@@ -37,9 +37,8 @@ export class UserActivityTimeline extends Component {
     // Begin by decorating the activity entries with supplemental data
     // that will make it easier for us to group and display.
     const decoratedActivities = _map(this.props.activity, entry => {
-      const normalizedDate = startOfDay(new Date(entry.created))
       return Object.assign({}, entry, {
-        normalizedISODate: normalizedDate.toISOString(),
+        normalizedISODate: this.props.startOfDay(new Date(entry.created)).toISOString(),
         description: `${localizedActionLabels[keysByAction[entry.action]]} ` +
                      localizedTypeLabels[keysByType[entry.typeId]] +
                      (_isNumber(entry.status) ?
@@ -130,10 +129,13 @@ UserActivityTimeline.propTypes = {
     typeId: PropTypes.number,
     status: PropTypes.number,
   })),
+  /** To more easily facilitate unit testing */
+  startOfDay: PropTypes.func,
 }
 
 UserActivityTimeline.defaultProps = {
   activity: [],
+  startOfDay,
 }
 
 export default injectIntl(UserActivityTimeline)

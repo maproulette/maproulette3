@@ -33,6 +33,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    startOfDay={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -173,7 +174,7 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": "1969-12-31T08:00:00.000Z",
+        "key": "1970-01-01T00:00:00.000Z",
         "nodeType": "host",
         "props": Object {
           "children": Array [
@@ -288,7 +289,7 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": "2017-11-10T08:00:00.000Z",
+        "key": "2017-11-10T00:00:00.000Z",
         "nodeType": "host",
         "props": Object {
           "children": Array [
@@ -403,7 +404,7 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": "2018-01-17T08:00:00.000Z",
+        "key": "2018-01-17T00:00:00.000Z",
         "nodeType": "host",
         "props": Object {
           "children": Array [
@@ -679,7 +680,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": "1969-12-31T08:00:00.000Z",
+          "key": "1970-01-01T00:00:00.000Z",
           "nodeType": "host",
           "props": Object {
             "children": Array [
@@ -794,7 +795,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": "2017-11-10T08:00:00.000Z",
+          "key": "2017-11-10T00:00:00.000Z",
           "nodeType": "host",
           "props": Object {
             "children": Array [
@@ -909,7 +910,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": "2018-01-17T08:00:00.000Z",
+          "key": "2018-01-17T00:00:00.000Z",
           "nodeType": "host",
           "props": Object {
             "children": Array [
@@ -1075,6 +1076,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    startOfDay={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -1422,6 +1424,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    startOfDay={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -1538,7 +1541,7 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": "2017-11-10T08:00:00.000Z",
+        "key": "2017-11-10T00:00:00.000Z",
         "nodeType": "host",
         "props": Object {
           "children": Array [
@@ -1653,7 +1656,7 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": "2018-01-17T08:00:00.000Z",
+        "key": "2018-01-17T00:00:00.000Z",
         "nodeType": "host",
         "props": Object {
           "children": Array [
@@ -1905,7 +1908,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": "2017-11-10T08:00:00.000Z",
+          "key": "2017-11-10T00:00:00.000Z",
           "nodeType": "host",
           "props": Object {
             "children": Array [
@@ -2020,7 +2023,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": "2018-01-17T08:00:00.000Z",
+          "key": "2018-01-17T00:00:00.000Z",
           "nodeType": "host",
           "props": Object {
             "children": Array [

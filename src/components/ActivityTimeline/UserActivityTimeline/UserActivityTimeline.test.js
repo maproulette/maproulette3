@@ -32,16 +32,30 @@ beforeEach(() => {
         created: 1516200787649,
       },
     ],
-    intl:{
+    intl: {
       formatMessage: jest.fn(),
       formatDate: jest.fn(),
     },
   }
 })
 
+/**
+ * For consistency in unit tests regardless of local timezone
+ */
+const startOfUTCDay = function(date) {
+  const start = new Date(date.getTime())
+  start.setUTCHours(0)
+  start.setUTCMinutes(0)
+  start.setUTCSeconds(0)
+  start.setUTCMilliseconds(0)
+
+  return start
+}
+
+
 test("it renders a timeline of the activity", () => {
   const wrapper = shallow(
-    <UserActivityTimeline {...basicProps} />
+    <UserActivityTimeline startOfDay={startOfUTCDay} {...basicProps} />
   )
 
   expect(wrapper.find('.activity-timeline').exists()).toBe(true)
@@ -51,7 +65,7 @@ test("it renders a timeline of the activity", () => {
 
 test("it consolidates duplicate activities on the same day", () => {
   const wrapper = shallow(
-    <UserActivityTimeline {...basicProps} />
+    <UserActivityTimeline startOfDay={startOfUTCDay} {...basicProps} />
   )
 
   // First two activity entries are dups on the same day.
@@ -62,7 +76,7 @@ test("it consolidates duplicate activities on the same day", () => {
 
 test("it includes a count of the duplicate activities", () => {
   const wrapper = shallow(
-    <UserActivityTimeline {...basicProps} />
+    <UserActivityTimeline startOfDay={startOfUTCDay} {...basicProps} />
   )
 
   // First two activity entries are dups on the same day.
@@ -74,7 +88,7 @@ test("it includes a count of the duplicate activities", () => {
 test("it does not consolidate duplicate activities on different days", () => {
   basicProps.activity[0].created = 0
   const wrapper = shallow(
-    <UserActivityTimeline {...basicProps} />
+    <UserActivityTimeline startOfDay={startOfUTCDay} {...basicProps} />
   )
 
   // We have 3 activities, but the first two are duplicates on the
@@ -90,7 +104,7 @@ test("it indicates on the timeline if there is no activity", () => {
   basicProps.activity = []
 
   const wrapper = shallow(
-    <UserActivityTimeline {...basicProps} />
+    <UserActivityTimeline startOfDay={startOfUTCDay} {...basicProps} />
   )
 
   // First two activity entries are dups on the same day.
