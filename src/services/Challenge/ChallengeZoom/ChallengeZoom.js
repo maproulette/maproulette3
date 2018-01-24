@@ -2,7 +2,7 @@ import { range as _range } from 'lodash'
 
 /**
  * Constants related to zoom levels. These are based on
- * Open Street Map zoom levels.
+ * OpenStreetMap zoom levels.
  *
  * @see See http://wiki.openstreetmap.org/wiki/Zoom_levels
  *

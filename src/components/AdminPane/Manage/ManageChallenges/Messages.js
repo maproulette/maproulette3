@@ -13,7 +13,7 @@ export default defineMessages({
     id: 'Admin.challengesIntro',
     defaultMessage: "Challenges consist of many tasks that all " +
                     "help address a specific problem or shortcoming " +
-                    "with Open Street Map data. Tasks are typically " +
+                    "with OpenStreetMap data. Tasks are typically " +
                     "generated automatically from an overpassQL query " +
                     "you provide when creating a new challenge, but " +
                     "can also be loaded from a local file or remote " +
