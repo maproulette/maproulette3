@@ -29,10 +29,6 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskEditControls extends Component {
-  state = {
-    comment: "",
-  }
-
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.props.setTaskBeingCompleted(this.props.task.id)
@@ -43,7 +39,7 @@ export default class TaskEditControls extends Component {
   complete = (taskStatus) => {
     this.props.setTaskBeingCompleted(this.props.task.id)
     this.props.completeTask(this.props.task.id, this.props.task.parent.id,
-                            taskStatus, this.state.comment)
+                            taskStatus, this.props.comment)
   }
 
   /** Process keyboard shortcuts for the edit controls */
@@ -145,8 +141,8 @@ export default class TaskEditControls extends Component {
                                  {'is-minimized': this.props.isMinimized})}>
 
         <TaskCommentInput className="task-edit-controls__task-comment"
-                          value={this.state.comment}
-                          commentChanged={(comment) => this.setState({comment})}
+                          value={this.props.comment}
+                          commentChanged={this.props.setComment}
                           {..._omit(this.props, 'className')} />
 
         <div className="columns">
@@ -190,16 +186,24 @@ TaskEditControls.propTypes = {
   task: PropTypes.object.isRequired,
   /** The current map bounds (for editing) */
   mapBounds: PropTypes.object,
+  /** The current completion comment */
+  comment: PropTypes.string,
   /** Invoked if the user wishes to edit the task */
   editTask: PropTypes.func.isRequired,
   /** Invoked if the user immediately completes the task (false positive) */
   completeTask: PropTypes.func.isRequired,
   /** Invoked if the user initiates the task completion process */
   setTaskBeingCompleted: PropTypes.func.isRequired,
+  /** Invoked to set a completion comment */
+  setComment: PropTypes.func.isRequired,
   /** The keyboard shortcuts to be offered on this step */
   keyboardShortcutGroups: PropTypes.object.isRequired,
   /** Invoked when keyboard shortcuts are to be active */
   activateKeyboardShortcuts: PropTypes.func.isRequired,
   /** Invoked when keyboard shortcuts should no longer be active  */
   deactivateKeyboardShortcuts: PropTypes.func.isRequired,
+}
+
+TaskEditControls.defaultProps = {
+  comment: "",
 }

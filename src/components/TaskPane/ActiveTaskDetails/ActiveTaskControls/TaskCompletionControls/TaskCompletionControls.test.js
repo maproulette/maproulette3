@@ -1,34 +1,32 @@
 import React from 'react'
-import { omit as _omit, cloneDeep as _cloneDeep } from 'lodash'
 import TaskCompletionControls from './TaskCompletionControls'
 import keyMappings from '../../../../../KeyMappings'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 
-const propsFixture = {
-  task: {
-    id: 123,
-    parent: {
-      id: 321,
-    }
-  },
-  keyboardShortcutGroups: keyMappings,
-  user: {
-    id: 357,
-    settings: {defaultEditor: 1},
-    isLoggedIn: true,
-  },
-}
-
 let basicProps = null
 
 beforeEach(() => {
-  basicProps = _cloneDeep(propsFixture)
-
-  basicProps.completeTask = jest.fn()
-  basicProps.setTaskBeingCompleted = jest.fn()
-  basicProps.closeEditor = jest.fn()
-  basicProps.activateKeyboardShortcuts = jest.fn()
-  basicProps.deactivateKeyboardShortcuts = jest.fn()
+  basicProps = {
+    task: {
+      id: 123,
+      parent: {
+        id: 321,
+      }
+    },
+    comment: "Foo",
+    keyboardShortcutGroups: keyMappings,
+    user: {
+      id: 357,
+      settings: {defaultEditor: 1},
+      isLoggedIn: true,
+    },
+    completeTask: jest.fn(),
+    setTaskBeingCompleted: jest.fn(),
+    setComment: jest.fn(),
+    closeEditor: jest.fn(),
+    activateKeyboardShortcuts: jest.fn(),
+    deactivateKeyboardShortcuts: jest.fn(),
+  }
 })
 
 test("it renders completion controls", () => {
@@ -41,6 +39,16 @@ test("it renders completion controls", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
+test("presents a completion comment field", () => {
+  const wrapper = shallow(
+    <TaskCompletionControls {...basicProps} />
+  )
+
+  expect(wrapper.find(
+    `TaskCommentInput[value="${basicProps.comment}"]`
+  ).exists()).toBe(true)
+})
+
 test("clicking the fixed button signals task completion with fixed status", () => {
   const wrapper = shallow(
     <TaskCompletionControls {...basicProps} />
@@ -48,12 +56,14 @@ test("clicking the fixed button signals task completion with fixed status", () =
 
   wrapper.find('.task-completion-controls__fix').simulate('click')
 
-  expect(basicProps.closeEditor.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls[0][0]).toBe(basicProps.task.id)
-  expect(basicProps.completeTask.mock.calls[0][1]).toBe(basicProps.task.parent.id)
-  expect(basicProps.completeTask.mock.calls[0][2]).toBe(TaskStatus.fixed)
+  expect(basicProps.closeEditor).toBeCalled()
 
+  expect(basicProps.completeTask).toBeCalledWith(basicProps.task.id,
+                                                 basicProps.task.parent.id,
+                                                 TaskStatus.fixed,
+                                                 basicProps.comment)
+
+  expect(basicProps.setTaskBeingCompleted).toBeCalledWith(basicProps.task.id)
 })
 
 test("clicking the too-hard button signals task completion with too-hard status", () => {
@@ -63,11 +73,14 @@ test("clicking the too-hard button signals task completion with too-hard status"
 
   wrapper.find('.task-completion-controls__too-hard').simulate('click')
 
-  expect(basicProps.closeEditor.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls[0][0]).toBe(basicProps.task.id)
-  expect(basicProps.completeTask.mock.calls[0][1]).toBe(basicProps.task.parent.id)
-  expect(basicProps.completeTask.mock.calls[0][2]).toBe(TaskStatus.tooHard)
+  expect(basicProps.closeEditor).toBeCalled()
+
+  expect(basicProps.completeTask).toBeCalledWith(basicProps.task.id,
+                                                 basicProps.task.parent.id,
+                                                 TaskStatus.tooHard,
+                                                 basicProps.comment)
+
+  expect(basicProps.setTaskBeingCompleted).toBeCalledWith(basicProps.task.id)
 })
 
 test("clicking the already-fixed button signals task completion with already-fixed status", () => {
@@ -77,11 +90,14 @@ test("clicking the already-fixed button signals task completion with already-fix
 
   wrapper.find('.task-completion-controls__already-fixed').simulate('click')
 
-  expect(basicProps.closeEditor.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls[0][0]).toBe(basicProps.task.id)
-  expect(basicProps.completeTask.mock.calls[0][1]).toBe(basicProps.task.parent.id)
-  expect(basicProps.completeTask.mock.calls[0][2]).toBe(TaskStatus.alreadyFixed)
+  expect(basicProps.closeEditor).toBeCalled()
+
+  expect(basicProps.completeTask).toBeCalledWith(basicProps.task.id,
+                                                 basicProps.task.parent.id,
+                                                 TaskStatus.alreadyFixed,
+                                                 basicProps.comment)
+
+  expect(basicProps.setTaskBeingCompleted).toBeCalledWith(basicProps.task.id)
 })
 
 test("clicking the cancel button aborts completion of the task", () => {
@@ -91,7 +107,6 @@ test("clicking the cancel button aborts completion of the task", () => {
 
   wrapper.find('.task-completion-controls__cancel').simulate('click')
 
-  expect(basicProps.closeEditor.mock.calls.length).toBe(1)
-  expect(basicProps.setTaskBeingCompleted.mock.calls.length).toBe(1)
-  expect(basicProps.setTaskBeingCompleted.mock.calls[0][0]).toBe(null)
+  expect(basicProps.closeEditor).toBeCalled()
+  expect(basicProps.setTaskBeingCompleted).toBeCalledWith(null)
 })
