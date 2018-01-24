@@ -1,0 +1,36 @@
+@import '../../../../../variables.scss';
+
+.task-done-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__next {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 18px;
+
+    svg {
+      height: 18px;
+      width: auto;
+      fill: $primary;
+      vertical-align: middle;
+      margin-left: 0.25em;
+    }
+
+    &:hover, &:enabled:focus {
+      color: $green;
+
+      svg {
+        fill: $green;
+      }
+    }
+  }
+
+
+  &.is-minimized {
+    .task-done-controls__next {
+      margin-top: 0;
+    }
+  }
+}

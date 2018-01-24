@@ -1,0 +1,109 @@
+@import '../../../../variables.scss';
+
+.admin__manage.challenge-details {
+  .admin__manage__primary-content {
+    padding-top: 0;
+  }
+
+  .challenge-details__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: -1em;
+    margin-bottom: 1em;
+  }
+
+  .challenge-details__breadcrumb {
+    font-size: $size-4;
+    margin-bottom: 0.25em;
+
+    li.is-active a {
+      color: $green;
+
+      .busy-spinner {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .challenge-details__controls {
+    font-size: $size-4;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0;
+
+    &--control {
+      a {
+        color: $grey-light;
+        font-weight: $weight-light;
+      }
+
+      svg {
+        fill: $grey-light;
+        height: $size-5;
+        width: auto;
+      }
+    }
+  }
+
+  .subtitle, .subtitle:not(:last-child) {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+  }
+
+  section {
+    margin-bottom: 1em;
+  }
+
+  .tab-content {
+    padding: 0 15px 15px 15px;
+    min-height: 300px;
+  }
+
+  .challenge-overview {
+    &--status {
+      .columns {
+        margin-bottom: 0;
+        margin-left: -0.25em;
+
+        .column {
+          padding: 0.25em;
+        }
+      }
+
+      .status-label {
+        font-weight: $weight-light;
+      }
+    }
+  }
+
+  .comment-list {
+    &.none {
+      font-size: $size-6;
+      color: $grey-dark;
+      margin-top: 0;
+    }
+  }
+
+  .challenge-metrics {
+    h5 {
+      margin-bottom: 1em;
+    }
+
+    .subheading {
+      font-weight: $weight-light;
+    }
+
+    .burndown-chart {
+      margin-bottom: 1em;
+    }
+  }
+
+  .labeled-progress {
+    .progress-label {
+      font-size: $size-6;
+      font-weight: $weight-light;
+    }
+  }
+}

@@ -1,0 +1,141 @@
+@import '../../../theme.scss';
+
+.challenge-list__item.card {
+  width: 100%;
+  border: none;
+  box-shadow: none;
+  margin-top: 20px;
+  border-radius: $radius-medium;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .challenge-list__item--featured-indicator {
+    background-color: $grey-light;
+    border-radius: $radius-medium 0 $radius-medium 0;
+    color: $white;
+    font-size: $size-9;
+    display: inline-block;
+    padding: 1px 5px;
+    position: absolute;
+    top: 0px;
+  }
+
+  .challenge-list__item-indicator-icon {
+    min-width: 20px;
+    width: 20px;
+    display: inline-block;
+    padding-top: 5px;
+    margin-right: 3px;
+
+    svg {
+      height: 15px;
+      width: auto;
+    }
+
+    &.saved {
+      svg {
+        fill: $coral;
+      }
+    }
+  }
+
+  .challenge-list__item-title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .challenge-list__item__name {
+    font-size: $size-5;
+  }
+
+  .challenge-list__item__project-name {
+    margin-left: 23px;
+    font-size: $size-8;
+    min-height: 1em;
+    color: $grey-light;
+  }
+
+  .challenge-list__item__difficulty {
+    font-size: $size-8;
+  }
+
+  .challenge-list__item__field-label {
+    text-transform: uppercase;
+    font-weight: $weight-bold;
+    margin-right: 0.5em;
+
+    &:after {
+      content: ':';
+    }
+  }
+
+  .challenge-list__item__blurb {
+    font-size: $size-7;
+    margin: 1em 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .challenge-list__item__task-progress {
+    margin-bottom: 20px;
+    font-size: $size-8;
+  }
+
+  button.start-challenge {
+    @include invert-on-hover($green, $white);
+  }
+
+  button.save-challenge-toggle {
+    @include invert-on-hover($coral, $white);
+  }
+
+  .card-header {
+    background-color: $white;
+    color: $blue;
+    font-weight: $weight-normal;
+    padding: 17px 10px 10px 10px;
+    border-radius: $radius-medium;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    &-icon {
+      align-items: flex-end;
+
+      .icon {
+        @include arrow($grey-light);
+        transform: rotate(-45deg);
+        transform-origin: center;
+        transition: transform 0.25s;
+      }
+    }
+  }
+
+  .card-content {
+    max-height: 0;
+    transition: max-height 0.25s, padding 0.25s;
+    padding: 0 1.5rem;
+    overflow: hidden;
+  }
+
+  &.is-active {
+    .card-content {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .card-header {
+      border-radius: $radius-medium $radius-medium 0 0;
+
+      .icon {
+        margin-top: 5px;
+        transform: rotate(135deg);
+      }
+    }
+  }
+}

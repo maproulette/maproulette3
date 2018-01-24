@@ -1,0 +1,33 @@
+@import '../../variables.scss';
+
+.help-popout {
+  &.dropdown.popout-right {
+    .menu-wrapper {
+      position: absolute;
+      left: 45px;
+    }
+  }
+
+  &--control {
+    margin: 0 5px;
+
+    svg {
+      fill: $grey-light;
+      width: 20px;
+      height: auto;
+    }
+
+    &:hover {
+      svg {
+        fill: $grey-dark;
+      }
+    }
+  }
+
+  &--content {
+    min-width: 300px;
+    padding: 10px;
+    color: $grey-darkest;
+    font-size: $size-6;
+  }
+}

@@ -1,0 +1,119 @@
+@import '../../../theme.scss';
+
+// Customizations for react-jsonschema-form to adapt it to the Bulma
+// framework. While we try to customize the markup, rjsf customization
+// is a bit clunky and requires some fine-tuning here.
+form.rjsf {
+  fieldset {
+    border: 1px solid $grey-lighter;
+    border-radius: $radius-medium;
+    padding: 25px;
+
+    legend {
+      @extend .title;
+      font-size: $size-4;
+      margin-left: 30px;
+      padding: 0 5px;
+    }
+  }
+
+  // The root element represents the top-level object -- essentially the form
+  // or the current step in a multi-step workflow.
+  #root__description {
+    // Negative top margin to reduce the top fieldset padding, which we want in
+    // the event there isn't a root description.
+    margin: -25px 0 30px 36px; // left-align with fieldset legend
+    color: $grey;
+  }
+
+  .form-fields-wrapper {
+    margin: 20px 0;
+  }
+
+  .form-controls {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  label .required {
+    color: $danger;
+    margin-left: 0.25em;
+  }
+
+  input.form-control {
+    @extend .input;
+  }
+
+  select.form-control {
+    @extend .select;
+  }
+
+  textarea.form-control {
+    @extend .textarea;
+  }
+
+  .control .checkbox {
+    // rjsf checkboxes render a lot more than just the input, unlike most other
+    // field types, so suppress display of the additional fields so we can render
+    // them where and how we want.
+    p.field-description {
+      display: none;
+    }
+
+    label {
+      @extend .checkbox;
+
+      input {
+        margin-right: 0.5em;
+      }
+    }
+  }
+
+  .control .field-radio-group {
+    label {
+      @extend .radio;
+
+      input {
+        margin-right: 0.5em;
+      }
+    }
+  }
+
+  .dropzone {
+    background-color: $grey-lightest;
+    border: 1px solid $grey-light;
+    border-radius: $radius-medium;
+    padding: 15px;
+    text-align: center;
+    max-width: 400px;
+    margin-top: 5px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.active {
+      border-color: $green;
+    }
+
+    svg {
+      margin-top: 10px;
+      width: 20px;
+      height: auto;
+      fill: $green;
+
+      &.success {
+        width: 30px;
+      }
+    }
+  }
+
+  .help {
+    font-size: $size-8;
+  }
+
+  .errors {
+    font-size: $size-8;
+    color: $danger;
+  }
+}

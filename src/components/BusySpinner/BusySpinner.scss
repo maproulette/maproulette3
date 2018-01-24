@@ -1,0 +1,7 @@
+@import '../../theme.scss';
+
+.busy-spinner {
+  .busy-spinner-icon {
+    @include loader;
+  }
+}

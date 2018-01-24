@@ -1,0 +1,75 @@
+@import '../../variables.scss';
+
+.user-profile {
+  padding: 15px;
+
+  h2.subtitle {
+    margin-bottom: 0.5rem;
+  }
+
+  section {
+    margin-top: 50px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__personal {
+    display: flex;
+    align-items: center;
+
+    &--avatar {
+      margin-right: 20px;
+
+      img {
+        border-radius: 50%;
+      }
+    }
+
+    &--display-name {
+      font-size: $size-4;
+    }
+  }
+
+  &__activity {
+    margin-left: 30px;
+  }
+
+  .saved-challenges__challenge, .saved-tasks__task {
+    align-items: center;
+    margin: 0;
+    &.columns:not(:last-child) {
+      padding: 0;
+      margin: 0;
+      margin-bottom: 0.5em;
+    }
+
+    .column {
+      padding: 0;
+    }
+
+    .button.is-clear {
+      svg.icon {
+        fill: $grey-light;
+        height: 15px;
+        width: auto;
+      }
+
+      &:hover {
+        svg.icon {
+          fill: $grey;
+        }
+      }
+    }
+  }
+
+  pre {
+    overflow-x: auto;
+
+    @media(max-width: 1200px) {
+      width: 80%;
+      max-width: 400px;
+    }
+  }
+}

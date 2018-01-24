@@ -1,0 +1,13 @@
+@import '../../../../variables.scss';
+
+.admin__manage-challenges {
+  .parent-project-name {
+    color: $coral;
+    margin-top: -20px;
+    margin-bottom: 20px;
+  }
+
+  .challenge-list {
+    margin: 0;
+  }
+}

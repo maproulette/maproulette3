@@ -1,0 +1,15 @@
+.edit-challenge {
+  .title {
+    display: flex;
+    justify-content: flex-start;
+
+    .busy-spinner {
+      margin-left: 0.5em;
+    }
+  }
+
+  &__workflow-header {
+    display: flex;
+    justify-content: space-between;
+  }
+}

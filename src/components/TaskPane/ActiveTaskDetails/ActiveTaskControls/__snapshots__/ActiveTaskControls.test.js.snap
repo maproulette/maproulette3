@@ -1,0 +1,850 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`a busy spinner is shown when switching from edit controls to completion controls 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ActiveTaskControls
+    activateKeyboardShortcuts={[Function]}
+    closeEditor={[Function]}
+    completeTask={[Function]}
+    deactivateKeyboardShortcuts={[Function]}
+    editTask={[Function]}
+    editor={Object {}}
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    keyboardShortcutGroups={
+        Object {
+            "taskCompletion": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskEditing": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+          }
+    }
+    mapBounds={
+        Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          }
+    }
+    nextTask={[Function]}
+    setTaskBeingCompleted={[Function]}
+    task={
+        Object {
+            "id": 123,
+            "status": 0,
+          }
+    }
+    user={
+        Object {
+            "id": 357,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {},
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {},
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`already-done controls are shown if the task is in a completed status. 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ActiveTaskControls
+    activateKeyboardShortcuts={[Function]}
+    closeEditor={[Function]}
+    completeTask={[Function]}
+    deactivateKeyboardShortcuts={[Function]}
+    editTask={[Function]}
+    editor={Object {}}
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    keyboardShortcutGroups={
+        Object {
+            "taskCompletion": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskEditing": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+          }
+    }
+    mapBounds={
+        Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          }
+    }
+    nextTask={[Function]}
+    setTaskBeingCompleted={[Function]}
+    task={
+        Object {
+            "id": 123,
+            "status": 1,
+          }
+    }
+    user={
+        Object {
+            "id": 357,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "activateKeyboardShortcuts": [Function],
+      "closeEditor": [Function],
+      "completeTask": [Function],
+      "deactivateKeyboardShortcuts": [Function],
+      "editTask": [Function],
+      "editor": Object {},
+      "intl": Object {
+        "formatMessage": [Function],
+      },
+      "keyboardShortcutGroups": Object {
+        "taskCompletion": Object {
+          "cancel": Object {
+            "key": "Escape",
+            "keyLabel": "ESC",
+            "label": "Cancel Editing",
+          },
+        },
+        "taskEditing": Object {
+          "editId": Object {
+            "key": "e",
+            "label": "Edit in Id",
+          },
+          "editJosm": Object {
+            "key": "r",
+            "label": "Edit in JOSM",
+          },
+          "editJosmLayer": Object {
+            "key": "t",
+            "label": "Edit in new JOSM layer",
+          },
+          "falsePositive": Object {
+            "key": "q",
+            "label": "Not an Issue",
+          },
+          "skip": Object {
+            "key": "w",
+            "label": "Skip",
+          },
+        },
+      },
+      "mapBounds": Object {
+        "task": Object {
+          "bounds": Array [
+            0,
+            0,
+            0,
+            0,
+          ],
+        },
+      },
+      "nextTask": [Function],
+      "setTaskBeingCompleted": [Function],
+      "task": Object {
+        "id": 123,
+        "status": 1,
+      },
+      "user": Object {
+        "id": 357,
+        "settings": Object {
+          "defaultEditor": 1,
+        },
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "activateKeyboardShortcuts": [Function],
+        "closeEditor": [Function],
+        "completeTask": [Function],
+        "deactivateKeyboardShortcuts": [Function],
+        "editTask": [Function],
+        "editor": Object {},
+        "intl": Object {
+          "formatMessage": [Function],
+        },
+        "keyboardShortcutGroups": Object {
+          "taskCompletion": Object {
+            "cancel": Object {
+              "key": "Escape",
+              "keyLabel": "ESC",
+              "label": "Cancel Editing",
+            },
+          },
+          "taskEditing": Object {
+            "editId": Object {
+              "key": "e",
+              "label": "Edit in Id",
+            },
+            "editJosm": Object {
+              "key": "r",
+              "label": "Edit in JOSM",
+            },
+            "editJosmLayer": Object {
+              "key": "t",
+              "label": "Edit in new JOSM layer",
+            },
+            "falsePositive": Object {
+              "key": "q",
+              "label": "Not an Issue",
+            },
+            "skip": Object {
+              "key": "w",
+              "label": "Skip",
+            },
+          },
+        },
+        "mapBounds": Object {
+          "task": Object {
+            "bounds": Array [
+              0,
+              0,
+              0,
+              0,
+            ],
+          },
+        },
+        "nextTask": [Function],
+        "setTaskBeingCompleted": [Function],
+        "task": Object {
+          "id": 123,
+          "status": 1,
+        },
+        "user": Object {
+          "id": 357,
+          "settings": Object {
+            "defaultEditor": 1,
+          },
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`completion controls are shown if the user has begun editing the task 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ActiveTaskControls
+    activateKeyboardShortcuts={[Function]}
+    closeEditor={[Function]}
+    completeTask={[Function]}
+    deactivateKeyboardShortcuts={[Function]}
+    editTask={[Function]}
+    editor={
+        Object {
+            "success": true,
+            "taskId": 123,
+          }
+    }
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    keyboardShortcutGroups={
+        Object {
+            "taskCompletion": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskEditing": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+          }
+    }
+    mapBounds={
+        Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          }
+    }
+    nextTask={[Function]}
+    setTaskBeingCompleted={[Function]}
+    task={
+        Object {
+            "id": 123,
+            "status": 0,
+          }
+    }
+    user={
+        Object {
+            "id": 357,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "activateKeyboardShortcuts": [Function],
+      "closeEditor": [Function],
+      "completeTask": [Function],
+      "deactivateKeyboardShortcuts": [Function],
+      "editTask": [Function],
+      "editor": Object {
+        "success": true,
+        "taskId": 123,
+      },
+      "intl": Object {
+        "formatMessage": [Function],
+      },
+      "keyboardShortcutGroups": Object {
+        "taskCompletion": Object {
+          "cancel": Object {
+            "key": "Escape",
+            "keyLabel": "ESC",
+            "label": "Cancel Editing",
+          },
+        },
+        "taskEditing": Object {
+          "editId": Object {
+            "key": "e",
+            "label": "Edit in Id",
+          },
+          "editJosm": Object {
+            "key": "r",
+            "label": "Edit in JOSM",
+          },
+          "editJosmLayer": Object {
+            "key": "t",
+            "label": "Edit in new JOSM layer",
+          },
+          "falsePositive": Object {
+            "key": "q",
+            "label": "Not an Issue",
+          },
+          "skip": Object {
+            "key": "w",
+            "label": "Skip",
+          },
+        },
+      },
+      "mapBounds": Object {
+        "task": Object {
+          "bounds": Array [
+            0,
+            0,
+            0,
+            0,
+          ],
+        },
+      },
+      "nextTask": [Function],
+      "setTaskBeingCompleted": [Function],
+      "task": Object {
+        "id": 123,
+        "status": 0,
+      },
+      "user": Object {
+        "id": 357,
+        "settings": Object {
+          "defaultEditor": 1,
+        },
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "activateKeyboardShortcuts": [Function],
+        "closeEditor": [Function],
+        "completeTask": [Function],
+        "deactivateKeyboardShortcuts": [Function],
+        "editTask": [Function],
+        "editor": Object {
+          "success": true,
+          "taskId": 123,
+        },
+        "intl": Object {
+          "formatMessage": [Function],
+        },
+        "keyboardShortcutGroups": Object {
+          "taskCompletion": Object {
+            "cancel": Object {
+              "key": "Escape",
+              "keyLabel": "ESC",
+              "label": "Cancel Editing",
+            },
+          },
+          "taskEditing": Object {
+            "editId": Object {
+              "key": "e",
+              "label": "Edit in Id",
+            },
+            "editJosm": Object {
+              "key": "r",
+              "label": "Edit in JOSM",
+            },
+            "editJosmLayer": Object {
+              "key": "t",
+              "label": "Edit in new JOSM layer",
+            },
+            "falsePositive": Object {
+              "key": "q",
+              "label": "Not an Issue",
+            },
+            "skip": Object {
+              "key": "w",
+              "label": "Skip",
+            },
+          },
+        },
+        "mapBounds": Object {
+          "task": Object {
+            "bounds": Array [
+              0,
+              0,
+              0,
+              0,
+            ],
+          },
+        },
+        "nextTask": [Function],
+        "setTaskBeingCompleted": [Function],
+        "task": Object {
+          "id": 123,
+          "status": 0,
+        },
+        "user": Object {
+          "id": 357,
+          "settings": Object {
+            "defaultEditor": 1,
+          },
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`edit controls are shown if the user has not yet begun editing the task 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ActiveTaskControls
+    activateKeyboardShortcuts={[Function]}
+    closeEditor={[Function]}
+    completeTask={[Function]}
+    deactivateKeyboardShortcuts={[Function]}
+    editTask={[Function]}
+    editor={Object {}}
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    keyboardShortcutGroups={
+        Object {
+            "taskCompletion": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskEditing": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+          }
+    }
+    mapBounds={
+        Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          }
+    }
+    nextTask={[Function]}
+    setTaskBeingCompleted={[Function]}
+    task={
+        Object {
+            "id": 123,
+            "status": 0,
+          }
+    }
+    user={
+        Object {
+            "id": 357,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "activateKeyboardShortcuts": [Function],
+      "closeEditor": [Function],
+      "completeTask": [Function],
+      "deactivateKeyboardShortcuts": [Function],
+      "editTask": [Function],
+      "editor": Object {},
+      "intl": Object {
+        "formatMessage": [Function],
+      },
+      "keyboardShortcutGroups": Object {
+        "taskCompletion": Object {
+          "cancel": Object {
+            "key": "Escape",
+            "keyLabel": "ESC",
+            "label": "Cancel Editing",
+          },
+        },
+        "taskEditing": Object {
+          "editId": Object {
+            "key": "e",
+            "label": "Edit in Id",
+          },
+          "editJosm": Object {
+            "key": "r",
+            "label": "Edit in JOSM",
+          },
+          "editJosmLayer": Object {
+            "key": "t",
+            "label": "Edit in new JOSM layer",
+          },
+          "falsePositive": Object {
+            "key": "q",
+            "label": "Not an Issue",
+          },
+          "skip": Object {
+            "key": "w",
+            "label": "Skip",
+          },
+        },
+      },
+      "mapBounds": Object {
+        "task": Object {
+          "bounds": Array [
+            0,
+            0,
+            0,
+            0,
+          ],
+        },
+      },
+      "nextTask": [Function],
+      "setTaskBeingCompleted": [Function],
+      "task": Object {
+        "id": 123,
+        "status": 0,
+      },
+      "user": Object {
+        "id": 357,
+        "settings": Object {
+          "defaultEditor": 1,
+        },
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "activateKeyboardShortcuts": [Function],
+        "closeEditor": [Function],
+        "completeTask": [Function],
+        "deactivateKeyboardShortcuts": [Function],
+        "editTask": [Function],
+        "editor": Object {},
+        "intl": Object {
+          "formatMessage": [Function],
+        },
+        "keyboardShortcutGroups": Object {
+          "taskCompletion": Object {
+            "cancel": Object {
+              "key": "Escape",
+              "keyLabel": "ESC",
+              "label": "Cancel Editing",
+            },
+          },
+          "taskEditing": Object {
+            "editId": Object {
+              "key": "e",
+              "label": "Edit in Id",
+            },
+            "editJosm": Object {
+              "key": "r",
+              "label": "Edit in JOSM",
+            },
+            "editJosmLayer": Object {
+              "key": "t",
+              "label": "Edit in new JOSM layer",
+            },
+            "falsePositive": Object {
+              "key": "q",
+              "label": "Not an Issue",
+            },
+            "skip": Object {
+              "key": "w",
+              "label": "Skip",
+            },
+          },
+        },
+        "mapBounds": Object {
+          "task": Object {
+            "bounds": Array [
+              0,
+              0,
+              0,
+              0,
+            ],
+          },
+        },
+        "nextTask": [Function],
+        "setTaskBeingCompleted": [Function],
+        "task": Object {
+          "id": 123,
+          "status": 0,
+        },
+        "user": Object {
+          "id": 357,
+          "settings": Object {
+            "defaultEditor": 1,
+          },
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

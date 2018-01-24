@@ -1,0 +1,44 @@
+@import '../../../variables.scss';
+
+.map-pane {
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  .leaflet-container {
+    .leaflet-pane {
+      z-index: $layer-map;
+    }
+
+    .leaflet-control-container {
+      .leaflet-top.leaflet-right, .leaflet-top.leaflet-left {
+        z-index: $layer-map-control;
+
+        .leaflet-control {
+          z-index: $layer-map-control;
+
+          &.leaflet-control-zoom {
+            border-width: 1px;
+            border-radius: 2px;
+
+            a {
+              width: 34px;
+              height: 34px;
+              font-weight: normal;
+
+              &:first-child {
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+              }
+
+              &:last-child {
+                border-bottom-left-radius: 2px;
+                border-bottom-right-radius: 2px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

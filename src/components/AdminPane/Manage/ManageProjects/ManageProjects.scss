@@ -1,0 +1,63 @@
+@import '../../../../variables.scss';
+
+.admin__manage__sidebar.projects-sidebar {
+  .sidebar__content {
+    margin-top: 6px;
+  }
+}
+
+.admin__manage__projects {
+  .admin__manage--heading {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    &.level:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
+  .heading-name {
+    transform-origin: left;
+    transform: rotate(0deg) translate(0px, 0px);
+    transition: transform 0.5s;
+  }
+
+  .search-box {
+    margin-top: 10px;
+    background-color: $white;
+  }
+
+  .project-list {
+    font-size: $size-6;
+    overflow-y: auto;
+    min-height: 200px;
+    max-height: 45vh;
+    padding-top: 15px;
+
+    .columns {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    svg.icon {
+      height: 15px;
+      width: auto;
+    }
+
+    .item-entry {
+      &:not(:last-child) {
+        border-bottom: none;
+        margin-bottom: 0.25rem;
+      }
+
+      .project-list-item {
+        align-items: center;
+      }
+    }
+
+    .column.edit-control {
+      font-size: $size-7;
+    }
+  }
+}
+

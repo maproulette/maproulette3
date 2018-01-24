@@ -1,0 +1,12 @@
+@import '../../../../../variables.scss';
+@import '../../../../../mixins.scss';
+
+.task-save-controls {
+  display: flex;
+  justify-content: center;
+
+  button.save-task-toggle {
+    @include invert-on-hover($coral, $white);
+    margin: 10px 0px 20px 0px;
+  }
+}

@@ -1,0 +1,66 @@
+@import '../../../variables.scss';
+
+.about-modal {
+  min-width: 335px;
+
+  .modal-content {
+    border-radius: $radius-medium;
+  }
+
+  &__content {
+    padding: 40px;
+    background-color: $white;
+
+    .about-modal__icon {
+      width: 80px;
+      height: auto;
+      stroke-width: 2px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      text-align: center;
+    }
+  }
+
+  &__intro {
+    color: $grey;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+
+    ul.about-modal__feature-points {
+      list-style: circle;
+
+      li {
+        width: fit-content;
+        font-size: $size-5
+      }
+    }
+  }
+
+  &__feedback-note {
+    margin: 20px 0;
+    background-color: $grey-lightest;
+    padding: 1rem;
+    border-radius: $radius-medium;
+
+    h2.subtitle {
+      font-size: $size-3;
+      font-weight: normal;
+      text-align: center;
+    }
+  }
+
+  button.about-modal__view-challenges {
+    font-size: $size-5;
+  }
+
+  &__footer {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    color: $grey;
+    font-size: $size-8;
+  }
+}

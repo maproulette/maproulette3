@@ -1,0 +1,143 @@
+@import '../../../variables.scss';
+
+.admin__manage {
+  &--heading {
+    display: flex;
+    flex-wrap: wrap;
+
+    h3 {
+      font-size: $size-3;
+      color: $subtitle-color;
+
+      display: flex;
+      justify-content: flex-start;
+
+      .busy-spinner {
+        margin-left: 1em;
+        padding-top: 0.25em;
+      }
+    }
+  }
+
+  &__pane-wrapper {
+    display: flex;
+  }
+
+  &__sidebar.sidebar {
+    background-color: $grey-lightest;
+    min-width: 350px;
+    max-width: 400px;
+    flex: 2 1 350px;
+    margin-right: 15px;
+    padding-bottom: 0;
+
+    &.is-minimized {
+      min-width: 50px;
+      max-width: 52px;
+      width: 52px;
+
+      .sidebar__content {
+        visibility: hidden;
+        padding: 15px 3px;
+
+        .heading-name {
+          visibility: visible;
+          transform: rotate(90deg) translate(10px, -23px);
+        }
+      }
+    }
+
+    .sidebar__content {
+      padding: 0;
+      overflow: visible;
+    }
+
+    .admin__manage__sidebar__controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 30px 0;
+      margin: 30px 15px 0px 15px;
+      border-top: 1px solid $grey-lighter;
+    }
+  }
+
+  &__primary-content {
+    padding: 15px;
+    flex: 1 2 80%;
+    min-width: 300px;
+    max-width: 1200px;
+  }
+
+  &__managed-item-list {
+    font-size: $size-5;
+    font-weight: $weight-light;
+
+    svg.icon {
+      height: 18px;
+      width: auto;
+    }
+
+    .item-entry {
+      &:not(:last-child) {
+        border-bottom: 1px solid $grey-lightest;
+        margin-bottom: 0.75rem;
+      }
+
+      .columns {
+        margin-bottom: 0;
+
+        &.is-active {
+          background-color: rgba($white, 0.71);
+        }
+
+        .column a {
+          vertical-align: middle;
+        }
+      }
+
+      .column.item-visibility {
+        max-width: 50px;
+
+        svg.icon {
+          height: 24px;
+          width: auto;
+          fill: $green-light;
+          vertical-align: middle;
+
+          &.enabled {
+            fill: $green;
+          }
+        }
+      }
+
+      .column.item-id {
+        max-width: 100px;
+      }
+
+      .column.item-priority {
+        max-width: 100px;
+      }
+
+      .column.controls {
+        color: $grey-light;
+
+        svg {
+          fill: $grey-light;
+        }
+
+        a, a:link, a:visited, a:active, a:hover {
+          color: $grey-light;
+        }
+      }
+
+      .column.item-link.is-active {
+        a, a:link, a:visited, a:active, a:hover {
+          color: $coral;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}

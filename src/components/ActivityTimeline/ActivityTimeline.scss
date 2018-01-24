@@ -1,0 +1,41 @@
+@import '../../variables.scss';
+
+.timeline.activity-timeline {
+  .timeline-header {
+    span {
+      color: $white;
+      background-color: $green;
+    }
+  }
+
+  .timeline-item {
+    .timeline-marker {
+      background-color: $green;
+      border-color: $green;
+    }
+
+    .timeline-content {
+      .heading {
+        color: $coral;
+      }
+
+      .badge {
+        padding-left: 2rem;
+
+        &::after {
+          top: 0;
+          left: 0;
+          color: $grey-dark;
+          background-color: $grey-lightest;
+          box-shadow: none;
+        }
+
+        &.inverted {
+          &::after {
+            background-color: $white;
+          }
+        }
+      }
+    }
+  }
+}

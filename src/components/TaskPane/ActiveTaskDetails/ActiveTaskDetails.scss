@@ -1,0 +1,210 @@
+@import '../../../variables.scss';
+
+.active-task-details {
+  background-color: $white;
+
+  .task-content {
+    padding: 30px;
+    padding-top: 0;
+  }
+
+  &.is-active {
+    width: 350px;
+    padding: 0;
+  }
+
+  &--heading, &--sub-heading {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    color: $grey;
+    text-transform: uppercase;
+    font-size: $size-7;
+    font-weight: $weight-semibold;
+
+    &.primary-heading {
+      font-size: $size-8;
+      font-weight: $weight-normal;
+    }
+  }
+
+  .content-block {
+    &.is-bordered {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid $grey-lightest-more;
+    }
+  }
+
+  &--sub-heading {
+    margin-bottom: 10px;
+  }
+
+  &--bordered {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid $grey-lightest-more;
+  }
+
+  &--name {
+    color: $primary;
+    font-size: $size-4;
+  }
+
+  &--project-name {
+    font-size: $size-8;
+    color: $grey-light;
+  }
+
+  &--inset-map {
+    margin-top: 20px;
+  }
+
+  &--instructions, .info-popout--instructions {
+    color: $grey-darkest;
+    font-size: $size-7;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  &--comment-badge {
+    // Because of the odd sizing of the comment icon due to the addition of the
+    // comment-count badge, we need to adjust some of the sizing, positioning,
+    // padding and margin to make it and the surrounding whitespace look
+    // more-or-less consistent with everything else.
+    &.active-task-details--bordered {
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    &:hover {
+      cursor: pointer;
+      .badge.is-badge-outlined[data-badge] {
+        svg {
+          fill: $black;
+        }
+      }
+    }
+  }
+
+  &--place {
+    font-size: $size-8;
+    margin-top: 1em;
+  }
+
+  &__task-comments {
+    .active-task-details--sub-heading {
+      .comment-count-badge {
+        margin-left: 0.5em;
+      }
+    }
+  }
+
+  &__controls {
+    font-size: $size-7;
+    margin-top: 10px;
+  }
+
+  &__info-popout {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+
+    .popout-trigger {
+      margin-left: 3px;
+    }
+
+    button.button.active-task-details__info-control {
+      .icon {
+        svg {
+          fill: $default-icon-color;
+          height: 26px;
+          width: auto;
+        }
+
+        &:hover, &:enabled:focus {
+          svg {
+            fill: $black;
+          }
+        }
+      }
+    }
+
+    .popout-content {
+      padding: 10px;
+
+      .info-popout--name {
+        color: $primary;
+        font-size: $size-6;
+        text-align: center;
+        font-weight: $weight-light;
+      }
+
+      .info-popout--project-name {
+        color: $grey-lighter;
+        font-size: $size-8;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  &__comment-popout {
+    width: 100%;
+
+    .dropdown-trigger {
+      width: 100%;
+
+      .comment-count-badge {
+        display: block; // or our border will be messed up
+      }
+    }
+
+    .popout-content {
+      padding: 10px;
+      width: 285px;
+      max-height: 60vh;
+      overflow-y: auto;
+
+      h3 {
+        color: $primary;
+        font-weight: $weight-light;
+        margin-bottom: 1em;
+      }
+    }
+  }
+
+  &.is-active.is-minimized {
+    .task-content {
+      padding: 0;
+      max-width: 30px;
+      padding-top: 0;
+      margin-left: 10px;
+    }
+
+    .active-task-details--heading,
+    .active-task-details--sub-heading,
+    .active-task-details--name,
+    .active-task-details--project-name,
+    .active-task-details--instructions,
+    .active-task-details--inset-map,
+    .active-task-details--place,
+    .active-task-details__task-comments {
+      display: none;
+    }
+
+    .active-task-details--name {
+      font-size: $size-5;
+      text-align: center;
+    }
+
+    .active-task-details__controls {
+      button .label {
+        display: none;
+      }
+    }
+  }
+}

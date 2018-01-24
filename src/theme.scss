@@ -1,0 +1,129 @@
+@import './variables.scss';
+@import './mixins.scss';
+
+// Temporarily disable mobile breakpoints in Bulma until we
+// add in mobile styling.
+$desktop: 50px;
+$tablet: 40px;
+
+.has-centered-children {
+  display: flex;
+  justify-content: center;
+}
+
+.modal.is-active {
+  z-index: $layer-modal;
+}
+
+// class for "full-screen" maps that calculates appropriate height based off
+// presence or absence of navbar and subnav.
+.full-screen-map {
+  .leaflet-container {
+    height: calc(100vh - #{$navbar-height} - #{$subnav-height});
+  }
+
+  &.task, &.about { // no subnav in task mode or about pane
+    .leaflet-container {
+      height: calc(100vh - #{$navbar-height});
+    }
+  }
+}
+
+// Dropdown that pops the menu out to the right
+.dropdown.popout-right {
+  .menu-wrapper {
+    position: fixed;
+    left: 65px;
+    z-index: $layer-popout;
+  }
+}
+
+.dropdown.is-center {
+  .dropdown-menu {
+    left: auto;
+    right: -25%;
+  }
+}
+
+.button.is-outlined {
+  border-radius: 20px;
+  border: 2px solid;
+  font-size: $size-7;
+  font-weight: $weight-medium;
+  padding: 0px 40px;
+
+  &.is-small {
+    border-radius: 20px;
+    font-size: $size-8;
+    padding: 0px 30px;
+  }
+
+  &.is-big {
+    font-size: $size-5;
+    font-weight: $weight-normal;
+    border-radius: 30px;
+    padding: 0px 40px;
+  }
+}
+
+.button.is-clear {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+
+  .icon:first-child:last-child, .icon:first-child:not(:last-child) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  &:focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+.button.has-svg-icon {
+  svg {
+    height: 15px;
+    width: auto;
+    margin: 0 5px;
+  }
+
+  &.is-primary {
+    svg {
+      fill: $primary;
+    }
+
+    &:enabled:hover, &:enabled:focus {
+      svg {
+        fill: $primary-invert;
+      }
+    }
+  }
+
+  &.is-loading {
+    svg {
+      visibility: hidden; // we only want to show the busy spinner
+    }
+  }
+}
+
+button.is-secondary {
+  @include invert-on-hover($grey, $white);
+}
+
+button.is-green {
+  @include invert-on-hover($green, $white);
+}
+
+button.is-primary.is-loading {
+  &:enabled:focus:after {
+    // Change spinner color. Bulma css has !important so we have to as well.
+    border-color: transparent transparent $primary-invert $primary-invert !important;
+  }
+}
+
+@import '../node_modules/bulma/bulma.sass';
+@import '../node_modules/bulma-badge/badge.sass';
+@import '../node_modules/bulma-timeline/timeline.sass';
+@import "../node_modules/bulma-steps-component/bulma-steps.sass";

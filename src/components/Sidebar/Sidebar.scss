@@ -1,0 +1,89 @@
+@import '../../theme.scss';
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  width: 0px;
+  border: none;
+  border-radius: $radius-medium;
+  max-width: 100%;
+  position: relative;
+  overflow: visible;
+  z-index: $layer-sidebar;
+  height: 100%;
+  background-color: rgba($grey-lightest, 0.9);
+  transition: width 0.5s, max-width 0.5s;
+
+  &:not(.inline) {
+    position: absolute;
+    border-radius: 0;
+
+    &.is-active {
+      box-shadow: 10px 0px 20px -10px $grey;
+    }
+  }
+
+  &.is-active {
+    width: 495px;
+    max-width: 495px;
+    padding: 10px 0px;
+
+    &.is-minimized {
+      width: 52px;
+      max-width: 52px;
+
+      .toggle-minimization {
+        padding-right: 20px;
+
+        &:after {
+          transform: rotate(225deg);
+        }
+      }
+    }
+  }
+
+  &__close.delete {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+  }
+
+  &__content {
+    overflow-y: auto;
+  }
+
+  &--minimizer {
+    min-height: 30px;
+    text-align: right;
+
+    button {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      padding-bottom: 10px;
+      outline: none;
+      font-size: $size-5;
+      line-height: 1em;
+      padding-right: 25px;
+      padding-top: 25px;
+
+      &:after {
+        @include arrow($grey);
+        position: static;
+        transform: rotate(45deg);
+        transform-origin: center;
+        transition: transform 0.5s;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+  }
+}

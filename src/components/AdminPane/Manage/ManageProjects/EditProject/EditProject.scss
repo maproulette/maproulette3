@@ -1,0 +1,10 @@
+.edit-project {
+  .title {
+    display: flex;
+    justify-content: flex-start;
+
+    .busy-spinner {
+      margin-left: 1em;
+    }
+  }
+}

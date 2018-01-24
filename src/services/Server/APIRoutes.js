@@ -1,0 +1,79 @@
+/**
+ * Generates a set of MR2 server API (v2) routes organized into a logical
+ * heirarchy to abstract them a bit for the various client services. Variable
+ * substitution is handled by the route-matcher package, so see its docs for
+ * additional syntax and possibilities.
+ *
+ * @param {RouteFactory} factory - a RouteFactory instance constructed with the
+ *        appropriate base URL that will be used to generate the individual
+ *        routes. The appropriate API version will be set here.
+ *
+ * @see See [route-matcher](https://github.com/cowboy/javascript-route-matcher)
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
+const apiRoutes = factory => {
+  factory.setAPIVersion('v2')
+
+  return {
+    'projects': {
+      'all': factory.get('/projects'),
+      'managed': factory.get('/projects/managed'),
+      'search': factory.get('/projects/find'),
+    },
+    'project': {
+      'single': factory.get('/project/:id'),
+      'challenges': factory.get('/project/:id/challenges'),
+      'create': factory.post('/project'),
+      'edit': factory.put('/project/:id'),
+    },
+    'challenges': {
+      'active': factory.get('/challenges/extendedFind'),
+      'featured': factory.get('/challenges/featured'),
+      'withKeywords': factory.get('/challenges/extendedFind'),
+      'search': factory.get('/challenges/extendedFind'),
+      'withinBounds': factory.get('/challenges/extendedFind'),
+      'actions': factory.get('/data/project/summary'),
+    },
+    'challenge': {
+      'single': factory.get('/challenge/:id'),
+      'tasks': factory.get('/challenge/:id/tasks'),
+      'randomTask': factory.get('/challenge/:id/tasks/randomTasks'),
+      'actions': factory.get('/data/challenge/:id'),
+      'activity': factory.get('/data/challenge/:id/activity'),
+      'comments': factory.get('/challenge/:id/comments'),
+      'create': factory.post('/challenge'),
+      'edit': factory.put('/challenge/:id'),
+      'removeKeywords': factory.delete('/challenge/:id/tags'),
+      'delete': factory.delete('/challenge/:id'),
+    },
+    'tasks': {
+      'random': factory.get('/tasks/random'),
+    },
+    'task': {
+      'single': factory.get('/task/:id'),
+      'updateStatus': factory.put('/task/:id/:status'),
+      'comments': factory.get('/task/:id/comments'),
+      'addComment': factory.post('/task/:id/comment'),
+      'create': factory.post('/task'),
+      'edit': factory.put('/task/:id'),
+    },
+    'tags': {
+      'all': factory.get('/tags'),
+    },
+    'users': {
+      'single': factory.get('/user/:id'),
+    },
+    'user': {
+      'activity': factory.get('/data/user/activity'),
+      'savedChallenges': factory.get('/user/:userId/saved'),
+      'saveChallenge': factory.post('/user/:userId/save/:challengeId'),
+      'unsaveChallenge': factory.delete('/user/:userId/unsave/:challengeId'),
+      'savedTasks': factory.get('/user/:userId/savedTasks'),
+      'saveTask': factory.post('/user/:userId/saveTask/:taskId'),
+      'unsaveTask': factory.delete('/user/:userId/unsaveTask/:taskId'),
+    },
+  }
+}
+
+export default apiRoutes

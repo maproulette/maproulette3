@@ -1,0 +1,14 @@
+@import '../../variables.scss';
+
+.error-pane {
+  li {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .message {
+    width: 75%;
+    max-width: 600px;
+  }
+}

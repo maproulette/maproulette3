@@ -1,0 +1,29 @@
+.challenge-share-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  overflow: hidden;
+
+  .share-control {
+    margin-right: 10px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    .SocialMediaShareButton:focus {
+      outline: 0;
+    }
+  }
+
+  &.is-minimized {
+    flex-direction: column;
+
+    .share-control {
+      margin-right: 0;
+      margin-bottom: 15px;
+    }
+  }
+}

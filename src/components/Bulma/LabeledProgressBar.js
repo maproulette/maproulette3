@@ -1,0 +1,40 @@
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import './LabeledProgressBar.css'
+
+/**
+ * LabeledProgressBar displays a Bulma `progress` component, along with
+ * a label and description of the value.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
+export default class LabeledProgressBar extends Component {
+  render() {
+    return (
+      <div className={classNames('labeled-progress', this.props.className)}>
+        <div className="description">
+          <div className="progress-label">{this.props.label}</div>
+          <div className="progress-made">
+            <span className="value">{this.props.value}</span>
+            /
+            <span className="max">{this.props.max}</span>
+          </div>
+        </div>
+        <div className="visual">
+          <progress className="progress is-small"
+                    value={this.props.value} max={this.props.max} />
+        </div>
+      </div>
+    )
+  }
+}
+
+LabeledProgressBar.propTypes = {
+  /** Label for the progress bar */
+  label: PropTypes.string,
+  /** Current progress value */
+  value: PropTypes.number.isRequired,
+  /** Max possible (completed) value */
+  max: PropTypes.number.isRequired,
+}

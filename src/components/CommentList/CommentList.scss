@@ -1,0 +1,52 @@
+@import '../../variables.scss';
+@import '../../mixins.scss';
+
+.comment-list {
+  &.none {
+    font-size: $size-7;
+    color: $grey;
+  }
+
+  &__comment {
+    margin-bottom: 1em;
+
+    &__header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    &--author {
+      color: $grey;
+      font-size: $size-7;
+      font-weight: $weight-semibold;
+      margin-right: 1em;
+    }
+
+    &--published-at {
+      color: $grey-light;
+      font-size: $size-8;
+      font-weight: $weight-semibold;
+
+      .time-part {
+        margin-right: 0.5em;
+      }
+    }
+
+    &--content {
+      font-size: $size-7;
+      background-color: $grey-lightest-more;
+      border-radius: $radius-medium;
+      padding: 1em;
+
+      p {
+        font-size: $size-7;
+      }
+    }
+
+    .with-triangle-border {
+      @include triangle-up(10px, $grey-lightest-more)
+    }
+  }
+}

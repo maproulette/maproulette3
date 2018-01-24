@@ -1,0 +1,82 @@
+@import '../node_modules/bulma/sass/utilities/initial-variables';
+
+// Bulma global variable overrides
+$radius-medium: 4px;
+
+// Colors
+$blue: #2281C2; // cornflower-blue
+$grey-darkest: #333333;
+$grey-dark: #606060;
+$grey: #777777;
+$grey-light: #AAAAAA;
+$grey-lighter: #CCCCCC;
+$grey-lighter-more: #D8D8D8;
+$grey-lightest: #EEEEEE;
+$grey-lightest-more: #F6F6F6;
+$green: #00A592; // persian green
+$green-light: #A4DBD5;
+$yellow: #FCCB4E; // mustard
+$coral: #E05054; // coral
+
+$primary: $blue;
+$danger: $red;
+$primary-invert: $white;
+$progress-value-background-color: $green;
+$default-icon-color: $grey-dark;
+
+// Typography
+$family-sans-serif: 'Roboto', sans-serif;
+$family-primary: $family-sans-serif;
+$weight-light: 300;
+$weight-normal: 400;
+$weight-semibold: 500;
+$weight-bold: 700;
+
+$size-7: 0.875rem;
+$size-8: 0.75rem;
+$size-9: 0.625rem;
+
+// z-index layers
+$intralayer-bump: 1;
+$nextlayer-bump: 5;
+
+$layer-none: 0;
+$layer-bottom: $layer-none + $nextlayer-bump;
+$layer-middle: $layer-bottom + $nextlayer-bump;
+$layer-top: $layer-middle + $nextlayer-bump;
+$layer-max: 50;
+
+$layer-map: $layer-bottom;
+$layer-map-control: $layer-map + $intralayer-bump;
+$layer-sidebar: $layer-middle;
+$layer-subnav: $layer-top;
+$layer-dropdown: $layer-top;
+$dropdown-content-z: $layer-dropdown;
+$layer-popout: $layer-top;
+$layer-modal: $layer-max;
+
+// Modal
+$modal-background-background-color: rgba($green, 0.7);
+
+// Title/header
+$title-color: $primary;
+$title-weight: $weight-light;
+
+$subtitle-color: $green;
+$subtitle-weight: $weight-light;
+
+// Navbar
+$navbar-background-color: $green;
+$navbar-item-color: $white;
+$navbar-item-active-color: $white;
+$navbar-item-hover-color: $white;
+$navbar-item-hover-background-color: transparent;
+$navbar-height: 4rem;
+
+// Subnav
+$subnav-height: $navbar-height;
+
+// Steps
+$steps-default-color: $grey-lightest;
+$steps-completed-color: $green;
+$steps-active-color: $green;

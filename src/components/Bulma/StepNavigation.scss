@@ -1,0 +1,10 @@
+@import '../../variables.scss';
+
+.step-navigation {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    margin-left: 1em;
+  }
+}

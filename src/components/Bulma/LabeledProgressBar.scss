@@ -1,0 +1,18 @@
+@import '../../variables.scss';
+
+.labeled-progress {
+  .description {
+    display: flex;
+    justify-content: space-between;
+
+    .progress-label {
+      font-weight: $weight-semibold;
+    }
+
+    .progress-made {
+      .value {
+        font-weight: $weight-semibold;
+      }
+    }
+  }
+}

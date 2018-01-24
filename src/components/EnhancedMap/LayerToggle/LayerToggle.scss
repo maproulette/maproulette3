@@ -1,0 +1,15 @@
+@import '../../../variables.scss';
+
+.layer-toggle.dropdown {
+  position: absolute;
+  z-index: $layer-map-control;
+  top: 100px;
+  right: 10px;
+
+  .layer-toggle__icon {
+    color: black;
+    width: 30px;
+    height: auto;
+    stroke-width: 2px;
+  }
+}

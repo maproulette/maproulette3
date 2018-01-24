@@ -1,0 +1,318 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders with props as expected 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <TaskMap
+    centerPoint={
+        Object {
+            "lat": 0,
+            "lng": 0,
+          }
+    }
+    setTaskMapBounds={[Function]}
+    task={
+        Object {
+            "geometries": Object {
+              "features": null,
+            },
+            "id": 2,
+            "parent": Object {
+              "defaultZoom": 2,
+              "maxZoom": 0,
+              "minZoom": 1,
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Connect(Component)
+          centerPoint={
+                    Object {
+                              "lat": 0,
+                              "lng": 0,
+                            }
+          }
+          setTaskMapBounds={[Function]}
+          task={
+                    Object {
+                              "geometries": Object {
+                                "features": null,
+                              },
+                              "id": 2,
+                              "parent": Object {
+                                "defaultZoom": 2,
+                                "maxZoom": 0,
+                                "minZoom": 1,
+                              },
+                            }
+          }
+/>,
+        <EnhancedMap
+          center={
+                    Object {
+                              "lat": 0,
+                              "lng": 0,
+                            }
+          }
+          features={null}
+          maxZoom={0}
+          minZoom={1}
+          onBoundsChange={[Function]}
+          setInitialBounds={true}
+          zoom={2}
+          zoomControl={false}
+>
+          <ZoomControl
+                    position="topright"
+          />
+          <Connect(InjectIntl(SourcedTileLayer))
+                    maxZoom={0}
+          />
+</EnhancedMap>,
+      ],
+      "className": "task-map full-screen-map task",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "centerPoint": Object {
+            "lat": 0,
+            "lng": 0,
+          },
+          "setTaskMapBounds": [Function],
+          "task": Object {
+            "geometries": Object {
+              "features": null,
+            },
+            "id": 2,
+            "parent": Object {
+              "defaultZoom": 2,
+              "maxZoom": 0,
+              "minZoom": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": "2",
+        "nodeType": "class",
+        "props": Object {
+          "center": Object {
+            "lat": 0,
+            "lng": 0,
+          },
+          "children": Array [
+            <ZoomControl
+              position="topright"
+/>,
+            <Connect(InjectIntl(SourcedTileLayer))
+              maxZoom={0}
+/>,
+          ],
+          "features": null,
+          "maxZoom": 0,
+          "minZoom": 1,
+          "onBoundsChange": [Function],
+          "setInitialBounds": true,
+          "zoom": 2,
+          "zoomControl": false,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "position": "topright",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "maxZoom": 0,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Connect(Component)
+            centerPoint={
+                        Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  }
+            }
+            setTaskMapBounds={[Function]}
+            task={
+                        Object {
+                                    "geometries": Object {
+                                      "features": null,
+                                    },
+                                    "id": 2,
+                                    "parent": Object {
+                                      "defaultZoom": 2,
+                                      "maxZoom": 0,
+                                      "minZoom": 1,
+                                    },
+                                  }
+            }
+/>,
+          <EnhancedMap
+            center={
+                        Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  }
+            }
+            features={null}
+            maxZoom={0}
+            minZoom={1}
+            onBoundsChange={[Function]}
+            setInitialBounds={true}
+            zoom={2}
+            zoomControl={false}
+>
+            <ZoomControl
+                        position="topright"
+            />
+            <Connect(InjectIntl(SourcedTileLayer))
+                        maxZoom={0}
+            />
+</EnhancedMap>,
+        ],
+        "className": "task-map full-screen-map task",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "centerPoint": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+            "setTaskMapBounds": [Function],
+            "task": Object {
+              "geometries": Object {
+                "features": null,
+              },
+              "id": 2,
+              "parent": Object {
+                "defaultZoom": 2,
+                "maxZoom": 0,
+                "minZoom": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": "2",
+          "nodeType": "class",
+          "props": Object {
+            "center": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+            "children": Array [
+              <ZoomControl
+                position="topright"
+/>,
+              <Connect(InjectIntl(SourcedTileLayer))
+                maxZoom={0}
+/>,
+            ],
+            "features": null,
+            "maxZoom": 0,
+            "minZoom": 1,
+            "onBoundsChange": [Function],
+            "setInitialBounds": true,
+            "zoom": 2,
+            "zoomControl": false,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "position": "topright",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "maxZoom": 0,
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

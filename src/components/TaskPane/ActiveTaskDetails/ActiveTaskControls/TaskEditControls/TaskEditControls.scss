@@ -1,0 +1,83 @@
+@import '../../../../../variables.scss';
+
+@mixin task-control($color, $hover-color) {
+  svg {
+    fill: $color;
+  }
+
+  &.button {
+    color: $color;
+
+    &:hover, &:enabled:focus {
+      color: $hover-color;
+
+      svg {
+        fill: $hover-color;
+      }
+    }
+  }
+}
+
+.task-edit-controls {
+  &__icon {
+    height: 18px;
+    width: auto;
+    margin-right: 5px;
+  }
+
+  &__task-comment {
+    width: 100%;
+    margin-bottom: 10px;
+
+    input {
+      width: 100%;
+      font-size: 16px;
+      padding: 5px;
+      border: 2px solid $grey;
+      border-radius: $radius-medium;
+    }
+  }
+
+  &__edit-control {
+    @include task-control($default-icon-color, $blue);
+  }
+
+  &__skip-control {
+    @include task-control($default-icon-color, $black);
+  }
+
+  &__false-positive-control {
+    @include task-control($default-icon-color, $green);
+  }
+
+  &.is-minimized {
+    .columns {
+      flex-direction: column;
+
+      .column {
+        padding: 0;
+      }
+    }
+
+    button {
+      margin-left: 15px;
+      margin-bottom: 5px;
+    }
+
+    .task-edit-controls__icon {
+      height: 26px;
+      width: auto;
+      margin-left: 0px;
+      margin-right: 0px;
+      fill: $default-icon-color;
+    }
+
+    .task-edit-controls__task-comment {
+      display: none;
+    }
+
+    .control-label {
+      display: none;
+    }
+  }
+}

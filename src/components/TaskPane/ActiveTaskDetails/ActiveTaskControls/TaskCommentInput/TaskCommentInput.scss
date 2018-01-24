@@ -1,0 +1,18 @@
+@import '../../../../../variables.scss';
+
+.task-completion-comment {
+  width: 100%;
+  margin-bottom: 10px;
+
+  input {
+    width: 100%;
+    font-size: $size-6;
+    padding: 5px 10px;
+    border: 2px solid $grey;
+    border-radius: $radius-medium;
+
+    &::placeholder {
+      font-size: $size-7;
+    }
+  }
+}

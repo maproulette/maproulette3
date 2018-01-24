@@ -1,0 +1,352 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it renders a full screen map 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <LocatorMap
+    layerSourceName="foo"
+    mapBounds={
+        Object {
+            "locator": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+            },
+          }
+    }
+    setLocatorMapBounds={[Function]}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Connect(Component)
+          layerSourceName="foo"
+          mapBounds={
+                    Object {
+                              "locator": Object {
+                                "bounds": Object {
+                                  "_northEast": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                  "_southWest": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                },
+                              },
+                            }
+          }
+          setLocatorMapBounds={[Function]}
+/>,
+        <EnhancedMap
+          animate={true}
+          center={
+                    Object {
+                              "lat": 0,
+                              "lng": 45,
+                            }
+          }
+          initialBounds={
+                    Object {
+                              "_northEast": Object {
+                                "lat": 0,
+                                "lng": 0,
+                              },
+                              "_southWest": Object {
+                                "lat": 0,
+                                "lng": 0,
+                              },
+                            }
+          }
+          minZoom={3}
+          onBoundsChange={[Function]}
+          setInitialBounds={false}
+          zoom={3}
+          zoomControl={false}
+>
+          <ZoomControl
+                    position="topright"
+          />
+          <Connect(InjectIntl(SourcedTileLayer))
+                    defaultLayer="foo"
+          />
+</EnhancedMap>,
+      ],
+      "className": "default-map full-screen-map",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "layerSourceName": "foo",
+          "mapBounds": Object {
+            "locator": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+            },
+          },
+          "setLocatorMapBounds": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "animate": true,
+          "center": Object {
+            "lat": 0,
+            "lng": 45,
+          },
+          "children": Array [
+            <ZoomControl
+              position="topright"
+/>,
+            <Connect(InjectIntl(SourcedTileLayer))
+              defaultLayer="foo"
+/>,
+          ],
+          "initialBounds": Object {
+            "_northEast": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+            "_southWest": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+          },
+          "minZoom": 3,
+          "onBoundsChange": [Function],
+          "setInitialBounds": false,
+          "zoom": 3,
+          "zoomControl": false,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "position": "topright",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultLayer": "foo",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Connect(Component)
+            layerSourceName="foo"
+            mapBounds={
+                        Object {
+                                    "locator": Object {
+                                      "bounds": Object {
+                                        "_northEast": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                        "_southWest": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                      },
+                                    },
+                                  }
+            }
+            setLocatorMapBounds={[Function]}
+/>,
+          <EnhancedMap
+            animate={true}
+            center={
+                        Object {
+                                    "lat": 0,
+                                    "lng": 45,
+                                  }
+            }
+            initialBounds={
+                        Object {
+                                    "_northEast": Object {
+                                      "lat": 0,
+                                      "lng": 0,
+                                    },
+                                    "_southWest": Object {
+                                      "lat": 0,
+                                      "lng": 0,
+                                    },
+                                  }
+            }
+            minZoom={3}
+            onBoundsChange={[Function]}
+            setInitialBounds={false}
+            zoom={3}
+            zoomControl={false}
+>
+            <ZoomControl
+                        position="topright"
+            />
+            <Connect(InjectIntl(SourcedTileLayer))
+                        defaultLayer="foo"
+            />
+</EnhancedMap>,
+        ],
+        "className": "default-map full-screen-map",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "layerSourceName": "foo",
+            "mapBounds": Object {
+              "locator": Object {
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                },
+              },
+            },
+            "setLocatorMapBounds": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "animate": true,
+            "center": Object {
+              "lat": 0,
+              "lng": 45,
+            },
+            "children": Array [
+              <ZoomControl
+                position="topright"
+/>,
+              <Connect(InjectIntl(SourcedTileLayer))
+                defaultLayer="foo"
+/>,
+            ],
+            "initialBounds": Object {
+              "_northEast": Object {
+                "lat": 0,
+                "lng": 0,
+              },
+              "_southWest": Object {
+                "lat": 0,
+                "lng": 0,
+              },
+            },
+            "minZoom": 3,
+            "onBoundsChange": [Function],
+            "setInitialBounds": false,
+            "zoom": 3,
+            "zoomControl": false,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "position": "topright",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultLayer": "foo",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

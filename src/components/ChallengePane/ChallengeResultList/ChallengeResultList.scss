@@ -1,0 +1,32 @@
+@import '../../../variables.scss';
+
+.challenge-result-list {
+  &--heading {
+    padding: 20px 0px;
+    margin: 0 20px 15px 20px;
+    border-bottom: 2px solid $grey-lighter-more;
+
+    h2.title {
+      color: $green;
+      font-weight: $weight-normal;
+      font-size: $size-3;
+    }
+  }
+
+  &__challenge-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 20px;
+
+    &.no-results {
+      display: flex;
+      justify-content: flex-start;
+      color: $grey;
+      font-weight: $weight-semibold;
+
+      .busy-spinner {
+        margin-left: 10px;
+      }
+    }
+  }
+}

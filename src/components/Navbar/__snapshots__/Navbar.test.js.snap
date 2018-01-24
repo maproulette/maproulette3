@@ -1,0 +1,2285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`does not show an admin link if user is not signed in 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Navbar
+    location={
+        Object {
+            "pathname": "/some/path",
+          }
+    }
+    user={
+        Object {
+            "id": 357,
+            "isLoggedIn": false,
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "aria-label": "main navigation",
+      "children": Array [
+        <div
+          className="navbar-brand"
+>
+          <Link
+                    className="navbar-item"
+                    replace={false}
+                    to="/"
+          >
+                    <SvgSymbol
+                              className="navbar__logo"
+                              sym="mr-logo"
+                              viewBox="0 0 20 20"
+                    />
+                    <span
+                              className="is-size-4"
+                    >
+                              <span
+                                        className="has-text-weight-bold"
+                              >
+                                        Map
+                              </span>
+                              Roulette
+                    </span>
+                    <span
+                              className="alpha-preview"
+                    >
+                              <FormattedMessage
+                                        defaultMessage="v3 ALPHA PREVIEW"
+                                        id="Navbar.preview.label"
+                                        values={Object {}}
+                              />
+                    </span>
+          </Link>
+</div>,
+        <div
+          className="navbar-menu"
+>
+          <div
+                    className="navbar-start"
+          >
+                    <Link
+                              className="navbar-item"
+                              replace={false}
+                              to="/about"
+                    >
+                              <span
+                                        className="item-text"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="About"
+                                                  id="Navbar.links.about"
+                                                  values={Object {}}
+                                        />
+                              </span>
+                    </Link>
+                    <Link
+                              className="navbar-item"
+                              replace={false}
+                              to="/"
+                    >
+                              <span
+                                        className="item-text"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="Challenges"
+                                                  id="Navbar.links.challengeResults"
+                                                  values={Object {}}
+                                        />
+                              </span>
+                    </Link>
+          </div>
+          <div
+                    className="navbar-end"
+          >
+                    <InjectIntl(AccountNavItem)
+                              location={
+                                        Object {
+                                                  "pathname": "/some/path",
+                                                }
+                              }
+                              user={
+                                        Object {
+                                                  "id": 357,
+                                                  "isLoggedIn": false,
+                                                }
+                              }
+                    />
+          </div>
+</div>,
+      ],
+      "className": "navbar top-nav",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <Link
+            className="navbar-item"
+            replace={false}
+            to="/"
+>
+            <SvgSymbol
+                        className="navbar__logo"
+                        sym="mr-logo"
+                        viewBox="0 0 20 20"
+            />
+            <span
+                        className="is-size-4"
+            >
+                        <span
+                                    className="has-text-weight-bold"
+                        >
+                                    Map
+                        </span>
+                        Roulette
+            </span>
+            <span
+                        className="alpha-preview"
+            >
+                        <FormattedMessage
+                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    id="Navbar.preview.label"
+                                    values={Object {}}
+                        />
+            </span>
+</Link>,
+          "className": "navbar-brand",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <SvgSymbol
+                className="navbar__logo"
+                sym="mr-logo"
+                viewBox="0 0 20 20"
+/>,
+              <span
+                className="is-size-4"
+>
+                <span
+                                className="has-text-weight-bold"
+                >
+                                Map
+                </span>
+                Roulette
+</span>,
+              <span
+                className="alpha-preview"
+>
+                <FormattedMessage
+                                defaultMessage="v3 ALPHA PREVIEW"
+                                id="Navbar.preview.label"
+                                values={Object {}}
+                />
+</span>,
+            ],
+            "className": "navbar-item",
+            "replace": false,
+            "to": "/",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "navbar__logo",
+                "sym": "mr-logo",
+                "viewBox": "0 0 20 20",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <span
+                    className="has-text-weight-bold"
+>
+                    Map
+</span>,
+                  "Roulette",
+                ],
+                "className": "is-size-4",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "Map",
+                    "className": "has-text-weight-bold",
+                  },
+                  "ref": null,
+                  "rendered": "Map",
+                  "type": "span",
+                },
+                "Roulette",
+              ],
+              "type": "span",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <FormattedMessage
+                  defaultMessage="v3 ALPHA PREVIEW"
+                  id="Navbar.preview.label"
+                  values={Object {}}
+/>,
+                "className": "alpha-preview",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "v3 ALPHA PREVIEW",
+                  "id": "Navbar.preview.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "span",
+            },
+          ],
+          "type": [Function],
+        },
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="navbar-start"
+>
+              <Link
+                            className="navbar-item"
+                            replace={false}
+                            to="/about"
+              >
+                            <span
+                                          className="item-text"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="About"
+                                                        id="Navbar.links.about"
+                                                        values={Object {}}
+                                          />
+                            </span>
+              </Link>
+              <Link
+                            className="navbar-item"
+                            replace={false}
+                            to="/"
+              >
+                            <span
+                                          className="item-text"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="Challenges"
+                                                        id="Navbar.links.challengeResults"
+                                                        values={Object {}}
+                                          />
+                            </span>
+              </Link>
+</div>,
+            <div
+              className="navbar-end"
+>
+              <InjectIntl(AccountNavItem)
+                            location={
+                                          Object {
+                                                        "pathname": "/some/path",
+                                                      }
+                            }
+                            user={
+                                          Object {
+                                                        "id": 357,
+                                                        "isLoggedIn": false,
+                                                      }
+                            }
+              />
+</div>,
+          ],
+          "className": "navbar-menu",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <Link
+                  className="navbar-item"
+                  replace={false}
+                  to="/about"
+>
+                  <span
+                                    className="item-text"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="About"
+                                                      id="Navbar.links.about"
+                                                      values={Object {}}
+                                    />
+                  </span>
+</Link>,
+                <Link
+                  className="navbar-item"
+                  replace={false}
+                  to="/"
+>
+                  <span
+                                    className="item-text"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="Challenges"
+                                                      id="Navbar.links.challengeResults"
+                                                      values={Object {}}
+                                    />
+                  </span>
+</Link>,
+                false,
+              ],
+              "className": "navbar-start",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <span
+                    className="item-text"
+>
+                    <FormattedMessage
+                                        defaultMessage="About"
+                                        id="Navbar.links.about"
+                                        values={Object {}}
+                    />
+</span>,
+                  "className": "navbar-item",
+                  "replace": false,
+                  "to": "/about",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="About"
+                      id="Navbar.links.about"
+                      values={Object {}}
+/>,
+                    "className": "item-text",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "About",
+                      "id": "Navbar.links.about",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <span
+                    className="item-text"
+>
+                    <FormattedMessage
+                                        defaultMessage="Challenges"
+                                        id="Navbar.links.challengeResults"
+                                        values={Object {}}
+                    />
+</span>,
+                  "className": "navbar-item",
+                  "replace": false,
+                  "to": "/",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Challenges"
+                      id="Navbar.links.challengeResults"
+                      values={Object {}}
+/>,
+                    "className": "item-text",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Challenges",
+                      "id": "Navbar.links.challengeResults",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": [Function],
+              },
+              false,
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <InjectIntl(AccountNavItem)
+                location={
+                                Object {
+                                                "pathname": "/some/path",
+                                              }
+                }
+                user={
+                                Object {
+                                                "id": 357,
+                                                "isLoggedIn": false,
+                                              }
+                }
+/>,
+              "className": "navbar-end",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "location": Object {
+                  "pathname": "/some/path",
+                },
+                "user": Object {
+                  "id": 357,
+                  "isLoggedIn": false,
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "nav",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "aria-label": "main navigation",
+        "children": Array [
+          <div
+            className="navbar-brand"
+>
+            <Link
+                        className="navbar-item"
+                        replace={false}
+                        to="/"
+            >
+                        <SvgSymbol
+                                    className="navbar__logo"
+                                    sym="mr-logo"
+                                    viewBox="0 0 20 20"
+                        />
+                        <span
+                                    className="is-size-4"
+                        >
+                                    <span
+                                                className="has-text-weight-bold"
+                                    >
+                                                Map
+                                    </span>
+                                    Roulette
+                        </span>
+                        <span
+                                    className="alpha-preview"
+                        >
+                                    <FormattedMessage
+                                                defaultMessage="v3 ALPHA PREVIEW"
+                                                id="Navbar.preview.label"
+                                                values={Object {}}
+                                    />
+                        </span>
+            </Link>
+</div>,
+          <div
+            className="navbar-menu"
+>
+            <div
+                        className="navbar-start"
+            >
+                        <Link
+                                    className="navbar-item"
+                                    replace={false}
+                                    to="/about"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="About"
+                                                            id="Navbar.links.about"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+                        <Link
+                                    className="navbar-item"
+                                    replace={false}
+                                    to="/"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="Challenges"
+                                                            id="Navbar.links.challengeResults"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+            </div>
+            <div
+                        className="navbar-end"
+            >
+                        <InjectIntl(AccountNavItem)
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                                    }
+                        />
+            </div>
+</div>,
+        ],
+        "className": "navbar top-nav",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <Link
+              className="navbar-item"
+              replace={false}
+              to="/"
+>
+              <SvgSymbol
+                            className="navbar__logo"
+                            sym="mr-logo"
+                            viewBox="0 0 20 20"
+              />
+              <span
+                            className="is-size-4"
+              >
+                            <span
+                                          className="has-text-weight-bold"
+                            >
+                                          Map
+                            </span>
+                            Roulette
+              </span>
+              <span
+                            className="alpha-preview"
+              >
+                            <FormattedMessage
+                                          defaultMessage="v3 ALPHA PREVIEW"
+                                          id="Navbar.preview.label"
+                                          values={Object {}}
+                            />
+              </span>
+</Link>,
+            "className": "navbar-brand",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <SvgSymbol
+                  className="navbar__logo"
+                  sym="mr-logo"
+                  viewBox="0 0 20 20"
+/>,
+                <span
+                  className="is-size-4"
+>
+                  <span
+                                    className="has-text-weight-bold"
+                  >
+                                    Map
+                  </span>
+                  Roulette
+</span>,
+                <span
+                  className="alpha-preview"
+>
+                  <FormattedMessage
+                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    id="Navbar.preview.label"
+                                    values={Object {}}
+                  />
+</span>,
+              ],
+              "className": "navbar-item",
+              "replace": false,
+              "to": "/",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "className": "navbar__logo",
+                  "sym": "mr-logo",
+                  "viewBox": "0 0 20 20",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="has-text-weight-bold"
+>
+                      Map
+</span>,
+                    "Roulette",
+                  ],
+                  "className": "is-size-4",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Map",
+                      "className": "has-text-weight-bold",
+                    },
+                    "ref": null,
+                    "rendered": "Map",
+                    "type": "span",
+                  },
+                  "Roulette",
+                ],
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="v3 ALPHA PREVIEW"
+                    id="Navbar.preview.label"
+                    values={Object {}}
+/>,
+                  "className": "alpha-preview",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "v3 ALPHA PREVIEW",
+                    "id": "Navbar.preview.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "span",
+              },
+            ],
+            "type": [Function],
+          },
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="navbar-start"
+>
+                <Link
+                                className="navbar-item"
+                                replace={false}
+                                to="/about"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="About"
+                                                                id="Navbar.links.about"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
+                <Link
+                                className="navbar-item"
+                                replace={false}
+                                to="/"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="Challenges"
+                                                                id="Navbar.links.challengeResults"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
+</div>,
+              <div
+                className="navbar-end"
+>
+                <InjectIntl(AccountNavItem)
+                                location={
+                                                Object {
+                                                                "pathname": "/some/path",
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "id": 357,
+                                                                "isLoggedIn": false,
+                                                              }
+                                }
+                />
+</div>,
+            ],
+            "className": "navbar-menu",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <Link
+                    className="navbar-item"
+                    replace={false}
+                    to="/about"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="About"
+                                                            id="Navbar.links.about"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
+                  <Link
+                    className="navbar-item"
+                    replace={false}
+                    to="/"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="Challenges"
+                                                            id="Navbar.links.challengeResults"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
+                  false,
+                ],
+                "className": "navbar-start",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="About"
+                                            id="Navbar.links.about"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item",
+                    "replace": false,
+                    "to": "/about",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="About"
+                        id="Navbar.links.about"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "About",
+                        "id": "Navbar.links.about",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="Challenges"
+                                            id="Navbar.links.challengeResults"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item",
+                    "replace": false,
+                    "to": "/",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="Challenges"
+                        id="Navbar.links.challengeResults"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "Challenges",
+                        "id": "Navbar.links.challengeResults",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
+                false,
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <InjectIntl(AccountNavItem)
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": false,
+                                                    }
+                  }
+/>,
+                "className": "navbar-end",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": false,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "nav",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`includes an admin link if user is logged in 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Navbar
+    location={
+        Object {
+            "pathname": "/some/path",
+          }
+    }
+    user={
+        Object {
+            "id": 357,
+            "isLoggedIn": true,
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "aria-label": "main navigation",
+      "children": Array [
+        <div
+          className="navbar-brand"
+>
+          <Link
+                    className="navbar-item"
+                    replace={false}
+                    to="/"
+          >
+                    <SvgSymbol
+                              className="navbar__logo"
+                              sym="mr-logo"
+                              viewBox="0 0 20 20"
+                    />
+                    <span
+                              className="is-size-4"
+                    >
+                              <span
+                                        className="has-text-weight-bold"
+                              >
+                                        Map
+                              </span>
+                              Roulette
+                    </span>
+                    <span
+                              className="alpha-preview"
+                    >
+                              <FormattedMessage
+                                        defaultMessage="v3 ALPHA PREVIEW"
+                                        id="Navbar.preview.label"
+                                        values={Object {}}
+                              />
+                    </span>
+          </Link>
+</div>,
+        <div
+          className="navbar-menu"
+>
+          <div
+                    className="navbar-start"
+          >
+                    <Link
+                              className="navbar-item"
+                              replace={false}
+                              to="/about"
+                    >
+                              <span
+                                        className="item-text"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="About"
+                                                  id="Navbar.links.about"
+                                                  values={Object {}}
+                                        />
+                              </span>
+                    </Link>
+                    <Link
+                              className="navbar-item"
+                              replace={false}
+                              to="/"
+                    >
+                              <span
+                                        className="item-text"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="Challenges"
+                                                  id="Navbar.links.challengeResults"
+                                                  values={Object {}}
+                                        />
+                              </span>
+                    </Link>
+                    <Link
+                              className="navbar-item"
+                              replace={false}
+                              to="/admin"
+                    >
+                              <span
+                                        className="item-text"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="Create"
+                                                  id="Navbar.links.admin"
+                                                  values={Object {}}
+                                        />
+                              </span>
+                    </Link>
+          </div>
+          <div
+                    className="navbar-end"
+          >
+                    <InjectIntl(AccountNavItem)
+                              location={
+                                        Object {
+                                                  "pathname": "/some/path",
+                                                }
+                              }
+                              user={
+                                        Object {
+                                                  "id": 357,
+                                                  "isLoggedIn": true,
+                                                }
+                              }
+                    />
+          </div>
+</div>,
+      ],
+      "className": "navbar top-nav",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <Link
+            className="navbar-item"
+            replace={false}
+            to="/"
+>
+            <SvgSymbol
+                        className="navbar__logo"
+                        sym="mr-logo"
+                        viewBox="0 0 20 20"
+            />
+            <span
+                        className="is-size-4"
+            >
+                        <span
+                                    className="has-text-weight-bold"
+                        >
+                                    Map
+                        </span>
+                        Roulette
+            </span>
+            <span
+                        className="alpha-preview"
+            >
+                        <FormattedMessage
+                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    id="Navbar.preview.label"
+                                    values={Object {}}
+                        />
+            </span>
+</Link>,
+          "className": "navbar-brand",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <SvgSymbol
+                className="navbar__logo"
+                sym="mr-logo"
+                viewBox="0 0 20 20"
+/>,
+              <span
+                className="is-size-4"
+>
+                <span
+                                className="has-text-weight-bold"
+                >
+                                Map
+                </span>
+                Roulette
+</span>,
+              <span
+                className="alpha-preview"
+>
+                <FormattedMessage
+                                defaultMessage="v3 ALPHA PREVIEW"
+                                id="Navbar.preview.label"
+                                values={Object {}}
+                />
+</span>,
+            ],
+            "className": "navbar-item",
+            "replace": false,
+            "to": "/",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "navbar__logo",
+                "sym": "mr-logo",
+                "viewBox": "0 0 20 20",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <span
+                    className="has-text-weight-bold"
+>
+                    Map
+</span>,
+                  "Roulette",
+                ],
+                "className": "is-size-4",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "Map",
+                    "className": "has-text-weight-bold",
+                  },
+                  "ref": null,
+                  "rendered": "Map",
+                  "type": "span",
+                },
+                "Roulette",
+              ],
+              "type": "span",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <FormattedMessage
+                  defaultMessage="v3 ALPHA PREVIEW"
+                  id="Navbar.preview.label"
+                  values={Object {}}
+/>,
+                "className": "alpha-preview",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "v3 ALPHA PREVIEW",
+                  "id": "Navbar.preview.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "span",
+            },
+          ],
+          "type": [Function],
+        },
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="navbar-start"
+>
+              <Link
+                            className="navbar-item"
+                            replace={false}
+                            to="/about"
+              >
+                            <span
+                                          className="item-text"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="About"
+                                                        id="Navbar.links.about"
+                                                        values={Object {}}
+                                          />
+                            </span>
+              </Link>
+              <Link
+                            className="navbar-item"
+                            replace={false}
+                            to="/"
+              >
+                            <span
+                                          className="item-text"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="Challenges"
+                                                        id="Navbar.links.challengeResults"
+                                                        values={Object {}}
+                                          />
+                            </span>
+              </Link>
+              <Link
+                            className="navbar-item"
+                            replace={false}
+                            to="/admin"
+              >
+                            <span
+                                          className="item-text"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="Create"
+                                                        id="Navbar.links.admin"
+                                                        values={Object {}}
+                                          />
+                            </span>
+              </Link>
+</div>,
+            <div
+              className="navbar-end"
+>
+              <InjectIntl(AccountNavItem)
+                            location={
+                                          Object {
+                                                        "pathname": "/some/path",
+                                                      }
+                            }
+                            user={
+                                          Object {
+                                                        "id": 357,
+                                                        "isLoggedIn": true,
+                                                      }
+                            }
+              />
+</div>,
+          ],
+          "className": "navbar-menu",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <Link
+                  className="navbar-item"
+                  replace={false}
+                  to="/about"
+>
+                  <span
+                                    className="item-text"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="About"
+                                                      id="Navbar.links.about"
+                                                      values={Object {}}
+                                    />
+                  </span>
+</Link>,
+                <Link
+                  className="navbar-item"
+                  replace={false}
+                  to="/"
+>
+                  <span
+                                    className="item-text"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="Challenges"
+                                                      id="Navbar.links.challengeResults"
+                                                      values={Object {}}
+                                    />
+                  </span>
+</Link>,
+                <Link
+                  className="navbar-item"
+                  replace={false}
+                  to="/admin"
+>
+                  <span
+                                    className="item-text"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="Create"
+                                                      id="Navbar.links.admin"
+                                                      values={Object {}}
+                                    />
+                  </span>
+</Link>,
+              ],
+              "className": "navbar-start",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <span
+                    className="item-text"
+>
+                    <FormattedMessage
+                                        defaultMessage="About"
+                                        id="Navbar.links.about"
+                                        values={Object {}}
+                    />
+</span>,
+                  "className": "navbar-item",
+                  "replace": false,
+                  "to": "/about",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="About"
+                      id="Navbar.links.about"
+                      values={Object {}}
+/>,
+                    "className": "item-text",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "About",
+                      "id": "Navbar.links.about",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <span
+                    className="item-text"
+>
+                    <FormattedMessage
+                                        defaultMessage="Challenges"
+                                        id="Navbar.links.challengeResults"
+                                        values={Object {}}
+                    />
+</span>,
+                  "className": "navbar-item",
+                  "replace": false,
+                  "to": "/",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Challenges"
+                      id="Navbar.links.challengeResults"
+                      values={Object {}}
+/>,
+                    "className": "item-text",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Challenges",
+                      "id": "Navbar.links.challengeResults",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <span
+                    className="item-text"
+>
+                    <FormattedMessage
+                                        defaultMessage="Create"
+                                        id="Navbar.links.admin"
+                                        values={Object {}}
+                    />
+</span>,
+                  "className": "navbar-item",
+                  "replace": false,
+                  "to": "/admin",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Create"
+                      id="Navbar.links.admin"
+                      values={Object {}}
+/>,
+                    "className": "item-text",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Create",
+                      "id": "Navbar.links.admin",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": [Function],
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <InjectIntl(AccountNavItem)
+                location={
+                                Object {
+                                                "pathname": "/some/path",
+                                              }
+                }
+                user={
+                                Object {
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                              }
+                }
+/>,
+              "className": "navbar-end",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "location": Object {
+                  "pathname": "/some/path",
+                },
+                "user": Object {
+                  "id": 357,
+                  "isLoggedIn": true,
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "nav",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "aria-label": "main navigation",
+        "children": Array [
+          <div
+            className="navbar-brand"
+>
+            <Link
+                        className="navbar-item"
+                        replace={false}
+                        to="/"
+            >
+                        <SvgSymbol
+                                    className="navbar__logo"
+                                    sym="mr-logo"
+                                    viewBox="0 0 20 20"
+                        />
+                        <span
+                                    className="is-size-4"
+                        >
+                                    <span
+                                                className="has-text-weight-bold"
+                                    >
+                                                Map
+                                    </span>
+                                    Roulette
+                        </span>
+                        <span
+                                    className="alpha-preview"
+                        >
+                                    <FormattedMessage
+                                                defaultMessage="v3 ALPHA PREVIEW"
+                                                id="Navbar.preview.label"
+                                                values={Object {}}
+                                    />
+                        </span>
+            </Link>
+</div>,
+          <div
+            className="navbar-menu"
+>
+            <div
+                        className="navbar-start"
+            >
+                        <Link
+                                    className="navbar-item"
+                                    replace={false}
+                                    to="/about"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="About"
+                                                            id="Navbar.links.about"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+                        <Link
+                                    className="navbar-item"
+                                    replace={false}
+                                    to="/"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="Challenges"
+                                                            id="Navbar.links.challengeResults"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+                        <Link
+                                    className="navbar-item"
+                                    replace={false}
+                                    to="/admin"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="Create"
+                                                            id="Navbar.links.admin"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+            </div>
+            <div
+                        className="navbar-end"
+            >
+                        <InjectIntl(AccountNavItem)
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                                    }
+                        />
+            </div>
+</div>,
+        ],
+        "className": "navbar top-nav",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <Link
+              className="navbar-item"
+              replace={false}
+              to="/"
+>
+              <SvgSymbol
+                            className="navbar__logo"
+                            sym="mr-logo"
+                            viewBox="0 0 20 20"
+              />
+              <span
+                            className="is-size-4"
+              >
+                            <span
+                                          className="has-text-weight-bold"
+                            >
+                                          Map
+                            </span>
+                            Roulette
+              </span>
+              <span
+                            className="alpha-preview"
+              >
+                            <FormattedMessage
+                                          defaultMessage="v3 ALPHA PREVIEW"
+                                          id="Navbar.preview.label"
+                                          values={Object {}}
+                            />
+              </span>
+</Link>,
+            "className": "navbar-brand",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <SvgSymbol
+                  className="navbar__logo"
+                  sym="mr-logo"
+                  viewBox="0 0 20 20"
+/>,
+                <span
+                  className="is-size-4"
+>
+                  <span
+                                    className="has-text-weight-bold"
+                  >
+                                    Map
+                  </span>
+                  Roulette
+</span>,
+                <span
+                  className="alpha-preview"
+>
+                  <FormattedMessage
+                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    id="Navbar.preview.label"
+                                    values={Object {}}
+                  />
+</span>,
+              ],
+              "className": "navbar-item",
+              "replace": false,
+              "to": "/",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "className": "navbar__logo",
+                  "sym": "mr-logo",
+                  "viewBox": "0 0 20 20",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="has-text-weight-bold"
+>
+                      Map
+</span>,
+                    "Roulette",
+                  ],
+                  "className": "is-size-4",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Map",
+                      "className": "has-text-weight-bold",
+                    },
+                    "ref": null,
+                    "rendered": "Map",
+                    "type": "span",
+                  },
+                  "Roulette",
+                ],
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="v3 ALPHA PREVIEW"
+                    id="Navbar.preview.label"
+                    values={Object {}}
+/>,
+                  "className": "alpha-preview",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "v3 ALPHA PREVIEW",
+                    "id": "Navbar.preview.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "span",
+              },
+            ],
+            "type": [Function],
+          },
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="navbar-start"
+>
+                <Link
+                                className="navbar-item"
+                                replace={false}
+                                to="/about"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="About"
+                                                                id="Navbar.links.about"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
+                <Link
+                                className="navbar-item"
+                                replace={false}
+                                to="/"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="Challenges"
+                                                                id="Navbar.links.challengeResults"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
+                <Link
+                                className="navbar-item"
+                                replace={false}
+                                to="/admin"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="Create"
+                                                                id="Navbar.links.admin"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
+</div>,
+              <div
+                className="navbar-end"
+>
+                <InjectIntl(AccountNavItem)
+                                location={
+                                                Object {
+                                                                "pathname": "/some/path",
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "id": 357,
+                                                                "isLoggedIn": true,
+                                                              }
+                                }
+                />
+</div>,
+            ],
+            "className": "navbar-menu",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <Link
+                    className="navbar-item"
+                    replace={false}
+                    to="/about"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="About"
+                                                            id="Navbar.links.about"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
+                  <Link
+                    className="navbar-item"
+                    replace={false}
+                    to="/"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="Challenges"
+                                                            id="Navbar.links.challengeResults"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
+                  <Link
+                    className="navbar-item"
+                    replace={false}
+                    to="/admin"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="Create"
+                                                            id="Navbar.links.admin"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
+                ],
+                "className": "navbar-start",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="About"
+                                            id="Navbar.links.about"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item",
+                    "replace": false,
+                    "to": "/about",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="About"
+                        id="Navbar.links.about"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "About",
+                        "id": "Navbar.links.about",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="Challenges"
+                                            id="Navbar.links.challengeResults"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item",
+                    "replace": false,
+                    "to": "/",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="Challenges"
+                        id="Navbar.links.challengeResults"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "Challenges",
+                        "id": "Navbar.links.challengeResults",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="Create"
+                                            id="Navbar.links.admin"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item",
+                    "replace": false,
+                    "to": "/admin",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="Create"
+                        id="Navbar.links.admin"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "Create",
+                        "id": "Navbar.links.admin",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <InjectIntl(AccountNavItem)
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": true,
+                                                    }
+                  }
+/>,
+                "className": "navbar-end",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": true,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "nav",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

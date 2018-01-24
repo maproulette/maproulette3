@@ -1,0 +1,49 @@
+@import './variables.scss';
+
+// Buttons
+@mixin invert-on-hover($foreground-color, $background-color) {
+  color: $foreground-color;
+  border-color: $foreground-color;
+  background-color: $background-color;
+
+  svg {
+    fill: $foreground-color;
+  }
+
+  &:enabled:hover, &:enabled:focus {
+    color: $background-color;
+    border-color: $foreground-color;
+    background-color: $foreground-color;
+
+    svg {
+      fill: $background-color;
+    }
+  }
+
+  &.is-loading {
+    &:enabled:focus:after {
+      // Change spinner color. Bulma css has !important so we have to as well.
+      border-color: transparent transparent $background-color $background-color !important;
+    }
+  }
+}
+
+@mixin triangle-up($size, $color) {
+  position: relative;
+  padding-top: $size;
+
+  &:before {
+    content:'';
+    display:block;
+    width:0;
+    height:0;
+    position:absolute;
+
+    border-bottom: $size solid $color;
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+
+    top: 0;
+    left: $size * 1.5;
+  }
+}

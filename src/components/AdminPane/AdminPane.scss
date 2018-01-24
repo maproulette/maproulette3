@@ -1,0 +1,40 @@
+@import '../../variables.scss';
+
+.admin {
+  display: flex;
+  justify-content: center;
+
+  .signin-button {
+    margin-top: 20px;
+  }
+
+  .admin-pane {
+    padding: 40px 40px 20px 40px;
+    width: 100%;
+    max-width: 1250px;
+  }
+
+  h1 {
+    font-size: $size-2;
+    font-weight: $title-weight;
+    color: $title-color;
+  }
+
+  .search-box {
+    border: 2px solid $grey-lighter-more;
+    border-radius: $radius-medium;
+    max-width: 320px;
+
+    .control-wrapper svg {
+      fill: $grey-light;
+
+      input::placeholder {
+        color: $grey-light;
+      }
+    }
+  }
+
+  &--intro {
+    margin-bottom: 1.5em;
+  }
+}

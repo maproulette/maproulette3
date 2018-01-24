@@ -1,0 +1,151 @@
+import { isEmpty as _isEmpty,
+         isFunction as _isFunction,
+         isArray as _isArray } from 'lodash'
+import { LatLngBounds, LatLng } from 'leaflet'
+
+// utility functions
+
+/**
+ * Converts a leaflet LatLngBounds instance to an array of [west, south, east,
+ * north].
+ *
+ * > Note that if an array is given instead of a LatLngBounds, it is simply
+ * > returned -- so it's safe to invoke this method on bounds if you're not
+ * > sure whether they've already been converted or not, but you know you
+ * > need them as an array.
+ *
+ * @param {Object} boundsObject - LatLngBounds to convert into an array
+ *
+ * @returns an array of [west, south, east, north]
+ */
+export const fromLatLngBounds = function(boundsObject) {
+  if (_isEmpty(boundsObject)) {
+    return null
+  }
+  else if (_isFunction(boundsObject.toBBoxString)) {
+    return [boundsObject.getWest(), boundsObject.getSouth(),
+            boundsObject.getEast(), boundsObject.getNorth()]
+  }
+  else if (_isArray(boundsObject) && boundsObject.length === 4) {
+    // They gave us an array of bounds. Just return it.
+    return boundsObject
+  }
+  else {
+    throw new Error("Invalid bounds object given")
+  }
+}
+
+/**
+ * Converts an arrayBounds of [west, south, east, north] to a
+ * leaflet LatLngBounds instance.
+ *
+ * > Note that if a LatLngBounds instance is given instead, it
+ * > is simply returned -- so it's safe to invoke this method
+ * > on bounds if you're not sure whether they've already been
+ * > converted or not, but you know you need them as a LatLngBounds.
+ *
+ * @param {array} arrayBounds - [west, south, east, north] bounds
+ *        to convert into LatLngBounds
+ *
+ * @returns a LatLngBounds instance
+ */
+export const toLatLngBounds = function(arrayBounds) {
+  if (_isEmpty(arrayBounds)) {
+    return null
+  }
+  else if (_isArray(arrayBounds) && arrayBounds.length === 4) {
+    const southWest = new LatLng(arrayBounds[1], arrayBounds[0])
+    const northEast = new LatLng(arrayBounds[3], arrayBounds[2])
+    return new LatLngBounds(southWest, northEast)
+  }
+  else if (_isFunction(arrayBounds.toBBoxString)) {
+    // they gave us a LatLngBounds. Just return it.
+    return arrayBounds
+  }
+  else {
+    throw new Error("Invalid bounds array given")
+  }
+}
+
+// redux actions
+const SET_LOCATOR_MAP_BOUNDS = 'SET_LOCATOR_MAP_BOUNDS'
+const SET_TASK_MAP_BOUNDS = 'SET_TASK_MAP_BOUNDS'
+
+// redux action creators
+
+/**
+ * Set the given bounds of the locator map in the redux store as the current
+ * bounds. If the bounds are being altered programatically in direct response
+ * to a user action (as opposed to just panning or zooming around the map),
+ * then set fromUserAction to true.
+ *
+ * @param bounds - either a LatLngBounds instance or an array of
+ *       [west, south, east, north]
+ *
+ * @param {boolean} [fromUserAction=false] set to true to indicate the
+ *        bounds were modified programatically in response to a user
+ *        action, false if the bounds are simply being altered in response
+ *        to normal panning and zooming.
+ */
+export const setLocatorMapBounds = function(bounds, fromUserAction=false) {
+  return {
+    type: SET_LOCATOR_MAP_BOUNDS,
+    bounds: fromLatLngBounds(bounds),
+    fromUserAction,
+  }
+}
+
+/**
+ * Set the given bounds of the task map in the redux store as the current
+ * bounds. If the bounds are being altered programatically in direct response
+ * to a user action (as opposed to just panning or zooming around the map),
+ * then set fromUserAction to true.
+ *
+ * @param bounds - either a LatLngBounds instance or an array of
+ *       [west, south, east, north]
+ *
+ * @param {boolean} [fromUserAction=false] set to true to indicate the
+ *        bounds were modified programatically in response to a user
+ *        action, false if the bounds are simply being altered in response
+ *        to normal panning and zooming.
+ */
+export const setTaskMapBounds = function(bounds, zoom, fromUserAction=false) {
+  return {
+    type: SET_TASK_MAP_BOUNDS,
+    bounds: fromLatLngBounds(bounds),
+    zoom,
+    fromUserAction,
+  }
+}
+
+// redux reducers
+
+export const currentMapBounds = function(state={}, action) {
+  if (action.type === SET_LOCATOR_MAP_BOUNDS) {
+    return Object.assign(
+      {},
+      state,
+      {
+        locator: {
+          bounds: action.bounds,
+          fromUserAction: action.fromUserAction
+        }
+      },
+    )
+  }
+  else if (action.type === SET_TASK_MAP_BOUNDS) {
+    return Object.assign(
+      {},
+      state,
+      {
+        task: {
+          bounds: action.bounds,
+          zoom: action.zoom,
+          fromUserAction: action.fromUserAction
+        }
+      },
+    )
+  }
+
+  return state
+}
