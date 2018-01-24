@@ -5,7 +5,7 @@ server from the [maproulette2](https://github.com/maproulette/maproulette2)
 project is still required.
 
 > Note: because of the oauth authentication workflow, your dev machine must be
-> publicly accessible to the Open Street Map (OSM) servers in order to login to
+> publicly accessible to the OpenStreetMap (OSM) servers in order to login to
 > the app. You may wish to setup an open-source tunneling server like
 > [go-http-tunnel](https://github.com/mmatczuk/go-http-tunnel) or use a
 > commercial service like ngrok.
@@ -22,7 +22,7 @@ project is still required.
 
 3. `yarn run start` to fire up the front-end server.
 
-4. Visit your [Open Street Map account](https://www.openstreetmap.org) and go
+4. Visit your [OpenStreetMap account](https://www.openstreetmap.org) and go
    to My Settings -> oauth settings -> Register your application and setup a
    new application for development. For the `Main Application URL` and
    `Callback URL` settings, put in your dev server URL (e.g.

@@ -10,7 +10,7 @@ export default defineMessages({
   },
   openStreetMap: {
     id: "Challenge.basemap.openStreetMap",
-    defaultMessage: "Open Street Map",
+    defaultMessage: "OpenStreetMap",
   },
   openCycleMap: {
     id: "Challenge.basemap.openCycleMap",
