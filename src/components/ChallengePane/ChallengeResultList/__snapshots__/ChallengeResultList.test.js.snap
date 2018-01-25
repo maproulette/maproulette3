@@ -5,13 +5,13 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeResultList
-    challengeDifficulty={3}
     challenges={Array []}
     fetchingChallenges={
         Array [
             Object {
               "blurb": "Challenge 309 blurb",
               "description": "Challenge 309 description",
+              "difficulty": 3,
               "id": 309,
               "name": "Challenge 309",
               "parent": Object {
@@ -21,6 +21,7 @@ ShallowWrapper {
             Object {
               "blurb": "Challenge 311 blurb",
               "description": "Challenge 311 description",
+              "difficulty": 3,
               "id": 311,
               "name": "Challenge 311",
               "parent": Object {
@@ -410,7 +411,6 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeResultList
-    challengeDifficulty={3}
     challenges={Array []}
     intl={
         Object {
@@ -775,12 +775,12 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeResultList
-    challengeDifficulty={3}
     challenges={
         Array [
             Object {
               "blurb": "Challenge 309 blurb",
               "description": "Challenge 309 description",
+              "difficulty": 3,
               "id": 309,
               "name": "Challenge 309",
               "parent": Object {
@@ -790,6 +790,7 @@ ShallowWrapper {
             Object {
               "blurb": "Challenge 311 blurb",
               "description": "Challenge 311 description",
+              "difficulty": 3,
               "id": 311,
               "name": "Challenge 311",
               "parent": Object {
@@ -852,6 +853,7 @@ ShallowWrapper {
                                         Object {
                                                   "blurb": "Challenge 309 blurb",
                                                   "description": "Challenge 309 description",
+                                                  "difficulty": 3,
                                                   "id": 309,
                                                   "name": "Challenge 309",
                                                   "parent": Object {
@@ -859,12 +861,12 @@ ShallowWrapper {
                                                   },
                                                 }
                               }
-                              challengeDifficulty={3}
                               challenges={
                                         Array [
                                                   Object {
                                                     "blurb": "Challenge 309 blurb",
                                                     "description": "Challenge 309 description",
+                                                    "difficulty": 3,
                                                     "id": 309,
                                                     "name": "Challenge 309",
                                                     "parent": Object {
@@ -874,6 +876,7 @@ ShallowWrapper {
                                                   Object {
                                                     "blurb": "Challenge 311 blurb",
                                                     "description": "Challenge 311 description",
+                                                    "difficulty": 3,
                                                     "id": 311,
                                                     "name": "Challenge 311",
                                                     "parent": Object {
@@ -904,6 +907,7 @@ ShallowWrapper {
                                         Object {
                                                   "blurb": "Challenge 311 blurb",
                                                   "description": "Challenge 311 description",
+                                                  "difficulty": 3,
                                                   "id": 311,
                                                   "name": "Challenge 311",
                                                   "parent": Object {
@@ -911,12 +915,12 @@ ShallowWrapper {
                                                   },
                                                 }
                               }
-                              challengeDifficulty={3}
                               challenges={
                                         Array [
                                                   Object {
                                                     "blurb": "Challenge 309 blurb",
                                                     "description": "Challenge 309 description",
+                                                    "difficulty": 3,
                                                     "id": 309,
                                                     "name": "Challenge 309",
                                                     "parent": Object {
@@ -926,6 +930,7 @@ ShallowWrapper {
                                                   Object {
                                                     "blurb": "Challenge 311 blurb",
                                                     "description": "Challenge 311 description",
+                                                    "difficulty": 3,
                                                     "id": 311,
                                                     "name": "Challenge 311",
                                                     "parent": Object {
@@ -1038,6 +1043,7 @@ ShallowWrapper {
                                           Object {
                                                         "blurb": "Challenge 309 blurb",
                                                         "description": "Challenge 309 description",
+                                                        "difficulty": 3,
                                                         "id": 309,
                                                         "name": "Challenge 309",
                                                         "parent": Object {
@@ -1045,12 +1051,12 @@ ShallowWrapper {
                                                         },
                                                       }
                             }
-                            challengeDifficulty={3}
                             challenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
                                                           "description": "Challenge 309 description",
+                                                          "difficulty": 3,
                                                           "id": 309,
                                                           "name": "Challenge 309",
                                                           "parent": Object {
@@ -1060,6 +1066,7 @@ ShallowWrapper {
                                                         Object {
                                                           "blurb": "Challenge 311 blurb",
                                                           "description": "Challenge 311 description",
+                                                          "difficulty": 3,
                                                           "id": 311,
                                                           "name": "Challenge 311",
                                                           "parent": Object {
@@ -1090,6 +1097,7 @@ ShallowWrapper {
                                           Object {
                                                         "blurb": "Challenge 311 blurb",
                                                         "description": "Challenge 311 description",
+                                                        "difficulty": 3,
                                                         "id": 311,
                                                         "name": "Challenge 311",
                                                         "parent": Object {
@@ -1097,12 +1105,12 @@ ShallowWrapper {
                                                         },
                                                       }
                             }
-                            challengeDifficulty={3}
                             challenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
                                                           "description": "Challenge 309 description",
+                                                          "difficulty": 3,
                                                           "id": 309,
                                                           "name": "Challenge 309",
                                                           "parent": Object {
@@ -1112,6 +1120,7 @@ ShallowWrapper {
                                                         Object {
                                                           "blurb": "Challenge 311 blurb",
                                                           "description": "Challenge 311 description",
+                                                          "difficulty": 3,
                                                           "id": 311,
                                                           "name": "Challenge 311",
                                                           "parent": Object {
@@ -1151,6 +1160,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -1158,12 +1168,12 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                challengeDifficulty={3}
                 challenges={
                                 Array [
                                                 Object {
                                                   "blurb": "Challenge 309 blurb",
                                                   "description": "Challenge 309 description",
+                                                  "difficulty": 3,
                                                   "id": 309,
                                                   "name": "Challenge 309",
                                                   "parent": Object {
@@ -1173,6 +1183,7 @@ ShallowWrapper {
                                                 Object {
                                                   "blurb": "Challenge 311 blurb",
                                                   "description": "Challenge 311 description",
+                                                  "difficulty": 3,
                                                   "id": 311,
                                                   "name": "Challenge 311",
                                                   "parent": Object {
@@ -1206,17 +1217,18 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
                     "displayName": "foo",
                   },
                 },
-                "challengeDifficulty": 3,
                 "challenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
                     "description": "Challenge 309 description",
+                    "difficulty": 3,
                     "id": 309,
                     "name": "Challenge 309",
                     "parent": Object {
@@ -1226,6 +1238,7 @@ ShallowWrapper {
                   Object {
                     "blurb": "Challenge 311 blurb",
                     "description": "Challenge 311 description",
+                    "difficulty": 3,
                     "id": 311,
                     "name": "Challenge 311",
                     "parent": Object {
@@ -1260,6 +1273,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 311 blurb",
                                                 "description": "Challenge 311 description",
+                                                "difficulty": 3,
                                                 "id": 311,
                                                 "name": "Challenge 311",
                                                 "parent": Object {
@@ -1267,12 +1281,12 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                challengeDifficulty={3}
                 challenges={
                                 Array [
                                                 Object {
                                                   "blurb": "Challenge 309 blurb",
                                                   "description": "Challenge 309 description",
+                                                  "difficulty": 3,
                                                   "id": 309,
                                                   "name": "Challenge 309",
                                                   "parent": Object {
@@ -1282,6 +1296,7 @@ ShallowWrapper {
                                                 Object {
                                                   "blurb": "Challenge 311 blurb",
                                                   "description": "Challenge 311 description",
+                                                  "difficulty": 3,
                                                   "id": 311,
                                                   "name": "Challenge 311",
                                                   "parent": Object {
@@ -1315,17 +1330,18 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 311 blurb",
                   "description": "Challenge 311 description",
+                  "difficulty": 3,
                   "id": 311,
                   "name": "Challenge 311",
                   "parent": Object {
                     "displayName": "bar",
                   },
                 },
-                "challengeDifficulty": 3,
                 "challenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
                     "description": "Challenge 309 description",
+                    "difficulty": 3,
                     "id": 309,
                     "name": "Challenge 309",
                     "parent": Object {
@@ -1335,6 +1351,7 @@ ShallowWrapper {
                   Object {
                     "blurb": "Challenge 311 blurb",
                     "description": "Challenge 311 description",
+                    "difficulty": 3,
                     "id": 311,
                     "name": "Challenge 311",
                     "parent": Object {
@@ -1398,6 +1415,7 @@ ShallowWrapper {
                                                 Object {
                                                             "blurb": "Challenge 309 blurb",
                                                             "description": "Challenge 309 description",
+                                                            "difficulty": 3,
                                                             "id": 309,
                                                             "name": "Challenge 309",
                                                             "parent": Object {
@@ -1405,12 +1423,12 @@ ShallowWrapper {
                                                             },
                                                           }
                                     }
-                                    challengeDifficulty={3}
                                     challenges={
                                                 Array [
                                                             Object {
                                                               "blurb": "Challenge 309 blurb",
                                                               "description": "Challenge 309 description",
+                                                              "difficulty": 3,
                                                               "id": 309,
                                                               "name": "Challenge 309",
                                                               "parent": Object {
@@ -1420,6 +1438,7 @@ ShallowWrapper {
                                                             Object {
                                                               "blurb": "Challenge 311 blurb",
                                                               "description": "Challenge 311 description",
+                                                              "difficulty": 3,
                                                               "id": 311,
                                                               "name": "Challenge 311",
                                                               "parent": Object {
@@ -1450,6 +1469,7 @@ ShallowWrapper {
                                                 Object {
                                                             "blurb": "Challenge 311 blurb",
                                                             "description": "Challenge 311 description",
+                                                            "difficulty": 3,
                                                             "id": 311,
                                                             "name": "Challenge 311",
                                                             "parent": Object {
@@ -1457,12 +1477,12 @@ ShallowWrapper {
                                                             },
                                                           }
                                     }
-                                    challengeDifficulty={3}
                                     challenges={
                                                 Array [
                                                             Object {
                                                               "blurb": "Challenge 309 blurb",
                                                               "description": "Challenge 309 description",
+                                                              "difficulty": 3,
                                                               "id": 309,
                                                               "name": "Challenge 309",
                                                               "parent": Object {
@@ -1472,6 +1492,7 @@ ShallowWrapper {
                                                             Object {
                                                               "blurb": "Challenge 311 blurb",
                                                               "description": "Challenge 311 description",
+                                                              "difficulty": 3,
                                                               "id": 311,
                                                               "name": "Challenge 311",
                                                               "parent": Object {
@@ -1584,6 +1605,7 @@ ShallowWrapper {
                                                 Object {
                                                                 "blurb": "Challenge 309 blurb",
                                                                 "description": "Challenge 309 description",
+                                                                "difficulty": 3,
                                                                 "id": 309,
                                                                 "name": "Challenge 309",
                                                                 "parent": Object {
@@ -1591,12 +1613,12 @@ ShallowWrapper {
                                                                 },
                                                               }
                                 }
-                                challengeDifficulty={3}
                                 challenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
                                                                   "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
                                                                   "id": 309,
                                                                   "name": "Challenge 309",
                                                                   "parent": Object {
@@ -1606,6 +1628,7 @@ ShallowWrapper {
                                                                 Object {
                                                                   "blurb": "Challenge 311 blurb",
                                                                   "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
                                                                   "id": 311,
                                                                   "name": "Challenge 311",
                                                                   "parent": Object {
@@ -1636,6 +1659,7 @@ ShallowWrapper {
                                                 Object {
                                                                 "blurb": "Challenge 311 blurb",
                                                                 "description": "Challenge 311 description",
+                                                                "difficulty": 3,
                                                                 "id": 311,
                                                                 "name": "Challenge 311",
                                                                 "parent": Object {
@@ -1643,12 +1667,12 @@ ShallowWrapper {
                                                                 },
                                                               }
                                 }
-                                challengeDifficulty={3}
                                 challenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
                                                                   "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
                                                                   "id": 309,
                                                                   "name": "Challenge 309",
                                                                   "parent": Object {
@@ -1658,6 +1682,7 @@ ShallowWrapper {
                                                                 Object {
                                                                   "blurb": "Challenge 311 blurb",
                                                                   "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
                                                                   "id": 311,
                                                                   "name": "Challenge 311",
                                                                   "parent": Object {
@@ -1697,6 +1722,7 @@ ShallowWrapper {
                                     Object {
                                                       "blurb": "Challenge 309 blurb",
                                                       "description": "Challenge 309 description",
+                                                      "difficulty": 3,
                                                       "id": 309,
                                                       "name": "Challenge 309",
                                                       "parent": Object {
@@ -1704,12 +1730,12 @@ ShallowWrapper {
                                                       },
                                                     }
                   }
-                  challengeDifficulty={3}
                   challenges={
                                     Array [
                                                       Object {
                                                         "blurb": "Challenge 309 blurb",
                                                         "description": "Challenge 309 description",
+                                                        "difficulty": 3,
                                                         "id": 309,
                                                         "name": "Challenge 309",
                                                         "parent": Object {
@@ -1719,6 +1745,7 @@ ShallowWrapper {
                                                       Object {
                                                         "blurb": "Challenge 311 blurb",
                                                         "description": "Challenge 311 description",
+                                                        "difficulty": 3,
                                                         "id": 311,
                                                         "name": "Challenge 311",
                                                         "parent": Object {
@@ -1752,17 +1779,18 @@ ShallowWrapper {
                   "challenge": Object {
                     "blurb": "Challenge 309 blurb",
                     "description": "Challenge 309 description",
+                    "difficulty": 3,
                     "id": 309,
                     "name": "Challenge 309",
                     "parent": Object {
                       "displayName": "foo",
                     },
                   },
-                  "challengeDifficulty": 3,
                   "challenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
                       "description": "Challenge 309 description",
+                      "difficulty": 3,
                       "id": 309,
                       "name": "Challenge 309",
                       "parent": Object {
@@ -1772,6 +1800,7 @@ ShallowWrapper {
                     Object {
                       "blurb": "Challenge 311 blurb",
                       "description": "Challenge 311 description",
+                      "difficulty": 3,
                       "id": 311,
                       "name": "Challenge 311",
                       "parent": Object {
@@ -1806,6 +1835,7 @@ ShallowWrapper {
                                     Object {
                                                       "blurb": "Challenge 311 blurb",
                                                       "description": "Challenge 311 description",
+                                                      "difficulty": 3,
                                                       "id": 311,
                                                       "name": "Challenge 311",
                                                       "parent": Object {
@@ -1813,12 +1843,12 @@ ShallowWrapper {
                                                       },
                                                     }
                   }
-                  challengeDifficulty={3}
                   challenges={
                                     Array [
                                                       Object {
                                                         "blurb": "Challenge 309 blurb",
                                                         "description": "Challenge 309 description",
+                                                        "difficulty": 3,
                                                         "id": 309,
                                                         "name": "Challenge 309",
                                                         "parent": Object {
@@ -1828,6 +1858,7 @@ ShallowWrapper {
                                                       Object {
                                                         "blurb": "Challenge 311 blurb",
                                                         "description": "Challenge 311 description",
+                                                        "difficulty": 3,
                                                         "id": 311,
                                                         "name": "Challenge 311",
                                                         "parent": Object {
@@ -1861,17 +1892,18 @@ ShallowWrapper {
                   "challenge": Object {
                     "blurb": "Challenge 311 blurb",
                     "description": "Challenge 311 description",
+                    "difficulty": 3,
                     "id": 311,
                     "name": "Challenge 311",
                     "parent": Object {
                       "displayName": "bar",
                     },
                   },
-                  "challengeDifficulty": 3,
                   "challenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
                       "description": "Challenge 309 description",
+                      "difficulty": 3,
                       "id": 309,
                       "name": "Challenge 309",
                       "parent": Object {
@@ -1881,6 +1913,7 @@ ShallowWrapper {
                     Object {
                       "blurb": "Challenge 311 blurb",
                       "description": "Challenge 311 description",
+                      "difficulty": 3,
                       "id": 311,
                       "name": "Challenge 311",
                       "parent": Object {
@@ -1927,12 +1960,12 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeResultList
-    challengeDifficulty={3}
     challenges={
         Array [
             Object {
               "blurb": "Challenge 309 blurb",
               "description": "Challenge 309 description",
+              "difficulty": 3,
               "id": 309,
               "name": "Challenge 309",
               "parent": Object {
@@ -1942,6 +1975,7 @@ ShallowWrapper {
             Object {
               "blurb": "Challenge 311 blurb",
               "description": "Challenge 311 description",
+              "difficulty": 3,
               "id": 311,
               "name": "Challenge 311",
               "parent": Object {
@@ -2005,6 +2039,7 @@ ShallowWrapper {
                                         Object {
                                                   "blurb": "Challenge 309 blurb",
                                                   "description": "Challenge 309 description",
+                                                  "difficulty": 3,
                                                   "id": 309,
                                                   "name": "Challenge 309",
                                                   "parent": Object {
@@ -2012,12 +2047,12 @@ ShallowWrapper {
                                                   },
                                                 }
                               }
-                              challengeDifficulty={3}
                               challenges={
                                         Array [
                                                   Object {
                                                     "blurb": "Challenge 309 blurb",
                                                     "description": "Challenge 309 description",
+                                                    "difficulty": 3,
                                                     "id": 309,
                                                     "name": "Challenge 309",
                                                     "parent": Object {
@@ -2027,6 +2062,7 @@ ShallowWrapper {
                                                   Object {
                                                     "blurb": "Challenge 311 blurb",
                                                     "description": "Challenge 311 description",
+                                                    "difficulty": 3,
                                                     "id": 311,
                                                     "name": "Challenge 311",
                                                     "parent": Object {
@@ -2058,6 +2094,7 @@ ShallowWrapper {
                                         Object {
                                                   "blurb": "Challenge 311 blurb",
                                                   "description": "Challenge 311 description",
+                                                  "difficulty": 3,
                                                   "id": 311,
                                                   "name": "Challenge 311",
                                                   "parent": Object {
@@ -2065,12 +2102,12 @@ ShallowWrapper {
                                                   },
                                                 }
                               }
-                              challengeDifficulty={3}
                               challenges={
                                         Array [
                                                   Object {
                                                     "blurb": "Challenge 309 blurb",
                                                     "description": "Challenge 309 description",
+                                                    "difficulty": 3,
                                                     "id": 309,
                                                     "name": "Challenge 309",
                                                     "parent": Object {
@@ -2080,6 +2117,7 @@ ShallowWrapper {
                                                   Object {
                                                     "blurb": "Challenge 311 blurb",
                                                     "description": "Challenge 311 description",
+                                                    "difficulty": 3,
                                                     "id": 311,
                                                     "name": "Challenge 311",
                                                     "parent": Object {
@@ -2193,6 +2231,7 @@ ShallowWrapper {
                                           Object {
                                                         "blurb": "Challenge 309 blurb",
                                                         "description": "Challenge 309 description",
+                                                        "difficulty": 3,
                                                         "id": 309,
                                                         "name": "Challenge 309",
                                                         "parent": Object {
@@ -2200,12 +2239,12 @@ ShallowWrapper {
                                                         },
                                                       }
                             }
-                            challengeDifficulty={3}
                             challenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
                                                           "description": "Challenge 309 description",
+                                                          "difficulty": 3,
                                                           "id": 309,
                                                           "name": "Challenge 309",
                                                           "parent": Object {
@@ -2215,6 +2254,7 @@ ShallowWrapper {
                                                         Object {
                                                           "blurb": "Challenge 311 blurb",
                                                           "description": "Challenge 311 description",
+                                                          "difficulty": 3,
                                                           "id": 311,
                                                           "name": "Challenge 311",
                                                           "parent": Object {
@@ -2246,6 +2286,7 @@ ShallowWrapper {
                                           Object {
                                                         "blurb": "Challenge 311 blurb",
                                                         "description": "Challenge 311 description",
+                                                        "difficulty": 3,
                                                         "id": 311,
                                                         "name": "Challenge 311",
                                                         "parent": Object {
@@ -2253,12 +2294,12 @@ ShallowWrapper {
                                                         },
                                                       }
                             }
-                            challengeDifficulty={3}
                             challenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
                                                           "description": "Challenge 309 description",
+                                                          "difficulty": 3,
                                                           "id": 309,
                                                           "name": "Challenge 309",
                                                           "parent": Object {
@@ -2268,6 +2309,7 @@ ShallowWrapper {
                                                         Object {
                                                           "blurb": "Challenge 311 blurb",
                                                           "description": "Challenge 311 description",
+                                                          "difficulty": 3,
                                                           "id": 311,
                                                           "name": "Challenge 311",
                                                           "parent": Object {
@@ -2308,6 +2350,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -2315,12 +2358,12 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                challengeDifficulty={3}
                 challenges={
                                 Array [
                                                 Object {
                                                   "blurb": "Challenge 309 blurb",
                                                   "description": "Challenge 309 description",
+                                                  "difficulty": 3,
                                                   "id": 309,
                                                   "name": "Challenge 309",
                                                   "parent": Object {
@@ -2330,6 +2373,7 @@ ShallowWrapper {
                                                 Object {
                                                   "blurb": "Challenge 311 blurb",
                                                   "description": "Challenge 311 description",
+                                                  "difficulty": 3,
                                                   "id": 311,
                                                   "name": "Challenge 311",
                                                   "parent": Object {
@@ -2364,17 +2408,18 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
                     "displayName": "foo",
                   },
                 },
-                "challengeDifficulty": 3,
                 "challenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
                     "description": "Challenge 309 description",
+                    "difficulty": 3,
                     "id": 309,
                     "name": "Challenge 309",
                     "parent": Object {
@@ -2384,6 +2429,7 @@ ShallowWrapper {
                   Object {
                     "blurb": "Challenge 311 blurb",
                     "description": "Challenge 311 description",
+                    "difficulty": 3,
                     "id": 311,
                     "name": "Challenge 311",
                     "parent": Object {
@@ -2419,6 +2465,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 311 blurb",
                                                 "description": "Challenge 311 description",
+                                                "difficulty": 3,
                                                 "id": 311,
                                                 "name": "Challenge 311",
                                                 "parent": Object {
@@ -2426,12 +2473,12 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                challengeDifficulty={3}
                 challenges={
                                 Array [
                                                 Object {
                                                   "blurb": "Challenge 309 blurb",
                                                   "description": "Challenge 309 description",
+                                                  "difficulty": 3,
                                                   "id": 309,
                                                   "name": "Challenge 309",
                                                   "parent": Object {
@@ -2441,6 +2488,7 @@ ShallowWrapper {
                                                 Object {
                                                   "blurb": "Challenge 311 blurb",
                                                   "description": "Challenge 311 description",
+                                                  "difficulty": 3,
                                                   "id": 311,
                                                   "name": "Challenge 311",
                                                   "parent": Object {
@@ -2475,17 +2523,18 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 311 blurb",
                   "description": "Challenge 311 description",
+                  "difficulty": 3,
                   "id": 311,
                   "name": "Challenge 311",
                   "parent": Object {
                     "displayName": "bar",
                   },
                 },
-                "challengeDifficulty": 3,
                 "challenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
                     "description": "Challenge 309 description",
+                    "difficulty": 3,
                     "id": 309,
                     "name": "Challenge 309",
                     "parent": Object {
@@ -2495,6 +2544,7 @@ ShallowWrapper {
                   Object {
                     "blurb": "Challenge 311 blurb",
                     "description": "Challenge 311 description",
+                    "difficulty": 3,
                     "id": 311,
                     "name": "Challenge 311",
                     "parent": Object {
@@ -2559,6 +2609,7 @@ ShallowWrapper {
                                                 Object {
                                                             "blurb": "Challenge 309 blurb",
                                                             "description": "Challenge 309 description",
+                                                            "difficulty": 3,
                                                             "id": 309,
                                                             "name": "Challenge 309",
                                                             "parent": Object {
@@ -2566,12 +2617,12 @@ ShallowWrapper {
                                                             },
                                                           }
                                     }
-                                    challengeDifficulty={3}
                                     challenges={
                                                 Array [
                                                             Object {
                                                               "blurb": "Challenge 309 blurb",
                                                               "description": "Challenge 309 description",
+                                                              "difficulty": 3,
                                                               "id": 309,
                                                               "name": "Challenge 309",
                                                               "parent": Object {
@@ -2581,6 +2632,7 @@ ShallowWrapper {
                                                             Object {
                                                               "blurb": "Challenge 311 blurb",
                                                               "description": "Challenge 311 description",
+                                                              "difficulty": 3,
                                                               "id": 311,
                                                               "name": "Challenge 311",
                                                               "parent": Object {
@@ -2612,6 +2664,7 @@ ShallowWrapper {
                                                 Object {
                                                             "blurb": "Challenge 311 blurb",
                                                             "description": "Challenge 311 description",
+                                                            "difficulty": 3,
                                                             "id": 311,
                                                             "name": "Challenge 311",
                                                             "parent": Object {
@@ -2619,12 +2672,12 @@ ShallowWrapper {
                                                             },
                                                           }
                                     }
-                                    challengeDifficulty={3}
                                     challenges={
                                                 Array [
                                                             Object {
                                                               "blurb": "Challenge 309 blurb",
                                                               "description": "Challenge 309 description",
+                                                              "difficulty": 3,
                                                               "id": 309,
                                                               "name": "Challenge 309",
                                                               "parent": Object {
@@ -2634,6 +2687,7 @@ ShallowWrapper {
                                                             Object {
                                                               "blurb": "Challenge 311 blurb",
                                                               "description": "Challenge 311 description",
+                                                              "difficulty": 3,
                                                               "id": 311,
                                                               "name": "Challenge 311",
                                                               "parent": Object {
@@ -2747,6 +2801,7 @@ ShallowWrapper {
                                                 Object {
                                                                 "blurb": "Challenge 309 blurb",
                                                                 "description": "Challenge 309 description",
+                                                                "difficulty": 3,
                                                                 "id": 309,
                                                                 "name": "Challenge 309",
                                                                 "parent": Object {
@@ -2754,12 +2809,12 @@ ShallowWrapper {
                                                                 },
                                                               }
                                 }
-                                challengeDifficulty={3}
                                 challenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
                                                                   "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
                                                                   "id": 309,
                                                                   "name": "Challenge 309",
                                                                   "parent": Object {
@@ -2769,6 +2824,7 @@ ShallowWrapper {
                                                                 Object {
                                                                   "blurb": "Challenge 311 blurb",
                                                                   "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
                                                                   "id": 311,
                                                                   "name": "Challenge 311",
                                                                   "parent": Object {
@@ -2800,6 +2856,7 @@ ShallowWrapper {
                                                 Object {
                                                                 "blurb": "Challenge 311 blurb",
                                                                 "description": "Challenge 311 description",
+                                                                "difficulty": 3,
                                                                 "id": 311,
                                                                 "name": "Challenge 311",
                                                                 "parent": Object {
@@ -2807,12 +2864,12 @@ ShallowWrapper {
                                                                 },
                                                               }
                                 }
-                                challengeDifficulty={3}
                                 challenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
                                                                   "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
                                                                   "id": 309,
                                                                   "name": "Challenge 309",
                                                                   "parent": Object {
@@ -2822,6 +2879,7 @@ ShallowWrapper {
                                                                 Object {
                                                                   "blurb": "Challenge 311 blurb",
                                                                   "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
                                                                   "id": 311,
                                                                   "name": "Challenge 311",
                                                                   "parent": Object {
@@ -2862,6 +2920,7 @@ ShallowWrapper {
                                     Object {
                                                       "blurb": "Challenge 309 blurb",
                                                       "description": "Challenge 309 description",
+                                                      "difficulty": 3,
                                                       "id": 309,
                                                       "name": "Challenge 309",
                                                       "parent": Object {
@@ -2869,12 +2928,12 @@ ShallowWrapper {
                                                       },
                                                     }
                   }
-                  challengeDifficulty={3}
                   challenges={
                                     Array [
                                                       Object {
                                                         "blurb": "Challenge 309 blurb",
                                                         "description": "Challenge 309 description",
+                                                        "difficulty": 3,
                                                         "id": 309,
                                                         "name": "Challenge 309",
                                                         "parent": Object {
@@ -2884,6 +2943,7 @@ ShallowWrapper {
                                                       Object {
                                                         "blurb": "Challenge 311 blurb",
                                                         "description": "Challenge 311 description",
+                                                        "difficulty": 3,
                                                         "id": 311,
                                                         "name": "Challenge 311",
                                                         "parent": Object {
@@ -2918,17 +2978,18 @@ ShallowWrapper {
                   "challenge": Object {
                     "blurb": "Challenge 309 blurb",
                     "description": "Challenge 309 description",
+                    "difficulty": 3,
                     "id": 309,
                     "name": "Challenge 309",
                     "parent": Object {
                       "displayName": "foo",
                     },
                   },
-                  "challengeDifficulty": 3,
                   "challenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
                       "description": "Challenge 309 description",
+                      "difficulty": 3,
                       "id": 309,
                       "name": "Challenge 309",
                       "parent": Object {
@@ -2938,6 +2999,7 @@ ShallowWrapper {
                     Object {
                       "blurb": "Challenge 311 blurb",
                       "description": "Challenge 311 description",
+                      "difficulty": 3,
                       "id": 311,
                       "name": "Challenge 311",
                       "parent": Object {
@@ -2973,6 +3035,7 @@ ShallowWrapper {
                                     Object {
                                                       "blurb": "Challenge 311 blurb",
                                                       "description": "Challenge 311 description",
+                                                      "difficulty": 3,
                                                       "id": 311,
                                                       "name": "Challenge 311",
                                                       "parent": Object {
@@ -2980,12 +3043,12 @@ ShallowWrapper {
                                                       },
                                                     }
                   }
-                  challengeDifficulty={3}
                   challenges={
                                     Array [
                                                       Object {
                                                         "blurb": "Challenge 309 blurb",
                                                         "description": "Challenge 309 description",
+                                                        "difficulty": 3,
                                                         "id": 309,
                                                         "name": "Challenge 309",
                                                         "parent": Object {
@@ -2995,6 +3058,7 @@ ShallowWrapper {
                                                       Object {
                                                         "blurb": "Challenge 311 blurb",
                                                         "description": "Challenge 311 description",
+                                                        "difficulty": 3,
                                                         "id": 311,
                                                         "name": "Challenge 311",
                                                         "parent": Object {
@@ -3029,17 +3093,18 @@ ShallowWrapper {
                   "challenge": Object {
                     "blurb": "Challenge 311 blurb",
                     "description": "Challenge 311 description",
+                    "difficulty": 3,
                     "id": 311,
                     "name": "Challenge 311",
                     "parent": Object {
                       "displayName": "bar",
                     },
                   },
-                  "challengeDifficulty": 3,
                   "challenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
                       "description": "Challenge 309 description",
+                      "difficulty": 3,
                       "id": 309,
                       "name": "Challenge 309",
                       "parent": Object {
@@ -3049,6 +3114,7 @@ ShallowWrapper {
                     Object {
                       "blurb": "Challenge 311 blurb",
                       "description": "Challenge 311 description",
+                      "difficulty": 3,
                       "id": 311,
                       "name": "Challenge 311",
                       "parent": Object {

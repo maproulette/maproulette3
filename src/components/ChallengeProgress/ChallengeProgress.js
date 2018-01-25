@@ -17,6 +17,7 @@ export default class ChallengeProgress extends Component {
 
     const completedTasks = _sum(_values(_omit(taskActions, ['total', 'available'])))
     return <LabeledProgressBar className="challenge-task-progress"
+                               isMedium
                                label='Task Progress'
                                value={completedTasks}
                                max={taskActions.total} />

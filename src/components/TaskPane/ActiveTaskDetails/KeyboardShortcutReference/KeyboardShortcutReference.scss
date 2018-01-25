@@ -22,15 +22,7 @@
   }
 
   .popout-content {
-    min-width: 250px;
-    padding: 10px;
-
-    h3 {
-      color: $primary;
-      font-weight: $weight-light;
-      margin-bottom: 15px;
-      text-align: center;
-    }
+    width: 250px;
 
     dl {
       dt {

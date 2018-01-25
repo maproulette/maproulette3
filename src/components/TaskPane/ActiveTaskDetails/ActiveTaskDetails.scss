@@ -1,11 +1,37 @@
 @import '../../../variables.scss';
+@import '../../../mixins.scss';
 
 .active-task-details {
   background-color: $white;
 
-  .task-content {
-    padding: 30px;
-    padding-top: 0;
+  .popout-content {
+    padding: 0;
+    min-width: 220px;
+
+    .popout-content__header {
+      padding: 20px 20px 12px 20px;
+      margin-bottom: 12px;
+
+      h3 {
+        color: $primary;
+        font-size: $size-6;
+        font-weight: $weight-medium;
+      }
+    }
+
+    .popout-content__body {
+      padding: 0 20px 20px 20px;
+    }
+  }
+
+  &__task-content {
+    .task-content__task-header {
+      padding: 0px 30px 20px 30px;
+    }
+
+    .task-content__task-body {
+      padding: 0px 30px 30px 30px;
+    }
   }
 
   &.is-active {
@@ -17,16 +43,23 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    letter-spacing: $letter-spacing-medium;
 
-    color: $grey;
+    color: $primary;
     text-transform: uppercase;
-    font-size: $size-7;
+    font-size: $size-6;
     font-weight: $weight-semibold;
 
     &.primary-heading {
       font-size: $size-8;
       font-weight: $weight-normal;
+      color: $grey;
+      margin-top: -24px;
     }
+  }
+
+  &--sub-heading {
+    margin-bottom: 10px;
   }
 
   .content-block {
@@ -35,10 +68,6 @@
       margin-bottom: 20px;
       border-bottom: 2px solid $grey-lightest-more;
     }
-  }
-
-  &--sub-heading {
-    margin-bottom: 10px;
   }
 
   &--bordered {
@@ -62,12 +91,10 @@
   }
 
   &--instructions, .info-popout--instructions {
-    color: $grey-darkest;
+    color: $grey;
     font-size: $size-7;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
+    line-height: 24px;
+    @include constrained-text-content();
   }
 
   &--comment-badge {
@@ -99,6 +126,8 @@
     .active-task-details--sub-heading {
       .comment-count-badge {
         margin-left: 0.5em;
+        position: relative;
+        top: 2px;
       }
     }
   }
@@ -120,8 +149,8 @@
     button.button.active-task-details__info-control {
       .icon {
         svg {
-          fill: $default-icon-color;
-          height: 26px;
+          fill: $primary;
+          height: 20px;
           width: auto;
         }
 
@@ -133,22 +162,10 @@
       }
     }
 
-    .popout-content {
-      padding: 10px;
 
-      .info-popout--name {
-        color: $primary;
-        font-size: $size-6;
-        text-align: center;
-        font-weight: $weight-light;
-      }
-
-      .info-popout--project-name {
-        color: $grey-lighter;
-        font-size: $size-8;
-        text-align: center;
-        margin-bottom: 15px;
-      }
+    .info-popout--project-name {
+      color: $grey-light;
+      font-size: $size-8;
     }
   }
 
@@ -164,27 +181,21 @@
     }
 
     .popout-content {
-      padding: 10px;
       width: 285px;
       max-height: 60vh;
       overflow-y: auto;
-
-      h3 {
-        color: $primary;
-        font-weight: $weight-light;
-        margin-bottom: 1em;
-      }
     }
   }
 
   &.is-active.is-minimized {
-    .task-content {
+    .task-content__task-body {
       padding: 0;
       max-width: 30px;
       padding-top: 0;
       margin-left: 10px;
     }
 
+    .task-content__task-header,
     .active-task-details--heading,
     .active-task-details--sub-heading,
     .active-task-details--name,

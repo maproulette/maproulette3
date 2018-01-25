@@ -35,6 +35,11 @@ $tablet: 40px;
     position: fixed;
     left: 65px;
     z-index: $layer-popout;
+
+    .dropdown-menu {
+      padding-top: 0;
+      box-shadow: 0px 2px 6px 0px $box-shadow-color;
+    }
   }
 }
 
@@ -45,12 +50,20 @@ $tablet: 40px;
   }
 }
 
+.button {
+  &:focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
 .button.is-outlined {
   border-radius: 20px;
   border: 2px solid;
-  font-size: $size-7;
+  font-size: $size-6;
   font-weight: $weight-medium;
-  padding: 0px 40px;
+  padding: 0px 30px;
+  height: 30px;
 
   &.is-small {
     border-radius: 20px;
@@ -75,10 +88,56 @@ $tablet: 40px;
     margin-left: 0;
     margin-right: 0;
   }
+}
 
-  &:focus {
-    outline: 0 !important;
-    box-shadow: none !important;
+.button.large-and-wide {
+  svg {
+    fill: $green;
+  }
+
+  width: 140px;
+  height: 75px;
+  background-color: $grey-lightest-more;
+  font-size: $size-6;
+  font-weight: $weight-medium;
+  color: $green;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover, &:enabled:focus {
+    box-shadow: 0px 2px 4px 0px $box-shadow-color;
+    color: $green;
+  }
+
+  .control-icon svg {
+    height: 20px;
+    width: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  &.full-width {
+    width: 100%;
+  }
+}
+
+.button.icon-only {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  justify-content: flex-start;
+  padding: 0px 6px;
+
+  .control-icon svg {
+    fill: $green;
+    height: 20px;
+    width: auto;
+  }
+
+  .control-label {
+    display: none;
   }
 }
 
@@ -127,3 +186,11 @@ button.is-primary.is-loading {
 @import '../node_modules/bulma-badge/badge.sass';
 @import '../node_modules/bulma-timeline/timeline.sass';
 @import "../node_modules/bulma-steps-component/bulma-steps.sass";
+
+code {
+  color: $coral;
+  background-color: transparent;
+  padding: 0;
+  font-family: $family-sans-serif;
+  font-size: inherit;
+}

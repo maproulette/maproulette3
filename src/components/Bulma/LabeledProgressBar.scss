@@ -5,10 +5,6 @@
     display: flex;
     justify-content: space-between;
 
-    .progress-label {
-      font-weight: $weight-semibold;
-    }
-
     .progress-made {
       .value {
         font-weight: $weight-semibold;

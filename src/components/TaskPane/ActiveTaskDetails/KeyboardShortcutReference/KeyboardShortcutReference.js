@@ -49,10 +49,14 @@ export class KeyboardShortcutReference extends Component {
                       })}
                       control={popoutButton}
                       {..._omit(this.props, 'className')}>
-                <h3><FormattedMessage {...messages.keyboardShortcuts} /></h3>
+                <div className="popout-content__header active-task-details--bordered">
+                  <h3><FormattedMessage {...messages.keyboardShortcuts} /></h3>
+                </div>
 
-                <dl className="keyboard-shortcuts">{shortcuts}</dl>
-                <div className="is-clearfix" />
+                <div className="popout-content__body">
+                  <dl className="keyboard-shortcuts">{shortcuts}</dl>
+                  <div className="is-clearfix" />
+                </div>
               </Popout>
             </div>
           </div>

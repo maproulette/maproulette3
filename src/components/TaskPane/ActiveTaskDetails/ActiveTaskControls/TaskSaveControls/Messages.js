@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   save: {
     id: "Task.controls.save.label",
-    defaultMessage: "Save for Later",
+    defaultMessage: "Save",
   },
   unsave: {
     id: "Task.controls.unsave.label",

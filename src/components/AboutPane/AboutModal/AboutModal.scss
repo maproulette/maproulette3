@@ -39,10 +39,10 @@
     }
   }
 
-  &__feedback-note {
+  &__feedback-note.column {
     margin: 20px 0;
-    background-color: $grey-lightest;
-    padding: 1rem;
+    background-color: $grey-lightest-more;
+    padding: 1em 1.5em;
     border-radius: $radius-medium;
 
     h2.subtitle {
@@ -50,10 +50,6 @@
       font-weight: normal;
       text-align: center;
     }
-  }
-
-  button.about-modal__view-challenges {
-    font-size: $size-5;
   }
 
   &__footer {
