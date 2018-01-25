@@ -19,11 +19,14 @@ import TaskDoneControls from './TaskDoneControls/TaskDoneControls'
 export class ActiveTaskControls extends Component {
   state = {
     taskBeingCompleted: null,
+    comment: "",
   }
 
-  setTaskBeingCompleted = (taskId) => {
+  setTaskBeingCompleted = taskId => {
     this.setState({taskBeingCompleted: taskId})
   }
+
+  setComment = comment => this.setState({comment})
 
   render() {
     if (!this.props.task) {
@@ -40,6 +43,8 @@ export class ActiveTaskControls extends Component {
     else if (isEditingTask) {
       // Editor is open, show completion options
       return <TaskCompletionControls setTaskBeingCompleted={this.setTaskBeingCompleted}
+                                     comment={this.state.comment}
+                                     setComment={this.setComment}
                                      {...this.props} />
     }
     else if (_get(this.props, 'editor.taskId') !== this.props.task.id &&
@@ -49,6 +54,8 @@ export class ActiveTaskControls extends Component {
     }
     else {
       return <TaskEditControls setTaskBeingCompleted={this.setTaskBeingCompleted}
+                               comment={this.state.comment}
+                               setComment={this.setComment}
                                {...this.props} />
     }
   }

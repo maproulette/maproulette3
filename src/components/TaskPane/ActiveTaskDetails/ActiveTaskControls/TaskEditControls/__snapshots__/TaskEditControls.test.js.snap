@@ -6,6 +6,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskEditControls
     activateKeyboardShortcuts={[Function]}
+    comment="Foo"
     completeTask={[Function]}
     deactivateKeyboardShortcuts={[Function]}
     editTask={[Function]}
@@ -59,6 +60,7 @@ ShallowWrapper {
             },
           }
     }
+    setComment={[Function]}
     setTaskBeingCompleted={[Function]}
     task={
         Object {
@@ -92,6 +94,7 @@ ShallowWrapper {
         <TaskCommentInput
           activateKeyboardShortcuts={[Function]}
           className="task-edit-controls__task-comment"
+          comment="Foo"
           commentChanged={[Function]}
           completeTask={[Function]}
           deactivateKeyboardShortcuts={[Function]}
@@ -146,6 +149,7 @@ ShallowWrapper {
                               },
                             }
           }
+          setComment={[Function]}
           setTaskBeingCompleted={[Function]}
           task={
                     Object {
@@ -162,7 +166,7 @@ ShallowWrapper {
                               "settings": Object {},
                             }
           }
-          value=""
+          value="Foo"
 />,
         <div
           className="columns"
@@ -297,6 +301,7 @@ ShallowWrapper {
         "props": Object {
           "activateKeyboardShortcuts": [Function],
           "className": "task-edit-controls__task-comment",
+          "comment": "Foo",
           "commentChanged": [Function],
           "completeTask": [Function],
           "deactivateKeyboardShortcuts": [Function],
@@ -345,6 +350,7 @@ ShallowWrapper {
               ],
             },
           },
+          "setComment": [Function],
           "setTaskBeingCompleted": [Function],
           "task": Object {
             "id": 123,
@@ -357,7 +363,7 @@ ShallowWrapper {
             "isLoggedIn": true,
             "settings": Object {},
           },
-          "value": "",
+          "value": "Foo",
         },
         "ref": null,
         "rendered": null,
@@ -973,6 +979,7 @@ ShallowWrapper {
           <TaskCommentInput
             activateKeyboardShortcuts={[Function]}
             className="task-edit-controls__task-comment"
+            comment="Foo"
             commentChanged={[Function]}
             completeTask={[Function]}
             deactivateKeyboardShortcuts={[Function]}
@@ -1027,6 +1034,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            setComment={[Function]}
             setTaskBeingCompleted={[Function]}
             task={
                         Object {
@@ -1043,7 +1051,7 @@ ShallowWrapper {
                                     "settings": Object {},
                                   }
             }
-            value=""
+            value="Foo"
 />,
           <div
             className="columns"
@@ -1178,6 +1186,7 @@ ShallowWrapper {
           "props": Object {
             "activateKeyboardShortcuts": [Function],
             "className": "task-edit-controls__task-comment",
+            "comment": "Foo",
             "commentChanged": [Function],
             "completeTask": [Function],
             "deactivateKeyboardShortcuts": [Function],
@@ -1226,6 +1235,7 @@ ShallowWrapper {
                 ],
               },
             },
+            "setComment": [Function],
             "setTaskBeingCompleted": [Function],
             "task": Object {
               "id": 123,
@@ -1238,7 +1248,7 @@ ShallowWrapper {
               "isLoggedIn": true,
               "settings": Object {},
             },
-            "value": "",
+            "value": "Foo",
           },
           "ref": null,
           "rendered": null,
@@ -1861,6 +1871,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskEditControls
     activateKeyboardShortcuts={[Function]}
+    comment="Foo"
     completeTask={[Function]}
     deactivateKeyboardShortcuts={[Function]}
     editTask={[Function]}
@@ -1914,6 +1925,7 @@ ShallowWrapper {
             },
           }
     }
+    setComment={[Function]}
     setTaskBeingCompleted={[Function]}
     task={
         Object {
@@ -1949,6 +1961,7 @@ ShallowWrapper {
         <TaskCommentInput
           activateKeyboardShortcuts={[Function]}
           className="task-edit-controls__task-comment"
+          comment="Foo"
           commentChanged={[Function]}
           completeTask={[Function]}
           deactivateKeyboardShortcuts={[Function]}
@@ -2003,6 +2016,7 @@ ShallowWrapper {
                               },
                             }
           }
+          setComment={[Function]}
           setTaskBeingCompleted={[Function]}
           task={
                     Object {
@@ -2021,7 +2035,7 @@ ShallowWrapper {
                               },
                             }
           }
-          value=""
+          value="Foo"
 />,
         <div
           className="columns"
@@ -2123,6 +2137,7 @@ ShallowWrapper {
         "props": Object {
           "activateKeyboardShortcuts": [Function],
           "className": "task-edit-controls__task-comment",
+          "comment": "Foo",
           "commentChanged": [Function],
           "completeTask": [Function],
           "deactivateKeyboardShortcuts": [Function],
@@ -2171,6 +2186,7 @@ ShallowWrapper {
               ],
             },
           },
+          "setComment": [Function],
           "setTaskBeingCompleted": [Function],
           "task": Object {
             "id": 123,
@@ -2185,7 +2201,7 @@ ShallowWrapper {
               "defaultEditor": 1,
             },
           },
-          "value": "",
+          "value": "Foo",
         },
         "ref": null,
         "rendered": null,
@@ -2677,6 +2693,7 @@ ShallowWrapper {
           <TaskCommentInput
             activateKeyboardShortcuts={[Function]}
             className="task-edit-controls__task-comment"
+            comment="Foo"
             commentChanged={[Function]}
             completeTask={[Function]}
             deactivateKeyboardShortcuts={[Function]}
@@ -2731,6 +2748,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            setComment={[Function]}
             setTaskBeingCompleted={[Function]}
             task={
                         Object {
@@ -2749,7 +2767,7 @@ ShallowWrapper {
                                     },
                                   }
             }
-            value=""
+            value="Foo"
 />,
           <div
             className="columns"
@@ -2851,6 +2869,7 @@ ShallowWrapper {
           "props": Object {
             "activateKeyboardShortcuts": [Function],
             "className": "task-edit-controls__task-comment",
+            "comment": "Foo",
             "commentChanged": [Function],
             "completeTask": [Function],
             "deactivateKeyboardShortcuts": [Function],
@@ -2899,6 +2918,7 @@ ShallowWrapper {
                 ],
               },
             },
+            "setComment": [Function],
             "setTaskBeingCompleted": [Function],
             "task": Object {
               "id": 123,
@@ -2913,7 +2933,7 @@ ShallowWrapper {
                 "defaultEditor": 1,
               },
             },
-            "value": "",
+            "value": "Foo",
           },
           "ref": null,
           "rendered": null,
@@ -3412,6 +3432,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskEditControls
     activateKeyboardShortcuts={[Function]}
+    comment="Foo"
     completeTask={[Function]}
     deactivateKeyboardShortcuts={[Function]}
     editTask={[Function]}
@@ -3465,6 +3486,7 @@ ShallowWrapper {
             },
           }
     }
+    setComment={[Function]}
     setTaskBeingCompleted={[Function]}
     task={
         Object {
@@ -3500,6 +3522,7 @@ ShallowWrapper {
         <TaskCommentInput
           activateKeyboardShortcuts={[Function]}
           className="task-edit-controls__task-comment"
+          comment="Foo"
           commentChanged={[Function]}
           completeTask={[Function]}
           deactivateKeyboardShortcuts={[Function]}
@@ -3554,6 +3577,7 @@ ShallowWrapper {
                               },
                             }
           }
+          setComment={[Function]}
           setTaskBeingCompleted={[Function]}
           task={
                     Object {
@@ -3572,7 +3596,7 @@ ShallowWrapper {
                               },
                             }
           }
-          value=""
+          value="Foo"
 />,
         <div
           className="columns"
@@ -3674,6 +3698,7 @@ ShallowWrapper {
         "props": Object {
           "activateKeyboardShortcuts": [Function],
           "className": "task-edit-controls__task-comment",
+          "comment": "Foo",
           "commentChanged": [Function],
           "completeTask": [Function],
           "deactivateKeyboardShortcuts": [Function],
@@ -3722,6 +3747,7 @@ ShallowWrapper {
               ],
             },
           },
+          "setComment": [Function],
           "setTaskBeingCompleted": [Function],
           "task": Object {
             "id": 123,
@@ -3736,7 +3762,7 @@ ShallowWrapper {
               "defaultEditor": 1,
             },
           },
-          "value": "",
+          "value": "Foo",
         },
         "ref": null,
         "rendered": null,
@@ -4228,6 +4254,7 @@ ShallowWrapper {
           <TaskCommentInput
             activateKeyboardShortcuts={[Function]}
             className="task-edit-controls__task-comment"
+            comment="Foo"
             commentChanged={[Function]}
             completeTask={[Function]}
             deactivateKeyboardShortcuts={[Function]}
@@ -4282,6 +4309,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            setComment={[Function]}
             setTaskBeingCompleted={[Function]}
             task={
                         Object {
@@ -4300,7 +4328,7 @@ ShallowWrapper {
                                     },
                                   }
             }
-            value=""
+            value="Foo"
 />,
           <div
             className="columns"
@@ -4402,6 +4430,7 @@ ShallowWrapper {
           "props": Object {
             "activateKeyboardShortcuts": [Function],
             "className": "task-edit-controls__task-comment",
+            "comment": "Foo",
             "commentChanged": [Function],
             "completeTask": [Function],
             "deactivateKeyboardShortcuts": [Function],
@@ -4450,6 +4479,7 @@ ShallowWrapper {
                 ],
               },
             },
+            "setComment": [Function],
             "setTaskBeingCompleted": [Function],
             "task": Object {
               "id": 123,
@@ -4464,7 +4494,7 @@ ShallowWrapper {
                 "defaultEditor": 1,
               },
             },
-            "value": "",
+            "value": "Foo",
           },
           "ref": null,
           "rendered": null,
@@ -4963,6 +4993,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskEditControls
     activateKeyboardShortcuts={[Function]}
+    comment="Foo"
     completeTask={[Function]}
     deactivateKeyboardShortcuts={[Function]}
     editTask={[Function]}
@@ -5016,6 +5047,7 @@ ShallowWrapper {
             },
           }
     }
+    setComment={[Function]}
     setTaskBeingCompleted={[Function]}
     task={
         Object {
@@ -5053,6 +5085,7 @@ ShallowWrapper {
         <Connect(SignInButton)
                 activateKeyboardShortcuts={[Function]}
                 className="task-edit-controls--signin"
+                comment="Foo"
                 completeTask={[Function]}
                 deactivateKeyboardShortcuts={[Function]}
                 editTask={[Function]}
@@ -5106,6 +5139,7 @@ ShallowWrapper {
                                 },
                               }
                 }
+                setComment={[Function]}
                 setTaskBeingCompleted={[Function]}
                 task={
                         Object {
@@ -5137,6 +5171,7 @@ ShallowWrapper {
         "children": <Connect(SignInButton)
           activateKeyboardShortcuts={[Function]}
           className="task-edit-controls--signin"
+          comment="Foo"
           completeTask={[Function]}
           deactivateKeyboardShortcuts={[Function]}
           editTask={[Function]}
@@ -5190,6 +5225,7 @@ ShallowWrapper {
                               },
                             }
           }
+          setComment={[Function]}
           setTaskBeingCompleted={[Function]}
           task={
                     Object {
@@ -5219,6 +5255,7 @@ ShallowWrapper {
         "props": Object {
           "activateKeyboardShortcuts": [Function],
           "className": "task-edit-controls--signin",
+          "comment": "Foo",
           "completeTask": [Function],
           "deactivateKeyboardShortcuts": [Function],
           "editTask": [Function],
@@ -5266,6 +5303,7 @@ ShallowWrapper {
               ],
             },
           },
+          "setComment": [Function],
           "setTaskBeingCompleted": [Function],
           "task": Object {
             "id": 123,
@@ -5301,6 +5339,7 @@ ShallowWrapper {
           <Connect(SignInButton)
                     activateKeyboardShortcuts={[Function]}
                     className="task-edit-controls--signin"
+                    comment="Foo"
                     completeTask={[Function]}
                     deactivateKeyboardShortcuts={[Function]}
                     editTask={[Function]}
@@ -5354,6 +5393,7 @@ ShallowWrapper {
                                         },
                                       }
                     }
+                    setComment={[Function]}
                     setTaskBeingCompleted={[Function]}
                     task={
                               Object {
@@ -5385,6 +5425,7 @@ ShallowWrapper {
           "children": <Connect(SignInButton)
             activateKeyboardShortcuts={[Function]}
             className="task-edit-controls--signin"
+            comment="Foo"
             completeTask={[Function]}
             deactivateKeyboardShortcuts={[Function]}
             editTask={[Function]}
@@ -5438,6 +5479,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            setComment={[Function]}
             setTaskBeingCompleted={[Function]}
             task={
                         Object {
@@ -5467,6 +5509,7 @@ ShallowWrapper {
           "props": Object {
             "activateKeyboardShortcuts": [Function],
             "className": "task-edit-controls--signin",
+            "comment": "Foo",
             "completeTask": [Function],
             "deactivateKeyboardShortcuts": [Function],
             "editTask": [Function],
@@ -5514,6 +5557,7 @@ ShallowWrapper {
                 ],
               },
             },
+            "setComment": [Function],
             "setTaskBeingCompleted": [Function],
             "task": Object {
               "id": 123,

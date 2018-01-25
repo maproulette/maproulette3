@@ -7,6 +7,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <TaskCompletionControls
     activateKeyboardShortcuts={[Function]}
     closeEditor={[Function]}
+    comment="Foo"
     completeTask={[Function]}
     deactivateKeyboardShortcuts={[Function]}
     keyboardShortcutGroups={
@@ -42,6 +43,7 @@ ShallowWrapper {
             },
           }
     }
+    setComment={[Function]}
     setTaskBeingCompleted={[Function]}
     task={
         Object {
@@ -74,6 +76,68 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
+        <TaskCommentInput
+          activateKeyboardShortcuts={[Function]}
+          className="task-completion-controls__task-comment"
+          closeEditor={[Function]}
+          comment="Foo"
+          commentChanged={[Function]}
+          completeTask={[Function]}
+          deactivateKeyboardShortcuts={[Function]}
+          keyboardShortcutGroups={
+                    Object {
+                              "taskCompletion": Object {
+                                "cancel": Object {
+                                  "key": "Escape",
+                                  "keyLabel": "ESC",
+                                  "label": "Cancel Editing",
+                                },
+                              },
+                              "taskEditing": Object {
+                                "editId": Object {
+                                  "key": "e",
+                                  "label": "Edit in Id",
+                                },
+                                "editJosm": Object {
+                                  "key": "r",
+                                  "label": "Edit in JOSM",
+                                },
+                                "editJosmLayer": Object {
+                                  "key": "t",
+                                  "label": "Edit in new JOSM layer",
+                                },
+                                "falsePositive": Object {
+                                  "key": "q",
+                                  "label": "Not an Issue",
+                                },
+                                "skip": Object {
+                                  "key": "w",
+                                  "label": "Skip",
+                                },
+                              },
+                            }
+          }
+          setComment={[Function]}
+          setTaskBeingCompleted={[Function]}
+          task={
+                    Object {
+                              "id": 123,
+                              "parent": Object {
+                                "id": 321,
+                              },
+                            }
+          }
+          user={
+                    Object {
+                              "id": 357,
+                              "isLoggedIn": true,
+                              "settings": Object {
+                                "defaultEditor": 1,
+                              },
+                            }
+          }
+          value="Foo"
+/>,
         <button
           className="button task-completion-controls__fix"
           onClick={[Function]}
@@ -127,6 +191,70 @@ ShallowWrapper {
     },
     "ref": null,
     "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcuts": [Function],
+          "className": "task-completion-controls__task-comment",
+          "closeEditor": [Function],
+          "comment": "Foo",
+          "commentChanged": [Function],
+          "completeTask": [Function],
+          "deactivateKeyboardShortcuts": [Function],
+          "keyboardShortcutGroups": Object {
+            "taskCompletion": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskEditing": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+          },
+          "setComment": [Function],
+          "setTaskBeingCompleted": [Function],
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+          "value": "Foo",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
       Object {
         "instance": null,
         "key": undefined,
@@ -297,6 +425,68 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
+          <TaskCommentInput
+            activateKeyboardShortcuts={[Function]}
+            className="task-completion-controls__task-comment"
+            closeEditor={[Function]}
+            comment="Foo"
+            commentChanged={[Function]}
+            completeTask={[Function]}
+            deactivateKeyboardShortcuts={[Function]}
+            keyboardShortcutGroups={
+                        Object {
+                                    "taskCompletion": Object {
+                                      "cancel": Object {
+                                        "key": "Escape",
+                                        "keyLabel": "ESC",
+                                        "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskEditing": Object {
+                                      "editId": Object {
+                                        "key": "e",
+                                        "label": "Edit in Id",
+                                      },
+                                      "editJosm": Object {
+                                        "key": "r",
+                                        "label": "Edit in JOSM",
+                                      },
+                                      "editJosmLayer": Object {
+                                        "key": "t",
+                                        "label": "Edit in new JOSM layer",
+                                      },
+                                      "falsePositive": Object {
+                                        "key": "q",
+                                        "label": "Not an Issue",
+                                      },
+                                      "skip": Object {
+                                        "key": "w",
+                                        "label": "Skip",
+                                      },
+                                    },
+                                  }
+            }
+            setComment={[Function]}
+            setTaskBeingCompleted={[Function]}
+            task={
+                        Object {
+                                    "id": 123,
+                                    "parent": Object {
+                                      "id": 321,
+                                    },
+                                  }
+            }
+            user={
+                        Object {
+                                    "id": 357,
+                                    "isLoggedIn": true,
+                                    "settings": Object {
+                                      "defaultEditor": 1,
+                                    },
+                                  }
+            }
+            value="Foo"
+/>,
           <button
             className="button task-completion-controls__fix"
             onClick={[Function]}
@@ -350,6 +540,70 @@ ShallowWrapper {
       },
       "ref": null,
       "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcuts": [Function],
+            "className": "task-completion-controls__task-comment",
+            "closeEditor": [Function],
+            "comment": "Foo",
+            "commentChanged": [Function],
+            "completeTask": [Function],
+            "deactivateKeyboardShortcuts": [Function],
+            "keyboardShortcutGroups": Object {
+              "taskCompletion": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": "ESC",
+                  "label": "Cancel Editing",
+                },
+              },
+              "taskEditing": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": "Edit in Id",
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": "Edit in JOSM",
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": "Edit in new JOSM layer",
+                },
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": "Not an Issue",
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": "Skip",
+                },
+              },
+            },
+            "setComment": [Function],
+            "setTaskBeingCompleted": [Function],
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+            "value": "Foo",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
         Object {
           "instance": null,
           "key": undefined,

@@ -453,6 +453,7 @@ ShallowWrapper {
     "props": Object {
       "activateKeyboardShortcuts": [Function],
       "closeEditor": [Function],
+      "comment": "",
       "completeTask": [Function],
       "deactivateKeyboardShortcuts": [Function],
       "editTask": [Function],
@@ -505,6 +506,7 @@ ShallowWrapper {
         },
       },
       "nextTask": [Function],
+      "setComment": [Function],
       "setTaskBeingCompleted": [Function],
       "task": Object {
         "id": 123,
@@ -529,6 +531,7 @@ ShallowWrapper {
       "props": Object {
         "activateKeyboardShortcuts": [Function],
         "closeEditor": [Function],
+        "comment": "",
         "completeTask": [Function],
         "deactivateKeyboardShortcuts": [Function],
         "editTask": [Function],
@@ -581,6 +584,7 @@ ShallowWrapper {
           },
         },
         "nextTask": [Function],
+        "setComment": [Function],
         "setTaskBeingCompleted": [Function],
         "task": Object {
           "id": 123,
@@ -700,6 +704,7 @@ ShallowWrapper {
     "props": Object {
       "activateKeyboardShortcuts": [Function],
       "closeEditor": [Function],
+      "comment": "",
       "completeTask": [Function],
       "deactivateKeyboardShortcuts": [Function],
       "editTask": [Function],
@@ -749,6 +754,7 @@ ShallowWrapper {
         },
       },
       "nextTask": [Function],
+      "setComment": [Function],
       "setTaskBeingCompleted": [Function],
       "task": Object {
         "id": 123,
@@ -773,6 +779,7 @@ ShallowWrapper {
       "props": Object {
         "activateKeyboardShortcuts": [Function],
         "closeEditor": [Function],
+        "comment": "",
         "completeTask": [Function],
         "deactivateKeyboardShortcuts": [Function],
         "editTask": [Function],
@@ -822,6 +829,7 @@ ShallowWrapper {
           },
         },
         "nextTask": [Function],
+        "setComment": [Function],
         "setTaskBeingCompleted": [Function],
         "task": Object {
           "id": 123,

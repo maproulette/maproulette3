@@ -1,40 +1,38 @@
 import React from 'react'
-import { omit as _omit, cloneDeep as _cloneDeep } from 'lodash'
 import TaskEditControls from './TaskEditControls'
 import keyMappings from '../../../../../KeyMappings'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 
-const propsFixture = {
-  task: {
-    id: 123,
-    parent: {
-      id: 321,
-    }
-  },
-  mapBounds: {
-    task: {
-      bounds: [0, 0, 0, 0],
-    }
-  },
-  keyboardShortcutGroups: keyMappings,
-  user: {
-    id: 357,
-    settings: {defaultEditor: 1},
-    isLoggedIn: true,
-  },
-}
-
 let basicProps = null
 
 beforeEach(() => {
-  basicProps = _cloneDeep(propsFixture)
-
-  basicProps.editTask = jest.fn()
-  basicProps.completeTask = jest.fn()
-  basicProps.setTaskBeingCompleted = jest.fn()
-  basicProps.activateKeyboardShortcuts = jest.fn()
-  basicProps.deactivateKeyboardShortcuts = jest.fn()
-  basicProps.intl = {formatMessage: jest.fn()}
+  basicProps = {
+    task: {
+      id: 123,
+      parent: {
+        id: 321,
+      }
+    },
+    comment: "Foo",
+    mapBounds: {
+      task: {
+        bounds: [0, 0, 0, 0],
+      }
+    },
+    keyboardShortcutGroups: keyMappings,
+    user: {
+      id: 357,
+      settings: {defaultEditor: 1},
+      isLoggedIn: true,
+    },
+    editTask: jest.fn(),
+    completeTask: jest.fn(),
+    setComment: jest.fn(),
+    setTaskBeingCompleted: jest.fn(),
+    activateKeyboardShortcuts: jest.fn(),
+    deactivateKeyboardShortcuts: jest.fn(),
+    intl: {formatMessage: jest.fn()},
+  }
 })
 
 test("shows only a sign-in button if the user is not logged in", () => {
@@ -79,8 +77,10 @@ test("clicking the edit button signals opening of the editor", () => {
 
   wrapper.find('.task-edit-controls__edit-control').simulate('click')
 
-  expect(basicProps.editTask.mock.calls.length).toBe(1)
-  expect(basicProps.editTask.mock.calls[0][0]).toBe(basicProps.user.settings.defaultEditor)
+  expect(basicProps.editTask).toBeCalled()
+  expect(
+    basicProps.editTask.mock.calls[0][0]
+  ).toBe(basicProps.user.settings.defaultEditor)
 })
 
 test("clicking the edit button signals that task completion has begun", () => {
@@ -90,8 +90,17 @@ test("clicking the edit button signals that task completion has begun", () => {
 
   wrapper.find('.task-edit-controls__edit-control').simulate('click')
 
-  expect(basicProps.setTaskBeingCompleted.mock.calls.length).toBe(1)
-  expect(basicProps.setTaskBeingCompleted.mock.calls[0][0]).toBe(basicProps.task.id)
+  expect(basicProps.setTaskBeingCompleted).toBeCalledWith(basicProps.task.id)
+})
+
+test("presents a completion comment field", () => {
+  const wrapper = shallow(
+    <TaskEditControls {...basicProps} />
+  )
+
+  expect(wrapper.find(
+    `TaskCommentInput[value="${basicProps.comment}"]`
+  ).exists()).toBe(true)
 })
 
 test("shows a dropdown of editor choices if user has not configured an editor", () => {
@@ -113,13 +122,12 @@ test("clicking the false positive button signals task completion with correct st
 
   wrapper.find('.task-edit-controls__false-positive-control').simulate('click')
 
-  expect(basicProps.completeTask.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls[0][0]).toBe(basicProps.task.id)
-  expect(basicProps.completeTask.mock.calls[0][1]).toBe(basicProps.task.parent.id)
-  expect(basicProps.completeTask.mock.calls[0][2]).toBe(TaskStatus.falsePositive)
+  expect(basicProps.completeTask).toBeCalledWith(basicProps.task.id,
+                                                 basicProps.task.parent.id,
+                                                 TaskStatus.falsePositive,
+                                                 basicProps.comment)
 
-  expect(basicProps.setTaskBeingCompleted.mock.calls.length).toBe(1)
-  expect(basicProps.setTaskBeingCompleted.mock.calls[0][0]).toBe(basicProps.task.id)
+  expect(basicProps.setTaskBeingCompleted).toBeCalledWith(basicProps.task.id)
 })
 
 test("clicking the skip button signals task completion with correct status", () => {
@@ -129,11 +137,11 @@ test("clicking the skip button signals task completion with correct status", () 
 
   wrapper.find('.task-edit-controls__skip-control').simulate('click')
 
-  expect(basicProps.completeTask.mock.calls.length).toBe(1)
-  expect(basicProps.completeTask.mock.calls[0][0]).toBe(basicProps.task.id)
-  expect(basicProps.completeTask.mock.calls[0][1]).toBe(basicProps.task.parent.id)
-  expect(basicProps.completeTask.mock.calls[0][2]).toBe(TaskStatus.skipped)
 
-  expect(basicProps.setTaskBeingCompleted.mock.calls.length).toBe(1)
-  expect(basicProps.setTaskBeingCompleted.mock.calls[0][0]).toBe(basicProps.task.id)
+  expect(basicProps.completeTask).toBeCalledWith(basicProps.task.id,
+                                                 basicProps.task.parent.id,
+                                                 TaskStatus.skipped,
+                                                 basicProps.comment)
+
+  expect(basicProps.setTaskBeingCompleted).toBeCalledWith(basicProps.task.id)
 })

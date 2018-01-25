@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { omit as _omit } from 'lodash'
 import { FormattedMessage } from 'react-intl'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import messages from './Messages'
 import './TaskCompletionControls.css'
 
@@ -18,7 +20,8 @@ import './TaskCompletionControls.css'
 export default class TaskCompletionControls extends Component {
   complete = (taskStatus) => {
     this.props.setTaskBeingCompleted(this.props.task.id)
-    this.props.completeTask(this.props.task.id, this.props.task.parent.id, taskStatus)
+    this.props.completeTask(this.props.task.id, this.props.task.parent.id,
+                            taskStatus, this.props.comment)
     this.props.closeEditor()
   }
 
@@ -51,6 +54,11 @@ export default class TaskCompletionControls extends Component {
   render() {
     return (
       <div className={classNames('task-completion-controls', this.props.className)}>
+        <TaskCommentInput className="task-completion-controls__task-comment"
+                          value={this.props.comment}
+                          commentChanged={this.props.setComment}
+                          {..._omit(this.props, 'className')} />
+
         <button className="button task-completion-controls__fix"
                 onClick={() => this.complete(TaskStatus.fixed)}>
           <FormattedMessage {...messages.fixed} />
@@ -80,10 +88,14 @@ export default class TaskCompletionControls extends Component {
 TaskCompletionControls.propTypes = {
   /** The task being completed */
   task: PropTypes.object.isRequired,
+  /** The current completion comment */
+  comment: PropTypes.string,
   /** Invoked when the user indicates a completion status */
   completeTask: PropTypes.func.isRequired,
   /** Invoked to cancel completion of the current task */
   setTaskBeingCompleted: PropTypes.func.isRequired,
+  /** Invoked to set a completion comment */
+  setComment: PropTypes.func.isRequired,
   /** Invoked if the user cancels and the editor is to be closed */
   closeEditor: PropTypes.func.isRequired,
   /** The keyboard shortcuts to be offered on this step */
@@ -92,4 +104,8 @@ TaskCompletionControls.propTypes = {
   activateKeyboardShortcuts: PropTypes.func.isRequired,
   /** Invoked when keyboard shortcuts should no longer be active  */
   deactivateKeyboardShortcuts: PropTypes.func.isRequired,
+}
+
+TaskCompletionControls.defaultProps = {
+  comment: "",
 }
