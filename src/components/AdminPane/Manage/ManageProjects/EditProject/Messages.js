@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   editProject: {
     id: 'EditProject.header',
-    defaultMessage: "Edit Project",
+    defaultMessage: "Edit",
   },
 
   newProject: {

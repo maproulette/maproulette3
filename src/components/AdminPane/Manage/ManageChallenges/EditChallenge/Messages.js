@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   editChallenge: {
     id: 'EditChallenge.header',
-    defaultMessage: "Edit Challenge",
+    defaultMessage: "Edit",
   },
 
   newChallenge: {

@@ -8,9 +8,11 @@ import { isObject as _isObject,
          difference as _difference,
          get as _get } from 'lodash'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { Link } from 'react-router-dom'
 import Steps from '../../../../Bulma/Steps'
 import StepNavigation from '../../../../Bulma/StepNavigation'
 import { CustomFieldTemplate } from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import WithCurrentProject from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentUser from '../../../../HOCs/WithCurrentUser/WithCurrentUser'
 import { ChallengeCategoryKeywords,
@@ -26,6 +28,7 @@ import { jsSchema as step3jsSchema,
          uiSchema as step3uiSchema } from './Step3Schema'
 import { jsSchema as step4jsSchema,
          uiSchema as step4uiSchema } from './Step4Schema'
+import manageMessages from '../../Messages'
 import messages from './Messages'
 import './EditChallenge.css'
 
@@ -209,6 +212,10 @@ export class EditChallenge extends Component {
   }
 
   render() {
+    if (!this.props.project) {
+      return <BusySpinner />
+    }
+
     const challengeData = this.prepareChallengeDataForForm()
     const currentStep = challengeSteps[this.state.activeStep]
 
@@ -219,21 +226,43 @@ export class EditChallenge extends Component {
     this.state.formContext.isValid = true
 
     return (
-      <div className="edit-challenge">
-        <div className="edit-challenge__workflow-header">
-          <h2 className="title">
-            <div className="level">
-              {
-                _isObject(this.props.challenge) ?
-                <FormattedMessage {...messages.editChallenge} /> :
-                <FormattedMessage {...messages.newChallenge} />
+      <div className="admin__manage edit-challenge">
+        <div className="admin__manage__header">
+          <nav className="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+              <li>
+                <Link to={`/admin/manage/${this.props.project.id}`}>
+                  <FormattedMessage {...manageMessages.manageHeader} />
+                </Link>
+              </li>
+              <li>
+                <Link to={`/admin/project/${this.props.project.id}`}>
+                  {this.props.project.displayName ||
+                  this.props.project.name}
+                </Link>
+              </li>
+              {_isObject(this.props.challenge) &&
+                <li>
+                  <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
+                    {this.props.challenge.name}
+                  </Link>
+                </li>
               }
-              {this.props.loadingChallenge && <BusySpinner inline />}
-            </div>
-          </h2>
-          <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
+              <li className="is-active">
+                <a aria-current="page">
+                  {
+                    _isObject(this.props.challenge) ?
+                    <FormattedMessage {...messages.editChallenge} /> :
+                    <FormattedMessage {...messages.newChallenge} />
+                  }
+                </a>
+                {this.props.loadingChallenge && <BusySpinner inline />}
+              </li>
+            </ul>
+          </nav>
         </div>
 
+        <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
         <Form schema={currentStep.jsSchema(this.props.intl, this.props.user)}
               uiSchema={currentStep.uiSchema}
               FieldTemplate={CustomFieldTemplate}
@@ -257,5 +286,7 @@ export class EditChallenge extends Component {
 }
 
 export default WithCurrentUser(
-  WithCurrentChallenge(injectIntl(EditChallenge))
+  WithCurrentProject(
+    WithCurrentChallenge(injectIntl(EditChallenge))
+  )
 )

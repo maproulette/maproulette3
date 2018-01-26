@@ -49,7 +49,7 @@ export default class Navbar extends Component {
             </Link>
 
             {_get(this.props, 'user.isLoggedIn') &&
-             <Link to='/admin' className='navbar-item'>
+            <Link to='/admin/manage' className='navbar-item'>
                <span className={
                  classNames('item-text',
                            {'is-active': _startsWith(this.props.location.pathname, '/admin')})

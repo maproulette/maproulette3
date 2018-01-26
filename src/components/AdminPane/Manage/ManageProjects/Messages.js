@@ -32,6 +32,16 @@ export default defineMessages({
     defaultMessage: "Disabled",
   },
 
+  viewProjectTooltip: {
+    id: "Project.controls.viewProject.tooltip",
+    defaultMessage: "View Project",
+  },
+
+  viewProjectLabel: {
+    id: "Project.controls.viewProject.label",
+    defaultMessage: "View",
+  },
+
   editProjectTooltip: {
     id: "Project.controls.editProject.tooltip",
     defaultMessage: "Edit Project",

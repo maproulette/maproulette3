@@ -29,6 +29,18 @@ export class Manage extends Component {
 
     return (
       <div className="admin__manage">
+        <div className="admin__manage__header">
+          <nav className="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+              <li className="is-active">
+                <a aria-current="page">
+                  <FormattedMessage {...messages.manageHeader} />
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
         <div className="admin__manage__pane-wrapper">
           <Sidebar className={classNames('admin__manage__sidebar',
                                          'projects-sidebar',
@@ -39,7 +51,7 @@ export class Manage extends Component {
             <ManageProjects selectedProject={selectedProject} {...this.props} />
 
             <div className='admin__manage__sidebar__controls'>
-              <button className="button is-green is-outlined is-big new-project"
+              <button className="button is-green is-outlined new-project"
                       onClick={() => this.props.history.push('/admin/projects/new')}>
                 <FormattedMessage {...messages.newProject} />
               </button>
