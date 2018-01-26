@@ -1,0 +1,54 @@
+@import '../../../../variables.scss';
+
+.admin__manage.view-challenge {
+  .admin__manage__primary-content {
+    padding-top: 0;
+  }
+
+  section {
+    margin-bottom: 1em;
+  }
+
+  .tab-content {
+    padding: 0 15px 15px 15px;
+    min-height: 300px;
+  }
+
+  .challenge-overview {
+    &--status {
+      .columns {
+        margin-bottom: 0;
+        margin-left: -0.25em;
+
+        .column {
+          padding: 0.25em;
+        }
+      }
+
+      .status-label {
+        font-weight: $weight-light;
+      }
+    }
+  }
+
+  .challenge-metrics {
+    h5 {
+      margin-bottom: 1em;
+    }
+
+    .subheading {
+      font-weight: $weight-light;
+    }
+
+    .burndown-chart {
+      margin-bottom: 1em;
+    }
+  }
+
+  .labeled-progress {
+    .progress-label {
+      font-size: $size-6;
+      font-weight: $weight-light;
+    }
+  }
+}

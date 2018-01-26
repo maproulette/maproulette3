@@ -39,7 +39,7 @@ export const challengeSchema = function() {
  * separately, so not used in normal schema)
  */
 export const challengeDenormalizationSchema = function() {
-  return new schema.Entity('tasks', {
+  return new schema.Entity('challenges', {
     parent: projectSchema(),
     comments: [ commentSchema() ],
   })

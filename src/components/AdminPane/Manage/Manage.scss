@@ -1,6 +1,19 @@
 @import '../../../variables.scss';
 
 .admin__manage {
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .subtitle, .subtitle:not(:last-child) {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+  }
+
   &--heading {
     display: flex;
     flex-wrap: wrap;
@@ -15,6 +28,42 @@
       .busy-spinner {
         margin-left: 1em;
         padding-top: 0.25em;
+      }
+    }
+  }
+
+  nav.breadcrumb {
+    font-size: $size-5;
+    margin-bottom: 0;
+
+    li.is-active a {
+      color: $green;
+
+      .busy-spinner {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  &__controls.columns {
+    font-size: $size-4;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0;
+
+    .admin__manage__controls--control {
+      padding: 9px 12px;
+
+      a {
+        color: $grey-light;
+        font-weight: $weight-light;
+      }
+
+      svg {
+        fill: $grey-light;
+        height: $size-5;
+        width: auto;
       }
     }
   }
@@ -50,6 +99,22 @@
     .sidebar__content {
       padding: 0;
       overflow: visible;
+
+     .comment-list { // sidebar and comment colors conflict
+       &__comment--content {
+         background-color: $white;
+       }
+
+       .with-triangle-border::before {
+         border-bottom-color: $white;
+       }
+
+       &.none {
+         font-size: $size-6;
+         color: $grey-dark;
+         margin-top: 0;
+       }
+     }
     }
 
     .admin__manage__sidebar__controls {

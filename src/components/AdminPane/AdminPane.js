@@ -9,7 +9,8 @@ import Manage from './Manage/Manage'
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
 import EditProject from './Manage/ManageProjects/EditProject/EditProject'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
-import ChallengeDetails from './Manage/ManageChallenges/ChallengeDetails'
+import ChallengeDetails from './Manage/ViewChallenge/ViewChallenge'
+import ViewProject from './Manage/ViewProject/ViewProject'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
 import messages from './Messages'
@@ -55,8 +56,9 @@ export class AdminPane extends Component {
             <Route exact path='/admin/project/:projectId/challenge/:challengeId/edit'
                    component={EditChallenge} />
             <Route exact path='/admin/project/:projectId/edit' component={EditProject} />
+            <Route exact path='/admin/project/:projectId' component={ViewProject} />
             <Route exact path='/admin/projects/new' component={EditProject} />
-            <Route exact path='/admin/project/:projectId' component={Manage} />
+            <Route exact path='/admin/manage/:projectId' component={Manage} />
             <Route component={Manage} />
           </Switch>
         </div>

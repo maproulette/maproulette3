@@ -30,24 +30,15 @@ const ProjectList = function(props) {
           'column item-link',
           {'is-active': project.id === _get(props, 'selectedProject.id')})}
         >
-          <Link to={`/admin/project/${project.id}`}>
+          <Link to={`/admin/manage/${project.id}`}>
             {project.displayName || project.name}
           </Link>
         </div>
 
-        <div className='column is-narrow has-text-right controls edit-control'>
-          <Link to={`/admin/project/${project.id}/edit`}
-                title={props.intl.formatMessage(messages.editProjectTooltip)}>
-            <FormattedMessage {...messages.editProjectLabel} />
-          </Link>
-        </div>
-
-        <div className='column is-narrow has-text-right controls new-challenge-control'>
-          <Link to={`/admin/project/${project.id}/challenges/new`}
-                title={props.intl.formatMessage(messages.addChallengeTooltip)}>
-            <span className='button is-clear'>
-              <SvgSymbol className='icon' sym='list-add-icon' viewBox='0 0 20 20' />
-            </span>
+        <div className='column is-narrow has-text-right controls view-control'>
+          <Link to={`/admin/project/${project.id}`}
+                title={props.intl.formatMessage(messages.viewProjectTooltip)}>
+            <FormattedMessage {...messages.viewProjectLabel} />
           </Link>
         </div>
       </div>

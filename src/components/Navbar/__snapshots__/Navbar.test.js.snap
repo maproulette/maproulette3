@@ -1154,7 +1154,7 @@ ShallowWrapper {
                     <Link
                               className="navbar-item"
                               replace={false}
-                              to="/admin"
+                              to="/admin/manage"
                     >
                               <span
                                         className="item-text"
@@ -1386,7 +1386,7 @@ ShallowWrapper {
               <Link
                             className="navbar-item"
                             replace={false}
-                            to="/admin"
+                            to="/admin/manage"
               >
                             <span
                                           className="item-text"
@@ -1460,7 +1460,7 @@ ShallowWrapper {
                 <Link
                   className="navbar-item"
                   replace={false}
-                  to="/admin"
+                  to="/admin/manage"
 >
                   <span
                                     className="item-text"
@@ -1591,7 +1591,7 @@ ShallowWrapper {
 </span>,
                   "className": "navbar-item",
                   "replace": false,
-                  "to": "/admin",
+                  "to": "/admin/manage",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -1754,7 +1754,7 @@ ShallowWrapper {
                         <Link
                                     className="navbar-item"
                                     replace={false}
-                                    to="/admin"
+                                    to="/admin/manage"
                         >
                                     <span
                                                 className="item-text"
@@ -1986,7 +1986,7 @@ ShallowWrapper {
                 <Link
                                 className="navbar-item"
                                 replace={false}
-                                to="/admin"
+                                to="/admin/manage"
                 >
                                 <span
                                                 className="item-text"
@@ -2060,7 +2060,7 @@ ShallowWrapper {
                   <Link
                     className="navbar-item"
                     replace={false}
-                    to="/admin"
+                    to="/admin/manage"
 >
                     <span
                                         className="item-text"
@@ -2191,7 +2191,7 @@ ShallowWrapper {
 </span>,
                     "className": "navbar-item",
                     "replace": false,
-                    "to": "/admin",
+                    "to": "/admin/manage",
                   },
                   "ref": null,
                   "rendered": Object {

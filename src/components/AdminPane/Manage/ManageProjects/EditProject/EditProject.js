@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import Form from 'react-jsonschema-form'
 import { merge as _merge,
+         get as _get,
          isNumber as _isNumber,
          isObject as _isObject } from 'lodash'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { Link } from 'react-router-dom'
 import { CustomFieldTemplate } from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import WithCurrentProject from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
@@ -48,17 +50,31 @@ export class EditProject extends Component {
     const projectData = _merge({}, this.props.project, this.state.formData)
 
     return (
-      <div className="edit-project">
-        <h2 className="title">
-          <div className="level">
-            {
-              _isObject(this.props.project) ?
-              <FormattedMessage {...messages.editProject} /> :
-              <FormattedMessage {...messages.newProject} />
+      <div className="admin__manage edit-project">
+        <nav className="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li>
+              <Link to={`/admin/manage/${_get(this.props, 'project.id', '')}`}>Manage</Link>
+            </li>
+            {_isObject(this.props.project) &&
+            <li>
+              <Link to={`/admin/project/${this.props.project.id}`}>
+                {_get(this.props, 'project.displayName', this.props.project.name)}
+              </Link>
+            </li>
             }
-            {this.props.loading && <BusySpinner inline />}
-          </div>
-        </h2>
+            <li className="is-active">
+              <a aria-current="page">
+                {
+                  _isObject(this.props.project) ?
+                  <FormattedMessage {...messages.editProject} /> :
+                  <FormattedMessage {...messages.newProject} />
+                }
+              </a>
+              {this.props.loadingProject && <BusySpinner inline />}
+            </li>
+          </ul>
+        </nav>
 
         <Form schema={jsSchema(this.props.intl, !_isNumber(projectData.id))}
               uiSchema={uiSchema}

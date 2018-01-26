@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { map as _map,
          isObject as _isObject,
@@ -15,45 +16,58 @@ import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const ChallengeList = function(props) {
+export default class ChallengeList extends Component {
+  render() {
+    let challenges = this.props.challenges
 
-  let challenges = props.challenges
-  if (_isObject(props.selectedProject)) {
-    challenges = _filter(challenges, {parent: props.selectedProject.id})
-  }
-  else if (!_isEmpty(props.filteredProjects)) {
-    const projectIds = _map(props.filteredProjects, 'id')
-    challenges = _filter(challenges,
-                         challenge => projectIds.indexOf(challenge.parent) !== -1)
-  }
+    if (_isObject(this.props.selectedProject)) {
+      challenges = _filter(challenges, {parent: this.props.selectedProject.id})
+    }
+    else if (!_isEmpty(this.props.filteredProjects)) {
+      const projectIds = _map(this.props.filteredProjects, 'id')
+      challenges = _filter(challenges,
+                           challenge => projectIds.indexOf(challenge.parent) !== -1)
+    }
 
-  return _map(challenges, challenge => {
-    const projectId = _get(challenge, 'parent.id', challenge.parent)
+    return _map(challenges, challenge => {
+      const projectId = _get(challenge, 'parent.id', challenge.parent)
 
-    return (
-      <div className='item-entry' key={challenge.id}>
-        <div className='columns'>
-          <div className='column is-narrow item-visibility'>
-            <SvgSymbol className={classNames('icon', {enabled: challenge.enabled})}
-                       viewBox='0 0 20 20'
-                       sym={challenge.enabled ? 'visible-icon' : 'hidden-icon'} />
-          </div>
+      return (
+        <div className='item-entry' key={challenge.id}>
+          <div className='columns'>
+            <div className='column is-narrow item-visibility'>
+              <SvgSymbol className={classNames('icon', {enabled: challenge.enabled})}
+                        viewBox='0 0 20 20'
+                        sym={challenge.enabled ? 'visible-icon' : 'hidden-icon'} />
+            </div>
 
-          <div className='column'>
-            <Link to={`/admin/project/${projectId}/challenge/${challenge.id}`}>
-              {challenge.name}
-            </Link>
-          </div>
+            <div className='column'>
+              <Link to={`/admin/project/${projectId}/challenge/${challenge.id}`}>
+                {challenge.name}
+              </Link>
+            </div>
 
-          <div className='column is-narrow controls'>
-            <Link to={`/admin/project/${projectId}/challenge/${challenge.id}/edit`}>
-              Edit
-            </Link>
+            {!this.props.hideControls &&
+            <div className='column is-narrow controls'>
+              <Link to={`/admin/project/${projectId}/challenge/${challenge.id}/edit`}>
+                Edit
+              </Link>
+            </div>
+            }
           </div>
         </div>
-      </div>
-    )
-  })
+      )
+    })
+  }
 }
 
-export default ChallengeList
+ChallengeList.propTypes = {
+  challenges: PropTypes.array.isRequired,
+  selectedProject: PropTypes.object,
+  filteredProjects: PropTypes.array,
+  hideControls: PropTypes.bool,
+}
+
+ChallengeList.defaultProps = {
+  hideControls: false,
+}
