@@ -55,6 +55,7 @@ ShallowWrapper {
     "nodeType": "class",
     "props": Object {
       "className": "challenge-task-progress",
+      "isMedium": true,
       "label": "Task Progress",
       "max": 5,
       "value": 2,
@@ -70,6 +71,7 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "className": "challenge-task-progress",
+        "isMedium": true,
         "label": "Task Progress",
         "max": 5,
         "value": 2,

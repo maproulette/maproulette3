@@ -27,6 +27,8 @@ beforeEach(() => {
     },
     editTask: jest.fn(),
     completeTask: jest.fn(),
+    saveTask: jest.fn(),
+    unsaveTask: jest.fn(),
     setComment: jest.fn(),
     setTaskBeingCompleted: jest.fn(),
     activateKeyboardShortcuts: jest.fn(),

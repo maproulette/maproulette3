@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { findIndex as _findIndex } from 'lodash'
+import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './TaskSaveControls.css'
 
 export default class TaskSaveControls extends Component {
   render() {
-    if (!this.props.user || !this.props.task || this.props.isMinimized) {
+    if (!this.props.user || !this.props.task) {
       return null
     }
 
@@ -18,9 +18,17 @@ export default class TaskSaveControls extends Component {
     if (_findIndex(this.props.user.savedTasks, {id: this.props.task.id}) !== -1) {
       unsaveTaskButton = (
         <p className="control">
-          <button className="button is-small is-outlined save-task-toggle unsave-task"
+          <button className={classNames("button save-task-toggle unsave-task",
+                                        {"large-and-wide": !this.props.isMinimized,
+                                        "icon-only": this.props.isMinimized})}
                   onClick={() => this.props.unsaveTask(this.props.user.id, this.props.task.id)}>
-            <FormattedMessage {...messages.unsave} />
+            <span className="control-icon"
+                  title={this.props.intl.formatMessage(messages.unsave)}>
+              <SvgSymbol viewBox='0 0 20 20' sym="bookmark-icon" />
+            </span>
+            <span className="control-label">
+              <FormattedMessage {...messages.unsave} />
+            </span>
           </button>
         </p>
       )
@@ -28,9 +36,17 @@ export default class TaskSaveControls extends Component {
     else {
       saveTaskButton = (
         <p className="control">
-          <button className="button is-small is-outlined save-task-toggle save-task"
+          <button className={classNames("button save-task-toggle save-task",
+                                        {"large-and-wide": !this.props.isMinimized,
+                                        "icon-only": this.props.isMinimized})}
                   onClick={() => this.props.saveTask(this.props.user.id, this.props.task.id)}>
-            <FormattedMessage {...messages.save} />
+            <span className="control-icon"
+                  title={this.props.intl.formatMessage(messages.save)}>
+              <SvgSymbol viewBox='0 0 20 20' sym="bookmark-add-icon" />
+            </span>
+            <span className="control-label">
+              <FormattedMessage {...messages.save} />
+            </span>
           </button>
         </p>
       )

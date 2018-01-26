@@ -60,7 +60,7 @@ export class ChallengeResultItem extends Component {
 
         unsaveChallengeButton = (
           <p className="control">
-            <button className="button is-small is-outlined save-challenge-toggle"
+            <button className="button is-outlined save-challenge-toggle"
                     onClick={() => this.props.unsaveChallenge(this.props.user.id, this.props.challenge.id)}>
               <FormattedMessage {...messages.unsave} />
             </button>
@@ -70,7 +70,7 @@ export class ChallengeResultItem extends Component {
       else {
         saveChallengeButton = (
           <p className="control">
-            <button className="button is-small is-outlined save-challenge-toggle"
+            <button className="button is-outlined save-challenge-toggle"
                     onClick={() => this.props.saveChallenge(this.props.user.id, this.props.challenge.id)}>
               <FormattedMessage {...messages.save} />
             </button>
@@ -115,7 +115,7 @@ export class ChallengeResultItem extends Component {
               <FormattedMessage {...messages.difficultyLabel} />
             </span>
             <span className="challenge-list__item__field-value">
-              <FormattedMessage {...messagesByDifficulty[this.props.challengeDifficulty]} />
+              <FormattedMessage {...messagesByDifficulty[this.props.challenge.difficulty]} />
             </span>
           </div>
 
@@ -128,7 +128,7 @@ export class ChallengeResultItem extends Component {
 
           <div className="field is-grouped">
             <p className="control">
-              <button className={classNames("button is-small is-outlined start-challenge",
+              <button className={classNames("button is-outlined start-challenge",
                                             {"is-loading": this.state.isStarting})}
                       onClick={this.startChallenge}>
                 <FormattedMessage {...messages.start} />
@@ -155,8 +155,6 @@ ChallengeResultItem.propTypes = {
   saveChallenge: PropTypes.func.isRequired,
   /** Invoked when a user indicates they wish to unsave/bookmark a challenge */
   unsaveChallenge: PropTypes.func.isRequired,
-  /** Challenge Difficulty */
-  challengeDifficulty: PropTypes.number,
 }
 
 export default injectIntl(ChallengeResultItem)

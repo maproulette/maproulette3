@@ -24,14 +24,17 @@ export class KeyboardShortcutReference extends Component {
     ])
 
     const popoutButton = (
-      <button className="button is-clear active-task-details__keyboard-reference-control">
-        <span className="icon"
+      <button className={classNames("button active-task-details__keyboard-reference-control",
+                                    {"icon-only": this.props.isMinimized,
+                                     "is-clear": !this.props.isMinimized})}>
+        <span className="control-icon"
               title={this.props.intl.formatMessage(messages.control)}>
           <SvgSymbol viewBox='0 0 20 20' sym="keyboard-icon" />
         </span>
-        {!this.props.isMinimized &&
+
+        <span className="control-label">
           <FormattedMessage {...messages.keyboardShortcuts} />
-        }
+        </span>
       </button>
     )
 
@@ -40,22 +43,22 @@ export class KeyboardShortcutReference extends Component {
                                  this.props.className,
                                  {'is-minimized': this.props.isMinimized})}>
         {this.props.user &&
-          <div className="columns is-centered">
-            <div className="column is-narrow">
-              <Popout direction={this.props.isMinimized ? 'right' : 'down'}
-                      className={classNames({
-                        'is-minimized': this.props.isMinimized,
-                        'is-center': !this.props.isMinimized
-                      })}
-                      control={popoutButton}
-                      {..._omit(this.props, 'className')}>
-                <h3><FormattedMessage {...messages.keyboardShortcuts} /></h3>
-
-                <dl className="keyboard-shortcuts">{shortcuts}</dl>
-                <div className="is-clearfix" />
-              </Popout>
-            </div>
+        <Popout direction={this.props.isMinimized ? 'right' : 'down'}
+                className={classNames({
+                  'is-minimized': this.props.isMinimized,
+                  'is-center': !this.props.isMinimized
+                })}
+                control={popoutButton}
+                {..._omit(this.props, 'className')}>
+          <div className="popout-content__header active-task-details--bordered">
+            <h3><FormattedMessage {...messages.keyboardShortcuts} /></h3>
           </div>
+
+          <div className="popout-content__body">
+            <dl className="keyboard-shortcuts">{shortcuts}</dl>
+            <div className="is-clearfix" />
+          </div>
+        </Popout>
         }
       </div>
     )

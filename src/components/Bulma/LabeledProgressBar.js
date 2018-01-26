@@ -22,8 +22,11 @@ export default class LabeledProgressBar extends Component {
           </div>
         </div>
         <div className="visual">
-          <progress className="progress is-small"
-                    value={this.props.value} max={this.props.max} />
+          <progress className={classNames('progress',
+                                          {"is-small": !this.props.isMedium,
+                                           "is-medium": this.props.isMedium})}
+                    value={this.props.value}
+                    max={this.props.max} />
         </div>
       </div>
     )
@@ -37,4 +40,10 @@ LabeledProgressBar.propTypes = {
   value: PropTypes.number.isRequired,
   /** Max possible (completed) value */
   max: PropTypes.number.isRequired,
+  /** Set to true for a larger progress bar */
+  isMedium: PropTypes.bool,
+}
+
+LabeledProgressBar.defaultProps = {
+  isMedium: false,
 }

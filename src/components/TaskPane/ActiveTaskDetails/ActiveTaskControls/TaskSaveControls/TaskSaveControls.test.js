@@ -16,6 +16,7 @@ const propsFixture = {
     savedTasks: [],
     isLoggedIn: true,
   },
+  intl: {formatMessage: jest.fn()},
 }
 
 let basicProps = null

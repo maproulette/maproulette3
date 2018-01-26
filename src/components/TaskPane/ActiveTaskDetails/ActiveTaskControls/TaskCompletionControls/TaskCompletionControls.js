@@ -59,17 +59,17 @@ export default class TaskCompletionControls extends Component {
                           commentChanged={this.props.setComment}
                           {..._omit(this.props, 'className')} />
 
-        <button className="button task-completion-controls__fix"
+        <button className="button large-and-wide full-width task-completion-controls__fix"
                 onClick={() => this.complete(TaskStatus.fixed)}>
           <FormattedMessage {...messages.fixed} />
         </button>
 
-        <button className="button task-completion-controls__too-hard"
+        <button className="button large-and-wide full-width task-completion-controls__too-hard"
                 onClick={() => this.complete(TaskStatus.tooHard)}>
           <FormattedMessage {...messages.notFixed} />
         </button>
 
-        <button className="button task-completion-controls__already-fixed"
+        <button className="button large-and-wide full-width task-completion-controls__already-fixed"
                 onClick={() => this.complete(TaskStatus.alreadyFixed)}>
           <FormattedMessage {...messages.alreadyFixed} />
         </button>

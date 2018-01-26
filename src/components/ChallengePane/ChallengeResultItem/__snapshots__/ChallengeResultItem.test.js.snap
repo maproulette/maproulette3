@@ -9,6 +9,7 @@ ShallowWrapper {
         Object {
             "blurb": "Challenge 309 blurb",
             "description": "Challenge 309 description",
+            "difficulty": 3,
             "id": 309,
             "name": "Challenge 309",
             "parent": Object {
@@ -16,7 +17,6 @@ ShallowWrapper {
             },
           }
     }
-    challengeDifficulty={3}
     intl={
         Object {
             "formatMessage": [Function],
@@ -111,6 +111,7 @@ ShallowWrapper {
                               Object {
                                         "blurb": "Challenge 309 blurb",
                                         "description": "Challenge 309 description",
+                                        "difficulty": 3,
                                         "id": 309,
                                         "name": "Challenge 309",
                                         "parent": Object {
@@ -126,7 +127,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -343,6 +344,7 @@ ShallowWrapper {
                             Object {
                                           "blurb": "Challenge 309 blurb",
                                           "description": "Challenge 309 description",
+                                          "difficulty": 3,
                                           "id": 309,
                                           "name": "Challenge 309",
                                           "parent": Object {
@@ -358,7 +360,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined start-challenge"
+                                          className="button is-outlined start-challenge"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -494,6 +496,7 @@ ShallowWrapper {
               "challenge": Object {
                 "blurb": "Challenge 309 blurb",
                 "description": "Challenge 309 description",
+                "difficulty": 3,
                 "id": 309,
                 "name": "Challenge 309",
                 "parent": Object {
@@ -515,7 +518,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined start-challenge"
+                                    className="button is-outlined start-challenge"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -538,7 +541,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined start-challenge"
+                    className="button is-outlined start-challenge"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -560,7 +563,7 @@ ShallowWrapper {
                       id="Challenge.start"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined start-challenge",
+                    "className": "button is-outlined start-challenge",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -670,6 +673,7 @@ ShallowWrapper {
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -685,7 +689,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -902,6 +906,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -917,7 +922,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -1053,6 +1058,7 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
@@ -1074,7 +1080,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -1097,7 +1103,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined start-challenge"
+                      className="button is-outlined start-challenge"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -1119,7 +1125,7 @@ ShallowWrapper {
                         id="Challenge.start"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined start-challenge",
+                      "className": "button is-outlined start-challenge",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -1171,6 +1177,7 @@ ShallowWrapper {
         Object {
             "blurb": "Challenge 309 blurb",
             "description": "Challenge 309 description",
+            "difficulty": 3,
             "featured": true,
             "id": 309,
             "name": "Challenge 309",
@@ -1179,7 +1186,6 @@ ShallowWrapper {
             },
           }
     }
-    challengeDifficulty={3}
     intl={
         Object {
             "formatMessage": [Function],
@@ -1287,6 +1293,7 @@ ShallowWrapper {
                               Object {
                                         "blurb": "Challenge 309 blurb",
                                         "description": "Challenge 309 description",
+                                        "difficulty": 3,
                                         "featured": true,
                                         "id": 309,
                                         "name": "Challenge 309",
@@ -1303,7 +1310,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -1317,7 +1324,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -1561,6 +1568,7 @@ ShallowWrapper {
                             Object {
                                           "blurb": "Challenge 309 blurb",
                                           "description": "Challenge 309 description",
+                                          "difficulty": 3,
                                           "featured": true,
                                           "id": 309,
                                           "name": "Challenge 309",
@@ -1577,7 +1585,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined start-challenge"
+                                          className="button is-outlined start-challenge"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -1591,7 +1599,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined save-challenge-toggle"
+                                          className="button is-outlined save-challenge-toggle"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -1727,6 +1735,7 @@ ShallowWrapper {
               "challenge": Object {
                 "blurb": "Challenge 309 blurb",
                 "description": "Challenge 309 description",
+                "difficulty": 3,
                 "featured": true,
                 "id": 309,
                 "name": "Challenge 309",
@@ -1749,7 +1758,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined start-challenge"
+                                    className="button is-outlined start-challenge"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -1763,7 +1772,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined save-challenge-toggle"
+                                    className="button is-outlined save-challenge-toggle"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -1785,7 +1794,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined start-challenge"
+                    className="button is-outlined start-challenge"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -1807,7 +1816,7 @@ ShallowWrapper {
                       id="Challenge.start"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined start-challenge",
+                    "className": "button is-outlined start-challenge",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -1834,7 +1843,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined save-challenge-toggle"
+                    className="button is-outlined save-challenge-toggle"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -1856,7 +1865,7 @@ ShallowWrapper {
                       id="Challenge.save"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined save-challenge-toggle",
+                    "className": "button is-outlined save-challenge-toggle",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -1973,6 +1982,7 @@ ShallowWrapper {
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "featured": true,
                                                 "id": 309,
                                                 "name": "Challenge 309",
@@ -1989,7 +1999,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -2003,7 +2013,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -2247,6 +2257,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "featured": true,
                                                 "id": 309,
                                                 "name": "Challenge 309",
@@ -2263,7 +2274,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -2277,7 +2288,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -2413,6 +2424,7 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "featured": true,
                   "id": 309,
                   "name": "Challenge 309",
@@ -2435,7 +2447,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -2449,7 +2461,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -2471,7 +2483,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined start-challenge"
+                      className="button is-outlined start-challenge"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -2493,7 +2505,7 @@ ShallowWrapper {
                         id="Challenge.start"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined start-challenge",
+                      "className": "button is-outlined start-challenge",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -2520,7 +2532,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined save-challenge-toggle"
+                      className="button is-outlined save-challenge-toggle"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -2542,7 +2554,7 @@ ShallowWrapper {
                         id="Challenge.save"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined save-challenge-toggle",
+                      "className": "button is-outlined save-challenge-toggle",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -2593,6 +2605,7 @@ ShallowWrapper {
         Object {
             "blurb": "Challenge 309 blurb",
             "description": "Challenge 309 description",
+            "difficulty": 3,
             "id": 309,
             "name": "Challenge 309",
             "parent": Object {
@@ -2600,7 +2613,6 @@ ShallowWrapper {
             },
           }
     }
-    challengeDifficulty={3}
     intl={
         Object {
             "formatMessage": [Function],
@@ -2700,6 +2712,7 @@ ShallowWrapper {
                               Object {
                                         "blurb": "Challenge 309 blurb",
                                         "description": "Challenge 309 description",
+                                        "difficulty": 3,
                                         "id": 309,
                                         "name": "Challenge 309",
                                         "parent": Object {
@@ -2715,7 +2728,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -2729,7 +2742,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -2946,6 +2959,7 @@ ShallowWrapper {
                             Object {
                                           "blurb": "Challenge 309 blurb",
                                           "description": "Challenge 309 description",
+                                          "difficulty": 3,
                                           "id": 309,
                                           "name": "Challenge 309",
                                           "parent": Object {
@@ -2961,7 +2975,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined start-challenge"
+                                          className="button is-outlined start-challenge"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -2975,7 +2989,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined save-challenge-toggle"
+                                          className="button is-outlined save-challenge-toggle"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -3111,6 +3125,7 @@ ShallowWrapper {
               "challenge": Object {
                 "blurb": "Challenge 309 blurb",
                 "description": "Challenge 309 description",
+                "difficulty": 3,
                 "id": 309,
                 "name": "Challenge 309",
                 "parent": Object {
@@ -3132,7 +3147,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined start-challenge"
+                                    className="button is-outlined start-challenge"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -3146,7 +3161,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined save-challenge-toggle"
+                                    className="button is-outlined save-challenge-toggle"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -3168,7 +3183,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined start-challenge"
+                    className="button is-outlined start-challenge"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -3190,7 +3205,7 @@ ShallowWrapper {
                       id="Challenge.start"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined start-challenge",
+                    "className": "button is-outlined start-challenge",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -3217,7 +3232,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined save-challenge-toggle"
+                    className="button is-outlined save-challenge-toggle"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -3239,7 +3254,7 @@ ShallowWrapper {
                       id="Challenge.save"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined save-challenge-toggle",
+                    "className": "button is-outlined save-challenge-toggle",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -3348,6 +3363,7 @@ ShallowWrapper {
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -3363,7 +3379,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -3377,7 +3393,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -3594,6 +3610,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -3609,7 +3626,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -3623,7 +3640,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -3759,6 +3776,7 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
@@ -3780,7 +3798,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -3794,7 +3812,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -3816,7 +3834,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined start-challenge"
+                      className="button is-outlined start-challenge"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -3838,7 +3856,7 @@ ShallowWrapper {
                         id="Challenge.start"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined start-challenge",
+                      "className": "button is-outlined start-challenge",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -3865,7 +3883,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined save-challenge-toggle"
+                      className="button is-outlined save-challenge-toggle"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -3887,7 +3905,7 @@ ShallowWrapper {
                         id="Challenge.save"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined save-challenge-toggle",
+                      "className": "button is-outlined save-challenge-toggle",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -3938,6 +3956,7 @@ ShallowWrapper {
         Object {
             "blurb": "Challenge 309 blurb",
             "description": "Challenge 309 description",
+            "difficulty": 3,
             "id": 309,
             "name": "Challenge 309",
             "parent": Object {
@@ -3945,7 +3964,6 @@ ShallowWrapper {
             },
           }
     }
-    challengeDifficulty={3}
     intl={
         Object {
             "formatMessage": [Function],
@@ -4045,6 +4063,7 @@ ShallowWrapper {
                               Object {
                                         "blurb": "Challenge 309 blurb",
                                         "description": "Challenge 309 description",
+                                        "difficulty": 3,
                                         "id": 309,
                                         "name": "Challenge 309",
                                         "parent": Object {
@@ -4060,7 +4079,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -4074,7 +4093,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -4291,6 +4310,7 @@ ShallowWrapper {
                             Object {
                                           "blurb": "Challenge 309 blurb",
                                           "description": "Challenge 309 description",
+                                          "difficulty": 3,
                                           "id": 309,
                                           "name": "Challenge 309",
                                           "parent": Object {
@@ -4306,7 +4326,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined start-challenge"
+                                          className="button is-outlined start-challenge"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -4320,7 +4340,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined save-challenge-toggle"
+                                          className="button is-outlined save-challenge-toggle"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -4456,6 +4476,7 @@ ShallowWrapper {
               "challenge": Object {
                 "blurb": "Challenge 309 blurb",
                 "description": "Challenge 309 description",
+                "difficulty": 3,
                 "id": 309,
                 "name": "Challenge 309",
                 "parent": Object {
@@ -4477,7 +4498,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined start-challenge"
+                                    className="button is-outlined start-challenge"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -4491,7 +4512,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined save-challenge-toggle"
+                                    className="button is-outlined save-challenge-toggle"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -4513,7 +4534,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined start-challenge"
+                    className="button is-outlined start-challenge"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -4535,7 +4556,7 @@ ShallowWrapper {
                       id="Challenge.start"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined start-challenge",
+                    "className": "button is-outlined start-challenge",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -4562,7 +4583,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined save-challenge-toggle"
+                    className="button is-outlined save-challenge-toggle"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -4584,7 +4605,7 @@ ShallowWrapper {
                       id="Challenge.save"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined save-challenge-toggle",
+                    "className": "button is-outlined save-challenge-toggle",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -4693,6 +4714,7 @@ ShallowWrapper {
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -4708,7 +4730,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -4722,7 +4744,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -4939,6 +4961,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -4954,7 +4977,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -4968,7 +4991,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -5104,6 +5127,7 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
@@ -5125,7 +5149,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -5139,7 +5163,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -5161,7 +5185,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined start-challenge"
+                      className="button is-outlined start-challenge"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -5183,7 +5207,7 @@ ShallowWrapper {
                         id="Challenge.start"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined start-challenge",
+                      "className": "button is-outlined start-challenge",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -5210,7 +5234,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined save-challenge-toggle"
+                      className="button is-outlined save-challenge-toggle"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -5232,7 +5256,7 @@ ShallowWrapper {
                         id="Challenge.save"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined save-challenge-toggle",
+                      "className": "button is-outlined save-challenge-toggle",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -5283,6 +5307,7 @@ ShallowWrapper {
         Object {
             "blurb": "Challenge 309 blurb",
             "description": "Challenge 309 description",
+            "difficulty": 3,
             "id": 309,
             "name": "Challenge 309",
             "parent": Object {
@@ -5290,7 +5315,6 @@ ShallowWrapper {
             },
           }
     }
-    challengeDifficulty={3}
     intl={
         Object {
             "formatMessage": [Function],
@@ -5390,6 +5414,7 @@ ShallowWrapper {
                               Object {
                                         "blurb": "Challenge 309 blurb",
                                         "description": "Challenge 309 description",
+                                        "difficulty": 3,
                                         "id": 309,
                                         "name": "Challenge 309",
                                         "parent": Object {
@@ -5405,7 +5430,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -5419,7 +5444,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -5636,6 +5661,7 @@ ShallowWrapper {
                             Object {
                                           "blurb": "Challenge 309 blurb",
                                           "description": "Challenge 309 description",
+                                          "difficulty": 3,
                                           "id": 309,
                                           "name": "Challenge 309",
                                           "parent": Object {
@@ -5651,7 +5677,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined start-challenge"
+                                          className="button is-outlined start-challenge"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -5665,7 +5691,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined save-challenge-toggle"
+                                          className="button is-outlined save-challenge-toggle"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -5801,6 +5827,7 @@ ShallowWrapper {
               "challenge": Object {
                 "blurb": "Challenge 309 blurb",
                 "description": "Challenge 309 description",
+                "difficulty": 3,
                 "id": 309,
                 "name": "Challenge 309",
                 "parent": Object {
@@ -5822,7 +5849,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined start-challenge"
+                                    className="button is-outlined start-challenge"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -5836,7 +5863,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined save-challenge-toggle"
+                                    className="button is-outlined save-challenge-toggle"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -5858,7 +5885,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined start-challenge"
+                    className="button is-outlined start-challenge"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -5880,7 +5907,7 @@ ShallowWrapper {
                       id="Challenge.start"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined start-challenge",
+                    "className": "button is-outlined start-challenge",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -5907,7 +5934,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined save-challenge-toggle"
+                    className="button is-outlined save-challenge-toggle"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -5929,7 +5956,7 @@ ShallowWrapper {
                       id="Challenge.save"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined save-challenge-toggle",
+                    "className": "button is-outlined save-challenge-toggle",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -6038,6 +6065,7 @@ ShallowWrapper {
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -6053,7 +6081,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -6067,7 +6095,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -6284,6 +6312,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -6299,7 +6328,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -6313,7 +6342,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -6449,6 +6478,7 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
@@ -6470,7 +6500,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -6484,7 +6514,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -6506,7 +6536,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined start-challenge"
+                      className="button is-outlined start-challenge"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -6528,7 +6558,7 @@ ShallowWrapper {
                         id="Challenge.start"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined start-challenge",
+                      "className": "button is-outlined start-challenge",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -6555,7 +6585,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined save-challenge-toggle"
+                      className="button is-outlined save-challenge-toggle"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -6577,7 +6607,7 @@ ShallowWrapper {
                         id="Challenge.save"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined save-challenge-toggle",
+                      "className": "button is-outlined save-challenge-toggle",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -6628,6 +6658,7 @@ ShallowWrapper {
         Object {
             "blurb": "Challenge 309 blurb",
             "description": "Challenge 309 description",
+            "difficulty": 3,
             "id": 309,
             "name": "Challenge 309",
             "parent": Object {
@@ -6635,7 +6666,6 @@ ShallowWrapper {
             },
           }
     }
-    challengeDifficulty={3}
     intl={
         Object {
             "formatMessage": [Function],
@@ -6735,6 +6765,7 @@ ShallowWrapper {
                               Object {
                                         "blurb": "Challenge 309 blurb",
                                         "description": "Challenge 309 description",
+                                        "difficulty": 3,
                                         "id": 309,
                                         "name": "Challenge 309",
                                         "parent": Object {
@@ -6750,7 +6781,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined start-challenge is-loading"
+                                        className="button is-outlined start-challenge is-loading"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -6764,7 +6795,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -6981,6 +7012,7 @@ ShallowWrapper {
                             Object {
                                           "blurb": "Challenge 309 blurb",
                                           "description": "Challenge 309 description",
+                                          "difficulty": 3,
                                           "id": 309,
                                           "name": "Challenge 309",
                                           "parent": Object {
@@ -6996,7 +7028,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined start-challenge is-loading"
+                                          className="button is-outlined start-challenge is-loading"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -7010,7 +7042,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined save-challenge-toggle"
+                                          className="button is-outlined save-challenge-toggle"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -7146,6 +7178,7 @@ ShallowWrapper {
               "challenge": Object {
                 "blurb": "Challenge 309 blurb",
                 "description": "Challenge 309 description",
+                "difficulty": 3,
                 "id": 309,
                 "name": "Challenge 309",
                 "parent": Object {
@@ -7167,7 +7200,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined start-challenge is-loading"
+                                    className="button is-outlined start-challenge is-loading"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -7181,7 +7214,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined save-challenge-toggle"
+                                    className="button is-outlined save-challenge-toggle"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -7203,7 +7236,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined start-challenge is-loading"
+                    className="button is-outlined start-challenge is-loading"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -7225,7 +7258,7 @@ ShallowWrapper {
                       id="Challenge.start"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined start-challenge is-loading",
+                    "className": "button is-outlined start-challenge is-loading",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -7252,7 +7285,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined save-challenge-toggle"
+                    className="button is-outlined save-challenge-toggle"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -7274,7 +7307,7 @@ ShallowWrapper {
                       id="Challenge.save"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined save-challenge-toggle",
+                    "className": "button is-outlined save-challenge-toggle",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -7383,6 +7416,7 @@ ShallowWrapper {
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -7398,7 +7432,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined start-challenge is-loading"
+                                                className="button is-outlined start-challenge is-loading"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -7412,7 +7446,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -7629,6 +7663,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -7644,7 +7679,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined start-challenge is-loading"
+                                                className="button is-outlined start-challenge is-loading"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -7658,7 +7693,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -7794,6 +7829,7 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
@@ -7815,7 +7851,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined start-challenge is-loading"
+                                        className="button is-outlined start-challenge is-loading"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -7829,7 +7865,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -7851,7 +7887,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined start-challenge is-loading"
+                      className="button is-outlined start-challenge is-loading"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -7873,7 +7909,7 @@ ShallowWrapper {
                         id="Challenge.start"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined start-challenge is-loading",
+                      "className": "button is-outlined start-challenge is-loading",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -7900,7 +7936,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined save-challenge-toggle"
+                      className="button is-outlined save-challenge-toggle"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -7922,7 +7958,7 @@ ShallowWrapper {
                         id="Challenge.save"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined save-challenge-toggle",
+                      "className": "button is-outlined save-challenge-toggle",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -7973,6 +8009,7 @@ ShallowWrapper {
         Object {
             "blurb": "Challenge 309 blurb",
             "description": "Challenge 309 description",
+            "difficulty": 3,
             "id": 309,
             "name": "Challenge 309",
             "parent": Object {
@@ -7980,7 +8017,6 @@ ShallowWrapper {
             },
           }
     }
-    challengeDifficulty={3}
     intl={
         Object {
             "formatMessage": [Function],
@@ -8089,6 +8125,7 @@ ShallowWrapper {
                               Object {
                                         "blurb": "Challenge 309 blurb",
                                         "description": "Challenge 309 description",
+                                        "difficulty": 3,
                                         "id": 309,
                                         "name": "Challenge 309",
                                         "parent": Object {
@@ -8104,7 +8141,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -8118,7 +8155,7 @@ ShallowWrapper {
                               className="control"
                     >
                               <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                               >
                                         <FormattedMessage
@@ -8364,6 +8401,7 @@ ShallowWrapper {
                             Object {
                                           "blurb": "Challenge 309 blurb",
                                           "description": "Challenge 309 description",
+                                          "difficulty": 3,
                                           "id": 309,
                                           "name": "Challenge 309",
                                           "parent": Object {
@@ -8379,7 +8417,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined start-challenge"
+                                          className="button is-outlined start-challenge"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -8393,7 +8431,7 @@ ShallowWrapper {
                             className="control"
               >
                             <button
-                                          className="button is-small is-outlined save-challenge-toggle"
+                                          className="button is-outlined save-challenge-toggle"
                                           onClick={[Function]}
                             >
                                           <FormattedMessage
@@ -8529,6 +8567,7 @@ ShallowWrapper {
               "challenge": Object {
                 "blurb": "Challenge 309 blurb",
                 "description": "Challenge 309 description",
+                "difficulty": 3,
                 "id": 309,
                 "name": "Challenge 309",
                 "parent": Object {
@@ -8550,7 +8589,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined start-challenge"
+                                    className="button is-outlined start-challenge"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -8565,7 +8604,7 @@ ShallowWrapper {
                   className="control"
 >
                   <button
-                                    className="button is-small is-outlined save-challenge-toggle"
+                                    className="button is-outlined save-challenge-toggle"
                                     onClick={[Function]}
                   >
                                     <FormattedMessage
@@ -8586,7 +8625,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined start-challenge"
+                    className="button is-outlined start-challenge"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -8608,7 +8647,7 @@ ShallowWrapper {
                       id="Challenge.start"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined start-challenge",
+                    "className": "button is-outlined start-challenge",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -8636,7 +8675,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <button
-                    className="button is-small is-outlined save-challenge-toggle"
+                    className="button is-outlined save-challenge-toggle"
                     onClick={[Function]}
 >
                     <FormattedMessage
@@ -8658,7 +8697,7 @@ ShallowWrapper {
                       id="Challenge.unsave"
                       values={Object {}}
 />,
-                    "className": "button is-small is-outlined save-challenge-toggle",
+                    "className": "button is-outlined save-challenge-toggle",
                     "onClick": [Function],
                   },
                   "ref": null,
@@ -8771,6 +8810,7 @@ ShallowWrapper {
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -8786,7 +8826,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -8800,7 +8840,7 @@ ShallowWrapper {
                                     className="control"
                         >
                                     <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                     >
                                                 <FormattedMessage
@@ -9046,6 +9086,7 @@ ShallowWrapper {
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
                                                 "description": "Challenge 309 description",
+                                                "difficulty": 3,
                                                 "id": 309,
                                                 "name": "Challenge 309",
                                                 "parent": Object {
@@ -9061,7 +9102,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined start-challenge"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -9075,7 +9116,7 @@ ShallowWrapper {
                                 className="control"
                 >
                                 <button
-                                                className="button is-small is-outlined save-challenge-toggle"
+                                                className="button is-outlined save-challenge-toggle"
                                                 onClick={[Function]}
                                 >
                                                 <FormattedMessage
@@ -9211,6 +9252,7 @@ ShallowWrapper {
                 "challenge": Object {
                   "blurb": "Challenge 309 blurb",
                   "description": "Challenge 309 description",
+                  "difficulty": 3,
                   "id": 309,
                   "name": "Challenge 309",
                   "parent": Object {
@@ -9232,7 +9274,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined start-challenge"
+                                        className="button is-outlined start-challenge"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -9247,7 +9289,7 @@ ShallowWrapper {
                     className="control"
 >
                     <button
-                                        className="button is-small is-outlined save-challenge-toggle"
+                                        className="button is-outlined save-challenge-toggle"
                                         onClick={[Function]}
                     >
                                         <FormattedMessage
@@ -9268,7 +9310,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined start-challenge"
+                      className="button is-outlined start-challenge"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -9290,7 +9332,7 @@ ShallowWrapper {
                         id="Challenge.start"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined start-challenge",
+                      "className": "button is-outlined start-challenge",
                       "onClick": [Function],
                     },
                     "ref": null,
@@ -9318,7 +9360,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <button
-                      className="button is-small is-outlined save-challenge-toggle"
+                      className="button is-outlined save-challenge-toggle"
                       onClick={[Function]}
 >
                       <FormattedMessage
@@ -9340,7 +9382,7 @@ ShallowWrapper {
                         id="Challenge.unsave"
                         values={Object {}}
 />,
-                      "className": "button is-small is-outlined save-challenge-toggle",
+                      "className": "button is-outlined save-challenge-toggle",
                       "onClick": [Function],
                     },
                     "ref": null,

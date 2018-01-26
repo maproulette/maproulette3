@@ -14,7 +14,6 @@ import WithTaskCenterPoint from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPo
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import ActiveTaskControls from './ActiveTaskControls/ActiveTaskControls'
-import TaskSaveControls from './ActiveTaskControls/TaskSaveControls/TaskSaveControls'
 import KeyboardShortcutReference from './KeyboardShortcutReference/KeyboardShortcutReference'
 import InsetMap from './InsetMap/InsetMap'
 import CommentList from '../../CommentList/CommentList'
@@ -77,10 +76,9 @@ export class ActiveTaskDetails extends Component {
     let commentPopout = null
     if (isMinimized) {
       const infoPopoutButton = (
-        <button className="button is-clear active-task-details__info-control">
-          <span className="icon"
+        <button className="button icon-only active-task-details__info-control">
+          <span className="control-icon"
                 title={this.props.intl.formatMessage(messages.info)}>
-
             <SvgSymbol viewBox='0 0 20 20' sym="info-icon" />
           </span>
         </button>
@@ -90,16 +88,20 @@ export class ActiveTaskDetails extends Component {
         <DeactivatablePopout direction='right'
                              className='active-task-details__info-popout'
                              control={infoPopoutButton}>
-          <h3 className="info-popout--name">
-            {_startCase(_get(this.props.task, 'parent.name'))}
-          </h3>
+          <div className="popout-content__header active-task-details--bordered">
+            <h3 className="info-popout--name">
+              {_startCase(_get(this.props.task, 'parent.name'))}
+            </h3>
 
-          <div className="info-popout--project-name">
-            {_get(this.props.task, 'parent.parent.displayName')}
+            <div className="info-popout--project-name">
+              {_get(this.props.task, 'parent.parent.displayName')}
+            </div>
           </div>
 
-          <div className='info-popout--instructions'>
-            <MarkdownContent markdown={taskInstructions} />
+          <div className="popout-content__body">
+            <div className='info-popout--instructions'>
+              <MarkdownContent markdown={taskInstructions} />
+            </div>
           </div>
         </DeactivatablePopout>
       )
@@ -115,10 +117,15 @@ export class ActiveTaskDetails extends Component {
                              className='active-task-details__comment-popout'
                              control={commentBadge}>
 
-          <h3>
-            <FormattedMessage {...messages.comments} />
-          </h3>
-          <CommentList comments={this.props.task.comments} />
+          <div className="popout-content__header active-task-details--bordered">
+            <h3>
+              <FormattedMessage {...messages.comments} />
+            </h3>
+          </div>
+
+          <div className="popout-content__body">
+            <CommentList comments={this.props.task.comments} />
+          </div>
         </DeactivatablePopout>
       )
     }
@@ -131,80 +138,80 @@ export class ActiveTaskDetails extends Component {
           {minimizerButton}
         </div>
 
-        <div className="task-content" key={`task-content-${this.props.task.id}`}>
-          {isMinimized && infoPopout}
-          {isMinimized && commentPopout}
-
-          <div className="active-task-details--heading primary-heading">
-            <FormattedMessage {...messages.challengeHeading} />
-          </div>
-
-          <h2 className="active-task-details--name">
-            {_startCase(_get(this.props.task, 'parent.name'))}
-          </h2>
-
-          <div className="active-task-details--project-name
-                          active-task-details--bordered">
-            {_get(this.props.task, 'parent.parent.displayName')}
-          </div>
-
-          {!isMinimized &&
-            <div>
-              {!_isEmpty(taskInstructions) &&
-                <div className={classNames('active-task-details--instructions',
-                                            {'active-task-details--bordered': !isMinimized})}>
-                  <div className="active-task-details--sub-heading">
-                    <FormattedMessage {...messages.instructions} />
-                  </div>
-                  <MarkdownContent markdown={taskInstructions} />
-                </div>
-              }
+        <div className="active-task-details__task-content"
+             key={`task-content-${this.props.task.id}`}>
+          <div className="task-content__task-header active-task-details--bordered">
+            <div className="active-task-details--heading primary-heading">
+              <FormattedMessage {...messages.challengeHeading} />
             </div>
-          }
 
-          <ActiveTaskControls className="active-task-details__controls"
-                              isMinimized={isMinimized}
-                              {...this.props} />
+            <h2 className="active-task-details--name">
+              {_startCase(_get(this.props.task, 'parent.name'))}
+            </h2>
 
-          <TaskSaveControls className="active-task-details--save-controls"
-                            isMinimized={isMinimized}
-                            {...this.props} />
+            <div className="active-task-details--project-name">
+              {_get(this.props.task, 'parent.parent.displayName')}
+            </div>
+          </div>
 
-          <KeyboardReferencePopout isMinimized={isMinimized}
-                                   className='active-task-details--bordered'
-                                   {...this.props} />
+          <div className="task-content__task-body">
+            {isMinimized && infoPopout}
+            {isMinimized && commentPopout}
 
-          {!isMinimized &&
-            <Delayed mounted={true} mountAfter={SIDEBAR_TRANSITION_DELAY}>
+            {!isMinimized &&
               <div>
-                <div className="active-task-details--inset-map">
+                {!_isEmpty(taskInstructions) &&
+                  <div className={classNames('active-task-details--instructions',
+                                              {'active-task-details--bordered': !isMinimized})}>
                     <div className="active-task-details--sub-heading">
-                      <FormattedMessage {...messages.location} />
+                      <FormattedMessage {...messages.instructions} />
                     </div>
-                  <OverviewMap key={this.props.task.id} task={this.props.task} {...this.props} />
-                </div>
-
-                <PlaceDescription place={this.props.task.place}
-                                  className="active-task-details--place active-task-details--bordered"/>
+                    <MarkdownContent markdown={taskInstructions} />
+                  </div>
+                }
               </div>
-            </Delayed>
-          }
+            }
 
-          <div className="active-task-details--sub-heading">
-            <FormattedMessage {...messages.social} />
-          </div>
-          <ChallengeShareControls className={classNames('active-task-details__share-controls',
-                                                        {'active-task-details--bordered': !isMinimized,
-                                                         'is-minimized': isMinimized})}
-                                  challenge={this.props.task.parent} />
+            <ActiveTaskControls className="active-task-details__controls"
+                                isMinimized={isMinimized}
+                                {...this.props} />
 
-          <div className="active-task-details__task-comments">
+            <KeyboardReferencePopout isMinimized={isMinimized}
+                                    className='active-task-details--bordered'
+                                    {...this.props} />
+
+            {!isMinimized &&
+              <Delayed mounted={true} mountAfter={SIDEBAR_TRANSITION_DELAY}>
+                <div>
+                  <div className="active-task-details--inset-map">
+                      <div className="active-task-details--sub-heading">
+                        <FormattedMessage {...messages.location} />
+                      </div>
+                    <OverviewMap key={this.props.task.id} task={this.props.task} {...this.props} />
+                  </div>
+
+                  <PlaceDescription place={this.props.task.place}
+                                    className="active-task-details--place active-task-details--bordered"/>
+                </div>
+              </Delayed>
+            }
+
             <div className="active-task-details--sub-heading">
-              <FormattedMessage {...messages.comments} />
-              <CommentCountBadge comments={_get(this.props, 'task.comments')} />
+              <FormattedMessage {...messages.social} />
             </div>
+            <ChallengeShareControls className={classNames('active-task-details__share-controls',
+                                                          {'active-task-details--bordered': !isMinimized,
+                                                          'is-minimized': isMinimized})}
+                                    challenge={this.props.task.parent} />
 
-            <CommentList comments={this.props.task.comments} />
+            <div className="active-task-details__task-comments">
+              <div className="active-task-details--sub-heading">
+                <FormattedMessage {...messages.comments} />
+                <CommentCountBadge comments={_get(this.props, 'task.comments')} />
+              </div>
+
+              <CommentList comments={this.props.task.comments} />
+            </div>
           </div>
         </div>
       </Sidebar>

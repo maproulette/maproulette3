@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import '../../../theme.scss';
 
 .challenge-filter-subnav.navbar.sub-nav {
   z-index: $layer-subnav;
@@ -35,21 +35,18 @@
       border-right: 1px solid $grey-lighter;
 
       &:after {
-        border-color: $grey-light;
+        @include arrow($minimizer-arrow-color);
+        @include dropdown-arrow();
         margin-top: 6px;
-        width: 10px;
-        height: 10px;
-        transform: rotate(-45deg);
-        transform-origin: center;
-        transition: transform 0.25s;
         margin-right: 10px;
       }
 
       label {
         text-transform: uppercase;
         font-size: $size-8;
-        font-weight: $weight-semibold;
-        margin: 0px 0px 5px 0px;
+        font-weight: $weight-medium;
+        letter-spacing: $letter-spacing-medium;
+        margin: 7px 0px 5px 0px;
       }
 
       .default-value, .placeholder, .current-value {

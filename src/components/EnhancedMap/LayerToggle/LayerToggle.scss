@@ -6,8 +6,12 @@
   top: 100px;
   right: 10px;
 
+  .dropdown-trigger > button.button:focus {
+    border-color: $grey-light;
+  }
+
   .layer-toggle__icon {
-    color: black;
+    fill: $green;
     width: 30px;
     height: auto;
     stroke-width: 2px;

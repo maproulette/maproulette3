@@ -139,7 +139,7 @@ ShallowWrapper {
           value="Foo"
 />,
         <button
-          className="button task-completion-controls__fix"
+          className="button large-and-wide full-width task-completion-controls__fix"
           onClick={[Function]}
 >
           <FormattedMessage
@@ -149,7 +149,7 @@ ShallowWrapper {
           />
 </button>,
         <button
-          className="button task-completion-controls__too-hard"
+          className="button large-and-wide full-width task-completion-controls__too-hard"
           onClick={[Function]}
 >
           <FormattedMessage
@@ -159,7 +159,7 @@ ShallowWrapper {
           />
 </button>,
         <button
-          className="button task-completion-controls__already-fixed"
+          className="button large-and-wide full-width task-completion-controls__already-fixed"
           onClick={[Function]}
 >
           <FormattedMessage
@@ -265,7 +265,7 @@ ShallowWrapper {
             id="ActiveTask.controls.fixed.label"
             values={Object {}}
 />,
-          "className": "button task-completion-controls__fix",
+          "className": "button large-and-wide full-width task-completion-controls__fix",
           "onClick": [Function],
         },
         "ref": null,
@@ -294,7 +294,7 @@ ShallowWrapper {
             id="ActiveTask.controls.notFixed.label"
             values={Object {}}
 />,
-          "className": "button task-completion-controls__too-hard",
+          "className": "button large-and-wide full-width task-completion-controls__too-hard",
           "onClick": [Function],
         },
         "ref": null,
@@ -323,7 +323,7 @@ ShallowWrapper {
             id="ActiveTask.controls.aleadyFixed.label"
             values={Object {}}
 />,
-          "className": "button task-completion-controls__already-fixed",
+          "className": "button large-and-wide full-width task-completion-controls__already-fixed",
           "onClick": [Function],
         },
         "ref": null,
@@ -488,7 +488,7 @@ ShallowWrapper {
             value="Foo"
 />,
           <button
-            className="button task-completion-controls__fix"
+            className="button large-and-wide full-width task-completion-controls__fix"
             onClick={[Function]}
 >
             <FormattedMessage
@@ -498,7 +498,7 @@ ShallowWrapper {
             />
 </button>,
           <button
-            className="button task-completion-controls__too-hard"
+            className="button large-and-wide full-width task-completion-controls__too-hard"
             onClick={[Function]}
 >
             <FormattedMessage
@@ -508,7 +508,7 @@ ShallowWrapper {
             />
 </button>,
           <button
-            className="button task-completion-controls__already-fixed"
+            className="button large-and-wide full-width task-completion-controls__already-fixed"
             onClick={[Function]}
 >
             <FormattedMessage
@@ -614,7 +614,7 @@ ShallowWrapper {
               id="ActiveTask.controls.fixed.label"
               values={Object {}}
 />,
-            "className": "button task-completion-controls__fix",
+            "className": "button large-and-wide full-width task-completion-controls__fix",
             "onClick": [Function],
           },
           "ref": null,
@@ -643,7 +643,7 @@ ShallowWrapper {
               id="ActiveTask.controls.notFixed.label"
               values={Object {}}
 />,
-            "className": "button task-completion-controls__too-hard",
+            "className": "button large-and-wide full-width task-completion-controls__too-hard",
             "onClick": [Function],
           },
           "ref": null,
@@ -672,7 +672,7 @@ ShallowWrapper {
               id="ActiveTask.controls.aleadyFixed.label"
               values={Object {}}
 />,
-            "className": "button task-completion-controls__already-fixed",
+            "className": "button large-and-wide full-width task-completion-controls__already-fixed",
             "onClick": [Function],
           },
           "ref": null,

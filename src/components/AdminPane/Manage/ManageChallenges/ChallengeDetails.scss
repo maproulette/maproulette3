@@ -79,6 +79,14 @@
   }
 
   .comment-list {
+    &__comment--content {
+      background-color: $white;
+    }
+
+    .with-triangle-border::before {
+      border-bottom-color: $white;
+    }
+
     &.none {
       font-size: $size-6;
       color: $grey-dark;

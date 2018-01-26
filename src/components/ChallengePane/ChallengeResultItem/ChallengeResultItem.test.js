@@ -1,5 +1,7 @@
 import React from 'react'
 import { ChallengeResultItem } from './ChallengeResultItem'
+import { ChallengeDifficulty }
+       from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import { cloneDeep as _cloneDeep } from 'lodash'
 
 const propsFixture = {
@@ -12,11 +14,11 @@ const propsFixture = {
     name: "Challenge 309",
     blurb: "Challenge 309 blurb",
     description: "Challenge 309 description",
+    difficulty: ChallengeDifficulty.expert,
     parent: {
       displayName: "foo",
     }
   },
-  challengeDifficulty: 3
 }
 
 let basicProps = null

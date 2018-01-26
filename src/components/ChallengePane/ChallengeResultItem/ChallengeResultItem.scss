@@ -58,13 +58,10 @@
     color: $grey-light;
   }
 
-  .challenge-list__item__difficulty {
-    font-size: $size-8;
-  }
-
   .challenge-list__item__field-label {
     text-transform: uppercase;
-    font-weight: $weight-bold;
+    font-weight: $weight-medium;
+    letter-spacing: $letter-spacing-little;
     margin-right: 0.5em;
 
     &:after {
@@ -73,12 +70,8 @@
   }
 
   .challenge-list__item__blurb {
-    font-size: $size-7;
-    margin: 1em 0;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
-    hyphens: auto;
+    margin: 15px 0 20px 0px;
+    @include constrained-text-content();
   }
 
   .challenge-list__item__task-progress {
@@ -91,7 +84,7 @@
   }
 
   button.save-challenge-toggle {
-    @include invert-on-hover($coral, $white);
+    @include invert-on-hover($grey, $white);
   }
 
   .card-header {
@@ -107,15 +100,15 @@
       align-items: flex-end;
 
       .icon {
-        @include arrow($grey-light);
-        transform: rotate(-45deg);
-        transform-origin: center;
-        transition: transform 0.25s;
+        @include arrow($minimizer-arrow-color);
+        @include dropdown-arrow();
       }
     }
   }
 
   .card-content {
+    color: $grey;
+    font-size: $size-7;
     max-height: 0;
     transition: max-height 0.25s, padding 0.25s;
     padding: 0 1.5rem;

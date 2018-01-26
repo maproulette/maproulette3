@@ -1,33 +1,25 @@
 @import '../../../../../variables.scss';
 
-@mixin task-control($color, $hover-color) {
-  svg {
-    fill: $color;
-  }
+.task-edit-controls {
+  &__control-block {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
-  &.button {
-    color: $color;
+    button.button.large-and-wide {
+      margin-bottom: 10px;
 
-    &:hover, &:enabled:focus {
-      color: $hover-color;
-
-      svg {
-        fill: $hover-color;
+      .control-icon svg {
+        height: 20px;
+        width: auto;
+        margin-right: 10px;
       }
     }
-  }
-}
-
-.task-edit-controls {
-  &__icon {
-    height: 18px;
-    width: auto;
-    margin-right: 5px;
   }
 
   &__task-comment {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 
     input {
       width: 100%;
@@ -38,29 +30,16 @@
     }
   }
 
-  &__edit-control {
-    @include task-control($default-icon-color, $blue);
-  }
-
-  &__skip-control {
-    @include task-control($default-icon-color, $black);
-  }
-
-  &__false-positive-control {
-    @include task-control($default-icon-color, $green);
-  }
-
   &.is-minimized {
-    .columns {
+    .task-edit-controls__control-block {
       flex-direction: column;
 
-      .column {
-        padding: 0;
+      .control-label {
+        display: none;
       }
     }
 
     button {
-      margin-left: 15px;
       margin-bottom: 5px;
     }
 

@@ -12,7 +12,7 @@
   overflow: visible;
   z-index: $layer-sidebar;
   height: 100%;
-  background-color: rgba($grey-lightest, 0.9);
+  background-color: rgba($grey-lightest-more, 0.9);
   transition: width 0.5s, max-width 0.5s;
 
   &:not(.inline) {
@@ -65,11 +65,11 @@
       outline: none;
       font-size: $size-5;
       line-height: 1em;
-      padding-right: 25px;
-      padding-top: 25px;
+      padding-right: 15px;
+      padding-top: 30px;
 
       &:after {
-        @include arrow($grey);
+        @include arrow($minimizer-arrow-color);
         position: static;
         transform: rotate(45deg);
         transform-origin: center;

@@ -11,6 +11,7 @@ import WithDeactivateOnOutsideClick
        from '../../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import SignInButton from '../../../../SignInButton/SignInButton'
+import TaskSaveControls from '../TaskSaveControls/TaskSaveControls'
 import messages from './Messages'
 import './TaskEditControls.css'
 
@@ -100,11 +101,13 @@ export default class TaskEditControls extends Component {
     let editControl = null
     if (defaultEditor !== Editor.none) {
       editControl = (
-        <button className="button is-clear task-edit-controls__edit-control"
+        <button className={classNames("button task-edit-controls__edit-control",
+                                      {"large-and-wide": !this.props.isMinimized,
+                                       "icon-only": this.props.isMinimized})}
                 onClick={() => this.pickEditor({value: defaultEditor})}>
-          <span className="icon"
+          <span className="control-icon"
                 title={this.props.intl.formatMessage(messages.fix)}>
-            <SvgSymbol viewBox='0 0 20 20' sym="edit-icon" className="task-edit-controls__icon" />
+            <SvgSymbol viewBox='0 0 20 20' sym="edit-icon" />
           </span>
           <span className="control-label">
             <FormattedMessage {...messages.fix} />
@@ -123,10 +126,12 @@ export default class TaskEditControls extends Component {
         <DeactivatableDropdownButton className={classNames('task-edit-controls__editor-dropdown',
                                                            {'popout-right': this.props.isMinimized})}
                                      options={editorOptions} onSelect={this.pickEditor}>
-          <button className="button is-clear task-edit-controls__edit-control">
-            <span className="icon"
+          <button className={classNames("button task-edit-controls__edit-control",
+                                        {"large-and-wide": !this.props.isMinimized,
+                                         "icon-only": this.props.isMinimized})}>
+            <span className="control-icon"
                   title={this.props.intl.formatMessage(messages.fix)}>
-              <SvgSymbol viewBox='0 0 20 20' sym="edit-icon" className="task-edit-controls__icon" />
+              <SvgSymbol viewBox='0 0 20 20' sym="edit-icon" />
             </span>
             <span className="control-label">
               <FormattedMessage {...messages.fix} />
@@ -145,34 +150,36 @@ export default class TaskEditControls extends Component {
                           commentChanged={this.props.setComment}
                           {..._omit(this.props, 'className')} />
 
-        <div className="columns">
-          <div className="column">{editControl}</div>
+        <div className="task-edit-controls__control-block">
+          {editControl}
 
-          <div className="column">
-            <button className="button is-clear task-edit-controls__false-positive-control"
-                    onClick={() => this.complete(TaskStatus.falsePositive)}>
-              <span className="icon"
-                    title={this.props.intl.formatMessage(messages.falsePositive)}>
-                <SvgSymbol viewBox='0 0 20 20' sym="check-icon" className="task-edit-controls__icon" />
-              </span>
-              <span className="control-label">
-                <FormattedMessage {...messages.falsePositive} />
-              </span>
-            </button>
-          </div>
+          <button className={classNames("button task-edit-controls__false-positive-control",
+                                        {"large-and-wide": !this.props.isMinimized,
+                                        "icon-only": this.props.isMinimized})}
+                  onClick={() => this.complete(TaskStatus.falsePositive)}>
+            <span className="control-icon"
+                  title={this.props.intl.formatMessage(messages.falsePositive)}>
+              <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
+            </span>
+            <span className="control-label">
+              <FormattedMessage {...messages.falsePositive} />
+            </span>
+          </button>
 
-          <div className={classNames('column', {'has-text-right': !this.props.isMinimized})}>
-            <button className="button is-clear task-edit-controls__skip-control"
-                    onClick={() => this.complete(TaskStatus.skipped)}>
-              <span className="icon"
-                    title={this.props.intl.formatMessage(messages.skip)}>
-                <SvgSymbol viewBox='0 0 20 20' sym="skip-icon" className="task-edit-controls__icon" />
-              </span>
-              <span className="control-label">
-                <FormattedMessage {...messages.skip} />
-              </span>
-            </button>
-          </div>
+          <button className={classNames("button task-edit-controls__skip-control",
+                                        {"large-and-wide": !this.props.isMinimized,
+                                        "icon-only": this.props.isMinimized})}
+                  onClick={() => this.complete(TaskStatus.skipped)}>
+            <span className="control-icon"
+                  title={this.props.intl.formatMessage(messages.skip)}>
+              <SvgSymbol viewBox='0 0 20 20' sym="skip-icon" />
+            </span>
+            <span className="control-label">
+              <FormattedMessage {...messages.skip} />
+            </span>
+          </button>
+
+          <TaskSaveControls {..._omit(this.props, 'className')} />
         </div>
       </div>
     )

@@ -3,8 +3,12 @@
 .challenge-result-list {
   &--heading {
     padding: 20px 0px;
-    margin: 0 20px 15px 20px;
+    margin: 0 20px 30px 20px;
     border-bottom: 2px solid $grey-lighter-more;
+
+    &.level:not(:last-child) { // override bulma level
+      margin-bottom: 30px;
+    }
 
     h2.title {
       color: $green;

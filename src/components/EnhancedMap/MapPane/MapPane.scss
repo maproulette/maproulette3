@@ -26,6 +26,10 @@
               height: 34px;
               font-weight: normal;
 
+              &:not(.leaflet-disabled) {
+                color: $green;
+              }
+
               &:first-child {
                 border-top-left-radius: 2px;
                 border-top-right-radius: 2px;

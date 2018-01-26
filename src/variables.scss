@@ -8,6 +8,7 @@ $blue: #2281C2; // cornflower-blue
 $grey-darkest: #333333;
 $grey-dark: #606060;
 $grey: #777777;
+$grey-light-less: #979797;
 $grey-light: #AAAAAA;
 $grey-lighter: #CCCCCC;
 $grey-lighter-more: #D8D8D8;
@@ -23,6 +24,8 @@ $danger: $red;
 $primary-invert: $white;
 $progress-value-background-color: $green;
 $default-icon-color: $grey-dark;
+$minimizer-arrow-color: $grey-light-less;
+$box-shadow-color: rgba(0,0,0, 0.15);
 
 // Typography
 $family-sans-serif: 'Roboto', sans-serif;
@@ -35,6 +38,9 @@ $weight-bold: 700;
 $size-7: 0.875rem;
 $size-8: 0.75rem;
 $size-9: 0.625rem;
+
+$letter-spacing-little: 0.66px;
+$letter-spacing-medium: 0.75px;
 
 // z-index layers
 $intralayer-bump: 1;
@@ -71,7 +77,7 @@ $navbar-item-color: $white;
 $navbar-item-active-color: $white;
 $navbar-item-hover-color: $white;
 $navbar-item-hover-background-color: transparent;
-$navbar-height: 4rem;
+$navbar-height: 75px;
 
 // Subnav
 $subnav-height: $navbar-height;
