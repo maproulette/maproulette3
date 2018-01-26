@@ -76,10 +76,9 @@ export class ActiveTaskDetails extends Component {
     let commentPopout = null
     if (isMinimized) {
       const infoPopoutButton = (
-        <button className="button is-clear active-task-details__info-control">
-          <span className="icon"
+        <button className="button icon-only active-task-details__info-control">
+          <span className="control-icon"
                 title={this.props.intl.formatMessage(messages.info)}>
-
             <SvgSymbol viewBox='0 0 20 20' sym="info-icon" />
           </span>
         </button>

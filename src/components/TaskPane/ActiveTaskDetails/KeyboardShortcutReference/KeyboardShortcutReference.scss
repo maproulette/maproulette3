@@ -8,14 +8,17 @@
     padding-bottom: 0;
   }
 
-  .active-task-details__keyboard-reference-control {
-    font-size: $size-8;
+  .button.active-task-details__keyboard-reference-control {
+    .control-icon svg {
+      fill: $grey;
+    }
 
-    .icon {
-      svg {
-        fill: $grey;
-        height: 18px;
-        width: auto;
+    &.is-clear {
+      font-size: $size-8;
+
+      .control-icon svg {
+        height: 14px;
+        vertical-align: text-bottom;
         margin-right: 5px;
       }
     }
@@ -39,22 +42,6 @@
       dd {
         float: left;
         font-size: $size-7;
-      }
-    }
-  }
-
-  &.is-minimized {
-    .active-task-details__keyboard-reference-control {
-      font-size: $size-6;
-
-      .icon, .icon:first-child:last-child {
-        margin-left: 5px;
-
-        svg {
-          height: 26px;
-          width: auto;
-          fill: $default-icon-color;
-        }
       }
     }
   }

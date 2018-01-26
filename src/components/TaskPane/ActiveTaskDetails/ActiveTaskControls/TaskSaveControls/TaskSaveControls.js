@@ -24,7 +24,7 @@ export default class TaskSaveControls extends Component {
                   onClick={() => this.props.unsaveTask(this.props.user.id, this.props.task.id)}>
             <span className="control-icon"
                   title={this.props.intl.formatMessage(messages.unsave)}>
-              <SvgSymbol viewBox='0 0 20 20' sym="save-disk-icon" />
+              <SvgSymbol viewBox='0 0 20 20' sym="bookmark-icon" />
             </span>
             <span className="control-label">
               <FormattedMessage {...messages.unsave} />
@@ -42,7 +42,7 @@ export default class TaskSaveControls extends Component {
                   onClick={() => this.props.saveTask(this.props.user.id, this.props.task.id)}>
             <span className="control-icon"
                   title={this.props.intl.formatMessage(messages.save)}>
-              <SvgSymbol viewBox='0 0 20 20' sym="save-disk-icon" />
+              <SvgSymbol viewBox='0 0 20 20' sym="bookmark-add-icon" />
             </span>
             <span className="control-label">
               <FormattedMessage {...messages.save} />

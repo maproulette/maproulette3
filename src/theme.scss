@@ -134,10 +134,17 @@ $tablet: 40px;
     fill: $green;
     height: 20px;
     width: auto;
+    transition: fill 0.3s;
   }
 
   .control-label {
     display: none;
+  }
+
+  &:hover {
+    .control-icon svg {
+      fill: $black;
+    }
   }
 }
 

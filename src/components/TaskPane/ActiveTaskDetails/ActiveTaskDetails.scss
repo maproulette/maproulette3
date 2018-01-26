@@ -107,6 +107,10 @@
       margin-bottom: 12px;
     }
 
+    .badge.is-badge-outlined[data-badge] svg {
+      transition: fill 0.3s;
+    }
+
     &:hover {
       cursor: pointer;
       .badge.is-badge-outlined[data-badge] {
@@ -142,26 +146,11 @@
     margin-bottom: 15px;
     width: 100%;
 
-    .popout-trigger {
-      margin-left: 3px;
-    }
-
-    button.button.active-task-details__info-control {
-      .icon {
-        svg {
-          fill: $primary;
-          height: 20px;
-          width: auto;
-        }
-
-        &:hover, &:enabled:focus {
-          svg {
-            fill: $black;
-          }
-        }
+    .button.active-task-details__info-control {
+      .control-icon svg {
+        fill: $primary;
       }
     }
-
 
     .info-popout--project-name {
       color: $grey-light;
@@ -185,6 +174,10 @@
       max-height: 60vh;
       overflow-y: auto;
     }
+  }
+
+  &__keyboard-reference {
+    text-align: center;
   }
 
   &.is-active.is-minimized {
