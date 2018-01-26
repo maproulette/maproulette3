@@ -54,7 +54,7 @@ ShallowWrapper {
                               title={undefined}
                     >
                               <SvgSymbol
-                                        sym="save-disk-icon"
+                                        sym="bookmark-add-icon"
                                         viewBox="0 0 20 20"
                               />
                     </span>
@@ -89,7 +89,7 @@ ShallowWrapper {
                         title={undefined}
             >
                         <SvgSymbol
-                                    sym="save-disk-icon"
+                                    sym="bookmark-add-icon"
                                     viewBox="0 0 20 20"
                         />
             </span>
@@ -117,7 +117,7 @@ ShallowWrapper {
                 title={undefined}
 >
                 <SvgSymbol
-                                sym="save-disk-icon"
+                                sym="bookmark-add-icon"
                                 viewBox="0 0 20 20"
                 />
 </span>,
@@ -142,7 +142,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <SvgSymbol
-                  sym="save-disk-icon"
+                  sym="bookmark-add-icon"
                   viewBox="0 0 20 20"
 />,
                 "className": "control-icon",
@@ -154,7 +154,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "sym": "save-disk-icon",
+                  "sym": "bookmark-add-icon",
                   "viewBox": "0 0 20 20",
                 },
                 "ref": null,
@@ -219,7 +219,7 @@ ShallowWrapper {
                                     title={undefined}
                         >
                                     <SvgSymbol
-                                                sym="save-disk-icon"
+                                                sym="bookmark-add-icon"
                                                 viewBox="0 0 20 20"
                                     />
                         </span>
@@ -254,7 +254,7 @@ ShallowWrapper {
                             title={undefined}
               >
                             <SvgSymbol
-                                          sym="save-disk-icon"
+                                          sym="bookmark-add-icon"
                                           viewBox="0 0 20 20"
                             />
               </span>
@@ -282,7 +282,7 @@ ShallowWrapper {
                   title={undefined}
 >
                   <SvgSymbol
-                                    sym="save-disk-icon"
+                                    sym="bookmark-add-icon"
                                     viewBox="0 0 20 20"
                   />
 </span>,
@@ -307,7 +307,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <SvgSymbol
-                    sym="save-disk-icon"
+                    sym="bookmark-add-icon"
                     viewBox="0 0 20 20"
 />,
                   "className": "control-icon",
@@ -319,7 +319,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "sym": "save-disk-icon",
+                    "sym": "bookmark-add-icon",
                     "viewBox": "0 0 20 20",
                   },
                   "ref": null,
@@ -435,7 +435,7 @@ ShallowWrapper {
                               title={undefined}
                     >
                               <SvgSymbol
-                                        sym="save-disk-icon"
+                                        sym="bookmark-icon"
                                         viewBox="0 0 20 20"
                               />
                     </span>
@@ -470,7 +470,7 @@ ShallowWrapper {
                         title={undefined}
             >
                         <SvgSymbol
-                                    sym="save-disk-icon"
+                                    sym="bookmark-icon"
                                     viewBox="0 0 20 20"
                         />
             </span>
@@ -498,7 +498,7 @@ ShallowWrapper {
                 title={undefined}
 >
                 <SvgSymbol
-                                sym="save-disk-icon"
+                                sym="bookmark-icon"
                                 viewBox="0 0 20 20"
                 />
 </span>,
@@ -523,7 +523,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <SvgSymbol
-                  sym="save-disk-icon"
+                  sym="bookmark-icon"
                   viewBox="0 0 20 20"
 />,
                 "className": "control-icon",
@@ -535,7 +535,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "sym": "save-disk-icon",
+                  "sym": "bookmark-icon",
                   "viewBox": "0 0 20 20",
                 },
                 "ref": null,
@@ -600,7 +600,7 @@ ShallowWrapper {
                                     title={undefined}
                         >
                                     <SvgSymbol
-                                                sym="save-disk-icon"
+                                                sym="bookmark-icon"
                                                 viewBox="0 0 20 20"
                                     />
                         </span>
@@ -635,7 +635,7 @@ ShallowWrapper {
                             title={undefined}
               >
                             <SvgSymbol
-                                          sym="save-disk-icon"
+                                          sym="bookmark-icon"
                                           viewBox="0 0 20 20"
                             />
               </span>
@@ -663,7 +663,7 @@ ShallowWrapper {
                   title={undefined}
 >
                   <SvgSymbol
-                                    sym="save-disk-icon"
+                                    sym="bookmark-icon"
                                     viewBox="0 0 20 20"
                   />
 </span>,
@@ -688,7 +688,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <SvgSymbol
-                    sym="save-disk-icon"
+                    sym="bookmark-icon"
                     viewBox="0 0 20 20"
 />,
                   "className": "control-icon",
@@ -700,7 +700,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "sym": "save-disk-icon",
+                    "sym": "bookmark-icon",
                     "viewBox": "0 0 20 20",
                   },
                   "ref": null,
