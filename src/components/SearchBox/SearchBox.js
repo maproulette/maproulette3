@@ -35,7 +35,7 @@ export default class SearchBox extends Component {
    */
   queryChanged = (e) => {
     this.props.setSearch(e.target.value)
-    this.props.fetchResults(e.target.value)
+    this.fetchResults(e.target.value)
   }
 
   /**

@@ -8,6 +8,14 @@ import { isArray as _isArray,
          intersection as _intersection } from 'lodash'
 import messages from './Messages'
 
+export const CHALLENGE_CATEGORY_NAVIGATION = "navigation"
+export const CHALLENGE_CATEGORY_WATER = "water"
+export const CHALLENGE_CATEGORY_POINTS_OF_INTEREST = "pointsOfInterest"
+export const CHALLENGE_CATEGORY_BUILDINGS = "buildings"
+export const CHALLENGE_CATEGORY_LAND_USE = "landUse"
+export const CHALLENGE_CATEGORY_TRANSIT = "transit"
+export const CHALLENGE_CATEGORY_OTHER = "other"
+
 /**
  * Categories are groupings of one or more keywords that serve to
  * provide a high-level starting point for new users looking to
@@ -18,13 +26,13 @@ import messages from './Messages'
  * Values should be arrays. Use empty array for no keywords.
  */
 export const ChallengeCategoryKeywords = {
-  navigation: ["highway"],
-  water: ["natural", "water"],
-  pointsOfInterest: ["amenity", "leisure"],
-  buildings: ["building"],
-  landUse: ["landuse", "boundary"],
-  transit: ["railway", "public_transport"],
-  other: [],
+  [CHALLENGE_CATEGORY_NAVIGATION]: ["highway"],
+  [CHALLENGE_CATEGORY_WATER]: ["natural", "water"],
+  [CHALLENGE_CATEGORY_POINTS_OF_INTEREST]: ["amenity", "leisure"],
+  [CHALLENGE_CATEGORY_BUILDINGS]: ["building"],
+  [CHALLENGE_CATEGORY_LAND_USE]: ["landuse", "boundary"],
+  [CHALLENGE_CATEGORY_TRANSIT]: ["railway", "public_transport"],
+  [CHALLENGE_CATEGORY_OTHER]: [],
 }
 
 /**
