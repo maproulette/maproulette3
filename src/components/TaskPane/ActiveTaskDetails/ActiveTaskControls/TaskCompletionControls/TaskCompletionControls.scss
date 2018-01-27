@@ -11,22 +11,12 @@
   &__cancel {
     margin-top: 15px;
     margin-bottom: 15px;
-    font-size: 18px;
 
     svg {
       height: 18px;
       width: auto;
-      fill: $primary;
       vertical-align: middle;
-      margin-right: 0.25em;
-    }
-
-    &:hover, &:enabled:focus {
-      color: $green;
-
-      svg {
-        fill: $green;
-      }
+      margin-right: 10px;
     }
   }
 }

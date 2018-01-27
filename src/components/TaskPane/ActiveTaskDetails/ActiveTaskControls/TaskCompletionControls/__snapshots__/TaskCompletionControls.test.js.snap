@@ -139,7 +139,7 @@ ShallowWrapper {
           value="Foo"
 />,
         <button
-          className="button large-and-wide full-width task-completion-controls__fix"
+          className="button large-and-wide full-width label-only task-completion-controls__fix"
           onClick={[Function]}
 >
           <FormattedMessage
@@ -149,7 +149,7 @@ ShallowWrapper {
           />
 </button>,
         <button
-          className="button large-and-wide full-width task-completion-controls__too-hard"
+          className="button large-and-wide full-width label-only task-completion-controls__too-hard"
           onClick={[Function]}
 >
           <FormattedMessage
@@ -159,7 +159,7 @@ ShallowWrapper {
           />
 </button>,
         <button
-          className="button large-and-wide full-width task-completion-controls__already-fixed"
+          className="button large-and-wide full-width label-only task-completion-controls__already-fixed"
           onClick={[Function]}
 >
           <FormattedMessage
@@ -171,8 +171,8 @@ ShallowWrapper {
         <div
           className="has-centered-children"
 >
-          <a
-                    className="is-text task-completion-controls__cancel"
+          <button
+                    className="button is-green is-outlined task-completion-controls__cancel"
                     onClick={[Function]}
           >
                     <SvgSymbol
@@ -184,7 +184,7 @@ ShallowWrapper {
                               id="ActiveTask.controls.cancelEditing.label"
                               values={Object {}}
                     />
-          </a>
+          </button>
 </div>,
       ],
       "className": "task-completion-controls",
@@ -265,7 +265,7 @@ ShallowWrapper {
             id="ActiveTask.controls.fixed.label"
             values={Object {}}
 />,
-          "className": "button large-and-wide full-width task-completion-controls__fix",
+          "className": "button large-and-wide full-width label-only task-completion-controls__fix",
           "onClick": [Function],
         },
         "ref": null,
@@ -294,7 +294,7 @@ ShallowWrapper {
             id="ActiveTask.controls.notFixed.label"
             values={Object {}}
 />,
-          "className": "button large-and-wide full-width task-completion-controls__too-hard",
+          "className": "button large-and-wide full-width label-only task-completion-controls__too-hard",
           "onClick": [Function],
         },
         "ref": null,
@@ -323,7 +323,7 @@ ShallowWrapper {
             id="ActiveTask.controls.aleadyFixed.label"
             values={Object {}}
 />,
-          "className": "button large-and-wide full-width task-completion-controls__already-fixed",
+          "className": "button large-and-wide full-width label-only task-completion-controls__already-fixed",
           "onClick": [Function],
         },
         "ref": null,
@@ -347,8 +347,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <a
-            className="is-text task-completion-controls__cancel"
+          "children": <button
+            className="button is-green is-outlined task-completion-controls__cancel"
             onClick={[Function]}
 >
             <SvgSymbol
@@ -360,7 +360,7 @@ ShallowWrapper {
                         id="ActiveTask.controls.cancelEditing.label"
                         values={Object {}}
             />
-</a>,
+</button>,
           "className": "has-centered-children",
         },
         "ref": null,
@@ -380,7 +380,7 @@ ShallowWrapper {
                 values={Object {}}
 />,
             ],
-            "className": "is-text task-completion-controls__cancel",
+            "className": "button is-green is-outlined task-completion-controls__cancel",
             "onClick": [Function],
           },
           "ref": null,
@@ -411,7 +411,7 @@ ShallowWrapper {
               "type": [Function],
             },
           ],
-          "type": "a",
+          "type": "button",
         },
         "type": "div",
       },
@@ -488,7 +488,7 @@ ShallowWrapper {
             value="Foo"
 />,
           <button
-            className="button large-and-wide full-width task-completion-controls__fix"
+            className="button large-and-wide full-width label-only task-completion-controls__fix"
             onClick={[Function]}
 >
             <FormattedMessage
@@ -498,7 +498,7 @@ ShallowWrapper {
             />
 </button>,
           <button
-            className="button large-and-wide full-width task-completion-controls__too-hard"
+            className="button large-and-wide full-width label-only task-completion-controls__too-hard"
             onClick={[Function]}
 >
             <FormattedMessage
@@ -508,7 +508,7 @@ ShallowWrapper {
             />
 </button>,
           <button
-            className="button large-and-wide full-width task-completion-controls__already-fixed"
+            className="button large-and-wide full-width label-only task-completion-controls__already-fixed"
             onClick={[Function]}
 >
             <FormattedMessage
@@ -520,8 +520,8 @@ ShallowWrapper {
           <div
             className="has-centered-children"
 >
-            <a
-                        className="is-text task-completion-controls__cancel"
+            <button
+                        className="button is-green is-outlined task-completion-controls__cancel"
                         onClick={[Function]}
             >
                         <SvgSymbol
@@ -533,7 +533,7 @@ ShallowWrapper {
                                     id="ActiveTask.controls.cancelEditing.label"
                                     values={Object {}}
                         />
-            </a>
+            </button>
 </div>,
         ],
         "className": "task-completion-controls",
@@ -614,7 +614,7 @@ ShallowWrapper {
               id="ActiveTask.controls.fixed.label"
               values={Object {}}
 />,
-            "className": "button large-and-wide full-width task-completion-controls__fix",
+            "className": "button large-and-wide full-width label-only task-completion-controls__fix",
             "onClick": [Function],
           },
           "ref": null,
@@ -643,7 +643,7 @@ ShallowWrapper {
               id="ActiveTask.controls.notFixed.label"
               values={Object {}}
 />,
-            "className": "button large-and-wide full-width task-completion-controls__too-hard",
+            "className": "button large-and-wide full-width label-only task-completion-controls__too-hard",
             "onClick": [Function],
           },
           "ref": null,
@@ -672,7 +672,7 @@ ShallowWrapper {
               id="ActiveTask.controls.aleadyFixed.label"
               values={Object {}}
 />,
-            "className": "button large-and-wide full-width task-completion-controls__already-fixed",
+            "className": "button large-and-wide full-width label-only task-completion-controls__already-fixed",
             "onClick": [Function],
           },
           "ref": null,
@@ -696,8 +696,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <a
-              className="is-text task-completion-controls__cancel"
+            "children": <button
+              className="button is-green is-outlined task-completion-controls__cancel"
               onClick={[Function]}
 >
               <SvgSymbol
@@ -709,7 +709,7 @@ ShallowWrapper {
                             id="ActiveTask.controls.cancelEditing.label"
                             values={Object {}}
               />
-</a>,
+</button>,
             "className": "has-centered-children",
           },
           "ref": null,
@@ -729,7 +729,7 @@ ShallowWrapper {
                   values={Object {}}
 />,
               ],
-              "className": "is-text task-completion-controls__cancel",
+              "className": "button is-green is-outlined task-completion-controls__cancel",
               "onClick": [Function],
             },
             "ref": null,
@@ -760,7 +760,7 @@ ShallowWrapper {
                 "type": [Function],
               },
             ],
-            "type": "a",
+            "type": "button",
           },
           "type": "div",
         },

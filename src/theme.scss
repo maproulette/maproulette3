@@ -115,11 +115,15 @@ $tablet: 40px;
     height: 20px;
     width: auto;
     margin-right: 8px;
-    vertical-align: middle;
+    vertical-align: text-bottom;
   }
 
   &.full-width {
     width: 100%;
+  }
+
+  &.label-only {
+    font-weight: $weight-normal;
   }
 }
 

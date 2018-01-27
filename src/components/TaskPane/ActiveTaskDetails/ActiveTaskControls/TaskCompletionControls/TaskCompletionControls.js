@@ -59,26 +59,27 @@ export default class TaskCompletionControls extends Component {
                           commentChanged={this.props.setComment}
                           {..._omit(this.props, 'className')} />
 
-        <button className="button large-and-wide full-width task-completion-controls__fix"
+        <button className="button large-and-wide full-width label-only task-completion-controls__fix"
                 onClick={() => this.complete(TaskStatus.fixed)}>
           <FormattedMessage {...messages.fixed} />
         </button>
 
-        <button className="button large-and-wide full-width task-completion-controls__too-hard"
+        <button className="button large-and-wide full-width label-only task-completion-controls__too-hard"
                 onClick={() => this.complete(TaskStatus.tooHard)}>
           <FormattedMessage {...messages.notFixed} />
         </button>
 
-        <button className="button large-and-wide full-width task-completion-controls__already-fixed"
+        <button className="button large-and-wide full-width label-only task-completion-controls__already-fixed"
                 onClick={() => this.complete(TaskStatus.alreadyFixed)}>
           <FormattedMessage {...messages.alreadyFixed} />
         </button>
 
         <div className="has-centered-children">
-          <a className="is-text task-completion-controls__cancel" onClick={this.cancel}>
+          <button className="button is-green is-outlined task-completion-controls__cancel"
+                  onClick={this.cancel}>
             <SvgSymbol viewBox='0 0 20 20' sym="back-icon" />
             <FormattedMessage {...messages.cancelEditing} />
-          </a>
+          </button>
         </div>
       </div>
     )
