@@ -3,6 +3,14 @@ import { isEmpty as _isEmpty,
          isArray as _isArray } from 'lodash'
 import { LatLngBounds, LatLng } from 'leaflet'
 
+/** Default map bounds in absence of any state */
+export const DEFAULT_MAP_BOUNDS = [
+  -6.152343750000001, // west
+  -22.512556954051437, // south
+  96.15234375, // east
+  22.51255695405145, // north
+]
+
 // utility functions
 
 /**
@@ -120,7 +128,13 @@ export const setTaskMapBounds = function(bounds, zoom, fromUserAction=false) {
 
 // redux reducers
 
-export const currentMapBounds = function(state={}, action) {
+const defaultState = {
+  locator: {
+    bounds: DEFAULT_MAP_BOUNDS,
+  }
+}
+
+export const currentMapBounds = function(state=defaultState, action) {
   if (action.type === SET_LOCATOR_MAP_BOUNDS) {
     return Object.assign(
       {},
