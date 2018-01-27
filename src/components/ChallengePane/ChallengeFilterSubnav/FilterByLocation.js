@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { map as _map,
-         reject as _reject } from 'lodash'
+         reject as _reject,
+         get as _get } from 'lodash'
 import { injectIntl } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
 import { ChallengeLocation,
@@ -35,10 +36,11 @@ export class FilterByLocation extends Component {
       if (value === ChallengeLocation.nearMe) {
         this.props.locateMapToUser(this.props.user)
       }
+      else if (value === ChallengeLocation.withinMapBounds) {
+        this.props.updateBoundedChallenges(
+          _get(this.props, 'mapBounds.locator.bounds'))
+      }
     }
-
-    // Let the system know that the relevant map bounds probably just changed.
-    this.props.updateMapBoundedChallenges()
   }
 
   render() {
@@ -75,14 +77,16 @@ export class FilterByLocation extends Component {
 }
 
 FilterByLocation.propTypes = {
+  /** The current map bounds */
+  mapBounds: PropTypes.object,
   /** Invoked to update the challenge location filter */
   setChallengeFilters: PropTypes.func.isRequired,
   /** Invoked to clear the challenge location filter */
   removeChallengeFilters: PropTypes.func.isRequired,
   /** Invoked when the user chooses the 'near me' option */
   locateMapToUser: PropTypes.func.isRequired,
-  /** Invoked when the location filter is changed */
-  updateMapBoundedChallenges: PropTypes.func.isRequired,
+  /** Invoked when the user chooses 'within map bounds' option */
+  updateBoundedChallenges: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
   challengeFilter: PropTypes.object,
   /** The current logged-in user, if any */

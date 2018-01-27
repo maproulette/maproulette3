@@ -3,9 +3,12 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { get as _get } from 'lodash'
 import { latLng } from 'leaflet'
+import { ChallengeLocation }
+       from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
+import WithChallengeFilters from '../HOCs/WithChallengeFilters/WithChallengeFilters'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithMapBoundsState from '../HOCs/WithMapBounds/WithMapBoundsState'
 import WithMapBoundsDispatch from '../HOCs/WithMapBounds/WithMapBoundsDispatch'
@@ -51,6 +54,23 @@ export class LocatorMap extends Component {
     return false
   }
 
+  /**
+   * Signal a change to the current locator map bounds in response to a change
+   * to the map (panning or zooming). If searching within map bounds is also
+   * active, then signal that the map-bounded challenges also need to be
+   * refreshed.
+   *
+   * @private
+   */
+  updateBounds = (bounds, zoom, fromUserAction=false) => {
+    this.props.setLocatorMapBounds(bounds, zoom, fromUserAction)
+
+    if (_get(this.props, 'challengeFilter.location') ===
+        ChallengeLocation.withinMapBounds) {
+      this.props.updateBoundedChallenges(bounds)
+    }
+  }
+
   render() {
     return (
       <div className={classNames('default-map full-screen-map', this.props.className)}>
@@ -58,7 +78,7 @@ export class LocatorMap extends Component {
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={3} setInitialBounds={false}
                      initialBounds = {_get(this.props, 'mapBounds.locator.bounds')}
                      zoomControl={false} animate={true}
-                     onBoundsChange={this.props.setLocatorMapBounds}>
+                     onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
           <VisibleTileLayer defaultLayer={this.props.layerSourceName} />
         </EnhancedMap>
@@ -81,4 +101,4 @@ LocatorMap.propTypes = {
 }
 
 export default
-  WithMapBoundsState(WithMapBoundsDispatch(LocatorMap))
+  WithChallengeFilters(WithMapBoundsState(WithMapBoundsDispatch(LocatorMap)))
