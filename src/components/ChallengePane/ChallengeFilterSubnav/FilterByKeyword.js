@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { keys as _keys,
-         isArray as _isArray,
          without as _without,
+         isEmpty as _isEmpty,
          first as _first } from 'lodash'
 import { injectIntl } from 'react-intl'
-import { ChallengeCategoryKeywords,
+import { CHALLENGE_CATEGORY_OTHER,
+         ChallengeCategoryKeywords,
+         categoryMatchingKeywords,
          keywordLabels }
        from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import NavDropdown from '../../Bulma/NavDropdown'
@@ -32,12 +34,12 @@ export class FilterByKeyword extends Component {
       this.props.removeChallengeFilters(['keywords'])
     }
     else {
-      this.props.setKeywordFilter(_isArray(value) ? value : [ value ])
+      this.props.setKeywordFilter(ChallengeCategoryKeywords[value])
     }
   }
 
   setOtherKeywords = keywordString => {
-    this.updateFilter({value: keywordString})
+    this.props.setKeywordFilter([keywordString])
   }
 
   clearOtherKeywords = () => {
@@ -48,7 +50,7 @@ export class FilterByKeyword extends Component {
     const localizedKeywordLabels = keywordLabels(this.props.intl)
 
     const categories = _without(_keys(ChallengeCategoryKeywords), 'other')
-    const activeCategory = _first(this.props.challengeFilter.keywords)
+    const activeCategory = categoryMatchingKeywords(this.props.challengeFilter.keywords)
     const selectOptions = categories.map(keyword => ({
       key: keyword,
       text: localizedKeywordLabels[keyword],
@@ -63,10 +65,10 @@ export class FilterByKeyword extends Component {
     }
     selectOptions.unshift(anyOption)
 
-    // If the active category doesn't match a known category, then it's an
+    // If the active category doesn't match a known category, then it's a
     // manually entered ("other") keyword
-    const otherKeyword =
-      categories.indexOf(activeCategory) === -1 ? activeCategory : null
+    const otherKeyword = activeCategory === CHALLENGE_CATEGORY_OTHER ?
+                         _first(this.props.challengeFilter.keywords) : null
 
     // Add 'other' box for manually entering other keywords not included in menu.
     selectOptions.push({
@@ -86,7 +88,8 @@ export class FilterByKeyword extends Component {
       <NavDropdown placeholder={anyOption.text}
                    label={this.props.intl.formatMessage(messages.keywordLabel)}
                    options={selectOptions}
-                   value={_first(this.props.challengeFilter.keywords)}
+                   value={_isEmpty(this.props.challengeFilter.keywords) ?
+                          null : {text: localizedKeywordLabels[activeCategory]}}
                    onChange={this.updateFilter}
       />
     )
