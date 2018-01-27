@@ -104,9 +104,10 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
     return new Endpoint(
       api.task.addComment,
       {variables: {id: taskId}, params: {comment, actionId: taskStatus}}
-    ).execute().then(() =>
+    ).execute().then(() => {
       fetchTaskComments(taskId)(dispatch)
-    ).catch((error) => {
+      fetchTask(taskId)(dispatch) // Refresh task data
+    }).catch((error) => {
       if (error.response && error.response.status === 401) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).
@@ -249,7 +250,9 @@ const updateTaskStatus = function(dispatch, taskId, newStatus) {
   return new Endpoint(
     api.task.updateStatus,
     {schema: taskSchema(), variables: {id: taskId, status: newStatus}}
-  ).execute().catch((error) => {
+  ).execute().then(() =>
+    fetchTask(taskId)(dispatch) // Refresh task data
+  ).catch((error) => {
     if (error.response && error.response.status === 401) {
       // If we get an unauthorized, we assume the user is not logged
       // in (or no longer logged in with the server).

@@ -1,0 +1,13 @@
+@import '../../../../../variables.scss';
+
+.active-task-details .cancel-control {
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  svg {
+    height: 18px;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+}

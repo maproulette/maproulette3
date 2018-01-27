@@ -1,0 +1,609 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shows popout control when minimized 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <TaskStatusIndicator
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    isMinimized={true}
+    task={
+        Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": Array [
+        <div
+          className="popout-content__header active-task-details--bordered"
+>
+          <h3
+                    className="info-popout--name"
+          >
+                    <FormattedMessage
+                              defaultMessage="Existing Status"
+                              id="ActiveTask.status.prompt"
+                              values={Object {}}
+                    />
+          </h3>
+</div>,
+        <div
+          className="popout-content__body"
+>
+          <span
+                    className="task-status__label"
+          >
+                    <FormattedMessage
+                              defaultMessage="Created"
+                              id="Task.status.created"
+                              values={Object {}}
+                    />
+          </span>
+</div>,
+      ],
+      "className": "task-status-popout",
+      "control": <button
+        className="button icon-only task-status"
+>
+        <span
+                className="control-icon"
+                title="Existing Status"
+        >
+                <SvgSymbol
+                        sym="flag-icon"
+                        viewBox="0 0 20 20"
+                />
+        </span>
+</button>,
+      "direction": "right",
+      "eventTypes": Array [
+        "mousedown",
+        "touchstart",
+      ],
+      "excludeScrollbar": false,
+      "outsideClickIgnoreClass": "ignore-react-onclickoutside",
+      "preventDefault": false,
+      "stopPropagation": false,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <h3
+            className="info-popout--name"
+>
+            <FormattedMessage
+                        defaultMessage="Existing Status"
+                        id="ActiveTask.status.prompt"
+                        values={Object {}}
+            />
+</h3>,
+          "className": "popout-content__header active-task-details--bordered",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <FormattedMessage
+              defaultMessage="Existing Status"
+              id="ActiveTask.status.prompt"
+              values={Object {}}
+/>,
+            "className": "info-popout--name",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": "Existing Status",
+              "id": "ActiveTask.status.prompt",
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "h3",
+        },
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <span
+            className="task-status__label"
+>
+            <FormattedMessage
+                        defaultMessage="Created"
+                        id="Task.status.created"
+                        values={Object {}}
+            />
+</span>,
+          "className": "popout-content__body",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <FormattedMessage
+              defaultMessage="Created"
+              id="Task.status.created"
+              values={Object {}}
+/>,
+            "className": "task-status__label",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": "Created",
+              "id": "Task.status.created",
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "span",
+        },
+        "type": "div",
+      },
+    ],
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <div
+            className="popout-content__header active-task-details--bordered"
+>
+            <h3
+                        className="info-popout--name"
+            >
+                        <FormattedMessage
+                                    defaultMessage="Existing Status"
+                                    id="ActiveTask.status.prompt"
+                                    values={Object {}}
+                        />
+            </h3>
+</div>,
+          <div
+            className="popout-content__body"
+>
+            <span
+                        className="task-status__label"
+            >
+                        <FormattedMessage
+                                    defaultMessage="Created"
+                                    id="Task.status.created"
+                                    values={Object {}}
+                        />
+            </span>
+</div>,
+        ],
+        "className": "task-status-popout",
+        "control": <button
+          className="button icon-only task-status"
+>
+          <span
+                    className="control-icon"
+                    title="Existing Status"
+          >
+                    <SvgSymbol
+                              sym="flag-icon"
+                              viewBox="0 0 20 20"
+                    />
+          </span>
+</button>,
+        "direction": "right",
+        "eventTypes": Array [
+          "mousedown",
+          "touchstart",
+        ],
+        "excludeScrollbar": false,
+        "outsideClickIgnoreClass": "ignore-react-onclickoutside",
+        "preventDefault": false,
+        "stopPropagation": false,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <h3
+              className="info-popout--name"
+>
+              <FormattedMessage
+                            defaultMessage="Existing Status"
+                            id="ActiveTask.status.prompt"
+                            values={Object {}}
+              />
+</h3>,
+            "className": "popout-content__header active-task-details--bordered",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <FormattedMessage
+                defaultMessage="Existing Status"
+                id="ActiveTask.status.prompt"
+                values={Object {}}
+/>,
+              "className": "info-popout--name",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": "Existing Status",
+                "id": "ActiveTask.status.prompt",
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "h3",
+          },
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <span
+              className="task-status__label"
+>
+              <FormattedMessage
+                            defaultMessage="Created"
+                            id="Task.status.created"
+                            values={Object {}}
+              />
+</span>,
+            "className": "popout-content__body",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <FormattedMessage
+                defaultMessage="Created"
+                id="Task.status.created"
+                values={Object {}}
+/>,
+              "className": "task-status__label",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": "Created",
+                "id": "Task.status.created",
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "span",
+          },
+          "type": "div",
+        },
+      ],
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`shows the task status 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <TaskStatusIndicator
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    isMinimized={false}
+    task={
+        Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <div
+          className="active-task-details--sub-heading"
+>
+          <FormattedMessage
+                    defaultMessage="Existing Status"
+                    id="ActiveTask.status.prompt"
+                    values={Object {}}
+          />
+</div>,
+        <div>
+          <span
+                    className="task-status__label"
+          >
+                    <FormattedMessage
+                              defaultMessage="Created"
+                              id="Task.status.created"
+                              values={Object {}}
+                    />
+          </span>
+</div>,
+      ],
+      "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <FormattedMessage
+            defaultMessage="Existing Status"
+            id="ActiveTask.status.prompt"
+            values={Object {}}
+/>,
+          "className": "active-task-details--sub-heading",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "defaultMessage": "Existing Status",
+            "id": "ActiveTask.status.prompt",
+            "values": Object {},
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <span
+            className="task-status__label"
+>
+            <FormattedMessage
+                        defaultMessage="Created"
+                        id="Task.status.created"
+                        values={Object {}}
+            />
+</span>,
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <FormattedMessage
+              defaultMessage="Created"
+              id="Task.status.created"
+              values={Object {}}
+/>,
+            "className": "task-status__label",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": "Created",
+              "id": "Task.status.created",
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "span",
+        },
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="active-task-details--sub-heading"
+>
+            <FormattedMessage
+                        defaultMessage="Existing Status"
+                        id="ActiveTask.status.prompt"
+                        values={Object {}}
+            />
+</div>,
+          <div>
+            <span
+                        className="task-status__label"
+            >
+                        <FormattedMessage
+                                    defaultMessage="Created"
+                                    id="Task.status.created"
+                                    values={Object {}}
+                        />
+            </span>
+</div>,
+        ],
+        "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <FormattedMessage
+              defaultMessage="Existing Status"
+              id="ActiveTask.status.prompt"
+              values={Object {}}
+/>,
+            "className": "active-task-details--sub-heading",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": "Existing Status",
+              "id": "ActiveTask.status.prompt",
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <span
+              className="task-status__label"
+>
+              <FormattedMessage
+                            defaultMessage="Created"
+                            id="Task.status.created"
+                            values={Object {}}
+              />
+</span>,
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <FormattedMessage
+                defaultMessage="Created"
+                id="Task.status.created"
+                values={Object {}}
+/>,
+              "className": "task-status__label",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": "Created",
+                "id": "Task.status.created",
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "span",
+          },
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

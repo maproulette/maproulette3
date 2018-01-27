@@ -25,14 +25,35 @@ export const TaskStatus = Object.freeze({
 export const keysByStatus = Object.freeze(_invert(TaskStatus))
 
 /**
- * Returns true if the given status represents completion of
- * the task.
+ * Returns a Set of status progressions that are allowed
+ * for the given status. An empty Set is returned if no
+ * progressions are allowed.
+ *
+ * @returns a Set of allowed status progressions
  */
-export const isCompleted = function(status) {
-  return status === TaskStatus.fixed ||
-         status === TaskStatus.falsePositive ||
-         status === TaskStatus.alreadyFixed ||
-         status === TaskStatus.deleted
+export const allowedStatusProgressions = function(status) {
+  switch(status) {
+    case TaskStatus.created:
+      return new Set([TaskStatus.fixed, TaskStatus.falsePositive,
+                      TaskStatus.skipped, TaskStatus.deleted,
+                      TaskStatus.alreadyFixed, TaskStatus.tooHard])
+    case TaskStatus.fixed:
+      return new Set()
+    case TaskStatus.falsePositive:
+      return new Set([TaskStatus.fixed])
+    case TaskStatus.skipped:
+    case TaskStatus.tooHard:
+      return new Set([TaskStatus.fixed, TaskStatus.falsePositive,
+                      TaskStatus.skipped, TaskStatus.alreadyFixed,
+                      TaskStatus.tooHard])
+    case TaskStatus.deleted:
+      return new Set([TaskStatus.created])
+    case TaskStatus.alreadyFixed:
+      return new Set()
+    default:
+      throw new Error("unrecognized-task-status",
+                      `Unrecognized task status ${status}`)
+  }
 }
 
 /**

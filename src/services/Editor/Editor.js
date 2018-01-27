@@ -1,6 +1,9 @@
-import { compact as _compact } from 'lodash'
+import { compact as _compact,
+         fromPairs as _fromPairs,
+         map as _map } from 'lodash'
 import RequestStatus from '../Server/RequestStatus'
 import { buildError, addError } from '../Error/Error'
+import messages from './Messages'
 
 // Editor constants defined on server
 export const NONE = -1
@@ -14,6 +17,11 @@ export const Editor = Object.freeze({
   josm: JOSM,
   josmLayer: JOSM_LAYER,
 })
+
+/** Returns object containing localized labels  */
+export const editorLabels = intl => _fromPairs(
+  _map(messages, (message, key) => [key, intl.formatMessage(message)])
+)
 
 // redux actions
 export const EDITOR_OPENED = 'EditorOpened'

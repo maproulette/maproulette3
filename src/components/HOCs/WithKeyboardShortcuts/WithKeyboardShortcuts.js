@@ -1,25 +1,36 @@
 import { connect } from 'react-redux'
 import { get as _get } from 'lodash'
-import { setKeyboardShortcuts,
-         clearKeyboardShortcuts } from '../../../services/KeyboardShortcuts/KeyboardShortcuts'
+import { addKeyboardShortcutGroup,
+         removeKeyboardShortcutGroup,
+         addKeyboardShortcut,
+         removeKeyboardShortcut }
+       from '../../../services/KeyboardShortcuts/KeyboardShortcuts'
 import KeyMappings from '../../../KeyMappings'
 
 const mapStateToProps = state => {
   return {
     keyboardShortcutGroups: KeyMappings,
-    activeKeyboardShortcuts: _get(state, 'currentKeyboardShortcuts.group'),
+    activeKeyboardShortcuts: _get(state, 'currentKeyboardShortcuts.groups', {}),
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    activateKeyboardShortcuts: (shortcutGroup, handler) => {
+    activateKeyboardShortcutGroup: (shortcutGroup, handler) => {
       document.addEventListener("keydown", handler, false)
-      dispatch(setKeyboardShortcuts(shortcutGroup))
+      dispatch(addKeyboardShortcutGroup(shortcutGroup))
     },
-    deactivateKeyboardShortcuts: (shortcutGroup, handler) => {
+    deactivateKeyboardShortcutGroup: (groupName, handler) => {
       document.removeEventListener("keydown", handler)
-      dispatch(clearKeyboardShortcuts())
+      dispatch(removeKeyboardShortcutGroup(groupName))
+    },
+    activateKeyboardShortcut: (groupName, shortcut, handler) => {
+      document.addEventListener("keydown", handler, false)
+      dispatch(addKeyboardShortcut(groupName, shortcut))
+    },
+    deactivateKeyboardShortcut: (groupName, shortcutName, handler) => {
+      document.removeEventListener("keydown", handler)
+      dispatch(removeKeyboardShortcut(groupName, shortcutName))
     },
   }
 }

@@ -1,0 +1,71 @@
+@import '../../../../variables.scss';
+
+.active-task-controls {
+  &__control-block {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    button.button.large-and-wide {
+      margin-bottom: 10px;
+
+      .control-icon svg {
+        height: 20px;
+        width: auto;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &__vertical-control-block {
+    display: flex;
+    flex-direction: column;
+
+    button {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__task-comment {
+    width: 100%;
+    margin-bottom: 20px;
+
+    input {
+      width: 100%;
+      font-size: 16px;
+      padding: 5px;
+      border: 2px solid $grey;
+      border-radius: $radius-medium;
+    }
+  }
+
+  &.is-minimized {
+    .active-task-controls__control-block {
+      flex-direction: column;
+
+      .control-label {
+        display: none;
+      }
+    }
+
+    button {
+      margin-bottom: 5px;
+    }
+
+    .active-task-controls__icon {
+      height: 26px;
+      width: auto;
+      margin-left: 0px;
+      margin-right: 0px;
+      fill: $default-icon-color;
+    }
+
+    .active-task-controls__task-comment {
+      display: none;
+    }
+
+    .control-label {
+      display: none;
+    }
+  }
+}

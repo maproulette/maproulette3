@@ -9,14 +9,16 @@
  * > [key values](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
  */
 export default {
-  taskEditing: {
+  openEditor: {
     editId: {key: 'e', label: 'Edit in Id'},
     editJosm: {key: 'r', label: 'Edit in JOSM'},
     editJosmLayer: {key: 't', label: 'Edit in new JOSM layer'},
-    falsePositive: {key: 'q', label: 'Not an Issue'},
-    skip: {key: 'w', label: 'Skip'},
+  },
+  taskEditing: {
+    cancel: {key: 'Escape', label: 'Cancel Editing', keyLabel: 'ESC'}
   },
   taskCompletion: {
-    cancel: {key: 'Escape', label: 'Cancel Editing', keyLabel: 'ESC'}
+    skip: {key: 'w', label: 'Skip'},
+    falsePositive: {key: 'q', label: 'Not an Issue'},
   },
 }

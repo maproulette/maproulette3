@@ -139,7 +139,7 @@ export class ActiveTaskDetails extends Component {
         </div>
 
         <div className="active-task-details__task-content"
-             key={`task-content-${this.props.task.id}`}>
+             key={`task-content-${this.props.task.id}-${_get(this.props.task, '_metaFetchedAt')}`}>
           <div className="task-content__task-header active-task-details--bordered">
             <div className="active-task-details--heading primary-heading">
               <FormattedMessage {...messages.challengeHeading} />
