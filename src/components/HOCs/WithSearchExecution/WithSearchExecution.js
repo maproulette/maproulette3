@@ -35,10 +35,9 @@ const WithSearchExecution = (WrappedComponent, searchName, searchFunction) =>
 
 const _WithSearchExecution = function(WrappedComponent, searchName, searchFunction) {
   return class extends Component {
-    fetchResults = (query) =>
-      _debounce(() => {
+    fetchResults = _debounce(query => {
         this.props.performSearch(searchName, query, searchFunction)
-      }, 1000)
+    }, 1000)
 
     render() {
       const queryProps = this.props.searchQueries[searchName]
