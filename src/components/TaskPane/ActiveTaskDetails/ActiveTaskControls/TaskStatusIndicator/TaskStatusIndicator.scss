@@ -1,0 +1,23 @@
+@import '../../../../../variables.scss';
+
+.active-task-details .task-status {
+  margin-bottom: 15px;
+
+  svg {
+    height: 18px;
+    width: auto;
+    fill: $grey-dark;
+    margin-right: 7px;
+    vertical-align: text-top;
+  }
+
+  .task-status__prompt {
+    font-weight: $weight-medium;
+  }
+
+  &.icon-only {
+    .control-icon svg {
+      fill: $yellow;
+    }
+  }
+}

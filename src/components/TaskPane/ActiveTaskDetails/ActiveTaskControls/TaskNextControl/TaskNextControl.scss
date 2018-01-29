@@ -1,0 +1,21 @@
+@import '../../../../../variables.scss';
+
+.active-task-details .next-control {
+  margin-top: 15px;
+  margin-bottom: 0px;
+
+  svg {
+    height: 18px;
+    width: auto;
+    vertical-align: middle;
+    margin-left: 10px;
+  }
+
+  &.icon-only {
+    margin-top: 0;
+
+    svg {
+      margin-left: 0;
+    }
+  }
+}

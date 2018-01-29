@@ -6,16 +6,25 @@ import { findIndex as _findIndex } from 'lodash'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
+/**
+ * TaskSaveControls displays controls for saving or unsaving the current task
+ * into the user's set of saved tasks.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export default class TaskSaveControls extends Component {
   render() {
     if (!this.props.user || !this.props.task) {
       return null
     }
 
+    const taskIsSaved =
+      _findIndex(this.props.user.savedTasks, {id: this.props.task.id}) !== -1
+
     let saveTaskButton = null
     let unsaveTaskButton = null
 
-    if (_findIndex(this.props.user.savedTasks, {id: this.props.task.id}) !== -1) {
+    if (taskIsSaved) {
       unsaveTaskButton = (
         <p className="control">
           <button className={classNames("button save-task-toggle unsave-task",
@@ -62,8 +71,12 @@ export default class TaskSaveControls extends Component {
 }
 
 TaskSaveControls.propTypes = {
+  /** The current user */
   user: PropTypes.object,
+  /** The current active task */
   task: PropTypes.object.isRequired,
+  /** Invoked if the user decides to save the task */
   saveTask: PropTypes.func.isRequired,
+  /** Invoked if the user decides to unsave the task */
   unsaveTask: PropTypes.func.isRequired,
 }

@@ -21,6 +21,8 @@ import { ChallengeCategoryKeywords }
        from './services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import { loadCompleteUser, GUEST_USER_ID } from './services/User/User'
 import { clearErrors } from './services/Error/Error'
+import { clearKeyboardShortcuts }
+       from './services/KeyboardShortcuts/KeyboardShortcuts'
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus,
          clearFetchingChallenges } from './services/Status/Status'
@@ -32,6 +34,7 @@ addLocaleData([...en])
 const configFromServer = window.mr3Config
 const {store} = initializePersistedStore((store) => {
   store.dispatch(clearErrors())
+  store.dispatch(clearKeyboardShortcuts())
   store.dispatch(setCheckingLoginStatus())
   store.dispatch(clearFetchingChallenges())
 

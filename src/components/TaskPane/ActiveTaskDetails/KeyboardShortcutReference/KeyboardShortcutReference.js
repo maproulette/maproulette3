@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { map as _map,
+         flatten as _flatten,
+         values as _values,
          startCase as _startCase,
          omit as _omit } from 'lodash'
 import Popout from '../../../Bulma/Popout'
@@ -18,7 +20,10 @@ import './KeyboardShortcutReference.css'
  */
 export class KeyboardShortcutReference extends Component {
   render() {
-    const shortcuts = _map(this.props.activeKeyboardShortcuts, (value, operation) => [
+    const flattenedShortcuts =
+      _flatten(_map(this.props.activeKeyboardShortcuts, group => _values(group)))
+
+    const shortcuts = _map(flattenedShortcuts, (value, operation) => [
       <dt key={`term-${operation}`}>{value.keyLabel || value.key}</dt>,
       <dd key={`def-${operation}`}>{value.label || _startCase(operation)}</dd>
     ])
