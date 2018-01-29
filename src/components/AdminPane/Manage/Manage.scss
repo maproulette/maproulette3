@@ -5,8 +5,10 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    border-bottom: 2px solid $grey-lightest-more;
     margin-top: 0;
-    margin-bottom: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 40px;
   }
 
   .subtitle, .subtitle:not(:last-child) {
