@@ -10,13 +10,14 @@ project is still required.
 > [go-http-tunnel](https://github.com/mmatczuk/go-http-tunnel) or use a
 > commercial service like ngrok.
 
-1. Create a `.env.development.local` file and set `REACT_APP_BASE_PATH='/mr3'`
-   and `REACT_APP_URL='https://maproulette.mydevserver.com/mr3'` (substituting
-   your dev domain, of course) and
-   `REACT_APP_MAP_ROULETTE_SERVER_URL='https://maproulette.mydevserver.com'`.
-   If you wish to use Mapbox maps, set the `REACT_APP_MAPBOX_ACCESS_TOKEN` to
-   your API token. If you want some debug output, set `REACT_APP_DEBUG='enabled'`.
-   Override any other settings from the `.env` file as needed or desired.
+1. Create a `.env.development.local` file and:
+ * set `REACT_APP_BASE_PATH='/mr3'`
+ * set `REACT_APP_URL='https://maproulette.mydevserver.com/mr3'` (substituting your dev domain, of course)
+ * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://maproulette.mydevserver.com'`
+ * if you wish to use Mapbox maps, set the `REACT_APP_MAPBOX_ACCESS_TOKEN` to
+   your API token.
+ * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
+ * override any other settings from the `.env` file as needed or desired.
 
 2. `yarn` to fetch and install NPM modules.
 
@@ -29,8 +30,8 @@ project is still required.
    `https://maproulette.mydevserver.com`). Take note of your new app's consumer
    key and secret key, as you'll need them in the next step.
 
-5. Fire up your backend scala server (installed separately), setting the
-   `MR_OAUTH_CONSUMER_KEY` and `MR_OAUTH_CONSUMER_SECRET` environment variables
+5. Fire up your backend scala server (installed separately from the maproulette2 project),
+   setting the `MR_OAUTH_CONSUMER_KEY` and `MR_OAUTH_CONSUMER_SECRET` environment variables
    to your OSM app's consumer key and secret key, respectively. The back-end
    server assumes your front-end dev server is running on port 3000, which is
    the default; if you've changed the port, you'll also need to set
@@ -44,8 +45,8 @@ project is still required.
 
 ### Staging/Production build:
 
-Setup a `.env.production` file with the desired production setting overrides.
-`yarn run build` to create a minified front-end tarball.
+* Setup a `.env.production` file with the desired production setting overrides.
+* `yarn run build` to create a minified front-end tarball.
 
 > Note that the minified front-end JS and CSS bundles are given new hashed
 > names with each build, and that the back-end server needs to know these names
@@ -59,19 +60,31 @@ Setup a `.env.production` file with the desired production setting overrides.
 > `jq -r '."main.css"' MR3React/asset-manifest.json`)
 
 
-# Development
+# Development Notes
 
-> Note: this project was bootstrapped with
-> [Create React App](https://github.com/facebookincubator/create-react-app).
-> The create-react-app user guide contains a lot of info about general project
-> setup and configuration.
+The project was bootstrapped with
+[Create React App](https://github.com/facebookincubator/create-react-app).
 
+Branch management follows
+[GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html) with
+active development of the next release occurring on the `develop` branch. Pull
+requests should target the `develop` branch. The master branch always contains
+the latest release.
 
-## CSS Styling
+Release versions follow [Semantic Versioning](https://semver.org/).
+
+## Testing
+
+[Jest](https://facebook.github.io/jest/) +
+[Enzyme](https://github.com/airbnb/enzyme) are being used for tests. `yarn test`
+to run them.
+
+## CSS Styling and Naming
 
 The app uses [Sass/scss](http://sass-lang.com/) in combination with the
-[Bulma](https://bulma.io) framework. The [BEM](http://getbem.com/introduction/)
-methodology has been loosely used as a guide for CSS class naming.
+[Bulma](https://bulma.io) CSS framework. The [BEM](http://getbem.com/introduction/)
+methodology has been loosely used as a guide for CSS class naming within
+components.
 
 The [node-sass-chokidar](https://www.npmjs.com/package/node-sass-chokidar)
 package is used for compiling the .scss files into .css, which are then imported
@@ -79,10 +92,16 @@ into the components (the .css files are not added to source control). It's
 run automatically as part of the yarn start and build scripts, so there's no need
 to run it separately.
 
-The `src/theme.scss` includes global sass variables (like colors), some Bulma
-variable overrides, and a few class customizations. You'll note that it's
-included in many of the .scss files to get access to the variables.
+The `src/variables.scss` includes global sass variables (such as colors), some
+Bulma variable overrides, etc.. Reusable mixins are kept in `src/mixins.scss`.
+Everything is pulled together (including Bulma's own Sass) into the
+`src/theme.scss` file.
 
-## Testing
+## Internationalization and Localization
 
-Jest + Enzyme is being used for tests. `yarn test` to run them.
+Internationalization and localization is performed via
+[react-intl](https://github.com/yahoo/react-intl/wiki). Each component features
+a co-located Messages.js file that contains messages intended for display,
+along with a default (English) version of each message. Given that the app is
+still under active development and seeing significant UI changes, no
+translation files have been generated yet.
