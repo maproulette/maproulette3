@@ -31,7 +31,6 @@ export const jsSchema = intl => {
   return {
     "$schema": "http://json-schema.org/draft-06/schema#",
     title: intl.formatMessage(messages.step4Label),
-    description: intl.formatMessage(messages.step4Description),
     type: "object",
     properties: {
       updateTasks: {

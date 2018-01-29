@@ -77,12 +77,12 @@ export default defineMessages({
 
   checkinCommentLabel: {
     id: 'EditChallenge.form.checkinComment.label',
-    defaultMessage: "Checkin Comment",
+    defaultMessage: "Changeset Description",
   },
 
   checkinCommentDescription: {
     id: 'EditChallenge.form.checkinComment.description',
-    defaultMessage: "Checkin comment to be associated with changes made by " +
+    defaultMessage: "Comment to be associated with changes made by " +
                     "users in editor",
   },
 

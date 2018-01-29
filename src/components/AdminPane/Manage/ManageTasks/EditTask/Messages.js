@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "New Task",
   },
 
+  formTitle: {
+    id: 'EditTask.form.formTitle',
+    defaultMessage: "Task Details",
+  },
+
   save: {
     id: 'EditTask.save',
     defaultMessage: "Save",

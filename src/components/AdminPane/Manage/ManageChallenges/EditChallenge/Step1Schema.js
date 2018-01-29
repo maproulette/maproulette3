@@ -33,7 +33,6 @@ export const jsSchema = (intl, user) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-06/schema#",
     title: intl.formatMessage(messages.formTitle),
-    description: intl.formatMessage(messages.formDescription),
     type: "object",
     properties: {
       enabled: {

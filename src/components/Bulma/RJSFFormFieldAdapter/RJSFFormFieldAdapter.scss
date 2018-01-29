@@ -5,15 +5,17 @@
 // is a bit clunky and requires some fine-tuning here.
 form.rjsf {
   fieldset {
-    border: 1px solid $grey-lighter;
-    border-radius: $radius-medium;
+    border: 6px solid $grey-lightest;
+    border-radius: 6px;
     padding: 25px;
 
-    legend {
+    legend, legend:not(:last-child) {
       @extend .title;
       font-size: $size-4;
       margin-left: 30px;
       padding: 0 5px;
+      margin-bottom: 40px;
+      font-weight: $weight-medium;
     }
   }
 
@@ -22,8 +24,11 @@ form.rjsf {
   #root__description {
     // Negative top margin to reduce the top fieldset padding, which we want in
     // the event there isn't a root description.
-    margin: -25px 0 30px 36px; // left-align with fieldset legend
+    margin: 0px 0 45px 36px; // left-align with fieldset legend
     color: $grey;
+    background-color: $grey-lightest-more;
+    padding: 15px;
+    border-radius: $radius-medium;
   }
 
   .form-fields-wrapper {
