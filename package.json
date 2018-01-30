@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "v3.00-alpha.2",
+  "version": "3.0.0-alpha.2",
   "private": true,
   "dependencies": {
     "bulma": "^0.6.0",
