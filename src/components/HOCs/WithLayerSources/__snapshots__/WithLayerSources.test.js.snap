@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`the wrapped component is rendered 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Component />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "layerSources": Array [
+        Object {
+          "attributionId": "map.attribution.OpenStreetMap",
+          "name": "OpenStreetMap",
+          "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        },
+        Object {
+          "attributionId": "map.attribution.OpenCycleMap",
+          "name": "OpenCycleMap",
+          "url": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+        },
+        Object {
+          "attributionId": "map.attribution.Bing",
+          "detectRetina": true,
+          "name": "Bing",
+          "tileSize": 256,
+          "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        },
+      ],
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "layerSources": Array [
+          Object {
+            "attributionId": "map.attribution.OpenStreetMap",
+            "name": "OpenStreetMap",
+            "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          },
+          Object {
+            "attributionId": "map.attribution.OpenCycleMap",
+            "name": "OpenCycleMap",
+            "url": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+          },
+          Object {
+            "attributionId": "map.attribution.Bing",
+            "detectRetina": true,
+            "name": "Bing",
+            "tileSize": 256,
+            "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          },
+        ],
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

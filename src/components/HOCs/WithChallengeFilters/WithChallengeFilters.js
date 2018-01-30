@@ -18,7 +18,7 @@ const FILTER_NAME = 'challenge'
 const WithChallengeFilters =
   WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   const challengeCriteria = _get(state, `currentFilters[${FILTER_NAME}]`, {})
 
   return {
@@ -28,7 +28,7 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   setChallengeFilters:
     filterCriteria => dispatch(setFilters(FILTER_NAME, filterCriteria)),
 

@@ -1,0 +1,217 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it renders with props as expected 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <FilterByKeyword
+    challengeFilter={
+        Object {
+            "difficulty": 1,
+            "keywords": "Challenge",
+          }
+    }
+    challenges={
+        Array [
+            Object {
+              "blurb": "Challenge 309 blurb",
+              "description": "Challenge 309 description",
+              "id": 309,
+              "name": "Challenge 309",
+              "parent": Object {
+                "displayName": "foo",
+              },
+            },
+            Object {
+              "blurb": "Challenge 311 blurb",
+              "description": "Challenge 311 description",
+              "id": 311,
+              "name": "Challenge 311",
+              "parent": Object {
+                "displayName": "bar",
+              },
+            },
+          ]
+    }
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    removeChallengeFilters={[Function]}
+    setKeywordFilter={[Function]}
+    user={
+        Object {
+            "id": 11,
+            "savedChallenges": Array [],
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "eventTypes": Array [
+        "mousedown",
+        "touchstart",
+      ],
+      "excludeScrollbar": false,
+      "label": undefined,
+      "onChange": [Function],
+      "options": Array [
+        Object {
+          "key": "any",
+          "text": undefined,
+          "value": null,
+        },
+        Object {
+          "key": "navigation",
+          "text": undefined,
+          "value": "navigation",
+        },
+        Object {
+          "key": "water",
+          "text": undefined,
+          "value": "water",
+        },
+        Object {
+          "key": "pointsOfInterest",
+          "text": undefined,
+          "value": "pointsOfInterest",
+        },
+        Object {
+          "key": "buildings",
+          "text": undefined,
+          "value": "buildings",
+        },
+        Object {
+          "key": "landUse",
+          "text": undefined,
+          "value": "landUse",
+        },
+        Object {
+          "key": "transit",
+          "text": undefined,
+          "value": "transit",
+        },
+        Object {
+          "Renderable": [Function],
+          "key": "other",
+          "ownProps": Object {
+            "clearSearch": [Function],
+            "placeholder": "",
+            "searchQuery": Object {
+              "query": "C",
+            },
+            "setSearch": [Function],
+          },
+          "text": undefined,
+          "value": "C",
+        },
+      ],
+      "outsideClickIgnoreClass": "ignore-react-onclickoutside",
+      "placeholder": undefined,
+      "preventDefault": false,
+      "stopPropagation": false,
+      "value": Object {
+        "text": undefined,
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "eventTypes": Array [
+          "mousedown",
+          "touchstart",
+        ],
+        "excludeScrollbar": false,
+        "label": undefined,
+        "onChange": [Function],
+        "options": Array [
+          Object {
+            "key": "any",
+            "text": undefined,
+            "value": null,
+          },
+          Object {
+            "key": "navigation",
+            "text": undefined,
+            "value": "navigation",
+          },
+          Object {
+            "key": "water",
+            "text": undefined,
+            "value": "water",
+          },
+          Object {
+            "key": "pointsOfInterest",
+            "text": undefined,
+            "value": "pointsOfInterest",
+          },
+          Object {
+            "key": "buildings",
+            "text": undefined,
+            "value": "buildings",
+          },
+          Object {
+            "key": "landUse",
+            "text": undefined,
+            "value": "landUse",
+          },
+          Object {
+            "key": "transit",
+            "text": undefined,
+            "value": "transit",
+          },
+          Object {
+            "Renderable": [Function],
+            "key": "other",
+            "ownProps": Object {
+              "clearSearch": [Function],
+              "placeholder": "",
+              "searchQuery": Object {
+                "query": "C",
+              },
+              "setSearch": [Function],
+            },
+            "text": undefined,
+            "value": "C",
+          },
+        ],
+        "outsideClickIgnoreClass": "ignore-react-onclickoutside",
+        "placeholder": undefined,
+        "preventDefault": false,
+        "stopPropagation": false,
+        "value": Object {
+          "text": undefined,
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

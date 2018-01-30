@@ -98,7 +98,7 @@ export class FilterByKeyword extends Component {
 
 FilterByKeyword.propTypes = {
   /** Invoked to update the challenge keyword filter */
-  setChallengeFilters: PropTypes.func.isRequired,
+  setKeywordFilter: PropTypes.func.isRequired,
   /** Invoked to clear the challenge keyword filter */
   removeChallengeFilters: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
