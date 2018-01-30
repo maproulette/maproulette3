@@ -1,8 +1,12 @@
 import { ChallengePriority, challengePriorityLabels }
        from '../../../../../services/Challenge/ChallengePriority/ChallengePriority'
-import { TaskStatus, statusLabels }
+import { TaskStatus,
+         messagesByStatus,
+         allowedStatusProgressions }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
-import { map as _map, values as _values } from 'lodash'
+import { map as _map,
+         values as _values,
+         isObject as _isObject } from 'lodash'
 import messages from './Messages'
 
 /**
@@ -16,9 +20,20 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = intl => {
+export const jsSchema = (intl, task) => {
   const localizedPriorityLabels = challengePriorityLabels(intl)
-  const localizedStatusLabels = statusLabels(intl)
+
+  // If the task exists, its status can limit the statuses allowed to be set
+  // during editing.
+  const allowedStatuses =
+    _isObject(task) ?
+    Array.from(allowedStatusProgressions(task.status, true)) :
+    _values(TaskStatus)
+
+  const allowedStatusLabels = _map(
+    allowedStatuses,
+    status => intl.formatMessage(messagesByStatus[status])
+  )
 
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-06/schema#",
@@ -53,8 +68,8 @@ export const jsSchema = intl => {
         title: intl.formatMessage(messages.statusLabel),
         description: intl.formatMessage(messages.statusDescription),
         type: "number",
-        enum: _values(TaskStatus),
-        enumNames: _map(TaskStatus, (value, key) => localizedStatusLabels[key]),
+        enum: allowedStatuses,
+        enumNames: allowedStatusLabels,
         default: TaskStatus.created,
       },
     },
