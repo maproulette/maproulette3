@@ -29,31 +29,47 @@ export const keysByStatus = Object.freeze(_invert(TaskStatus))
  * for the given status. An empty Set is returned if no
  * progressions are allowed.
  *
+ * Set includeSelf to true if the given (presumed current) status should be
+ * also included in the results.
+ *
  * @returns a Set of allowed status progressions
  */
-export const allowedStatusProgressions = function(status) {
+export const allowedStatusProgressions = function(status, includeSelf = false) {
+  let progressions = null
   switch(status) {
     case TaskStatus.created:
-      return new Set([TaskStatus.fixed, TaskStatus.falsePositive,
-                      TaskStatus.skipped, TaskStatus.deleted,
-                      TaskStatus.alreadyFixed, TaskStatus.tooHard])
+      progressions = new Set([TaskStatus.fixed, TaskStatus.falsePositive,
+                              TaskStatus.skipped, TaskStatus.deleted,
+                              TaskStatus.alreadyFixed, TaskStatus.tooHard])
+      break
     case TaskStatus.fixed:
-      return new Set()
+      progressions = new Set()
+      break
     case TaskStatus.falsePositive:
-      return new Set([TaskStatus.fixed])
+      progressions = new Set([TaskStatus.fixed])
+      break
     case TaskStatus.skipped:
     case TaskStatus.tooHard:
-      return new Set([TaskStatus.fixed, TaskStatus.falsePositive,
-                      TaskStatus.skipped, TaskStatus.alreadyFixed,
-                      TaskStatus.tooHard])
+      progressions = new Set([TaskStatus.fixed, TaskStatus.falsePositive,
+                              TaskStatus.skipped, TaskStatus.alreadyFixed,
+                              TaskStatus.tooHard])
+      break
     case TaskStatus.deleted:
-      return new Set([TaskStatus.created])
+      progressions = new Set([TaskStatus.created])
+      break
     case TaskStatus.alreadyFixed:
-      return new Set()
+      progressions = new Set()
+      break
     default:
       throw new Error("unrecognized-task-status",
                       `Unrecognized task status ${status}`)
   }
+
+  if (includeSelf) {
+    progressions.add(status)
+  }
+
+  return progressions
 }
 
 /**

@@ -92,7 +92,7 @@ export class EditTask extends Component {
           </nav>
         </div>
 
-        <Form schema={jsSchema(this.props.intl)}
+        <Form schema={jsSchema(this.props.intl, this.props.task)}
               uiSchema={uiSchema}
               FieldTemplate={CustomFieldTemplate}
               liveValidate
