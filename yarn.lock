@@ -2,6 +2,23 @@
 # yarn lockfile v1
 
 
+"@turf/bbox@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-5.1.5.tgz#3051df514ad4c50f4a4f9b8a2d15fd8b6840eda3"
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+    "@turf/meta" "^5.1.5"
+
+"@turf/helpers@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-5.1.5.tgz#153405227ab933d004a5bb9641a9ed999fcbe0cf"
+
+"@turf/meta@^5.1.5":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-5.2.0.tgz#3b1ad485ee0c3b0b1775132a32c384d53e4ba53d"
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+
 "@types/node@*":
   version "9.3.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.3.0.tgz#3a129cda7c4e5df2409702626892cb4b96546dd5"
