@@ -1,8 +1,8 @@
 import { OPEN_STREET_MAP,
          OPEN_CYCLE_MAP,
          BING } from '../../VisibleLayer/LayerSources'
-import { map as _map,
-         fromPairs as _fromPairs } from 'lodash'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
 import messages from './Messages'
 
 /**

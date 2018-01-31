@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import WithDeactivateOnOutsideClick from
        '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import { isUndefined as _isUndefined,
-         isObject as _isObject,
-         find as _find } from 'lodash'
+import _isUndefined from 'lodash/isUndefined'
+import _isObject from 'lodash/isObject'
+import _find from 'lodash/find'
 
 /**
  * NavDropdown presents a Bulma nav-dropdown with additional logic for

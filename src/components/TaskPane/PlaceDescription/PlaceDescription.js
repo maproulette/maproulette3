@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { get as _get,
-         isObject as _isObject,
-         isString as _isString } from 'lodash'
+import _get from 'lodash/get'
+import _isObject from 'lodash/isObject'
+import _isString from 'lodash/isString'
 
 export default class PlaceDescription extends Component {
   render() {

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { sum as _sum,
-         values as _values,
-         omit as _omit,
-         isObject as _isObject,
-         get as _get } from 'lodash'
+import _sum from 'lodash/sum'
+import _values from 'lodash/values'
+import _omit from 'lodash/omit'
+import _isObject from 'lodash/isObject'
+import _get from 'lodash/get'
 import LabeledProgressBar from '../Bulma/LabeledProgressBar'
 import './ChallengeProgress.css'
 

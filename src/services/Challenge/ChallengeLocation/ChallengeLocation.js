@@ -1,8 +1,8 @@
 import bbox from '@turf/bbox'
-import { map as _map,
-         fromPairs as _fromPairs,
-         isEmpty as _isEmpty,
-         get as _get } from 'lodash'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
+import _isEmpty from 'lodash/isEmpty'
+import _get from 'lodash/get'
 import { toLatLngBounds } from '../../MapBounds/MapBounds'
 import messages from './Messages'
 

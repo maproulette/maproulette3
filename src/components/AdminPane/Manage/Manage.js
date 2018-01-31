@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { get as _get,
-         find as _find } from 'lodash'
+import _get from 'lodash/get'
+import _find from 'lodash/find'
 import Sidebar from '../../Sidebar/Sidebar'
 import WithManageableChallenges from '../HOCs/WithManageableChallenges/WithManageableChallenges'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'

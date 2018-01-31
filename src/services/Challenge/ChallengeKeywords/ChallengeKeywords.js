@@ -1,11 +1,11 @@
-import { isArray as _isArray,
-         map as _map,
-         fromPairs as _fromPairs,
-         flatten as _flatten,
-         keys as _keys,
-         values as _values,
-         find as _find,
-         intersection as _intersection } from 'lodash'
+import _isArray from 'lodash/isArray'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
+import _flatten from 'lodash/flatten'
+import _keys from 'lodash/keys'
+import _values from 'lodash/values'
+import _find from 'lodash/find'
+import _intersection from 'lodash/intersection'
 import messages from './Messages'
 
 export const CHALLENGE_CATEGORY_NAVIGATION = "navigation"

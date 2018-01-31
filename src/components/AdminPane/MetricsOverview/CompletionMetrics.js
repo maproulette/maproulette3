@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import LabeledProgressBar from '../../Bulma/LabeledProgressBar'
-import { map as _map,
-         values as _values,
-         sum as _sum,
-         startCase as _startCase,
-         pick as _pick } from 'lodash'
+import _map from 'lodash/map'
+import _values from 'lodash/values'
+import _sum from 'lodash/sum'
+import _startCase from 'lodash/startCase'
+import _pick from 'lodash/pick'
 
 export default class CompletionMetrics extends Component {
   render() {

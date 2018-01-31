@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { get as _get,
-         values as _values,
-         filter as _filter,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _values from 'lodash/values'
+import _filter from 'lodash/filter'
+import _omit from 'lodash/omit'
 import { fetchProject,
          saveProject } from '../../../../services/Project/Project'
 import { fetchProjectChallenges }

@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import Fuse from 'fuse.js'
-import { get as _get,
-         isString as _isString,
-         isArray as _isArray,
-         isEmpty as _isEmpty,
-         filter as _filter,
-         find as _find,
-         startsWith as _startsWith,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _isString from 'lodash/isString'
+import _isArray from 'lodash/isArray'
+import _isEmpty from 'lodash/isEmpty'
+import _filter from 'lodash/filter'
+import _find from 'lodash/find'
+import _startsWith from 'lodash/startsWith'
+import _omit from 'lodash/omit'
 import WithSearchQuery from '../WithSearchQuery/WithSearchQuery'
 import { parseQueryString } from '../../../services/Search/Search'
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { get as _get,
-         map as _map,
-         take as _take,
-         values as _values,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _take from 'lodash/take'
+import _values from 'lodash/values'
+import _omit from 'lodash/omit'
 import { fetchManageableProjects } from '../../../../services/Project/Project'
 import { fetchProjectChallenges } from '../../../../services/Challenge/Challenge'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'

@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { get as _get,
-         isEmpty as _isEmpty,
-         isArray as _isArray,
-         isNumber as _isNumber,
-         each as _each,
-         fromPairs as _fromPairs,
-         map as _map,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
+import _isArray from 'lodash/isArray'
+import _isNumber from 'lodash/isNumber'
+import _each from 'lodash/each'
+import _fromPairs from 'lodash/fromPairs'
+import _map from 'lodash/map'
+import _omit from 'lodash/omit'
 
 /**
  * WithComputedMetrics computes aggregated metrics for most of the task

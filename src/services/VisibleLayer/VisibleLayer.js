@@ -1,4 +1,4 @@
-import { find as _find } from 'lodash'
+import _find from 'lodash/find'
 import { LayerSources } from './LayerSources'
 
 // redux actions

@@ -1,6 +1,6 @@
-import { cloneDeep as _cloneDeep,
-         merge as _merge,
-         isEmpty as _isEmpty } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
+import _merge from 'lodash/merge'
+import _isEmpty from 'lodash/isEmpty'
 
 // redux actions
 export const ADD_KEYBOARD_SHORTCUT_GROUP = 'ADD_KEYBOARD_SHORTCUT_GROUP'

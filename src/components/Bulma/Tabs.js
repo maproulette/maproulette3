@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { isEmpty as _isEmpty,
-         map as _map,
-         first as _first,
-         keys as _keys,
-         values as _values } from 'lodash'
+import _isEmpty from 'lodash/isEmpty'
+import _map from 'lodash/map'
+import _first from 'lodash/first'
+import _keys from 'lodash/keys'
+import _values from 'lodash/values'
 
 export default class Tabs extends Component {
   state = {

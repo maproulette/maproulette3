@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
-import { compact as _compact,
-         map as _map,
-         get as _get } from 'lodash'
+import _compact from 'lodash/compact'
+import _map from 'lodash/map'
+import _get from 'lodash/get'
 import { projectSchema } from '../../../services/Project/Project'
 import { fetchProjectChallenges } from '../../../services/Challenge/Challenge'
 

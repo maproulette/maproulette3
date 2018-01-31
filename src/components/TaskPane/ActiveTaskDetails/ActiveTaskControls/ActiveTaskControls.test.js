@@ -1,5 +1,5 @@
 import React from 'react'
-import { omit as _omit } from 'lodash'
+import _omit from 'lodash/omit'
 import { ActiveTaskControls } from './ActiveTaskControls'
 import keyMappings from '../../../../KeyMappings'
 import { Editor } from '../../../../services/Editor/Editor'

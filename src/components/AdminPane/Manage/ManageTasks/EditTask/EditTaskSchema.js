@@ -4,9 +4,9 @@ import { TaskStatus,
          messagesByStatus,
          allowedStatusProgressions }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
-import { map as _map,
-         values as _values,
-         isObject as _isObject } from 'lodash'
+import _map from 'lodash/map'
+import _values from 'lodash/values'
+import _isObject from 'lodash/isObject'
 import messages from './Messages'
 
 /**

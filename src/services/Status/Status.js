@@ -1,6 +1,6 @@
-import { cloneDeep as _cloneDeep,
-         get as _get,
-         pull as _pull } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
+import _get from 'lodash/get'
+import _pull from 'lodash/pull'
 
 /**
  * Manage application status so that it can be reflected in

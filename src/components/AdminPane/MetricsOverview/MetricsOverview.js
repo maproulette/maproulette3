@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { map as _map,
-         compact as _compact,
-         round as _round,
-         startCase as _startCase } from 'lodash'
+import _map from 'lodash/map'
+import _compact from 'lodash/compact'
+import _round from 'lodash/round'
+import _startCase from 'lodash/startCase'
 import WithComputedMetrics from '../HOCs/WithComputedMetrics/WithComputedMetrics'
 import CompletionMetrics from './CompletionMetrics'
 import CompletionChart from './CompletionChart'

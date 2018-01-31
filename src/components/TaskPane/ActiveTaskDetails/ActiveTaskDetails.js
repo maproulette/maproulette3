@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { startCase as _startCase,
-         get as _get,
-         isNumber as _isNumber,
-         isEmpty as _isEmpty } from 'lodash'
+import _startCase from 'lodash/startCase'
+import _get from 'lodash/get'
+import _isNumber from 'lodash/isNumber'
+import _isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import Delayed from 'react-delayed'

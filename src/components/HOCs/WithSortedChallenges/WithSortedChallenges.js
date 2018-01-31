@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-import { get as _get,
-         findIndex as _findIndex,
-         sortBy as _sortBy,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _findIndex from 'lodash/findIndex'
+import _sortBy from 'lodash/sortBy'
+import _omit from 'lodash/omit'
 
 const FEATURED_POINTS = -1
 const SAVED_POINTS = -2

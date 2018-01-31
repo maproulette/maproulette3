@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
-import { get as _get,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _omit from 'lodash/omit'
 import { taskDenormalizationSchema,
          fetchTask,
          fetchTaskComments,

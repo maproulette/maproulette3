@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { every as _every,
-         filter as _filter,
-         omit as _omit } from 'lodash'
+import _every from 'lodash/every'
+import _filter from 'lodash/filter'
+import _omit from 'lodash/omit'
 import { challengePassesDifficultyFilter }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import { challengePassesKeywordFilter }

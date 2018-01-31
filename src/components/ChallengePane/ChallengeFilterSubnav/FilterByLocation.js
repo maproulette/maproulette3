@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { map as _map,
-         reject as _reject,
-         get as _get } from 'lodash'
+import _map from 'lodash/map'
+import _reject from 'lodash/reject'
+import _get from 'lodash/get'
 import { injectIntl } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
 import { ChallengeLocation,

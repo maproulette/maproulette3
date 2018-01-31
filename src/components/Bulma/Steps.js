@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { map as _map, isString as _isString } from 'lodash'
+import _map from 'lodash/map'
+import _isString from 'lodash/isString'
 
 /**
  * Steps renders a Bulma Steps (extension) component with the given steps.  It

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { isObject as _isObject,
-         findIndex as _findIndex,
-         startCase as _startCase,
-         get as _get } from 'lodash'
+import _isObject from 'lodash/isObject'
+import _findIndex from 'lodash/findIndex'
+import _startCase from 'lodash/startCase'
+import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'

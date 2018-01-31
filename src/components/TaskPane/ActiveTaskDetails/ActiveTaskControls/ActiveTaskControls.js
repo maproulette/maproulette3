@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { injectIntl } from 'react-intl'
-import { get as _get,
-         isNumber as _isNumber,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _isNumber from 'lodash/isNumber'
+import _omit from 'lodash/omit'
 import { allowedStatusProgressions,
          TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from './TaskCommentInput/TaskCommentInput'

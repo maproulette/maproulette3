@@ -1,18 +1,18 @@
 import { normalize, schema } from 'normalizr'
-import { get as _get,
-         isObject as _isObject,
-         compact as _compact,
-         pick as _pick,
-         map as _map,
-         keys as _keys,
-         values as _values,
-         flatten as _flatten,
-         clone as _clone,
-         cloneDeep as _cloneDeep,
-         isEmpty as _isEmpty,
-         isString as _isString,
-         isNumber as _isNumber,
-         isArray as _isArray } from 'lodash'
+import _get from 'lodash/get'
+import _isObject from 'lodash/isObject'
+import _compact from 'lodash/compact'
+import _pick from 'lodash/pick'
+import _map from 'lodash/map'
+import _keys from 'lodash/keys'
+import _values from 'lodash/values'
+import _flatten from 'lodash/flatten'
+import _clone from 'lodash/clone'
+import _cloneDeep from 'lodash/cloneDeep'
+import _isEmpty from 'lodash/isEmpty'
+import _isString from 'lodash/isString'
+import _isNumber from 'lodash/isNumber'
+import _isArray from 'lodash/isArray'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'

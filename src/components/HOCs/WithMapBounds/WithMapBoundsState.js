@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { isEmpty as _isEmpty,
-         get as _get } from 'lodash'
+import _isEmpty from 'lodash/isEmpty'
+import _get from 'lodash/get'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 
 const convertBounds = (boundsObject) => {

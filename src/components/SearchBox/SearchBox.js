@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { isFunction as _isFunction,
-         get as _get } from 'lodash'
+import _isFunction from 'lodash/isFunction'
+import _get from 'lodash/get'
 import classNames from 'classnames'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import './SearchBox.css'

@@ -2,7 +2,7 @@ import React from 'react'
 import { ChallengeDifficulty }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import { ChallengeResultList } from './ChallengeResultList'
-import { cloneDeep as _cloneDeep } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
 
 const propsFixture = {
   user: {

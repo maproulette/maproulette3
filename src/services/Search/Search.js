@@ -1,7 +1,7 @@
-import { uniqueId as _uniqueId,
-         cloneDeep as _cloneDeep,
-         set as _set,
-         get as _get } from 'lodash'
+import _uniqueId from 'lodash/uniqueId'
+import _cloneDeep from 'lodash/cloneDeep'
+import _set from 'lodash/set'
+import _get from 'lodash/get'
 
 // redux actions
 export const SET_SEARCH = 'SET_SEARCH'
