@@ -10,6 +10,7 @@ import { commentSchema, receiveComments } from '../Comment/Comment'
 import { buildError, buildServerError, addError } from '../Error/Error'
 import { logoutUser } from '../User/User'
 import _get from 'lodash/get'
+import _each from 'lodash/each'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
@@ -239,6 +240,32 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
     ).execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
+    })
+  }
+}
+
+
+/**
+ * Retrieve clustered task data belonging to the given challenge
+ */
+export const fetchClusteredTasks = function(challengeId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenge.clusteredTasks,
+      {schema: [ taskSchema() ], variables: {id: challengeId}}
+    ).execute().then(normalizedResults => {
+      // Add parent field
+      _each(_get(normalizedResults, 'entities.tasks', {}),
+            task => task.parent = challengeId
+      )
+      dispatch(receiveTasks(normalizedResults.entities))
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(buildError(
+        "Task.fetchFailure", "Unable to fetch task clusters"
+      )))
+
+      console.log(error.response || error)
     })
   }
 }

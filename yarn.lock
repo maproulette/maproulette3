@@ -4458,7 +4458,11 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-leaflet@^1.1.0:
+leaflet.markercluster@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.3.0.tgz#58eb0654e90bd3274a660390ab0bc734212b204d"
+
+leaflet@^1.3.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.3.1.tgz#86f336d2fb0e2d0ff446677049a5dc34cf0ea60e"
 
@@ -6166,7 +6170,11 @@ react-jsonschema-form@^1.0.0:
     prop-types "^15.5.8"
     setimmediate "^1.0.5"
 
-react-leaflet@^1.4.0:
+react-leaflet-markercluster@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/react-leaflet-markercluster/-/react-leaflet-markercluster-1.1.7.tgz#d35dbdc076ec87f69a1ff8b83b682c0d5ab34136"
+
+react-leaflet@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-1.8.0.tgz#e33ba704910e2ad86dd29b5a4a52acb7030fe2c4"
   dependencies:

@@ -69,6 +69,7 @@ ShallowWrapper {
                             }
           }
           features={null}
+          justFitFeatures={false}
           maxZoom={0}
           minZoom={1}
           onBoundsChange={[Function]}
@@ -132,6 +133,7 @@ ShallowWrapper {
 />,
           ],
           "features": null,
+          "justFitFeatures": false,
           "maxZoom": 0,
           "minZoom": 1,
           "onBoundsChange": [Function],
@@ -206,6 +208,7 @@ ShallowWrapper {
                                   }
             }
             features={null}
+            justFitFeatures={false}
             maxZoom={0}
             minZoom={1}
             onBoundsChange={[Function]}
@@ -269,6 +272,7 @@ ShallowWrapper {
 />,
             ],
             "features": null,
+            "justFitFeatures": false,
             "maxZoom": 0,
             "minZoom": 1,
             "onBoundsChange": [Function],
