@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-import { map as _map,
-         groupBy as _groupBy,
-         toPairs as _toPairs,
-         isNumber as _isNumber,
-         reverse as _reverse,
-         sortBy as _sortBy } from 'lodash'
+import _map from 'lodash/map'
+import _groupBy from 'lodash/groupBy'
+import _toPairs from 'lodash/toPairs'
+import _isNumber from 'lodash/isNumber'
+import _reverse from 'lodash/reverse'
+import _sortBy from 'lodash/sortBy'
 import { parse, startOfDay } from 'date-fns'
 import { typeLabels,
          keysByType }

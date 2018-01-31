@@ -6,8 +6,8 @@ import { CHALLENGE_BASEMAP_NONE,
          ChallengeBasemap,
          basemapLayerLabels }
        from '../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
-import { values as _values,
-         map as _map } from 'lodash'
+import _values from 'lodash/values'
+import _map from 'lodash/map'
 import messages from './Messages'
 
 /**

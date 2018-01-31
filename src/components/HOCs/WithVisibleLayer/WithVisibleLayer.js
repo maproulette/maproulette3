@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { layerSourceWithName,
          defaultLayerSource } from '../../../services/VisibleLayer/LayerSources'
 import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
-import { isString as _isString } from 'lodash'
+import _isString from 'lodash/isString'
 
 /**
  * WithVisibleLayer provides the wrapped component with the proper tile layer

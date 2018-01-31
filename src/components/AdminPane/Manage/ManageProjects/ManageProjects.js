@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { omit as _omit } from 'lodash'
+import _omit from 'lodash/omit'
 import WithSearchExecution from '../../../HOCs/WithSearchExecution/WithSearchExecution'
 import SearchBox from '../../../SearchBox/SearchBox'
 import { searchProjects } from '../../../../services/Project/Project'

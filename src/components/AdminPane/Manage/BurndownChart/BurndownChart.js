@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-import { map as _map,
-         toPairs as _toPairs,
-         groupBy as _groupBy,
-         sumBy as _sumBy,
-         flatten as _flatten,
-         compact as _compact,
-         isEmpty as _isEmpty,
-         sortBy as _sortBy,
-         reverse as _reverse } from 'lodash'
+import _map from 'lodash/map'
+import _toPairs from 'lodash/toPairs'
+import _groupBy from 'lodash/groupBy'
+import _sumBy from 'lodash/sumBy'
+import _flatten from 'lodash/flatten'
+import _compact from 'lodash/compact'
+import _isEmpty from 'lodash/isEmpty'
+import _sortBy from 'lodash/sortBy'
+import _reverse from 'lodash/reverse'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { parse } from 'date-fns'
 import { TaskStatus }

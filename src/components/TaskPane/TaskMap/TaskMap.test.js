@@ -1,7 +1,7 @@
 import React from 'react'
 import TaskMap from './TaskMap'
 import { latLng } from 'leaflet'
-import { cloneDeep as _cloneDeep } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
 
 const propsFixture = {
   task: {

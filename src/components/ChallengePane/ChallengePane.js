@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { isEqual as _isEqual } from 'lodash'
+import _isEqual from 'lodash/isEqual'
 import { MAPBOX_STREETS } from '../../services/VisibleLayer/LayerSources'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import MapPane from '../EnhancedMap/MapPane/MapPane'

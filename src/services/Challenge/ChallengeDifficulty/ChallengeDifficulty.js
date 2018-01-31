@@ -1,6 +1,6 @@
-import { map as _map,
-         fromPairs as _fromPairs,
-         isNumber as _isNumber } from 'lodash'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
+import _isNumber from 'lodash/isNumber'
 import messages from './Messages'
 
 // These constants are defined on the server

@@ -1,8 +1,8 @@
 import { ChallengePriority,
          challengePriorityLabels }
        from '../../../../../services/Challenge/ChallengePriority/ChallengePriority'
-import { map as _map,
-         values as _values } from 'lodash'
+import _map from 'lodash/map'
+import _values from 'lodash/values'
 import messages from './Messages'
 
 /**

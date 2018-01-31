@@ -1,5 +1,5 @@
 import React from 'react'
-import { cloneDeep as _cloneDeep } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
 import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { LocatorMap } from './LocatorMap'
 

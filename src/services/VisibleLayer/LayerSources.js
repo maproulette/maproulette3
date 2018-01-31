@@ -1,5 +1,5 @@
-import { isEmpty as _isEmpty,
-         find as _find } from 'lodash'
+import _isEmpty from 'lodash/isEmpty'
+import _find from 'lodash/find'
 import PropTypes from 'prop-types'
 
 export const layerSourceShape = PropTypes.shape({

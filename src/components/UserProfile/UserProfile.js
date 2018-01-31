@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import UserActivityTimeline
        from '../ActivityTimeline/UserActivityTimeline/UserActivityTimeline'

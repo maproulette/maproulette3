@@ -1,8 +1,8 @@
 import { GUEST_USER_ID,
          SUPERUSER_GROUP_TYPE } from './User'
-import { find as _find,
-         isObject as _isObject,
-         isNumber as _isNumber } from 'lodash'
+import _find from 'lodash/find'
+import _isObject from 'lodash/isObject'
+import _isNumber from 'lodash/isNumber'
 
 /**
  * Provides basic methods for interacting with users.

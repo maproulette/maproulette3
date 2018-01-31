@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { isUndefined as _isUndefined } from 'lodash'
+import _isUndefined from 'lodash/isUndefined'
 
 /**
  * Popout displays a Bulma dropdown menu as a popout that appears

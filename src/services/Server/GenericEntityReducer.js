@@ -1,10 +1,10 @@
-import { isArray as _isArray,
-         isFunction as _isFunction,
-         isObject as _isObject,
-         cloneDeep as _cloneDeep,
-         forOwn as _forOwn,
-         merge as _merge,
-         values as _values } from 'lodash'
+import _isArray from 'lodash/isArray'
+import _isFunction from 'lodash/isFunction'
+import _isObject from 'lodash/isObject'
+import _cloneDeep from 'lodash/cloneDeep'
+import _forOwn from 'lodash/forOwn'
+import _merge from 'lodash/merge'
+import _values from 'lodash/values'
 import RequestStatus from './RequestStatus'
 
 /**

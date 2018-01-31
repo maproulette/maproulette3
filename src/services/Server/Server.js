@@ -7,7 +7,7 @@
  */
 
 import { normalize } from 'normalizr'
-import { isArray as _isArray } from 'lodash'
+import _isArray from 'lodash/isArray'
 import RouteFactory from './RouteFactory'
 import apiRoutes from './APIRoutes'
 

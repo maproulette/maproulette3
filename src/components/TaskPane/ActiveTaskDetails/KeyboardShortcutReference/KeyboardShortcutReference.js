@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { map as _map,
-         flatten as _flatten,
-         values as _values,
-         startCase as _startCase,
-         omit as _omit } from 'lodash'
+import _map from 'lodash/map'
+import _flatten from 'lodash/flatten'
+import _values from 'lodash/values'
+import _startCase from 'lodash/startCase'
+import _omit from 'lodash/omit'
 import Popout from '../../../Bulma/Popout'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'

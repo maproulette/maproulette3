@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { keys as _keys,
-         without as _without,
-         isEmpty as _isEmpty,
-         first as _first } from 'lodash'
+import _keys from 'lodash/keys'
+import _without from 'lodash/without'
+import _isEmpty from 'lodash/isEmpty'
+import _first from 'lodash/first'
 import { injectIntl } from 'react-intl'
 import { CHALLENGE_CATEGORY_OTHER,
          ChallengeCategoryKeywords,

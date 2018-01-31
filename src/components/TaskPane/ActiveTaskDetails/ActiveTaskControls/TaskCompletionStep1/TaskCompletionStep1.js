@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { omit as _omit } from 'lodash'
+import _omit from 'lodash/omit'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import TaskEditControl from '../TaskEditControl/TaskEditControl'
 import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'

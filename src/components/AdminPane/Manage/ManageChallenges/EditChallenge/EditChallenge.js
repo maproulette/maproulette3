@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Form from "react-jsonschema-form"
-import { isObject as _isObject,
-         isNumber as _isNumber,
-         filter as _filter,
-         isString as _isString,
-         isEmpty as _isEmpty,
-         difference as _difference,
-         get as _get } from 'lodash'
+import _isObject from 'lodash/isObject'
+import _isNumber from 'lodash/isNumber'
+import _filter from 'lodash/filter'
+import _isString from 'lodash/isString'
+import _isEmpty from 'lodash/isEmpty'
+import _difference from 'lodash/difference'
+import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import Steps from '../../../../Bulma/Steps'

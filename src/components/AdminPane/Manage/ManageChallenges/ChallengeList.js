@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { map as _map,
-         isObject as _isObject,
-         isEmpty as _isEmpty,
-         filter as _filter,
-         get as _get } from 'lodash'
+import _map from 'lodash/map'
+import _isObject from 'lodash/isObject'
+import _isEmpty from 'lodash/isEmpty'
+import _filter from 'lodash/filter'
+import _get from 'lodash/get'
 import { Link } from 'react-router-dom'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 

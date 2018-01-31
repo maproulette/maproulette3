@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
-import { isString as _isString,
-         clone as _clone,
-         isEmpty as _isEmpty,
-         remove as _remove } from 'lodash'
+import _isString from 'lodash/isString'
+import _clone from 'lodash/clone'
+import _isEmpty from 'lodash/isEmpty'
+import _remove from 'lodash/remove'
 
 export const errorShape = PropTypes.shape({
   id: PropTypes.string.isRequired,

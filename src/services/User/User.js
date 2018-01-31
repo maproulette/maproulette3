@@ -8,14 +8,14 @@ import { taskSchema,
          taskDenormalizationSchema,
          receiveTasks } from '../Task/Task'
 import { buildError, addError } from '../Error/Error'
-import { get as _get,
-         set as _set,
-         isNumber as _isNumber,
-         isObject as _isObject,
-         isArray as _isArray,
-         cloneDeep as _cloneDeep,
-         pull as _pull,
-         keys as _keys } from 'lodash'
+import _get from 'lodash/get'
+import _set from 'lodash/set'
+import _isNumber from 'lodash/isNumber'
+import _isObject from 'lodash/isObject'
+import _isArray from 'lodash/isArray'
+import _cloneDeep from 'lodash/cloneDeep'
+import _pull from 'lodash/pull'
+import _keys from 'lodash/keys'
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in

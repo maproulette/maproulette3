@@ -1,4 +1,4 @@
-import { range as _range } from 'lodash'
+import _range from 'lodash/range'
 
 /**
  * Constants related to zoom levels. These are based on

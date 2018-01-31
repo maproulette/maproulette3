@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
-import { isNumber as _isNumber } from 'lodash'
+import _isNumber from 'lodash/isNumber'
 import AboutPane from './components/AboutPane/AboutPane'
 import ChallengePane from './components/ChallengePane/ChallengePane'
 import TaskPane from './components/TaskPane/TaskPane'

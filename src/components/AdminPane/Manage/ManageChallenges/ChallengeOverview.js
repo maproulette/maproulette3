@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage,
          FormattedDate } from 'react-intl'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import { CHALLENGE_STATUS_NONE,
          messagesByStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
