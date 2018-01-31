@@ -1,7 +1,6 @@
 import { normalize, schema } from 'normalizr'
 import { get as _get,
          isObject as _isObject,
-         each as _each,
          compact as _compact,
          pick as _pick,
          map as _map,
@@ -21,7 +20,7 @@ import genericEntityReducer from '../Server/GenericEntityReducer'
 import { commentSchema, receiveComments } from '../Comment/Comment'
 import { projectSchema, fetchProject } from '../Project/Project'
 import { logoutUser } from '../User/User'
-import { toLatLngBounds, fromLatLngBounds } from '../MapBounds/MapBounds'
+import { toLatLngBounds } from '../MapBounds/MapBounds'
 import { buildError,
          buildServerError,
          addError } from '../Error/Error'
@@ -183,7 +182,6 @@ export const searchChallenges = function(queryString, limit=50) {
  */
 export const fetchChallengesWithinBoundingBox = function(bounds, limit=50) {
   const boundsObject = toLatLngBounds(bounds)
-  const arrayBounds = fromLatLngBounds(bounds)
 
   return function(dispatch) {
     return new Endpoint(
@@ -193,12 +191,6 @@ export const fetchChallengesWithinBoundingBox = function(bounds, limit=50) {
         params: {tbb: boundsObject.toBBoxString(), limit}
       }
     ).execute().then(normalizedResults => {
-      // challenge results don't include locations, so add in the bounding box
-      const challenges = _get(normalizedResults, 'entities.challenges')
-      if (_isObject(challenges)) {
-        _each(challenges, challenge => challenge.boundedBy = arrayBounds)
-      }
-
       dispatch(receiveChallenges(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {

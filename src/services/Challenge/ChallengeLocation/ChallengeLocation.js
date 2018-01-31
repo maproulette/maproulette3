@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox'
 import { map as _map,
          fromPairs as _fromPairs,
          isEmpty as _isEmpty,
@@ -32,15 +33,17 @@ export const challengePassesLocationFilter = function(filter, challenge, props) 
     if (_isEmpty(_get(props, 'mapBounds.locator.bounds'))) {
       return true
     }
-    else if (!challenge.boundedBy) {
+    else if (_isEmpty(challenge.bounding)) {
       return false
     }
 
     const locatorBounds = toLatLngBounds(props.mapBounds.locator.bounds)
-    const challengeBounds = toLatLngBounds(challenge.boundedBy)
+    const challengeBounds = toLatLngBounds(
+      // right now API double-nests bounding, but that will likely change.
+      bbox(_get(challenge, 'bounding.bounding', challenge.bounding))
+    )
 
-    return locatorBounds.equals(challengeBounds) ||
-           locatorBounds.contains(challengeBounds)
+    return locatorBounds.overlaps(challengeBounds)
   }
   else {
     return true
