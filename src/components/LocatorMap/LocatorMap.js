@@ -45,17 +45,33 @@ export class LocatorMap extends Component {
   currentBounds = null
 
   shouldComponentUpdate(nextProps, nextState) {
-    // We only re-render if:
-    // (1) the layer has been changed, or
-    // (2) the browsing challenge has changed, or
-    // (3) it's the first time we've been given specific map bounds, or
-    // (4) a change in map bounds was initiated by a user action, as opposed
-    //     to simply navigating around in the map.
-    if (nextProps.layerSourceName !== this.props.layerSourceName ||
-        nextProps.browsingChallenge !== this.props.browsingChallenge ||
-        nextProps.clusteredTasks !== this.props.clusteredTasks ||
-        (this.props.mapBounds.locator === null && nextProps.mapBounds.locator !== null) ||
-        _get(nextProps, 'mapBounds.locator.fromUserAction')) {
+    // We want to be careful about not constantly re-rendering, so we only
+    // re-render if something meaningful changes:
+
+    // the layer has been changed, or
+    if (nextProps.layerSourceName !== this.props.layerSourceName) {
+      return true
+    }
+
+    // the browsing challenge has changed, or
+    if (nextProps.browsingChallenge !== this.props.browsingChallenge) {
+      return true
+    }
+
+    // we received new clustered tasks for the challenge, or
+    if (_get(nextProps, 'clusteredTasks.length', 0) >
+        _get(this.props, 'clusteredTasks.length', 0)) {
+      return true
+    }
+
+    // it's the first time we've been given specific map bounds, or
+    if (this.props.mapBounds.locator === null && nextProps.mapBounds.locator !== null) {
+      return true
+    }
+
+    // a change in map bounds was initiated by a user action, as opposed
+    // to simply navigating around in the map.
+    if (_get(nextProps, 'mapBounds.locator.fromUserAction')) {
       return true
     }
 
@@ -71,6 +87,11 @@ export class LocatorMap extends Component {
    * @private
    */
   updateBounds = (bounds, zoom, fromUserAction=false) => {
+    // If the new bounds are the same as the old, do nothing.
+    if (this.currentBounds && this.currentBounds.equals(bounds)) {
+      return
+    }
+
     this.currentBounds = bounds
 
     // Don't update the locator bounds if we're actively browsing a challenge.
