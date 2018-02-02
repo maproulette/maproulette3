@@ -30,13 +30,14 @@
 
     .task-content__task-body {
       padding: 0px 30px 30px 30px;
+      width: 350px;
     }
   }
 
   &.is-active {
-    min-width: 350px;
-    max-width: 350px;
-    width: 350px;
+    min-width: 365px;
+    max-width: 365px;
+    width: 365px;
     padding: 0;
   }
 
