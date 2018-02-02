@@ -2,33 +2,35 @@ import React from 'react'
 import { ChallengeResultItem } from './ChallengeResultItem'
 import { ChallengeDifficulty }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
-import _cloneDeep from 'lodash/cloneDeep'
 
-const propsFixture = {
-  user: {
-    id: 11,
-    savedChallenges: [],
-  },
-  challenge: {
-    id: 309,
-    name: "Challenge 309",
-    blurb: "Challenge 309 blurb",
-    description: "Challenge 309 description",
-    difficulty: ChallengeDifficulty.expert,
-    parent: {
-      displayName: "foo",
-    }
-  },
-}
+jest.useFakeTimers()
 
 let basicProps = null
 
 beforeEach(() => {
-  basicProps = _cloneDeep(propsFixture)
-  basicProps.startChallenge = jest.fn()
-  basicProps.saveChallenge = jest.fn()
-  basicProps.unsaveChallenge = jest.fn()
-  basicProps.intl = {formatMessage: jest.fn()}
+  basicProps = {
+    user: {
+      id: 11,
+      savedChallenges: [],
+    },
+    challenge: {
+      id: 309,
+      name: "Challenge 309",
+      blurb: "Challenge 309 blurb",
+      description: "Challenge 309 description",
+      difficulty: ChallengeDifficulty.expert,
+      parent: {
+        displayName: "foo",
+      }
+    },
+    browsingChallenge: null,
+    startChallenge: jest.fn(),
+    saveChallenge: jest.fn(),
+    unsaveChallenge: jest.fn(),
+    startBrowsingChallenge: jest.fn(),
+    stopBrowsingChallenge: jest.fn(),
+    intl: {formatMessage: jest.fn()},
+  }
 })
 
 test("renders with props as expected", () => {
@@ -50,15 +52,47 @@ test("renders featured challenges with a featured icon", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test("when clicked the challenge becomes active", () => {
+test("shows collapsed view if not being actively browsed", () => {
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />
   )
 
-  expect(wrapper.find('.is-active').exists()).toBe(false)
-  wrapper.find('.card-header').simulate('click')
-  expect(wrapper.find('.is-active').exists()).toBe(true)
+  expect(wrapper.find('.challenge-list__item.is-active').exists()).toBe(false)
   expect(wrapper).toMatchSnapshot()
+})
+
+test("shows expanded view if being actively browsed", () => {
+  basicProps.browsingChallenge = basicProps.challenge
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(wrapper.find('.challenge-list__item.is-active').exists()).toBe(true)
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("clicking when inactive signals that user wants to browse", () => {
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  wrapper.find('.card-header').simulate('click')
+  jest.runAllTimers()
+
+  expect(basicProps.startBrowsingChallenge).toBeCalledWith(basicProps.challenge)
+})
+
+test("clicking when active challenge signals that user is done browsing", () => {
+  basicProps.browsingChallenge = basicProps.challenge
+
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  wrapper.find('.card-header').simulate('click')
+  jest.runAllTimers()
+
+  expect(basicProps.stopBrowsingChallenge).toBeCalled()
 })
 
 test("when start challenge button is clicked startChallenge is called", () => {

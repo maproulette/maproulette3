@@ -25,11 +25,17 @@
   }
 
   &.is-active {
-    width: 495px;
+    min-width: 495px;
+    width: 4945px;
     max-width: 495px;
     padding: 10px 0px;
 
+    &.with-shadow {
+      box-shadow: 10px 0px 20px -10px $grey;
+    }
+
     &.is-minimized {
+      min-width: 52px;
       width: 52px;
       max-width: 52px;
 

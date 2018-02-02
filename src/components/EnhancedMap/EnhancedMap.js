@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types'
 import { Map } from 'react-leaflet'
 import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
-import PropTypes from 'prop-types'
+import _isEmpty from 'lodash/isEmpty'
 
 /**
  * EnhancedMap is an extension of the react-leaflet Map that provides
@@ -16,6 +17,8 @@ import PropTypes from 'prop-types'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class EnhancedMap extends Map {
+  currentFeatures = null
+
   /**
    * Invoked after the user is finished altering the map bounds, either by
    * moving the map or altering the zoom level. It will invoke `onBoundsChange`
@@ -37,15 +40,28 @@ export default class EnhancedMap extends Map {
     }
   }
 
+  updateFeatures = (newFeatures) => {
+    if (!_isEmpty(this.currentFeatures)) {
+      this.currentFeatures.remove()
+    }
+
+    if (!_isEmpty(newFeatures)) {
+      this.currentFeatures = geoJSON(newFeatures)
+      if (!this.props.justFitFeatures) {
+        this.currentFeatures.addTo(this.leafletElement)
+      }
+
+      this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
+    }
+  }
+
   componentDidMount() {
     super.componentDidMount()
 
     // If there are geojson features, add them to the leaflet map and then
     // fit the map to the bounds of those features.
     if (this.props.features) {
-      const geoJSONFeatures = geoJSON(this.props.features)
-      geoJSONFeatures.addTo(this.leafletElement)
-      this.leafletElement.fitBounds(geoJSONFeatures.getBounds().pad(0.5))
+      this.updateFeatures(this.props.features)
     }
 
     // Setup event handlers for moveend and zoomend events if the parent
@@ -62,14 +78,19 @@ export default class EnhancedMap extends Map {
       }
     }
 
-    if (this.props.initialBounds) {
+    if (this.props.initialBounds && _isEmpty(this.props.features)) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.initialBounds) {
+    if (this.props.initialBounds && _isEmpty(this.props.features)) {
       this.leafletElement.fitBounds(this.props.initialBounds)
+    }
+
+    if (this.props.features !== prevProps.features ||
+        this.props.justFitFeatures !== prevProps.justFitFeatures) {
+      this.updateFeatures(this.props.features)
     }
   }
 
@@ -93,10 +114,13 @@ EnhancedMap.propTypes = {
   onBoundsChange: PropTypes.func,
   /** If false, onBoundsChange will not be invoked for initial bounding box */
   setInitialBounds: PropTypes.bool,
+  /** If true, features will only be used to fit bounds, not rendered */
+  justFitFeatures: PropTypes.bool,
 }
 
 EnhancedMap.defaultProps = {
   center: latLng(0, 45),
   zoom: 13,
   setInitialBounds: true,
+  justFitFeatures: false,
 }

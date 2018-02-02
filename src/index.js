@@ -26,8 +26,10 @@ import { clearKeyboardShortcuts }
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus,
          clearFetchingChallenges } from './services/Status/Status'
-import './theme.css';
-import './index.css';
+import './theme.css'
+import './index.css'
+import '../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
+import '../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 addLocaleData([...en])
 

@@ -2,4 +2,9 @@
 
 .challenge-pane {
   position: relative;
+  display: flex;
+
+  .sidebar {
+    background-color: $grey-lightest-more;
+  }
 }

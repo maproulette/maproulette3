@@ -15,6 +15,17 @@ $tablet: 40px;
   z-index: $layer-modal;
 }
 
+.full-screen-height {
+  height: calc(100vh - #{$navbar-height} - #{$subnav-height});
+}
+
+.task .full-screen-height, .about .full-screen-height {
+  // no subnav in task mode or about pane
+  .leaflet-container {
+    height: calc(100vh - #{$navbar-height});
+  }
+}
+
 // class for "full-screen" maps that calculates appropriate height based off
 // presence or absence of navbar and subnav.
 .full-screen-map {
