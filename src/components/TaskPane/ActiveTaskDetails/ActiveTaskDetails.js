@@ -51,6 +51,13 @@ export class ActiveTaskDetails extends Component {
     }
   }
 
+  toggleInstructionsCollapsed = () => {
+    const challengeId = _get(this.props.task, 'parent.id')
+    if (_isNumber(challengeId)) {
+      this.props.setInstructionsCollapsed(challengeId, !this.props.collapseInstructions)
+    }
+  }
+
   render() {
     if (!this.props.task) {
       return null
@@ -162,11 +169,19 @@ export class ActiveTaskDetails extends Component {
               <div>
                 {!_isEmpty(taskInstructions) &&
                   <div className={classNames('active-task-details--instructions',
-                                              {'active-task-details--bordered': !isMinimized})}>
-                    <div className="active-task-details--sub-heading">
+                    {'active-task-details--bordered': !isMinimized,
+                     'is-collapsed': this.props.collapseInstructions})}>
+                     <div className="active-task-details--sub-heading collapsible"
+                          onClick={this.toggleInstructionsCollapsed} >
                       <FormattedMessage {...messages.instructions} />
+
+                      <a className="collapsible-icon" aria-label="more options">
+                        <span className="icon"></span>
+                      </a>
                     </div>
-                    <MarkdownContent markdown={taskInstructions} />
+                    {!this.props.collapseInstructions &&
+                     <MarkdownContent markdown={taskInstructions} />
+                    }
                   </div>
                 }
               </div>
