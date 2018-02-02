@@ -1,5 +1,5 @@
-import { map as _map,
-         fromPairs as _fromPairs } from 'lodash'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
 import messages from './Messages'
 
 /**

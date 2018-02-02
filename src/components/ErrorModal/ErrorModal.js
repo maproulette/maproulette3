@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { isArray as _isArray } from 'lodash'
+import _isArray from 'lodash/isArray'
 import { errorShape } from '../../services/Error/Error'
 import WithErrors from '../HOCs/WithErrors/WithErrors'
 import Modal from '../Bulma/Modal'

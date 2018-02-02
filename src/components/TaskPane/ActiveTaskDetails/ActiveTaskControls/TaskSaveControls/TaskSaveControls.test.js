@@ -1,5 +1,5 @@
 import React from 'react'
-import { omit as _omit, cloneDeep as _cloneDeep } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
 import TaskSaveControls from './TaskSaveControls'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 

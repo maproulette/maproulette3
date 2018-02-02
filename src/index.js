@@ -4,10 +4,10 @@ import { Provider } from 'react-redux'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { get as _get,
-         keys as _keys,
-         isNumber as _isNumber,
-         isEmpty as _isEmpty } from 'lodash'
+import _get from 'lodash/get'
+import _keys from 'lodash/keys'
+import _isNumber from 'lodash/isNumber'
+import _isEmpty from 'lodash/isEmpty'
 import messages from './lang/en.json'
 import App from './App';
 import BusySpinner from './components/BusySpinner/BusySpinner'
@@ -26,8 +26,10 @@ import { clearKeyboardShortcuts }
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus,
          clearFetchingChallenges } from './services/Status/Status'
-import './theme.css';
-import './index.css';
+import './theme.css'
+import './index.css'
+import '../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
+import '../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 addLocaleData([...en])
 

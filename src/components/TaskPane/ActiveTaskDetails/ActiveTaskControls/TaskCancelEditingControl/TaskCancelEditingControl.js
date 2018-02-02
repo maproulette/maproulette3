@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { pick as _pick } from 'lodash'
+import _pick from 'lodash/pick'
 import classNames from 'classnames'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'

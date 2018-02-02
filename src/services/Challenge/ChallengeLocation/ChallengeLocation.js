@@ -1,7 +1,8 @@
-import { map as _map,
-         fromPairs as _fromPairs,
-         isEmpty as _isEmpty,
-         get as _get } from 'lodash'
+import bbox from '@turf/bbox'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
+import _isEmpty from 'lodash/isEmpty'
+import _get from 'lodash/get'
 import { toLatLngBounds } from '../../MapBounds/MapBounds'
 import messages from './Messages'
 
@@ -32,15 +33,17 @@ export const challengePassesLocationFilter = function(filter, challenge, props) 
     if (_isEmpty(_get(props, 'mapBounds.locator.bounds'))) {
       return true
     }
-    else if (!challenge.boundedBy) {
+    else if (_isEmpty(challenge.bounding)) {
       return false
     }
 
     const locatorBounds = toLatLngBounds(props.mapBounds.locator.bounds)
-    const challengeBounds = toLatLngBounds(challenge.boundedBy)
+    const challengeBounds = toLatLngBounds(
+      // right now API double-nests bounding, but that will likely change.
+      bbox(_get(challenge, 'bounding.bounding', challenge.bounding))
+    )
 
-    return locatorBounds.equals(challengeBounds) ||
-           locatorBounds.contains(challengeBounds)
+    return locatorBounds.overlaps(challengeBounds)
   }
   else {
     return true

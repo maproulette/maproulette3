@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { map as _map } from 'lodash'
+import _map from 'lodash/map'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'

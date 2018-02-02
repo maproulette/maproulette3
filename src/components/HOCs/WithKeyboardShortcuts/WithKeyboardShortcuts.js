@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import { addKeyboardShortcutGroup,
          removeKeyboardShortcutGroup,
          addKeyboardShortcut,

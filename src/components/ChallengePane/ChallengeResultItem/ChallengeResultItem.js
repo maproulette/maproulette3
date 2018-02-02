@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { isObject as _isObject,
-         findIndex as _findIndex,
-         startCase as _startCase,
-         get as _get } from 'lodash'
+import _isObject from 'lodash/isObject'
+import _findIndex from 'lodash/findIndex'
+import _startCase from 'lodash/startCase'
+import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
@@ -30,14 +30,65 @@ import './ChallengeResultItem.css'
  */
 export class ChallengeResultItem extends Component {
   state = {
-    /** An active item expands to show the challenge blurb and controls */
-    isActive: false,
+    /**
+     * Keep track of browsing locally, making UI more responsive. isBrowsing is based
+     * on the browsingChallenge prop, and rendering off that prop would work correctly.
+     * But in a long list of challenge results, there can be a small delay between
+     * updates to the prop and re-renders, which makes the toggle control feel sluggish.
+     * So we instead render based off local state, and toggle local state, while issuing
+     * the prop updates in the background. We implement componentWillReceiveProps to
+     * ensure our state is synced up with any prop changes.
+     **/
+    isBrowsing: _get(this.props, 'browsingChallenge.id') === this.props.challenge.id,
     /** Set to true when the user indicates they wish to start the challenge */
     isStarting: false,
   }
 
-  toggleActive = () => this.setState({isActive: !this.state.isActive})
+  componentWillReceiveProps(nextProps) {
+    // Ensure isBrowsing state stays synced with browsingChallenge prop.
+    this.setState({
+      isBrowsing: _get(nextProps, 'browsingChallenge.id') === this.props.challenge.id
+    })
+  }
 
+  /**
+   * Invoke to begin browsing this challenge. It will immediately update local state
+   * used for rendering so that the UI is responsive, and then asynchronously
+   * invoke startBrowsingChallenge.
+   *
+   * @private
+   */
+  startBrowsing = () => {
+    this.setState({isBrowsing: true})
+    setTimeout(() => this.props.startBrowsingChallenge(this.props.challenge), 0)
+  }
+
+  /**
+   * Invoke to stop browsing this challenge. It will immediately update local state
+   * used for rendering so that the UI is responsive, and then asynchronously
+   * invoke stopBrowsingChallenge.
+   *
+   * @private
+   */
+  stopBrowsing = () => {
+    this.setState({isBrowsing: false})
+    setTimeout(() => this.props.stopBrowsingChallenge(), 0)
+  }
+
+  /**
+   * Toggle whether this challeng is being actively browsed
+   *
+   * @private
+   */
+  toggleActive = () => {
+    this.state.isBrowsing ? this.stopBrowsing() : this.startBrowsing()
+  }
+
+  /**
+   * Begin the challenge
+   *
+   * @private
+   */
   startChallenge = () => {
     if (!this.state.isStarting) {
       this.props.startChallenge(this.props.challenge)
@@ -87,7 +138,8 @@ export class ChallengeResultItem extends Component {
       </div>
 
     return (
-      <div className={classNames('card', 'challenge-list__item', {'is-active': this.state.isActive})}>
+      <div className={classNames('card', 'challenge-list__item',
+                                 {'is-active': this.state.isBrowsing})}>
         {featuredIndicator}
         <header className="card-header" onClick={this.toggleActive}>
           <div>
@@ -149,6 +201,12 @@ ChallengeResultItem.propTypes = {
   user: PropTypes.object,
   /** The challenge represented by this item */
   challenge: PropTypes.object.isRequired,
+  /** The challenge being actively browsed by the user, if any */
+  browsingChallenge: PropTypes.object,
+  /** Invoked when the user wishes to browse details of this challenge */
+  startBrowsingChallenge: PropTypes.func.isRequired,
+  /** Invoked if the user explicitly minimizes this challenge's details */
+  stopBrowsingChallenge: PropTypes.func.isRequired,
   /** Invoked when user indicates they wish to start work on a challenge */
   startChallenge: PropTypes.func.isRequired,
   /** Invoked when a user indicates they wish to save/bookmark a challenge */

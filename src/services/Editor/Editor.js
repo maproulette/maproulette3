@@ -1,6 +1,6 @@
-import { compact as _compact,
-         fromPairs as _fromPairs,
-         map as _map } from 'lodash'
+import _compact from 'lodash/compact'
+import _fromPairs from 'lodash/fromPairs'
+import _map from 'lodash/map'
 import RequestStatus from '../Server/RequestStatus'
 import { buildError, addError } from '../Error/Error'
 import messages from './Messages'

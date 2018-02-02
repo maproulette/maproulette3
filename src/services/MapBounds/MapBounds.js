@@ -1,6 +1,6 @@
-import { isEmpty as _isEmpty,
-         isFunction as _isFunction,
-         isArray as _isArray } from 'lodash'
+import _isEmpty from 'lodash/isEmpty'
+import _isFunction from 'lodash/isFunction'
+import _isArray from 'lodash/isArray'
 import { LatLngBounds, LatLng } from 'leaflet'
 
 /** Default map bounds in absence of any state */

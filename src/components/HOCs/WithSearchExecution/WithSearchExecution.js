@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { debounce as _debounce,
-         omit as _omit } from 'lodash'
+import _debounce from 'lodash/debounce'
+import _omit from 'lodash/omit'
 import WithSearchQuery from '../../HOCs/WithSearchQuery/WithSearchQuery'
 import { performSearch } from '../../../services/Search/Search'
 

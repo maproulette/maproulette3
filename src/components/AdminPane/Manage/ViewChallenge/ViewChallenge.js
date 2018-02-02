@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import { Link } from 'react-router-dom'
 import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
@@ -12,7 +12,7 @@ import ChallengeOverview from '../ManageChallenges/ChallengeOverview'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import Tabs from '../../../Bulma/Tabs'
-import ChallengeMetrics from '../ManageChallenges/ChallengeMetrics'
+import ChallengeMetrics from '../ChallengeMetrics/ChallengeMetrics'
 import manageMessages from '../Messages'
 import './ViewChallenge.css'
 
@@ -32,7 +32,7 @@ export class ViewChallenge extends Component {
     const tabs = {
       "Overview": <ChallengeOverview challenge={this.props.challenge} />,
       "Comments": <CommentList comments={_get(this.props, 'challenge.comments', [])} />,
-      "Metrics": <ChallengeMetrics challenge={this.props.challenge} />,
+      "Metrics": <ChallengeMetrics challenges={[this.props.challenge]} />,
     }
 
     return (

@@ -1,6 +1,8 @@
 import React from 'react'
-import { cloneDeep as _cloneDeep } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
 import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
+import { ChallengeLocation }
+       from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import { LocatorMap } from './LocatorMap'
 
 let basicProps = null
@@ -14,6 +16,7 @@ beforeEach(() => {
     },
     layerSourceName: "foo",
     setLocatorMapBounds: jest.fn(),
+    updateBoundedChallenges: jest.fn(),
   }
 })
 
@@ -59,4 +62,65 @@ test("rerenders if the default layer name changes", () => {
   newProps.layerSourceName = 'bar'
 
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
+})
+
+test("rerenders if the challenge being browsed changes", () => {
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  const newProps = _cloneDeep(basicProps)
+  newProps.browsingChallenge = {id: 456}
+
+  expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
+})
+
+test("moving the map signals that the locator map bounds should be updated", () => {
+  const bounds = [0, 0, 0, 0]
+  const zoom = 3
+
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  wrapper.instance().updateBounds(bounds, zoom, false)
+  expect(basicProps.setLocatorMapBounds).toBeCalledWith(bounds, zoom, false)
+})
+
+test("moving the map does not signal locator update if browsing a challenge", () => {
+  basicProps.browsingChallenge = {id: 123}
+  const bounds = [0, 0, 0, 0]
+  const zoom = 3
+
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  wrapper.instance().updateBounds(bounds, zoom, false)
+  expect(basicProps.setLocatorMapBounds).not.toBeCalled()
+})
+
+test("moving the map signals that the challenges should be updated if filtering on map bounds", () => {
+  basicProps.challengeFilter = {location: ChallengeLocation.withinMapBounds}
+  const bounds = [0, 0, 0, 0]
+  const zoom = 3
+
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  wrapper.instance().updateBounds(bounds, zoom, false)
+  expect(basicProps.updateBoundedChallenges).toBeCalledWith(bounds)
+})
+
+test("moving the map doesn't signal challenges updates if not filtering on map bounds", () => {
+  const bounds = [0, 0, 0, 0]
+  const zoom = 3
+
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  wrapper.instance().updateBounds(bounds, zoom, false)
+  expect(basicProps.updateBoundedChallenges).not.toBeCalled()
 })

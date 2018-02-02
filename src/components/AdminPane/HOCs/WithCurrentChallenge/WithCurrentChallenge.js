@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
-import { get as _get,
-         filter as _filter,
-         values as _values,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _filter from 'lodash/filter'
+import _values from 'lodash/values'
+import _omit from 'lodash/omit'
 import { subMonths } from 'date-fns'
 import { challengeDenormalizationSchema,
          fetchChallenge,

@@ -1,0 +1,15 @@
+@import '../../../../variables.scss';
+
+.challenge-metrics {
+  h5 {
+    margin-bottom: 1em;
+  }
+
+  .subheading {
+    font-weight: $weight-light;
+  }
+
+  .burndown-chart {
+    margin-bottom: 1em;
+  }
+}

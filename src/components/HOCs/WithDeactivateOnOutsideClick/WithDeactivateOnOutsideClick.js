@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import onClickOutside from 'react-onclickoutside'
-import { omit as _omit } from 'lodash'
+import _omit from 'lodash/omit'
 
 export default function(WrappedComponent) {
   class WithDeactivateOnOutsideClick extends Component {

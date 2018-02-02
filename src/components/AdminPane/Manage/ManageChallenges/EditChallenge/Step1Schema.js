@@ -1,6 +1,6 @@
-import { map as _map,
-         keys as _keys,
-         values as _values } from 'lodash'
+import _map from 'lodash/map'
+import _keys from 'lodash/keys'
+import _values from 'lodash/values'
 import AsManager from '../../../../../services/User/AsManager'
 import { ChallengeDifficulty,
          difficultyLabels }

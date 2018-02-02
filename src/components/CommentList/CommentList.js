@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedDate, FormattedTime } from 'react-intl'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
-import { map as _map,
-         isObject as _isObject,
-         sortBy as _sortBy,
-         reverse as _reverse } from 'lodash'
+import _map from 'lodash/map'
+import _isObject from 'lodash/isObject'
+import _sortBy from 'lodash/sortBy'
+import _reverse from 'lodash/reverse'
 import './CommentList.css'
 
 /**

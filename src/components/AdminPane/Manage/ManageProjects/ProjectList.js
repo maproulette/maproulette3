@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
-import { map as _map,
-         get as _get } from 'lodash'
+import _map from 'lodash/map'
+import _get from 'lodash/get'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'

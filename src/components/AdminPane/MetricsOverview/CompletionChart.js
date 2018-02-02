@@ -5,11 +5,11 @@ import { Radar,
          PolarGrid,
          PolarAngleAxis,
          PolarRadiusAxis } from 'recharts'
-import { map as _map,
-         pick as _pick,
-         isNumber as _isNumber,
-         compact as _compact,
-         startCase as _startCase } from 'lodash'
+import _map from 'lodash/map'
+import _pick from 'lodash/pick'
+import _isNumber from 'lodash/isNumber'
+import _compact from 'lodash/compact'
+import _startCase from 'lodash/startCase'
 
 /**
  * Renders a radar chart displaying relative completion statuses

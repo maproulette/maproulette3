@@ -8,8 +8,8 @@ import { buildError,
          buildServerError,
          addError } from '../Error/Error'
 import { logoutUser } from '../User/User'
-import { get as _get,
-         isNumber as _isNumber } from 'lodash'
+import _get from 'lodash/get'
+import _isNumber from 'lodash/isNumber'
 
 /** normalizr schema for projects */
 export const projectSchema = function() {

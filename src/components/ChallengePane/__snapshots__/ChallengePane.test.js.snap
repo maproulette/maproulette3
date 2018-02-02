@@ -1,0 +1,562 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders with props as expected 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ChallengePane
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
+    saveChallenge={[Function]}
+    startChallenge={[Function]}
+    unsaveChallenge={[Function]}
+    user={
+        Object {
+            "id": 11,
+            "savedChallenges": Array [],
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Connect(Connect(Connect(ChallengeFilterSubnav)))
+          intl={
+                    Object {
+                              "formatMessage": [Function],
+                            }
+          }
+          saveChallenge={[Function]}
+          startChallenge={[Function]}
+          unsaveChallenge={[Function]}
+          user={
+                    Object {
+                              "id": 11,
+                              "savedChallenges": Array [],
+                            }
+          }
+/>,
+        <div
+          className="challenge-pane"
+>
+          <Sidebar
+                    className="inline full-screen-height with-shadow challenge-pane__results"
+                    isActive={true}
+          >
+                    <Connect(Connect(Connect(Connect(Connect(Component)))))
+                              browsingChallenge={null}
+                              intl={
+                                        Object {
+                                                  "formatMessage": [Function],
+                                                }
+                              }
+                              saveChallenge={[Function]}
+                              startBrowsingChallenge={[Function]}
+                              startChallenge={[Function]}
+                              stopBrowsingChallenge={[Function]}
+                              unsaveChallenge={[Function]}
+                              user={
+                                        Object {
+                                                  "id": 11,
+                                                  "savedChallenges": Array [],
+                                                }
+                              }
+                    />
+          </Sidebar>
+          <MapPane>
+                    <Connect(Component)
+                              browsingChallenge={null}
+                              intl={
+                                        Object {
+                                                  "formatMessage": [Function],
+                                                }
+                              }
+                              layerSourceName="Mapbox"
+                              mappedChallenge={null}
+                              saveChallenge={[Function]}
+                              startChallenge={[Function]}
+                              unsaveChallenge={[Function]}
+                              user={
+                                        Object {
+                                                  "id": 11,
+                                                  "savedChallenges": Array [],
+                                                }
+                              }
+                    />
+          </MapPane>
+</div>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "saveChallenge": [Function],
+          "startChallenge": [Function],
+          "unsaveChallenge": [Function],
+          "user": Object {
+            "id": 11,
+            "savedChallenges": Array [],
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <Sidebar
+              className="inline full-screen-height with-shadow challenge-pane__results"
+              isActive={true}
+>
+              <Connect(Connect(Connect(Connect(Connect(Component)))))
+                            browsingChallenge={null}
+                            intl={
+                                          Object {
+                                                        "formatMessage": [Function],
+                                                      }
+                            }
+                            saveChallenge={[Function]}
+                            startBrowsingChallenge={[Function]}
+                            startChallenge={[Function]}
+                            stopBrowsingChallenge={[Function]}
+                            unsaveChallenge={[Function]}
+                            user={
+                                          Object {
+                                                        "id": 11,
+                                                        "savedChallenges": Array [],
+                                                      }
+                            }
+              />
+</Sidebar>,
+            <MapPane>
+              <Connect(Component)
+                            browsingChallenge={null}
+                            intl={
+                                          Object {
+                                                        "formatMessage": [Function],
+                                                      }
+                            }
+                            layerSourceName="Mapbox"
+                            mappedChallenge={null}
+                            saveChallenge={[Function]}
+                            startChallenge={[Function]}
+                            unsaveChallenge={[Function]}
+                            user={
+                                          Object {
+                                                        "id": 11,
+                                                        "savedChallenges": Array [],
+                                                      }
+                            }
+              />
+</MapPane>,
+          ],
+          "className": "challenge-pane",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": <Connect(Connect(Connect(Connect(Connect(Component)))))
+                browsingChallenge={null}
+                intl={
+                                Object {
+                                                "formatMessage": [Function],
+                                              }
+                }
+                saveChallenge={[Function]}
+                startBrowsingChallenge={[Function]}
+                startChallenge={[Function]}
+                stopBrowsingChallenge={[Function]}
+                unsaveChallenge={[Function]}
+                user={
+                                Object {
+                                                "id": 11,
+                                                "savedChallenges": Array [],
+                                              }
+                }
+/>,
+              "className": "inline full-screen-height with-shadow challenge-pane__results",
+              "isActive": true,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "browsingChallenge": null,
+                "intl": Object {
+                  "formatMessage": [Function],
+                },
+                "saveChallenge": [Function],
+                "startBrowsingChallenge": [Function],
+                "startChallenge": [Function],
+                "stopBrowsingChallenge": [Function],
+                "unsaveChallenge": [Function],
+                "user": Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": <Connect(Component)
+                browsingChallenge={null}
+                intl={
+                                Object {
+                                                "formatMessage": [Function],
+                                              }
+                }
+                layerSourceName="Mapbox"
+                mappedChallenge={null}
+                saveChallenge={[Function]}
+                startChallenge={[Function]}
+                unsaveChallenge={[Function]}
+                user={
+                                Object {
+                                                "id": 11,
+                                                "savedChallenges": Array [],
+                                              }
+                }
+/>,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "browsingChallenge": null,
+                "intl": Object {
+                  "formatMessage": [Function],
+                },
+                "layerSourceName": "Mapbox",
+                "mappedChallenge": null,
+                "saveChallenge": [Function],
+                "startChallenge": [Function],
+                "unsaveChallenge": [Function],
+                "user": Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": [Function],
+          },
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "span",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Connect(Connect(Connect(ChallengeFilterSubnav)))
+            intl={
+                        Object {
+                                    "formatMessage": [Function],
+                                  }
+            }
+            saveChallenge={[Function]}
+            startChallenge={[Function]}
+            unsaveChallenge={[Function]}
+            user={
+                        Object {
+                                    "id": 11,
+                                    "savedChallenges": Array [],
+                                  }
+            }
+/>,
+          <div
+            className="challenge-pane"
+>
+            <Sidebar
+                        className="inline full-screen-height with-shadow challenge-pane__results"
+                        isActive={true}
+            >
+                        <Connect(Connect(Connect(Connect(Connect(Component)))))
+                                    browsingChallenge={null}
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
+                                    saveChallenge={[Function]}
+                                    startBrowsingChallenge={[Function]}
+                                    startChallenge={[Function]}
+                                    stopBrowsingChallenge={[Function]}
+                                    unsaveChallenge={[Function]}
+                                    user={
+                                                Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                                    }
+                        />
+            </Sidebar>
+            <MapPane>
+                        <Connect(Component)
+                                    browsingChallenge={null}
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
+                                    layerSourceName="Mapbox"
+                                    mappedChallenge={null}
+                                    saveChallenge={[Function]}
+                                    startChallenge={[Function]}
+                                    unsaveChallenge={[Function]}
+                                    user={
+                                                Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                                    }
+                        />
+            </MapPane>
+</div>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "saveChallenge": [Function],
+            "startChallenge": [Function],
+            "unsaveChallenge": [Function],
+            "user": Object {
+              "id": 11,
+              "savedChallenges": Array [],
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <Sidebar
+                className="inline full-screen-height with-shadow challenge-pane__results"
+                isActive={true}
+>
+                <Connect(Connect(Connect(Connect(Connect(Component)))))
+                                browsingChallenge={null}
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                saveChallenge={[Function]}
+                                startBrowsingChallenge={[Function]}
+                                startChallenge={[Function]}
+                                stopBrowsingChallenge={[Function]}
+                                unsaveChallenge={[Function]}
+                                user={
+                                                Object {
+                                                                "id": 11,
+                                                                "savedChallenges": Array [],
+                                                              }
+                                }
+                />
+</Sidebar>,
+              <MapPane>
+                <Connect(Component)
+                                browsingChallenge={null}
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                layerSourceName="Mapbox"
+                                mappedChallenge={null}
+                                saveChallenge={[Function]}
+                                startChallenge={[Function]}
+                                unsaveChallenge={[Function]}
+                                user={
+                                                Object {
+                                                                "id": 11,
+                                                                "savedChallenges": Array [],
+                                                              }
+                                }
+                />
+</MapPane>,
+            ],
+            "className": "challenge-pane",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <Connect(Connect(Connect(Connect(Connect(Component)))))
+                  browsingChallenge={null}
+                  intl={
+                                    Object {
+                                                      "formatMessage": [Function],
+                                                    }
+                  }
+                  saveChallenge={[Function]}
+                  startBrowsingChallenge={[Function]}
+                  startChallenge={[Function]}
+                  stopBrowsingChallenge={[Function]}
+                  unsaveChallenge={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 11,
+                                                      "savedChallenges": Array [],
+                                                    }
+                  }
+/>,
+                "className": "inline full-screen-height with-shadow challenge-pane__results",
+                "isActive": true,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "browsingChallenge": null,
+                  "intl": Object {
+                    "formatMessage": [Function],
+                  },
+                  "saveChallenge": [Function],
+                  "startBrowsingChallenge": [Function],
+                  "startChallenge": [Function],
+                  "stopBrowsingChallenge": [Function],
+                  "unsaveChallenge": [Function],
+                  "user": Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <Connect(Component)
+                  browsingChallenge={null}
+                  intl={
+                                    Object {
+                                                      "formatMessage": [Function],
+                                                    }
+                  }
+                  layerSourceName="Mapbox"
+                  mappedChallenge={null}
+                  saveChallenge={[Function]}
+                  startChallenge={[Function]}
+                  unsaveChallenge={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 11,
+                                                      "savedChallenges": Array [],
+                                                    }
+                  }
+/>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "browsingChallenge": null,
+                  "intl": Object {
+                    "formatMessage": [Function],
+                  },
+                  "layerSourceName": "Mapbox",
+                  "mappedChallenge": null,
+                  "saveChallenge": [Function],
+                  "startChallenge": [Function],
+                  "unsaveChallenge": [Function],
+                  "user": Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "span",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

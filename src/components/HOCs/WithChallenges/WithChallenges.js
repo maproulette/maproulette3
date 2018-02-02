@@ -8,10 +8,10 @@ import { BasemapLayerSources }
 import { loadRandomTaskFromChallenge } from '../../../services/Task/Task'
 import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
 import { buildError, addError } from '../../../services/Error/Error'
-import { values as _values,
-         get as _get,
-         isNumber as _isNumber,
-         filter as _filter } from 'lodash'
+import _values from 'lodash/values'
+import _get from 'lodash/get'
+import _isNumber from 'lodash/isNumber'
+import _filter from 'lodash/filter'
 
 /**
  * WithChallenges passes down denormalized challenges from the redux store to

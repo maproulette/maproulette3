@@ -1,8 +1,8 @@
 import { SUPERUSER_GROUP_TYPE } from './User'
-import { find as _find,
-         get as _get,
-         map as _map,
-         filter as _filter } from 'lodash'
+import _find from 'lodash/find'
+import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _filter from 'lodash/filter'
 import AsEndUser from './AsEndUser'
 
 /**

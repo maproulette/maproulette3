@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import Form from 'react-jsonschema-form'
-import { merge as _merge,
-         get as _get,
-         isNumber as _isNumber,
-         isObject as _isObject } from 'lodash'
+import _merge from 'lodash/merge'
+import _get from 'lodash/get'
+import _isNumber from 'lodash/isNumber'
+import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'

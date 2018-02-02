@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import DropdownButton from '../../Bulma/DropdownButton'
 import SignInButton from '../../SignInButton/SignInButton'
 import WithDeactivateOnOutsideClick

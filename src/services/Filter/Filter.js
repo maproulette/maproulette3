@@ -1,7 +1,7 @@
-import { cloneDeep as _cloneDeep,
-         set as _set,
-         get as _get,
-         omit as _omit } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
+import _set from 'lodash/set'
+import _get from 'lodash/get'
+import _omit from 'lodash/omit'
 
 // redux actions
 export const SET_FILTERS = 'SET_FILTERS'

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import { get as _get,
-         pick as _pick,
-         debounce as _debounce } from 'lodash'
+import _get from 'lodash/get'
+import _pick from 'lodash/pick'
+import _debounce from 'lodash/debounce'
 import { setFilters,
          removeFilters } from '../../../services/Filter/Filter'
 import { fetchChallengesWithKeywords } from '../../../services/Challenge/Challenge'

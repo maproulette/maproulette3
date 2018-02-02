@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { get as _get,
-         omit as _omit } from 'lodash'
+import _get from 'lodash/get'
+import _omit from 'lodash/omit'
 import { setSearch, clearSearch } from '../../../services/Search/Search'
 
 

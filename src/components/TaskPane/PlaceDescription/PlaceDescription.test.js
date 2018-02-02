@@ -1,6 +1,6 @@
 import React from 'react'
 import PlaceDescription from './PlaceDescription'
-import { cloneDeep as _cloneDeep } from 'lodash'
+import _cloneDeep from 'lodash/cloneDeep'
 
 const propsFixture = {
   place: {

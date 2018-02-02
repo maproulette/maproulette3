@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import { logoutUser,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,

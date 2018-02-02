@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import { debounce as _debounce,
-         isEmpty as _isEmpty,
-         uniqueId as _uniqueId } from 'lodash'
+import _debounce from 'lodash/debounce'
+import _isEmpty from 'lodash/isEmpty'
+import _uniqueId from 'lodash/uniqueId'
 import { setLocatorMapBounds, setTaskMapBounds }
        from '../../../services/MapBounds/MapBounds'
 import { fetchChallengesWithinBoundingBox }

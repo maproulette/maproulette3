@@ -1,6 +1,6 @@
 import { routeMatcher } from 'route-matcher'
 import QueryString from 'query-string'
-import { isEmpty as _isEmpty } from 'lodash'
+import _isEmpty from 'lodash/isEmpty'
 
 /**
  * Represents a single API route. Variable substitution in route paths is

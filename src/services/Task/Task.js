@@ -9,16 +9,17 @@ import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
 import { buildError, buildServerError, addError } from '../Error/Error'
 import { logoutUser } from '../User/User'
-import { get as _get,
-         pick as _pick,
-         cloneDeep as _cloneDeep,
-         keys as _keys,
-         map as _map,
-         isEmpty as _isEmpty,
-         isUndefined as _isUndefined,
-         isString as _isString,
-         isNumber as _isNumber,
-         isObject as _isObject } from 'lodash'
+import _get from 'lodash/get'
+import _each from 'lodash/each'
+import _pick from 'lodash/pick'
+import _cloneDeep from 'lodash/cloneDeep'
+import _keys from 'lodash/keys'
+import _map from 'lodash/map'
+import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
+import _isString from 'lodash/isString'
+import _isNumber from 'lodash/isNumber'
+import _isObject from 'lodash/isObject'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -239,6 +240,32 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
     ).execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
+    })
+  }
+}
+
+
+/**
+ * Retrieve clustered task data belonging to the given challenge
+ */
+export const fetchClusteredTasks = function(challengeId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenge.clusteredTasks,
+      {schema: [ taskSchema() ], variables: {id: challengeId}}
+    ).execute().then(normalizedResults => {
+      // Add parent field
+      _each(_get(normalizedResults, 'entities.tasks', {}),
+            task => task.parent = challengeId
+      )
+      dispatch(receiveTasks(normalizedResults.entities))
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(buildError(
+        "Task.fetchFailure", "Unable to fetch task clusters"
+      )))
+
+      console.log(error.response || error)
     })
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { get as _get } from 'lodash'
+import _get from 'lodash/get'
 import { Link } from 'react-router-dom'
 import WithCurrentProject
        from '../../HOCs/WithCurrentProject/WithCurrentProject'
@@ -11,6 +11,7 @@ import Sidebar from '../../../Sidebar/Sidebar'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import Tabs from '../../../Bulma/Tabs'
+import ChallengeMetrics from '../ChallengeMetrics/ChallengeMetrics'
 import manageMessages from '../Messages'
 import messages from './Messages'
 import './ViewProject.css'
@@ -30,6 +31,7 @@ export class ViewProject extends Component {
 
     const tabs = {
       "Overview": <ProjectOverview {...this.props} />,
+      "Metrics": <ChallengeMetrics challenges={this.props.challenges} />,
     }
 
     return (

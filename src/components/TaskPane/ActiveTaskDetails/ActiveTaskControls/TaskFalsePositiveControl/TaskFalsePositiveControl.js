@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
-import { pick as _pick } from 'lodash'
+import _pick from 'lodash/pick'
 import { TaskStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'

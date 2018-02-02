@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { startsWith as _startsWith,
-         get as _get } from 'lodash'
+import _startsWith from 'lodash/startsWith'
+import _get from 'lodash/get'
 import { Link } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { map as _map } from 'lodash'
+import _map from 'lodash/map'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import { messagesByPriority }

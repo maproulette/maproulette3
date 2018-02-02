@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
-import { get as _get,
-         once as _once,
-         omit as _omit,
-         isNumber as _isNumber,
-         isString as _isString,
-         isObject as _isObject } from 'lodash'
+import _get from 'lodash/get'
+import _once from 'lodash/once'
+import _omit from 'lodash/omit'
+import _isNumber from 'lodash/isNumber'
+import _isString from 'lodash/isString'
+import _isObject from 'lodash/isObject'
 import { taskDenormalizationSchema,
          loadCompleteTask,
          loadRandomTaskFromChallenge,
