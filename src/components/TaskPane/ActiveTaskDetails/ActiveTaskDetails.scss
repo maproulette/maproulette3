@@ -1,5 +1,4 @@
-@import '../../../variables.scss';
-@import '../../../mixins.scss';
+@import '../../../theme.scss';
 
 .active-task-details {
   background-color: $white;
@@ -62,6 +61,39 @@
 
   &--sub-heading {
     margin-bottom: 10px;
+
+    &.collapsible {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .collapsible-icon {
+        height: 1em;
+
+        .icon {
+          @include arrow($minimizer-arrow-color);
+          @include dropdown-arrow();
+          position: static;
+        }
+      }
+    }
+  }
+
+  .is-collapsed {
+    .active-task-details--sub-heading {
+      margin-bottom: 0px;
+
+      .collapsible-icon {
+        .icon {
+          margin-top: 5px;
+          transform: rotate(135deg);
+        }
+      }
+    }
   }
 
   .content-block {

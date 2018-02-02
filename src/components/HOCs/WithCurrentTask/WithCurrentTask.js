@@ -86,6 +86,10 @@ const mapStateToProps = (state, ownProps) => {
         props.minimizeChallenge = _get(state.currentPreferences,
                                        `challenges.${challengeId}.minimize`,
                                        false)
+
+        props.collapseInstructions = _get(state.currentPreferences,
+                                       `challenges.${challengeId}.collapseInstructions`,
+                                       false)
       }
     }
   }
@@ -131,6 +135,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     setChallengeMinimization: (challengeId, minimize=false) =>
       dispatch(setPreferences('challenges', {[challengeId]: {minimize}})),
+
+    setInstructionsCollapsed: (challengeId, collapseInstructions=false) =>
+      dispatch(setPreferences('challenges', {[challengeId]: {collapseInstructions}})),
   }
 }
 
