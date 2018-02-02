@@ -211,13 +211,17 @@ export class ActiveTaskDetails extends Component {
               </Delayed>
             }
 
-            <div className="active-task-details--sub-heading">
-              <FormattedMessage {...messages.social} />
+            {process.env.REACT_APP_FEATURE_SOCIAL_SHARING !== 'disabled' &&
+            <div>
+              <div className="active-task-details--sub-heading">
+                <FormattedMessage {...messages.social} />
+              </div>
+              <ChallengeShareControls className={classNames('active-task-details__share-controls',
+                                                            {'active-task-details--bordered': !isMinimized,
+                                                            'is-minimized': isMinimized})}
+                                      challenge={this.props.task.parent} />
             </div>
-            <ChallengeShareControls className={classNames('active-task-details__share-controls',
-                                                          {'active-task-details--bordered': !isMinimized,
-                                                          'is-minimized': isMinimized})}
-                                    challenge={this.props.task.parent} />
+            }
 
             <div className="active-task-details__task-comments">
               <div className="active-task-details--sub-heading">
