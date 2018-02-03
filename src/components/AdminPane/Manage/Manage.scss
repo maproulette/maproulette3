@@ -69,17 +69,25 @@
     margin: 0;
 
     .admin__manage__controls--control {
-      padding: 9px 12px;
+      padding: 8px 12px;
 
       a {
         color: $grey-light;
         font-weight: $weight-light;
+
+        &:hover {
+          color: $grey-darkest;
+        }
       }
 
       svg {
         fill: $grey-light;
         height: $size-5;
         width: auto;
+
+        &:hover {
+          fill: $grey-darkest;
+        }
       }
 
       &:first-child {
@@ -210,10 +218,18 @@
 
         svg {
           fill: $grey-light;
+
+          &:hover {
+            fill: $grey-darkest;
+          }
         }
 
-        a, a:link, a:visited, a:active, a:hover {
+        a, a:link, a:visited, a:active {
           color: $grey-light;
+        }
+
+        a:hover {
+          color: $grey-darkest;
         }
       }
 

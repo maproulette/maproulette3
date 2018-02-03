@@ -12,6 +12,7 @@ import { challengeDenormalizationSchema,
          fetchChallengeActivity,
          fetchChallengeActions,
          saveChallenge,
+         removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
 import { fetchChallengeTasks } from '../../../../services/Task/Task'
 
@@ -92,7 +93,7 @@ const mapStateToProps = state => ({
   entities: state.entities,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchChallenge: challengeId => dispatch(fetchChallenge(challengeId)),
   fetchChallengeComments: challengeId =>
     dispatch(fetchChallengeComments(challengeId)),
@@ -103,7 +104,14 @@ const mapDispatchToProps = dispatch => ({
   fetchChallengeTasks: challengeId =>
     dispatch(fetchChallengeTasks(challengeId)),
   saveChallenge: challengeData => dispatch(saveChallenge(challengeData)),
-  deleteChallenge: challengeId => dispatch(deleteChallenge(challengeId)),
+  deleteChallenge: (projectId, challengeId) => {
+    // Optimistically remove the challenge.
+    dispatch(removeChallenge(challengeId))
+
+    dispatch(deleteChallenge(challengeId)).then(() =>
+      ownProps.history.replace(`/admin/project/${projectId}`)
+    )
+  },
 })
 
 export default (WrappedComponent, includeTasks, historicalMonths) =>
