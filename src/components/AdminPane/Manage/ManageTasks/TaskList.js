@@ -22,7 +22,9 @@ const TaskList = function(props) {
         </div>
 
         <div className='column item-name'>
-          {task.name}
+          <Link to={`/challenge/${props.challenge.id}/task/${task.id}`}>
+            {task.name}
+          </Link>
         </div>
 
         <div className='column is-narrow has-text-right controls edit-control'>

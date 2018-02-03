@@ -33,17 +33,22 @@ export default defineMessages({
   },
 
   creationDate: {
-    id: "Challenge.creationDate.label",
+    id: "Admin.Challenge.creationDate.label",
     defaultMessage: "Created:",
   },
 
   status: {
-    id: "Challenge.status.label",
+    id: "Admin.Challenge.status.label",
     defaultMessage: "Status:",
   },
 
+  startChallengeLabel: {
+    id: "Admin.Challenge.controls.startChallenge.label",
+    defaultMessage: "Start Challenge",
+  },
+
   activity: {
-    id: "Challenge.activity.label",
+    id: "Admin.Challenge.activity.label",
     defaultMessage: "Recent Activity",
   }
 })
