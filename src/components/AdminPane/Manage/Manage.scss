@@ -3,6 +3,7 @@
 .admin__manage {
   &__header {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
     border-bottom: 2px solid $grey-lightest-more;
@@ -35,6 +36,7 @@
   }
 
   nav.breadcrumb {
+    overflow: visible;
     font-size: $size-5;
     margin-bottom: 0;
 
@@ -43,6 +45,18 @@
 
       .busy-spinner {
         margin-left: 10px;
+      }
+    }
+
+    @media(max-width: 1000px) {
+      font-size: $size-6;
+      padding-top: 0.5em;
+    }
+
+    @media(max-width: 700px) {
+      ul {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   }
@@ -66,6 +80,10 @@
         fill: $grey-light;
         height: $size-5;
         width: auto;
+      }
+
+      &:first-child {
+        padding-left: 0;
       }
     }
   }
