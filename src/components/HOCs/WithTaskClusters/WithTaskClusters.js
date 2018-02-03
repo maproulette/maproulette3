@@ -10,13 +10,23 @@ import { fetchClusteredTasks } from '../../../services/Task/Task'
  * WithTaskClusters makes clustered tasks from the given mappedChallenge
  * available to the given WrappedComponent via the clusteredTasks prop.
  *
+ * > Note: unlike most data retrievals, clustered tasks are not stored in the
+ * > redux store due to their potentially very large size. Instead they're
+ * > simply represented here in local state.
+ *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 const WithTaskClusters = function(WrappedComponent) {
   return class extends Component {
+    state = {
+      tasks: [],
+    }
+
     loadClusters = challengeId => {
       if (_isNumber(challengeId)) {
-        this.props.fetchClusteredTasks(challengeId)
+        this.props.fetchClusteredTasks(challengeId).then(
+          tasks => this.setState({tasks})
+        )
       }
     }
 
@@ -37,7 +47,7 @@ const WithTaskClusters = function(WrappedComponent) {
       let clusteredTasks = []
 
       if (_isNumber(challengeId)) {
-        clusteredTasks = _filter(_get(this.props, 'entities.tasks'),
+        clusteredTasks = _filter(this.state.tasks,
                                  task => task.parent === challengeId && task.point
         )
       }

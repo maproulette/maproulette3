@@ -144,7 +144,7 @@ ShallowWrapper {
             <Connect(InjectIntl(SourcedTileLayer))
               defaultLayer="foo"
 />,
-            null,
+            false,
           ],
           "features": undefined,
           "initialBounds": Object {
@@ -189,7 +189,7 @@ ShallowWrapper {
             "rendered": null,
             "type": [Function],
           },
-          null,
+          false,
         ],
         "type": [Function],
       },
@@ -309,7 +309,7 @@ ShallowWrapper {
               <Connect(InjectIntl(SourcedTileLayer))
                 defaultLayer="foo"
 />,
-              null,
+              false,
             ],
             "features": undefined,
             "initialBounds": Object {
@@ -354,7 +354,7 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-            null,
+            false,
           ],
           "type": [Function],
         },

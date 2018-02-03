@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
-import _map from 'lodash/map'
+import _each from 'lodash/each'
 import { latLng } from 'leaflet'
+import { TaskStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import { ChallengeLocation }
        from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
@@ -107,16 +108,31 @@ export class LocatorMap extends Component {
     }
   }
 
+  markerClicked = marker => {
+    this.props.history.push(
+      `/challenge/${marker.options.challengeId}/task/${marker.options.taskId}`)
+  }
+
   render() {
     // right now API double-nests bounding, but that will likely change.
     const bounding = _get(this.props, 'browsingChallenge.bounding.bounding') ||
                      _get(this.props, 'browsingChallenge.bounding')
 
-    let markers = null
+    const markers = []
     if (_get(this.props, 'clusteredTasks.length') > 0) {
-      markers = _map(this.props.clusteredTasks,
-                     task => ({position: [task.point.lat, task.point.lng]}))
-
+      _each(this.props.clusteredTasks, task => {
+        // Only show created or skipped tasks
+        if (task.status === TaskStatus.created ||
+            task.status === TaskStatus.skipped) {
+          markers.push({
+            position: [task.point.lat, task.point.lng],
+            options: {
+              challengeId: task.parent,
+              taskId: task.id,
+            },
+          })
+        }
+      })
     }
 
     return (
@@ -129,11 +145,13 @@ export class LocatorMap extends Component {
                                       _get(this.props, 'mapBounds.locator.bounds')}
                      zoomControl={false} animate={true}
                      features={bounding}
-                     justFitFeatures={markers !== null}
+                     justFitFeatures={markers.length > 0}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
           <VisibleTileLayer defaultLayer={this.props.layerSourceName} />
-          {markers && <MarkerClusterGroup markers={markers} />}
+          {markers.length > 0 &&
+           <MarkerClusterGroup markers={markers} onMarkerClick={this.markerClicked} />
+          }
         </EnhancedMap>
       </div>
     )

@@ -45,7 +45,7 @@ export default class TaskMap extends Component {
         <EnhancedMap key={this.props.task.id}
                      center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom}
-                     features={this.props.task.geometries.features}
+                     features={_get(this.props.task, 'geometries.features')}
                      onBoundsChange={this.props.setTaskMapBounds}
         >
           <ZoomControl position='topright' />
