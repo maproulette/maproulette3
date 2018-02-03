@@ -465,6 +465,9 @@ export const deleteChallenge = function(challengeId) {
     ).execute().then(() =>
       dispatch(removeChallenge(challengeId))
     ).catch((error) => {
+      // Update with the latest challenge data.
+      this.fetchChallenge(challengeId)(dispatch)
+
       if (error.response && error.response.status === 401) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).

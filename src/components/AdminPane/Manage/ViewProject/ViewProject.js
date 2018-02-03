@@ -9,7 +9,6 @@ import ChallengeList from '../ManageChallenges/ChallengeList'
 import ProjectOverview from '../ProjectOverview/ProjectOverview'
 import Sidebar from '../../../Sidebar/Sidebar'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import Tabs from '../../../Bulma/Tabs'
 import ChallengeMetrics from '../ChallengeMetrics/ChallengeMetrics'
 import manageMessages from '../Messages'
@@ -58,13 +57,6 @@ export class ViewProject extends Component {
               <Link to={`/admin/project/${this.props.project.id}/edit`}>
                 Edit
               </Link>
-            </div>
-
-            <div className="column is-narrow admin__manage__controls--control">
-              <a className='button is-clear'
-                onClick={() => this.props.deleteProject(this.props.project.id)}>
-                <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
-              </a>
             </div>
           </div>
         </div>

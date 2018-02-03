@@ -13,6 +13,7 @@ import BusySpinner from '../../../BusySpinner/BusySpinner'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import Tabs from '../../../Bulma/Tabs'
 import ChallengeMetrics from '../ChallengeMetrics/ChallengeMetrics'
+import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import manageMessages from '../Messages'
 import './ViewChallenge.css'
 
@@ -24,6 +25,11 @@ import './ViewChallenge.css'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ViewChallenge extends Component {
+  deleteChallenge = () => {
+    this.props.deleteChallenge(this.props.challenge.parent.id,
+                               this.props.challenge.id)
+  }
+
   render() {
     if (!this.props.challenge) {
       return <BusySpinner />
@@ -68,10 +74,11 @@ export class ViewChallenge extends Component {
             </div>
 
             <div className="column is-narrow admin__manage__controls--control">
-              <a className='button is-clear'
-                onClick={() => this.props.deleteChallenge(this.props.challenge.id)}>
-                <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
-              </a>
+              <ConfirmAction>
+                <a className='button is-clear' onClick={this.deleteChallenge}>
+                  <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
+                </a>
+              </ConfirmAction>
             </div>
           </div>
         </div>

@@ -1,0 +1,29 @@
+@import '../../variables.scss';
+
+.confirm-action {
+  display: flex;
+  justify-content: flex-start;
+
+  .message .message-body {
+    background-color: $white;
+  }
+
+  &__prompt {
+    color: $grey-dark;
+    font-size: $size-5;
+  }
+
+  &__controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+
+    button.button {
+      margin-right: 15px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
