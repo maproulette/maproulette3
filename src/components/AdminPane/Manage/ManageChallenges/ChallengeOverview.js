@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage,
          FormattedDate } from 'react-intl'
+import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import { CHALLENGE_STATUS_NONE,
          messagesByStatus }
@@ -38,6 +39,7 @@ export class ChallengeOverview extends Component {
                              day='2-digit' />
             </div>
           </div>
+
           <div className="columns">
             <div className="column is-narrow status-label">
               <FormattedMessage {...messages.status} />
@@ -47,6 +49,13 @@ export class ChallengeOverview extends Component {
               <FormattedMessage {...messagesByStatus[status]} />
             </div>
           </div>
+
+          <div className="view-challenge">
+            <Link to={`/challenge/${this.props.challenge.id}`}>
+              <FormattedMessage {...messages.startChallengeLabel} />
+            </Link>
+          </div>
+
           <CompletionMetrics onlyCompleted
                              challenges={this.props.challenge}
                              {...this.props} />

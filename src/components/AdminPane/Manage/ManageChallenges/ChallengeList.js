@@ -46,14 +46,6 @@ export default class ChallengeList extends Component {
                 {challenge.name}
               </Link>
             </div>
-
-            {!this.props.hideControls &&
-            <div className='column is-narrow controls'>
-              <Link to={`/admin/project/${projectId}/challenge/${challenge.id}/edit`}>
-                Edit
-              </Link>
-            </div>
-            }
           </div>
         </div>
       )

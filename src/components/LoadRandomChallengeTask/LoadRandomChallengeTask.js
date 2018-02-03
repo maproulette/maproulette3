@@ -11,7 +11,7 @@ const _LoadRandomChallengeTask = class extends Component {
 
     if (!isNaN(challengeId)) {
       this.props.loadRandomTaskFromChallenge(challengeId)
-        .then(task => this.props.history.push(
+        .then(task => this.props.history.replace(
                 `/challenge/${challengeId}/task/${task.id}`)
         )
     }

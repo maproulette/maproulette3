@@ -82,7 +82,7 @@ export class ViewProject extends Component {
               </div>
 
               <div className='admin__manage__managed-item-list challenge-list'>
-                <ChallengeList hideControls {...this.props} />
+                <ChallengeList {...this.props} />
               </div>
             </div>
           </div>
