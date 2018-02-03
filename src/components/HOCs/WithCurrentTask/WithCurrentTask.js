@@ -15,7 +15,7 @@ import { taskDenormalizationSchema,
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 import { setPreferences } from '../../../services/Preferences/Preferences'
 
-const FRESHNESS_THRESHOLD = 60000 // 1 minute
+const FRESHNESS_THRESHOLD = 5000 // 5 seconds
 
 /**
  * WithCurrentTask passes down the denormalized task specified in either the
@@ -107,17 +107,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
      */
     loadTask: _once((taskId) => dispatch(loadCompleteTask(taskId))),
 
-    /** Invoke to mark as a task as complete with the given status */
+    /**
+     * Invoke to mark as a task as complete with the given status
+     */
     completeTask: (taskId, challengeId, taskStatus, comment) => {
-      dispatch(completeTask(taskId, challengeId, taskStatus)).then(() => {
+      dispatch(
+        completeTask(taskId, challengeId, taskStatus)
+      ).then(() => {
         if (_isString(comment) && comment.length > 0) {
           dispatch(addTaskComment(taskId, comment, taskStatus))
         }
         dispatch(fetchChallengeActions(challengeId))
+      })
 
-        // Load the next task from the challenge.
-        return dispatch(loadRandomTaskFromChallenge(challengeId, taskId))
-      }).then(newTask =>
+      // Load the next task from the challenge.
+      dispatch(
+        loadRandomTaskFromChallenge(challengeId, taskId)
+      ).then(newTask =>
         visitNewTask(challengeId, taskId, newTask, ownProps.history)
       )
     },

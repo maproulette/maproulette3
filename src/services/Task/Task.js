@@ -14,6 +14,7 @@ import _each from 'lodash/each'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
+import _values from 'lodash/values'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import _isUndefined from 'lodash/isUndefined'
@@ -247,6 +248,10 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
 
 /**
  * Retrieve clustered task data belonging to the given challenge
+ *
+ * > Note: because we could be retrieving data on literally tens of thousands
+ * > of tasks in some cases, we don't store the tasks in the redux store like
+ * > we do with nearly all other data retrievals. They're simply returned.
  */
 export const fetchClusteredTasks = function(challengeId) {
   return function(dispatch) {
@@ -255,11 +260,10 @@ export const fetchClusteredTasks = function(challengeId) {
       {schema: [ taskSchema() ], variables: {id: challengeId}}
     ).execute().then(normalizedResults => {
       // Add parent field
-      _each(_get(normalizedResults, 'entities.tasks', {}),
-            task => task.parent = challengeId
-      )
-      dispatch(receiveTasks(normalizedResults.entities))
-      return normalizedResults
+      const tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
+      _each(tasks, task => task.parent = challengeId)
+
+      return tasks
     }).catch((error) => {
       dispatch(addError(buildError(
         "Task.fetchFailure", "Unable to fetch task clusters"
