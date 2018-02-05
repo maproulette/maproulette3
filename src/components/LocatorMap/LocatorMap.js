@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { point, featureCollection } from '@turf/helpers'
+import bbox from '@turf/bbox'
+import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _each from 'lodash/each'
+import _map from 'lodash/map'
 import { latLng } from 'leaflet'
 import { TaskStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import { ChallengeLocation }
@@ -114,10 +118,7 @@ export class LocatorMap extends Component {
   }
 
   render() {
-    // right now API double-nests bounding, but that will likely change.
-    const bounding = _get(this.props, 'browsingChallenge.bounding.bounding') ||
-                     _get(this.props, 'browsingChallenge.bounding')
-
+    // Build the clustered tasks markers
     const markers = []
     if (_get(this.props, 'clusteredTasks.length') > 0) {
       _each(this.props.clusteredTasks, task => {
@@ -133,6 +134,23 @@ export class LocatorMap extends Component {
           })
         }
       })
+    }
+
+    // Get the challenge bounding so we know which part of the map to display.
+    // Right now API double-nests bounding, but that will likely change.
+    let bounding = _get(this.props, 'browsingChallenge.bounding.bounding') ||
+                   _get(this.props, 'browsingChallenge.bounding')
+
+
+    // If the challenge doesn't have a bounding polygon, build one from the
+    // markers instead. This is extra work and requires waiting for the clustered
+    // task data to arrive, so not ideal.
+    if (!bounding && markers.length > 0) {
+      bounding = bboxPolygon(
+        bbox(featureCollection(
+          _map(markers, marker => point([marker.position[1], marker.position[0]]))
+        ))
+      )
     }
 
     return (

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@turf/bbox": "^5.1.5",
+    "@turf/bbox-polygon": "^5.1.5",
     "bulma": "^0.6.0",
     "bulma-badge": "^0.1.0",
     "bulma-steps-component": "^0.5.3",
