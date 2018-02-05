@@ -10,11 +10,11 @@ test('it renders a badge with the count of the given comments', () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test('it renders a badge with zero for empty comments', () => {
+test('it renders a badge with is-empty class for empty comments', () => {
   const wrapper = shallow(
     <CommentCountBadge />
   )
 
-  expect(wrapper.find('.badge[data-badge=0]').exists()).toBe(true)
+  expect(wrapper.find('.badge.is-empty[data-badge=0]').exists()).toBe(true)
   expect(wrapper).toMatchSnapshot()
 })
