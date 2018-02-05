@@ -22,4 +22,8 @@
     border: none;
     left: calc(100% - ( 1.2rem / 2 ) - 1px) // move slightly to the left
   }
+
+  .badge.is-badge-outlined.is-empty[data-badge]::after {
+    background-color: $grey-light;
+  }
 }
