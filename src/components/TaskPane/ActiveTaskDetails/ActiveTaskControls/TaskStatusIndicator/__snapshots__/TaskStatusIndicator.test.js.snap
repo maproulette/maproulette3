@@ -396,7 +396,7 @@ ShallowWrapper {
           />
 </div>,
         <div>
-          <span
+          <div
                     className="task-status__label"
           >
                     <FormattedMessage
@@ -404,7 +404,7 @@ ShallowWrapper {
                               id="Task.status.created"
                               values={Object {}}
                     />
-          </span>
+          </div>
 </div>,
       ],
       "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
@@ -444,7 +444,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <span
+          "children": <div
             className="task-status__label"
 >
             <FormattedMessage
@@ -452,7 +452,7 @@ ShallowWrapper {
                         id="Task.status.created"
                         values={Object {}}
             />
-</span>,
+</div>,
         },
         "ref": null,
         "rendered": Object {
@@ -481,7 +481,7 @@ ShallowWrapper {
             "rendered": null,
             "type": [Function],
           },
-          "type": "span",
+          "type": "div",
         },
         "type": "div",
       },
@@ -505,7 +505,7 @@ ShallowWrapper {
             />
 </div>,
           <div>
-            <span
+            <div
                         className="task-status__label"
             >
                         <FormattedMessage
@@ -513,7 +513,7 @@ ShallowWrapper {
                                     id="Task.status.created"
                                     values={Object {}}
                         />
-            </span>
+            </div>
 </div>,
         ],
         "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
@@ -553,7 +553,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <span
+            "children": <div
               className="task-status__label"
 >
               <FormattedMessage
@@ -561,7 +561,7 @@ ShallowWrapper {
                             id="Task.status.created"
                             values={Object {}}
               />
-</span>,
+</div>,
           },
           "ref": null,
           "rendered": Object {
@@ -590,7 +590,7 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-            "type": "span",
+            "type": "div",
           },
           "type": "div",
         },

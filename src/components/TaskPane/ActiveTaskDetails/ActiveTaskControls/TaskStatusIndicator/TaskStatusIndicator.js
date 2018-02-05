@@ -60,9 +60,9 @@ export default class TaskStatusIndicator extends Component {
             <FormattedMessage {...messages.statusPrompt} />
           </div>
           <div>
-            <span className="task-status__label">
+            <div className="task-status__label">
               <FormattedMessage {...messagesByStatus[this.props.task.status]} />
-            </span>
+            </div>
           </div>
         </div>
       )
