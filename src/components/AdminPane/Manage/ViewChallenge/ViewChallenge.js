@@ -37,7 +37,8 @@ export class ViewChallenge extends Component {
 
     const tabs = {
       "Overview": <ChallengeOverview challenge={this.props.challenge} />,
-      "Comments": <CommentList comments={_get(this.props, 'challenge.comments', [])} />,
+      "Comments": <CommentList includeTaskLinks
+                               comments={_get(this.props, 'challenge.comments', [])} />,
       "Metrics": <ChallengeMetrics challenges={[this.props.challenge]} />,
     }
 

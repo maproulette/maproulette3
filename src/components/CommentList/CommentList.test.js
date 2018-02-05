@@ -54,3 +54,23 @@ test('it renders a div with class none if there are no comments', () => {
   expect(wrapper.find('.none').exists()).toBe(true)
   expect(wrapper).toMatchSnapshot()
 })
+
+test("task links are not shown by default", () => {
+  const wrapper = shallow(
+    <CommentList {...basicProps} />
+  )
+
+  expect(wrapper.find('.comment-list__comment--task-link').exists()).not.toBe(true)
+})
+
+test("task links are shown if includeTaskLinks prop is set to true", () => {
+  const wrapper = shallow(
+    <CommentList includeTaskLinks {...basicProps} />
+  )
+
+  expect(wrapper.find(
+    '.comment-list__comment--task-link'
+  ).length).toBe(basicProps.comments.length)
+
+  expect(wrapper).toMatchSnapshot()
+})

@@ -6,6 +6,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <CommentList
     comments={Array []}
+    includeTaskLinks={false}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -77,6 +78,7 @@ ShallowWrapper {
             },
           ]
     }
+    includeTaskLinks={false}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -278,6 +280,7 @@ ShallowWrapper {
                             markdown="Joe's comment"
               />
 </div>,
+            false,
           ],
           "className": "comment-list__comment",
         },
@@ -462,6 +465,7 @@ ShallowWrapper {
             },
             "type": "div",
           },
+          false,
         ],
         "type": "li",
       },
@@ -512,6 +516,7 @@ ShallowWrapper {
                             markdown="Sarah's comment"
               />
 </div>,
+            false,
           ],
           "className": "comment-list__comment",
         },
@@ -696,6 +701,7 @@ ShallowWrapper {
             },
             "type": "div",
           },
+          false,
         ],
         "type": "li",
       },
@@ -746,6 +752,7 @@ ShallowWrapper {
                             markdown="Bob's comment"
               />
 </div>,
+            false,
           ],
           "className": "comment-list__comment",
         },
@@ -930,6 +937,7 @@ ShallowWrapper {
             },
             "type": "div",
           },
+          false,
         ],
         "type": "li",
       },
@@ -1130,6 +1138,7 @@ ShallowWrapper {
                                 markdown="Joe's comment"
                 />
 </div>,
+              false,
             ],
             "className": "comment-list__comment",
           },
@@ -1314,6 +1323,7 @@ ShallowWrapper {
               },
               "type": "div",
             },
+            false,
           ],
           "type": "li",
         },
@@ -1363,6 +1373,2110 @@ ShallowWrapper {
                                 className="comment-list__comment--content"
                                 markdown="Sarah's comment"
                 />
+</div>,
+              false,
+            ],
+            "className": "comment-list__comment",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <div
+                    className="comment-list__comment--author"
+>
+                    sarah
+</div>,
+                  <div
+                    className="comment-list__comment--published-at"
+>
+                    <span
+                                        className="time-part"
+                    >
+                                        <FormattedTime
+                                                            hour="2-digit"
+                                                            minute="2-digit"
+                                                            value={2017-11-25T22:04:03.002Z}
+                                        />
+                                        ,
+                    </span>
+                    <span
+                                        className="date-part"
+                    >
+                                        <FormattedDate
+                                                            day="2-digit"
+                                                            month="long"
+                                                            value={2017-11-25T22:04:03.002Z}
+                                                            year="numeric"
+                                        />
+                    </span>
+</div>,
+                ],
+                "className": "comment-list__comment__header",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "sarah",
+                    "className": "comment-list__comment--author",
+                  },
+                  "ref": null,
+                  "rendered": "sarah",
+                  "type": "div",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <span
+                        className="time-part"
+>
+                        <FormattedTime
+                                                hour="2-digit"
+                                                minute="2-digit"
+                                                value={2017-11-25T22:04:03.002Z}
+                        />
+                        ,
+</span>,
+                      <span
+                        className="date-part"
+>
+                        <FormattedDate
+                                                day="2-digit"
+                                                month="long"
+                                                value={2017-11-25T22:04:03.002Z}
+                                                year="numeric"
+                        />
+</span>,
+                    ],
+                    "className": "comment-list__comment--published-at",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": Array [
+                          <FormattedTime
+                            hour="2-digit"
+                            minute="2-digit"
+                            value={2017-11-25T22:04:03.002Z}
+/>,
+                          ",",
+                        ],
+                        "className": "time-part",
+                      },
+                      "ref": null,
+                      "rendered": Array [
+                        Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "class",
+                          "props": Object {
+                            "hour": "2-digit",
+                            "minute": "2-digit",
+                            "value": 2017-11-25T22:04:03.002Z,
+                          },
+                          "ref": null,
+                          "rendered": null,
+                          "type": [Function],
+                        },
+                        ",",
+                      ],
+                      "type": "span",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <FormattedDate
+                          day="2-digit"
+                          month="long"
+                          value={2017-11-25T22:04:03.002Z}
+                          year="numeric"
+/>,
+                        "className": "date-part",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "day": "2-digit",
+                          "month": "long",
+                          "value": 2017-11-25T22:04:03.002Z,
+                          "year": "numeric",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "span",
+                    },
+                  ],
+                  "type": "div",
+                },
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <MarkdownContent
+                  className="comment-list__comment--content"
+                  markdown="Sarah's comment"
+/>,
+                "className": "with-triangle-border",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "className": "comment-list__comment--content",
+                  "markdown": "Sarah's comment",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+            false,
+          ],
+          "type": "li",
+        },
+        Object {
+          "instance": null,
+          "key": "123",
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="comment-list__comment__header"
+>
+                <div
+                                className="comment-list__comment--author"
+                >
+                                bob
+                </div>
+                <div
+                                className="comment-list__comment--published-at"
+                >
+                                <span
+                                                className="time-part"
+                                >
+                                                <FormattedTime
+                                                                hour="2-digit"
+                                                                minute="2-digit"
+                                                                value={2017-11-10T23:53:17.739Z}
+                                                />
+                                                ,
+                                </span>
+                                <span
+                                                className="date-part"
+                                >
+                                                <FormattedDate
+                                                                day="2-digit"
+                                                                month="long"
+                                                                value={2017-11-10T23:53:17.739Z}
+                                                                year="numeric"
+                                                />
+                                </span>
+                </div>
+</div>,
+              <div
+                className="with-triangle-border"
+>
+                <MarkdownContent
+                                className="comment-list__comment--content"
+                                markdown="Bob's comment"
+                />
+</div>,
+              false,
+            ],
+            "className": "comment-list__comment",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <div
+                    className="comment-list__comment--author"
+>
+                    bob
+</div>,
+                  <div
+                    className="comment-list__comment--published-at"
+>
+                    <span
+                                        className="time-part"
+                    >
+                                        <FormattedTime
+                                                            hour="2-digit"
+                                                            minute="2-digit"
+                                                            value={2017-11-10T23:53:17.739Z}
+                                        />
+                                        ,
+                    </span>
+                    <span
+                                        className="date-part"
+                    >
+                                        <FormattedDate
+                                                            day="2-digit"
+                                                            month="long"
+                                                            value={2017-11-10T23:53:17.739Z}
+                                                            year="numeric"
+                                        />
+                    </span>
+</div>,
+                ],
+                "className": "comment-list__comment__header",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "bob",
+                    "className": "comment-list__comment--author",
+                  },
+                  "ref": null,
+                  "rendered": "bob",
+                  "type": "div",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <span
+                        className="time-part"
+>
+                        <FormattedTime
+                                                hour="2-digit"
+                                                minute="2-digit"
+                                                value={2017-11-10T23:53:17.739Z}
+                        />
+                        ,
+</span>,
+                      <span
+                        className="date-part"
+>
+                        <FormattedDate
+                                                day="2-digit"
+                                                month="long"
+                                                value={2017-11-10T23:53:17.739Z}
+                                                year="numeric"
+                        />
+</span>,
+                    ],
+                    "className": "comment-list__comment--published-at",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": Array [
+                          <FormattedTime
+                            hour="2-digit"
+                            minute="2-digit"
+                            value={2017-11-10T23:53:17.739Z}
+/>,
+                          ",",
+                        ],
+                        "className": "time-part",
+                      },
+                      "ref": null,
+                      "rendered": Array [
+                        Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "class",
+                          "props": Object {
+                            "hour": "2-digit",
+                            "minute": "2-digit",
+                            "value": 2017-11-10T23:53:17.739Z,
+                          },
+                          "ref": null,
+                          "rendered": null,
+                          "type": [Function],
+                        },
+                        ",",
+                      ],
+                      "type": "span",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <FormattedDate
+                          day="2-digit"
+                          month="long"
+                          value={2017-11-10T23:53:17.739Z}
+                          year="numeric"
+/>,
+                        "className": "date-part",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "day": "2-digit",
+                          "month": "long",
+                          "value": 2017-11-10T23:53:17.739Z,
+                          "year": "numeric",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "span",
+                    },
+                  ],
+                  "type": "div",
+                },
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <MarkdownContent
+                  className="comment-list__comment--content"
+                  markdown="Bob's comment"
+/>,
+                "className": "with-triangle-border",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "className": "comment-list__comment--content",
+                  "markdown": "Bob's comment",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+            false,
+          ],
+          "type": "li",
+        },
+      ],
+      "type": "ul",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`task links are shown if includeTaskLinks prop is set to true 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <CommentList
+    comments={
+        Array [
+            Object {
+              "comment": "Bob's comment",
+              "created": 1510357997739,
+              "id": 123,
+              "osm_username": "bob",
+            },
+            Object {
+              "comment": "Sarah's comment",
+              "created": 1511647443002,
+              "id": 456,
+              "osm_username": "sarah",
+            },
+            Object {
+              "comment": "Joe's comment",
+              "created": 1516200787649,
+              "id": 789,
+              "osm_username": "joe",
+            },
+          ]
+    }
+    includeTaskLinks={true}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <li
+          className="comment-list__comment"
+>
+          <div
+                    className="comment-list__comment__header"
+          >
+                    <div
+                              className="comment-list__comment--author"
+                    >
+                              joe
+                    </div>
+                    <div
+                              className="comment-list__comment--published-at"
+                    >
+                              <span
+                                        className="time-part"
+                              >
+                                        <FormattedTime
+                                                  hour="2-digit"
+                                                  minute="2-digit"
+                                                  value={2018-01-17T14:53:07.649Z}
+                                        />
+                                        ,
+                              </span>
+                              <span
+                                        className="date-part"
+                              >
+                                        <FormattedDate
+                                                  day="2-digit"
+                                                  month="long"
+                                                  value={2018-01-17T14:53:07.649Z}
+                                                  year="numeric"
+                                        />
+                              </span>
+                    </div>
+          </div>
+          <div
+                    className="with-triangle-border"
+          >
+                    <MarkdownContent
+                              className="comment-list__comment--content"
+                              markdown="Joe's comment"
+                    />
+          </div>
+          <div
+                    className="comment-list__comment--task-link"
+          >
+                    <Link
+                              replace={false}
+                              to="/task/undefined"
+                    >
+                              <FormattedMessage
+                                        defaultMessage="View Task"
+                                        id="CommentList.controls.viewTask.label"
+                                        values={Object {}}
+                              />
+                    </Link>
+          </div>
+</li>,
+        <li
+          className="comment-list__comment"
+>
+          <div
+                    className="comment-list__comment__header"
+          >
+                    <div
+                              className="comment-list__comment--author"
+                    >
+                              sarah
+                    </div>
+                    <div
+                              className="comment-list__comment--published-at"
+                    >
+                              <span
+                                        className="time-part"
+                              >
+                                        <FormattedTime
+                                                  hour="2-digit"
+                                                  minute="2-digit"
+                                                  value={2017-11-25T22:04:03.002Z}
+                                        />
+                                        ,
+                              </span>
+                              <span
+                                        className="date-part"
+                              >
+                                        <FormattedDate
+                                                  day="2-digit"
+                                                  month="long"
+                                                  value={2017-11-25T22:04:03.002Z}
+                                                  year="numeric"
+                                        />
+                              </span>
+                    </div>
+          </div>
+          <div
+                    className="with-triangle-border"
+          >
+                    <MarkdownContent
+                              className="comment-list__comment--content"
+                              markdown="Sarah's comment"
+                    />
+          </div>
+          <div
+                    className="comment-list__comment--task-link"
+          >
+                    <Link
+                              replace={false}
+                              to="/task/undefined"
+                    >
+                              <FormattedMessage
+                                        defaultMessage="View Task"
+                                        id="CommentList.controls.viewTask.label"
+                                        values={Object {}}
+                              />
+                    </Link>
+          </div>
+</li>,
+        <li
+          className="comment-list__comment"
+>
+          <div
+                    className="comment-list__comment__header"
+          >
+                    <div
+                              className="comment-list__comment--author"
+                    >
+                              bob
+                    </div>
+                    <div
+                              className="comment-list__comment--published-at"
+                    >
+                              <span
+                                        className="time-part"
+                              >
+                                        <FormattedTime
+                                                  hour="2-digit"
+                                                  minute="2-digit"
+                                                  value={2017-11-10T23:53:17.739Z}
+                                        />
+                                        ,
+                              </span>
+                              <span
+                                        className="date-part"
+                              >
+                                        <FormattedDate
+                                                  day="2-digit"
+                                                  month="long"
+                                                  value={2017-11-10T23:53:17.739Z}
+                                                  year="numeric"
+                                        />
+                              </span>
+                    </div>
+          </div>
+          <div
+                    className="with-triangle-border"
+          >
+                    <MarkdownContent
+                              className="comment-list__comment--content"
+                              markdown="Bob's comment"
+                    />
+          </div>
+          <div
+                    className="comment-list__comment--task-link"
+          >
+                    <Link
+                              replace={false}
+                              to="/task/undefined"
+                    >
+                              <FormattedMessage
+                                        defaultMessage="View Task"
+                                        id="CommentList.controls.viewTask.label"
+                                        values={Object {}}
+                              />
+                    </Link>
+          </div>
+</li>,
+      ],
+      "className": "comment-list",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": "789",
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="comment-list__comment__header"
+>
+              <div
+                            className="comment-list__comment--author"
+              >
+                            joe
+              </div>
+              <div
+                            className="comment-list__comment--published-at"
+              >
+                            <span
+                                          className="time-part"
+                            >
+                                          <FormattedTime
+                                                        hour="2-digit"
+                                                        minute="2-digit"
+                                                        value={2018-01-17T14:53:07.649Z}
+                                          />
+                                          ,
+                            </span>
+                            <span
+                                          className="date-part"
+                            >
+                                          <FormattedDate
+                                                        day="2-digit"
+                                                        month="long"
+                                                        value={2018-01-17T14:53:07.649Z}
+                                                        year="numeric"
+                                          />
+                            </span>
+              </div>
+</div>,
+            <div
+              className="with-triangle-border"
+>
+              <MarkdownContent
+                            className="comment-list__comment--content"
+                            markdown="Joe's comment"
+              />
+</div>,
+            <div
+              className="comment-list__comment--task-link"
+>
+              <Link
+                            replace={false}
+                            to="/task/undefined"
+              >
+                            <FormattedMessage
+                                          defaultMessage="View Task"
+                                          id="CommentList.controls.viewTask.label"
+                                          values={Object {}}
+                            />
+              </Link>
+</div>,
+          ],
+          "className": "comment-list__comment",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="comment-list__comment--author"
+>
+                  joe
+</div>,
+                <div
+                  className="comment-list__comment--published-at"
+>
+                  <span
+                                    className="time-part"
+                  >
+                                    <FormattedTime
+                                                      hour="2-digit"
+                                                      minute="2-digit"
+                                                      value={2018-01-17T14:53:07.649Z}
+                                    />
+                                    ,
+                  </span>
+                  <span
+                                    className="date-part"
+                  >
+                                    <FormattedDate
+                                                      day="2-digit"
+                                                      month="long"
+                                                      value={2018-01-17T14:53:07.649Z}
+                                                      year="numeric"
+                                    />
+                  </span>
+</div>,
+              ],
+              "className": "comment-list__comment__header",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "joe",
+                  "className": "comment-list__comment--author",
+                },
+                "ref": null,
+                "rendered": "joe",
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="time-part"
+>
+                      <FormattedTime
+                                            hour="2-digit"
+                                            minute="2-digit"
+                                            value={2018-01-17T14:53:07.649Z}
+                      />
+                      ,
+</span>,
+                    <span
+                      className="date-part"
+>
+                      <FormattedDate
+                                            day="2-digit"
+                                            month="long"
+                                            value={2018-01-17T14:53:07.649Z}
+                                            year="numeric"
+                      />
+</span>,
+                  ],
+                  "className": "comment-list__comment--published-at",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": Array [
+                        <FormattedTime
+                          hour="2-digit"
+                          minute="2-digit"
+                          value={2018-01-17T14:53:07.649Z}
+/>,
+                        ",",
+                      ],
+                      "className": "time-part",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "hour": "2-digit",
+                          "minute": "2-digit",
+                          "value": 2018-01-17T14:53:07.649Z,
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      ",",
+                    ],
+                    "type": "span",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedDate
+                        day="2-digit"
+                        month="long"
+                        value={2018-01-17T14:53:07.649Z}
+                        year="numeric"
+/>,
+                      "className": "date-part",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "day": "2-digit",
+                        "month": "long",
+                        "value": 2018-01-17T14:53:07.649Z,
+                        "year": "numeric",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                ],
+                "type": "div",
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <MarkdownContent
+                className="comment-list__comment--content"
+                markdown="Joe's comment"
+/>,
+              "className": "with-triangle-border",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "comment-list__comment--content",
+                "markdown": "Joe's comment",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <Link
+                replace={false}
+                to="/task/undefined"
+>
+                <FormattedMessage
+                                defaultMessage="View Task"
+                                id="CommentList.controls.viewTask.label"
+                                values={Object {}}
+                />
+</Link>,
+              "className": "comment-list__comment--task-link",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <FormattedMessage
+                  defaultMessage="View Task"
+                  id="CommentList.controls.viewTask.label"
+                  values={Object {}}
+/>,
+                "replace": false,
+                "to": "/task/undefined",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "View Task",
+                  "id": "CommentList.controls.viewTask.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            "type": "div",
+          },
+        ],
+        "type": "li",
+      },
+      Object {
+        "instance": null,
+        "key": "456",
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="comment-list__comment__header"
+>
+              <div
+                            className="comment-list__comment--author"
+              >
+                            sarah
+              </div>
+              <div
+                            className="comment-list__comment--published-at"
+              >
+                            <span
+                                          className="time-part"
+                            >
+                                          <FormattedTime
+                                                        hour="2-digit"
+                                                        minute="2-digit"
+                                                        value={2017-11-25T22:04:03.002Z}
+                                          />
+                                          ,
+                            </span>
+                            <span
+                                          className="date-part"
+                            >
+                                          <FormattedDate
+                                                        day="2-digit"
+                                                        month="long"
+                                                        value={2017-11-25T22:04:03.002Z}
+                                                        year="numeric"
+                                          />
+                            </span>
+              </div>
+</div>,
+            <div
+              className="with-triangle-border"
+>
+              <MarkdownContent
+                            className="comment-list__comment--content"
+                            markdown="Sarah's comment"
+              />
+</div>,
+            <div
+              className="comment-list__comment--task-link"
+>
+              <Link
+                            replace={false}
+                            to="/task/undefined"
+              >
+                            <FormattedMessage
+                                          defaultMessage="View Task"
+                                          id="CommentList.controls.viewTask.label"
+                                          values={Object {}}
+                            />
+              </Link>
+</div>,
+          ],
+          "className": "comment-list__comment",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="comment-list__comment--author"
+>
+                  sarah
+</div>,
+                <div
+                  className="comment-list__comment--published-at"
+>
+                  <span
+                                    className="time-part"
+                  >
+                                    <FormattedTime
+                                                      hour="2-digit"
+                                                      minute="2-digit"
+                                                      value={2017-11-25T22:04:03.002Z}
+                                    />
+                                    ,
+                  </span>
+                  <span
+                                    className="date-part"
+                  >
+                                    <FormattedDate
+                                                      day="2-digit"
+                                                      month="long"
+                                                      value={2017-11-25T22:04:03.002Z}
+                                                      year="numeric"
+                                    />
+                  </span>
+</div>,
+              ],
+              "className": "comment-list__comment__header",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "sarah",
+                  "className": "comment-list__comment--author",
+                },
+                "ref": null,
+                "rendered": "sarah",
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="time-part"
+>
+                      <FormattedTime
+                                            hour="2-digit"
+                                            minute="2-digit"
+                                            value={2017-11-25T22:04:03.002Z}
+                      />
+                      ,
+</span>,
+                    <span
+                      className="date-part"
+>
+                      <FormattedDate
+                                            day="2-digit"
+                                            month="long"
+                                            value={2017-11-25T22:04:03.002Z}
+                                            year="numeric"
+                      />
+</span>,
+                  ],
+                  "className": "comment-list__comment--published-at",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": Array [
+                        <FormattedTime
+                          hour="2-digit"
+                          minute="2-digit"
+                          value={2017-11-25T22:04:03.002Z}
+/>,
+                        ",",
+                      ],
+                      "className": "time-part",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "hour": "2-digit",
+                          "minute": "2-digit",
+                          "value": 2017-11-25T22:04:03.002Z,
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      ",",
+                    ],
+                    "type": "span",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedDate
+                        day="2-digit"
+                        month="long"
+                        value={2017-11-25T22:04:03.002Z}
+                        year="numeric"
+/>,
+                      "className": "date-part",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "day": "2-digit",
+                        "month": "long",
+                        "value": 2017-11-25T22:04:03.002Z,
+                        "year": "numeric",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                ],
+                "type": "div",
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <MarkdownContent
+                className="comment-list__comment--content"
+                markdown="Sarah's comment"
+/>,
+              "className": "with-triangle-border",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "comment-list__comment--content",
+                "markdown": "Sarah's comment",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <Link
+                replace={false}
+                to="/task/undefined"
+>
+                <FormattedMessage
+                                defaultMessage="View Task"
+                                id="CommentList.controls.viewTask.label"
+                                values={Object {}}
+                />
+</Link>,
+              "className": "comment-list__comment--task-link",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <FormattedMessage
+                  defaultMessage="View Task"
+                  id="CommentList.controls.viewTask.label"
+                  values={Object {}}
+/>,
+                "replace": false,
+                "to": "/task/undefined",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "View Task",
+                  "id": "CommentList.controls.viewTask.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            "type": "div",
+          },
+        ],
+        "type": "li",
+      },
+      Object {
+        "instance": null,
+        "key": "123",
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="comment-list__comment__header"
+>
+              <div
+                            className="comment-list__comment--author"
+              >
+                            bob
+              </div>
+              <div
+                            className="comment-list__comment--published-at"
+              >
+                            <span
+                                          className="time-part"
+                            >
+                                          <FormattedTime
+                                                        hour="2-digit"
+                                                        minute="2-digit"
+                                                        value={2017-11-10T23:53:17.739Z}
+                                          />
+                                          ,
+                            </span>
+                            <span
+                                          className="date-part"
+                            >
+                                          <FormattedDate
+                                                        day="2-digit"
+                                                        month="long"
+                                                        value={2017-11-10T23:53:17.739Z}
+                                                        year="numeric"
+                                          />
+                            </span>
+              </div>
+</div>,
+            <div
+              className="with-triangle-border"
+>
+              <MarkdownContent
+                            className="comment-list__comment--content"
+                            markdown="Bob's comment"
+              />
+</div>,
+            <div
+              className="comment-list__comment--task-link"
+>
+              <Link
+                            replace={false}
+                            to="/task/undefined"
+              >
+                            <FormattedMessage
+                                          defaultMessage="View Task"
+                                          id="CommentList.controls.viewTask.label"
+                                          values={Object {}}
+                            />
+              </Link>
+</div>,
+          ],
+          "className": "comment-list__comment",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="comment-list__comment--author"
+>
+                  bob
+</div>,
+                <div
+                  className="comment-list__comment--published-at"
+>
+                  <span
+                                    className="time-part"
+                  >
+                                    <FormattedTime
+                                                      hour="2-digit"
+                                                      minute="2-digit"
+                                                      value={2017-11-10T23:53:17.739Z}
+                                    />
+                                    ,
+                  </span>
+                  <span
+                                    className="date-part"
+                  >
+                                    <FormattedDate
+                                                      day="2-digit"
+                                                      month="long"
+                                                      value={2017-11-10T23:53:17.739Z}
+                                                      year="numeric"
+                                    />
+                  </span>
+</div>,
+              ],
+              "className": "comment-list__comment__header",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "bob",
+                  "className": "comment-list__comment--author",
+                },
+                "ref": null,
+                "rendered": "bob",
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="time-part"
+>
+                      <FormattedTime
+                                            hour="2-digit"
+                                            minute="2-digit"
+                                            value={2017-11-10T23:53:17.739Z}
+                      />
+                      ,
+</span>,
+                    <span
+                      className="date-part"
+>
+                      <FormattedDate
+                                            day="2-digit"
+                                            month="long"
+                                            value={2017-11-10T23:53:17.739Z}
+                                            year="numeric"
+                      />
+</span>,
+                  ],
+                  "className": "comment-list__comment--published-at",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": Array [
+                        <FormattedTime
+                          hour="2-digit"
+                          minute="2-digit"
+                          value={2017-11-10T23:53:17.739Z}
+/>,
+                        ",",
+                      ],
+                      "className": "time-part",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "hour": "2-digit",
+                          "minute": "2-digit",
+                          "value": 2017-11-10T23:53:17.739Z,
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      ",",
+                    ],
+                    "type": "span",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedDate
+                        day="2-digit"
+                        month="long"
+                        value={2017-11-10T23:53:17.739Z}
+                        year="numeric"
+/>,
+                      "className": "date-part",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "day": "2-digit",
+                        "month": "long",
+                        "value": 2017-11-10T23:53:17.739Z,
+                        "year": "numeric",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                ],
+                "type": "div",
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <MarkdownContent
+                className="comment-list__comment--content"
+                markdown="Bob's comment"
+/>,
+              "className": "with-triangle-border",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "comment-list__comment--content",
+                "markdown": "Bob's comment",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <Link
+                replace={false}
+                to="/task/undefined"
+>
+                <FormattedMessage
+                                defaultMessage="View Task"
+                                id="CommentList.controls.viewTask.label"
+                                values={Object {}}
+                />
+</Link>,
+              "className": "comment-list__comment--task-link",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <FormattedMessage
+                  defaultMessage="View Task"
+                  id="CommentList.controls.viewTask.label"
+                  values={Object {}}
+/>,
+                "replace": false,
+                "to": "/task/undefined",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "View Task",
+                  "id": "CommentList.controls.viewTask.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            "type": "div",
+          },
+        ],
+        "type": "li",
+      },
+    ],
+    "type": "ul",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <li
+            className="comment-list__comment"
+>
+            <div
+                        className="comment-list__comment__header"
+            >
+                        <div
+                                    className="comment-list__comment--author"
+                        >
+                                    joe
+                        </div>
+                        <div
+                                    className="comment-list__comment--published-at"
+                        >
+                                    <span
+                                                className="time-part"
+                                    >
+                                                <FormattedTime
+                                                            hour="2-digit"
+                                                            minute="2-digit"
+                                                            value={2018-01-17T14:53:07.649Z}
+                                                />
+                                                ,
+                                    </span>
+                                    <span
+                                                className="date-part"
+                                    >
+                                                <FormattedDate
+                                                            day="2-digit"
+                                                            month="long"
+                                                            value={2018-01-17T14:53:07.649Z}
+                                                            year="numeric"
+                                                />
+                                    </span>
+                        </div>
+            </div>
+            <div
+                        className="with-triangle-border"
+            >
+                        <MarkdownContent
+                                    className="comment-list__comment--content"
+                                    markdown="Joe's comment"
+                        />
+            </div>
+            <div
+                        className="comment-list__comment--task-link"
+            >
+                        <Link
+                                    replace={false}
+                                    to="/task/undefined"
+                        >
+                                    <FormattedMessage
+                                                defaultMessage="View Task"
+                                                id="CommentList.controls.viewTask.label"
+                                                values={Object {}}
+                                    />
+                        </Link>
+            </div>
+</li>,
+          <li
+            className="comment-list__comment"
+>
+            <div
+                        className="comment-list__comment__header"
+            >
+                        <div
+                                    className="comment-list__comment--author"
+                        >
+                                    sarah
+                        </div>
+                        <div
+                                    className="comment-list__comment--published-at"
+                        >
+                                    <span
+                                                className="time-part"
+                                    >
+                                                <FormattedTime
+                                                            hour="2-digit"
+                                                            minute="2-digit"
+                                                            value={2017-11-25T22:04:03.002Z}
+                                                />
+                                                ,
+                                    </span>
+                                    <span
+                                                className="date-part"
+                                    >
+                                                <FormattedDate
+                                                            day="2-digit"
+                                                            month="long"
+                                                            value={2017-11-25T22:04:03.002Z}
+                                                            year="numeric"
+                                                />
+                                    </span>
+                        </div>
+            </div>
+            <div
+                        className="with-triangle-border"
+            >
+                        <MarkdownContent
+                                    className="comment-list__comment--content"
+                                    markdown="Sarah's comment"
+                        />
+            </div>
+            <div
+                        className="comment-list__comment--task-link"
+            >
+                        <Link
+                                    replace={false}
+                                    to="/task/undefined"
+                        >
+                                    <FormattedMessage
+                                                defaultMessage="View Task"
+                                                id="CommentList.controls.viewTask.label"
+                                                values={Object {}}
+                                    />
+                        </Link>
+            </div>
+</li>,
+          <li
+            className="comment-list__comment"
+>
+            <div
+                        className="comment-list__comment__header"
+            >
+                        <div
+                                    className="comment-list__comment--author"
+                        >
+                                    bob
+                        </div>
+                        <div
+                                    className="comment-list__comment--published-at"
+                        >
+                                    <span
+                                                className="time-part"
+                                    >
+                                                <FormattedTime
+                                                            hour="2-digit"
+                                                            minute="2-digit"
+                                                            value={2017-11-10T23:53:17.739Z}
+                                                />
+                                                ,
+                                    </span>
+                                    <span
+                                                className="date-part"
+                                    >
+                                                <FormattedDate
+                                                            day="2-digit"
+                                                            month="long"
+                                                            value={2017-11-10T23:53:17.739Z}
+                                                            year="numeric"
+                                                />
+                                    </span>
+                        </div>
+            </div>
+            <div
+                        className="with-triangle-border"
+            >
+                        <MarkdownContent
+                                    className="comment-list__comment--content"
+                                    markdown="Bob's comment"
+                        />
+            </div>
+            <div
+                        className="comment-list__comment--task-link"
+            >
+                        <Link
+                                    replace={false}
+                                    to="/task/undefined"
+                        >
+                                    <FormattedMessage
+                                                defaultMessage="View Task"
+                                                id="CommentList.controls.viewTask.label"
+                                                values={Object {}}
+                                    />
+                        </Link>
+            </div>
+</li>,
+        ],
+        "className": "comment-list",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": "789",
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="comment-list__comment__header"
+>
+                <div
+                                className="comment-list__comment--author"
+                >
+                                joe
+                </div>
+                <div
+                                className="comment-list__comment--published-at"
+                >
+                                <span
+                                                className="time-part"
+                                >
+                                                <FormattedTime
+                                                                hour="2-digit"
+                                                                minute="2-digit"
+                                                                value={2018-01-17T14:53:07.649Z}
+                                                />
+                                                ,
+                                </span>
+                                <span
+                                                className="date-part"
+                                >
+                                                <FormattedDate
+                                                                day="2-digit"
+                                                                month="long"
+                                                                value={2018-01-17T14:53:07.649Z}
+                                                                year="numeric"
+                                                />
+                                </span>
+                </div>
+</div>,
+              <div
+                className="with-triangle-border"
+>
+                <MarkdownContent
+                                className="comment-list__comment--content"
+                                markdown="Joe's comment"
+                />
+</div>,
+              <div
+                className="comment-list__comment--task-link"
+>
+                <Link
+                                replace={false}
+                                to="/task/undefined"
+                >
+                                <FormattedMessage
+                                                defaultMessage="View Task"
+                                                id="CommentList.controls.viewTask.label"
+                                                values={Object {}}
+                                />
+                </Link>
+</div>,
+            ],
+            "className": "comment-list__comment",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <div
+                    className="comment-list__comment--author"
+>
+                    joe
+</div>,
+                  <div
+                    className="comment-list__comment--published-at"
+>
+                    <span
+                                        className="time-part"
+                    >
+                                        <FormattedTime
+                                                            hour="2-digit"
+                                                            minute="2-digit"
+                                                            value={2018-01-17T14:53:07.649Z}
+                                        />
+                                        ,
+                    </span>
+                    <span
+                                        className="date-part"
+                    >
+                                        <FormattedDate
+                                                            day="2-digit"
+                                                            month="long"
+                                                            value={2018-01-17T14:53:07.649Z}
+                                                            year="numeric"
+                                        />
+                    </span>
+</div>,
+                ],
+                "className": "comment-list__comment__header",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "joe",
+                    "className": "comment-list__comment--author",
+                  },
+                  "ref": null,
+                  "rendered": "joe",
+                  "type": "div",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <span
+                        className="time-part"
+>
+                        <FormattedTime
+                                                hour="2-digit"
+                                                minute="2-digit"
+                                                value={2018-01-17T14:53:07.649Z}
+                        />
+                        ,
+</span>,
+                      <span
+                        className="date-part"
+>
+                        <FormattedDate
+                                                day="2-digit"
+                                                month="long"
+                                                value={2018-01-17T14:53:07.649Z}
+                                                year="numeric"
+                        />
+</span>,
+                    ],
+                    "className": "comment-list__comment--published-at",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": Array [
+                          <FormattedTime
+                            hour="2-digit"
+                            minute="2-digit"
+                            value={2018-01-17T14:53:07.649Z}
+/>,
+                          ",",
+                        ],
+                        "className": "time-part",
+                      },
+                      "ref": null,
+                      "rendered": Array [
+                        Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "class",
+                          "props": Object {
+                            "hour": "2-digit",
+                            "minute": "2-digit",
+                            "value": 2018-01-17T14:53:07.649Z,
+                          },
+                          "ref": null,
+                          "rendered": null,
+                          "type": [Function],
+                        },
+                        ",",
+                      ],
+                      "type": "span",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <FormattedDate
+                          day="2-digit"
+                          month="long"
+                          value={2018-01-17T14:53:07.649Z}
+                          year="numeric"
+/>,
+                        "className": "date-part",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "day": "2-digit",
+                          "month": "long",
+                          "value": 2018-01-17T14:53:07.649Z,
+                          "year": "numeric",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "span",
+                    },
+                  ],
+                  "type": "div",
+                },
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <MarkdownContent
+                  className="comment-list__comment--content"
+                  markdown="Joe's comment"
+/>,
+                "className": "with-triangle-border",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "className": "comment-list__comment--content",
+                  "markdown": "Joe's comment",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <Link
+                  replace={false}
+                  to="/task/undefined"
+>
+                  <FormattedMessage
+                                    defaultMessage="View Task"
+                                    id="CommentList.controls.viewTask.label"
+                                    values={Object {}}
+                  />
+</Link>,
+                "className": "comment-list__comment--task-link",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="View Task"
+                    id="CommentList.controls.viewTask.label"
+                    values={Object {}}
+/>,
+                  "replace": false,
+                  "to": "/task/undefined",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "View Task",
+                    "id": "CommentList.controls.viewTask.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": [Function],
+              },
+              "type": "div",
+            },
+          ],
+          "type": "li",
+        },
+        Object {
+          "instance": null,
+          "key": "456",
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="comment-list__comment__header"
+>
+                <div
+                                className="comment-list__comment--author"
+                >
+                                sarah
+                </div>
+                <div
+                                className="comment-list__comment--published-at"
+                >
+                                <span
+                                                className="time-part"
+                                >
+                                                <FormattedTime
+                                                                hour="2-digit"
+                                                                minute="2-digit"
+                                                                value={2017-11-25T22:04:03.002Z}
+                                                />
+                                                ,
+                                </span>
+                                <span
+                                                className="date-part"
+                                >
+                                                <FormattedDate
+                                                                day="2-digit"
+                                                                month="long"
+                                                                value={2017-11-25T22:04:03.002Z}
+                                                                year="numeric"
+                                                />
+                                </span>
+                </div>
+</div>,
+              <div
+                className="with-triangle-border"
+>
+                <MarkdownContent
+                                className="comment-list__comment--content"
+                                markdown="Sarah's comment"
+                />
+</div>,
+              <div
+                className="comment-list__comment--task-link"
+>
+                <Link
+                                replace={false}
+                                to="/task/undefined"
+                >
+                                <FormattedMessage
+                                                defaultMessage="View Task"
+                                                id="CommentList.controls.viewTask.label"
+                                                values={Object {}}
+                                />
+                </Link>
 </div>,
             ],
             "className": "comment-list__comment",
@@ -1548,6 +3662,55 @@ ShallowWrapper {
               },
               "type": "div",
             },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <Link
+                  replace={false}
+                  to="/task/undefined"
+>
+                  <FormattedMessage
+                                    defaultMessage="View Task"
+                                    id="CommentList.controls.viewTask.label"
+                                    values={Object {}}
+                  />
+</Link>,
+                "className": "comment-list__comment--task-link",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="View Task"
+                    id="CommentList.controls.viewTask.label"
+                    values={Object {}}
+/>,
+                  "replace": false,
+                  "to": "/task/undefined",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "View Task",
+                    "id": "CommentList.controls.viewTask.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": [Function],
+              },
+              "type": "div",
+            },
           ],
           "type": "li",
         },
@@ -1597,6 +3760,20 @@ ShallowWrapper {
                                 className="comment-list__comment--content"
                                 markdown="Bob's comment"
                 />
+</div>,
+              <div
+                className="comment-list__comment--task-link"
+>
+                <Link
+                                replace={false}
+                                to="/task/undefined"
+                >
+                                <FormattedMessage
+                                                defaultMessage="View Task"
+                                                id="CommentList.controls.viewTask.label"
+                                                values={Object {}}
+                                />
+                </Link>
 </div>,
             ],
             "className": "comment-list__comment",
@@ -1778,6 +3955,55 @@ ShallowWrapper {
                 },
                 "ref": null,
                 "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <Link
+                  replace={false}
+                  to="/task/undefined"
+>
+                  <FormattedMessage
+                                    defaultMessage="View Task"
+                                    id="CommentList.controls.viewTask.label"
+                                    values={Object {}}
+                  />
+</Link>,
+                "className": "comment-list__comment--task-link",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="View Task"
+                    id="CommentList.controls.viewTask.label"
+                    values={Object {}}
+/>,
+                  "replace": false,
+                  "to": "/task/undefined",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "View Task",
+                    "id": "CommentList.controls.viewTask.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
                 "type": [Function],
               },
               "type": "div",

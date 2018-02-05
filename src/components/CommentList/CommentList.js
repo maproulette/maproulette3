@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { FormattedDate, FormattedTime } from 'react-intl'
+import { FormattedMessage,
+         FormattedDate,
+         FormattedTime } from 'react-intl'
+import { Link } from 'react-router-dom'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
+import messages from './Messages'
 import './CommentList.css'
 
 /**
@@ -49,8 +53,16 @@ export default class CommentList extends Component {
 
           <div className="with-triangle-border">
             <MarkdownContent className="comment-list__comment--content"
-                            markdown={comment.comment} />
+                             markdown={comment.comment} />
           </div>
+
+          {this.props.includeTaskLinks &&
+           <div className="comment-list__comment--task-link">
+            <Link to={`/task/${comment.task_id}`}>
+              <FormattedMessage {...messages.viewTaskLabel} />
+            </Link>
+           </div>
+          }
         </li>
       )
     )
@@ -73,8 +85,13 @@ CommentList.propTypes = {
       created: PropTypes.number,
     })
   ),
+  /**
+   * Set to true to include a link to the task on which the comment appears
+   */
+  includeTaskLinks: PropTypes.bool,
 }
 
 CommentList.defaultProps = {
   comments: [],
+  includeTaskLinks: false,
 }
