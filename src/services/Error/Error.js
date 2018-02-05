@@ -3,6 +3,7 @@ import _isString from 'lodash/isString'
 import _clone from 'lodash/clone'
 import _isEmpty from 'lodash/isEmpty'
 import _remove from 'lodash/remove'
+import _find from 'lodash/find'
 
 export const errorShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
@@ -86,7 +87,12 @@ export const currentErrors = function(state=[], action) {
   switch(action.type) {
     case ADD_ERROR:
       copy = _clone(state)
-      copy.push(action.error)
+
+      // Don't add dup errors
+      if (!_find(copy, {id: action.error.id})) {
+        copy.push(action.error)
+      }
+
       return copy
     case REMOVE_ERROR:
       copy = _clone(state)
