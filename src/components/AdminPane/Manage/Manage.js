@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _find from 'lodash/find'
+import _isNumber from 'lodash/isNumber'
 import Sidebar from '../../Sidebar/Sidebar'
 import WithManageableChallenges from '../HOCs/WithManageableChallenges/WithManageableChallenges'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
@@ -11,21 +11,24 @@ import ManageProjects from './ManageProjects/ManageProjects'
 import messages from './Messages'
 import './Manage.css'
 
+/**
+ * Manage serves a landing page for project and challenge management and
+ * creation.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export class Manage extends Component {
-  state = {
-    sidebarMinimized: false,
-  }
-
-  toggleSidebarMinimization = () =>
-    this.setState({sidebarMinimized: !this.state.sidebarMinimized})
-
   render() {
     const selectedProjectId = _get(this.props, 'match.params.projectId')
 
-    const selectedProject =
-      selectedProjectId ?
-      _find(this.props.projects, {id: parseInt(selectedProjectId, 10)}) :
-      null
+    let selectedProject = null
+    if (_isNumber(selectedProjectId)) {
+      selectedProject =
+        _find(this.props.projects, {id: parseInt(selectedProjectId, 10)})
+    }
+    else if (_get(this.props, 'projects.length', 0) === 1) {
+      selectedProject = this.props.projects[0]
+    }
 
     return (
       <div className="admin__manage">
@@ -42,20 +45,18 @@ export class Manage extends Component {
         </div>
 
         <div className="admin__manage__pane-wrapper">
-          <Sidebar className={classNames('admin__manage__sidebar',
-                                         'projects-sidebar',
-                                         'inline',
-                                         {'is-minimized': this.state.sidebarMinimized})}
+          <Sidebar className="admin__manage__sidebar projects-sidebar inline"
                    isActive={true}>
-
             <ManageProjects selectedProject={selectedProject} {...this.props} />
 
-            <div className='admin__manage__sidebar__controls'>
-              <button className="button is-green is-outlined new-project"
-                      onClick={() => this.props.history.push('/admin/projects/new')}>
-                <FormattedMessage {...messages.newProject} />
-              </button>
-            </div>
+            {this.props.user.isSuperUser &&
+             <div className='admin__manage__sidebar__controls'>
+               <button className="button is-green is-outlined new-project"
+                       onClick={() => this.props.history.push('/admin/projects/new')}>
+                 <FormattedMessage {...messages.newProject} />
+               </button>
+             </div>
+            }
           </Sidebar>
 
           <div className="admin__manage__primary-content">

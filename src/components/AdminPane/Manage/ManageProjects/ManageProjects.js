@@ -45,9 +45,11 @@ export class ManageProjects extends Component {
             </div>
           </h3>
 
+          {this.props.projects.length > 1 &&
           <ProjectSearch placeholder={
                           this.props.intl.formatMessage(messages.placeholder)
                           } />
+          }
         </div>
 
         <div className='admin__intro admin__manage-projects--intro'>

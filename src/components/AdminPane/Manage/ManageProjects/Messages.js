@@ -11,10 +11,9 @@ export default defineMessages({
 
   help: {
     id: 'Projects.help.info',
-    defaultMessage: "Projects serve as a means of grouping " +
-                    "related challenges together. All challenges need to " +
-                    "belong to a project. You can create as few or as " +
-                    "many different projects as makes sense for your needs.",
+    defaultMessage: "Projects serve as a means of grouping related " +
+                    "challenges together. All challenges must belong " +
+                    "to a project.",
   },
 
   placeholder: {

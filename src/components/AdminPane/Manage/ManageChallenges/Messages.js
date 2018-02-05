@@ -18,8 +18,7 @@ export default defineMessages({
                     "you provide when creating a new challenge, but " +
                     "can also be loaded from a local file or remote " +
                     "URL containing GeoJSON features. You can create " +
-                    "as many challenges as you'd like, and can group " +
-                    "them into projects to help keep them organized.",
+                    "as many challenges as you'd like.",
   },
 
   placeholder: {
