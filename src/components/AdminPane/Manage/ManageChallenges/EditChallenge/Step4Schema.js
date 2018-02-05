@@ -1,4 +1,5 @@
 import { ZOOM_LEVELS,
+         MIN_ZOOM,
          MAX_ZOOM,
          DEFAULT_ZOOM }
        from '../../../../../services/Challenge/ChallengeZoom/ChallengeZoom'
@@ -6,6 +7,7 @@ import { CHALLENGE_BASEMAP_NONE,
          ChallengeBasemap,
          basemapLayerLabels }
        from '../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _map from 'lodash/map'
 import messages from './Messages'
@@ -44,21 +46,24 @@ export const jsSchema = intl => {
         description: intl.formatMessage(messages.defaultZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: DEFAULT_ZOOM,
+        default: _get(process.env, 'REACT_APP_INITIAL_CHALLENGE_DEFAULT_ZOOM',
+                      DEFAULT_ZOOM),
       },
       minZoom: {
         title: intl.formatMessage(messages.minZoomLabel),
         description: intl.formatMessage(messages.minZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: DEFAULT_ZOOM,
+        default: _get(process.env, 'REACT_APP_INITIAL_CHALLENGE_MIN_ZOOM',
+                      MIN_ZOOM),
       },
       maxZoom: {
         title: intl.formatMessage(messages.maxZoomLabel),
         description: intl.formatMessage(messages.maxZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: MAX_ZOOM,
+        default: _get(process.env, 'REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM',
+                      MAX_ZOOM),
       },
       defaultBasemap: {
         title: intl.formatMessage(messages.defaultBasemapLabel),
