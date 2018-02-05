@@ -45,6 +45,15 @@
       }
     }
 
+    &--task-link {
+      font-size: $size-8;
+      text-align: right;
+
+      a {
+        color: $grey;
+      }
+    }
+
     .with-triangle-border {
       @include triangle-up(10px, $grey-lightest-more)
     }
