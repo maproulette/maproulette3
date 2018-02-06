@@ -26,7 +26,7 @@ import _filter from 'lodash/filter'
 const WithChallenges =
   WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
-export const mapStateToProps = (state, ownProps) => {
+export const mapStateToProps = (state, ownProps={}) => {
   const challenges = _values(_get(state, 'entities.challenges')) || []
 
   // By default, only pass through challenges that are enabled, have some
@@ -53,7 +53,7 @@ export const mapStateToProps = (state, ownProps) => {
   return { challenges: usableChallenges }
 }
 
-export const mapDispatchToProps = (dispatch, ownProps) => {
+export const mapDispatchToProps = (dispatch, ownProps={}) => {
   return {
     startChallenge: challenge => {
       dispatch(loadRandomTaskFromChallenge(challenge.id)).then(task => {

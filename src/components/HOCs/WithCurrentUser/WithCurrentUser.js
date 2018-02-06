@@ -7,7 +7,19 @@ import { logoutUser,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../services/User/AsEndUser'
 
-const mapStateToProps = state => {
+/**
+ * WithCurrentUser passes down the current user from the redux store.  If the
+ * user is non-null, it also automatically adds isSignedIn and isSuperUser
+ * fields to the user object (isSignedIn should be checked as the user could be
+ * a guest user). Various functions are also made available for managing saved
+ * user challenges and tasks, as well as logging out the user.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
+const WithCurrentUser =
+  WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
+
+export const mapStateToProps = state => {
   const props = {user: null}
 
   const userId = _get(state, 'currentUser.userId')
@@ -26,7 +38,7 @@ const mapStateToProps = state => {
   return props
 }
 
-const mapDispatchToProps = dispatch => {
+export const mapDispatchToProps = dispatch => {
   return {
     logoutUser: () => dispatch(logoutUser()),
 
@@ -43,8 +55,5 @@ const mapDispatchToProps = dispatch => {
       dispatch(unsaveTask(userId, taskId)),
   }
 }
-
-const WithCurrentUser =
-  WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
 export default WithCurrentUser

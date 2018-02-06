@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapStateToProps provides an editor prop with the current open editor 1`] = `
+Object {
+  "editor": 1,
+}
+`;

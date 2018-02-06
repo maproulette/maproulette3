@@ -66,7 +66,7 @@ const WithLoadedTask = function(WrappedComponent) {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+export const mapStateToProps = (state, ownProps) => {
   const props = {task: null}
 
   // Pull taskId from route
@@ -97,7 +97,7 @@ const mapStateToProps = (state, ownProps) => {
   return props
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     /**
      * For the LoadCurrentTask private HOC.
@@ -151,13 +151,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
  * Route to the given new task, if valid. Otherwise route back to the home
  * page.
  */
-const visitNewTask = function(challengeId, currentTaskId, newTask, history) {
+export const visitNewTask = function(challengeId, currentTaskId, newTask, history) {
   if (_isObject(newTask) && newTask.id !== currentTaskId) {
     history.push(`/challenge/${challengeId}/task/${newTask.id}`)
   }
   else {
     // Probably no tasks left in this challenge, back to challenges.
-    history.push(`/`)
+    history.push('/')
   }
 }
 

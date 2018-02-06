@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`challenges are denormalized before being passed through 1`] = `
+Object {
+  "challenges": Array [
+    Object {
+      "actions": Object {
+        "available": 3,
+      },
+      "difficulty": "hard",
+      "enabled": true,
+      "id": 123,
+      "name": "challenge1",
+    },
+    Object {
+      "actions": Object {
+        "available": 6,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 456,
+      "name": "challenge2",
+    },
+    Object {
+      "actions": Object {
+        "available": 1,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 789,
+      "name": "challenge2",
+    },
+  ],
+}
+`;
+
+exports[`mapStateToProps maps all entities.challenges when allStatuses prop is true 1`] = `
+Object {
+  "challenges": Array [
+    Object {
+      "actions": Object {
+        "available": 3,
+      },
+      "difficulty": "hard",
+      "enabled": true,
+      "id": 123,
+      "name": "challenge1",
+    },
+    Object {
+      "actions": Object {
+        "available": 6,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 456,
+      "name": "challenge2",
+    },
+    Object {
+      "actions": Object {
+        "available": 1,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 789,
+      "name": "challenge2",
+    },
+  ],
+}
+`;
+
+exports[`only challenges with a usable status are normally passed through 1`] = `
+Object {
+  "challenges": Array [
+    Object {
+      "actions": Object {
+        "available": 6,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 456,
+      "name": "challenge2",
+    },
+    Object {
+      "actions": Object {
+        "available": 1,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 789,
+      "name": "challenge2",
+    },
+  ],
+}
+`;
+
+exports[`only challenges with available tasks/actions are normally passed through 1`] = `
+Object {
+  "challenges": Array [
+    Object {
+      "actions": Object {
+        "available": 6,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 456,
+      "name": "challenge2",
+    },
+    Object {
+      "actions": Object {
+        "available": 1,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 789,
+      "name": "challenge2",
+    },
+  ],
+}
+`;
+
+exports[`only enabled challenges are normally passed through 1`] = `
+Object {
+  "challenges": Array [
+    Object {
+      "actions": Object {
+        "available": 6,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 456,
+      "name": "challenge2",
+    },
+    Object {
+      "actions": Object {
+        "available": 1,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 789,
+      "name": "challenge2",
+    },
+  ],
+}
+`;
+
+exports[`only enabled challenges are normally passed through 2`] = `
+Object {
+  "challenges": Array [
+    Object {
+      "actions": Object {
+        "available": 6,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 456,
+      "name": "challenge2",
+    },
+    Object {
+      "actions": Object {
+        "available": 1,
+      },
+      "difficulty": "easy",
+      "enabled": true,
+      "id": 789,
+      "name": "challenge2",
+    },
+  ],
+}
+`;

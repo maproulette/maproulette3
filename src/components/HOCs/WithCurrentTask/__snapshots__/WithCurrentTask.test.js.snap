@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapDispatchToProps maps some functions 1`] = `
+Object {
+  "completeTask": [Function],
+  "loadTask": [Function],
+  "nextTask": [Function],
+  "setChallengeMinimization": [Function],
+  "setInstructionsCollapsed": [Function],
+}
+`;
+
+exports[`mapStateToProps maps task from a given taskId 1`] = `
+Object {
+  "collapseInstructions": true,
+  "minimizeChallenge": true,
+  "task": Object {
+    "name": "task1",
+    "parent": Object {
+      "id": 123,
+    },
+    "taskId": 1,
+  },
+  "taskId": 1,
+}
+`;
