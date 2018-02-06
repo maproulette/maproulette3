@@ -11,6 +11,9 @@ export const ID = 0
 export const JOSM = 1
 export const JOSM_LAYER = 2
 
+// Reference to open editor window
+let editorWindowReference = null
+
 export const Editor = Object.freeze({
   none: NONE,
   id: ID,
@@ -41,7 +44,14 @@ export const editorOpened = function(editor, taskId, status=RequestStatus.succes
 export const editTask = function(editor, task, mapBounds) {
   return function(dispatch) {
     if (editor === ID) {
-      window.open(constructIdURI(task, mapBounds))
+      // If we've already opened an editor window, close it so that we don't
+      // build up a bunch of open editor tabs, potentially confusing users.
+      if (editorWindowReference && !editorWindowReference.closed) {
+        editorWindowReference.close()
+      }
+
+      editorWindowReference = window.open(constructIdURI(task, mapBounds))
+
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
     }
     else if (editor === JOSM || editor === JOSM_LAYER) {
