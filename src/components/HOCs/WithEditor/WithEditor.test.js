@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithEditor'
+import { editTask, closeEditor, JOSM } from '../../../services/Editor/Editor'
 
 jest.mock('../../../services/Editor/Editor')
-import { editTask, closeEditor, JOSM } from '../../../services/Editor/Editor'
 
 let basicState = null
 
@@ -16,6 +16,8 @@ test("mapStateToProps provides an editor prop with the current open editor", () 
   const mappedProps = mapStateToProps(basicState)
 
   expect(mappedProps.editor).toEqual(basicState.openEditor)
+
+  expect(mappedProps).toMatchSnapshot()
 })
 
 test("mapDispatchToProps makes the closeEditor() function available", () => {

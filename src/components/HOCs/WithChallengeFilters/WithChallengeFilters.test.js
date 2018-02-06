@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithChallengeFilters'
+import { setFilters, removeFilters } from '../../../services/Filter/Filter'
 
 jest.mock('../../../services/Filter/Filter')
-import { setFilters, removeFilters } from '../../../services/Filter/Filter'
 
 let basicState = null
 

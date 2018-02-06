@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapStateToProps adds isLoggedIn and isSuperUser fields to the user 1`] = `
+Object {
+  "user": Object {
+    "id": 456,
+    "isLoggedIn": true,
+    "isSuperUser": true,
+  },
+}
+`;
+
+exports[`mapStateToProps provides the current user in denormalized form 1`] = `
+Object {
+  "user": Object {
+    "id": 456,
+    "isLoggedIn": undefined,
+    "isSuperUser": undefined,
+  },
+}
+`;
