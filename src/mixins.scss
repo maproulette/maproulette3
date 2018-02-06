@@ -64,3 +64,18 @@
   word-break: break-word;
   hyphens: auto;
 }
+
+@mixin busy-spinner-color($color) {
+  .busy-spinner-icon {
+    border-color: $color;
+    border-right-color: transparent;
+    border-top-color: transparent;
+  }
+}
+
+@mixin busy-spinner-size($size) {
+  .busy-spinner-icon {
+    width: $size;
+    height: $size;
+  }
+}

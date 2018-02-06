@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import '../../../mixins.scss';
 
 .map-pane {
   position: relative;
@@ -44,5 +44,15 @@
         }
       }
     }
+  }
+
+  .busy-spinner {
+    @include busy-spinner-color($grey);
+    @include busy-spinner-size(30px);
+
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+    z-index: $layer-map + $intralayer-bump;
   }
 }

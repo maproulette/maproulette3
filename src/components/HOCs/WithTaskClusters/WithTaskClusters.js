@@ -20,12 +20,17 @@ const WithTaskClusters = function(WrappedComponent) {
   return class extends Component {
     state = {
       tasks: [],
+      loadingClusteredTasks: false,
     }
 
     loadClusters = challengeId => {
       if (_isNumber(challengeId)) {
+        this.setState({tasks: [], loadingClusteredTasks: true})
+
         this.props.fetchClusteredTasks(challengeId).then(
-          tasks => this.setState({tasks})
+          tasks => this.setState({tasks, loadingClusteredTasks: false})
+        ).catch(error =>
+          this.setState({loadingClusteredTasks: false})
         )
       }
     }
@@ -48,13 +53,15 @@ const WithTaskClusters = function(WrappedComponent) {
 
       if (_isNumber(challengeId)) {
         clusteredTasks = _filter(this.state.tasks,
-                                 task => task.parent === challengeId && task.point
-        )
+                                 task => task.parent === challengeId && task.point)
       }
 
-      return <WrappedComponent clusteredTasks={clusteredTasks} 
-                               {..._omit(this.props,
-                                         ['entities', 'fetchClusteredTasks'])} />
+      return (
+        <WrappedComponent clusteredTasks={clusteredTasks}
+                          loadingClusteredTasks={this.state.loadingClusteredTasks}
+                          {..._omit(this.props,
+                                    ['entities', 'fetchClusteredTasks'])} />
+      )
     }
   }
 }
