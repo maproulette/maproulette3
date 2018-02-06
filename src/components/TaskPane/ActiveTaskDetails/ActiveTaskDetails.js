@@ -10,12 +10,11 @@ import Delayed from 'react-delayed'
 import Sidebar from '../../Sidebar/Sidebar'
 import Popout from '../../Bulma/Popout'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import WithTaskCenterPoint from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import ActiveTaskControls from './ActiveTaskControls/ActiveTaskControls'
 import KeyboardShortcutReference from './KeyboardShortcutReference/KeyboardShortcutReference'
-import InsetMap from './InsetMap/InsetMap'
+import TaskLocationMap from './TaskLocationMap/TaskLocationMap'
 import CommentList from '../../CommentList/CommentList'
 import CommentCountBadge from '../../CommentList/CommentCountBadge/CommentCountBadge'
 import PlaceDescription from '../PlaceDescription/PlaceDescription'
@@ -27,7 +26,6 @@ import './ActiveTaskDetails.css'
 
 const SIDEBAR_TRANSITION_DELAY = 500 // milliseconds
 
-const OverviewMap = WithTaskCenterPoint(InsetMap)
 const DeactivatablePopout = WithDeactivateOnOutsideClick(Popout)
 const KeyboardReferencePopout =
   WithKeyboardShortcuts(WithDeactivateOnOutsideClick(KeyboardShortcutReference))
@@ -202,7 +200,7 @@ export class ActiveTaskDetails extends Component {
                       <div className="active-task-details--sub-heading">
                         <FormattedMessage {...messages.location} />
                       </div>
-                    <OverviewMap key={this.props.task.id} task={this.props.task} {...this.props} />
+                    <TaskLocationMap key={this.props.task.id} {...this.props} />
                   </div>
 
                   <PlaceDescription place={this.props.task.place}
