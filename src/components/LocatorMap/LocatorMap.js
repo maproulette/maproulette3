@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { ZoomControl } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { point, featureCollection } from '@turf/helpers'
 import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
+import _isObject from 'lodash/isObject'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
 import { latLng } from 'leaflet'
@@ -19,8 +22,7 @@ import WithChallengeFilters from '../HOCs/WithChallengeFilters/WithChallengeFilt
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithMapBoundsState from '../HOCs/WithMapBounds/WithMapBoundsState'
 import WithMapBoundsDispatch from '../HOCs/WithMapBounds/WithMapBoundsDispatch'
-import { ZoomControl } from 'react-leaflet'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
+import BusySpinner from '../BusySpinner/BusySpinner'
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
@@ -63,9 +65,8 @@ export class LocatorMap extends Component {
       return true
     }
 
-    // we received new clustered tasks for the challenge, or
-    if (_get(nextProps, 'clusteredTasks.length', 0) >
-        _get(this.props, 'clusteredTasks.length', 0)) {
+    // the loading status of clustered tasks change, or
+    if (nextProps.loadingClusteredTasks !== this.props.loadingClusteredTasks) {
       return true
     }
 
@@ -118,39 +119,45 @@ export class LocatorMap extends Component {
   }
 
   render() {
-    // Build the clustered tasks markers
+    const isBrowsingChallenge = _isObject(this.props.browsingChallenge)
+    const isLoadingData = isBrowsingChallenge && this.props.loadingClusteredTasks
+
     const markers = []
-    if (_get(this.props, 'clusteredTasks.length') > 0) {
-      _each(this.props.clusteredTasks, task => {
-        // Only show created or skipped tasks
-        if (task.status === TaskStatus.created ||
-            task.status === TaskStatus.skipped) {
-          markers.push({
-            position: [task.point.lat, task.point.lng],
-            options: {
-              challengeId: task.parent,
-              taskId: task.id,
-            },
-          })
-        }
-      })
-    }
+    let bounding = null
+    if (isBrowsingChallenge) {
+      // Build the clustered task markers if we have clustered tasks
+      if (_get(this.props, 'clusteredTasks.length') > 0) {
+        _each(this.props.clusteredTasks, task => {
+          // Only show created or skipped tasks
+          if (task.status === TaskStatus.created ||
+              task.status === TaskStatus.skipped) {
+            markers.push({
+              position: [task.point.lat, task.point.lng],
+              options: {
+                challengeId: task.parent,
+                taskId: task.id,
+              },
+            })
+          }
+        })
+      }
 
-    // Get the challenge bounding so we know which part of the map to display.
-    // Right now API double-nests bounding, but that will likely change.
-    let bounding = _get(this.props, 'browsingChallenge.bounding.bounding') ||
-                   _get(this.props, 'browsingChallenge.bounding')
+      // Get the challenge bounding so we know which part of the map to display.
+      // Right now API double-nests bounding, but that will likely change.
+      bounding = _get(this.props, 'browsingChallenge.bounding.bounding') ||
+                 _get(this.props, 'browsingChallenge.bounding')
 
 
-    // If the challenge doesn't have a bounding polygon, build one from the
-    // markers instead. This is extra work and requires waiting for the clustered
-    // task data to arrive, so not ideal.
-    if (!bounding && markers.length > 0) {
-      bounding = bboxPolygon(
-        bbox(featureCollection(
-          _map(markers, marker => point([marker.position[1], marker.position[0]]))
-        ))
-      )
+      // If the challenge doesn't have a bounding polygon, build one from the
+      // markers instead. This is extra work and requires waiting for the clustered
+      // task data to arrive, so not ideal.
+      if (!bounding && markers.length > 0) {
+        bounding = bboxPolygon(
+          bbox(featureCollection(
+            _map(markers, marker => point([marker.position[1], marker.position[0]]))
+          ))
+        )
+      }
     }
 
     return (
@@ -171,6 +178,8 @@ export class LocatorMap extends Component {
            <MarkerClusterGroup markers={markers} onMarkerClick={this.markerClicked} />
           }
         </EnhancedMap>
+
+        {isLoadingData && <BusySpinner />}
       </div>
     )
   }

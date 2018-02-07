@@ -75,6 +75,19 @@ test("rerenders if the challenge being browsed changes", () => {
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })
 
+test("rerenders if the challenge's clustered tasks have loaded", () => {
+  basicProps.loadingClusteredTasks = false
+
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  const newProps = _cloneDeep(basicProps)
+  newProps.loadingClusteredTasks = true
+
+  expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
+})
+
 test("moving the map signals that the locator map bounds should be updated", () => {
   const bounds = [0, 0, 0, 0]
   const zoom = 3
@@ -123,4 +136,30 @@ test("moving the map doesn't signal challenges updates if not filtering on map b
 
   wrapper.instance().updateBounds(bounds, zoom, false)
   expect(basicProps.updateBoundedChallenges).not.toBeCalled()
+})
+
+test("a busy indicator is displayed if clustered tasks are loading", () => {
+  basicProps.browsingChallenge = {id: 123}
+  basicProps.loadingClusteredTasks = true
+
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  expect(wrapper.find('BusySpinner').exists()).toBe(true)
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("the busy indicator is removed once tasks are done loading", () => {
+  basicProps.browsingChallenge = {id: 123}
+  basicProps.loadingClusteredTasks = false
+
+  const wrapper = shallow(
+    <LocatorMap {...basicProps} />
+  )
+
+  expect(wrapper.find('BusySpinner').exists()).toBe(false)
+
+  expect(wrapper).toMatchSnapshot()
 })
