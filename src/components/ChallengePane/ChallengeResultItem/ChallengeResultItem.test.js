@@ -23,7 +23,7 @@ beforeEach(() => {
         displayName: "foo",
       }
     },
-    browsingChallenge: null,
+    browsedChallenge: null,
     startChallenge: jest.fn(),
     saveChallenge: jest.fn(),
     unsaveChallenge: jest.fn(),
@@ -62,7 +62,7 @@ test("shows collapsed view if not being actively browsed", () => {
 })
 
 test("shows expanded view if being actively browsed", () => {
-  basicProps.browsingChallenge = basicProps.challenge
+  basicProps.browsedChallenge = basicProps.challenge
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />
   )
@@ -83,7 +83,7 @@ test("clicking when inactive signals that user wants to browse", () => {
 })
 
 test("clicking when active challenge signals that user is done browsing", () => {
-  basicProps.browsingChallenge = basicProps.challenge
+  basicProps.browsedChallenge = basicProps.challenge
 
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />

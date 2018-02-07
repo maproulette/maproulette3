@@ -5,7 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <LocatorMap
-    browsingChallenge={
+    browsedChallenge={
         Object {
             "id": 123,
           }
@@ -28,6 +28,7 @@ ShallowWrapper {
             },
           }
     }
+    setChallengeMapBounds={[Function]}
     setLocatorMapBounds={[Function]}
     updateBoundedChallenges={[Function]}
 />,
@@ -45,7 +46,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <Connect(Component)
-          browsingChallenge={
+          browsedChallenge={
                     Object {
                               "id": 123,
                             }
@@ -68,6 +69,7 @@ ShallowWrapper {
                               },
                             }
           }
+          setChallengeMapBounds={[Function]}
           setLocatorMapBounds={[Function]}
           updateBoundedChallenges={[Function]}
 />,
@@ -118,7 +120,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "browsingChallenge": Object {
+          "browsedChallenge": Object {
             "id": 123,
           },
           "layerSourceName": "foo",
@@ -137,6 +139,7 @@ ShallowWrapper {
               },
             },
           },
+          "setChallengeMapBounds": [Function],
           "setLocatorMapBounds": [Function],
           "updateBoundedChallenges": [Function],
         },
@@ -230,7 +233,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <Connect(Component)
-            browsingChallenge={
+            browsedChallenge={
                         Object {
                                     "id": 123,
                                   }
@@ -253,6 +256,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            setChallengeMapBounds={[Function]}
             setLocatorMapBounds={[Function]}
             updateBoundedChallenges={[Function]}
 />,
@@ -303,7 +307,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "browsingChallenge": Object {
+            "browsedChallenge": Object {
               "id": 123,
             },
             "layerSourceName": "foo",
@@ -322,6 +326,7 @@ ShallowWrapper {
                 },
               },
             },
+            "setChallengeMapBounds": [Function],
             "setLocatorMapBounds": [Function],
             "updateBoundedChallenges": [Function],
           },
@@ -440,6 +445,7 @@ ShallowWrapper {
             },
           }
     }
+    setChallengeMapBounds={[Function]}
     setLocatorMapBounds={[Function]}
     updateBoundedChallenges={[Function]}
 />,
@@ -474,6 +480,7 @@ ShallowWrapper {
                               },
                             }
           }
+          setChallengeMapBounds={[Function]}
           setLocatorMapBounds={[Function]}
           updateBoundedChallenges={[Function]}
 />,
@@ -539,6 +546,7 @@ ShallowWrapper {
               },
             },
           },
+          "setChallengeMapBounds": [Function],
           "setLocatorMapBounds": [Function],
           "updateBoundedChallenges": [Function],
         },
@@ -641,6 +649,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            setChallengeMapBounds={[Function]}
             setLocatorMapBounds={[Function]}
             updateBoundedChallenges={[Function]}
 />,
@@ -706,6 +715,7 @@ ShallowWrapper {
                 },
               },
             },
+            "setChallengeMapBounds": [Function],
             "setLocatorMapBounds": [Function],
             "updateBoundedChallenges": [Function],
           },
@@ -799,7 +809,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <LocatorMap
-    browsingChallenge={
+    browsedChallenge={
         Object {
             "id": 123,
           }
@@ -822,6 +832,7 @@ ShallowWrapper {
             },
           }
     }
+    setChallengeMapBounds={[Function]}
     setLocatorMapBounds={[Function]}
     updateBoundedChallenges={[Function]}
 />,
@@ -839,7 +850,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <Connect(Component)
-          browsingChallenge={
+          browsedChallenge={
                     Object {
                               "id": 123,
                             }
@@ -862,6 +873,7 @@ ShallowWrapper {
                               },
                             }
           }
+          setChallengeMapBounds={[Function]}
           setLocatorMapBounds={[Function]}
           updateBoundedChallenges={[Function]}
 />,
@@ -912,7 +924,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "browsingChallenge": Object {
+          "browsedChallenge": Object {
             "id": 123,
           },
           "layerSourceName": "foo",
@@ -931,6 +943,7 @@ ShallowWrapper {
               },
             },
           },
+          "setChallengeMapBounds": [Function],
           "setLocatorMapBounds": [Function],
           "updateBoundedChallenges": [Function],
         },
@@ -1016,7 +1029,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <Connect(Component)
-            browsingChallenge={
+            browsedChallenge={
                         Object {
                                     "id": 123,
                                   }
@@ -1039,6 +1052,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            setChallengeMapBounds={[Function]}
             setLocatorMapBounds={[Function]}
             updateBoundedChallenges={[Function]}
 />,
@@ -1089,7 +1103,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "browsingChallenge": Object {
+            "browsedChallenge": Object {
               "id": 123,
             },
             "layerSourceName": "foo",
@@ -1108,6 +1122,7 @@ ShallowWrapper {
                 },
               },
             },
+            "setChallengeMapBounds": [Function],
             "setLocatorMapBounds": [Function],
             "updateBoundedChallenges": [Function],
           },

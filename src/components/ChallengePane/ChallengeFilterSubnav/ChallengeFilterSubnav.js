@@ -4,8 +4,7 @@ import WithSearchExecution from '../../HOCs/WithSearchExecution/WithSearchExecut
 import SearchBox from '../../SearchBox/SearchBox'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeFilters from '../../HOCs/WithChallengeFilters/WithChallengeFilters'
-import WithMapBoundsState from '../../HOCs/WithMapBounds/WithMapBoundsState'
-import WithMapBoundsDispatch from '../../HOCs/WithMapBounds/WithMapBoundsDispatch'
+import WithMapBounds from '../../HOCs/WithMapBounds/WithMapBounds'
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
 import FilterByLocation from './FilterByLocation'
@@ -48,8 +47,4 @@ export class ChallengeFilterSubnav extends Component {
   }
 }
 
-export default WithChallengeFilters(
-  WithMapBoundsState(
-    WithMapBoundsDispatch(ChallengeFilterSubnav)
-  )
-)
+export default WithChallengeFilters(WithMapBounds(ChallengeFilterSubnav))

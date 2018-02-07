@@ -5,7 +5,8 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeFilters from '../../HOCs/WithChallengeFilters/WithChallengeFilters'
-import WithMapBoundsState from '../../HOCs/WithMapBounds/WithMapBoundsState'
+import WithMapBounds from '../../HOCs/WithMapBounds/WithMapBounds'
+import WithChallenges from '../../HOCs/WithChallenges/WithChallenges'
 import WithFilteredChallenges from '../../HOCs/WithFilteredChallenges/WithFilteredChallenges'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
@@ -76,16 +77,18 @@ ChallengeResultList.propTypes = {
 
 export default function(searchName='challenges') {
   return WithCurrentUser(
-    WithChallengeFilters(
-      WithMapBoundsState(
-        WithFilteredChallenges(
-          WithSearchResults(
-            WithSortedChallenges(
-              ChallengeResultList
+    WithMapBounds(
+      WithChallenges(
+        WithChallengeFilters(
+          WithFilteredChallenges(
+            WithSearchResults(
+              WithSortedChallenges(
+                ChallengeResultList
+              ),
+              searchName,
+              'challenges'
             ),
-            searchName,
-            'challenges'
-          ),
+          )
         )
       )
     )

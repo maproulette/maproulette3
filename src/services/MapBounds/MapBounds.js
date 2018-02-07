@@ -77,6 +77,7 @@ export const toLatLngBounds = function(arrayBounds) {
 
 // redux actions
 const SET_LOCATOR_MAP_BOUNDS = 'SET_LOCATOR_MAP_BOUNDS'
+const SET_CHALLENGE_MAP_BOUNDS = 'SET_CHALLENGE_MAP_BOUNDS'
 const SET_TASK_MAP_BOUNDS = 'SET_TASK_MAP_BOUNDS'
 
 // redux action creators
@@ -100,6 +101,22 @@ export const setLocatorMapBounds = function(bounds, fromUserAction=false) {
     type: SET_LOCATOR_MAP_BOUNDS,
     bounds: fromLatLngBounds(bounds),
     fromUserAction,
+  }
+}
+
+/**
+ * Set the given bounds of the challenge (browsing) map in the redux store as
+ * the current bounds.
+ *
+ * @param bounds - either a LatLngBounds instance or an array of
+ *       [west, south, east, north]
+ */
+export const setChallengeMapBounds = function(challengeId, bounds, zoom) {
+  return {
+    type: SET_CHALLENGE_MAP_BOUNDS,
+    challengeId,
+    bounds: fromLatLngBounds(bounds),
+    zoom,
   }
 }
 
@@ -143,6 +160,19 @@ export const currentMapBounds = function(state=defaultState, action) {
         locator: {
           bounds: action.bounds,
           fromUserAction: action.fromUserAction
+        }
+      },
+    )
+  }
+  else if (action.type === SET_CHALLENGE_MAP_BOUNDS) {
+    return Object.assign(
+      {},
+      state,
+      {
+        challenge: {
+          challengeId: action.challengeId,
+          bounds: action.bounds,
+          zoom: action.zoom,
         }
       },
     )
