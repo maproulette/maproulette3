@@ -16,6 +16,7 @@ beforeEach(() => {
     },
     layerSourceName: "foo",
     setLocatorMapBounds: jest.fn(),
+    setChallengeMapBounds: jest.fn(),
     updateBoundedChallenges: jest.fn(),
   }
 })
@@ -70,7 +71,7 @@ test("rerenders if the challenge being browsed changes", () => {
   )
 
   const newProps = _cloneDeep(basicProps)
-  newProps.browsingChallenge = {id: 456}
+  newProps.browsedChallenge = {id: 456}
 
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })
@@ -98,10 +99,11 @@ test("moving the map signals that the locator map bounds should be updated", () 
 
   wrapper.instance().updateBounds(bounds, zoom, false)
   expect(basicProps.setLocatorMapBounds).toBeCalledWith(bounds, zoom, false)
+  expect(basicProps.setChallengeMapBounds).not.toBeCalled()
 })
 
-test("moving the map does not signal locator update if browsing a challenge", () => {
-  basicProps.browsingChallenge = {id: 123}
+test("moving the map when browsing a challenge updates the challenge bounds", () => {
+  basicProps.browsedChallenge = {id: 123}
   const bounds = [0, 0, 0, 0]
   const zoom = 3
 
@@ -110,6 +112,9 @@ test("moving the map does not signal locator update if browsing a challenge", ()
   )
 
   wrapper.instance().updateBounds(bounds, zoom, false)
+  expect(
+    basicProps.setChallengeMapBounds
+  ).toBeCalledWith(basicProps.browsedChallenge.id, bounds, zoom)
   expect(basicProps.setLocatorMapBounds).not.toBeCalled()
 })
 
@@ -139,7 +144,7 @@ test("moving the map doesn't signal challenges updates if not filtering on map b
 })
 
 test("a busy indicator is displayed if clustered tasks are loading", () => {
-  basicProps.browsingChallenge = {id: 123}
+  basicProps.browsedChallenge = {id: 123}
   basicProps.loadingClusteredTasks = true
 
   const wrapper = shallow(
@@ -152,7 +157,7 @@ test("a busy indicator is displayed if clustered tasks are loading", () => {
 })
 
 test("the busy indicator is removed once tasks are done loading", () => {
-  basicProps.browsingChallenge = {id: 123}
+  basicProps.browsedChallenge = {id: 123}
   basicProps.loadingClusteredTasks = false
 
   const wrapper = shallow(

@@ -33,7 +33,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Connect(Connect(ChallengeFilterSubnav)))
+        <Connect(Connect(ChallengeFilterSubnav))
           intl={
                     Object {
                               "formatMessage": [Function],
@@ -57,16 +57,13 @@ ShallowWrapper {
                     isActive={true}
           >
                     <Connect(Connect(Connect(Connect(Connect(Component)))))
-                              browsingChallenge={null}
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
                                                 }
                               }
                               saveChallenge={[Function]}
-                              startBrowsingChallenge={[Function]}
                               startChallenge={[Function]}
-                              stopBrowsingChallenge={[Function]}
                               unsaveChallenge={[Function]}
                               user={
                                         Object {
@@ -77,15 +74,13 @@ ShallowWrapper {
                     />
           </Sidebar>
           <MapPane>
-                    <Connect(Component)
-                              browsingChallenge={null}
+                    <Connect(Connect(LocatorMap))
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
                                                 }
                               }
                               layerSourceName="Mapbox"
-                              mappedChallenge={null}
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
                               unsaveChallenge={[Function]}
@@ -133,16 +128,13 @@ ShallowWrapper {
               isActive={true}
 >
               <Connect(Connect(Connect(Connect(Connect(Component)))))
-                            browsingChallenge={null}
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
                                                       }
                             }
                             saveChallenge={[Function]}
-                            startBrowsingChallenge={[Function]}
                             startChallenge={[Function]}
-                            stopBrowsingChallenge={[Function]}
                             unsaveChallenge={[Function]}
                             user={
                                           Object {
@@ -153,15 +145,13 @@ ShallowWrapper {
               />
 </Sidebar>,
             <MapPane>
-              <Connect(Component)
-                            browsingChallenge={null}
+              <Connect(Connect(LocatorMap))
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
                                                       }
                             }
                             layerSourceName="Mapbox"
-                            mappedChallenge={null}
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
                             unsaveChallenge={[Function]}
@@ -184,16 +174,13 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <Connect(Connect(Connect(Connect(Connect(Component)))))
-                browsingChallenge={null}
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
                                               }
                 }
                 saveChallenge={[Function]}
-                startBrowsingChallenge={[Function]}
                 startChallenge={[Function]}
-                stopBrowsingChallenge={[Function]}
                 unsaveChallenge={[Function]}
                 user={
                                 Object {
@@ -211,14 +198,11 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "browsingChallenge": null,
                 "intl": Object {
                   "formatMessage": [Function],
                 },
                 "saveChallenge": [Function],
-                "startBrowsingChallenge": [Function],
                 "startChallenge": [Function],
-                "stopBrowsingChallenge": [Function],
                 "unsaveChallenge": [Function],
                 "user": Object {
                   "id": 11,
@@ -236,15 +220,13 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Connect(Component)
-                browsingChallenge={null}
+              "children": <Connect(Connect(LocatorMap))
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
                                               }
                 }
                 layerSourceName="Mapbox"
-                mappedChallenge={null}
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
                 unsaveChallenge={[Function]}
@@ -262,12 +244,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "browsingChallenge": null,
                 "intl": Object {
                   "formatMessage": [Function],
                 },
                 "layerSourceName": "Mapbox",
-                "mappedChallenge": null,
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
                 "unsaveChallenge": [Function],
@@ -295,7 +275,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Connect(Connect(ChallengeFilterSubnav)))
+          <Connect(Connect(ChallengeFilterSubnav))
             intl={
                         Object {
                                     "formatMessage": [Function],
@@ -319,16 +299,13 @@ ShallowWrapper {
                         isActive={true}
             >
                         <Connect(Connect(Connect(Connect(Connect(Component)))))
-                                    browsingChallenge={null}
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
                                                           }
                                     }
                                     saveChallenge={[Function]}
-                                    startBrowsingChallenge={[Function]}
                                     startChallenge={[Function]}
-                                    stopBrowsingChallenge={[Function]}
                                     unsaveChallenge={[Function]}
                                     user={
                                                 Object {
@@ -339,15 +316,13 @@ ShallowWrapper {
                         />
             </Sidebar>
             <MapPane>
-                        <Connect(Component)
-                                    browsingChallenge={null}
+                        <Connect(Connect(LocatorMap))
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
                                                           }
                                     }
                                     layerSourceName="Mapbox"
-                                    mappedChallenge={null}
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
                                     unsaveChallenge={[Function]}
@@ -395,16 +370,13 @@ ShallowWrapper {
                 isActive={true}
 >
                 <Connect(Connect(Connect(Connect(Connect(Component)))))
-                                browsingChallenge={null}
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
                                 saveChallenge={[Function]}
-                                startBrowsingChallenge={[Function]}
                                 startChallenge={[Function]}
-                                stopBrowsingChallenge={[Function]}
                                 unsaveChallenge={[Function]}
                                 user={
                                                 Object {
@@ -415,15 +387,13 @@ ShallowWrapper {
                 />
 </Sidebar>,
               <MapPane>
-                <Connect(Component)
-                                browsingChallenge={null}
+                <Connect(Connect(LocatorMap))
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
                                 layerSourceName="Mapbox"
-                                mappedChallenge={null}
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
                                 unsaveChallenge={[Function]}
@@ -446,16 +416,13 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <Connect(Connect(Connect(Connect(Connect(Component)))))
-                  browsingChallenge={null}
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
                                                     }
                   }
                   saveChallenge={[Function]}
-                  startBrowsingChallenge={[Function]}
                   startChallenge={[Function]}
-                  stopBrowsingChallenge={[Function]}
                   unsaveChallenge={[Function]}
                   user={
                                     Object {
@@ -473,14 +440,11 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "browsingChallenge": null,
                   "intl": Object {
                     "formatMessage": [Function],
                   },
                   "saveChallenge": [Function],
-                  "startBrowsingChallenge": [Function],
                   "startChallenge": [Function],
-                  "stopBrowsingChallenge": [Function],
                   "unsaveChallenge": [Function],
                   "user": Object {
                     "id": 11,
@@ -498,15 +462,13 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Connect(Component)
-                  browsingChallenge={null}
+                "children": <Connect(Connect(LocatorMap))
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
                                                     }
                   }
                   layerSourceName="Mapbox"
-                  mappedChallenge={null}
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
                   unsaveChallenge={[Function]}
@@ -524,12 +486,10 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "browsingChallenge": null,
                   "intl": Object {
                     "formatMessage": [Function],
                   },
                   "layerSourceName": "Mapbox",
-                  "mappedChallenge": null,
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
                   "unsaveChallenge": [Function],

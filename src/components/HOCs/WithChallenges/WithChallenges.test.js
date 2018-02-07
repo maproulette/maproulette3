@@ -57,7 +57,7 @@ test("mapStateToProps maps all entities.challenges when allStatuses prop is true
 
 test("only challenges with available tasks/actions are normally passed through", () => {
   basicState.entities.challenges[0].actions.available = 0
-  const mappedProps = mapStateToProps(basicState)
+  const mappedProps = mapStateToProps(basicState, {})
 
   expect(
     mappedProps.challenges.length
@@ -68,7 +68,7 @@ test("only challenges with available tasks/actions are normally passed through",
 
 test("only enabled challenges are normally passed through", () => {
   basicState.entities.challenges[0].enabled = false
-  const mappedProps = mapStateToProps(basicState)
+  const mappedProps = mapStateToProps(basicState, {})
 
   expect(
     mappedProps.challenges.length
@@ -79,7 +79,7 @@ test("only enabled challenges are normally passed through", () => {
 
 test("only enabled challenges are normally passed through", () => {
   basicState.entities.challenges[0].enabled = false
-  const mappedProps = mapStateToProps(basicState)
+  const mappedProps = mapStateToProps(basicState, {})
 
   expect(
     mappedProps.challenges.length
@@ -90,7 +90,7 @@ test("only enabled challenges are normally passed through", () => {
 
 test("only challenges with a usable status are normally passed through", () => {
   isUsableChallengeStatus.mockReturnValueOnce(false)
-  const mappedProps = mapStateToProps(basicState)
+  const mappedProps = mapStateToProps(basicState, {})
 
   expect(
     mappedProps.challenges.length
@@ -100,7 +100,7 @@ test("only challenges with a usable status are normally passed through", () => {
 })
 
 test("challenges are denormalized before being passed through", () => {
-  const mappedProps = mapStateToProps(basicState)
+  const mappedProps = mapStateToProps(basicState, {})
 
   expect(denormalize).toHaveBeenCalled()
 
@@ -109,21 +109,4 @@ test("challenges are denormalized before being passed through", () => {
   ).toBe(basicState.entities.challenges.length)
 
   expect(mappedProps).toMatchSnapshot()
-})
-
-test("mapDispatchToProps makes the startChallenge() function available", () => {
-   const challenge = basicState.entities.challenges[0]
-   const task = {id: 357}
-   const dispatch = jest.fn(() => Promise.resolve(task))
-   const history = {
-     push: jest.fn(),
-   }
-
-   //loadRandomTaskFromChallenge.mockReturnValue(Promise.resolve(task))
-
-   const mappedProps = mapDispatchToProps(dispatch, {history})
-
-   mappedProps.startChallenge(challenge)
-   expect(dispatch).toBeCalled()
-   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id)
 })

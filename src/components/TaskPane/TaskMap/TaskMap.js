@@ -26,6 +26,27 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskMap extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    // We want to avoid constantly re-rendering, so we only re-render if the
+    // task changes. We care about changes to the task id, its geometries, and
+    // a few settings on the parent challenge.
+    if(_get(nextProps, 'task.id') !== _get(this.props, 'task.id')) {
+      return true
+    }
+
+    if (_get(nextProps, 'task.parent.defaultZoom') !==
+        _get(this.props, 'task.parent.defaultZoom')) {
+      return true
+    }
+
+    if (_get(nextProps, 'task.geometries') !==
+        _get(this.props, 'task.geometries')) {
+      return true
+    }
+
+    return false
+  }
+
   render() {
     if (!this.props.task || !_isObject(this.props.task.parent)) {
       return null

@@ -9,7 +9,7 @@ import { allowedStatusProgressions,
          TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from './TaskCommentInput/TaskCommentInput'
 import SignInButton from '../../../SignInButton/SignInButton'
-import WithMapBoundsState from '../../../HOCs/WithMapBounds/WithMapBoundsState'
+import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 import WithKeyboardShortcuts from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskStatusIndicator from './TaskStatusIndicator/TaskStatusIndicator'
@@ -132,7 +132,7 @@ ActiveTaskControls.defaultProps = {
   editor: {},
 }
 
-export default WithMapBoundsState(
+export default WithMapBounds(
   WithKeyboardShortcuts(
     injectIntl(ActiveTaskControls)
   )

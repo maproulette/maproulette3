@@ -7,7 +7,6 @@ import { point, featureCollection } from '@turf/helpers'
 import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
-import _isEmpty from 'lodash/isEmpty'
 import _isObject from 'lodash/isObject'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
@@ -20,8 +19,7 @@ import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import WithChallengeFilters from '../HOCs/WithChallengeFilters/WithChallengeFilters'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import WithMapBoundsState from '../HOCs/WithMapBounds/WithMapBoundsState'
-import WithMapBoundsDispatch from '../HOCs/WithMapBounds/WithMapBoundsDispatch'
+import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import BusySpinner from '../BusySpinner/BusySpinner'
 
 // Setup child components with necessary HOCs
@@ -60,8 +58,8 @@ export class LocatorMap extends Component {
       return true
     }
 
-    // the browsing challenge has changed, or
-    if (nextProps.browsingChallenge !== this.props.browsingChallenge) {
+    // the browsed challenge has changed, or
+    if (nextProps.browsedChallenge !== this.props.browsedChallenge) {
       return true
     }
 
@@ -100,10 +98,13 @@ export class LocatorMap extends Component {
 
     this.currentBounds = bounds
 
-    // Don't update the locator bounds if we're actively browsing a challenge.
-    // That way we'll naturally return to the map the user had before they
-    // began browsing a challenge.
-    if (_isEmpty(this.props.browsingChallenge)) {
+    // Update either the challenge bounds, if we're actively browsing a
+    // challenge, or the locator bounds if not.
+    if (_isObject(this.props.browsedChallenge)) {
+      this.props.setChallengeMapBounds(this.props.browsedChallenge.id,
+                                       bounds, zoom)
+    }
+    else {
       this.props.setLocatorMapBounds(bounds, zoom, fromUserAction)
 
       if (_get(this.props, 'challengeFilter.location') ===
@@ -119,7 +120,7 @@ export class LocatorMap extends Component {
   }
 
   render() {
-    const isBrowsingChallenge = _isObject(this.props.browsingChallenge)
+    const isBrowsingChallenge = _isObject(this.props.browsedChallenge)
     const isLoadingData = isBrowsingChallenge && this.props.loadingClusteredTasks
 
     const markers = []
@@ -144,8 +145,8 @@ export class LocatorMap extends Component {
 
       // Get the challenge bounding so we know which part of the map to display.
       // Right now API double-nests bounding, but that will likely change.
-      bounding = _get(this.props, 'browsingChallenge.bounding.bounding') ||
-                 _get(this.props, 'browsingChallenge.bounding')
+      bounding = _get(this.props, 'browsedChallenge.bounding.bounding') ||
+                 _get(this.props, 'browsedChallenge.bounding')
 
 
       // If the challenge doesn't have a bounding polygon, build one from the
@@ -161,12 +162,12 @@ export class LocatorMap extends Component {
     }
 
     return (
-      <div key={_get(this.props, 'browsingChallenge.id') || 'locator'}
+      <div key={_get(this.props, 'browsedChallenge.id') || 'locator'}
            className={classNames('full-screen-map', this.props.className)}>
         <LayerToggle {...this.props} />
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}
-                     initialBounds = {(this.props.browsingChallenge && this.currentBounds) ||
+                     initialBounds = {(this.props.browsedChallenge && this.currentBounds) ||
                                       _get(this.props, 'mapBounds.locator.bounds')}
                      zoomControl={false} animate={true}
                      features={bounding}
@@ -193,14 +194,15 @@ LocatorMap.propTypes = {
    */
   mapBounds: PropTypes.object,
   /** The current challenge being browsed, if any */
-  browsingChallenge: PropTypes.object,
-  /** Invoked when the user moves the map, altering the map bounds */
+  browsedChallenge: PropTypes.object,
+  /** Invoked when the user moves the locator map */
   setLocatorMapBounds: PropTypes.func.isRequired,
+  /** Invoked when the user moves the map while browsing a challenge */
+  setChallengeMapBounds: PropTypes.func.isRequired,
   /** Name of default layer to display */
   layerSourceName: PropTypes.string,
   /** The currently enabled challenge filter, if any */
   challengeFilter: PropTypes.object,
 }
 
-export default
-  WithChallengeFilters(WithMapBoundsState(WithMapBoundsDispatch(LocatorMap)))
+export default WithChallengeFilters(WithMapBounds(LocatorMap))

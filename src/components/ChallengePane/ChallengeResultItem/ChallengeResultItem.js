@@ -32,22 +32,22 @@ export class ChallengeResultItem extends Component {
   state = {
     /**
      * Keep track of browsing locally, making UI more responsive. isBrowsing is based
-     * on the browsingChallenge prop, and rendering off that prop would work correctly.
+     * on the browsedChallenge prop, and rendering off that prop would work correctly.
      * But in a long list of challenge results, there can be a small delay between
      * updates to the prop and re-renders, which makes the toggle control feel sluggish.
      * So we instead render based off local state, and toggle local state, while issuing
      * the prop updates in the background. We implement componentWillReceiveProps to
      * ensure our state is synced up with any prop changes.
      **/
-    isBrowsing: _get(this.props, 'browsingChallenge.id') === this.props.challenge.id,
+    isBrowsing: _get(this.props, 'browsedChallenge.id') === this.props.challenge.id,
     /** Set to true when the user indicates they wish to start the challenge */
     isStarting: false,
   }
 
   componentWillReceiveProps(nextProps) {
-    // Ensure isBrowsing state stays synced with browsingChallenge prop.
+    // Ensure isBrowsing state stays synced with browsedChallenge prop.
     this.setState({
-      isBrowsing: _get(nextProps, 'browsingChallenge.id') === this.props.challenge.id
+      isBrowsing: _get(nextProps, 'browsedChallenge.id') === this.props.challenge.id
     })
   }
 
@@ -202,7 +202,7 @@ ChallengeResultItem.propTypes = {
   /** The challenge represented by this item */
   challenge: PropTypes.object.isRequired,
   /** The challenge being actively browsed by the user, if any */
-  browsingChallenge: PropTypes.object,
+  browsedChallenge: PropTypes.object,
   /** Invoked when the user wishes to browse details of this challenge */
   startBrowsingChallenge: PropTypes.func.isRequired,
   /** Invoked if the user explicitly minimizes this challenge's details */

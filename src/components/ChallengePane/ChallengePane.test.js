@@ -1,5 +1,5 @@
 import React from 'react'
-import ChallengePane from './ChallengePane'
+import { ChallengePane } from './ChallengePane'
 import { ChallengeDifficulty }
        from '../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 
