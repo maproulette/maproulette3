@@ -33,7 +33,7 @@ const WithSearchExecution = (WrappedComponent, searchName, searchFunction) =>
     )
   )
 
-const _WithSearchExecution = function(WrappedComponent, searchName, searchFunction) {
+export const _WithSearchExecution = function(WrappedComponent, searchName, searchFunction) {
   return class extends Component {
     fetchResults = _debounce(query => {
         this.props.performSearch(searchName, query, searchFunction)
@@ -48,7 +48,7 @@ const _WithSearchExecution = function(WrappedComponent, searchName, searchFuncti
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   performSearch: (searchName, query, searchProjects) =>
     dispatch(performSearch(searchName, query, searchProjects)),
 })

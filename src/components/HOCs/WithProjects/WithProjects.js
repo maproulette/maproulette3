@@ -6,14 +6,14 @@ import _get from 'lodash/get'
 import { projectSchema } from '../../../services/Project/Project'
 import { fetchProjectChallenges } from '../../../services/Challenge/Challenge'
 
-const mapStateToProps = (state, ownProps) => ({
+export const mapStateToProps = (state, ownProps) => ({
   projects: _compact(_map(_get(state, 'entities.projects', {}),
     project => project.id ?
               denormalize(project, projectSchema(), state.entities) :
               null))
 })
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   fetchProjectChallenges: (projectId) => dispatch(fetchProjectChallenges(projectId)),
 })
 

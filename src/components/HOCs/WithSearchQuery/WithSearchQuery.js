@@ -22,7 +22,7 @@ const WithSearchQuery = (WrappedComponent, searchName) =>
     _WithSearchQuery(WrappedComponent, searchName)
   )
 
-const _WithSearchQuery = function(WrappedComponent, searchName) {
+export const _WithSearchQuery = function(WrappedComponent, searchName) {
   return class extends Component {
     setSearch = (query) => this.props.setSearch(query, searchName)
     clearSearch = () => this.props.clearSearch(searchName)
@@ -48,11 +48,11 @@ const _WithSearchQuery = function(WrappedComponent, searchName) {
   }
 }
 
-const mapStateToProps = state => ({
+export const mapStateToProps = state => ({
   currentSearch: _get(state, 'currentSearch')
 })
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   setSearch: (query, searchName) => dispatch(setSearch(searchName, query)),
   clearSearch: (searchName) => dispatch(clearSearch(searchName)),
 })
