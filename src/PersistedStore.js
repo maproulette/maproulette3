@@ -8,6 +8,7 @@ import { currentUser, userEntities } from './services/User/User'
 import { projectEntities } from './services/Project/Project'
 import { challengeEntities } from './services/Challenge/Challenge'
 import { taskEntities } from './services/Task/Task'
+import { currentClusteredTasks } from './services/Task/ClusteredTask'
 import { commentEntities } from './services/Comment/Comment'
 import { placeEntities } from './services/Place/Place'
 import { currentFilters } from './services/Filter/Filter'
@@ -77,6 +78,12 @@ export const initializePersistedStore = callback => {
     version: process.env.REACT_APP_VERSION_DATAMODEL,
     migrate: createMigrate(dataMigrations, { debug: false }),
     debug: false,
+    blacklist: [ // don't persist
+      'currentStatus',
+      'currentErrors',
+      'openEditor',
+      'currentClusteredTasks',
+    ],
   }
 
   // Create a top-level 'entities' redux reducer that groups together the
@@ -103,6 +110,7 @@ export const initializePersistedStore = callback => {
       currentErrors,
       adminContext,
       currentPreferences,
+      currentClusteredTasks,
       entities,
   })
 

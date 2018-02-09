@@ -57,6 +57,7 @@ export class App extends Component {
         <TopNav />
 
         <Route exact path='/' component={ChallengePane} />
+        <Route path='/browse/challenges/:challengeId?' component={ChallengePane} />
         <Route exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
         <Route exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
         <Route exact path='/task/:taskId' component={CurrentTaskPane} />

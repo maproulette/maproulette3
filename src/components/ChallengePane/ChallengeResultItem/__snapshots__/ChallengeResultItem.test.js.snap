@@ -145,7 +145,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       null,
       Object {
@@ -707,7 +707,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         null,
         Object {
@@ -1345,7 +1345,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       Object {
         "instance": null,
@@ -2034,7 +2034,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         Object {
           "instance": null,
@@ -2766,7 +2766,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       null,
       Object {
@@ -3417,7 +3417,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         null,
         Object {
@@ -4120,7 +4120,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       null,
       Object {
@@ -4771,7 +4771,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         null,
         Object {
@@ -5485,7 +5485,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item is-active",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       null,
       Object {
@@ -6136,7 +6136,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item is-active",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         null,
         Object {
@@ -6839,7 +6839,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       null,
       Object {
@@ -7490,7 +7490,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         null,
         Object {
@@ -8193,7 +8193,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       null,
       Object {
@@ -8844,7 +8844,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         null,
         Object {
@@ -9556,7 +9556,7 @@ ShallowWrapper {
       ],
       "className": "card challenge-list__item",
     },
-    "ref": null,
+    "ref": [Function],
     "rendered": Array [
       null,
       Object {
@@ -10241,7 +10241,7 @@ ShallowWrapper {
         ],
         "className": "card challenge-list__item",
       },
-      "ref": null,
+      "ref": [Function],
       "rendered": Array [
         null,
         Object {
