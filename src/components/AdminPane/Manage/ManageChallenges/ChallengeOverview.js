@@ -3,7 +3,7 @@ import { FormattedMessage,
          FormattedDate } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
-import { CHALLENGE_STATUS_NONE,
+import { ChallengeStatus,
          messagesByStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import ChallengeActivityTimeline
@@ -22,7 +22,7 @@ import messages from './Messages'
 export class ChallengeOverview extends Component {
   render() {
     const status = _get(this.props,
-                        'challenge.status', CHALLENGE_STATUS_NONE)
+                        'challenge.status', ChallengeStatus.none)
 
     return (
       <div className="challenge-overview">
@@ -50,11 +50,13 @@ export class ChallengeOverview extends Component {
             </div>
           </div>
 
-          <div className="view-challenge">
-            <Link to={`/challenge/${this.props.challenge.id}`}>
-              <FormattedMessage {...messages.startChallengeLabel} />
-            </Link>
-          </div>
+          {status !== ChallengeStatus.failed &&
+           <div className="view-challenge">
+             <Link to={`/challenge/${this.props.challenge.id}`}>
+               <FormattedMessage {...messages.startChallengeLabel} />
+             </Link>
+           </div>
+          }
 
           <CompletionMetrics onlyCompleted
                              challenges={this.props.challenge}
