@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _find from 'lodash/find'
-import _isNumber from 'lodash/isNumber'
 import Sidebar from '../../Sidebar/Sidebar'
 import WithManageableChallenges from '../HOCs/WithManageableChallenges/WithManageableChallenges'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
@@ -19,12 +18,13 @@ import './Manage.css'
  */
 export class Manage extends Component {
   render() {
-    const selectedProjectId = _get(this.props, 'match.params.projectId')
+    const selectedProjectId =
+      parseInt(_get(this.props, 'match.params.projectId'), 10)
 
     let selectedProject = null
-    if (_isNumber(selectedProjectId)) {
+    if (!isNaN(selectedProjectId)) {
       selectedProject =
-        _find(this.props.projects, {id: parseInt(selectedProjectId, 10)})
+        _find(this.props.projects, {id: selectedProjectId})
     }
     else if (_get(this.props, 'projects.length', 0) === 1) {
       selectedProject = this.props.projects[0]

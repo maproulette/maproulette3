@@ -322,12 +322,16 @@ const updateUser = function(userId, updateFunction) {
  * @private
  */
 const reduceUsersFurther = function(mergedState, oldState, userEntities) {
-  // The generic reduction will merge arrays, creating a union of values.
-  // We don't want that for savedChallenges: we want to replace the old array
-  // with the new one. One complication is that not all user entities will
+  // The generic reduction will merge arrays, creating a union of values. We
+  // don't want that for user groups or savedChallenges: we want to replace the
+  // old arrays with new ones.
+  //
+  // One complication with savedChallenges is that not all user entities will
   // contain saved challenge data, as that comes from a separate API request.
   // So we only replace the challenge data if the entity contains some.
   for (let entity of userEntities) {
+    mergedState[entity.id].groups = entity.groups
+
     if (_isArray(entity.savedChallenges)) {
       mergedState[entity.id].savedChallenges = entity.savedChallenges
     }
