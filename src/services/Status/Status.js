@@ -3,8 +3,8 @@ import _get from 'lodash/get'
 import _pull from 'lodash/pull'
 
 /**
- * Manage application status so that it can be reflected in
- * various components as appropriate.
+ * Manage application status so that it can be reflected in various components
+ * as appropriate.
  */
 
 // status names

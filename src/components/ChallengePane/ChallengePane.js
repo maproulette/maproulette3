@@ -5,8 +5,11 @@ import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import Sidebar from '../Sidebar/Sidebar'
 import LocatorMap from '../LocatorMap/LocatorMap'
+import ChallengeMap from '../ChallengeMap/ChallengeMap'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
+import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
+import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import './ChallengePane.css'
 
@@ -34,6 +37,7 @@ export class ChallengePane extends Component {
   }
 
   render() {
+    const Map = this.props.browsedChallenge ? ChallengeMap : LocatorMap
     return (
       <span>
         <ChallengeFilterSubnav {...this.props} />
@@ -45,7 +49,7 @@ export class ChallengePane extends Component {
           </Sidebar>
 
           <MapPane>
-            <LocatorMap layerSourceName={MAPBOX_STREETS} {...this.props} />
+            <Map layerSourceName={MAPBOX_STREETS} {...this.props} />
           </MapPane>
         </div>
       </span>
@@ -53,4 +57,4 @@ export class ChallengePane extends Component {
   }
 }
 
-export default WithBrowsedChallenge(ChallengePane)
+export default WithMapBounds(WithChallenges(WithBrowsedChallenge(ChallengePane)))

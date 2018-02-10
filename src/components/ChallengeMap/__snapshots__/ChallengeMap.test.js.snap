@@ -1,0 +1,1181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`a busy indicator is displayed if clustered tasks are loading 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ChallengeMap
+    browsedChallenge={
+        Object {
+            "id": 123,
+          }
+    }
+    clusteredTasks={
+        Object {
+            "challengeId": 123,
+            "loading": true,
+          }
+    }
+    layerSourceName="foo"
+    mapBounds={
+        Object {
+            "challenge": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+              "challengeId": 123,
+            },
+          }
+    }
+    setChallengeMapBounds={[Function]}
+    updateBoundedChallenges={[Function]}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": "123",
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Connect(Component)
+          browsedChallenge={
+                    Object {
+                              "id": 123,
+                            }
+          }
+          clusteredTasks={
+                    Object {
+                              "challengeId": 123,
+                              "loading": true,
+                            }
+          }
+          layerSourceName="foo"
+          mapBounds={
+                    Object {
+                              "challenge": Object {
+                                "bounds": Object {
+                                  "_northEast": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                  "_southWest": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                },
+                                "challengeId": 123,
+                              },
+                            }
+          }
+          setChallengeMapBounds={[Function]}
+          updateBoundedChallenges={[Function]}
+/>,
+        <EnhancedMap
+          animate={true}
+          center={
+                    Object {
+                              "lat": 0,
+                              "lng": 45,
+                            }
+          }
+          features={undefined}
+          initialBounds={null}
+          justFitFeatures={false}
+          maxZoom={18}
+          minZoom={2}
+          onBoundsChange={[Function]}
+          setInitialBounds={false}
+          zoom={3}
+          zoomControl={false}
+>
+          <ZoomControl
+                    position="topright"
+          />
+          <Connect(InjectIntl(SourcedTileLayer))
+                    defaultLayer="foo"
+          />
+</EnhancedMap>,
+        <BusySpinner />,
+      ],
+      "className": "full-screen-map",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "browsedChallenge": Object {
+            "id": 123,
+          },
+          "clusteredTasks": Object {
+            "challengeId": 123,
+            "loading": true,
+          },
+          "layerSourceName": "foo",
+          "mapBounds": Object {
+            "challenge": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+              "challengeId": 123,
+            },
+          },
+          "setChallengeMapBounds": [Function],
+          "updateBoundedChallenges": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "animate": true,
+          "center": Object {
+            "lat": 0,
+            "lng": 45,
+          },
+          "children": Array [
+            <ZoomControl
+              position="topright"
+/>,
+            <Connect(InjectIntl(SourcedTileLayer))
+              defaultLayer="foo"
+/>,
+            false,
+          ],
+          "features": undefined,
+          "initialBounds": null,
+          "justFitFeatures": false,
+          "maxZoom": 18,
+          "minZoom": 2,
+          "onBoundsChange": [Function],
+          "setInitialBounds": false,
+          "zoom": 3,
+          "zoomControl": false,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "position": "topright",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultLayer": "foo",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          false,
+        ],
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {},
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": "123",
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Connect(Component)
+            browsedChallenge={
+                        Object {
+                                    "id": 123,
+                                  }
+            }
+            clusteredTasks={
+                        Object {
+                                    "challengeId": 123,
+                                    "loading": true,
+                                  }
+            }
+            layerSourceName="foo"
+            mapBounds={
+                        Object {
+                                    "challenge": Object {
+                                      "bounds": Object {
+                                        "_northEast": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                        "_southWest": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                      },
+                                      "challengeId": 123,
+                                    },
+                                  }
+            }
+            setChallengeMapBounds={[Function]}
+            updateBoundedChallenges={[Function]}
+/>,
+          <EnhancedMap
+            animate={true}
+            center={
+                        Object {
+                                    "lat": 0,
+                                    "lng": 45,
+                                  }
+            }
+            features={undefined}
+            initialBounds={null}
+            justFitFeatures={false}
+            maxZoom={18}
+            minZoom={2}
+            onBoundsChange={[Function]}
+            setInitialBounds={false}
+            zoom={3}
+            zoomControl={false}
+>
+            <ZoomControl
+                        position="topright"
+            />
+            <Connect(InjectIntl(SourcedTileLayer))
+                        defaultLayer="foo"
+            />
+</EnhancedMap>,
+          <BusySpinner />,
+        ],
+        "className": "full-screen-map",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "browsedChallenge": Object {
+              "id": 123,
+            },
+            "clusteredTasks": Object {
+              "challengeId": 123,
+              "loading": true,
+            },
+            "layerSourceName": "foo",
+            "mapBounds": Object {
+              "challenge": Object {
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                },
+                "challengeId": 123,
+              },
+            },
+            "setChallengeMapBounds": [Function],
+            "updateBoundedChallenges": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "animate": true,
+            "center": Object {
+              "lat": 0,
+              "lng": 45,
+            },
+            "children": Array [
+              <ZoomControl
+                position="topright"
+/>,
+              <Connect(InjectIntl(SourcedTileLayer))
+                defaultLayer="foo"
+/>,
+              false,
+            ],
+            "features": undefined,
+            "initialBounds": null,
+            "justFitFeatures": false,
+            "maxZoom": 18,
+            "minZoom": 2,
+            "onBoundsChange": [Function],
+            "setInitialBounds": false,
+            "zoom": 3,
+            "zoomControl": false,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "position": "topright",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultLayer": "foo",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            false,
+          ],
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {},
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`it renders a full screen map 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ChallengeMap
+    browsedChallenge={
+        Object {
+            "id": 123,
+          }
+    }
+    clusteredTasks={
+        Object {
+            "challengeId": 123,
+            "loading": false,
+          }
+    }
+    layerSourceName="foo"
+    mapBounds={
+        Object {
+            "challenge": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+              "challengeId": 123,
+            },
+          }
+    }
+    setChallengeMapBounds={[Function]}
+    updateBoundedChallenges={[Function]}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": "123",
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Connect(Component)
+          browsedChallenge={
+                    Object {
+                              "id": 123,
+                            }
+          }
+          clusteredTasks={
+                    Object {
+                              "challengeId": 123,
+                              "loading": false,
+                            }
+          }
+          layerSourceName="foo"
+          mapBounds={
+                    Object {
+                              "challenge": Object {
+                                "bounds": Object {
+                                  "_northEast": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                  "_southWest": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                },
+                                "challengeId": 123,
+                              },
+                            }
+          }
+          setChallengeMapBounds={[Function]}
+          updateBoundedChallenges={[Function]}
+/>,
+        <EnhancedMap
+          animate={true}
+          center={
+                    Object {
+                              "lat": 0,
+                              "lng": 45,
+                            }
+          }
+          features={undefined}
+          initialBounds={null}
+          justFitFeatures={false}
+          maxZoom={18}
+          minZoom={2}
+          onBoundsChange={[Function]}
+          setInitialBounds={false}
+          zoom={3}
+          zoomControl={false}
+>
+          <ZoomControl
+                    position="topright"
+          />
+          <Connect(InjectIntl(SourcedTileLayer))
+                    defaultLayer="foo"
+          />
+</EnhancedMap>,
+        false,
+      ],
+      "className": "full-screen-map",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "browsedChallenge": Object {
+            "id": 123,
+          },
+          "clusteredTasks": Object {
+            "challengeId": 123,
+            "loading": false,
+          },
+          "layerSourceName": "foo",
+          "mapBounds": Object {
+            "challenge": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+              "challengeId": 123,
+            },
+          },
+          "setChallengeMapBounds": [Function],
+          "updateBoundedChallenges": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "animate": true,
+          "center": Object {
+            "lat": 0,
+            "lng": 45,
+          },
+          "children": Array [
+            <ZoomControl
+              position="topright"
+/>,
+            <Connect(InjectIntl(SourcedTileLayer))
+              defaultLayer="foo"
+/>,
+            false,
+          ],
+          "features": undefined,
+          "initialBounds": null,
+          "justFitFeatures": false,
+          "maxZoom": 18,
+          "minZoom": 2,
+          "onBoundsChange": [Function],
+          "setInitialBounds": false,
+          "zoom": 3,
+          "zoomControl": false,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "position": "topright",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultLayer": "foo",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          false,
+        ],
+        "type": [Function],
+      },
+      false,
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": "123",
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Connect(Component)
+            browsedChallenge={
+                        Object {
+                                    "id": 123,
+                                  }
+            }
+            clusteredTasks={
+                        Object {
+                                    "challengeId": 123,
+                                    "loading": false,
+                                  }
+            }
+            layerSourceName="foo"
+            mapBounds={
+                        Object {
+                                    "challenge": Object {
+                                      "bounds": Object {
+                                        "_northEast": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                        "_southWest": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                      },
+                                      "challengeId": 123,
+                                    },
+                                  }
+            }
+            setChallengeMapBounds={[Function]}
+            updateBoundedChallenges={[Function]}
+/>,
+          <EnhancedMap
+            animate={true}
+            center={
+                        Object {
+                                    "lat": 0,
+                                    "lng": 45,
+                                  }
+            }
+            features={undefined}
+            initialBounds={null}
+            justFitFeatures={false}
+            maxZoom={18}
+            minZoom={2}
+            onBoundsChange={[Function]}
+            setInitialBounds={false}
+            zoom={3}
+            zoomControl={false}
+>
+            <ZoomControl
+                        position="topright"
+            />
+            <Connect(InjectIntl(SourcedTileLayer))
+                        defaultLayer="foo"
+            />
+</EnhancedMap>,
+          false,
+        ],
+        "className": "full-screen-map",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "browsedChallenge": Object {
+              "id": 123,
+            },
+            "clusteredTasks": Object {
+              "challengeId": 123,
+              "loading": false,
+            },
+            "layerSourceName": "foo",
+            "mapBounds": Object {
+              "challenge": Object {
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                },
+                "challengeId": 123,
+              },
+            },
+            "setChallengeMapBounds": [Function],
+            "updateBoundedChallenges": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "animate": true,
+            "center": Object {
+              "lat": 0,
+              "lng": 45,
+            },
+            "children": Array [
+              <ZoomControl
+                position="topright"
+/>,
+              <Connect(InjectIntl(SourcedTileLayer))
+                defaultLayer="foo"
+/>,
+              false,
+            ],
+            "features": undefined,
+            "initialBounds": null,
+            "justFitFeatures": false,
+            "maxZoom": 18,
+            "minZoom": 2,
+            "onBoundsChange": [Function],
+            "setInitialBounds": false,
+            "zoom": 3,
+            "zoomControl": false,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "position": "topright",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultLayer": "foo",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            false,
+          ],
+          "type": [Function],
+        },
+        false,
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`the busy indicator is removed once tasks are done loading 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ChallengeMap
+    browsedChallenge={
+        Object {
+            "id": 123,
+          }
+    }
+    clusteredTasks={
+        Object {
+            "challengeId": 123,
+            "loading": false,
+          }
+    }
+    layerSourceName="foo"
+    mapBounds={
+        Object {
+            "challenge": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+              "challengeId": 123,
+            },
+          }
+    }
+    setChallengeMapBounds={[Function]}
+    updateBoundedChallenges={[Function]}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": "123",
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Connect(Component)
+          browsedChallenge={
+                    Object {
+                              "id": 123,
+                            }
+          }
+          clusteredTasks={
+                    Object {
+                              "challengeId": 123,
+                              "loading": false,
+                            }
+          }
+          layerSourceName="foo"
+          mapBounds={
+                    Object {
+                              "challenge": Object {
+                                "bounds": Object {
+                                  "_northEast": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                  "_southWest": Object {
+                                    "lat": 0,
+                                    "lng": 0,
+                                  },
+                                },
+                                "challengeId": 123,
+                              },
+                            }
+          }
+          setChallengeMapBounds={[Function]}
+          updateBoundedChallenges={[Function]}
+/>,
+        <EnhancedMap
+          animate={true}
+          center={
+                    Object {
+                              "lat": 0,
+                              "lng": 45,
+                            }
+          }
+          features={undefined}
+          initialBounds={null}
+          justFitFeatures={false}
+          maxZoom={18}
+          minZoom={2}
+          onBoundsChange={[Function]}
+          setInitialBounds={false}
+          zoom={3}
+          zoomControl={false}
+>
+          <ZoomControl
+                    position="topright"
+          />
+          <Connect(InjectIntl(SourcedTileLayer))
+                    defaultLayer="foo"
+          />
+</EnhancedMap>,
+        false,
+      ],
+      "className": "full-screen-map",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "browsedChallenge": Object {
+            "id": 123,
+          },
+          "clusteredTasks": Object {
+            "challengeId": 123,
+            "loading": false,
+          },
+          "layerSourceName": "foo",
+          "mapBounds": Object {
+            "challenge": Object {
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+              },
+              "challengeId": 123,
+            },
+          },
+          "setChallengeMapBounds": [Function],
+          "updateBoundedChallenges": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "animate": true,
+          "center": Object {
+            "lat": 0,
+            "lng": 45,
+          },
+          "children": Array [
+            <ZoomControl
+              position="topright"
+/>,
+            <Connect(InjectIntl(SourcedTileLayer))
+              defaultLayer="foo"
+/>,
+            false,
+          ],
+          "features": undefined,
+          "initialBounds": null,
+          "justFitFeatures": false,
+          "maxZoom": 18,
+          "minZoom": 2,
+          "onBoundsChange": [Function],
+          "setInitialBounds": false,
+          "zoom": 3,
+          "zoomControl": false,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "position": "topright",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultLayer": "foo",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          false,
+        ],
+        "type": [Function],
+      },
+      false,
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": "123",
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Connect(Component)
+            browsedChallenge={
+                        Object {
+                                    "id": 123,
+                                  }
+            }
+            clusteredTasks={
+                        Object {
+                                    "challengeId": 123,
+                                    "loading": false,
+                                  }
+            }
+            layerSourceName="foo"
+            mapBounds={
+                        Object {
+                                    "challenge": Object {
+                                      "bounds": Object {
+                                        "_northEast": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                        "_southWest": Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        },
+                                      },
+                                      "challengeId": 123,
+                                    },
+                                  }
+            }
+            setChallengeMapBounds={[Function]}
+            updateBoundedChallenges={[Function]}
+/>,
+          <EnhancedMap
+            animate={true}
+            center={
+                        Object {
+                                    "lat": 0,
+                                    "lng": 45,
+                                  }
+            }
+            features={undefined}
+            initialBounds={null}
+            justFitFeatures={false}
+            maxZoom={18}
+            minZoom={2}
+            onBoundsChange={[Function]}
+            setInitialBounds={false}
+            zoom={3}
+            zoomControl={false}
+>
+            <ZoomControl
+                        position="topright"
+            />
+            <Connect(InjectIntl(SourcedTileLayer))
+                        defaultLayer="foo"
+            />
+</EnhancedMap>,
+          false,
+        ],
+        "className": "full-screen-map",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "browsedChallenge": Object {
+              "id": 123,
+            },
+            "clusteredTasks": Object {
+              "challengeId": 123,
+              "loading": false,
+            },
+            "layerSourceName": "foo",
+            "mapBounds": Object {
+              "challenge": Object {
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                },
+                "challengeId": 123,
+              },
+            },
+            "setChallengeMapBounds": [Function],
+            "updateBoundedChallenges": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "animate": true,
+            "center": Object {
+              "lat": 0,
+              "lng": 45,
+            },
+            "children": Array [
+              <ZoomControl
+                position="topright"
+/>,
+              <Connect(InjectIntl(SourcedTileLayer))
+                defaultLayer="foo"
+/>,
+              false,
+            ],
+            "features": undefined,
+            "initialBounds": null,
+            "justFitFeatures": false,
+            "maxZoom": 18,
+            "minZoom": 2,
+            "onBoundsChange": [Function],
+            "setInitialBounds": false,
+            "zoom": 3,
+            "zoomControl": false,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "position": "topright",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultLayer": "foo",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            false,
+          ],
+          "type": [Function],
+        },
+        false,
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

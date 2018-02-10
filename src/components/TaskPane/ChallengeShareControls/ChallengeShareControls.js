@@ -20,7 +20,7 @@ export default class ChallengeShareControls extends Component {
     const TwitterIcon = generateShareIcon('twitter')
     const EmailIcon = generateShareIcon('email')
 
-    const shareUrl = `${process.env.REACT_APP_URL}/challenge/${this.props.challenge.id}`
+    const shareUrl = `${process.env.REACT_APP_URL}/browse/challenges/${this.props.challenge.id}`
     const title = process.env.REACT_APP_TITLE
     const hashtag = 'maproulette'
 

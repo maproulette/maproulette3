@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _findIndex from 'lodash/findIndex'
+import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeFilters from '../../HOCs/WithChallengeFilters/WithChallengeFilters'
-import WithMapBounds from '../../HOCs/WithMapBounds/WithMapBounds'
-import WithChallenges from '../../HOCs/WithChallenges/WithChallenges'
+import WithStartChallenge from '../../HOCs/WithStartChallenge/WithStartChallenge'
 import WithFilteredChallenges from '../../HOCs/WithFilteredChallenges/WithFilteredChallenges'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
@@ -26,8 +28,18 @@ import './ChallengeResultList.css'
  */
 export class ChallengeResultList extends Component {
   render() {
+    const challengeResults = this.props.challenges
+
+    // If the user is actively browsing a challenge, include that challenge even if
+    // it didn't pass the filters.
+    if (_isObject(this.props.browsedChallenge)) {
+      if (_findIndex(challengeResults, {id: this.props.browsedChallenge.id}) === -1) {
+        challengeResults.push(this.props.browsedChallenge)
+      }
+    }
+
     let results = null
-    if (this.props.challenges.length === 0) {
+    if (challengeResults.length === 0) {
       results = (
         <div className='challenge-result-list__challenge-list no-results'>
           <span><FormattedMessage {...messages.noResults} /></span>
@@ -38,7 +50,7 @@ export class ChallengeResultList extends Component {
       )
     }
     else {
-      const challenges = this.props.challenges.map(challenge => (
+      const challenges = _map(challengeResults, challenge => (
         <li key={challenge.id}>
           <ChallengeResultItem challenge={challenge} {...this.props} />
         </li>
@@ -77,18 +89,16 @@ ChallengeResultList.propTypes = {
 
 export default function(searchName='challenges') {
   return WithCurrentUser(
-    WithMapBounds(
-      WithChallenges(
-        WithChallengeFilters(
-          WithFilteredChallenges(
-            WithSearchResults(
-              WithSortedChallenges(
-                ChallengeResultList
-              ),
-              searchName,
-              'challenges'
+    WithStartChallenge(
+      WithChallengeFilters(
+        WithFilteredChallenges(
+          WithSearchResults(
+            WithSortedChallenges(
+              ChallengeResultList
             ),
-          )
+            searchName,
+            'challenges'
+          ),
         )
       )
     )

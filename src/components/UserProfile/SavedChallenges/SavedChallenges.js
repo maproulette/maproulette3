@@ -14,7 +14,7 @@ export default class SavedChallenges extends Component {
       _map(_get(this.props, 'user.savedChallenges', []), challenge =>
         <li key={challenge.id} className="columns saved-challenges__challenge">
           <div className="column">
-            <Link to={`/challenge/${challenge.id}`}>
+            <Link to={`/browse/challenges/${challenge.id}`}>
               {challenge.name}
             </Link>
           </div>

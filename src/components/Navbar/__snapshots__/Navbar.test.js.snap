@@ -89,7 +89,7 @@ ShallowWrapper {
                     <Link
                               className="navbar-item"
                               replace={false}
-                              to="/"
+                              to="/browse/challenges"
                     >
                               <span
                                         className="item-text"
@@ -306,7 +306,7 @@ ShallowWrapper {
               <Link
                             className="navbar-item"
                             replace={false}
-                            to="/"
+                            to="/browse/challenges"
               >
                             <span
                                           className="item-text"
@@ -365,7 +365,7 @@ ShallowWrapper {
                 <Link
                   className="navbar-item"
                   replace={false}
-                  to="/"
+                  to="/browse/challenges"
 >
                   <span
                                     className="item-text"
@@ -448,7 +448,7 @@ ShallowWrapper {
 </span>,
                   "className": "navbar-item",
                   "replace": false,
-                  "to": "/",
+                  "to": "/browse/challenges",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -597,7 +597,7 @@ ShallowWrapper {
                         <Link
                                     className="navbar-item"
                                     replace={false}
-                                    to="/"
+                                    to="/browse/challenges"
                         >
                                     <span
                                                 className="item-text"
@@ -814,7 +814,7 @@ ShallowWrapper {
                 <Link
                                 className="navbar-item"
                                 replace={false}
-                                to="/"
+                                to="/browse/challenges"
                 >
                                 <span
                                                 className="item-text"
@@ -873,7 +873,7 @@ ShallowWrapper {
                   <Link
                     className="navbar-item"
                     replace={false}
-                    to="/"
+                    to="/browse/challenges"
 >
                     <span
                                         className="item-text"
@@ -956,7 +956,7 @@ ShallowWrapper {
 </span>,
                     "className": "navbar-item",
                     "replace": false,
-                    "to": "/",
+                    "to": "/browse/challenges",
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1139,7 +1139,7 @@ ShallowWrapper {
                     <Link
                               className="navbar-item"
                               replace={false}
-                              to="/"
+                              to="/browse/challenges"
                     >
                               <span
                                         className="item-text"
@@ -1371,7 +1371,7 @@ ShallowWrapper {
               <Link
                             className="navbar-item"
                             replace={false}
-                            to="/"
+                            to="/browse/challenges"
               >
                             <span
                                           className="item-text"
@@ -1445,7 +1445,7 @@ ShallowWrapper {
                 <Link
                   className="navbar-item"
                   replace={false}
-                  to="/"
+                  to="/browse/challenges"
 >
                   <span
                                     className="item-text"
@@ -1542,7 +1542,7 @@ ShallowWrapper {
 </span>,
                   "className": "navbar-item",
                   "replace": false,
-                  "to": "/",
+                  "to": "/browse/challenges",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -1739,7 +1739,7 @@ ShallowWrapper {
                         <Link
                                     className="navbar-item"
                                     replace={false}
-                                    to="/"
+                                    to="/browse/challenges"
                         >
                                     <span
                                                 className="item-text"
@@ -1971,7 +1971,7 @@ ShallowWrapper {
                 <Link
                                 className="navbar-item"
                                 replace={false}
-                                to="/"
+                                to="/browse/challenges"
                 >
                                 <span
                                                 className="item-text"
@@ -2045,7 +2045,7 @@ ShallowWrapper {
                   <Link
                     className="navbar-item"
                     replace={false}
-                    to="/"
+                    to="/browse/challenges"
 >
                     <span
                                         className="item-text"
@@ -2142,7 +2142,7 @@ ShallowWrapper {
 </span>,
                     "className": "navbar-item",
                     "replace": false,
-                    "to": "/",
+                    "to": "/browse/challenges",
                   },
                   "ref": null,
                   "rendered": Object {

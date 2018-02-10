@@ -231,7 +231,7 @@ ShallowWrapper {
                     >
                               <Link
                                         replace={false}
-                                        to="/challenge/321"
+                                        to="/browse/challenges/321"
                               >
                                         First Challenge
                               </Link>
@@ -260,7 +260,7 @@ ShallowWrapper {
                     >
                               <Link
                                         replace={false}
-                                        to="/challenge/654"
+                                        to="/browse/challenges/654"
                               >
                                         Second Challenge
                               </Link>
@@ -289,7 +289,7 @@ ShallowWrapper {
                     >
                               <Link
                                         replace={false}
-                                        to="/challenge/987"
+                                        to="/browse/challenges/987"
                               >
                                         Third Challenge
                               </Link>
@@ -358,7 +358,7 @@ ShallowWrapper {
               >
                             <Link
                                           replace={false}
-                                          to="/challenge/321"
+                                          to="/browse/challenges/321"
                             >
                                           First Challenge
                             </Link>
@@ -387,7 +387,7 @@ ShallowWrapper {
               >
                             <Link
                                           replace={false}
-                                          to="/challenge/654"
+                                          to="/browse/challenges/654"
                             >
                                           Second Challenge
                             </Link>
@@ -416,7 +416,7 @@ ShallowWrapper {
               >
                             <Link
                                           replace={false}
-                                          to="/challenge/987"
+                                          to="/browse/challenges/987"
                             >
                                           Third Challenge
                             </Link>
@@ -452,7 +452,7 @@ ShallowWrapper {
 >
                   <Link
                                     replace={false}
-                                    to="/challenge/321"
+                                    to="/browse/challenges/321"
                   >
                                     First Challenge
                   </Link>
@@ -484,7 +484,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <Link
                     replace={false}
-                    to="/challenge/321"
+                    to="/browse/challenges/321"
 >
                     First Challenge
 </Link>,
@@ -498,7 +498,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": "First Challenge",
                     "replace": false,
-                    "to": "/challenge/321",
+                    "to": "/browse/challenges/321",
                   },
                   "ref": null,
                   "rendered": "First Challenge",
@@ -571,7 +571,7 @@ ShallowWrapper {
 >
                   <Link
                                     replace={false}
-                                    to="/challenge/654"
+                                    to="/browse/challenges/654"
                   >
                                     Second Challenge
                   </Link>
@@ -603,7 +603,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <Link
                     replace={false}
-                    to="/challenge/654"
+                    to="/browse/challenges/654"
 >
                     Second Challenge
 </Link>,
@@ -617,7 +617,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": "Second Challenge",
                     "replace": false,
-                    "to": "/challenge/654",
+                    "to": "/browse/challenges/654",
                   },
                   "ref": null,
                   "rendered": "Second Challenge",
@@ -690,7 +690,7 @@ ShallowWrapper {
 >
                   <Link
                                     replace={false}
-                                    to="/challenge/987"
+                                    to="/browse/challenges/987"
                   >
                                     Third Challenge
                   </Link>
@@ -722,7 +722,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <Link
                     replace={false}
-                    to="/challenge/987"
+                    to="/browse/challenges/987"
 >
                     Third Challenge
 </Link>,
@@ -736,7 +736,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": "Third Challenge",
                     "replace": false,
-                    "to": "/challenge/987",
+                    "to": "/browse/challenges/987",
                   },
                   "ref": null,
                   "rendered": "Third Challenge",
@@ -829,7 +829,7 @@ ShallowWrapper {
                         >
                                     <Link
                                                 replace={false}
-                                                to="/challenge/321"
+                                                to="/browse/challenges/321"
                                     >
                                                 First Challenge
                                     </Link>
@@ -858,7 +858,7 @@ ShallowWrapper {
                         >
                                     <Link
                                                 replace={false}
-                                                to="/challenge/654"
+                                                to="/browse/challenges/654"
                                     >
                                                 Second Challenge
                                     </Link>
@@ -887,7 +887,7 @@ ShallowWrapper {
                         >
                                     <Link
                                                 replace={false}
-                                                to="/challenge/987"
+                                                to="/browse/challenges/987"
                                     >
                                                 Third Challenge
                                     </Link>
@@ -956,7 +956,7 @@ ShallowWrapper {
                 >
                                 <Link
                                                 replace={false}
-                                                to="/challenge/321"
+                                                to="/browse/challenges/321"
                                 >
                                                 First Challenge
                                 </Link>
@@ -985,7 +985,7 @@ ShallowWrapper {
                 >
                                 <Link
                                                 replace={false}
-                                                to="/challenge/654"
+                                                to="/browse/challenges/654"
                                 >
                                                 Second Challenge
                                 </Link>
@@ -1014,7 +1014,7 @@ ShallowWrapper {
                 >
                                 <Link
                                                 replace={false}
-                                                to="/challenge/987"
+                                                to="/browse/challenges/987"
                                 >
                                                 Third Challenge
                                 </Link>
@@ -1050,7 +1050,7 @@ ShallowWrapper {
 >
                     <Link
                                         replace={false}
-                                        to="/challenge/321"
+                                        to="/browse/challenges/321"
                     >
                                         First Challenge
                     </Link>
@@ -1082,7 +1082,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <Link
                       replace={false}
-                      to="/challenge/321"
+                      to="/browse/challenges/321"
 >
                       First Challenge
 </Link>,
@@ -1096,7 +1096,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": "First Challenge",
                       "replace": false,
-                      "to": "/challenge/321",
+                      "to": "/browse/challenges/321",
                     },
                     "ref": null,
                     "rendered": "First Challenge",
@@ -1169,7 +1169,7 @@ ShallowWrapper {
 >
                     <Link
                                         replace={false}
-                                        to="/challenge/654"
+                                        to="/browse/challenges/654"
                     >
                                         Second Challenge
                     </Link>
@@ -1201,7 +1201,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <Link
                       replace={false}
-                      to="/challenge/654"
+                      to="/browse/challenges/654"
 >
                       Second Challenge
 </Link>,
@@ -1215,7 +1215,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": "Second Challenge",
                       "replace": false,
-                      "to": "/challenge/654",
+                      "to": "/browse/challenges/654",
                     },
                     "ref": null,
                     "rendered": "Second Challenge",
@@ -1288,7 +1288,7 @@ ShallowWrapper {
 >
                     <Link
                                         replace={false}
-                                        to="/challenge/987"
+                                        to="/browse/challenges/987"
                     >
                                         Third Challenge
                     </Link>
@@ -1320,7 +1320,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <Link
                       replace={false}
-                      to="/challenge/987"
+                      to="/browse/challenges/987"
 >
                       Third Challenge
 </Link>,
@@ -1334,7 +1334,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": "Third Challenge",
                       "replace": false,
-                      "to": "/challenge/987",
+                      "to": "/browse/challenges/987",
                     },
                     "ref": null,
                     "rendered": "Third Challenge",

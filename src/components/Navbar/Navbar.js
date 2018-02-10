@@ -41,9 +41,10 @@ export default class Navbar extends Component {
               </span>
             </Link>
 
-            <Link to='/' className="navbar-item">
-              <span className={classNames('item-text',
-                                          {'is-active': this.props.location.pathname === '/'})}>
+            <Link to='/browse/challenges' className="navbar-item">
+              <span className={
+                classNames('item-text',
+                           {'is-active': /\/browse\/challenges/.test(this.props.location.pathname)})}>
                 <FormattedMessage {...messages.results} />
               </span>
             </Link>

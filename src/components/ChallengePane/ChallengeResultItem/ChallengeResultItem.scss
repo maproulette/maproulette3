@@ -7,10 +7,6 @@
   margin-top: 20px;
   border-radius: $radius-medium;
 
-  &:hover {
-    cursor: pointer;
-  }
-
   .challenge-list__item--featured-indicator {
     background-color: $grey-light;
     border-radius: $radius-medium 0 $radius-medium 0;
@@ -103,6 +99,10 @@
         @include arrow($minimizer-arrow-color);
         @include dropdown-arrow();
       }
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
 import _startCase from 'lodash/startCase'
+import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
@@ -44,11 +45,51 @@ export class ChallengeResultItem extends Component {
     isStarting: false,
   }
 
+  componentDidMount() {
+    if (_get(this.props, 'browsedChallenge.id') === this.props.challenge.id) {
+      if (this.node) {
+        this.node.scrollIntoView()
+      }
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // Only re-render under specific conditions:
+
+    // if our state changed, or
+    if (!_isEqual(nextState, this.state)) {
+      return true
+    }
+
+    // if the user object changed, or
+    if (!_isEqual(nextProps.user, this.props.user)) {
+      return true
+    }
+
+    // if the challenge object itself changed, or
+    if (!_isEqual(nextProps.challenge, this.props.challenge)) {
+      return true
+    }
+
+    // if the browsedChallenge changed and it either references our challenge now
+    // or used to before.
+    if (_get(nextProps, 'browsedChallenge.id') !== _get(this.props, 'browsedChallenge.id') &&
+        (_get(nextProps, 'browsedChallenge.id') === this.props.challenge.id ||
+         _get(this.props, 'browsedChallenge.id') === this.props.challenge.id)) {
+      return true
+    }
+
+    return false
+  }
+
   componentWillReceiveProps(nextProps) {
     // Ensure isBrowsing state stays synced with browsedChallenge prop.
-    this.setState({
-      isBrowsing: _get(nextProps, 'browsedChallenge.id') === this.props.challenge.id
-    })
+    const isBrowsing =
+      _get(nextProps, 'browsedChallenge.id') === this.props.challenge.id
+
+    if (this.state.isBrowsing !== isBrowsing) {
+      this.setState({isBrowsing})
+    }
   }
 
   /**
@@ -138,7 +179,8 @@ export class ChallengeResultItem extends Component {
       </div>
 
     return (
-      <div className={classNames('card', 'challenge-list__item',
+      <div ref={node => this.node = node}
+           className={classNames('card', 'challenge-list__item',
                                  {'is-active': this.state.isBrowsing})}>
         {featuredIndicator}
         <header className="card-header" onClick={this.toggleActive}>
