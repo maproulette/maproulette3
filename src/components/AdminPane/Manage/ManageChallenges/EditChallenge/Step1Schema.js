@@ -88,7 +88,7 @@ export const jsSchema = (intl, user) => {
         type: "string",
       }
     },
-    required: ["name"],
+    required: ["name", "instruction"],
   }
 
   // Only show Featured option to superusers
