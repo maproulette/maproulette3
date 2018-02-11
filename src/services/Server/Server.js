@@ -36,8 +36,7 @@ export const fetchContent = function(url, normalizationSchema) {
       else {
         resolve(jsonData)
       }
-    })
-    .catch((error) => {
+    }).catch(error => {
       // 404 is used by the scala server to indicate no results. Treat as
       // successful response with empty data.
       if (error.response && error.response.status === 404) {

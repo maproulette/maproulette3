@@ -26,6 +26,18 @@
   &__task-content {
     .task-content__task-header {
       padding: 0px 30px 20px 30px;
+
+      svg {
+        height: 20px;
+        width: auto;
+      }
+
+      .active-task-details__contact-owner {
+        svg {
+          height: 1em;
+          width: auto;
+        }
+      }
     }
 
     .task-content__task-body {
@@ -119,6 +131,25 @@
   &--project-name {
     font-size: $size-8;
     color: $grey-light;
+  }
+
+  &__contact-owner {
+    color: $grey;
+    font-size: $size-8;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    svg {
+      fill: $grey;
+      height: 1em;
+      width: auto;
+      margin-right: 0.5em;
+    }
+
+    &:hover svg {
+      fill: $grey-darkest;
+    }
   }
 
   &--inset-map {

@@ -48,6 +48,10 @@ const KeyboardReferencePopout =
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ActiveTaskDetails extends Component {
+  state = {
+    contactOwnerUrl: null,
+  }
+
   /**
    * Invoked to toggle minimization of the sidebar
    */
@@ -73,6 +77,29 @@ export class ActiveTaskDetails extends Component {
       this.props.setInstructionsCollapsed(challengeId,
                                           isVirtual,
                                           !this.props.collapseInstructions)
+    }
+  }
+
+  updateContactOwnerUrl = props => {
+    const ownerOSMId = _get(props, 'task.parent.owner')
+    if (_isFinite(ownerOSMId) && ownerOSMId > 0) {
+      props.contactTaskOwnerURL(ownerOSMId).then(url =>
+        this.setState({contactOwnerUrl: url})
+      )
+    }
+    else {
+      this.setState({contactOwnerUrl: null})
+    }
+  }
+
+  componentDidMount() {
+    this.updateContactOwnerUrl(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (_get(nextProps, 'task.parent.owner') !==
+        _get(this.props, 'task.parent.owner')) {
+      this.updateContactOwnerUrl(nextProps)
     }
   }
 
@@ -136,6 +163,15 @@ export class ActiveTaskDetails extends Component {
             <div className="info-popout--project-name">
               {_get(this.props.task, 'parent.parent.displayName')}
             </div>
+
+            {this.state.contactOwnerUrl &&
+            <a className="active-task-details__contact-owner"
+                href={this.state.contactOwnerUrl}
+                target='_blank'>
+              <SvgSymbol viewBox='0 0 20 20' sym="envelope-icon" />
+              <FormattedMessage {...messages.contactOwnerLabel} />
+            </a>
+            }
           </div>
 
           <div className="popout-content__body">
@@ -190,6 +226,15 @@ export class ActiveTaskDetails extends Component {
             <div className="active-task-details--project-name">
               {_get(this.props.task, 'parent.parent.displayName')}
             </div>
+
+            {this.state.contactOwnerUrl &&
+            <a className="active-task-details__contact-owner"
+                href={this.state.contactOwnerUrl}
+                target='_blank'>
+              <SvgSymbol viewBox='0 0 20 20' sym="envelope-icon" />
+              <FormattedMessage {...messages.contactOwnerLabel} />
+            </a>
+            }
           </div>
 
           <div className="task-content__task-body">
