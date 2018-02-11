@@ -10,6 +10,7 @@ import { CHALLENGE_BASEMAP_NONE,
 import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _map from 'lodash/map'
+import _isString from 'lodash/isString'
 import messages from './Messages'
 
 /**
@@ -46,24 +47,27 @@ export const jsSchema = intl => {
         description: intl.formatMessage(messages.defaultZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: _get(process.env, 'REACT_APP_INITIAL_CHALLENGE_DEFAULT_ZOOM',
-                      DEFAULT_ZOOM),
+        default: numericEnvSetting(
+                   'REACT_APP_INITIAL_CHALLENGE_DEFAULT_ZOOM',
+                   DEFAULT_ZOOM),
       },
       minZoom: {
         title: intl.formatMessage(messages.minZoomLabel),
         description: intl.formatMessage(messages.minZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: _get(process.env, 'REACT_APP_INITIAL_CHALLENGE_MIN_ZOOM',
-                      MIN_ZOOM),
+        default: numericEnvSetting(
+                   'REACT_APP_INITIAL_CHALLENGE_MIN_ZOOM',
+                   MIN_ZOOM),
       },
       maxZoom: {
         title: intl.formatMessage(messages.maxZoomLabel),
         description: intl.formatMessage(messages.maxZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
-        default: _get(process.env, 'REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM',
-                      MAX_ZOOM),
+        default: numericEnvSetting(
+                  'REACT_APP_INITIAL_CHALLENGE_MAX_ZOOM',
+                  MAX_ZOOM),
       },
       defaultBasemap: {
         title: intl.formatMessage(messages.defaultBasemapLabel),
@@ -103,4 +107,9 @@ export const uiSchema = {
   defaultBasemap: {
     "ui:widget": "select",
   }
+}
+
+export const numericEnvSetting = (settingName, defaultValue) => {
+  const setting = _get(process.env, settingName, defaultValue)
+  return _isString(setting) ? parseInt(setting, 10) : setting
 }
