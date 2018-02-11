@@ -208,6 +208,25 @@ button.is-primary.is-loading {
   }
 }
 
+// Animations
+.animate-slide-enter {
+  transform: translate(100%,0);
+}
+
+.animate-slide-enter.animate-slide-enter-active {
+  transform: translate(0, 0);
+  transition: transform 1500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-slide-exit {
+  transform: translate(0, 0);
+}
+
+.animate-slide-exit.animate-slide-exit-active {
+  transition: transform 250ms ease-in;
+  transform: translate(-100%, 0);
+}
+
 @import '../node_modules/bulma/bulma.sass';
 @import '../node_modules/bulma-badge/badge.sass';
 @import '../node_modules/bulma-timeline/timeline.sass';
