@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _every from 'lodash/every'
+import _isEmpty from 'lodash/isEmpty'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
 import { challengePassesDifficultyFilter }
@@ -15,7 +16,9 @@ const allFilters = [
   challengePassesLocationFilter,
 ]
 
-export default function WithFilteredChallenges(WrappedComponent) {
+export default function WithFilteredChallenges(WrappedComponent,
+                                               challengesProp='challenges',
+                                               outputProp) {
   return class extends Component {
     challengePassesAllFilters(challenge) {
       return _every(allFilters,
@@ -23,11 +26,15 @@ export default function WithFilteredChallenges(WrappedComponent) {
     }
 
     render() {
-      const filteredChallenges = _filter(this.props.challenges,
+      const filteredChallenges = _filter(this.props[challengesProp],
                                          challenge => this.challengePassesAllFilters(challenge))
 
-      return <WrappedComponent challenges={filteredChallenges}
-                               {..._omit(this.props, 'challenges')} />
+      if (_isEmpty(outputProp)) {
+        outputProp = challengesProp
+      }
+
+      return <WrappedComponent {...{[outputProp]: filteredChallenges}}
+                               {..._omit(this.props, outputProp)} />
     }
   }
 }

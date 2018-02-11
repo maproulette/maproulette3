@@ -14,8 +14,7 @@ import WithStatus from '../HOCs/WithStatus/WithStatus'
 import './ChallengePane.css'
 
 // Setup child components with necessary HOCs
-const ChallengeResults =
-  WithStatus(ChallengeResultList('challenges'))
+const ChallengeResults = WithStatus(ChallengeResultList)
 
 /**
  * ChallengePane represents the top-level view when the user is browsing,

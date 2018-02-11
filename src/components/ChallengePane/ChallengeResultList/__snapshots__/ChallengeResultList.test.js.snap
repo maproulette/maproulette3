@@ -29,6 +29,30 @@ ShallowWrapper {
                 "displayName": "foo",
               },
             },
+            Object {
+              "blurb": "Challenge 311 blurb",
+              "description": "Challenge 311 description",
+              "difficulty": 3,
+              "id": 311,
+              "name": "Challenge 311",
+              "parent": Object {
+                "displayName": "bar",
+              },
+            },
+          ]
+    }
+    filteredChallenges={
+        Array [
+            Object {
+              "blurb": "Challenge 309 blurb",
+              "description": "Challenge 309 description",
+              "difficulty": 3,
+              "id": 309,
+              "name": "Challenge 309",
+              "parent": Object {
+                "displayName": "foo",
+              },
+            },
           ]
     }
     intl={
@@ -62,19 +86,29 @@ ShallowWrapper {
         <div
           className="level challenge-result-list--heading"
 >
-          <div
-                    className="level-left"
+          <h2
+                    className="title is-4"
           >
-                    <h2
-                              className="title is-4"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Challenge.results.heading"
-                                        values={Object {}}
-                              />
-                    </h2>
-          </div>
+                    <FormattedMessage
+                              defaultMessage="Challenges"
+                              id="Challenge.results.heading"
+                              values={Object {}}
+                    />
+          </h2>
+          <button
+                    className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                    onClick={[Function]}
+          >
+                    <SvgSymbol
+                              sym="close-icon"
+                              viewBox="0 0 20 20"
+                    />
+                    <FormattedMessage
+                              defaultMessage="Clear Filters"
+                              id="Challenge.controls.clearFilters.label"
+                              values={Object {}}
+                    />
+          </button>
 </div>,
         <ul
           className="challenge-result-list__challenge-list"
@@ -117,6 +151,30 @@ ShallowWrapper {
                                                       "displayName": "foo",
                                                     },
                                                   },
+                                                  Object {
+                                                    "blurb": "Challenge 311 blurb",
+                                                    "description": "Challenge 311 description",
+                                                    "difficulty": 3,
+                                                    "id": 311,
+                                                    "name": "Challenge 311",
+                                                    "parent": Object {
+                                                      "displayName": "bar",
+                                                    },
+                                                  },
+                                                ]
+                              }
+                              filteredChallenges={
+                                        Array [
+                                                  Object {
+                                                    "blurb": "Challenge 309 blurb",
+                                                    "description": "Challenge 309 description",
+                                                    "difficulty": 3,
+                                                    "id": 309,
+                                                    "name": "Challenge 309",
+                                                    "parent": Object {
+                                                      "displayName": "foo",
+                                                    },
+                                                  },
                                                 ]
                               }
                               intl={
@@ -146,28 +204,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <div
-            className="level-left"
->
+          "children": Array [
             <h2
-                        className="title is-4"
-            >
-                        <FormattedMessage
-                                    defaultMessage="Challenges"
-                                    id="Challenge.results.heading"
-                                    values={Object {}}
-                        />
-            </h2>
-</div>,
-          "className": "level challenge-result-list--heading",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <h2
               className="title is-4"
 >
               <FormattedMessage
@@ -176,10 +214,26 @@ ShallowWrapper {
                             values={Object {}}
               />
 </h2>,
-            "className": "level-left",
-          },
-          "ref": null,
-          "rendered": Object {
+            <button
+              className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+              onClick={[Function]}
+>
+              <SvgSymbol
+                            sym="close-icon"
+                            viewBox="0 0 20 20"
+              />
+              <FormattedMessage
+                            defaultMessage="Clear Filters"
+                            id="Challenge.controls.clearFilters.label"
+                            values={Object {}}
+              />
+</button>,
+          ],
+          "className": "level challenge-result-list--heading",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
@@ -207,8 +261,56 @@ ShallowWrapper {
             },
             "type": "h2",
           },
-          "type": "div",
-        },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <SvgSymbol
+                  sym="close-icon"
+                  viewBox="0 0 20 20"
+/>,
+                <FormattedMessage
+                  defaultMessage="Clear Filters"
+                  id="Challenge.controls.clearFilters.label"
+                  values={Object {}}
+/>,
+              ],
+              "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+              "onClick": [Function],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "sym": "close-icon",
+                  "viewBox": "0 0 20 20",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Clear Filters",
+                  "id": "Challenge.controls.clearFilters.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": "button",
+          },
+        ],
         "type": "div",
       },
       Object {
@@ -244,6 +346,30 @@ ShallowWrapper {
                                                       }
                             }
                             challenges={
+                                          Array [
+                                                        Object {
+                                                          "blurb": "Challenge 309 blurb",
+                                                          "description": "Challenge 309 description",
+                                                          "difficulty": 3,
+                                                          "id": 309,
+                                                          "name": "Challenge 309",
+                                                          "parent": Object {
+                                                            "displayName": "foo",
+                                                          },
+                                                        },
+                                                        Object {
+                                                          "blurb": "Challenge 311 blurb",
+                                                          "description": "Challenge 311 description",
+                                                          "difficulty": 3,
+                                                          "id": 311,
+                                                          "name": "Challenge 311",
+                                                          "parent": Object {
+                                                            "displayName": "bar",
+                                                          },
+                                                        },
+                                                      ]
+                            }
+                            filteredChallenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
@@ -320,6 +446,30 @@ ShallowWrapper {
                                                     "displayName": "foo",
                                                   },
                                                 },
+                                                Object {
+                                                  "blurb": "Challenge 311 blurb",
+                                                  "description": "Challenge 311 description",
+                                                  "difficulty": 3,
+                                                  "id": 311,
+                                                  "name": "Challenge 311",
+                                                  "parent": Object {
+                                                    "displayName": "bar",
+                                                  },
+                                                },
+                                              ]
+                }
+                filteredChallenges={
+                                Array [
+                                                Object {
+                                                  "blurb": "Challenge 309 blurb",
+                                                  "description": "Challenge 309 description",
+                                                  "difficulty": 3,
+                                                  "id": 309,
+                                                  "name": "Challenge 309",
+                                                  "parent": Object {
+                                                    "displayName": "foo",
+                                                  },
+                                                },
                                               ]
                 }
                 intl={
@@ -375,6 +525,28 @@ ShallowWrapper {
                       "displayName": "foo",
                     },
                   },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "difficulty": 3,
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ],
+                "filteredChallenges": Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "difficulty": 3,
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
                 ],
                 "intl": Object {
                   "formatMessage": [Function],
@@ -409,19 +581,29 @@ ShallowWrapper {
           <div
             className="level challenge-result-list--heading"
 >
-            <div
-                        className="level-left"
+            <h2
+                        className="title is-4"
             >
-                        <h2
-                                    className="title is-4"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Challenges"
-                                                id="Challenge.results.heading"
-                                                values={Object {}}
-                                    />
-                        </h2>
-            </div>
+                        <FormattedMessage
+                                    defaultMessage="Challenges"
+                                    id="Challenge.results.heading"
+                                    values={Object {}}
+                        />
+            </h2>
+            <button
+                        className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                        onClick={[Function]}
+            >
+                        <SvgSymbol
+                                    sym="close-icon"
+                                    viewBox="0 0 20 20"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Clear Filters"
+                                    id="Challenge.controls.clearFilters.label"
+                                    values={Object {}}
+                        />
+            </button>
 </div>,
           <ul
             className="challenge-result-list__challenge-list"
@@ -464,6 +646,30 @@ ShallowWrapper {
                                                                 "displayName": "foo",
                                                               },
                                                             },
+                                                            Object {
+                                                              "blurb": "Challenge 311 blurb",
+                                                              "description": "Challenge 311 description",
+                                                              "difficulty": 3,
+                                                              "id": 311,
+                                                              "name": "Challenge 311",
+                                                              "parent": Object {
+                                                                "displayName": "bar",
+                                                              },
+                                                            },
+                                                          ]
+                                    }
+                                    filteredChallenges={
+                                                Array [
+                                                            Object {
+                                                              "blurb": "Challenge 309 blurb",
+                                                              "description": "Challenge 309 description",
+                                                              "difficulty": 3,
+                                                              "id": 309,
+                                                              "name": "Challenge 309",
+                                                              "parent": Object {
+                                                                "displayName": "foo",
+                                                              },
+                                                            },
                                                           ]
                                     }
                                     intl={
@@ -493,28 +699,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <div
-              className="level-left"
->
+            "children": Array [
               <h2
-                            className="title is-4"
-              >
-                            <FormattedMessage
-                                          defaultMessage="Challenges"
-                                          id="Challenge.results.heading"
-                                          values={Object {}}
-                            />
-              </h2>
-</div>,
-            "className": "level challenge-result-list--heading",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <h2
                 className="title is-4"
 >
                 <FormattedMessage
@@ -523,10 +709,26 @@ ShallowWrapper {
                                 values={Object {}}
                 />
 </h2>,
-              "className": "level-left",
-            },
-            "ref": null,
-            "rendered": Object {
+              <button
+                className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                onClick={[Function]}
+>
+                <SvgSymbol
+                                sym="close-icon"
+                                viewBox="0 0 20 20"
+                />
+                <FormattedMessage
+                                defaultMessage="Clear Filters"
+                                id="Challenge.controls.clearFilters.label"
+                                values={Object {}}
+                />
+</button>,
+            ],
+            "className": "level challenge-result-list--heading",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
@@ -554,8 +756,56 @@ ShallowWrapper {
               },
               "type": "h2",
             },
-            "type": "div",
-          },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <SvgSymbol
+                    sym="close-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Clear Filters"
+                    id="Challenge.controls.clearFilters.label"
+                    values={Object {}}
+/>,
+                ],
+                "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "sym": "close-icon",
+                    "viewBox": "0 0 20 20",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Clear Filters",
+                    "id": "Challenge.controls.clearFilters.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "button",
+            },
+          ],
           "type": "div",
         },
         Object {
@@ -591,6 +841,30 @@ ShallowWrapper {
                                                               }
                                 }
                                 challenges={
+                                                Array [
+                                                                Object {
+                                                                  "blurb": "Challenge 309 blurb",
+                                                                  "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 309,
+                                                                  "name": "Challenge 309",
+                                                                  "parent": Object {
+                                                                    "displayName": "foo",
+                                                                  },
+                                                                },
+                                                                Object {
+                                                                  "blurb": "Challenge 311 blurb",
+                                                                  "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 311,
+                                                                  "name": "Challenge 311",
+                                                                  "parent": Object {
+                                                                    "displayName": "bar",
+                                                                  },
+                                                                },
+                                                              ]
+                                }
+                                filteredChallenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
@@ -667,6 +941,30 @@ ShallowWrapper {
                                                           "displayName": "foo",
                                                         },
                                                       },
+                                                      Object {
+                                                        "blurb": "Challenge 311 blurb",
+                                                        "description": "Challenge 311 description",
+                                                        "difficulty": 3,
+                                                        "id": 311,
+                                                        "name": "Challenge 311",
+                                                        "parent": Object {
+                                                          "displayName": "bar",
+                                                        },
+                                                      },
+                                                    ]
+                  }
+                  filteredChallenges={
+                                    Array [
+                                                      Object {
+                                                        "blurb": "Challenge 309 blurb",
+                                                        "description": "Challenge 309 description",
+                                                        "difficulty": 3,
+                                                        "id": 309,
+                                                        "name": "Challenge 309",
+                                                        "parent": Object {
+                                                          "displayName": "foo",
+                                                        },
+                                                      },
                                                     ]
                   }
                   intl={
@@ -712,6 +1010,28 @@ ShallowWrapper {
                     },
                   },
                   "challenges": Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "difficulty": 3,
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "difficulty": 3,
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ],
+                  "filteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
                       "description": "Challenge 309 description",
@@ -786,6 +1106,30 @@ ShallowWrapper {
                 "displayName": "foo",
               },
             },
+            Object {
+              "blurb": "Challenge 311 blurb",
+              "description": "Challenge 311 description",
+              "difficulty": 3,
+              "id": 311,
+              "name": "Challenge 311",
+              "parent": Object {
+                "displayName": "bar",
+              },
+            },
+          ]
+    }
+    filteredChallenges={
+        Array [
+            Object {
+              "blurb": "Challenge 309 blurb",
+              "description": "Challenge 309 description",
+              "difficulty": 3,
+              "id": 309,
+              "name": "Challenge 309",
+              "parent": Object {
+                "displayName": "foo",
+              },
+            },
           ]
     }
     intl={
@@ -819,19 +1163,29 @@ ShallowWrapper {
         <div
           className="level challenge-result-list--heading"
 >
-          <div
-                    className="level-left"
+          <h2
+                    className="title is-4"
           >
-                    <h2
-                              className="title is-4"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Challenge.results.heading"
-                                        values={Object {}}
-                              />
-                    </h2>
-          </div>
+                    <FormattedMessage
+                              defaultMessage="Challenges"
+                              id="Challenge.results.heading"
+                              values={Object {}}
+                    />
+          </h2>
+          <button
+                    className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                    onClick={[Function]}
+          >
+                    <SvgSymbol
+                              sym="close-icon"
+                              viewBox="0 0 20 20"
+                    />
+                    <FormattedMessage
+                              defaultMessage="Clear Filters"
+                              id="Challenge.controls.clearFilters.label"
+                              values={Object {}}
+                    />
+          </button>
 </div>,
         <ul
           className="challenge-result-list__challenge-list"
@@ -874,6 +1228,30 @@ ShallowWrapper {
                                                       "displayName": "foo",
                                                     },
                                                   },
+                                                  Object {
+                                                    "blurb": "Challenge 311 blurb",
+                                                    "description": "Challenge 311 description",
+                                                    "difficulty": 3,
+                                                    "id": 311,
+                                                    "name": "Challenge 311",
+                                                    "parent": Object {
+                                                      "displayName": "bar",
+                                                    },
+                                                  },
+                                                ]
+                              }
+                              filteredChallenges={
+                                        Array [
+                                                  Object {
+                                                    "blurb": "Challenge 309 blurb",
+                                                    "description": "Challenge 309 description",
+                                                    "difficulty": 3,
+                                                    "id": 309,
+                                                    "name": "Challenge 309",
+                                                    "parent": Object {
+                                                      "displayName": "foo",
+                                                    },
+                                                  },
                                                 ]
                               }
                               intl={
@@ -903,28 +1281,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <div
-            className="level-left"
->
+          "children": Array [
             <h2
-                        className="title is-4"
-            >
-                        <FormattedMessage
-                                    defaultMessage="Challenges"
-                                    id="Challenge.results.heading"
-                                    values={Object {}}
-                        />
-            </h2>
-</div>,
-          "className": "level challenge-result-list--heading",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <h2
               className="title is-4"
 >
               <FormattedMessage
@@ -933,10 +1291,26 @@ ShallowWrapper {
                             values={Object {}}
               />
 </h2>,
-            "className": "level-left",
-          },
-          "ref": null,
-          "rendered": Object {
+            <button
+              className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+              onClick={[Function]}
+>
+              <SvgSymbol
+                            sym="close-icon"
+                            viewBox="0 0 20 20"
+              />
+              <FormattedMessage
+                            defaultMessage="Clear Filters"
+                            id="Challenge.controls.clearFilters.label"
+                            values={Object {}}
+              />
+</button>,
+          ],
+          "className": "level challenge-result-list--heading",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
@@ -964,8 +1338,56 @@ ShallowWrapper {
             },
             "type": "h2",
           },
-          "type": "div",
-        },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <SvgSymbol
+                  sym="close-icon"
+                  viewBox="0 0 20 20"
+/>,
+                <FormattedMessage
+                  defaultMessage="Clear Filters"
+                  id="Challenge.controls.clearFilters.label"
+                  values={Object {}}
+/>,
+              ],
+              "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+              "onClick": [Function],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "sym": "close-icon",
+                  "viewBox": "0 0 20 20",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Clear Filters",
+                  "id": "Challenge.controls.clearFilters.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": "button",
+          },
+        ],
         "type": "div",
       },
       Object {
@@ -1001,6 +1423,30 @@ ShallowWrapper {
                                                       }
                             }
                             challenges={
+                                          Array [
+                                                        Object {
+                                                          "blurb": "Challenge 309 blurb",
+                                                          "description": "Challenge 309 description",
+                                                          "difficulty": 3,
+                                                          "id": 309,
+                                                          "name": "Challenge 309",
+                                                          "parent": Object {
+                                                            "displayName": "foo",
+                                                          },
+                                                        },
+                                                        Object {
+                                                          "blurb": "Challenge 311 blurb",
+                                                          "description": "Challenge 311 description",
+                                                          "difficulty": 3,
+                                                          "id": 311,
+                                                          "name": "Challenge 311",
+                                                          "parent": Object {
+                                                            "displayName": "bar",
+                                                          },
+                                                        },
+                                                      ]
+                            }
+                            filteredChallenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
@@ -1077,6 +1523,30 @@ ShallowWrapper {
                                                     "displayName": "foo",
                                                   },
                                                 },
+                                                Object {
+                                                  "blurb": "Challenge 311 blurb",
+                                                  "description": "Challenge 311 description",
+                                                  "difficulty": 3,
+                                                  "id": 311,
+                                                  "name": "Challenge 311",
+                                                  "parent": Object {
+                                                    "displayName": "bar",
+                                                  },
+                                                },
+                                              ]
+                }
+                filteredChallenges={
+                                Array [
+                                                Object {
+                                                  "blurb": "Challenge 309 blurb",
+                                                  "description": "Challenge 309 description",
+                                                  "difficulty": 3,
+                                                  "id": 309,
+                                                  "name": "Challenge 309",
+                                                  "parent": Object {
+                                                    "displayName": "foo",
+                                                  },
+                                                },
                                               ]
                 }
                 intl={
@@ -1132,6 +1602,28 @@ ShallowWrapper {
                       "displayName": "foo",
                     },
                   },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "difficulty": 3,
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ],
+                "filteredChallenges": Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "difficulty": 3,
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
                 ],
                 "intl": Object {
                   "formatMessage": [Function],
@@ -1166,19 +1658,29 @@ ShallowWrapper {
           <div
             className="level challenge-result-list--heading"
 >
-            <div
-                        className="level-left"
+            <h2
+                        className="title is-4"
             >
-                        <h2
-                                    className="title is-4"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Challenges"
-                                                id="Challenge.results.heading"
-                                                values={Object {}}
-                                    />
-                        </h2>
-            </div>
+                        <FormattedMessage
+                                    defaultMessage="Challenges"
+                                    id="Challenge.results.heading"
+                                    values={Object {}}
+                        />
+            </h2>
+            <button
+                        className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                        onClick={[Function]}
+            >
+                        <SvgSymbol
+                                    sym="close-icon"
+                                    viewBox="0 0 20 20"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Clear Filters"
+                                    id="Challenge.controls.clearFilters.label"
+                                    values={Object {}}
+                        />
+            </button>
 </div>,
           <ul
             className="challenge-result-list__challenge-list"
@@ -1221,6 +1723,30 @@ ShallowWrapper {
                                                                 "displayName": "foo",
                                                               },
                                                             },
+                                                            Object {
+                                                              "blurb": "Challenge 311 blurb",
+                                                              "description": "Challenge 311 description",
+                                                              "difficulty": 3,
+                                                              "id": 311,
+                                                              "name": "Challenge 311",
+                                                              "parent": Object {
+                                                                "displayName": "bar",
+                                                              },
+                                                            },
+                                                          ]
+                                    }
+                                    filteredChallenges={
+                                                Array [
+                                                            Object {
+                                                              "blurb": "Challenge 309 blurb",
+                                                              "description": "Challenge 309 description",
+                                                              "difficulty": 3,
+                                                              "id": 309,
+                                                              "name": "Challenge 309",
+                                                              "parent": Object {
+                                                                "displayName": "foo",
+                                                              },
+                                                            },
                                                           ]
                                     }
                                     intl={
@@ -1250,28 +1776,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <div
-              className="level-left"
->
+            "children": Array [
               <h2
-                            className="title is-4"
-              >
-                            <FormattedMessage
-                                          defaultMessage="Challenges"
-                                          id="Challenge.results.heading"
-                                          values={Object {}}
-                            />
-              </h2>
-</div>,
-            "className": "level challenge-result-list--heading",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <h2
                 className="title is-4"
 >
                 <FormattedMessage
@@ -1280,10 +1786,26 @@ ShallowWrapper {
                                 values={Object {}}
                 />
 </h2>,
-              "className": "level-left",
-            },
-            "ref": null,
-            "rendered": Object {
+              <button
+                className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                onClick={[Function]}
+>
+                <SvgSymbol
+                                sym="close-icon"
+                                viewBox="0 0 20 20"
+                />
+                <FormattedMessage
+                                defaultMessage="Clear Filters"
+                                id="Challenge.controls.clearFilters.label"
+                                values={Object {}}
+                />
+</button>,
+            ],
+            "className": "level challenge-result-list--heading",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
@@ -1311,8 +1833,56 @@ ShallowWrapper {
               },
               "type": "h2",
             },
-            "type": "div",
-          },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <SvgSymbol
+                    sym="close-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Clear Filters"
+                    id="Challenge.controls.clearFilters.label"
+                    values={Object {}}
+/>,
+                ],
+                "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "sym": "close-icon",
+                    "viewBox": "0 0 20 20",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Clear Filters",
+                    "id": "Challenge.controls.clearFilters.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "button",
+            },
+          ],
           "type": "div",
         },
         Object {
@@ -1348,6 +1918,30 @@ ShallowWrapper {
                                                               }
                                 }
                                 challenges={
+                                                Array [
+                                                                Object {
+                                                                  "blurb": "Challenge 309 blurb",
+                                                                  "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 309,
+                                                                  "name": "Challenge 309",
+                                                                  "parent": Object {
+                                                                    "displayName": "foo",
+                                                                  },
+                                                                },
+                                                                Object {
+                                                                  "blurb": "Challenge 311 blurb",
+                                                                  "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 311,
+                                                                  "name": "Challenge 311",
+                                                                  "parent": Object {
+                                                                    "displayName": "bar",
+                                                                  },
+                                                                },
+                                                              ]
+                                }
+                                filteredChallenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
@@ -1424,6 +2018,30 @@ ShallowWrapper {
                                                           "displayName": "foo",
                                                         },
                                                       },
+                                                      Object {
+                                                        "blurb": "Challenge 311 blurb",
+                                                        "description": "Challenge 311 description",
+                                                        "difficulty": 3,
+                                                        "id": 311,
+                                                        "name": "Challenge 311",
+                                                        "parent": Object {
+                                                          "displayName": "bar",
+                                                        },
+                                                      },
+                                                    ]
+                  }
+                  filteredChallenges={
+                                    Array [
+                                                      Object {
+                                                        "blurb": "Challenge 309 blurb",
+                                                        "description": "Challenge 309 description",
+                                                        "difficulty": 3,
+                                                        "id": 309,
+                                                        "name": "Challenge 309",
+                                                        "parent": Object {
+                                                          "displayName": "foo",
+                                                        },
+                                                      },
                                                     ]
                   }
                   intl={
@@ -1479,6 +2097,28 @@ ShallowWrapper {
                         "displayName": "foo",
                       },
                     },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "difficulty": 3,
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ],
+                  "filteredChallenges": Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "difficulty": 3,
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
                   ],
                   "intl": Object {
                     "formatMessage": [Function],
@@ -1519,7 +2159,30 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeResultList
-    challenges={Array []}
+    challenges={
+        Array [
+            Object {
+              "blurb": "Challenge 309 blurb",
+              "description": "Challenge 309 description",
+              "difficulty": 3,
+              "id": 309,
+              "name": "Challenge 309",
+              "parent": Object {
+                "displayName": "foo",
+              },
+            },
+            Object {
+              "blurb": "Challenge 311 blurb",
+              "description": "Challenge 311 description",
+              "difficulty": 3,
+              "id": 311,
+              "name": "Challenge 311",
+              "parent": Object {
+                "displayName": "bar",
+              },
+            },
+          ]
+    }
     fetchingChallenges={
         Array [
             Object {
@@ -1544,6 +2207,7 @@ ShallowWrapper {
             },
           ]
     }
+    filteredChallenges={Array []}
     intl={
         Object {
             "formatMessage": [Function],
@@ -1575,19 +2239,29 @@ ShallowWrapper {
         <div
           className="level challenge-result-list--heading"
 >
-          <div
-                    className="level-left"
+          <h2
+                    className="title is-4"
           >
-                    <h2
-                              className="title is-4"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Challenge.results.heading"
-                                        values={Object {}}
-                              />
-                    </h2>
-          </div>
+                    <FormattedMessage
+                              defaultMessage="Challenges"
+                              id="Challenge.results.heading"
+                              values={Object {}}
+                    />
+          </h2>
+          <button
+                    className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                    onClick={[Function]}
+          >
+                    <SvgSymbol
+                              sym="close-icon"
+                              viewBox="0 0 20 20"
+                    />
+                    <FormattedMessage
+                              defaultMessage="Clear Filters"
+                              id="Challenge.controls.clearFilters.label"
+                              values={Object {}}
+                    />
+          </button>
 </div>,
         <div
           className="challenge-result-list__challenge-list no-results"
@@ -1611,28 +2285,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <div
-            className="level-left"
->
+          "children": Array [
             <h2
-                        className="title is-4"
-            >
-                        <FormattedMessage
-                                    defaultMessage="Challenges"
-                                    id="Challenge.results.heading"
-                                    values={Object {}}
-                        />
-            </h2>
-</div>,
-          "className": "level challenge-result-list--heading",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <h2
               className="title is-4"
 >
               <FormattedMessage
@@ -1641,10 +2295,26 @@ ShallowWrapper {
                             values={Object {}}
               />
 </h2>,
-            "className": "level-left",
-          },
-          "ref": null,
-          "rendered": Object {
+            <button
+              className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+              onClick={[Function]}
+>
+              <SvgSymbol
+                            sym="close-icon"
+                            viewBox="0 0 20 20"
+              />
+              <FormattedMessage
+                            defaultMessage="Clear Filters"
+                            id="Challenge.controls.clearFilters.label"
+                            values={Object {}}
+              />
+</button>,
+          ],
+          "className": "level challenge-result-list--heading",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
@@ -1672,8 +2342,56 @@ ShallowWrapper {
             },
             "type": "h2",
           },
-          "type": "div",
-        },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <SvgSymbol
+                  sym="close-icon"
+                  viewBox="0 0 20 20"
+/>,
+                <FormattedMessage
+                  defaultMessage="Clear Filters"
+                  id="Challenge.controls.clearFilters.label"
+                  values={Object {}}
+/>,
+              ],
+              "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+              "onClick": [Function],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "sym": "close-icon",
+                  "viewBox": "0 0 20 20",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Clear Filters",
+                  "id": "Challenge.controls.clearFilters.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": "button",
+          },
+        ],
         "type": "div",
       },
       Object {
@@ -1747,19 +2465,29 @@ ShallowWrapper {
           <div
             className="level challenge-result-list--heading"
 >
-            <div
-                        className="level-left"
+            <h2
+                        className="title is-4"
             >
-                        <h2
-                                    className="title is-4"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Challenges"
-                                                id="Challenge.results.heading"
-                                                values={Object {}}
-                                    />
-                        </h2>
-            </div>
+                        <FormattedMessage
+                                    defaultMessage="Challenges"
+                                    id="Challenge.results.heading"
+                                    values={Object {}}
+                        />
+            </h2>
+            <button
+                        className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                        onClick={[Function]}
+            >
+                        <SvgSymbol
+                                    sym="close-icon"
+                                    viewBox="0 0 20 20"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Clear Filters"
+                                    id="Challenge.controls.clearFilters.label"
+                                    values={Object {}}
+                        />
+            </button>
 </div>,
           <div
             className="challenge-result-list__challenge-list no-results"
@@ -1783,28 +2511,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <div
-              className="level-left"
->
+            "children": Array [
               <h2
-                            className="title is-4"
-              >
-                            <FormattedMessage
-                                          defaultMessage="Challenges"
-                                          id="Challenge.results.heading"
-                                          values={Object {}}
-                            />
-              </h2>
-</div>,
-            "className": "level challenge-result-list--heading",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <h2
                 className="title is-4"
 >
                 <FormattedMessage
@@ -1813,10 +2521,26 @@ ShallowWrapper {
                                 values={Object {}}
                 />
 </h2>,
-              "className": "level-left",
-            },
-            "ref": null,
-            "rendered": Object {
+              <button
+                className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                onClick={[Function]}
+>
+                <SvgSymbol
+                                sym="close-icon"
+                                viewBox="0 0 20 20"
+                />
+                <FormattedMessage
+                                defaultMessage="Clear Filters"
+                                id="Challenge.controls.clearFilters.label"
+                                values={Object {}}
+                />
+</button>,
+            ],
+            "className": "level challenge-result-list--heading",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
@@ -1844,8 +2568,56 @@ ShallowWrapper {
               },
               "type": "h2",
             },
-            "type": "div",
-          },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <SvgSymbol
+                    sym="close-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Clear Filters"
+                    id="Challenge.controls.clearFilters.label"
+                    values={Object {}}
+/>,
+                ],
+                "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "sym": "close-icon",
+                    "viewBox": "0 0 20 20",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Clear Filters",
+                    "id": "Challenge.controls.clearFilters.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "button",
+            },
+          ],
           "type": "div",
         },
         Object {
@@ -1925,7 +2697,31 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeResultList
-    challenges={Array []}
+    challenges={
+        Array [
+            Object {
+              "blurb": "Challenge 309 blurb",
+              "description": "Challenge 309 description",
+              "difficulty": 3,
+              "id": 309,
+              "name": "Challenge 309",
+              "parent": Object {
+                "displayName": "foo",
+              },
+            },
+            Object {
+              "blurb": "Challenge 311 blurb",
+              "description": "Challenge 311 description",
+              "difficulty": 3,
+              "id": 311,
+              "name": "Challenge 311",
+              "parent": Object {
+                "displayName": "bar",
+              },
+            },
+          ]
+    }
+    filteredChallenges={Array []}
     intl={
         Object {
             "formatMessage": [Function],
@@ -1957,19 +2753,29 @@ ShallowWrapper {
         <div
           className="level challenge-result-list--heading"
 >
-          <div
-                    className="level-left"
+          <h2
+                    className="title is-4"
           >
-                    <h2
-                              className="title is-4"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Challenge.results.heading"
-                                        values={Object {}}
-                              />
-                    </h2>
-          </div>
+                    <FormattedMessage
+                              defaultMessage="Challenges"
+                              id="Challenge.results.heading"
+                              values={Object {}}
+                    />
+          </h2>
+          <button
+                    className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                    onClick={[Function]}
+          >
+                    <SvgSymbol
+                              sym="close-icon"
+                              viewBox="0 0 20 20"
+                    />
+                    <FormattedMessage
+                              defaultMessage="Clear Filters"
+                              id="Challenge.controls.clearFilters.label"
+                              values={Object {}}
+                    />
+          </button>
 </div>,
         <div
           className="challenge-result-list__challenge-list no-results"
@@ -1992,28 +2798,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <div
-            className="level-left"
->
+          "children": Array [
             <h2
-                        className="title is-4"
-            >
-                        <FormattedMessage
-                                    defaultMessage="Challenges"
-                                    id="Challenge.results.heading"
-                                    values={Object {}}
-                        />
-            </h2>
-</div>,
-          "className": "level challenge-result-list--heading",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <h2
               className="title is-4"
 >
               <FormattedMessage
@@ -2022,10 +2808,26 @@ ShallowWrapper {
                             values={Object {}}
               />
 </h2>,
-            "className": "level-left",
-          },
-          "ref": null,
-          "rendered": Object {
+            <button
+              className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+              onClick={[Function]}
+>
+              <SvgSymbol
+                            sym="close-icon"
+                            viewBox="0 0 20 20"
+              />
+              <FormattedMessage
+                            defaultMessage="Clear Filters"
+                            id="Challenge.controls.clearFilters.label"
+                            values={Object {}}
+              />
+</button>,
+          ],
+          "className": "level challenge-result-list--heading",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
@@ -2053,8 +2855,56 @@ ShallowWrapper {
             },
             "type": "h2",
           },
-          "type": "div",
-        },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <SvgSymbol
+                  sym="close-icon"
+                  viewBox="0 0 20 20"
+/>,
+                <FormattedMessage
+                  defaultMessage="Clear Filters"
+                  id="Challenge.controls.clearFilters.label"
+                  values={Object {}}
+/>,
+              ],
+              "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+              "onClick": [Function],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "sym": "close-icon",
+                  "viewBox": "0 0 20 20",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Clear Filters",
+                  "id": "Challenge.controls.clearFilters.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": "button",
+          },
+        ],
         "type": "div",
       },
       Object {
@@ -2120,19 +2970,29 @@ ShallowWrapper {
           <div
             className="level challenge-result-list--heading"
 >
-            <div
-                        className="level-left"
+            <h2
+                        className="title is-4"
             >
-                        <h2
-                                    className="title is-4"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Challenges"
-                                                id="Challenge.results.heading"
-                                                values={Object {}}
-                                    />
-                        </h2>
-            </div>
+                        <FormattedMessage
+                                    defaultMessage="Challenges"
+                                    id="Challenge.results.heading"
+                                    values={Object {}}
+                        />
+            </h2>
+            <button
+                        className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                        onClick={[Function]}
+            >
+                        <SvgSymbol
+                                    sym="close-icon"
+                                    viewBox="0 0 20 20"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Clear Filters"
+                                    id="Challenge.controls.clearFilters.label"
+                                    values={Object {}}
+                        />
+            </button>
 </div>,
           <div
             className="challenge-result-list__challenge-list no-results"
@@ -2155,28 +3015,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <div
-              className="level-left"
->
+            "children": Array [
               <h2
-                            className="title is-4"
-              >
-                            <FormattedMessage
-                                          defaultMessage="Challenges"
-                                          id="Challenge.results.heading"
-                                          values={Object {}}
-                            />
-              </h2>
-</div>,
-            "className": "level challenge-result-list--heading",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <h2
                 className="title is-4"
 >
                 <FormattedMessage
@@ -2185,10 +3025,26 @@ ShallowWrapper {
                                 values={Object {}}
                 />
 </h2>,
-              "className": "level-left",
-            },
-            "ref": null,
-            "rendered": Object {
+              <button
+                className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                onClick={[Function]}
+>
+                <SvgSymbol
+                                sym="close-icon"
+                                viewBox="0 0 20 20"
+                />
+                <FormattedMessage
+                                defaultMessage="Clear Filters"
+                                id="Challenge.controls.clearFilters.label"
+                                values={Object {}}
+                />
+</button>,
+            ],
+            "className": "level challenge-result-list--heading",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
@@ -2216,8 +3072,56 @@ ShallowWrapper {
               },
               "type": "h2",
             },
-            "type": "div",
-          },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <SvgSymbol
+                    sym="close-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Clear Filters"
+                    id="Challenge.controls.clearFilters.label"
+                    values={Object {}}
+/>,
+                ],
+                "className": "button is-clear has-svg-icon challenge-result-list__clear-filters-control",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "sym": "close-icon",
+                    "viewBox": "0 0 20 20",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Clear Filters",
+                    "id": "Challenge.controls.clearFilters.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "button",
+            },
+          ],
           "type": "div",
         },
         Object {
@@ -2313,6 +3217,30 @@ ShallowWrapper {
             },
           ]
     }
+    filteredChallenges={
+        Array [
+            Object {
+              "blurb": "Challenge 309 blurb",
+              "description": "Challenge 309 description",
+              "difficulty": 3,
+              "id": 309,
+              "name": "Challenge 309",
+              "parent": Object {
+                "displayName": "foo",
+              },
+            },
+            Object {
+              "blurb": "Challenge 311 blurb",
+              "description": "Challenge 311 description",
+              "difficulty": 3,
+              "id": 311,
+              "name": "Challenge 311",
+              "parent": Object {
+                "displayName": "bar",
+              },
+            },
+          ]
+    }
     intl={
         Object {
             "formatMessage": [Function],
@@ -2344,19 +3272,15 @@ ShallowWrapper {
         <div
           className="level challenge-result-list--heading"
 >
-          <div
-                    className="level-left"
+          <h2
+                    className="title is-4"
           >
-                    <h2
-                              className="title is-4"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Challenge.results.heading"
-                                        values={Object {}}
-                              />
-                    </h2>
-          </div>
+                    <FormattedMessage
+                              defaultMessage="Challenges"
+                              id="Challenge.results.heading"
+                              values={Object {}}
+                    />
+          </h2>
 </div>,
         <ul
           className="challenge-result-list__challenge-list"
@@ -2376,6 +3300,30 @@ ShallowWrapper {
                                                 }
                               }
                               challenges={
+                                        Array [
+                                                  Object {
+                                                    "blurb": "Challenge 309 blurb",
+                                                    "description": "Challenge 309 description",
+                                                    "difficulty": 3,
+                                                    "id": 309,
+                                                    "name": "Challenge 309",
+                                                    "parent": Object {
+                                                      "displayName": "foo",
+                                                    },
+                                                  },
+                                                  Object {
+                                                    "blurb": "Challenge 311 blurb",
+                                                    "description": "Challenge 311 description",
+                                                    "difficulty": 3,
+                                                    "id": 311,
+                                                    "name": "Challenge 311",
+                                                    "parent": Object {
+                                                      "displayName": "bar",
+                                                    },
+                                                  },
+                                                ]
+                              }
+                              filteredChallenges={
                                         Array [
                                                   Object {
                                                     "blurb": "Challenge 309 blurb",
@@ -2453,6 +3401,30 @@ ShallowWrapper {
                                                   },
                                                 ]
                               }
+                              filteredChallenges={
+                                        Array [
+                                                  Object {
+                                                    "blurb": "Challenge 309 blurb",
+                                                    "description": "Challenge 309 description",
+                                                    "difficulty": 3,
+                                                    "id": 309,
+                                                    "name": "Challenge 309",
+                                                    "parent": Object {
+                                                      "displayName": "foo",
+                                                    },
+                                                  },
+                                                  Object {
+                                                    "blurb": "Challenge 311 blurb",
+                                                    "description": "Challenge 311 description",
+                                                    "difficulty": 3,
+                                                    "id": 311,
+                                                    "name": "Challenge 311",
+                                                    "parent": Object {
+                                                      "displayName": "bar",
+                                                    },
+                                                  },
+                                                ]
+                              }
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
@@ -2480,28 +3452,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <div
-            className="level-left"
->
+          "children": Array [
             <h2
-                        className="title is-4"
-            >
-                        <FormattedMessage
-                                    defaultMessage="Challenges"
-                                    id="Challenge.results.heading"
-                                    values={Object {}}
-                        />
-            </h2>
-</div>,
-          "className": "level challenge-result-list--heading",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <h2
               className="title is-4"
 >
               <FormattedMessage
@@ -2510,10 +3462,13 @@ ShallowWrapper {
                             values={Object {}}
               />
 </h2>,
-            "className": "level-left",
-          },
-          "ref": null,
-          "rendered": Object {
+            null,
+          ],
+          "className": "level challenge-result-list--heading",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
@@ -2541,8 +3496,8 @@ ShallowWrapper {
             },
             "type": "h2",
           },
-          "type": "div",
-        },
+          null,
+        ],
         "type": "div",
       },
       Object {
@@ -2566,6 +3521,30 @@ ShallowWrapper {
                                                       }
                             }
                             challenges={
+                                          Array [
+                                                        Object {
+                                                          "blurb": "Challenge 309 blurb",
+                                                          "description": "Challenge 309 description",
+                                                          "difficulty": 3,
+                                                          "id": 309,
+                                                          "name": "Challenge 309",
+                                                          "parent": Object {
+                                                            "displayName": "foo",
+                                                          },
+                                                        },
+                                                        Object {
+                                                          "blurb": "Challenge 311 blurb",
+                                                          "description": "Challenge 311 description",
+                                                          "difficulty": 3,
+                                                          "id": 311,
+                                                          "name": "Challenge 311",
+                                                          "parent": Object {
+                                                            "displayName": "bar",
+                                                          },
+                                                        },
+                                                      ]
+                            }
+                            filteredChallenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
@@ -2620,6 +3599,30 @@ ShallowWrapper {
                                                       }
                             }
                             challenges={
+                                          Array [
+                                                        Object {
+                                                          "blurb": "Challenge 309 blurb",
+                                                          "description": "Challenge 309 description",
+                                                          "difficulty": 3,
+                                                          "id": 309,
+                                                          "name": "Challenge 309",
+                                                          "parent": Object {
+                                                            "displayName": "foo",
+                                                          },
+                                                        },
+                                                        Object {
+                                                          "blurb": "Challenge 311 blurb",
+                                                          "description": "Challenge 311 description",
+                                                          "difficulty": 3,
+                                                          "id": 311,
+                                                          "name": "Challenge 311",
+                                                          "parent": Object {
+                                                            "displayName": "bar",
+                                                          },
+                                                        },
+                                                      ]
+                            }
+                            filteredChallenges={
                                           Array [
                                                         Object {
                                                           "blurb": "Challenge 309 blurb",
@@ -2706,6 +3709,30 @@ ShallowWrapper {
                                                 },
                                               ]
                 }
+                filteredChallenges={
+                                Array [
+                                                Object {
+                                                  "blurb": "Challenge 309 blurb",
+                                                  "description": "Challenge 309 description",
+                                                  "difficulty": 3,
+                                                  "id": 309,
+                                                  "name": "Challenge 309",
+                                                  "parent": Object {
+                                                    "displayName": "foo",
+                                                  },
+                                                },
+                                                Object {
+                                                  "blurb": "Challenge 311 blurb",
+                                                  "description": "Challenge 311 description",
+                                                  "difficulty": 3,
+                                                  "id": 311,
+                                                  "name": "Challenge 311",
+                                                  "parent": Object {
+                                                    "displayName": "bar",
+                                                  },
+                                                },
+                                              ]
+                }
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
@@ -2739,6 +3766,28 @@ ShallowWrapper {
                   },
                 },
                 "challenges": Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "difficulty": 3,
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "difficulty": 3,
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ],
+                "filteredChallenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
                     "description": "Challenge 309 description",
@@ -2819,6 +3868,30 @@ ShallowWrapper {
                                                 },
                                               ]
                 }
+                filteredChallenges={
+                                Array [
+                                                Object {
+                                                  "blurb": "Challenge 309 blurb",
+                                                  "description": "Challenge 309 description",
+                                                  "difficulty": 3,
+                                                  "id": 309,
+                                                  "name": "Challenge 309",
+                                                  "parent": Object {
+                                                    "displayName": "foo",
+                                                  },
+                                                },
+                                                Object {
+                                                  "blurb": "Challenge 311 blurb",
+                                                  "description": "Challenge 311 description",
+                                                  "difficulty": 3,
+                                                  "id": 311,
+                                                  "name": "Challenge 311",
+                                                  "parent": Object {
+                                                    "displayName": "bar",
+                                                  },
+                                                },
+                                              ]
+                }
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
@@ -2873,6 +3946,28 @@ ShallowWrapper {
                     },
                   },
                 ],
+                "filteredChallenges": Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "difficulty": 3,
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "difficulty": 3,
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ],
                 "intl": Object {
                   "formatMessage": [Function],
                 },
@@ -2906,19 +4001,15 @@ ShallowWrapper {
           <div
             className="level challenge-result-list--heading"
 >
-            <div
-                        className="level-left"
+            <h2
+                        className="title is-4"
             >
-                        <h2
-                                    className="title is-4"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Challenges"
-                                                id="Challenge.results.heading"
-                                                values={Object {}}
-                                    />
-                        </h2>
-            </div>
+                        <FormattedMessage
+                                    defaultMessage="Challenges"
+                                    id="Challenge.results.heading"
+                                    values={Object {}}
+                        />
+            </h2>
 </div>,
           <ul
             className="challenge-result-list__challenge-list"
@@ -2938,6 +4029,30 @@ ShallowWrapper {
                                                           }
                                     }
                                     challenges={
+                                                Array [
+                                                            Object {
+                                                              "blurb": "Challenge 309 blurb",
+                                                              "description": "Challenge 309 description",
+                                                              "difficulty": 3,
+                                                              "id": 309,
+                                                              "name": "Challenge 309",
+                                                              "parent": Object {
+                                                                "displayName": "foo",
+                                                              },
+                                                            },
+                                                            Object {
+                                                              "blurb": "Challenge 311 blurb",
+                                                              "description": "Challenge 311 description",
+                                                              "difficulty": 3,
+                                                              "id": 311,
+                                                              "name": "Challenge 311",
+                                                              "parent": Object {
+                                                                "displayName": "bar",
+                                                              },
+                                                            },
+                                                          ]
+                                    }
+                                    filteredChallenges={
                                                 Array [
                                                             Object {
                                                               "blurb": "Challenge 309 blurb",
@@ -3015,6 +4130,30 @@ ShallowWrapper {
                                                             },
                                                           ]
                                     }
+                                    filteredChallenges={
+                                                Array [
+                                                            Object {
+                                                              "blurb": "Challenge 309 blurb",
+                                                              "description": "Challenge 309 description",
+                                                              "difficulty": 3,
+                                                              "id": 309,
+                                                              "name": "Challenge 309",
+                                                              "parent": Object {
+                                                                "displayName": "foo",
+                                                              },
+                                                            },
+                                                            Object {
+                                                              "blurb": "Challenge 311 blurb",
+                                                              "description": "Challenge 311 description",
+                                                              "difficulty": 3,
+                                                              "id": 311,
+                                                              "name": "Challenge 311",
+                                                              "parent": Object {
+                                                                "displayName": "bar",
+                                                              },
+                                                            },
+                                                          ]
+                                    }
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
@@ -3042,28 +4181,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <div
-              className="level-left"
->
+            "children": Array [
               <h2
-                            className="title is-4"
-              >
-                            <FormattedMessage
-                                          defaultMessage="Challenges"
-                                          id="Challenge.results.heading"
-                                          values={Object {}}
-                            />
-              </h2>
-</div>,
-            "className": "level challenge-result-list--heading",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <h2
                 className="title is-4"
 >
                 <FormattedMessage
@@ -3072,10 +4191,13 @@ ShallowWrapper {
                                 values={Object {}}
                 />
 </h2>,
-              "className": "level-left",
-            },
-            "ref": null,
-            "rendered": Object {
+              null,
+            ],
+            "className": "level challenge-result-list--heading",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
@@ -3103,8 +4225,8 @@ ShallowWrapper {
               },
               "type": "h2",
             },
-            "type": "div",
-          },
+            null,
+          ],
           "type": "div",
         },
         Object {
@@ -3128,6 +4250,30 @@ ShallowWrapper {
                                                               }
                                 }
                                 challenges={
+                                                Array [
+                                                                Object {
+                                                                  "blurb": "Challenge 309 blurb",
+                                                                  "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 309,
+                                                                  "name": "Challenge 309",
+                                                                  "parent": Object {
+                                                                    "displayName": "foo",
+                                                                  },
+                                                                },
+                                                                Object {
+                                                                  "blurb": "Challenge 311 blurb",
+                                                                  "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 311,
+                                                                  "name": "Challenge 311",
+                                                                  "parent": Object {
+                                                                    "displayName": "bar",
+                                                                  },
+                                                                },
+                                                              ]
+                                }
+                                filteredChallenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
@@ -3182,6 +4328,30 @@ ShallowWrapper {
                                                               }
                                 }
                                 challenges={
+                                                Array [
+                                                                Object {
+                                                                  "blurb": "Challenge 309 blurb",
+                                                                  "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 309,
+                                                                  "name": "Challenge 309",
+                                                                  "parent": Object {
+                                                                    "displayName": "foo",
+                                                                  },
+                                                                },
+                                                                Object {
+                                                                  "blurb": "Challenge 311 blurb",
+                                                                  "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 311,
+                                                                  "name": "Challenge 311",
+                                                                  "parent": Object {
+                                                                    "displayName": "bar",
+                                                                  },
+                                                                },
+                                                              ]
+                                }
+                                filteredChallenges={
                                                 Array [
                                                                 Object {
                                                                   "blurb": "Challenge 309 blurb",
@@ -3268,6 +4438,30 @@ ShallowWrapper {
                                                       },
                                                     ]
                   }
+                  filteredChallenges={
+                                    Array [
+                                                      Object {
+                                                        "blurb": "Challenge 309 blurb",
+                                                        "description": "Challenge 309 description",
+                                                        "difficulty": 3,
+                                                        "id": 309,
+                                                        "name": "Challenge 309",
+                                                        "parent": Object {
+                                                          "displayName": "foo",
+                                                        },
+                                                      },
+                                                      Object {
+                                                        "blurb": "Challenge 311 blurb",
+                                                        "description": "Challenge 311 description",
+                                                        "difficulty": 3,
+                                                        "id": 311,
+                                                        "name": "Challenge 311",
+                                                        "parent": Object {
+                                                          "displayName": "bar",
+                                                        },
+                                                      },
+                                                    ]
+                  }
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
@@ -3301,6 +4495,28 @@ ShallowWrapper {
                     },
                   },
                   "challenges": Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "difficulty": 3,
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "difficulty": 3,
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ],
+                  "filteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
                       "description": "Challenge 309 description",
@@ -3381,6 +4597,30 @@ ShallowWrapper {
                                                       },
                                                     ]
                   }
+                  filteredChallenges={
+                                    Array [
+                                                      Object {
+                                                        "blurb": "Challenge 309 blurb",
+                                                        "description": "Challenge 309 description",
+                                                        "difficulty": 3,
+                                                        "id": 309,
+                                                        "name": "Challenge 309",
+                                                        "parent": Object {
+                                                          "displayName": "foo",
+                                                        },
+                                                      },
+                                                      Object {
+                                                        "blurb": "Challenge 311 blurb",
+                                                        "description": "Challenge 311 description",
+                                                        "difficulty": 3,
+                                                        "id": 311,
+                                                        "name": "Challenge 311",
+                                                        "parent": Object {
+                                                          "displayName": "bar",
+                                                        },
+                                                      },
+                                                    ]
+                  }
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
@@ -3414,6 +4654,28 @@ ShallowWrapper {
                     },
                   },
                   "challenges": Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "difficulty": 3,
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "difficulty": 3,
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ],
+                  "filteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
                       "description": "Challenge 309 description",
@@ -3499,6 +4761,30 @@ ShallowWrapper {
           ]
     }
     className="my-test"
+    filteredChallenges={
+        Array [
+            Object {
+              "blurb": "Challenge 309 blurb",
+              "description": "Challenge 309 description",
+              "difficulty": 3,
+              "id": 309,
+              "name": "Challenge 309",
+              "parent": Object {
+                "displayName": "foo",
+              },
+            },
+            Object {
+              "blurb": "Challenge 311 blurb",
+              "description": "Challenge 311 description",
+              "difficulty": 3,
+              "id": 311,
+              "name": "Challenge 311",
+              "parent": Object {
+                "displayName": "bar",
+              },
+            },
+          ]
+    }
     intl={
         Object {
             "formatMessage": [Function],
@@ -3530,19 +4816,15 @@ ShallowWrapper {
         <div
           className="level challenge-result-list--heading"
 >
-          <div
-                    className="level-left"
+          <h2
+                    className="title is-4"
           >
-                    <h2
-                              className="title is-4"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Challenge.results.heading"
-                                        values={Object {}}
-                              />
-                    </h2>
-          </div>
+                    <FormattedMessage
+                              defaultMessage="Challenges"
+                              id="Challenge.results.heading"
+                              values={Object {}}
+                    />
+          </h2>
 </div>,
         <ul
           className="challenge-result-list__challenge-list"
@@ -3586,6 +4868,30 @@ ShallowWrapper {
                                                 ]
                               }
                               className="my-test"
+                              filteredChallenges={
+                                        Array [
+                                                  Object {
+                                                    "blurb": "Challenge 309 blurb",
+                                                    "description": "Challenge 309 description",
+                                                    "difficulty": 3,
+                                                    "id": 309,
+                                                    "name": "Challenge 309",
+                                                    "parent": Object {
+                                                      "displayName": "foo",
+                                                    },
+                                                  },
+                                                  Object {
+                                                    "blurb": "Challenge 311 blurb",
+                                                    "description": "Challenge 311 description",
+                                                    "difficulty": 3,
+                                                    "id": 311,
+                                                    "name": "Challenge 311",
+                                                    "parent": Object {
+                                                      "displayName": "bar",
+                                                    },
+                                                  },
+                                                ]
+                              }
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
@@ -3641,6 +4947,30 @@ ShallowWrapper {
                                                 ]
                               }
                               className="my-test"
+                              filteredChallenges={
+                                        Array [
+                                                  Object {
+                                                    "blurb": "Challenge 309 blurb",
+                                                    "description": "Challenge 309 description",
+                                                    "difficulty": 3,
+                                                    "id": 309,
+                                                    "name": "Challenge 309",
+                                                    "parent": Object {
+                                                      "displayName": "foo",
+                                                    },
+                                                  },
+                                                  Object {
+                                                    "blurb": "Challenge 311 blurb",
+                                                    "description": "Challenge 311 description",
+                                                    "difficulty": 3,
+                                                    "id": 311,
+                                                    "name": "Challenge 311",
+                                                    "parent": Object {
+                                                      "displayName": "bar",
+                                                    },
+                                                  },
+                                                ]
+                              }
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
@@ -3668,28 +4998,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <div
-            className="level-left"
->
+          "children": Array [
             <h2
-                        className="title is-4"
-            >
-                        <FormattedMessage
-                                    defaultMessage="Challenges"
-                                    id="Challenge.results.heading"
-                                    values={Object {}}
-                        />
-            </h2>
-</div>,
-          "className": "level challenge-result-list--heading",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <h2
               className="title is-4"
 >
               <FormattedMessage
@@ -3698,10 +5008,13 @@ ShallowWrapper {
                             values={Object {}}
               />
 </h2>,
-            "className": "level-left",
-          },
-          "ref": null,
-          "rendered": Object {
+            null,
+          ],
+          "className": "level challenge-result-list--heading",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
@@ -3729,8 +5042,8 @@ ShallowWrapper {
             },
             "type": "h2",
           },
-          "type": "div",
-        },
+          null,
+        ],
         "type": "div",
       },
       Object {
@@ -3778,6 +5091,30 @@ ShallowWrapper {
                                                       ]
                             }
                             className="my-test"
+                            filteredChallenges={
+                                          Array [
+                                                        Object {
+                                                          "blurb": "Challenge 309 blurb",
+                                                          "description": "Challenge 309 description",
+                                                          "difficulty": 3,
+                                                          "id": 309,
+                                                          "name": "Challenge 309",
+                                                          "parent": Object {
+                                                            "displayName": "foo",
+                                                          },
+                                                        },
+                                                        Object {
+                                                          "blurb": "Challenge 311 blurb",
+                                                          "description": "Challenge 311 description",
+                                                          "difficulty": 3,
+                                                          "id": 311,
+                                                          "name": "Challenge 311",
+                                                          "parent": Object {
+                                                            "displayName": "bar",
+                                                          },
+                                                        },
+                                                      ]
+                            }
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
@@ -3833,6 +5170,30 @@ ShallowWrapper {
                                                       ]
                             }
                             className="my-test"
+                            filteredChallenges={
+                                          Array [
+                                                        Object {
+                                                          "blurb": "Challenge 309 blurb",
+                                                          "description": "Challenge 309 description",
+                                                          "difficulty": 3,
+                                                          "id": 309,
+                                                          "name": "Challenge 309",
+                                                          "parent": Object {
+                                                            "displayName": "foo",
+                                                          },
+                                                        },
+                                                        Object {
+                                                          "blurb": "Challenge 311 blurb",
+                                                          "description": "Challenge 311 description",
+                                                          "difficulty": 3,
+                                                          "id": 311,
+                                                          "name": "Challenge 311",
+                                                          "parent": Object {
+                                                            "displayName": "bar",
+                                                          },
+                                                        },
+                                                      ]
+                            }
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
@@ -3897,6 +5258,30 @@ ShallowWrapper {
                                               ]
                 }
                 className="my-test"
+                filteredChallenges={
+                                Array [
+                                                Object {
+                                                  "blurb": "Challenge 309 blurb",
+                                                  "description": "Challenge 309 description",
+                                                  "difficulty": 3,
+                                                  "id": 309,
+                                                  "name": "Challenge 309",
+                                                  "parent": Object {
+                                                    "displayName": "foo",
+                                                  },
+                                                },
+                                                Object {
+                                                  "blurb": "Challenge 311 blurb",
+                                                  "description": "Challenge 311 description",
+                                                  "difficulty": 3,
+                                                  "id": 311,
+                                                  "name": "Challenge 311",
+                                                  "parent": Object {
+                                                    "displayName": "bar",
+                                                  },
+                                                },
+                                              ]
+                }
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
@@ -3952,6 +5337,28 @@ ShallowWrapper {
                   },
                 ],
                 "className": "my-test",
+                "filteredChallenges": Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "difficulty": 3,
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "difficulty": 3,
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ],
                 "intl": Object {
                   "formatMessage": [Function],
                 },
@@ -4012,6 +5419,30 @@ ShallowWrapper {
                                               ]
                 }
                 className="my-test"
+                filteredChallenges={
+                                Array [
+                                                Object {
+                                                  "blurb": "Challenge 309 blurb",
+                                                  "description": "Challenge 309 description",
+                                                  "difficulty": 3,
+                                                  "id": 309,
+                                                  "name": "Challenge 309",
+                                                  "parent": Object {
+                                                    "displayName": "foo",
+                                                  },
+                                                },
+                                                Object {
+                                                  "blurb": "Challenge 311 blurb",
+                                                  "description": "Challenge 311 description",
+                                                  "difficulty": 3,
+                                                  "id": 311,
+                                                  "name": "Challenge 311",
+                                                  "parent": Object {
+                                                    "displayName": "bar",
+                                                  },
+                                                },
+                                              ]
+                }
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
@@ -4067,6 +5498,28 @@ ShallowWrapper {
                   },
                 ],
                 "className": "my-test",
+                "filteredChallenges": Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "difficulty": 3,
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "difficulty": 3,
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ],
                 "intl": Object {
                   "formatMessage": [Function],
                 },
@@ -4100,19 +5553,15 @@ ShallowWrapper {
           <div
             className="level challenge-result-list--heading"
 >
-            <div
-                        className="level-left"
+            <h2
+                        className="title is-4"
             >
-                        <h2
-                                    className="title is-4"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Challenges"
-                                                id="Challenge.results.heading"
-                                                values={Object {}}
-                                    />
-                        </h2>
-            </div>
+                        <FormattedMessage
+                                    defaultMessage="Challenges"
+                                    id="Challenge.results.heading"
+                                    values={Object {}}
+                        />
+            </h2>
 </div>,
           <ul
             className="challenge-result-list__challenge-list"
@@ -4156,6 +5605,30 @@ ShallowWrapper {
                                                           ]
                                     }
                                     className="my-test"
+                                    filteredChallenges={
+                                                Array [
+                                                            Object {
+                                                              "blurb": "Challenge 309 blurb",
+                                                              "description": "Challenge 309 description",
+                                                              "difficulty": 3,
+                                                              "id": 309,
+                                                              "name": "Challenge 309",
+                                                              "parent": Object {
+                                                                "displayName": "foo",
+                                                              },
+                                                            },
+                                                            Object {
+                                                              "blurb": "Challenge 311 blurb",
+                                                              "description": "Challenge 311 description",
+                                                              "difficulty": 3,
+                                                              "id": 311,
+                                                              "name": "Challenge 311",
+                                                              "parent": Object {
+                                                                "displayName": "bar",
+                                                              },
+                                                            },
+                                                          ]
+                                    }
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
@@ -4211,6 +5684,30 @@ ShallowWrapper {
                                                           ]
                                     }
                                     className="my-test"
+                                    filteredChallenges={
+                                                Array [
+                                                            Object {
+                                                              "blurb": "Challenge 309 blurb",
+                                                              "description": "Challenge 309 description",
+                                                              "difficulty": 3,
+                                                              "id": 309,
+                                                              "name": "Challenge 309",
+                                                              "parent": Object {
+                                                                "displayName": "foo",
+                                                              },
+                                                            },
+                                                            Object {
+                                                              "blurb": "Challenge 311 blurb",
+                                                              "description": "Challenge 311 description",
+                                                              "difficulty": 3,
+                                                              "id": 311,
+                                                              "name": "Challenge 311",
+                                                              "parent": Object {
+                                                                "displayName": "bar",
+                                                              },
+                                                            },
+                                                          ]
+                                    }
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
@@ -4238,28 +5735,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <div
-              className="level-left"
->
+            "children": Array [
               <h2
-                            className="title is-4"
-              >
-                            <FormattedMessage
-                                          defaultMessage="Challenges"
-                                          id="Challenge.results.heading"
-                                          values={Object {}}
-                            />
-              </h2>
-</div>,
-            "className": "level challenge-result-list--heading",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <h2
                 className="title is-4"
 >
                 <FormattedMessage
@@ -4268,10 +5745,13 @@ ShallowWrapper {
                                 values={Object {}}
                 />
 </h2>,
-              "className": "level-left",
-            },
-            "ref": null,
-            "rendered": Object {
+              null,
+            ],
+            "className": "level challenge-result-list--heading",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
@@ -4299,8 +5779,8 @@ ShallowWrapper {
               },
               "type": "h2",
             },
-            "type": "div",
-          },
+            null,
+          ],
           "type": "div",
         },
         Object {
@@ -4348,6 +5828,30 @@ ShallowWrapper {
                                                               ]
                                 }
                                 className="my-test"
+                                filteredChallenges={
+                                                Array [
+                                                                Object {
+                                                                  "blurb": "Challenge 309 blurb",
+                                                                  "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 309,
+                                                                  "name": "Challenge 309",
+                                                                  "parent": Object {
+                                                                    "displayName": "foo",
+                                                                  },
+                                                                },
+                                                                Object {
+                                                                  "blurb": "Challenge 311 blurb",
+                                                                  "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 311,
+                                                                  "name": "Challenge 311",
+                                                                  "parent": Object {
+                                                                    "displayName": "bar",
+                                                                  },
+                                                                },
+                                                              ]
+                                }
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
@@ -4403,6 +5907,30 @@ ShallowWrapper {
                                                               ]
                                 }
                                 className="my-test"
+                                filteredChallenges={
+                                                Array [
+                                                                Object {
+                                                                  "blurb": "Challenge 309 blurb",
+                                                                  "description": "Challenge 309 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 309,
+                                                                  "name": "Challenge 309",
+                                                                  "parent": Object {
+                                                                    "displayName": "foo",
+                                                                  },
+                                                                },
+                                                                Object {
+                                                                  "blurb": "Challenge 311 blurb",
+                                                                  "description": "Challenge 311 description",
+                                                                  "difficulty": 3,
+                                                                  "id": 311,
+                                                                  "name": "Challenge 311",
+                                                                  "parent": Object {
+                                                                    "displayName": "bar",
+                                                                  },
+                                                                },
+                                                              ]
+                                }
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
@@ -4467,6 +5995,30 @@ ShallowWrapper {
                                                     ]
                   }
                   className="my-test"
+                  filteredChallenges={
+                                    Array [
+                                                      Object {
+                                                        "blurb": "Challenge 309 blurb",
+                                                        "description": "Challenge 309 description",
+                                                        "difficulty": 3,
+                                                        "id": 309,
+                                                        "name": "Challenge 309",
+                                                        "parent": Object {
+                                                          "displayName": "foo",
+                                                        },
+                                                      },
+                                                      Object {
+                                                        "blurb": "Challenge 311 blurb",
+                                                        "description": "Challenge 311 description",
+                                                        "difficulty": 3,
+                                                        "id": 311,
+                                                        "name": "Challenge 311",
+                                                        "parent": Object {
+                                                          "displayName": "bar",
+                                                        },
+                                                      },
+                                                    ]
+                  }
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
@@ -4522,6 +6074,28 @@ ShallowWrapper {
                     },
                   ],
                   "className": "my-test",
+                  "filteredChallenges": Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "difficulty": 3,
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "difficulty": 3,
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ],
                   "intl": Object {
                     "formatMessage": [Function],
                   },
@@ -4582,6 +6156,30 @@ ShallowWrapper {
                                                     ]
                   }
                   className="my-test"
+                  filteredChallenges={
+                                    Array [
+                                                      Object {
+                                                        "blurb": "Challenge 309 blurb",
+                                                        "description": "Challenge 309 description",
+                                                        "difficulty": 3,
+                                                        "id": 309,
+                                                        "name": "Challenge 309",
+                                                        "parent": Object {
+                                                          "displayName": "foo",
+                                                        },
+                                                      },
+                                                      Object {
+                                                        "blurb": "Challenge 311 blurb",
+                                                        "description": "Challenge 311 description",
+                                                        "difficulty": 3,
+                                                        "id": 311,
+                                                        "name": "Challenge 311",
+                                                        "parent": Object {
+                                                          "displayName": "bar",
+                                                        },
+                                                      },
+                                                    ]
+                  }
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
@@ -4637,6 +6235,28 @@ ShallowWrapper {
                     },
                   ],
                   "className": "my-test",
+                  "filteredChallenges": Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "difficulty": 3,
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "difficulty": 3,
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ],
                   "intl": Object {
                     "formatMessage": [Function],
                   },
