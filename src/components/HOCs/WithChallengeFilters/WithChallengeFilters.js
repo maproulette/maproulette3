@@ -3,7 +3,8 @@ import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _debounce from 'lodash/debounce'
 import { setFilters,
-         removeFilters } from '../../../services/Filter/Filter'
+         removeFilters,
+         clearFilters } from '../../../services/Filter/Filter'
 import { fetchChallengesWithKeywords } from '../../../services/Challenge/Challenge'
 
 const FILTER_NAME = 'challenge'
@@ -42,6 +43,8 @@ export const mapDispatchToProps = dispatch => ({
 
     dispatch(setFilters(FILTER_NAME, {keywords}))
   },
+
+  clearChallengeFilters: () => dispatch(clearFilters(FILTER_NAME)),
 })
 
 const refreshChallengesWithKeywords = _debounce(

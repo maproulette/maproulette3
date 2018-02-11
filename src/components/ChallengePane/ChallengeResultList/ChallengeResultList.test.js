@@ -4,36 +4,40 @@ import { ChallengeDifficulty }
 import { ChallengeResultList } from './ChallengeResultList'
 import _cloneDeep from 'lodash/cloneDeep'
 
+let challenges = null
 let basicProps = null
 
 beforeEach(() => {
+  challenges = [
+    {
+      id: 309,
+      name: "Challenge 309",
+      blurb: "Challenge 309 blurb",
+      description: "Challenge 309 description",
+      difficulty: ChallengeDifficulty.expert,
+      parent: {
+        displayName: "foo",
+      }
+    },
+    {
+      id: 311,
+      name: "Challenge 311",
+      blurb: "Challenge 311 blurb",
+      description: "Challenge 311 description",
+      difficulty: ChallengeDifficulty.expert,
+      parent: {
+        displayName: "bar",
+      }
+    },
+  ]
+
   basicProps = {
     user: {
       id: 11,
       savedChallenges: [],
     },
-    challenges: [
-      {
-        id: 309,
-        name: "Challenge 309",
-        blurb: "Challenge 309 blurb",
-        description: "Challenge 309 description",
-        difficulty: ChallengeDifficulty.expert,
-        parent: {
-          displayName: "foo",
-        }
-      },
-      {
-        id: 311,
-        name: "Challenge 311",
-        blurb: "Challenge 311 blurb",
-        description: "Challenge 311 description",
-        difficulty: ChallengeDifficulty.expert,
-        parent: {
-          displayName: "bar",
-        }
-      },
-    ],
+    challenges,
+    filteredChallenges: challenges,
     startChallenge: jest.fn(),
     saveChallenge: jest.fn(),
     unsaveChallenge: jest.fn(),
@@ -52,7 +56,7 @@ test("renders with props as expected", () => {
 })
 
 test("renders with no challenges", () => {
-  basicProps.challenges = []
+  basicProps.filteredChallenges = []
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} />
   )
@@ -71,8 +75,8 @@ test("renders with props className in encapsulating div", () => {
 })
 
 test("renders with a busySpinner if props fetchingChallenges", () => {
-  const fetchingChallenges = basicProps.challenges
-  basicProps.challenges = []
+  const fetchingChallenges = basicProps.filteredChallenges
+  basicProps.filteredChallenges = []
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} fetchingChallenges={fetchingChallenges} />
@@ -83,8 +87,8 @@ test("renders with a busySpinner if props fetchingChallenges", () => {
 })
 
 test("always includes actively browsed challenge in the result list", () => {
-  const browsed = basicProps.challenges[0]
-  basicProps.challenges = []
+  const browsed = basicProps.filteredChallenges[0]
+  basicProps.filteredChallenges = []
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} browsedChallenge={browsed} />
@@ -97,8 +101,8 @@ test("always includes actively browsed challenge in the result list", () => {
 })
 
 test("doesn't duplicate actively browsed challenge in the result list", () => {
-  const browsed = basicProps.challenges[0]
-  basicProps.challenges = [browsed]
+  const browsed = basicProps.filteredChallenges[0]
+  basicProps.filteredChallenges = [browsed]
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} browsedChallenge={browsed} />
@@ -108,4 +112,28 @@ test("doesn't duplicate actively browsed challenge in the result list", () => {
   expect(wrapper.find('InjectIntl(ChallengeResultItem)').length).toBe(1)
 
   expect(wrapper).toMatchSnapshot()
+})
+
+test("shows a clear-filters button if some challenges are filtered", () => {
+  basicProps.filteredChallenges = [challenges[0]]
+
+  const wrapper = shallow(
+    <ChallengeResultList {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-result-list__clear-filters-control').exists()
+  ).toBe(true)
+})
+
+test("does not show a clear-filters button if no challenges filtered", () => {
+  basicProps.filteredChallenges = challenges
+
+  const wrapper = shallow(
+    <ChallengeResultList {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-result-list__clear-filters-control').exists()
+  ).not.toBe(true)
 })

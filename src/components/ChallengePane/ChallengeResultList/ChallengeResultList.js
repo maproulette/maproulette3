@@ -13,6 +13,7 @@ import WithFilteredChallenges from '../../HOCs/WithFilteredChallenges/WithFilter
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
 import './ChallengeResultList.css'
@@ -27,8 +28,13 @@ import './ChallengeResultList.css'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeResultList extends Component {
+  clearFilters = () => {
+    this.props.clearChallengeFilters()
+    this.props.searchQueries.challenges.clearSearch()
+  }
+
   render() {
-    const challengeResults = this.props.challenges
+    const challengeResults = this.props.filteredChallenges
 
     // If the user is actively browsing a challenge, include that challenge even if
     // it didn't pass the filters.
@@ -36,6 +42,17 @@ export class ChallengeResultList extends Component {
       if (_findIndex(challengeResults, {id: this.props.browsedChallenge.id}) === -1) {
         challengeResults.push(this.props.browsedChallenge)
       }
+    }
+
+    let clearFiltersControl = null
+    if (this.props.challenges.length > this.props.filteredChallenges.length) {
+      clearFiltersControl = (
+        <button className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
+                onClick={this.clearFilters}>
+          <SvgSymbol viewBox='0 0 20 20' sym="close-icon" />
+          <FormattedMessage {...messages.clearFiltersLabel} />
+        </button>
+      )
     }
 
     let results = null
@@ -66,11 +83,11 @@ export class ChallengeResultList extends Component {
     return (
       <div className={classNames("challenge-result-list", this.props.className)}>
         <div className="level challenge-result-list--heading">
-          <div className="level-left">
-            <h2 className="title is-4">
-              <FormattedMessage {...messages.heading} />
-            </h2>
-          </div>
+          <h2 className="title is-4">
+            <FormattedMessage {...messages.heading} />
+          </h2>
+
+          {clearFiltersControl}
         </div>
 
         {results}
@@ -85,22 +102,25 @@ ChallengeResultList.propTypes = {
    * applied
    */
   challenges: PropTypes.array.isRequired,
+
+  /** Remaining challenges after all filters, searches, etc. applied */
+  filteredChallenges: PropTypes.array.isRequired,
 }
 
-export default function(searchName='challenges') {
-  return WithCurrentUser(
-    WithStartChallenge(
-      WithChallengeFilters(
-        WithFilteredChallenges(
-          WithSearchResults(
-            WithSortedChallenges(
-              ChallengeResultList
-            ),
-            searchName,
-            'challenges'
+export default WithCurrentUser(
+  WithStartChallenge(
+    WithChallengeFilters(
+      WithFilteredChallenges(
+        WithSearchResults(
+          WithSortedChallenges(
+            ChallengeResultList
           ),
-        )
+          'challenges',
+          'filteredChallenges'
+        ),
+        'challenges',
+        'filteredChallenges'
       )
     )
   )
-}
+)
