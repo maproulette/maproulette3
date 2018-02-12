@@ -60,7 +60,7 @@ export default class TaskEditControl extends Component {
   render() {
     const editControlClasses = classNames(
       "button edit-control", this.props.className,
-      {"large-and-wide": !this.props.isMinimized,
+      {"large-and-wide full-width": !this.props.isMinimized,
        "icon-only": this.props.isMinimized})
 
     const editControlContent = [
@@ -96,7 +96,9 @@ export default class TaskEditControl extends Component {
       return (
         <DeactivatableDropdownButton
           className={classNames('editor-dropdown',
-                                {'popout-right': this.props.isMinimized})}
+                                {'full-width': !this.props.isMinimized,
+                                 'popout-right': this.props.isMinimized})}
+          triggerClassName={classNames({'full-width': !this.props.isMinimized})}
           options={editorDropdownOptions} onSelect={this.props.pickEditor}
         >
           <button className={editControlClasses}>

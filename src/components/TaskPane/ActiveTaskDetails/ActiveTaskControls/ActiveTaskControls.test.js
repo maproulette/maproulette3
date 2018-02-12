@@ -34,6 +34,8 @@ beforeEach(() => {
     editTask: jest.fn(),
     completeTask: jest.fn(),
     nextTask: jest.fn(),
+    saveTask: jest.fn(),
+    unsaveTask: jest.fn(),
     setTaskBeingCompleted: jest.fn(),
     closeEditor: jest.fn(),
     intl: {formatMessage: jest.fn()},
@@ -91,6 +93,16 @@ test("a next-task control is not shown if the task is not in a completed status.
   )
 
   expect(wrapper.find('TaskNextControl').exists()).toBe(false)
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("shows track/untrack controls", () => {
+  const wrapper = shallow(
+    <ActiveTaskControls {...basicProps} />
+  )
+
+  expect(wrapper.find('TaskTrackControls').exists()).toBe(true)
 
   expect(wrapper).toMatchSnapshot()
 })

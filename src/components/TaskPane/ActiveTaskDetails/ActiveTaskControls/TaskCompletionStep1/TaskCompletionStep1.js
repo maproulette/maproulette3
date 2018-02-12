@@ -5,7 +5,6 @@ import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import TaskEditControl from '../TaskEditControl/TaskEditControl'
 import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
-import TaskSaveControls from '../TaskSaveControls/TaskSaveControls'
 import './TaskCompletionStep1.css'
 
 
@@ -38,8 +37,6 @@ export default class TaskCompletionStep1 extends Component {
                           className="active-task-controls__skip-control"
                           {..._omit(this.props, 'className')} />
         }
-
-        <TaskSaveControls {..._omit(this.props, 'className')} />
       </div>
     )
   }

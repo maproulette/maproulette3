@@ -78,7 +78,7 @@ ShallowWrapper {
     "nodeType": "class",
     "props": Object {
       "children": <button
-        className="button edit-control large-and-wide"
+        className="button edit-control large-and-wide full-width"
 >
         <span
                 className="control-icon"
@@ -99,7 +99,7 @@ ShallowWrapper {
                 />
         </span>
 </button>,
-      "className": "editor-dropdown",
+      "className": "editor-dropdown full-width",
       "eventTypes": Array [
         "mousedown",
         "touchstart",
@@ -126,6 +126,7 @@ ShallowWrapper {
       "outsideClickIgnoreClass": "ignore-react-onclickoutside",
       "preventDefault": false,
       "stopPropagation": false,
+      "triggerClassName": "full-width",
     },
     "ref": null,
     "rendered": Object {
@@ -153,7 +154,7 @@ ShallowWrapper {
             />
 </span>,
         ],
-        "className": "button edit-control large-and-wide",
+        "className": "button edit-control large-and-wide full-width",
       },
       "ref": null,
       "rendered": Array [
@@ -224,7 +225,7 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "children": <button
-          className="button edit-control large-and-wide"
+          className="button edit-control large-and-wide full-width"
 >
           <span
                     className="control-icon"
@@ -245,7 +246,7 @@ ShallowWrapper {
                     />
           </span>
 </button>,
-        "className": "editor-dropdown",
+        "className": "editor-dropdown full-width",
         "eventTypes": Array [
           "mousedown",
           "touchstart",
@@ -272,6 +273,7 @@ ShallowWrapper {
         "outsideClickIgnoreClass": "ignore-react-onclickoutside",
         "preventDefault": false,
         "stopPropagation": false,
+        "triggerClassName": "full-width",
       },
       "ref": null,
       "rendered": Object {
@@ -299,7 +301,7 @@ ShallowWrapper {
               />
 </span>,
           ],
-          "className": "button edit-control large-and-wide",
+          "className": "button edit-control large-and-wide full-width",
         },
         "ref": null,
         "rendered": Array [
@@ -473,7 +475,7 @@ ShallowWrapper {
           />
 </span>,
       ],
-      "className": "button edit-control large-and-wide",
+      "className": "button edit-control large-and-wide full-width",
       "onClick": [Function],
     },
     "ref": null,
@@ -562,7 +564,7 @@ ShallowWrapper {
             />
 </span>,
         ],
-        "className": "button edit-control large-and-wide",
+        "className": "button edit-control large-and-wide full-width",
         "onClick": [Function],
       },
       "ref": null,
@@ -735,7 +737,7 @@ ShallowWrapper {
           />
 </span>,
       ],
-      "className": "button edit-control large-and-wide",
+      "className": "button edit-control large-and-wide full-width",
       "onClick": [Function],
     },
     "ref": null,
@@ -824,7 +826,7 @@ ShallowWrapper {
             />
 </span>,
         ],
-        "className": "button edit-control large-and-wide",
+        "className": "button edit-control large-and-wide full-width",
         "onClick": [Function],
       },
       "ref": null,

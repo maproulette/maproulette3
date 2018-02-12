@@ -1255,6 +1255,10 @@ bulma-steps-component@^0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/bulma-steps-component/-/bulma-steps-component-0.5.3.tgz#9f2f9843b16ed8d1fb724bdd6942540911c3d101"
 
+bulma-switch@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bulma-switch/-/bulma-switch-1.0.1.tgz#447bf2e45ea5ed8e83919ae22b586e6ebc17a4ce"
+
 bulma-timeline@^1.1.2:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/bulma-timeline/-/bulma-timeline-1.1.4.tgz#de242960356d0c326508023dd34f5d19456eecc2"

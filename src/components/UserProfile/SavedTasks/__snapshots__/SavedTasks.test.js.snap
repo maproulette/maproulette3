@@ -33,7 +33,7 @@ ShallowWrapper {
           className="subtitle"
 >
           <FormattedMessage
-                    defaultMessage="Saved Tasks"
+                    defaultMessage="Tracked Tasks"
                     id="UserProfile.savedTasks.header"
                     values={Object {}}
           />
@@ -54,7 +54,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <FormattedMessage
-            defaultMessage="Saved Tasks"
+            defaultMessage="Tracked Tasks"
             id="UserProfile.savedTasks.header"
             values={Object {}}
 />,
@@ -66,7 +66,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "defaultMessage": "Saved Tasks",
+            "defaultMessage": "Tracked Tasks",
             "id": "UserProfile.savedTasks.header",
             "values": Object {},
           },
@@ -102,7 +102,7 @@ ShallowWrapper {
             className="subtitle"
 >
             <FormattedMessage
-                        defaultMessage="Saved Tasks"
+                        defaultMessage="Tracked Tasks"
                         id="UserProfile.savedTasks.header"
                         values={Object {}}
             />
@@ -123,7 +123,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <FormattedMessage
-              defaultMessage="Saved Tasks"
+              defaultMessage="Tracked Tasks"
               id="UserProfile.savedTasks.header"
               values={Object {}}
 />,
@@ -135,7 +135,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "defaultMessage": "Saved Tasks",
+              "defaultMessage": "Tracked Tasks",
               "id": "UserProfile.savedTasks.header",
               "values": Object {},
             },
@@ -229,7 +229,7 @@ ShallowWrapper {
           className="subtitle"
 >
           <FormattedMessage
-                    defaultMessage="Saved Tasks"
+                    defaultMessage="Tracked Tasks"
                     id="UserProfile.savedTasks.header"
                     values={Object {}}
           />
@@ -340,7 +340,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <FormattedMessage
-            defaultMessage="Saved Tasks"
+            defaultMessage="Tracked Tasks"
             id="UserProfile.savedTasks.header"
             values={Object {}}
 />,
@@ -352,7 +352,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "defaultMessage": "Saved Tasks",
+            "defaultMessage": "Tracked Tasks",
             "id": "UserProfile.savedTasks.header",
             "values": Object {},
           },
@@ -875,7 +875,7 @@ ShallowWrapper {
             className="subtitle"
 >
             <FormattedMessage
-                        defaultMessage="Saved Tasks"
+                        defaultMessage="Tracked Tasks"
                         id="UserProfile.savedTasks.header"
                         values={Object {}}
             />
@@ -986,7 +986,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <FormattedMessage
-              defaultMessage="Saved Tasks"
+              defaultMessage="Tracked Tasks"
               id="UserProfile.savedTasks.header"
               values={Object {}}
 />,
@@ -998,7 +998,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "defaultMessage": "Saved Tasks",
+              "defaultMessage": "Tracked Tasks",
               "id": "UserProfile.savedTasks.header",
               "values": Object {},
             },
