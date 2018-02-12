@@ -7,6 +7,37 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-alpha.4] - 2018-02-12
+### Added
+- Dedicated route for challenge browse mode so it can be linked to directly.
+- Show busy indicator while loading task clusters on challenge map (#64).
+- When working on a task, challenge name now links back to browse mode (#79).
+- Provide visual cue to user when moving to next task (#75).
+- New control to clear all challenge filters (#60).
+- Make initial zoom values when creating a challenge configurable in .env file.
+- README section on how to update to the latest code.
+- Other minor enhancements.
+
+### Changed
+- Mute comment-icon badge color when no comments (#53).
+- Declutter create-and-manage pages for non-superusers.
+- Increased zoom of task inset map, and added extent map (#23).
+- Reuse Id editor tab instead of opening a new one for each task (#54).
+- Start challenges with a task visible on the current map when possible (#63).
+- Social sharing of a challenge now links to browse-mode.
+- Saved Challenge links on user profile page now link to browse mode.
+- Refer to "saving" a task as "tracking" the task to avoid confusion. (#81)
+- Represent tracking a task as a switch instead of a button.
+
+### Fixed
+- Correctly map challenges with missing bounding polygon (#57).
+- Correctly map tasks with missing location points (#6).
+- Don't offer owners Start Challenge link on challenges in failed status (#80).
+- Create/Edit challenge form shows that instructions field is required (#73).
+
+### Removed
+- Project filtering in create-and-manage for users with single project.
+
 
 ## [v3.00-alpha.3] - 2018-02-05
 ### Added
