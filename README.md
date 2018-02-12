@@ -42,6 +42,15 @@ project is still required.
 6. Point your browser at /mr3 on your server (e.g.
    `https://maproulette.mydevserver.com/mr3`) to bring up the front-end.
 
+### Updating to the Latest Code
+
+> Note that the [maproulette2](https://github.com/maproulette/maproulette2)
+> backend (scala) server must be updated separately, if desired.
+
+1. Stop your front-end server (ctrl-c) if it's running.
+2. Pull the latest code
+3. `yarn` to install new or updated NPM packages
+4. `yarn run start` to restart the front-end server.
 
 ### Staging/Production build:
 
