@@ -8,6 +8,7 @@ import _omit from 'lodash/omit'
 import { allowedStatusProgressions,
          TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from './TaskCommentInput/TaskCommentInput'
+import TaskTrackControls from './TaskTrackControls/TaskTrackControls'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 import WithKeyboardShortcuts from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
@@ -92,6 +93,9 @@ export class ActiveTaskControls extends Component {
           {hasExistingStatus &&
            <TaskStatusIndicator {...this.props} />
           }
+
+          <TaskTrackControls className="active-task-controls__track-task"
+                             {..._omit(this.props, 'className')} />
 
           {canProgress &&
            <TaskCommentInput className="active-task-controls__task-comment"

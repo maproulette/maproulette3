@@ -9,6 +9,7 @@
     "bulma": "^0.6.0",
     "bulma-badge": "^0.1.0",
     "bulma-steps-component": "^0.5.3",
+    "bulma-switch": "^1.0.1",
     "bulma-timeline": "^1.1.2",
     "classnames": "^2.2.5",
     "date-fns": "^1.29.0",

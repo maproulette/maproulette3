@@ -6,10 +6,10 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   header: {
     id: "UserProfile.savedTasks.header",
-    defaultMessage: "Saved Tasks",
+    defaultMessage: "Tracked Tasks",
   },
   unsave: {
     id: "Task.unsave.control.tooltip",
-    defaultMessage: "Unsave Task",
+    defaultMessage: "Stop Tracking",
   }
 })

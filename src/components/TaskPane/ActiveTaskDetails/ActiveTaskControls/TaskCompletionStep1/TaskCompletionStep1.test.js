@@ -29,8 +29,6 @@ beforeEach(() => {
     keyboardShortcutGroups: keyMappings,
     pickEditor: jest.fn(),
     complete: jest.fn(),
-    saveTask: jest.fn(),
-    unsaveTask: jest.fn(),
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
     activateKeyboardShortcutGroup: jest.fn(),
     deactivateKeyboardShortcutGroup: jest.fn(),
@@ -110,16 +108,6 @@ test("doesn't show the skip control if status not appropriate", () => {
   )
 
   expect(wrapper.find('TaskSkipControl').exists()).toBe(false)
-
-  expect(wrapper).toMatchSnapshot()
-})
-
-test("shows save/unsave controls", () => {
-  const wrapper = shallow(
-    <TaskCompletionStep1 {...basicProps} />
-  )
-
-  expect(wrapper.find('TaskSaveControls').exists()).toBe(true)
 
   expect(wrapper).toMatchSnapshot()
 })
