@@ -113,7 +113,8 @@ export default WithCurrentUser(
       WithFilteredChallenges(
         WithSearchResults(
           WithSortedChallenges(
-            ChallengeResultList
+            ChallengeResultList,
+            'filteredChallenges'
           ),
           'challenges',
           'filteredChallenges'
