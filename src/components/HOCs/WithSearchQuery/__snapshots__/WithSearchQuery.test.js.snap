@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapDispatchToProps maps function setSearch 1`] = `
+Object {
+  "clearSearch": [Function],
+  "setSearch": [Function],
+}
+`;
+
+exports[`mapStateToProps maps currentSearch 1`] = `
+Object {
+  "currentSearch": Object {
+    "searchQueryTest": "searchQueryValue",
+  },
+}
+`;
+
+exports[`searchQueries are passed through to the wrapped component 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Component
+    currentSearch={
+        Object {
+            "searchQueryTest": "searchQueryValue",
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "searchQueries": Object {
+        "searchQueryTest": Object {
+          "clearSearch": [Function],
+          "searchQuery": "searchQueryValue",
+          "setSearch": [Function],
+        },
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "searchQueries": Object {
+          "searchQueryTest": Object {
+            "clearSearch": [Function],
+            "searchQuery": "searchQueryValue",
+            "setSearch": [Function],
+          },
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

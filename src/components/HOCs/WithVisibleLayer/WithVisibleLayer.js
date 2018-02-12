@@ -18,7 +18,7 @@ import _isString from 'lodash/isString'
 const WithVisibleLayer =
   WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
-const mapStateToProps = (state, ownProps) => {
+export const mapStateToProps = (state, ownProps) => {
   // If a specific layer has been chosen, use it. Otherwise, if a specific
   // default layer has been given, use that. Otherwise try to find a default
   // layer based on the layer configuration, and finally just give back the
@@ -32,7 +32,7 @@ const mapStateToProps = (state, ownProps) => {
   return ({source: layer ? layer : defaultLayerSource()})
 }
 
-const mapDispatchToProps = dispatch => {
+export const mapDispatchToProps = dispatch => {
   return {
     changeLayer: layerSource => dispatch(changeVisibleLayer(layerSource))
   }

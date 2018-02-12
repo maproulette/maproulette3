@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapStateToProps maps projects 1`] = `
+Object {
+  "projects": Array [
+    Object {
+      "id": "123",
+      "name": "first",
+    },
+    Object {
+      "id": "456",
+      "name": "second",
+    },
+  ],
+}
+`;

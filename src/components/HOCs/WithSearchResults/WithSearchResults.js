@@ -40,7 +40,7 @@ const searchOptions = {
   keys: ["name", "displayName", "blurb"], // fields to search
 }
 
-const _WithSearchResults = function(WrappedComponent, searchName, itemsProp, outputProp) {
+export const _WithSearchResults = function(WrappedComponent, searchName, itemsProp, outputProp) {
   return class extends Component {
     /**
      * @private

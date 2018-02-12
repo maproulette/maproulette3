@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checkingLoginStatus returns false if no status 1`] = `
+Object {
+  "checkingLoginStatus": false,
+  "fetchingChallenges": Array [],
+}
+`;
+
+exports[`fetchingChallenges returns empty array if no status 1`] = `
+Object {
+  "checkingLoginStatus": false,
+  "fetchingChallenges": Array [],
+}
+`;
+
+exports[`mapStateToProps maps checkingLoginStatus 1`] = `
+Object {
+  "checkingLoginStatus": true,
+  "fetchingChallenges": Array [],
+}
+`;
+
+exports[`mapStateToProps maps fetchingChallenges 1`] = `
+Object {
+  "checkingLoginStatus": false,
+  "fetchingChallenges": Array [
+    "fetch123",
+    "fetch456",
+  ],
+}
+`;

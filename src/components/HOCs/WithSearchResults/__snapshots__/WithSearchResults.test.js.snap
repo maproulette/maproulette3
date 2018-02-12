@@ -1,0 +1,391 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search Results are passed back as the 'outputProp' if provided 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Component
+    myItems={
+        Array [
+            Object {
+              "name": "first item",
+              "tags": Array [
+                "foo",
+              ],
+            },
+            Object {
+              "name": "second item",
+            },
+            Object {
+              "name": "third item",
+              "tags": Array [
+                "bar",
+                "baz",
+              ],
+            },
+          ]
+    }
+    searchQueries={
+        Object {
+            "mySearchName": Object {
+              "searchQuery": Object {
+                "query": "",
+              },
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "myItems": Array [
+        Object {
+          "name": "first item",
+          "tags": Array [
+            "foo",
+          ],
+        },
+        Object {
+          "name": "second item",
+        },
+        Object {
+          "name": "third item",
+          "tags": Array [
+            "bar",
+            "baz",
+          ],
+        },
+      ],
+      "myOutput": Array [
+        Object {
+          "name": "first item",
+          "tags": Array [
+            "foo",
+          ],
+        },
+        Object {
+          "name": "second item",
+        },
+        Object {
+          "name": "third item",
+          "tags": Array [
+            "bar",
+            "baz",
+          ],
+        },
+      ],
+      "searchQueries": Object {
+        "mySearchName": Object {
+          "searchQuery": Object {
+            "query": "",
+          },
+        },
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "myItems": Array [
+          Object {
+            "name": "first item",
+            "tags": Array [
+              "foo",
+            ],
+          },
+          Object {
+            "name": "second item",
+          },
+          Object {
+            "name": "third item",
+            "tags": Array [
+              "bar",
+              "baz",
+            ],
+          },
+        ],
+        "myOutput": Array [
+          Object {
+            "name": "first item",
+            "tags": Array [
+              "foo",
+            ],
+          },
+          Object {
+            "name": "second item",
+          },
+          Object {
+            "name": "third item",
+            "tags": Array [
+              "bar",
+              "baz",
+            ],
+          },
+        ],
+        "searchQueries": Object {
+          "mySearchName": Object {
+            "searchQuery": Object {
+              "query": "",
+            },
+          },
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`Search Results with tags are passed first in search results 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Component
+    myItems={
+        Array [
+            Object {
+              "name": "first item",
+              "tags": Array [
+                "foo",
+              ],
+            },
+            Object {
+              "name": "second item",
+            },
+            Object {
+              "name": "third item",
+              "tags": Array [
+                "bar",
+                "baz",
+              ],
+            },
+          ]
+    }
+    searchQueries={
+        Object {
+            "mySearchName": Object {
+              "searchQuery": Object {
+                "query": "#bar",
+              },
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "myItems": Array [
+        Object {
+          "name": "third item",
+          "tags": Array [
+            "bar",
+            "baz",
+          ],
+        },
+      ],
+      "searchQueries": Object {
+        "mySearchName": Object {
+          "searchQuery": Object {
+            "query": "#bar",
+          },
+        },
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "myItems": Array [
+          Object {
+            "name": "third item",
+            "tags": Array [
+              "bar",
+              "baz",
+            ],
+          },
+        ],
+        "searchQueries": Object {
+          "mySearchName": Object {
+            "searchQuery": Object {
+              "query": "#bar",
+            },
+          },
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`Search query is passed using given 'searchName' to wrapped component 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Component
+    myItems={
+        Array [
+            Object {
+              "name": "first item",
+              "tags": Array [
+                "foo",
+              ],
+            },
+            Object {
+              "name": "second item",
+            },
+            Object {
+              "name": "third item",
+              "tags": Array [
+                "bar",
+                "baz",
+              ],
+            },
+          ]
+    }
+    searchQueries={
+        Object {
+            "mySearchName": Object {
+              "searchQuery": Object {
+                "query": "",
+              },
+            },
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "myItems": Array [
+        Object {
+          "name": "first item",
+          "tags": Array [
+            "foo",
+          ],
+        },
+        Object {
+          "name": "second item",
+        },
+        Object {
+          "name": "third item",
+          "tags": Array [
+            "bar",
+            "baz",
+          ],
+        },
+      ],
+      "searchQueries": Object {
+        "mySearchName": Object {
+          "searchQuery": Object {
+            "query": "",
+          },
+        },
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "myItems": Array [
+          Object {
+            "name": "first item",
+            "tags": Array [
+              "foo",
+            ],
+          },
+          Object {
+            "name": "second item",
+          },
+          Object {
+            "name": "third item",
+            "tags": Array [
+              "bar",
+              "baz",
+            ],
+          },
+        ],
+        "searchQueries": Object {
+          "mySearchName": Object {
+            "searchQuery": Object {
+              "query": "",
+            },
+          },
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
