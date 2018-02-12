@@ -86,7 +86,7 @@ const mapDispatchToProps = dispatch => {
       }
     },
 
-    setTaskMapBounds: (bounds, zoom, fromUserAction=false) => {
+    setTaskMapBounds: (task, bounds, zoom, fromUserAction=false) => {
       dispatch(setTaskMapBounds(bounds, zoom, fromUserAction))
     },
   }

@@ -65,7 +65,7 @@ export default class TaskPane extends Component {
         <MapPane>
           <TransitionGroup>
             {this.state.completingTask !== this.props.task.id &&
-              <CSSTransition key={this.props.task.id} timeout={1500}
+              <CSSTransition key={this.props.task.id} timeout={{enter: 1500, exit: 500}}
                              classNames="animate-slide">
                 <DetailMap task={this.props.task} {...this.props} />
               </CSSTransition>

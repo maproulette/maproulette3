@@ -47,6 +47,10 @@ export default class TaskMap extends Component {
     return false
   }
 
+  updateTaskBounds = (bounds, zoom) => {
+    this.props.setTaskMapBounds(this.props.task, bounds, zoom, false)
+  }
+
   render() {
     if (!this.props.task || !_isObject(this.props.task.parent)) {
       return null
@@ -67,7 +71,7 @@ export default class TaskMap extends Component {
                      center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom}
                      features={_get(this.props.task, 'geometries.features')}
-                     onBoundsChange={this.props.setTaskMapBounds}
+                     onBoundsChange={this.updateTaskBounds}
         >
           <ZoomControl position='topright' />
           <VisibleTileLayer maxZoom={maxZoom} />
