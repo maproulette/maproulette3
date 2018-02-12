@@ -16,6 +16,9 @@ project is still required.
  * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://maproulette.mydevserver.com'`
  * if you wish to use Mapbox maps, set the `REACT_APP_MAPBOX_ACCESS_TOKEN` to
    your API token.
+ * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
+   analytics, set `REACT_APP_MATOMO_URL` and `REACT_APP_MATOMO_SITE_ID` to your
+   tracking url and site id, respectively.
  * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
  * override any other settings from the `.env` file as needed or desired.
 

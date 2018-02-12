@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { Router } from 'react-router-dom'
+import createBrowserHistory from 'history/createBrowserHistory'
+import PiwikReactRouter from 'piwik-react-router'
 import _get from 'lodash/get'
 import _keys from 'lodash/keys'
 import _isNumber from 'lodash/isNumber'
@@ -76,13 +78,30 @@ const {store} = initializePersistedStore((store) => {
   // Seed our store with projects
   store.dispatch(fetchProjects())
 
+  // Setup the router history object separately so that it can be integrated
+  // with 3rd-party libraries. If the user has configured Matomo/PIWIK for
+  // analytics, we'll hook it up here.
+  let routerHistory = createBrowserHistory({
+    basename: !_isEmpty(process.env.REACT_APP_BASE_PATH) ?
+              process.env.REACT_APP_BASE_PATH :
+              undefined,
+  })
+
+  if (!_isEmpty(process.env.REACT_APP_MATOMO_URL) &&
+      !_isEmpty(process.env.REACT_APP_MATOMO_SITE_ID)) {
+    const piwik = PiwikReactRouter({
+      url: process.env.REACT_APP_MATOMO_URL,
+      siteId: process.env.REACT_APP_MATOMO_SITE_ID
+    })
+
+    routerHistory = piwik.connectToHistory(routerHistory)
+  }
+
   // Render the app
   ReactDOM.render(
     <IntlProvider locale="en" messages={messages}>
       <Provider store={store}>
-        <Router basename={!_isEmpty(process.env.REACT_APP_BASE_PATH) ?
-                          process.env.REACT_APP_BASE_PATH :
-                          undefined}>
+        <Router history={routerHistory}>
           <App initialUserId={currentUserId} />
         </Router>
       </Provider>
