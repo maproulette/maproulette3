@@ -9,6 +9,7 @@ import Manage from './Manage/Manage'
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
 import EditProject from './Manage/ManageProjects/EditProject/EditProject'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
+import ReviewTask from './Manage/ReviewTask/ReviewTask'
 import ChallengeDetails from './Manage/ViewChallenge/ViewChallenge'
 import ViewProject from './Manage/ViewProject/ViewProject'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
@@ -49,6 +50,8 @@ export class AdminPane extends Component {
                    render={props => <MetricsSummary allStatuses={true} {...props} />} />
             <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
                    component={EditTask} />
+            <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/review'
+                   component={ReviewTask} />
             <Route exact path='/admin/project/:projectId/challenge/:challengeId'
                    component={ChallengeDetails} />
             <Route exact path='/admin/project/:projectId/challenges/new'

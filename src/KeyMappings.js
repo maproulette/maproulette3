@@ -21,4 +21,8 @@ export default {
     skip: {key: 'w', label: 'Skip'},
     falsePositive: {key: 'q', label: 'Not an Issue'},
   },
+  taskReview: {
+    nextTask: {key: 'l', label: 'Next Task'},
+    prevTask: {key: 'h', label: 'Previous Task'},
+  },
 }

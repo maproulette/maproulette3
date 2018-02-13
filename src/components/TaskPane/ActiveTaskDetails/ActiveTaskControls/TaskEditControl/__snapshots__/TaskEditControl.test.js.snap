@@ -45,6 +45,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     pickEditor={[Function]}
@@ -421,6 +431,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     pickEditor={[Function]}
@@ -681,6 +701,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           }

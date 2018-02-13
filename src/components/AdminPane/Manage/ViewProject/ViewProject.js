@@ -67,7 +67,7 @@ export class ViewProject extends Component {
           </Sidebar>
 
           <div className="admin__manage__primary-content">
-            <div className='admin__manage-tasks'>
+            <div className='admin__manage-projects'>
               <div className='level admin__manage--heading'>
                 <h3>
                   Challenges

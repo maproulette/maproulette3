@@ -13,7 +13,6 @@ import SignInButton from '../../../SignInButton/SignInButton'
 import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 import WithKeyboardShortcuts from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import TaskStatusIndicator from './TaskStatusIndicator/TaskStatusIndicator'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
@@ -90,10 +89,6 @@ export class ActiveTaskControls extends Component {
       return (
         <div className={classNames('active-task-controls', this.props.className,
                                   {'is-minimized': this.props.isMinimized})}>
-          {hasExistingStatus &&
-           <TaskStatusIndicator {...this.props} />
-          }
-
           <TaskTrackControls className="active-task-controls__track-task"
                              {..._omit(this.props, 'className')} />
 

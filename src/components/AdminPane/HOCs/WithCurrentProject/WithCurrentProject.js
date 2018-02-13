@@ -26,8 +26,11 @@ const WithCurrentProject = function(WrappedComponent,
       loadingChallenges: includeChallenges,
     }
 
+    currentProjectId = () =>
+      parseInt(_get(this.props, 'match.params.projectId'), 10)
+
     componentDidMount() {
-      const projectId = parseInt(_get(this.props, 'match.params.projectId'), 10)
+      const projectId = this.currentProjectId()
 
       if (!isNaN(projectId)) {
         this.props.fetchProject(projectId).then(() =>

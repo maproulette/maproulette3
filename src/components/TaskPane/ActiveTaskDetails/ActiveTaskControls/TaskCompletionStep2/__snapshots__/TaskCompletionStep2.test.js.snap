@@ -51,6 +51,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -147,6 +157,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -234,6 +254,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -326,6 +356,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -413,6 +453,16 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -510,6 +560,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -606,6 +666,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -693,6 +763,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -785,6 +865,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -872,6 +962,16 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -969,6 +1069,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -1065,6 +1175,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -1152,6 +1272,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -1244,6 +1374,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -1331,6 +1471,16 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -1437,6 +1587,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -1539,6 +1699,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -1626,6 +1796,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -1717,6 +1897,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -1804,6 +1994,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -1899,89 +2099,14 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": "Edit in Id",
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
               },
-              "editJosm": Object {
-                "key": "r",
-                "label": "Edit in JOSM",
-              },
-              "editJosmLayer": Object {
-                "key": "t",
-                "label": "Edit in new JOSM layer",
-              },
-            },
-            "taskCompletion": Object {
-              "falsePositive": Object {
-                "key": "q",
-                "label": "Not an Issue",
-              },
-              "skip": Object {
-                "key": "w",
-                "label": "Skip",
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": "ESC",
-                "label": "Cancel Editing",
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -2069,6 +2194,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -2152,6 +2287,111 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -2250,6 +2490,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -2337,6 +2587,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -2428,6 +2688,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -2515,6 +2785,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -2610,89 +2890,14 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": "Edit in Id",
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
                 },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": "Edit in JOSM",
-                },
-                "editJosmLayer": Object {
-                  "key": "t",
-                  "label": "Edit in new JOSM layer",
-                },
-              },
-              "taskCompletion": Object {
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": "Not an Issue",
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": "Skip",
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": "ESC",
-                  "label": "Cancel Editing",
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -2780,6 +2985,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -2863,6 +3078,111 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": "Edit in Id",
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": "Edit in JOSM",
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": "Edit in new JOSM layer",
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": "Not an Issue",
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": "Skip",
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": "ESC",
+                  "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -2969,6 +3289,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -3071,6 +3401,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -3158,6 +3498,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -3249,6 +3599,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -3336,6 +3696,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -3431,89 +3801,14 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": "Edit in Id",
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
               },
-              "editJosm": Object {
-                "key": "r",
-                "label": "Edit in JOSM",
-              },
-              "editJosmLayer": Object {
-                "key": "t",
-                "label": "Edit in new JOSM layer",
-              },
-            },
-            "taskCompletion": Object {
-              "falsePositive": Object {
-                "key": "q",
-                "label": "Not an Issue",
-              },
-              "skip": Object {
-                "key": "w",
-                "label": "Skip",
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": "ESC",
-                "label": "Cancel Editing",
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -3601,6 +3896,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -3684,6 +3989,111 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -3782,6 +4192,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -3869,6 +4289,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -3960,6 +4390,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -4047,6 +4487,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -4142,89 +4592,14 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": "Edit in Id",
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
                 },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": "Edit in JOSM",
-                },
-                "editJosmLayer": Object {
-                  "key": "t",
-                  "label": "Edit in new JOSM layer",
-                },
-              },
-              "taskCompletion": Object {
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": "Not an Issue",
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": "Skip",
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": "ESC",
-                  "label": "Cancel Editing",
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -4312,6 +4687,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -4395,6 +4780,111 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": "Edit in Id",
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": "Edit in JOSM",
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": "Edit in new JOSM layer",
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": "Not an Issue",
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": "Skip",
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": "ESC",
+                  "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -4501,6 +4991,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -4603,6 +5103,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -4690,6 +5200,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -4781,6 +5301,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -4868,6 +5398,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -4963,89 +5503,14 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": "Edit in Id",
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
               },
-              "editJosm": Object {
-                "key": "r",
-                "label": "Edit in JOSM",
-              },
-              "editJosmLayer": Object {
-                "key": "t",
-                "label": "Edit in new JOSM layer",
-              },
-            },
-            "taskCompletion": Object {
-              "falsePositive": Object {
-                "key": "q",
-                "label": "Not an Issue",
-              },
-              "skip": Object {
-                "key": "w",
-                "label": "Skip",
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": "ESC",
-                "label": "Cancel Editing",
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -5133,6 +5598,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -5216,6 +5691,111 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -5314,6 +5894,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -5401,6 +5991,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -5492,6 +6092,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -5579,6 +6189,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -5674,89 +6294,14 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": "Edit in Id",
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
                 },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": "Edit in JOSM",
-                },
-                "editJosmLayer": Object {
-                  "key": "t",
-                  "label": "Edit in new JOSM layer",
-                },
-              },
-              "taskCompletion": Object {
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": "Not an Issue",
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": "Skip",
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": "ESC",
-                  "label": "Cancel Editing",
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -5844,6 +6389,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -5927,6 +6482,111 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": "Edit in Id",
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": "Edit in JOSM",
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": "Edit in new JOSM layer",
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": "Not an Issue",
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": "Skip",
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": "ESC",
+                  "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -6033,6 +6693,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -6135,6 +6805,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -6222,6 +6902,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -6313,6 +7003,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -6400,6 +7100,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -6495,89 +7205,14 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": "Edit in Id",
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
               },
-              "editJosm": Object {
-                "key": "r",
-                "label": "Edit in JOSM",
-              },
-              "editJosmLayer": Object {
-                "key": "t",
-                "label": "Edit in new JOSM layer",
-              },
-            },
-            "taskCompletion": Object {
-              "falsePositive": Object {
-                "key": "q",
-                "label": "Not an Issue",
-              },
-              "skip": Object {
-                "key": "w",
-                "label": "Skip",
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": "ESC",
-                "label": "Cancel Editing",
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -6665,6 +7300,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -6748,6 +7393,111 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": "Edit in Id",
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": "Edit in JOSM",
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": "Edit in new JOSM layer",
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": "Not an Issue",
+              },
+              "skip": Object {
+                "key": "w",
+                "label": "Skip",
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": "ESC",
+                "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -6846,6 +7596,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -6933,6 +7693,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -7024,6 +7794,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -7111,6 +7891,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -7206,89 +7996,14 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": "Edit in Id",
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
                 },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": "Edit in JOSM",
-                },
-                "editJosmLayer": Object {
-                  "key": "t",
-                  "label": "Edit in new JOSM layer",
-                },
-              },
-              "taskCompletion": Object {
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": "Not an Issue",
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": "Skip",
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": "ESC",
-                  "label": "Cancel Editing",
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -7376,6 +8091,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -7459,6 +8184,111 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": "Edit in Id",
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": "Edit in JOSM",
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": "Edit in new JOSM layer",
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": "Not an Issue",
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": "Skip",
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": "ESC",
+                  "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },

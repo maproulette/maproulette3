@@ -55,38 +55,6 @@ test("shows only a sign-in button if the user is not logged in", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test("task status is shown if the task is in a completed status.", () => {
-  basicProps.task.status = TaskStatus.fixed
-  const wrapper = shallow(
-    <ActiveTaskControls {...basicProps} />
-  )
-
-  expect(wrapper.find('TaskStatusIndicator').exists()).toBe(true)
-
-  expect(wrapper).toMatchSnapshot()
-})
-
-test("task status is not shown if the task is not in a completed status.", () => {
-  const wrapper = shallow(
-    <ActiveTaskControls {...basicProps} />
-  )
-
-  expect(wrapper.find('TaskStatusIndicator').exists()).toBe(false)
-
-  expect(wrapper).toMatchSnapshot()
-})
-
-test("a next-task control is shown if the task is in a completed status.", () => {
-  basicProps.task.status = TaskStatus.fixed
-  const wrapper = shallow(
-    <ActiveTaskControls {...basicProps} />
-  )
-
-  expect(wrapper.find('TaskNextControl').exists()).toBe(true)
-
-  expect(wrapper).toMatchSnapshot()
-})
-
 test("a next-task control is not shown if the task is not in a completed status.", () => {
   const wrapper = shallow(
     <ActiveTaskControls {...basicProps} />
