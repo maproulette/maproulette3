@@ -18,6 +18,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _isUndefined from 'lodash/isUndefined'
 import _isString from 'lodash/isString'
 import _isNumber from 'lodash/isNumber'
+import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 
 /** normalizr schema for tasks */
@@ -191,39 +192,48 @@ export const loadCompleteTask = function(taskId) {
  */
 export const loadRandomTaskFromChallenge = function(challengeId, priorTaskId) {
   return function(dispatch) {
-    return new Endpoint(
+    return retrieveChallengeTask(dispatch, new Endpoint(
       api.challenge.randomTask,
       {
         schema: [ taskSchema() ],
         variables: {id: challengeId},
         params: _isNumber(priorTaskId) ? {proximity: priorTaskId} : undefined
       }
-    ).execute().then(normalizedTaskResults => {
-      if (_isEmpty(normalizedTaskResults.result)) {
-        return null
+    ))
+  }
+}
+
+/**
+ * Retrieve the previous sequential task from the given challenge (primarily
+ * intended for use during challenge review by challenge owners).
+ */
+export const loadPreviousSequentialTaskFromChallenge = function(challengeId,
+                                                                currentTaskId) {
+  return function(dispatch) {
+    return retrieveChallengeTask(dispatch, new Endpoint(
+      api.challenge.previousSequentialTask,
+      {
+        schema: taskSchema(),
+        variables: {challengeId: challengeId, taskId: currentTaskId},
       }
+    ))
+  }
+}
 
-      const randomTaskId = normalizedTaskResults.result[0]
-
-      // Some challenges may not have any tasks.
-      if (!_isUndefined(randomTaskId)) {
-        dispatch(receiveTasks(normalizedTaskResults.entities))
-
-        // Kick off fetches supplementary data, but don't wait for them.
-        fetchTaskPlace(
-          normalizedTaskResults.entities.tasks[randomTaskId]
-        )(dispatch)
-        fetchTaskComments(randomTaskId)(dispatch)
-
-        return normalizedTaskResults.entities.tasks[randomTaskId]
+/**
+ * Retrieve the next sequential task from the given challenge (primarily intended
+ * for use during challenge review by challenge owners).
+ */
+export const loadNextSequentialTaskFromChallenge = function(challengeId,
+                                                            currentTaskId) {
+  return function(dispatch) {
+    return retrieveChallengeTask(dispatch, new Endpoint(
+      api.challenge.nextSequentialTask,
+      {
+        schema: taskSchema(),
+        variables: {challengeId: challengeId, taskId: currentTaskId},
       }
-    }).catch((error) => {
-      dispatch(addError(buildError(
-        "Task.fetchFailure", "Unable to fetch a task to work on."
-      )))
-
-      console.log(error.response || error)
-    })
+    ))
   }
 }
 
@@ -376,6 +386,46 @@ export const deleteTask = function(taskId) {
     })
   }
 }
+
+
+/**
+ * Retrieve and process a single task retrieval from the given endpoint (next
+ * task, previous task, random task, etc).
+ *
+ * @private
+ */
+export const retrieveChallengeTask = function(dispatch, endpoint) {
+  return endpoint.execute().then(normalizedTaskResults => {
+    if (!_isNumber(normalizedTaskResults.result) &&
+        _isEmpty(normalizedTaskResults.result)) {
+      return null
+    }
+
+    const retrievedTaskId = _isArray(normalizedTaskResults.result) ?
+                            normalizedTaskResults.result[0] :
+                            normalizedTaskResults.result
+
+    if (!_isUndefined(retrievedTaskId)) {
+      dispatch(receiveTasks(normalizedTaskResults.entities))
+
+      // Kick off fetches of supplementary data, but don't wait for them.
+      fetchTaskPlace(
+        normalizedTaskResults.entities.tasks[retrievedTaskId]
+      )(dispatch)
+
+      fetchTaskComments(retrievedTaskId)(dispatch)
+
+      return normalizedTaskResults.entities.tasks[retrievedTaskId]
+    }
+  }).catch((error) => {
+    dispatch(addError(buildError(
+      "Task.fetchFailure", "Unable to fetch a task to work on."
+    )))
+
+    console.log(error.response || error)
+  })
+}
+
 
 // redux reducers
 export const taskEntities = function(state, action) {

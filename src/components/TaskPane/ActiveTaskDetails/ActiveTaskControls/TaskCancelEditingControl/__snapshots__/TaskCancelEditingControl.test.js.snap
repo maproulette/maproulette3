@@ -46,6 +46,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     task={

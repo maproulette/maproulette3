@@ -50,6 +50,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -193,6 +203,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -334,6 +354,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           }
@@ -488,6 +518,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -591,6 +631,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -682,6 +732,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -771,6 +831,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -867,6 +937,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -954,6 +1034,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -1039,6 +1129,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -1138,6 +1238,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -1229,6 +1339,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -1318,6 +1438,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -1414,6 +1544,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -1501,6 +1641,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -1586,6 +1736,16 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -1692,6 +1852,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -1795,6 +1965,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -1886,6 +2066,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -1975,6 +2165,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -2071,6 +2271,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -2158,6 +2368,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -2243,6 +2463,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -2342,6 +2572,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -2433,6 +2673,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -2522,6 +2772,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -2618,6 +2878,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -2705,6 +2975,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -2790,6 +3070,16 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },
@@ -2896,6 +3186,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           }
     }
     mapBounds={
@@ -2999,6 +3299,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -3090,6 +3400,16 @@ ShallowWrapper {
                                   "label": "Cancel Editing",
                                 },
                               },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
+                                },
+                              },
                             }
           }
           mapBounds={
@@ -3179,6 +3499,16 @@ ShallowWrapper {
                                   "key": "Escape",
                                   "keyLabel": "ESC",
                                   "label": "Cancel Editing",
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": "Next Task",
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": "Previous Task",
                                 },
                               },
                             }
@@ -3275,6 +3605,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -3362,6 +3702,16 @@ ShallowWrapper {
                 "label": "Cancel Editing",
               },
             },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
+              },
+            },
           },
           "mapBounds": Object {
             "task": Object {
@@ -3447,6 +3797,16 @@ ShallowWrapper {
                 "key": "Escape",
                 "keyLabel": "ESC",
                 "label": "Cancel Editing",
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": "Next Task",
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": "Previous Task",
               },
             },
           },
@@ -3546,6 +3906,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -3637,6 +4007,16 @@ ShallowWrapper {
                                         "label": "Cancel Editing",
                                       },
                                     },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
+                                      },
+                                    },
                                   }
             }
             mapBounds={
@@ -3726,6 +4106,16 @@ ShallowWrapper {
                                         "key": "Escape",
                                         "keyLabel": "ESC",
                                         "label": "Cancel Editing",
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": "Next Task",
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": "Previous Task",
                                       },
                                     },
                                   }
@@ -3822,6 +4212,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -3909,6 +4309,16 @@ ShallowWrapper {
                   "label": "Cancel Editing",
                 },
               },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
+                },
+              },
             },
             "mapBounds": Object {
               "task": Object {
@@ -3994,6 +4404,16 @@ ShallowWrapper {
                   "key": "Escape",
                   "keyLabel": "ESC",
                   "label": "Cancel Editing",
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": "Next Task",
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": "Previous Task",
                 },
               },
             },

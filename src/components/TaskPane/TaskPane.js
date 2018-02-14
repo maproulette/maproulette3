@@ -37,9 +37,13 @@ export default class TaskPane extends Component {
     completingTask: null,
   }
 
+  /**
+   * Invoked by various completion controls to signal the user is completing
+   * the task with a specific status. Normally this would just go straight to
+   * WithCurrentTask, but we intercept the call so that we can manage our
+   * transition animation as the task prepares to complete.
+   */
   completeTask = (taskId, challengeId, taskStatus, comment) => {
-    // Record that we're completing the task so that our animation transition
-    // can begin.
     this.setState({completingTask: taskId})
     this.props.completeTask(taskId, challengeId, taskStatus, comment)
   }

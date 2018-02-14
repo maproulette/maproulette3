@@ -1,0 +1,12 @@
+@import '../../../../variables.scss';
+
+.review-task-controls {
+  &__control-block {
+    display: flex;
+    justify-content: space-between;
+
+    .button {
+      margin-bottom: 10px;
+    }
+  }
+}

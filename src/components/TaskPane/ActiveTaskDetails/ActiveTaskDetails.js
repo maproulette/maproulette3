@@ -13,7 +13,9 @@ import Popout from '../../Bulma/Popout'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
+import TaskStatusIndicator from './TaskStatusIndicator/TaskStatusIndicator'
 import ActiveTaskControls from './ActiveTaskControls/ActiveTaskControls'
+import ReviewTaskControls from './ReviewTaskControls/ReviewTaskControls'
 import KeyboardShortcutReference from './KeyboardShortcutReference/KeyboardShortcutReference'
 import TaskLocationMap from './TaskLocationMap/TaskLocationMap'
 import CommentList from '../../CommentList/CommentList'
@@ -43,6 +45,9 @@ const KeyboardReferencePopout =
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ActiveTaskDetails extends Component {
+  /**
+   * Invoked to toggle minimization of the sidebar
+   */
   toggleIsMinimized = () => {
     const challengeId = _get(this.props.task, 'parent.id')
     if (_isNumber(challengeId)) {
@@ -50,6 +55,9 @@ export class ActiveTaskDetails extends Component {
     }
   }
 
+  /**
+   * Invoked to toggle minimization of the challenge instructions.
+   */
   toggleInstructionsCollapsed = () => {
     const challengeId = _get(this.props.task, 'parent.id')
     if (_isNumber(challengeId)) {
@@ -68,7 +76,7 @@ export class ActiveTaskDetails extends Component {
     // Don't let sidebar be minimized if there is no current user or if the
     // task is being edited, as the controls in both cases need the extra
     // real-estate.
-    const canBeMinimized = this.props.user && !isEditingTask
+    const canBeMinimized = this.props.user && !isEditingTask && !this.props.reviewTask
     const isMinimized = canBeMinimized && this.props.minimizeChallenge
 
     const minimizerButton =
@@ -83,6 +91,14 @@ export class ActiveTaskDetails extends Component {
     const taskInstructions = !_isEmpty(this.props.task.instruction) ?
                              this.props.task.instruction :
                              _get(this.props.task, 'parent.instruction')
+
+    const taskControls = this.props.reviewTask ?
+      <ReviewTaskControls className="active-task-details__controls"
+                          {...this.props} /> :
+      <ActiveTaskControls className="active-task-details__controls"
+                          isMinimized={isMinimized}
+                          {...this.props} />
+
     let infoPopout = null
     let commentPopout = null
     if (isMinimized) {
@@ -187,10 +203,10 @@ export class ActiveTaskDetails extends Component {
               </div>
             }
 
-            <ActiveTaskControls className="active-task-details__controls"
-                                isMinimized={isMinimized}
-                                {...this.props} />
-
+            <TaskStatusIndicator allStatuses={this.props.reviewTask}
+                                 isMinimized={isMinimized}
+                                 {...this.props} />
+            {taskControls}
             <KeyboardReferencePopout isMinimized={isMinimized}
                                     className='active-task-details--bordered'
                                     {...this.props} />
@@ -239,12 +255,17 @@ export class ActiveTaskDetails extends Component {
 }
 
 ActiveTaskDetails.propTypes = {
+  /** The task to display details about */
   task: PropTypes.object,
+  /** Set to true to minimize the sidebar, false to expand */
+  minimizeChallenge: PropTypes.bool,
+  /** Invoked when the user toggles minimization of the sidebar */
   setChallengeMinimization: PropTypes.func.isRequired,
 }
 
 ActiveTaskDetails.defaultProps = {
   minimizeChallenge: false,
+  reviewTask: false,
 }
 
 export default injectIntl(ActiveTaskDetails)

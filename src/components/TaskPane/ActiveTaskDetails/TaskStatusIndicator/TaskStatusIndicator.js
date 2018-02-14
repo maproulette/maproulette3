@@ -2,26 +2,34 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
-import { messagesByStatus }
-       from '../../../../../services/Task/TaskStatus/TaskStatus'
+import { messagesByStatus,
+         TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import WithDeactivateOnOutsideClick
-       from '../../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import Popout from '../../../../Bulma/Popout'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+       from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
+import Popout from '../../../Bulma/Popout'
+import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './TaskStatusIndicator.css'
 
 const DeactivatablePopout = WithDeactivateOnOutsideClick(Popout)
 
 /**
- * TaskStatusIndicator displays the current status of the given task.
- * If isMinimized is set to true, then it makes use of a popout component
- * with an icon control.
+ * TaskStatusIndicator displays the current status of the given task. If
+ * isMinimized is set to true, then it makes use of a popout component with an
+ * icon control.
+ *
+ * By default, the indicator only renders for statuses other than created. Set
+ * the allStatuses prop to true to render regardless of status.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskStatusIndicator extends Component {
   render() {
+    if (this.props.task.status === TaskStatus.created &&
+        !this.props.allStatuses) {
+      return null
+    }
+
     if (this.props.isMinimized) {
       const popoutButton = (
         <button className="button icon-only task-status">
@@ -71,6 +79,15 @@ export default class TaskStatusIndicator extends Component {
 }
 
 TaskStatusIndicator.propTypes = {
+  /** The task for which status is to be displayed */
   task: PropTypes.object.isRequired,
+  /** Set to true to render in minimized mode */
   isMinimized: PropTypes.bool,
+  /** Set to true to render regardless of task status. */
+  allStatuses: PropTypes.bool,
+}
+
+TaskStatusIndicator.defaultProps = {
+  isMinimized: false,
+  allStatuses: false,
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
-import _once from 'lodash/once'
 import _omit from 'lodash/omit'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
@@ -40,7 +39,7 @@ const WithCurrentTask = WrappedComponent =>
 const WithLoadedTask = function(WrappedComponent) {
   return class extends Component {
     loadNeededTask = props => {
-      if (_isNumber(props.taskId)) {
+      if (!isNaN(props.taskId)) {
         // Load task if we don't already have it or if the data is stale
         const fetchedAt = _get(props, 'task._meta.fetchedAt')
 
@@ -55,7 +54,9 @@ const WithLoadedTask = function(WrappedComponent) {
     }
 
     componentWillReceiveProps(nextProps) {
-      this.loadNeededTask(nextProps)
+      if (nextProps.taskId !== this.props.taskId) {
+        this.loadNeededTask(nextProps)
+      }
     }
 
     render() {
@@ -101,11 +102,10 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     /**
      * For the LoadCurrentTask private HOC.
-     * Restrict to a single load for this task.
      *
      * @private
      */
-    loadTask: _once((taskId) => dispatch(loadCompleteTask(taskId))),
+    loadTask: taskId => dispatch(loadCompleteTask(taskId)),
 
     /**
      * Invoke to mark as a task as complete with the given status
