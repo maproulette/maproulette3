@@ -41,4 +41,77 @@
       font-weight: $weight-light;
     }
   }
+
+  .status-filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    .status-filter {
+      margin-bottom: 5px;
+
+      label {
+        margin-left: 0;
+      }
+
+      .field {
+        &.created {
+          label::before, label::after {
+            background-color: $status-created-color !important;
+          }
+        }
+
+        &.fixed {
+          label::before, label::after {
+            background-color: $status-fixed-color !important;
+          }
+        }
+
+        &.falsePositive {
+          label::before, label::after {
+            background-color: $status-falsePositive-color !important;
+          }
+        }
+
+        &.skipped {
+          label::before, label::after {
+            background-color: $status-skipped-color !important;
+          }
+
+          label::after {
+            border-color: $grey-darkest !important;
+          }
+        }
+
+        &.deleted {
+          label::before, label::after {
+            background-color: $status-deleted-color !important;
+          }
+
+          label::after {
+            border-color: $grey-darkest !important;
+          }
+        }
+
+        &.alreadyFixed {
+          label::before, label::after {
+            background-color: $status-alreadyFixed-color !important;
+          }
+        }
+
+        &.tooHard {
+          label::before, label::after {
+            background-color: $status-tooHard-color !important;
+          }
+        }
+      }
+
+      &:last-child {
+        .field label {
+          padding-right: 0;
+          margin-right: 0;
+        }
+      }
+    }
+  }
 }

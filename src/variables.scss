@@ -7,6 +7,7 @@ $radius-medium: 4px;
 $blue: #2281C2; // cornflower-blue
 $grey-darkest: #333333;
 $grey-dark: #606060;
+$grey-dark-less: #646464;
 $grey: #777777;
 $grey-light-less: #979797;
 $grey-light: #AAAAAA;
@@ -27,6 +28,16 @@ $switch-background-active: $green;
 $default-icon-color: $grey-dark;
 $minimizer-arrow-color: $grey-light-less;
 $box-shadow-color: rgba(0,0,0, 0.15);
+
+// Status colors
+// From https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors
+$status-created-color: #0082C8;
+$status-fixed-color: #3CB44B;
+$status-falsePositive-color: #F58231;
+$status-skipped-color: #FFE119;
+$status-deleted-color: #46F0F0;
+$status-alreadyFixed-color: #911EB4;
+$status-tooHard-color: #E6194B;
 
 // Typography
 $family-sans-serif: 'Roboto', sans-serif;

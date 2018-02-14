@@ -73,7 +73,7 @@ export const allowedStatusProgressions = function(status, includeSelf = false) {
 }
 
 /**
- * Returns an object mapping difficulty values to raw internationalized
+ * Returns an object mapping status values to raw internationalized
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesByStatus = _fromPairs(

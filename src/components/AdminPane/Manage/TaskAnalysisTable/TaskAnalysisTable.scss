@@ -1,0 +1,55 @@
+@import 'variables.scss';
+@import 'react-table/react-table';
+
+.task-analysis-table {
+  .ReactTable .rt-thead.-header {
+    box-shadow: 0 4px 15px -4px rgba(0, 0, 0, 0.15)
+  }
+
+  .status-icon {
+    height: 15px;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 10px;
+
+    &.created {
+      fill: $status-created-color;
+    }
+
+    &.fixed {
+      fill: $status-fixed-color;
+    }
+
+    &.falsePositive {
+      fill: $status-falsePositive-color;
+    }
+
+    &.skipped {
+      fill: $status-skipped-color;
+    }
+
+    &.deleted {
+      fill: $status-deleted-color;
+    }
+
+    &.alreadyFixed {
+      fill: $status-alreadyFixed-color;
+    }
+
+    &.tooHard {
+      fill: $status-tooHard-color;
+    }
+  }
+
+  .task-row-controls {
+    text-align: center;
+
+    a {
+      margin-right: 15px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

@@ -1251,6 +1251,10 @@ bulma-badge@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/bulma-badge/-/bulma-badge-0.1.0.tgz#870982c9c8b4b5955ca1b22e7f99d754108ea48f"
 
+bulma-checkradio@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bulma-checkradio/-/bulma-checkradio-1.0.1.tgz#21674a9aee65c48e4028594bd0f22e5b52ea5346"
+
 bulma-steps-component@^0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/bulma-steps-component/-/bulma-steps-component-0.5.3.tgz#9f2f9843b16ed8d1fb724bdd6942540911c3d101"
@@ -6324,6 +6328,12 @@ react-smooth@1.0.0:
     prop-types "^15.6.0"
     raf "^3.2.0"
     react-transition-group "^2.2.1"
+
+react-table@^6.7.6:
+  version "6.7.6"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.7.6.tgz#3f9e3b308328ceb04ef93a47babefaba2619c905"
+  dependencies:
+    classnames "^2.2.5"
 
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.2.0:
   version "16.2.0"

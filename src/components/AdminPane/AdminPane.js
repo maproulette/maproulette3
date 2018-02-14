@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
 import AsManager from '../../services/User/AsManager'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
@@ -10,7 +10,7 @@ import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge
 import EditProject from './Manage/ManageProjects/EditProject/EditProject'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
 import ReviewTask from './Manage/ReviewTask/ReviewTask'
-import ChallengeDetails from './Manage/ViewChallenge/ViewChallenge'
+import ViewChallenge from './Manage/ViewChallenge/ViewChallenge'
 import ViewProject from './Manage/ViewProject/ViewProject'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
@@ -29,6 +29,12 @@ const MetricsSummary = WithChallenges(MetricsOverview)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class AdminPane extends Component {
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      window.scrollTo(0, 0)
+    }
+  }
+
   render() {
     // The user needs to be logged in.
     const manager = new AsManager(this.props.user)
@@ -53,7 +59,7 @@ export class AdminPane extends Component {
             <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/review'
                    component={ReviewTask} />
             <Route exact path='/admin/project/:projectId/challenge/:challengeId'
-                   component={ChallengeDetails} />
+                   component={ViewChallenge} />
             <Route exact path='/admin/project/:projectId/challenges/new'
                    component={EditChallenge} />
             <Route exact path='/admin/project/:projectId/challenge/:challengeId/edit'
@@ -75,4 +81,4 @@ AdminPane.propTypes = {
   location: PropTypes.object.isRequired,
 }
 
-export default WithCurrentUser(AdminPane)
+export default WithCurrentUser(withRouter(AdminPane))
