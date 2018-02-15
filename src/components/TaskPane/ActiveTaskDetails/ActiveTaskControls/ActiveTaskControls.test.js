@@ -1,7 +1,7 @@
 import React from 'react'
 import _omit from 'lodash/omit'
 import { ActiveTaskControls } from './ActiveTaskControls'
-import keyMappings from '../../../../KeyMappings'
+import keyMappings from '../../../../services/KeyboardShortcuts/KeyMappings'
 import { Editor } from '../../../../services/Editor/Editor'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 
@@ -137,7 +137,7 @@ test("a busy spinner is shown when switching from edit controls to completion co
   const wrapper = shallow(
     <ActiveTaskControls {...basicProps} />
   )
-  
+
   wrapper.instance().pickEditor({value: Editor.JOSM})
   wrapper.update()
 

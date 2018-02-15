@@ -1,6 +1,6 @@
 import React from 'react'
 import TaskSkipControl from './TaskSkipControl'
-import keyMappings from '../../../../../KeyMappings'
+import keyMappings from '../../../../../services/KeyboardShortcuts/KeyMappings'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 
 let basicProps = null

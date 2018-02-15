@@ -1,6 +1,6 @@
 import React from 'react'
 import TaskCompletionStep2 from './TaskCompletionStep2'
-import keyMappings from '../../../../../KeyMappings'
+import keyMappings from '../../../../../services/KeyboardShortcuts/KeyMappings'
 import { TaskStatus,
          allowedStatusProgressions } from '../../../../../services/Task/TaskStatus/TaskStatus'
 

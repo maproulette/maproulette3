@@ -17,42 +17,69 @@ ShallowWrapper {
             "openEditor": Object {
               "editId": Object {
                 "key": "e",
-                "label": "Edit in Id",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
               },
               "editJosm": Object {
                 "key": "r",
-                "label": "Edit in JOSM",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
               },
               "editJosmLayer": Object {
                 "key": "t",
-                "label": "Edit in new JOSM layer",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
               },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
                 "key": "q",
-                "label": "Not an Issue",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
               },
               "skip": Object {
                 "key": "w",
-                "label": "Skip",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
               },
             },
             "taskEditing": Object {
               "cancel": Object {
                 "key": "Escape",
-                "keyLabel": "ESC",
-                "label": "Cancel Editing",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
               },
             },
             "taskReview": Object {
               "nextTask": Object {
                 "key": "l",
-                "label": "Next Task",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
               },
               "prevTask": Object {
                 "key": "h",
-                "label": "Previous Task",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
               },
             },
           }
@@ -403,42 +430,69 @@ ShallowWrapper {
             "openEditor": Object {
               "editId": Object {
                 "key": "e",
-                "label": "Edit in Id",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
               },
               "editJosm": Object {
                 "key": "r",
-                "label": "Edit in JOSM",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
               },
               "editJosmLayer": Object {
                 "key": "t",
-                "label": "Edit in new JOSM layer",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
               },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
                 "key": "q",
-                "label": "Not an Issue",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
               },
               "skip": Object {
                 "key": "w",
-                "label": "Skip",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
               },
             },
             "taskEditing": Object {
               "cancel": Object {
                 "key": "Escape",
-                "keyLabel": "ESC",
-                "label": "Cancel Editing",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
               },
             },
             "taskReview": Object {
               "nextTask": Object {
                 "key": "l",
-                "label": "Next Task",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
               },
               "prevTask": Object {
                 "key": "h",
-                "label": "Previous Task",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
               },
             },
           }
@@ -675,42 +729,69 @@ ShallowWrapper {
             "openEditor": Object {
               "editId": Object {
                 "key": "e",
-                "label": "Edit in Id",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
               },
               "editJosm": Object {
                 "key": "r",
-                "label": "Edit in JOSM",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
               },
               "editJosmLayer": Object {
                 "key": "t",
-                "label": "Edit in new JOSM layer",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
               },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
                 "key": "q",
-                "label": "Not an Issue",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
               },
               "skip": Object {
                 "key": "w",
-                "label": "Skip",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
               },
             },
             "taskEditing": Object {
               "cancel": Object {
                 "key": "Escape",
-                "keyLabel": "ESC",
-                "label": "Cancel Editing",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
               },
             },
             "taskReview": Object {
               "nextTask": Object {
                 "key": "l",
-                "label": "Next Task",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
               },
               "prevTask": Object {
                 "key": "h",
-                "label": "Previous Task",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
               },
             },
           }
