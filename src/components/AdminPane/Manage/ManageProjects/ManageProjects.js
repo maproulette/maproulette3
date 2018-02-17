@@ -57,6 +57,7 @@ export class ManageProjects extends Component {
 
         <div className='admin__manage__managed-item-list project-list'>
           <ProjectList projects={this.props.filteredProjects || this.props.projects}
+                       allManageableProjects={this.props.projects}
                        {..._omit(this.props, ['projects'])} />
         </div>
 
