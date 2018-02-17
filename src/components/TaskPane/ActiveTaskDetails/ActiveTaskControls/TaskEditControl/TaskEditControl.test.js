@@ -1,7 +1,7 @@
 import React from 'react'
 import TaskEditControl from './TaskEditControl'
 import { Editor } from '../../../../../services/Editor/Editor'
-import keyMappings from '../../../../../KeyMappings'
+import keyMappings from '../../../../../services/KeyboardShortcuts/KeyMappings'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 
 let basicProps = null

@@ -5,7 +5,6 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
 import _flatten from 'lodash/flatten'
 import _values from 'lodash/values'
-import _startCase from 'lodash/startCase'
 import _omit from 'lodash/omit'
 import Popout from '../../../Bulma/Popout'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
@@ -24,8 +23,12 @@ export class KeyboardShortcutReference extends Component {
       _flatten(_map(this.props.activeKeyboardShortcuts, group => _values(group)))
 
     const shortcuts = _map(flattenedShortcuts, (value, operation) => [
-      <dt key={`term-${operation}`}>{value.keyLabel || value.key}</dt>,
-      <dd key={`def-${operation}`}>{value.label || _startCase(operation)}</dd>
+      <dt key={`term-${operation}`}>
+        <FormattedMessage {...(value.keyLabel || value.key)} />
+      </dt>,
+      <dd key={`def-${operation}`}>
+        <FormattedMessage {...value.label} />
+      </dd>
     ])
 
     const popoutButton = (

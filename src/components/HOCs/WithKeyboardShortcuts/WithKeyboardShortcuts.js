@@ -5,7 +5,7 @@ import { addKeyboardShortcutGroup,
          addKeyboardShortcut,
          removeKeyboardShortcut }
        from '../../../services/KeyboardShortcuts/KeyboardShortcuts'
-import KeyMappings from '../../../KeyMappings'
+import KeyMappings from '../../../services/KeyboardShortcuts/KeyMappings'
 
 const mapStateToProps = state => {
   return {
