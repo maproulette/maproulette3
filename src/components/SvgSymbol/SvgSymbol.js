@@ -15,6 +15,7 @@ export default class SvgSymbol extends Component {
     return (
       <svg viewBox={this.props.viewBox}
            className={this.props.className}
+           style={this.props.style}
            onClick={this.props.onClick}>
         <use xlinkHref={'#' + this.props.sym} />
       </svg>

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
-import _filter from 'lodash/filter'
-import _values from 'lodash/values'
 import _omit from 'lodash/omit'
 import { subMonths } from 'date-fns'
 import { challengeDenormalizationSchema,
@@ -14,7 +12,8 @@ import { challengeDenormalizationSchema,
          saveChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
-import { fetchChallengeTasks } from '../../../../services/Task/Task'
+import WithClusteredTasks
+       from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
 
 /**
  * WithCurrentChallenge makes available to the WrappedComponent the current
@@ -48,7 +47,7 @@ const WithCurrentChallenge = function(WrappedComponent,
         ]).then(() => this.setState({loadingChallenge: false}))
 
         if (includeTasks) {
-          this.props.fetchChallengeTasks(challengeId).then(() =>
+          this.props.fetchClusteredTasks(challengeId).then(() =>
             this.setState({loadingTasks: false})
           )
         }
@@ -61,7 +60,7 @@ const WithCurrentChallenge = function(WrappedComponent,
     render() {
       const challengeId = this.currentChallengeId()
       let challenge = null
-      let tasks = []
+      let clusteredTasks = null
 
       if (!isNaN(challengeId)) {
         challenge =
@@ -69,21 +68,22 @@ const WithCurrentChallenge = function(WrappedComponent,
                       challengeDenormalizationSchema(),
                       this.props.entities)
 
-        if (includeTasks) {
-          const allTasks = _values(_get(this.props, 'entities.tasks', {}))
-          tasks = _filter(allTasks, {parent: challengeId})
+        if (includeTasks &&
+            _get(this.props, 'clusteredTasks.challengeId') === challengeId) {
+          clusteredTasks = this.props.clusteredTasks
         }
       }
 
       return <WrappedComponent key={challengeId}
                                challenge={challenge}
-                               tasks={tasks}
+                               clusteredTasks={clusteredTasks}
                                loadingChallenge={this.state.loadingChallenge}
                                loadingTasks={this.state.loadingTasks}
                                {..._omit(this.props, ['entities',
                                                       'fetchChallenge',
                                                       'fetchChallengeComments',
-                                                      'fetchChallengeTasks',
+                                                      'fetchClusteredTasks',
+                                                      'clusteredTasks',
                                                       'fetchChallengeActivity'])} />
     }
   }
@@ -101,8 +101,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(fetchChallengeActivity(challengeId, startDate, endDate)),
   fetchChallengeActions: challengeId =>
     dispatch(fetchChallengeActions(challengeId)),
-  fetchChallengeTasks: challengeId =>
-    dispatch(fetchChallengeTasks(challengeId)),
   saveChallenge: challengeData => dispatch(saveChallenge(challengeData)),
   deleteChallenge: (projectId, challengeId) => {
     // Optimistically remove the challenge.
@@ -115,7 +113,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 })
 
 export default (WrappedComponent, includeTasks, historicalMonths) =>
-  connect(mapStateToProps,
-          mapDispatchToProps)(WithCurrentChallenge(WrappedComponent,
-                                                   includeTasks,
-                                                   historicalMonths))
+  connect(mapStateToProps, mapDispatchToProps)(
+    WithClusteredTasks(
+      WithCurrentChallenge(WrappedComponent, includeTasks, historicalMonths)
+    )
+  )

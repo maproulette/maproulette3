@@ -172,6 +172,12 @@
       width: auto;
     }
 
+    .item-status-icon svg.icon {
+      height: 20px;
+      width: auto;
+      vertical-align: middle;
+    }
+
     .item-entry {
       &:not(:last-child) {
         border-bottom: 1px solid $grey-lightest;

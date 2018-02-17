@@ -8,6 +8,7 @@
     "@turf/center": "^5.1.5",
     "bulma": "^0.6.0",
     "bulma-badge": "^0.1.0",
+    "bulma-checkradio": "^1.0.1",
     "bulma-steps-component": "^0.5.3",
     "bulma-switch": "^1.0.1",
     "bulma-timeline": "^1.1.2",
@@ -36,6 +37,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.0",
     "react-share": "^1.16.0",
+    "react-table": "^6.7.6",
     "react-transition-group": "^2.2.1",
     "recharts": "^1.0.0-beta.1",
     "redux": "^3.7.0",
@@ -54,8 +56,8 @@
     "redux-mock-store": "^1.4.0"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
