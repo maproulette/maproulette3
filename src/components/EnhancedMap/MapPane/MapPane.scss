@@ -1,4 +1,4 @@
-@import '../../../mixins.scss';
+@import 'mixins.scss';
 
 .map-pane {
   position: relative;
@@ -40,6 +40,69 @@
                 border-bottom-right-radius: 2px;
               }
             }
+          }
+        }
+      }
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: $radius-medium;
+
+      .leaflet-popup-content {
+        width: 300px;
+        overflow-y: auto;
+        margin: 0;
+
+        .feature-properties {
+          color: $grey;
+          font-size: $size-7;
+          margin: 19px 0px;
+
+          h3 {
+            color: $primary;
+            font-size: $size-6;
+            font-weight: $weight-medium;
+            padding: 0 19px 12px 19px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid $grey-lightest-more;
+          }
+
+          .name {
+            font-weight: $weight-medium;
+            padding: 5px 0.5em 5px 0px;
+            border: none;
+            position: relative;
+
+            .not-linked {
+              color: $grey;
+              padding-left: 19px;
+            }
+
+            a, a:link, a:active, a:visited {
+              color: $grey;
+              padding-left: 19px;
+
+              &:hover {
+                &:before {
+                  content: '?';
+                  font-size: 10px;
+                  color: $white;
+                  background-color: $grey-light;
+                  border-radius: 50%;
+                  padding: 0px 4px;
+                  position: absolute;
+                  top: 8px;
+                  left: 2px;
+                }
+              }
+            }
+          }
+
+          .value {
+            @include constrained-text-content;
+            hyphens: initial;
+            padding: 5px 19px 5px 0px;
+            border: none;
           }
         }
       }

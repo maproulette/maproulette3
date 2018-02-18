@@ -24,7 +24,10 @@ export class KeyboardShortcutReference extends Component {
 
     const shortcuts = _map(flattenedShortcuts, (value, operation) => [
       <dt key={`term-${operation}`}>
-        <FormattedMessage {...(value.keyLabel || value.key)} />
+        {value.keyLabel ?
+          <FormattedMessage {...value.keyLabel} /> :
+          value.key
+        }
       </dt>,
       <dd key={`def-${operation}`}>
         <FormattedMessage {...value.label} />
