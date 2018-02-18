@@ -5,22 +5,17 @@ Object {
   "completeTask": [Function],
   "loadTask": [Function],
   "nextTask": [Function],
-  "setChallengeMinimization": [Function],
-  "setInstructionsCollapsed": [Function],
 }
 `;
 
-exports[`mapStateToProps maps task from a given taskId 1`] = `
+exports[`mapStateToProps maps task from the taskId in the route 1`] = `
 Object {
-  "collapseInstructions": true,
-  "minimizeChallenge": true,
+  "challengeId": undefined,
   "task": Object {
-    "name": "task1",
-    "parent": Object {
-      "id": 123,
-    },
-    "taskId": 1,
+    "id": 987,
+    "name": "task987",
+    "parent": 123,
   },
-  "taskId": 1,
+  "taskId": 987,
 }
 `;

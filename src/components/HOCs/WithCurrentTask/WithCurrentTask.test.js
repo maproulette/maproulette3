@@ -15,68 +15,52 @@ jest.mock('../../../services/Challenge/Challenge')
 
 denormalize.mockImplementation((challenge, schema, entities) => challenge)
 
+let task = null
+let challenge = null
+let completionStatus = null
 let basicState = null
 
 beforeEach(() => {
+  challenge = {
+    id: 123,
+    name: "challenge123",
+    difficulty: "hard",
+    actions: {available: 3},
+    enabled: true,
+  }
+
+  task = {
+    id: 987,
+    name: "task987",
+    parent: challenge.id,
+  }
+
+  completionStatus = 1
+
   basicState = {
     entities: {
       tasks: {
-        1: {
-          taskId: 1,
-          name: "task1",
-          parent: {
-            id: 123
-          }
-        }
+        [task.id]: task,
       },
-      challenges: [
-        {
-          id: 123,
-          name: "challenge1",
-          difficulty: "hard",
-          actions: {available: 3},
-          enabled: true,
-        },
-      ]
-    },
-    currentPreferences: {
       challenges: {
-        123: {
-          minimize: true,
-          collapseInstructions: true,
-        }
-      }
+        [challenge.id] : challenge,
+      },
     },
   }
 })
 
-test("mapStateToProps maps task from a given taskId", () => {
-  const mappedProps = mapStateToProps(basicState, {taskId: 1})
+test("mapStateToProps maps task from the taskId in the route", () => {
+  const routeMatchProps = {
+    match: {
+      params: {taskId: task.id}
+    }
+  }
 
-  // { task: { taskId: 1, name: 'task1', parent: { id: 5 } },
-  //       taskId: 1,
-  //       minimizeChallenge: false,
-  //       collapseInstructions: false }
-
-  expect(mappedProps.task).toEqual(basicState.entities.tasks["1"])
+  const mappedProps = mapStateToProps(basicState, routeMatchProps)
+  expect(mappedProps.task.id).toEqual(task.id)
   expect(denormalize).toHaveBeenCalled()
 
   expect(mappedProps).toMatchSnapshot()
-})
-
-
-test("mapStateToProps maps minimizeChallenge to current minimize preference", () => {
-  basicState.currentPreferences.challenges["123"].minimize = false
-  const mappedProps = mapStateToProps(basicState, {taskId: 1})
-
-  expect(mappedProps.minimizeChallenge).toEqual(false)
-})
-
-test("mapStateToProps maps collapseInstructions to current minimize preference", () => {
-  basicState.currentPreferences.challenges["123"].collapseInstructions = false
-  const mappedProps = mapStateToProps(basicState, {taskId: 1})
-
-  expect(mappedProps.collapseInstructions).toEqual(false)
 })
 
 test("mapDispatchToProps maps some functions", () => {
@@ -90,13 +74,12 @@ test("mapDispatchToProps loadTask calls loadCompleteTask", () => {
   const dispatch  = jest.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {})
 
-  mappedProps.loadTask(1)
+  mappedProps.loadTask(task.id)
   expect(dispatch).toBeCalled()
-  expect(loadCompleteTask).toBeCalledWith(1)
+  expect(loadCompleteTask).toBeCalledWith(task.id)
 })
 
 test("mapDispatchToProps completeTask calls completeTask", () => {
-  const task = {id: 1}
   const dispatch  = jest.fn(() => Promise.resolve())
   const history = {
    push: jest.fn(),
@@ -104,12 +87,13 @@ test("mapDispatchToProps completeTask calls completeTask", () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  mappedProps.completeTask(1, 123, "good", "")
+  mappedProps.completeTask(task.id, challenge.id, completionStatus)
   expect(dispatch).toBeCalled()
-  expect(completeTask).toBeCalledWith(1, 123, "good")
+  expect(completeTask).toBeCalledWith(task.id, challenge.id, completionStatus)
 })
 
 test("completeTask calls addComment if comment present",  async () => {
+  const comment = "A Comment"
   const dispatch  = jest.fn(() => Promise.resolve())
   const history = {
    push: jest.fn(),
@@ -117,8 +101,8 @@ test("completeTask calls addComment if comment present",  async () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(1, 123, "good", "my new comment")
-  expect(addTaskComment).toHaveBeenLastCalledWith(1, "my new comment", "good")
+  await mappedProps.completeTask(task.id, challenge.id, completionStatus, comment)
+  expect(addTaskComment).toHaveBeenLastCalledWith(task.id, comment, completionStatus)
 })
 
 test("completeTask does not call addComment if no comment", async () => {
@@ -131,7 +115,7 @@ test("completeTask does not call addComment if no comment", async () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(1, 123, "good", "")
+  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
   expect(addTaskComment).not.toHaveBeenCalled()
 })
 
@@ -143,14 +127,11 @@ test("completeTask calls loadRandomTaskFromChallenge", () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  mappedProps.completeTask(1, 123, "good", "my comment")
-  expect(loadRandomTaskFromChallenge).toBeCalledWith(123, 1)
+  mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, task.id)
 })
 
 test("completeTask calls fetchChallengeActions", () => {
-  const taskId = 1
-  const challengeId = 123
-
   const dispatch  = jest.fn(() => Promise.resolve())
   const history = {
    push: jest.fn(),
@@ -158,14 +139,12 @@ test("completeTask calls fetchChallengeActions", () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  mappedProps.completeTask(taskId, challengeId, "good", "my comment")
-  expect(fetchChallengeActions).toBeCalledWith(challengeId)
+  mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  expect(fetchChallengeActions).toBeCalledWith(challenge.id)
 })
 
 test("completeTask routes the user to the new task if there is one", async () => {
-  const taskId = 1
-  const challengeId = 123
-  const nextTask = {id: 2}
+  const nextTask = {id: 654}
 
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromChallenge.mockReturnValueOnce(Promise.resolve(nextTask))
@@ -176,14 +155,12 @@ test("completeTask routes the user to the new task if there is one", async () =>
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(taskId, challengeId, "good", "my comment")
-  expect(history.push).toBeCalledWith(`/challenge/${challengeId}/task/${nextTask.id}`)
+  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  expect(history.push).toBeCalledWith(`/challenge/${challenge.id}/task/${nextTask.id}`)
 })
 
 test("completeTask routes the user home if the next task isn't new", async () => {
-  const taskId = 1
-  const challengeId = 123
-  const nextTask = {id: taskId} // same as our current task
+  const nextTask = {id: task.id} // same as our current task
 
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromChallenge.mockReturnValueOnce(Promise.resolve(nextTask))
@@ -194,14 +171,11 @@ test("completeTask routes the user home if the next task isn't new", async () =>
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(taskId, challengeId, "good", "my comment")
+  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
   expect(history.push).toBeCalledWith('/')
 })
 
 test("completeTask routes the user home if there is no next task", async () => {
-  const taskId = 1
-  const challengeId = 123
-
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromChallenge.mockReturnValueOnce(Promise.resolve(null))
   const dispatch = jest.fn(value => value)
@@ -211,6 +185,6 @@ test("completeTask routes the user home if there is no next task", async () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(taskId, challengeId, "good", "my comment")
+  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
   expect(history.push).toBeCalledWith('/')
 })
