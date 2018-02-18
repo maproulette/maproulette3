@@ -11,6 +11,8 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
+import { TaskLoadMethod }
+       from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 
 const FRESHNESS_THRESHOLD = 5000 // 5 seconds
@@ -101,7 +103,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (taskId, challengeId, taskStatus, comment) => {
+    completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy) => {
       dispatch(
         completeTask(taskId, challengeId, taskStatus)
       ).then(() => {
@@ -113,7 +115,10 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
       // Load the next task from the challenge.
       dispatch(
-        loadRandomTaskFromChallenge(challengeId, taskId)
+        loadRandomTaskFromChallenge(
+          challengeId,
+          taskLoadBy === TaskLoadMethod.proximity ? taskId : undefined
+        )
       ).then(newTask =>
         visitNewTask(challengeId, taskId, newTask, ownProps.history)
       )
@@ -123,9 +128,12 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Move to the next task without setting any completion status,
      * useful for when a user visits a task that is already complete.
      */
-    nextTask: (challengeId, taskId) =>
+    nextTask: (challengeId, taskId, taskLoadBy) =>
       dispatch(
-        loadRandomTaskFromChallenge(challengeId, taskId)
+        loadRandomTaskFromChallenge(
+          challengeId,
+          taskLoadBy === TaskLoadMethod.proximity ? taskId : undefined
+        )
       ).then(newTask =>
         visitNewTask(challengeId, taskId, newTask, ownProps.history)
       ),

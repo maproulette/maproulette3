@@ -1,7 +1,11 @@
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _isNumber from 'lodash/isNumber'
-import { setPreferences } from '../../../services/Preferences/Preferences'
+import { TaskLoadMethod }
+       from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
+import { setPreferences,
+         CHALLENGES_PREFERENCE_GROUP }
+       from '../../../services/Preferences/Preferences'
 
 /**
  * WithChallengePreferences passes down the user's preference settings for the
@@ -13,8 +17,6 @@ import { setPreferences } from '../../../services/Preferences/Preferences'
  */
 const WithChallengePreferences = WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
-
-export const CHALLENGES_PREFERENCE_GROUP = 'challenges'
 
 export const mapStateToProps = (state, ownProps) => {
   const challengeId = _get(ownProps, 'challenge.id', ownProps.challengeId)
@@ -30,6 +32,11 @@ export const mapStateToProps = (state, ownProps) => {
       _get(state.currentPreferences,
            `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.collapseInstructions`,
            false)
+
+    mappedProps.taskLoadBy =
+      _get(state.currentPreferences,
+           `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.taskLoadMethod`,
+           TaskLoadMethod.random)
   }
 
   return mappedProps
@@ -43,6 +50,10 @@ export const mapDispatchToProps = dispatch => ({
   setInstructionsCollapsed: (challengeId, collapseInstructions=false) =>
     dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
                             {[challengeId]: {collapseInstructions}})),
+
+  setTaskLoadBy: (challengeId, taskLoadMethod) =>
+    dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
+                            {[challengeId]: {taskLoadMethod}})),
 })
 
 export default WithChallengePreferences

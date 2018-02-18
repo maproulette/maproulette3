@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import _each from 'lodash/each'
 import { denormalize } from 'normalizr'
-import { mapStateToProps, mapDispatchToProps, visitNewTask } from './WithCurrentTask'
+import { mapStateToProps,
+         mapDispatchToProps,
+         visitNewTask } from './WithCurrentTask'
 import { taskDenormalizationSchema,
          loadCompleteTask,
          loadRandomTaskFromChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
+import { TaskLoadMethod }
+       from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 
 jest.mock('normalizr')
@@ -119,7 +123,7 @@ test("completeTask does not call addComment if no comment", async () => {
   expect(addTaskComment).not.toHaveBeenCalled()
 })
 
-test("completeTask calls loadRandomTaskFromChallenge", () => {
+test("completeTask calls loadRandomTaskFromChallenge without proximate task by default", () => {
   const dispatch  = jest.fn(() => Promise.resolve())
   const history = {
    push: jest.fn(),
@@ -128,6 +132,19 @@ test("completeTask calls loadRandomTaskFromChallenge", () => {
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
   mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, undefined)
+})
+
+test("completeTask calls loadRandomTaskFromChallenge with task if proximate load method", () => {
+  const dispatch  = jest.fn(() => Promise.resolve())
+  const history = {
+   push: jest.fn(),
+  }
+
+  const mappedProps = mapDispatchToProps(dispatch, {history})
+
+  mappedProps.completeTask(task.id, challenge.id,
+                           completionStatus, "", TaskLoadMethod.proximity)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, task.id)
 })
 

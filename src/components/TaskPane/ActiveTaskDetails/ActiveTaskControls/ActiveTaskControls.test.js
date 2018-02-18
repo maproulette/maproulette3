@@ -5,17 +5,26 @@ import keyMappings from '../../../../services/KeyboardShortcuts/KeyMappings'
 import { Editor } from '../../../../services/Editor/Editor'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 
+let challengeId = null
+let taskId = null
+let task = null
 let basicProps = null
 
 beforeEach(() => {
-  basicProps = {
-    task: {
-      id: 123,
-      parent: {
-        id: 321,
-      },
-      status: TaskStatus.created,
+  challengeId = 321
+  taskId = 123
+
+  task = {
+    id: taskId,
+    parent: {
+      id: challengeId,
     },
+    status: TaskStatus.created,
+  }
+
+  basicProps = {
+    task,
+    challengeId,
     editor: {
     },
     mapBounds: {
@@ -29,6 +38,8 @@ beforeEach(() => {
       settings: {defaultEditor: 1},
       isLoggedIn: true,
     },
+    taskLoadBy: 'random',
+    setTaskLoadBy: jest.fn(),
     activateKeyboardShortcutGroup: jest.fn(),
     deactivateKeyboardShortcutGroup: jest.fn(),
     editTask: jest.fn(),
@@ -107,7 +118,7 @@ test("does not show comment field if task cannot progress to new status", () => 
 })
 
 test("shows completion controls if the user has begun editing the task", () => {
-  basicProps.editor.taskId = basicProps.task.id
+  basicProps.editor.taskId = taskId
   basicProps.editor.success = true
 
   const wrapper = shallow(

@@ -9,9 +9,12 @@ import { allowedStatusProgressions,
          TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from './TaskCommentInput/TaskCommentInput'
 import TaskTrackControls from './TaskTrackControls/TaskTrackControls'
+import TaskRandomnessControl
+       from './TaskRandomnessControl/TaskRandomnessControl'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
-import WithKeyboardShortcuts from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import WithKeyboardShortcuts
+       from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
@@ -47,7 +50,7 @@ export class ActiveTaskControls extends Component {
   complete = taskStatus => {
     this.setState({taskBeingCompleted: this.props.task.id})
     this.props.completeTask(this.props.task.id, this.props.task.parent.id,
-                            taskStatus, this.state.comment)
+                            taskStatus, this.state.comment, this.props.taskLoadBy)
   }
 
   render() {
@@ -116,6 +119,8 @@ export class ActiveTaskControls extends Component {
                                 cancelEditing={this.cancelEditing}
                                 {...this.props} />
           }
+
+          <TaskRandomnessControl {...this.props} />
         </div>
       )
     }
@@ -123,8 +128,12 @@ export class ActiveTaskControls extends Component {
 }
 
 ActiveTaskControls.propTypes = {
+  /** Current task controls are to operate upon */
   task: PropTypes.object,
+  /** Current editor status */
   editor: PropTypes.object,
+  /** Current setting of whether to load tasks randomly or by proximity */
+  taskLoadBy: PropTypes.string.isRequired,
 }
 
 ActiveTaskControls.defaultProps = {
