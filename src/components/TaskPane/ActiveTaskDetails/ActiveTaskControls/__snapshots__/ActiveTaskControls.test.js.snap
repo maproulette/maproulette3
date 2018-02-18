@@ -6,6 +6,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ActiveTaskControls
     activateKeyboardShortcutGroup={[Function]}
+    challengeId={321}
     closeEditor={[Function]}
     completeTask={[Function]}
     deactivateKeyboardShortcutGroup={[Function]}
@@ -103,6 +104,7 @@ ShallowWrapper {
     nextTask={[Function]}
     saveTask={[Function]}
     setTaskBeingCompleted={[Function]}
+    setTaskLoadBy={[Function]}
     task={
         Object {
             "id": 123,
@@ -112,6 +114,7 @@ ShallowWrapper {
             "status": 0,
           }
     }
+    taskLoadBy="random"
     unsaveTask={[Function]}
     user={
         Object {
@@ -166,6 +169,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ActiveTaskControls
     activateKeyboardShortcutGroup={[Function]}
+    challengeId={321}
     closeEditor={[Function]}
     completeTask={[Function]}
     deactivateKeyboardShortcutGroup={[Function]}
@@ -263,6 +267,7 @@ ShallowWrapper {
     nextTask={[Function]}
     saveTask={[Function]}
     setTaskBeingCompleted={[Function]}
+    setTaskLoadBy={[Function]}
     task={
         Object {
             "id": 123,
@@ -272,6 +277,7 @@ ShallowWrapper {
             "status": 0,
           }
     }
+    taskLoadBy="random"
     unsaveTask={[Function]}
     user={
         Object {
@@ -298,6 +304,7 @@ ShallowWrapper {
       "children": Array [
         <TaskTrackControls
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__track-task"
           closeEditor={[Function]}
           completeTask={[Function]}
@@ -396,6 +403,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -405,6 +413,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -418,6 +427,7 @@ ShallowWrapper {
 />,
         <TaskCommentInput
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__task-comment"
           closeEditor={[Function]}
           commentChanged={[Function]}
@@ -517,6 +527,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -526,6 +537,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -550,6 +562,7 @@ ShallowWrapper {
                               6,
                             }
           }
+          challengeId={321}
           closeEditor={[Function]}
           complete={[Function]}
           completeTask={[Function]}
@@ -649,6 +662,7 @@ ShallowWrapper {
           pickEditor={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -658,6 +672,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -671,6 +686,128 @@ ShallowWrapper {
 />,
         false,
         false,
+        <TaskRandomnessControl
+          activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
+          closeEditor={[Function]}
+          completeTask={[Function]}
+          deactivateKeyboardShortcutGroup={[Function]}
+          editTask={[Function]}
+          editor={Object {}}
+          intl={
+                    Object {
+                              "formatMessage": [Function],
+                            }
+          }
+          keyboardShortcutGroups={
+                    Object {
+                              "openEditor": Object {
+                                "editId": Object {
+                                  "key": "e",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Id",
+                                    "id": "KeyMapping.openEditor.editId",
+                                  },
+                                },
+                                "editJosm": Object {
+                                  "key": "r",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmLayer": Object {
+                                  "key": "t",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in new JOSM layer",
+                                    "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                              },
+                              "taskCompletion": Object {
+                                "falsePositive": Object {
+                                  "key": "q",
+                                  "label": Object {
+                                    "defaultMessage": "Not an Issue",
+                                    "id": "KeyMapping.taskCompletion.falsePositive",
+                                  },
+                                },
+                                "skip": Object {
+                                  "key": "w",
+                                  "label": Object {
+                                    "defaultMessage": "Skip",
+                                    "id": "KeyMapping.taskCompletion.skip",
+                                  },
+                                },
+                              },
+                              "taskEditing": Object {
+                                "cancel": Object {
+                                  "key": "Escape",
+                                  "keyLabel": Object {
+                                    "defaultMessage": "ESC",
+                                    "id": "KeyMapping.taskEditing.escapeLabel",
+                                  },
+                                  "label": Object {
+                                    "defaultMessage": "Cancel Editing",
+                                    "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Next Task",
+                                    "id": "KeyMapping.taskReview.nextTask",
+                                  },
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": Object {
+                                    "defaultMessage": "Previous Task",
+                                    "id": "KeyMapping.taskReview.prevTask",
+                                  },
+                                },
+                              },
+                            }
+          }
+          mapBounds={
+                    Object {
+                              "task": Object {
+                                "bounds": Array [
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                ],
+                              },
+                            }
+          }
+          nextTask={[Function]}
+          saveTask={[Function]}
+          setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
+          task={
+                    Object {
+                              "id": 123,
+                              "parent": Object {
+                                "id": 321,
+                              },
+                              "status": 0,
+                            }
+          }
+          taskLoadBy="random"
+          unsaveTask={[Function]}
+          user={
+                    Object {
+                              "id": 357,
+                              "isLoggedIn": true,
+                              "settings": Object {
+                                "defaultEditor": 1,
+                              },
+                            }
+          }
+/>,
       ],
       "className": "active-task-controls",
     },
@@ -682,6 +819,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__track-task",
           "closeEditor": [Function],
           "completeTask": [Function],
@@ -774,6 +912,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -781,6 +920,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -800,6 +940,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__task-comment",
           "closeEditor": [Function],
           "commentChanged": [Function],
@@ -893,6 +1034,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -900,6 +1042,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -928,6 +1071,7 @@ ShallowWrapper {
             5,
             6,
           },
+          "challengeId": 321,
           "closeEditor": [Function],
           "complete": [Function],
           "completeTask": [Function],
@@ -1021,6 +1165,7 @@ ShallowWrapper {
           "pickEditor": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -1028,6 +1173,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -1043,6 +1189,126 @@ ShallowWrapper {
       },
       false,
       false,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
+          "closeEditor": [Function],
+          "completeTask": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "editTask": [Function],
+          "editor": Object {},
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "nextTask": [Function],
+          "saveTask": [Function],
+          "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "taskLoadBy": "random",
+          "unsaveTask": [Function],
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
     ],
     "type": "div",
   },
@@ -1055,6 +1321,7 @@ ShallowWrapper {
         "children": Array [
           <TaskTrackControls
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__track-task"
             closeEditor={[Function]}
             completeTask={[Function]}
@@ -1153,6 +1420,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -1162,6 +1430,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -1175,6 +1444,7 @@ ShallowWrapper {
 />,
           <TaskCommentInput
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__task-comment"
             closeEditor={[Function]}
             commentChanged={[Function]}
@@ -1274,6 +1544,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -1283,6 +1554,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -1307,6 +1579,7 @@ ShallowWrapper {
                                     6,
                                   }
             }
+            challengeId={321}
             closeEditor={[Function]}
             complete={[Function]}
             completeTask={[Function]}
@@ -1406,6 +1679,7 @@ ShallowWrapper {
             pickEditor={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -1415,6 +1689,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -1428,6 +1703,128 @@ ShallowWrapper {
 />,
           false,
           false,
+          <TaskRandomnessControl
+            activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
+            closeEditor={[Function]}
+            completeTask={[Function]}
+            deactivateKeyboardShortcutGroup={[Function]}
+            editTask={[Function]}
+            editor={Object {}}
+            intl={
+                        Object {
+                                    "formatMessage": [Function],
+                                  }
+            }
+            keyboardShortcutGroups={
+                        Object {
+                                    "openEditor": Object {
+                                      "editId": Object {
+                                        "key": "e",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Id",
+                                          "id": "KeyMapping.openEditor.editId",
+                                        },
+                                      },
+                                      "editJosm": Object {
+                                        "key": "r",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmLayer": Object {
+                                        "key": "t",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in new JOSM layer",
+                                          "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                    },
+                                    "taskCompletion": Object {
+                                      "falsePositive": Object {
+                                        "key": "q",
+                                        "label": Object {
+                                          "defaultMessage": "Not an Issue",
+                                          "id": "KeyMapping.taskCompletion.falsePositive",
+                                        },
+                                      },
+                                      "skip": Object {
+                                        "key": "w",
+                                        "label": Object {
+                                          "defaultMessage": "Skip",
+                                          "id": "KeyMapping.taskCompletion.skip",
+                                        },
+                                      },
+                                    },
+                                    "taskEditing": Object {
+                                      "cancel": Object {
+                                        "key": "Escape",
+                                        "keyLabel": Object {
+                                          "defaultMessage": "ESC",
+                                          "id": "KeyMapping.taskEditing.escapeLabel",
+                                        },
+                                        "label": Object {
+                                          "defaultMessage": "Cancel Editing",
+                                          "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Next Task",
+                                          "id": "KeyMapping.taskReview.nextTask",
+                                        },
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": Object {
+                                          "defaultMessage": "Previous Task",
+                                          "id": "KeyMapping.taskReview.prevTask",
+                                        },
+                                      },
+                                    },
+                                  }
+            }
+            mapBounds={
+                        Object {
+                                    "task": Object {
+                                      "bounds": Array [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                      ],
+                                    },
+                                  }
+            }
+            nextTask={[Function]}
+            saveTask={[Function]}
+            setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
+            task={
+                        Object {
+                                    "id": 123,
+                                    "parent": Object {
+                                      "id": 321,
+                                    },
+                                    "status": 0,
+                                  }
+            }
+            taskLoadBy="random"
+            unsaveTask={[Function]}
+            user={
+                        Object {
+                                    "id": 357,
+                                    "isLoggedIn": true,
+                                    "settings": Object {
+                                      "defaultEditor": 1,
+                                    },
+                                  }
+            }
+/>,
         ],
         "className": "active-task-controls",
       },
@@ -1439,6 +1836,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__track-task",
             "closeEditor": [Function],
             "completeTask": [Function],
@@ -1531,6 +1929,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -1538,6 +1937,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -1557,6 +1957,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__task-comment",
             "closeEditor": [Function],
             "commentChanged": [Function],
@@ -1650,6 +2051,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -1657,6 +2059,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -1685,6 +2088,7 @@ ShallowWrapper {
               5,
               6,
             },
+            "challengeId": 321,
             "closeEditor": [Function],
             "complete": [Function],
             "completeTask": [Function],
@@ -1778,6 +2182,7 @@ ShallowWrapper {
             "pickEditor": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -1785,6 +2190,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -1800,6 +2206,126 @@ ShallowWrapper {
         },
         false,
         false,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
+            "closeEditor": [Function],
+            "completeTask": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "editTask": [Function],
+            "editor": Object {},
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "nextTask": [Function],
+            "saveTask": [Function],
+            "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "taskLoadBy": "random",
+            "unsaveTask": [Function],
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
       ],
       "type": "div",
     },
@@ -1820,6 +2346,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ActiveTaskControls
     activateKeyboardShortcutGroup={[Function]}
+    challengeId={321}
     closeEditor={[Function]}
     completeTask={[Function]}
     deactivateKeyboardShortcutGroup={[Function]}
@@ -1917,6 +2444,7 @@ ShallowWrapper {
     nextTask={[Function]}
     saveTask={[Function]}
     setTaskBeingCompleted={[Function]}
+    setTaskLoadBy={[Function]}
     task={
         Object {
             "id": 123,
@@ -1926,6 +2454,7 @@ ShallowWrapper {
             "status": 1,
           }
     }
+    taskLoadBy="random"
     unsaveTask={[Function]}
     user={
         Object {
@@ -1952,6 +2481,7 @@ ShallowWrapper {
       "children": Array [
         <TaskTrackControls
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__track-task"
           closeEditor={[Function]}
           completeTask={[Function]}
@@ -2050,6 +2580,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -2059,6 +2590,7 @@ ShallowWrapper {
                               "status": 1,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -2074,6 +2606,7 @@ ShallowWrapper {
         <TaskCompletionStep1
           activateKeyboardShortcutGroup={[Function]}
           allowedProgressions={Set {}}
+          challengeId={321}
           closeEditor={[Function]}
           complete={[Function]}
           completeTask={[Function]}
@@ -2173,6 +2706,7 @@ ShallowWrapper {
           pickEditor={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -2182,6 +2716,7 @@ ShallowWrapper {
                               "status": 1,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -2195,6 +2730,7 @@ ShallowWrapper {
 />,
         <TaskNextControl
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           closeEditor={[Function]}
           completeTask={[Function]}
           deactivateKeyboardShortcutGroup={[Function]}
@@ -2293,6 +2829,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -2302,6 +2839,7 @@ ShallowWrapper {
                               "status": 1,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -2314,6 +2852,128 @@ ShallowWrapper {
           }
 />,
         false,
+        <TaskRandomnessControl
+          activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
+          closeEditor={[Function]}
+          completeTask={[Function]}
+          deactivateKeyboardShortcutGroup={[Function]}
+          editTask={[Function]}
+          editor={Object {}}
+          intl={
+                    Object {
+                              "formatMessage": [Function],
+                            }
+          }
+          keyboardShortcutGroups={
+                    Object {
+                              "openEditor": Object {
+                                "editId": Object {
+                                  "key": "e",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Id",
+                                    "id": "KeyMapping.openEditor.editId",
+                                  },
+                                },
+                                "editJosm": Object {
+                                  "key": "r",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmLayer": Object {
+                                  "key": "t",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in new JOSM layer",
+                                    "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                              },
+                              "taskCompletion": Object {
+                                "falsePositive": Object {
+                                  "key": "q",
+                                  "label": Object {
+                                    "defaultMessage": "Not an Issue",
+                                    "id": "KeyMapping.taskCompletion.falsePositive",
+                                  },
+                                },
+                                "skip": Object {
+                                  "key": "w",
+                                  "label": Object {
+                                    "defaultMessage": "Skip",
+                                    "id": "KeyMapping.taskCompletion.skip",
+                                  },
+                                },
+                              },
+                              "taskEditing": Object {
+                                "cancel": Object {
+                                  "key": "Escape",
+                                  "keyLabel": Object {
+                                    "defaultMessage": "ESC",
+                                    "id": "KeyMapping.taskEditing.escapeLabel",
+                                  },
+                                  "label": Object {
+                                    "defaultMessage": "Cancel Editing",
+                                    "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Next Task",
+                                    "id": "KeyMapping.taskReview.nextTask",
+                                  },
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": Object {
+                                    "defaultMessage": "Previous Task",
+                                    "id": "KeyMapping.taskReview.prevTask",
+                                  },
+                                },
+                              },
+                            }
+          }
+          mapBounds={
+                    Object {
+                              "task": Object {
+                                "bounds": Array [
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                ],
+                              },
+                            }
+          }
+          nextTask={[Function]}
+          saveTask={[Function]}
+          setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
+          task={
+                    Object {
+                              "id": 123,
+                              "parent": Object {
+                                "id": 321,
+                              },
+                              "status": 1,
+                            }
+          }
+          taskLoadBy="random"
+          unsaveTask={[Function]}
+          user={
+                    Object {
+                              "id": 357,
+                              "isLoggedIn": true,
+                              "settings": Object {
+                                "defaultEditor": 1,
+                              },
+                            }
+          }
+/>,
       ],
       "className": "active-task-controls",
     },
@@ -2325,6 +2985,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__track-task",
           "closeEditor": [Function],
           "completeTask": [Function],
@@ -2417,6 +3078,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -2424,6 +3086,7 @@ ShallowWrapper {
             },
             "status": 1,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -2445,6 +3108,7 @@ ShallowWrapper {
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
           "allowedProgressions": Set {},
+          "challengeId": 321,
           "closeEditor": [Function],
           "complete": [Function],
           "completeTask": [Function],
@@ -2538,6 +3202,7 @@ ShallowWrapper {
           "pickEditor": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -2545,6 +3210,7 @@ ShallowWrapper {
             },
             "status": 1,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -2564,6 +3230,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "closeEditor": [Function],
           "completeTask": [Function],
           "deactivateKeyboardShortcutGroup": [Function],
@@ -2656,6 +3323,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -2663,6 +3331,7 @@ ShallowWrapper {
             },
             "status": 1,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -2677,6 +3346,126 @@ ShallowWrapper {
         "type": [Function],
       },
       false,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
+          "closeEditor": [Function],
+          "completeTask": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "editTask": [Function],
+          "editor": Object {},
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "nextTask": [Function],
+          "saveTask": [Function],
+          "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 1,
+          },
+          "taskLoadBy": "random",
+          "unsaveTask": [Function],
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
     ],
     "type": "div",
   },
@@ -2689,6 +3478,7 @@ ShallowWrapper {
         "children": Array [
           <TaskTrackControls
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__track-task"
             closeEditor={[Function]}
             completeTask={[Function]}
@@ -2787,6 +3577,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -2796,6 +3587,7 @@ ShallowWrapper {
                                     "status": 1,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -2811,6 +3603,7 @@ ShallowWrapper {
           <TaskCompletionStep1
             activateKeyboardShortcutGroup={[Function]}
             allowedProgressions={Set {}}
+            challengeId={321}
             closeEditor={[Function]}
             complete={[Function]}
             completeTask={[Function]}
@@ -2910,6 +3703,7 @@ ShallowWrapper {
             pickEditor={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -2919,6 +3713,7 @@ ShallowWrapper {
                                     "status": 1,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -2932,6 +3727,7 @@ ShallowWrapper {
 />,
           <TaskNextControl
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             closeEditor={[Function]}
             completeTask={[Function]}
             deactivateKeyboardShortcutGroup={[Function]}
@@ -3030,6 +3826,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -3039,6 +3836,7 @@ ShallowWrapper {
                                     "status": 1,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -3051,6 +3849,128 @@ ShallowWrapper {
             }
 />,
           false,
+          <TaskRandomnessControl
+            activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
+            closeEditor={[Function]}
+            completeTask={[Function]}
+            deactivateKeyboardShortcutGroup={[Function]}
+            editTask={[Function]}
+            editor={Object {}}
+            intl={
+                        Object {
+                                    "formatMessage": [Function],
+                                  }
+            }
+            keyboardShortcutGroups={
+                        Object {
+                                    "openEditor": Object {
+                                      "editId": Object {
+                                        "key": "e",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Id",
+                                          "id": "KeyMapping.openEditor.editId",
+                                        },
+                                      },
+                                      "editJosm": Object {
+                                        "key": "r",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmLayer": Object {
+                                        "key": "t",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in new JOSM layer",
+                                          "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                    },
+                                    "taskCompletion": Object {
+                                      "falsePositive": Object {
+                                        "key": "q",
+                                        "label": Object {
+                                          "defaultMessage": "Not an Issue",
+                                          "id": "KeyMapping.taskCompletion.falsePositive",
+                                        },
+                                      },
+                                      "skip": Object {
+                                        "key": "w",
+                                        "label": Object {
+                                          "defaultMessage": "Skip",
+                                          "id": "KeyMapping.taskCompletion.skip",
+                                        },
+                                      },
+                                    },
+                                    "taskEditing": Object {
+                                      "cancel": Object {
+                                        "key": "Escape",
+                                        "keyLabel": Object {
+                                          "defaultMessage": "ESC",
+                                          "id": "KeyMapping.taskEditing.escapeLabel",
+                                        },
+                                        "label": Object {
+                                          "defaultMessage": "Cancel Editing",
+                                          "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Next Task",
+                                          "id": "KeyMapping.taskReview.nextTask",
+                                        },
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": Object {
+                                          "defaultMessage": "Previous Task",
+                                          "id": "KeyMapping.taskReview.prevTask",
+                                        },
+                                      },
+                                    },
+                                  }
+            }
+            mapBounds={
+                        Object {
+                                    "task": Object {
+                                      "bounds": Array [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                      ],
+                                    },
+                                  }
+            }
+            nextTask={[Function]}
+            saveTask={[Function]}
+            setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
+            task={
+                        Object {
+                                    "id": 123,
+                                    "parent": Object {
+                                      "id": 321,
+                                    },
+                                    "status": 1,
+                                  }
+            }
+            taskLoadBy="random"
+            unsaveTask={[Function]}
+            user={
+                        Object {
+                                    "id": 357,
+                                    "isLoggedIn": true,
+                                    "settings": Object {
+                                      "defaultEditor": 1,
+                                    },
+                                  }
+            }
+/>,
         ],
         "className": "active-task-controls",
       },
@@ -3062,6 +3982,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__track-task",
             "closeEditor": [Function],
             "completeTask": [Function],
@@ -3154,6 +4075,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -3161,6 +4083,7 @@ ShallowWrapper {
               },
               "status": 1,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -3182,6 +4105,7 @@ ShallowWrapper {
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
             "allowedProgressions": Set {},
+            "challengeId": 321,
             "closeEditor": [Function],
             "complete": [Function],
             "completeTask": [Function],
@@ -3275,6 +4199,7 @@ ShallowWrapper {
             "pickEditor": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -3282,6 +4207,7 @@ ShallowWrapper {
               },
               "status": 1,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -3301,6 +4227,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "closeEditor": [Function],
             "completeTask": [Function],
             "deactivateKeyboardShortcutGroup": [Function],
@@ -3393,6 +4320,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -3400,6 +4328,7 @@ ShallowWrapper {
               },
               "status": 1,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -3414,6 +4343,126 @@ ShallowWrapper {
           "type": [Function],
         },
         false,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
+            "closeEditor": [Function],
+            "completeTask": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "editTask": [Function],
+            "editor": Object {},
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "nextTask": [Function],
+            "saveTask": [Function],
+            "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 1,
+            },
+            "taskLoadBy": "random",
+            "unsaveTask": [Function],
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
       ],
       "type": "div",
     },
@@ -3434,6 +4483,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ActiveTaskControls
     activateKeyboardShortcutGroup={[Function]}
+    challengeId={321}
     closeEditor={[Function]}
     completeTask={[Function]}
     deactivateKeyboardShortcutGroup={[Function]}
@@ -3536,6 +4586,7 @@ ShallowWrapper {
     nextTask={[Function]}
     saveTask={[Function]}
     setTaskBeingCompleted={[Function]}
+    setTaskLoadBy={[Function]}
     task={
         Object {
             "id": 123,
@@ -3545,6 +4596,7 @@ ShallowWrapper {
             "status": 0,
           }
     }
+    taskLoadBy="random"
     unsaveTask={[Function]}
     user={
         Object {
@@ -3571,6 +4623,7 @@ ShallowWrapper {
       "children": Array [
         <TaskTrackControls
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__track-task"
           closeEditor={[Function]}
           completeTask={[Function]}
@@ -3674,6 +4727,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -3683,6 +4737,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -3696,6 +4751,7 @@ ShallowWrapper {
 />,
         <TaskCommentInput
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__task-comment"
           closeEditor={[Function]}
           commentChanged={[Function]}
@@ -3800,6 +4856,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -3809,6 +4866,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -3836,6 +4894,7 @@ ShallowWrapper {
                             }
           }
           cancelEditing={[Function]}
+          challengeId={321}
           closeEditor={[Function]}
           complete={[Function]}
           completeTask={[Function]}
@@ -3939,6 +4998,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -3948,6 +5008,134 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
+          unsaveTask={[Function]}
+          user={
+                    Object {
+                              "id": 357,
+                              "isLoggedIn": true,
+                              "settings": Object {
+                                "defaultEditor": 1,
+                              },
+                            }
+          }
+/>,
+        <TaskRandomnessControl
+          activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
+          closeEditor={[Function]}
+          completeTask={[Function]}
+          deactivateKeyboardShortcutGroup={[Function]}
+          editTask={[Function]}
+          editor={
+                    Object {
+                              "success": true,
+                              "taskId": 123,
+                            }
+          }
+          intl={
+                    Object {
+                              "formatMessage": [Function],
+                            }
+          }
+          keyboardShortcutGroups={
+                    Object {
+                              "openEditor": Object {
+                                "editId": Object {
+                                  "key": "e",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Id",
+                                    "id": "KeyMapping.openEditor.editId",
+                                  },
+                                },
+                                "editJosm": Object {
+                                  "key": "r",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmLayer": Object {
+                                  "key": "t",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in new JOSM layer",
+                                    "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                              },
+                              "taskCompletion": Object {
+                                "falsePositive": Object {
+                                  "key": "q",
+                                  "label": Object {
+                                    "defaultMessage": "Not an Issue",
+                                    "id": "KeyMapping.taskCompletion.falsePositive",
+                                  },
+                                },
+                                "skip": Object {
+                                  "key": "w",
+                                  "label": Object {
+                                    "defaultMessage": "Skip",
+                                    "id": "KeyMapping.taskCompletion.skip",
+                                  },
+                                },
+                              },
+                              "taskEditing": Object {
+                                "cancel": Object {
+                                  "key": "Escape",
+                                  "keyLabel": Object {
+                                    "defaultMessage": "ESC",
+                                    "id": "KeyMapping.taskEditing.escapeLabel",
+                                  },
+                                  "label": Object {
+                                    "defaultMessage": "Cancel Editing",
+                                    "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Next Task",
+                                    "id": "KeyMapping.taskReview.nextTask",
+                                  },
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": Object {
+                                    "defaultMessage": "Previous Task",
+                                    "id": "KeyMapping.taskReview.prevTask",
+                                  },
+                                },
+                              },
+                            }
+          }
+          mapBounds={
+                    Object {
+                              "task": Object {
+                                "bounds": Array [
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                ],
+                              },
+                            }
+          }
+          nextTask={[Function]}
+          saveTask={[Function]}
+          setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
+          task={
+                    Object {
+                              "id": 123,
+                              "parent": Object {
+                                "id": 321,
+                              },
+                              "status": 0,
+                            }
+          }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -3970,6 +5158,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__track-task",
           "closeEditor": [Function],
           "completeTask": [Function],
@@ -4065,6 +5254,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -4072,6 +5262,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -4091,6 +5282,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__task-comment",
           "closeEditor": [Function],
           "commentChanged": [Function],
@@ -4187,6 +5379,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -4194,6 +5387,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -4225,6 +5419,7 @@ ShallowWrapper {
             6,
           },
           "cancelEditing": [Function],
+          "challengeId": 321,
           "closeEditor": [Function],
           "complete": [Function],
           "completeTask": [Function],
@@ -4320,6 +5515,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -4327,6 +5523,130 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
+          "unsaveTask": [Function],
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
+          "closeEditor": [Function],
+          "completeTask": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "editTask": [Function],
+          "editor": Object {
+            "success": true,
+            "taskId": 123,
+          },
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "nextTask": [Function],
+          "saveTask": [Function],
+          "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -4352,6 +5672,7 @@ ShallowWrapper {
         "children": Array [
           <TaskTrackControls
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__track-task"
             closeEditor={[Function]}
             completeTask={[Function]}
@@ -4455,6 +5776,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -4464,6 +5786,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -4477,6 +5800,7 @@ ShallowWrapper {
 />,
           <TaskCommentInput
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__task-comment"
             closeEditor={[Function]}
             commentChanged={[Function]}
@@ -4581,6 +5905,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -4590,6 +5915,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -4617,6 +5943,7 @@ ShallowWrapper {
                                   }
             }
             cancelEditing={[Function]}
+            challengeId={321}
             closeEditor={[Function]}
             complete={[Function]}
             completeTask={[Function]}
@@ -4720,6 +6047,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -4729,6 +6057,134 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
+            unsaveTask={[Function]}
+            user={
+                        Object {
+                                    "id": 357,
+                                    "isLoggedIn": true,
+                                    "settings": Object {
+                                      "defaultEditor": 1,
+                                    },
+                                  }
+            }
+/>,
+          <TaskRandomnessControl
+            activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
+            closeEditor={[Function]}
+            completeTask={[Function]}
+            deactivateKeyboardShortcutGroup={[Function]}
+            editTask={[Function]}
+            editor={
+                        Object {
+                                    "success": true,
+                                    "taskId": 123,
+                                  }
+            }
+            intl={
+                        Object {
+                                    "formatMessage": [Function],
+                                  }
+            }
+            keyboardShortcutGroups={
+                        Object {
+                                    "openEditor": Object {
+                                      "editId": Object {
+                                        "key": "e",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Id",
+                                          "id": "KeyMapping.openEditor.editId",
+                                        },
+                                      },
+                                      "editJosm": Object {
+                                        "key": "r",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmLayer": Object {
+                                        "key": "t",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in new JOSM layer",
+                                          "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                    },
+                                    "taskCompletion": Object {
+                                      "falsePositive": Object {
+                                        "key": "q",
+                                        "label": Object {
+                                          "defaultMessage": "Not an Issue",
+                                          "id": "KeyMapping.taskCompletion.falsePositive",
+                                        },
+                                      },
+                                      "skip": Object {
+                                        "key": "w",
+                                        "label": Object {
+                                          "defaultMessage": "Skip",
+                                          "id": "KeyMapping.taskCompletion.skip",
+                                        },
+                                      },
+                                    },
+                                    "taskEditing": Object {
+                                      "cancel": Object {
+                                        "key": "Escape",
+                                        "keyLabel": Object {
+                                          "defaultMessage": "ESC",
+                                          "id": "KeyMapping.taskEditing.escapeLabel",
+                                        },
+                                        "label": Object {
+                                          "defaultMessage": "Cancel Editing",
+                                          "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Next Task",
+                                          "id": "KeyMapping.taskReview.nextTask",
+                                        },
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": Object {
+                                          "defaultMessage": "Previous Task",
+                                          "id": "KeyMapping.taskReview.prevTask",
+                                        },
+                                      },
+                                    },
+                                  }
+            }
+            mapBounds={
+                        Object {
+                                    "task": Object {
+                                      "bounds": Array [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                      ],
+                                    },
+                                  }
+            }
+            nextTask={[Function]}
+            saveTask={[Function]}
+            setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
+            task={
+                        Object {
+                                    "id": 123,
+                                    "parent": Object {
+                                      "id": 321,
+                                    },
+                                    "status": 0,
+                                  }
+            }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -4751,6 +6207,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__track-task",
             "closeEditor": [Function],
             "completeTask": [Function],
@@ -4846,6 +6303,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -4853,6 +6311,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -4872,6 +6331,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__task-comment",
             "closeEditor": [Function],
             "commentChanged": [Function],
@@ -4968,6 +6428,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -4975,6 +6436,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -5006,6 +6468,7 @@ ShallowWrapper {
               6,
             },
             "cancelEditing": [Function],
+            "challengeId": 321,
             "closeEditor": [Function],
             "complete": [Function],
             "completeTask": [Function],
@@ -5101,6 +6564,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -5108,6 +6572,130 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
+            "unsaveTask": [Function],
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
+            "closeEditor": [Function],
+            "completeTask": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "editTask": [Function],
+            "editor": Object {
+              "success": true,
+              "taskId": 123,
+            },
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "nextTask": [Function],
+            "saveTask": [Function],
+            "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -5141,6 +6729,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ActiveTaskControls
     activateKeyboardShortcutGroup={[Function]}
+    challengeId={321}
     closeEditor={[Function]}
     completeTask={[Function]}
     deactivateKeyboardShortcutGroup={[Function]}
@@ -5238,6 +6827,7 @@ ShallowWrapper {
     nextTask={[Function]}
     saveTask={[Function]}
     setTaskBeingCompleted={[Function]}
+    setTaskLoadBy={[Function]}
     task={
         Object {
             "id": 123,
@@ -5247,6 +6837,7 @@ ShallowWrapper {
             "status": 0,
           }
     }
+    taskLoadBy="random"
     unsaveTask={[Function]}
     user={
         Object {
@@ -5273,6 +6864,7 @@ ShallowWrapper {
       "children": Array [
         <TaskTrackControls
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__track-task"
           closeEditor={[Function]}
           completeTask={[Function]}
@@ -5371,6 +6963,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -5380,6 +6973,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -5393,6 +6987,7 @@ ShallowWrapper {
 />,
         <TaskCommentInput
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__task-comment"
           closeEditor={[Function]}
           commentChanged={[Function]}
@@ -5492,6 +7087,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -5501,6 +7097,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -5525,6 +7122,7 @@ ShallowWrapper {
                               6,
                             }
           }
+          challengeId={321}
           closeEditor={[Function]}
           complete={[Function]}
           completeTask={[Function]}
@@ -5624,6 +7222,7 @@ ShallowWrapper {
           pickEditor={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -5633,6 +7232,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -5646,6 +7246,128 @@ ShallowWrapper {
 />,
         false,
         false,
+        <TaskRandomnessControl
+          activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
+          closeEditor={[Function]}
+          completeTask={[Function]}
+          deactivateKeyboardShortcutGroup={[Function]}
+          editTask={[Function]}
+          editor={Object {}}
+          intl={
+                    Object {
+                              "formatMessage": [Function],
+                            }
+          }
+          keyboardShortcutGroups={
+                    Object {
+                              "openEditor": Object {
+                                "editId": Object {
+                                  "key": "e",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Id",
+                                    "id": "KeyMapping.openEditor.editId",
+                                  },
+                                },
+                                "editJosm": Object {
+                                  "key": "r",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmLayer": Object {
+                                  "key": "t",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in new JOSM layer",
+                                    "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                              },
+                              "taskCompletion": Object {
+                                "falsePositive": Object {
+                                  "key": "q",
+                                  "label": Object {
+                                    "defaultMessage": "Not an Issue",
+                                    "id": "KeyMapping.taskCompletion.falsePositive",
+                                  },
+                                },
+                                "skip": Object {
+                                  "key": "w",
+                                  "label": Object {
+                                    "defaultMessage": "Skip",
+                                    "id": "KeyMapping.taskCompletion.skip",
+                                  },
+                                },
+                              },
+                              "taskEditing": Object {
+                                "cancel": Object {
+                                  "key": "Escape",
+                                  "keyLabel": Object {
+                                    "defaultMessage": "ESC",
+                                    "id": "KeyMapping.taskEditing.escapeLabel",
+                                  },
+                                  "label": Object {
+                                    "defaultMessage": "Cancel Editing",
+                                    "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Next Task",
+                                    "id": "KeyMapping.taskReview.nextTask",
+                                  },
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": Object {
+                                    "defaultMessage": "Previous Task",
+                                    "id": "KeyMapping.taskReview.prevTask",
+                                  },
+                                },
+                              },
+                            }
+          }
+          mapBounds={
+                    Object {
+                              "task": Object {
+                                "bounds": Array [
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                ],
+                              },
+                            }
+          }
+          nextTask={[Function]}
+          saveTask={[Function]}
+          setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
+          task={
+                    Object {
+                              "id": 123,
+                              "parent": Object {
+                                "id": 321,
+                              },
+                              "status": 0,
+                            }
+          }
+          taskLoadBy="random"
+          unsaveTask={[Function]}
+          user={
+                    Object {
+                              "id": 357,
+                              "isLoggedIn": true,
+                              "settings": Object {
+                                "defaultEditor": 1,
+                              },
+                            }
+          }
+/>,
       ],
       "className": "active-task-controls",
     },
@@ -5657,6 +7379,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__track-task",
           "closeEditor": [Function],
           "completeTask": [Function],
@@ -5749,6 +7472,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -5756,6 +7480,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -5775,6 +7500,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__task-comment",
           "closeEditor": [Function],
           "commentChanged": [Function],
@@ -5868,6 +7594,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -5875,6 +7602,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -5903,6 +7631,7 @@ ShallowWrapper {
             5,
             6,
           },
+          "challengeId": 321,
           "closeEditor": [Function],
           "complete": [Function],
           "completeTask": [Function],
@@ -5996,6 +7725,7 @@ ShallowWrapper {
           "pickEditor": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -6003,6 +7733,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -6018,6 +7749,126 @@ ShallowWrapper {
       },
       false,
       false,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
+          "closeEditor": [Function],
+          "completeTask": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "editTask": [Function],
+          "editor": Object {},
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "nextTask": [Function],
+          "saveTask": [Function],
+          "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "taskLoadBy": "random",
+          "unsaveTask": [Function],
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
     ],
     "type": "div",
   },
@@ -6030,6 +7881,7 @@ ShallowWrapper {
         "children": Array [
           <TaskTrackControls
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__track-task"
             closeEditor={[Function]}
             completeTask={[Function]}
@@ -6128,6 +7980,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -6137,6 +7990,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -6150,6 +8004,7 @@ ShallowWrapper {
 />,
           <TaskCommentInput
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__task-comment"
             closeEditor={[Function]}
             commentChanged={[Function]}
@@ -6249,6 +8104,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -6258,6 +8114,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -6282,6 +8139,7 @@ ShallowWrapper {
                                     6,
                                   }
             }
+            challengeId={321}
             closeEditor={[Function]}
             complete={[Function]}
             completeTask={[Function]}
@@ -6381,6 +8239,7 @@ ShallowWrapper {
             pickEditor={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -6390,6 +8249,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -6403,6 +8263,128 @@ ShallowWrapper {
 />,
           false,
           false,
+          <TaskRandomnessControl
+            activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
+            closeEditor={[Function]}
+            completeTask={[Function]}
+            deactivateKeyboardShortcutGroup={[Function]}
+            editTask={[Function]}
+            editor={Object {}}
+            intl={
+                        Object {
+                                    "formatMessage": [Function],
+                                  }
+            }
+            keyboardShortcutGroups={
+                        Object {
+                                    "openEditor": Object {
+                                      "editId": Object {
+                                        "key": "e",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Id",
+                                          "id": "KeyMapping.openEditor.editId",
+                                        },
+                                      },
+                                      "editJosm": Object {
+                                        "key": "r",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmLayer": Object {
+                                        "key": "t",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in new JOSM layer",
+                                          "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                    },
+                                    "taskCompletion": Object {
+                                      "falsePositive": Object {
+                                        "key": "q",
+                                        "label": Object {
+                                          "defaultMessage": "Not an Issue",
+                                          "id": "KeyMapping.taskCompletion.falsePositive",
+                                        },
+                                      },
+                                      "skip": Object {
+                                        "key": "w",
+                                        "label": Object {
+                                          "defaultMessage": "Skip",
+                                          "id": "KeyMapping.taskCompletion.skip",
+                                        },
+                                      },
+                                    },
+                                    "taskEditing": Object {
+                                      "cancel": Object {
+                                        "key": "Escape",
+                                        "keyLabel": Object {
+                                          "defaultMessage": "ESC",
+                                          "id": "KeyMapping.taskEditing.escapeLabel",
+                                        },
+                                        "label": Object {
+                                          "defaultMessage": "Cancel Editing",
+                                          "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Next Task",
+                                          "id": "KeyMapping.taskReview.nextTask",
+                                        },
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": Object {
+                                          "defaultMessage": "Previous Task",
+                                          "id": "KeyMapping.taskReview.prevTask",
+                                        },
+                                      },
+                                    },
+                                  }
+            }
+            mapBounds={
+                        Object {
+                                    "task": Object {
+                                      "bounds": Array [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                      ],
+                                    },
+                                  }
+            }
+            nextTask={[Function]}
+            saveTask={[Function]}
+            setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
+            task={
+                        Object {
+                                    "id": 123,
+                                    "parent": Object {
+                                      "id": 321,
+                                    },
+                                    "status": 0,
+                                  }
+            }
+            taskLoadBy="random"
+            unsaveTask={[Function]}
+            user={
+                        Object {
+                                    "id": 357,
+                                    "isLoggedIn": true,
+                                    "settings": Object {
+                                      "defaultEditor": 1,
+                                    },
+                                  }
+            }
+/>,
         ],
         "className": "active-task-controls",
       },
@@ -6414,6 +8396,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__track-task",
             "closeEditor": [Function],
             "completeTask": [Function],
@@ -6506,6 +8489,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -6513,6 +8497,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -6532,6 +8517,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__task-comment",
             "closeEditor": [Function],
             "commentChanged": [Function],
@@ -6625,6 +8611,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -6632,6 +8619,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -6660,6 +8648,7 @@ ShallowWrapper {
               5,
               6,
             },
+            "challengeId": 321,
             "closeEditor": [Function],
             "complete": [Function],
             "completeTask": [Function],
@@ -6753,6 +8742,7 @@ ShallowWrapper {
             "pickEditor": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -6760,6 +8750,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -6775,6 +8766,126 @@ ShallowWrapper {
         },
         false,
         false,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
+            "closeEditor": [Function],
+            "completeTask": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "editTask": [Function],
+            "editor": Object {},
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "nextTask": [Function],
+            "saveTask": [Function],
+            "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "taskLoadBy": "random",
+            "unsaveTask": [Function],
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
       ],
       "type": "div",
     },
@@ -6795,6 +8906,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ActiveTaskControls
     activateKeyboardShortcutGroup={[Function]}
+    challengeId={321}
     closeEditor={[Function]}
     completeTask={[Function]}
     deactivateKeyboardShortcutGroup={[Function]}
@@ -6892,6 +9004,7 @@ ShallowWrapper {
     nextTask={[Function]}
     saveTask={[Function]}
     setTaskBeingCompleted={[Function]}
+    setTaskLoadBy={[Function]}
     task={
         Object {
             "id": 123,
@@ -6901,6 +9014,7 @@ ShallowWrapper {
             "status": 0,
           }
     }
+    taskLoadBy="random"
     unsaveTask={[Function]}
     user={
         Object {
@@ -6929,6 +9043,7 @@ ShallowWrapper {
 >
         <Connect(SignInButton)
                 activateKeyboardShortcutGroup={[Function]}
+                challengeId={321}
                 className="active-task-controls--signin"
                 closeEditor={[Function]}
                 completeTask={[Function]}
@@ -7027,6 +9142,7 @@ ShallowWrapper {
                 nextTask={[Function]}
                 saveTask={[Function]}
                 setTaskBeingCompleted={[Function]}
+                setTaskLoadBy={[Function]}
                 task={
                         Object {
                                 "id": 123,
@@ -7036,6 +9152,7 @@ ShallowWrapper {
                                 "status": 0,
                               }
                 }
+                taskLoadBy="random"
                 unsaveTask={[Function]}
                 user={
                         Object {
@@ -7058,6 +9175,7 @@ ShallowWrapper {
       "props": Object {
         "children": <Connect(SignInButton)
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls--signin"
           closeEditor={[Function]}
           completeTask={[Function]}
@@ -7156,6 +9274,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -7165,6 +9284,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -7185,6 +9305,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls--signin",
           "closeEditor": [Function],
           "completeTask": [Function],
@@ -7277,6 +9398,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -7284,6 +9406,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -7312,6 +9435,7 @@ ShallowWrapper {
 >
           <Connect(SignInButton)
                     activateKeyboardShortcutGroup={[Function]}
+                    challengeId={321}
                     className="active-task-controls--signin"
                     closeEditor={[Function]}
                     completeTask={[Function]}
@@ -7410,6 +9534,7 @@ ShallowWrapper {
                     nextTask={[Function]}
                     saveTask={[Function]}
                     setTaskBeingCompleted={[Function]}
+                    setTaskLoadBy={[Function]}
                     task={
                               Object {
                                         "id": 123,
@@ -7419,6 +9544,7 @@ ShallowWrapper {
                                         "status": 0,
                                       }
                     }
+                    taskLoadBy="random"
                     unsaveTask={[Function]}
                     user={
                               Object {
@@ -7441,6 +9567,7 @@ ShallowWrapper {
         "props": Object {
           "children": <Connect(SignInButton)
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls--signin"
             closeEditor={[Function]}
             completeTask={[Function]}
@@ -7539,6 +9666,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -7548,6 +9676,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -7568,6 +9697,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls--signin",
             "closeEditor": [Function],
             "completeTask": [Function],
@@ -7660,6 +9790,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -7667,6 +9798,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -7701,6 +9833,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ActiveTaskControls
     activateKeyboardShortcutGroup={[Function]}
+    challengeId={321}
     closeEditor={[Function]}
     completeTask={[Function]}
     deactivateKeyboardShortcutGroup={[Function]}
@@ -7798,6 +9931,7 @@ ShallowWrapper {
     nextTask={[Function]}
     saveTask={[Function]}
     setTaskBeingCompleted={[Function]}
+    setTaskLoadBy={[Function]}
     task={
         Object {
             "id": 123,
@@ -7807,6 +9941,7 @@ ShallowWrapper {
             "status": 0,
           }
     }
+    taskLoadBy="random"
     unsaveTask={[Function]}
     user={
         Object {
@@ -7833,6 +9968,7 @@ ShallowWrapper {
       "children": Array [
         <TaskTrackControls
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__track-task"
           closeEditor={[Function]}
           completeTask={[Function]}
@@ -7931,6 +10067,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -7940,6 +10077,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -7953,6 +10091,7 @@ ShallowWrapper {
 />,
         <TaskCommentInput
           activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
           className="active-task-controls__task-comment"
           closeEditor={[Function]}
           commentChanged={[Function]}
@@ -8052,6 +10191,7 @@ ShallowWrapper {
           nextTask={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -8061,6 +10201,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -8085,6 +10226,7 @@ ShallowWrapper {
                               6,
                             }
           }
+          challengeId={321}
           closeEditor={[Function]}
           complete={[Function]}
           completeTask={[Function]}
@@ -8184,6 +10326,7 @@ ShallowWrapper {
           pickEditor={[Function]}
           saveTask={[Function]}
           setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
           task={
                     Object {
                               "id": 123,
@@ -8193,6 +10336,7 @@ ShallowWrapper {
                               "status": 0,
                             }
           }
+          taskLoadBy="random"
           unsaveTask={[Function]}
           user={
                     Object {
@@ -8206,6 +10350,128 @@ ShallowWrapper {
 />,
         false,
         false,
+        <TaskRandomnessControl
+          activateKeyboardShortcutGroup={[Function]}
+          challengeId={321}
+          closeEditor={[Function]}
+          completeTask={[Function]}
+          deactivateKeyboardShortcutGroup={[Function]}
+          editTask={[Function]}
+          editor={Object {}}
+          intl={
+                    Object {
+                              "formatMessage": [Function],
+                            }
+          }
+          keyboardShortcutGroups={
+                    Object {
+                              "openEditor": Object {
+                                "editId": Object {
+                                  "key": "e",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Id",
+                                    "id": "KeyMapping.openEditor.editId",
+                                  },
+                                },
+                                "editJosm": Object {
+                                  "key": "r",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmLayer": Object {
+                                  "key": "t",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in new JOSM layer",
+                                    "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                              },
+                              "taskCompletion": Object {
+                                "falsePositive": Object {
+                                  "key": "q",
+                                  "label": Object {
+                                    "defaultMessage": "Not an Issue",
+                                    "id": "KeyMapping.taskCompletion.falsePositive",
+                                  },
+                                },
+                                "skip": Object {
+                                  "key": "w",
+                                  "label": Object {
+                                    "defaultMessage": "Skip",
+                                    "id": "KeyMapping.taskCompletion.skip",
+                                  },
+                                },
+                              },
+                              "taskEditing": Object {
+                                "cancel": Object {
+                                  "key": "Escape",
+                                  "keyLabel": Object {
+                                    "defaultMessage": "ESC",
+                                    "id": "KeyMapping.taskEditing.escapeLabel",
+                                  },
+                                  "label": Object {
+                                    "defaultMessage": "Cancel Editing",
+                                    "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                              },
+                              "taskReview": Object {
+                                "nextTask": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Next Task",
+                                    "id": "KeyMapping.taskReview.nextTask",
+                                  },
+                                },
+                                "prevTask": Object {
+                                  "key": "h",
+                                  "label": Object {
+                                    "defaultMessage": "Previous Task",
+                                    "id": "KeyMapping.taskReview.prevTask",
+                                  },
+                                },
+                              },
+                            }
+          }
+          mapBounds={
+                    Object {
+                              "task": Object {
+                                "bounds": Array [
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                ],
+                              },
+                            }
+          }
+          nextTask={[Function]}
+          saveTask={[Function]}
+          setTaskBeingCompleted={[Function]}
+          setTaskLoadBy={[Function]}
+          task={
+                    Object {
+                              "id": 123,
+                              "parent": Object {
+                                "id": 321,
+                              },
+                              "status": 0,
+                            }
+          }
+          taskLoadBy="random"
+          unsaveTask={[Function]}
+          user={
+                    Object {
+                              "id": 357,
+                              "isLoggedIn": true,
+                              "settings": Object {
+                                "defaultEditor": 1,
+                              },
+                            }
+          }
+/>,
       ],
       "className": "active-task-controls",
     },
@@ -8217,6 +10483,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__track-task",
           "closeEditor": [Function],
           "completeTask": [Function],
@@ -8309,6 +10576,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -8316,6 +10584,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -8335,6 +10604,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
           "className": "active-task-controls__task-comment",
           "closeEditor": [Function],
           "commentChanged": [Function],
@@ -8428,6 +10698,7 @@ ShallowWrapper {
           "nextTask": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -8435,6 +10706,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -8463,6 +10735,7 @@ ShallowWrapper {
             5,
             6,
           },
+          "challengeId": 321,
           "closeEditor": [Function],
           "complete": [Function],
           "completeTask": [Function],
@@ -8556,6 +10829,7 @@ ShallowWrapper {
           "pickEditor": [Function],
           "saveTask": [Function],
           "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -8563,6 +10837,7 @@ ShallowWrapper {
             },
             "status": 0,
           },
+          "taskLoadBy": "random",
           "unsaveTask": [Function],
           "user": Object {
             "id": 357,
@@ -8578,6 +10853,126 @@ ShallowWrapper {
       },
       false,
       false,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcutGroup": [Function],
+          "challengeId": 321,
+          "closeEditor": [Function],
+          "completeTask": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "editTask": [Function],
+          "editor": Object {},
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "nextTask": [Function],
+          "saveTask": [Function],
+          "setTaskBeingCompleted": [Function],
+          "setTaskLoadBy": [Function],
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "taskLoadBy": "random",
+          "unsaveTask": [Function],
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
     ],
     "type": "div",
   },
@@ -8590,6 +10985,7 @@ ShallowWrapper {
         "children": Array [
           <TaskTrackControls
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__track-task"
             closeEditor={[Function]}
             completeTask={[Function]}
@@ -8688,6 +11084,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -8697,6 +11094,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -8710,6 +11108,7 @@ ShallowWrapper {
 />,
           <TaskCommentInput
             activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
             className="active-task-controls__task-comment"
             closeEditor={[Function]}
             commentChanged={[Function]}
@@ -8809,6 +11208,7 @@ ShallowWrapper {
             nextTask={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -8818,6 +11218,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -8842,6 +11243,7 @@ ShallowWrapper {
                                     6,
                                   }
             }
+            challengeId={321}
             closeEditor={[Function]}
             complete={[Function]}
             completeTask={[Function]}
@@ -8941,6 +11343,7 @@ ShallowWrapper {
             pickEditor={[Function]}
             saveTask={[Function]}
             setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
             task={
                         Object {
                                     "id": 123,
@@ -8950,6 +11353,7 @@ ShallowWrapper {
                                     "status": 0,
                                   }
             }
+            taskLoadBy="random"
             unsaveTask={[Function]}
             user={
                         Object {
@@ -8963,6 +11367,128 @@ ShallowWrapper {
 />,
           false,
           false,
+          <TaskRandomnessControl
+            activateKeyboardShortcutGroup={[Function]}
+            challengeId={321}
+            closeEditor={[Function]}
+            completeTask={[Function]}
+            deactivateKeyboardShortcutGroup={[Function]}
+            editTask={[Function]}
+            editor={Object {}}
+            intl={
+                        Object {
+                                    "formatMessage": [Function],
+                                  }
+            }
+            keyboardShortcutGroups={
+                        Object {
+                                    "openEditor": Object {
+                                      "editId": Object {
+                                        "key": "e",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Id",
+                                          "id": "KeyMapping.openEditor.editId",
+                                        },
+                                      },
+                                      "editJosm": Object {
+                                        "key": "r",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmLayer": Object {
+                                        "key": "t",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in new JOSM layer",
+                                          "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                    },
+                                    "taskCompletion": Object {
+                                      "falsePositive": Object {
+                                        "key": "q",
+                                        "label": Object {
+                                          "defaultMessage": "Not an Issue",
+                                          "id": "KeyMapping.taskCompletion.falsePositive",
+                                        },
+                                      },
+                                      "skip": Object {
+                                        "key": "w",
+                                        "label": Object {
+                                          "defaultMessage": "Skip",
+                                          "id": "KeyMapping.taskCompletion.skip",
+                                        },
+                                      },
+                                    },
+                                    "taskEditing": Object {
+                                      "cancel": Object {
+                                        "key": "Escape",
+                                        "keyLabel": Object {
+                                          "defaultMessage": "ESC",
+                                          "id": "KeyMapping.taskEditing.escapeLabel",
+                                        },
+                                        "label": Object {
+                                          "defaultMessage": "Cancel Editing",
+                                          "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                    },
+                                    "taskReview": Object {
+                                      "nextTask": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Next Task",
+                                          "id": "KeyMapping.taskReview.nextTask",
+                                        },
+                                      },
+                                      "prevTask": Object {
+                                        "key": "h",
+                                        "label": Object {
+                                          "defaultMessage": "Previous Task",
+                                          "id": "KeyMapping.taskReview.prevTask",
+                                        },
+                                      },
+                                    },
+                                  }
+            }
+            mapBounds={
+                        Object {
+                                    "task": Object {
+                                      "bounds": Array [
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                      ],
+                                    },
+                                  }
+            }
+            nextTask={[Function]}
+            saveTask={[Function]}
+            setTaskBeingCompleted={[Function]}
+            setTaskLoadBy={[Function]}
+            task={
+                        Object {
+                                    "id": 123,
+                                    "parent": Object {
+                                      "id": 321,
+                                    },
+                                    "status": 0,
+                                  }
+            }
+            taskLoadBy="random"
+            unsaveTask={[Function]}
+            user={
+                        Object {
+                                    "id": 357,
+                                    "isLoggedIn": true,
+                                    "settings": Object {
+                                      "defaultEditor": 1,
+                                    },
+                                  }
+            }
+/>,
         ],
         "className": "active-task-controls",
       },
@@ -8974,6 +11500,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__track-task",
             "closeEditor": [Function],
             "completeTask": [Function],
@@ -9066,6 +11593,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -9073,6 +11601,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -9092,6 +11621,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
             "className": "active-task-controls__task-comment",
             "closeEditor": [Function],
             "commentChanged": [Function],
@@ -9185,6 +11715,7 @@ ShallowWrapper {
             "nextTask": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -9192,6 +11723,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -9220,6 +11752,7 @@ ShallowWrapper {
               5,
               6,
             },
+            "challengeId": 321,
             "closeEditor": [Function],
             "complete": [Function],
             "completeTask": [Function],
@@ -9313,6 +11846,7 @@ ShallowWrapper {
             "pickEditor": [Function],
             "saveTask": [Function],
             "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -9320,6 +11854,7 @@ ShallowWrapper {
               },
               "status": 0,
             },
+            "taskLoadBy": "random",
             "unsaveTask": [Function],
             "user": Object {
               "id": 357,
@@ -9335,6 +11870,126 @@ ShallowWrapper {
         },
         false,
         false,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcutGroup": [Function],
+            "challengeId": 321,
+            "closeEditor": [Function],
+            "completeTask": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "editTask": [Function],
+            "editor": Object {},
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "nextTask": [Function],
+            "saveTask": [Function],
+            "setTaskBeingCompleted": [Function],
+            "setTaskLoadBy": [Function],
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "taskLoadBy": "random",
+            "unsaveTask": [Function],
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
       ],
       "type": "div",
     },

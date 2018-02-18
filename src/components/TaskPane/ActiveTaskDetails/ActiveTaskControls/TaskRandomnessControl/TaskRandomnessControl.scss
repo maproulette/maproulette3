@@ -1,0 +1,11 @@
+@import 'variables.scss';
+
+.task-randomness-control {
+  &__prompt {
+    margin-right: 0.5em;
+  }
+
+  input {
+    margin: 0 5px;
+  }
+}

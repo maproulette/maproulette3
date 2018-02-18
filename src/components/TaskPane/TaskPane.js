@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import { TransitionGroup,
+         CSSTransition } from 'react-transition-group'
 import _isNumber from 'lodash/isNumber'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import BusySpinner from '../BusySpinner/BusySpinner'
-import WithTaskCenterPoint from '../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
+import WithTaskCenterPoint
+       from '../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
 import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithEditor from '../HOCs/WithEditor/WithEditor'
+import WithChallengePreferences
+       from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import ActiveTaskDetails from './ActiveTaskDetails/ActiveTaskDetails'
 import './TaskPane.css'
 
@@ -28,7 +32,7 @@ const DetailMap = WithMapBounds(WithTaskCenterPoint(TaskMap))
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class TaskPane extends Component {
+export class TaskPane extends Component {
   state = {
     /**
      * id of task once user initiates completion. This is used to help our
@@ -43,9 +47,9 @@ export default class TaskPane extends Component {
    * WithCurrentTask, but we intercept the call so that we can manage our
    * transition animation as the task prepares to complete.
    */
-  completeTask = (taskId, challengeId, taskStatus, comment) => {
+  completeTask = (taskId, challengeId, taskStatus, comment, taskLoadBy) => {
     this.setState({completingTask: taskId})
-    this.props.completeTask(taskId, challengeId, taskStatus, comment)
+    this.props.completeTask(taskId, challengeId, taskStatus, comment, taskLoadBy)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,3 +89,5 @@ TaskPane.propTypes = {
   /** The task to be worked upon. */
   task: PropTypes.object,
 }
+
+export default WithChallengePreferences(TaskPane)

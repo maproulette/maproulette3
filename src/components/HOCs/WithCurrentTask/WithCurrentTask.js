@@ -11,8 +11,9 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
+import { TaskLoadMethod }
+       from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
-import { setPreferences } from '../../../services/Preferences/Preferences'
 
 const FRESHNESS_THRESHOLD = 5000 // 5 seconds
 
@@ -68,34 +69,26 @@ const WithLoadedTask = function(WrappedComponent) {
 }
 
 export const mapStateToProps = (state, ownProps) => {
-  const props = {task: null}
+  const mappedProps = {task: null}
 
   // Pull taskId from route
-  const taskId = parseInt(_get(ownProps, 'match.params.taskId', ownProps.taskId), 10)
+  const taskId =
+    parseInt(_get(ownProps, 'match.params.taskId', ownProps.taskId), 10)
 
   if (!isNaN(taskId)) {
-    props.taskId = taskId
+    mappedProps.taskId = taskId
     const taskEntity = _get(state, `entities.tasks.${taskId}`)
 
     if (taskEntity) {
       // denormalize task so that parent challenge is embedded.
-      props.task =
+      mappedProps.task =
         denormalize(taskEntity, taskDenormalizationSchema(), state.entities)
-      const challengeId = _get(props.task, 'parent.id')
 
-      if (_isNumber(challengeId)) {
-        props.minimizeChallenge = _get(state.currentPreferences,
-                                       `challenges.${challengeId}.minimize`,
-                                       false)
-
-        props.collapseInstructions = _get(state.currentPreferences,
-                                       `challenges.${challengeId}.collapseInstructions`,
-                                       false)
-      }
+      mappedProps.challengeId = _get(mappedProps.task, 'parent.id')
     }
   }
 
-  return props
+  return mappedProps
 }
 
 export const mapDispatchToProps = (dispatch, ownProps) => {
@@ -110,7 +103,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (taskId, challengeId, taskStatus, comment) => {
+    completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy) => {
       dispatch(
         completeTask(taskId, challengeId, taskStatus)
       ).then(() => {
@@ -122,7 +115,10 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
       // Load the next task from the challenge.
       dispatch(
-        loadRandomTaskFromChallenge(challengeId, taskId)
+        loadRandomTaskFromChallenge(
+          challengeId,
+          taskLoadBy === TaskLoadMethod.proximity ? taskId : undefined
+        )
       ).then(newTask =>
         visitNewTask(challengeId, taskId, newTask, ownProps.history)
       )
@@ -132,18 +128,15 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Move to the next task without setting any completion status,
      * useful for when a user visits a task that is already complete.
      */
-    nextTask: (challengeId, taskId) =>
+    nextTask: (challengeId, taskId, taskLoadBy) =>
       dispatch(
-        loadRandomTaskFromChallenge(challengeId, taskId)
+        loadRandomTaskFromChallenge(
+          challengeId,
+          taskLoadBy === TaskLoadMethod.proximity ? taskId : undefined
+        )
       ).then(newTask =>
         visitNewTask(challengeId, taskId, newTask, ownProps.history)
       ),
-
-    setChallengeMinimization: (challengeId, minimize=false) =>
-      dispatch(setPreferences('challenges', {[challengeId]: {minimize}})),
-
-    setInstructionsCollapsed: (challengeId, collapseInstructions=false) =>
-      dispatch(setPreferences('challenges', {[challengeId]: {collapseInstructions}})),
   }
 }
 
