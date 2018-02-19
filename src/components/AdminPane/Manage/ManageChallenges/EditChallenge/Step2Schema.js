@@ -1,4 +1,5 @@
-import { DropzoneTextUpload } from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import { DropzoneTextUpload }
+       from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import messages from './Messages'
 
 /**

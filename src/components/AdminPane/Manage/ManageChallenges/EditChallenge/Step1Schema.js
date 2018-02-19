@@ -69,6 +69,7 @@ export const jsSchema = (intl, user) => {
       },
       difficulty: {
         title: intl.formatMessage(messages.difficultyLabel),
+        description: intl.formatMessage(messages.difficultyDescription),
         type: "number",
         enum: _values(ChallengeDifficulty),
         enumNames: _map(ChallengeDifficulty, (value, key) => localizedDifficultyLabels[key]),
