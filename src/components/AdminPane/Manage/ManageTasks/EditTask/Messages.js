@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Save",
   },
 
+  cancel: {
+    id: 'EditTask.cancel',
+    defaultMessage: "Cancel",
+  },
+
   nameLabel: {
     id: 'EditTask.form.name.label',
     defaultMessage: "Name",

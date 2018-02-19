@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Save",
   },
 
+  cancel: {
+    id: 'EditProject.cancel',
+    defaultMessage: "Cancel",
+  },
+
   nameLabel: {
     id: 'EditProject.form.name.label',
     defaultMessage: "Name",
