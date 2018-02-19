@@ -11,10 +11,15 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import Steps from '../../../../Bulma/Steps'
 import StepNavigation from '../../../../Bulma/StepNavigation'
-import { CustomFieldTemplate } from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
-import WithCurrentProject from '../../../HOCs/WithCurrentProject/WithCurrentProject'
-import WithCurrentChallenge from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
-import WithCurrentUser from '../../../../HOCs/WithCurrentUser/WithCurrentUser'
+import { CustomFieldTemplate,
+         MarkdownDescriptionField }
+       from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import WithCurrentProject
+       from '../../../HOCs/WithCurrentProject/WithCurrentProject'
+import WithCurrentChallenge
+       from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
+import WithCurrentUser
+       from '../../../../HOCs/WithCurrentUser/WithCurrentUser'
 import { ChallengeCategoryKeywords,
          categoryMatchingKeywords,
          rawCategoryKeywords }
@@ -112,6 +117,7 @@ export class EditChallenge extends Component {
           activeStep: this.state.activeStep + 1,
           formContext: {isValid: true}
         })
+        window.scrollTo(0, 0)
       }
     }
     else {
@@ -219,6 +225,12 @@ export class EditChallenge extends Component {
     const challengeData = this.prepareChallengeDataForForm()
     const currentStep = challengeSteps[this.state.activeStep]
 
+    // Override the standard form-field description renderer with our own that
+    // supports Markdown. We pass this in to the `fields` prop on the Form.
+    const customFields = {
+      DescriptionField: MarkdownDescriptionField,
+    }
+
     // Each time we render, start formContext.isValid at true. It'll be set
     // to false if needed by an RJSFFormFieldAdapter if its value has errors.
     // This is an ugly workaround -- see above.
@@ -266,6 +278,7 @@ export class EditChallenge extends Component {
         <Form schema={currentStep.jsSchema(this.props.intl, this.props.user)}
               uiSchema={currentStep.uiSchema}
               FieldTemplate={CustomFieldTemplate}
+              fields={customFields}
               liveValidate
               noHtml5Validate
               showErrorList={false}

@@ -3,6 +3,12 @@ import remark from 'remark'
 import reactRenderer from 'remark-react'
 import PropTypes from 'prop-types'
 
+/**
+ * MarkdownContent normalizes and renders the content of the given markdown
+ * string as formatted Markdown.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export default class MarkdownContent extends Component {
   render() {
     if (!this.props.markdown) {

@@ -31,7 +31,7 @@ export default defineMessages({
 
   nameDescription: {
     id: 'EditTask.form.name.description',
-    defaultMessage: "Name of the task",
+    defaultMessage: "Name of the task.",
   },
 
   instructionLabel: {
@@ -42,7 +42,7 @@ export default defineMessages({
   instructionDescription: {
     id: 'EditTask.form.instruction.description',
     defaultMessage: "Instructions for users doing this specific task " +
-                    "(overrides challenge instructions)",
+                    "(overrides challenge instructions).",
   },
 
   geometriesLabel: {
@@ -52,7 +52,10 @@ export default defineMessages({
 
   geometriesDescription: {
     id: 'EditTask.form.geometries.description',
-    defaultMessage: "GeoJSON for this task",
+    defaultMessage: "GeoJSON for this task. Every Task in MapRoulette basically " +
+      "consists of a geometry: a point, line or polygon indicating on the map " +
+      "where it is that you want the mapper to pay attention, described by " +
+      "GeoJSON.",
   },
 
   priorityLabel: {
@@ -62,7 +65,10 @@ export default defineMessages({
 
   priorityDescription: {
     id: 'EditTask.form.priority.description',
-    defaultMessage: "Priority of this task",
+    defaultMessage: "Priority of this task. " +
+      "The priority of tasks can be defined as High, Medium and Low. All " +
+      "high priority tasks will be shown first, then medium and finally " +
+      "low.",
   },
 
   statusLabel: {
@@ -72,6 +78,7 @@ export default defineMessages({
 
   statusDescription: {
     id: 'EditTask.form.status.description',
-    defaultMessage: "Status of this task",
+    defaultMessage: "Status of this task. Depending on the current " +
+      "status, your choices for updating the status may be limited.",
   },
 })

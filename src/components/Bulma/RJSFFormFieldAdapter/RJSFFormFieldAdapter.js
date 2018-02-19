@@ -3,6 +3,7 @@ import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import Dropzone from 'react-dropzone'
 import { FormattedMessage } from 'react-intl'
+import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './RJSFFormFieldAdapter.css'
@@ -61,7 +62,7 @@ export const SelectField = ({id, label, required, rawDescription, children}) => 
       <div className="field">
         <div className="control">
           <div className="select">{children}</div>
-          {_isString(rawDescription) && <div className="help">{rawDescription}</div>}
+          <MarkdownContent className="help" markdown={rawDescription} />
         </div>
       </div>
     </div>
@@ -87,7 +88,7 @@ export const InputField = ({id, label, required, rawDescription, rawErrors, chil
            <div className="errors">{rawErrors.join('; ')}</div>
           }
           {children}
-          {_isString(rawDescription) && <div className="help">{rawDescription}</div>}
+          <MarkdownContent className="help" markdown={rawDescription} />
         </div>
       </div>
     </div>
@@ -110,7 +111,7 @@ export const CheckboxField = ({id, label, required, rawDescription, children}) =
       <div className="field">
         <div className="control">
           {children}
-          {_isString(rawDescription) && <div className="help">{rawDescription}</div>}
+          <MarkdownContent className="help" markdown={rawDescription} />
         </div>
       </div>
     </div>
@@ -148,6 +149,21 @@ export const DropzoneTextUpload = ({required, onChange}) => (
     }}
   </Dropzone>
 )
+
+/**
+ * Interprets and renders the given field description as Markdown
+ */
+export const MarkdownDescriptionField = ({id, description}) => {
+  if (!_isString(description)) {
+    return null
+  }
+
+  return (
+    <div id={id} className="field-description">
+      <MarkdownContent markdown={description} />
+    </div>
+  )
+}
 
 /**
  * Helper function that returns a Promise that extracts the content from the

@@ -46,7 +46,13 @@ export default defineMessages({
 
   enabledDescription: {
     id: 'EditProject.form.enabled.description',
-    defaultMessage: "Allow users to see the project",
+    defaultMessage: "If you set your project to Visible, all Challenges under " +
+      "it that are also set to Visible will be available, discoverable, and " +
+      "searchable for other users. Effectively, making your Project visible " +
+      "publishes any Challenges under it that are also Visible. You can still work " +
+      "on your own challenges and share static Challenge URLs for any of your " +
+      "Challenges with people and it will work. So until you set your Project to " +
+      "Visible, you can see your Project as testing ground for Challenges.",
   },
 
   descriptionLabel: {
