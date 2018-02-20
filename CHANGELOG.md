@@ -7,6 +7,32 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-alpha.5] - 2018-02-19
+### Added
+- Support Matomo/PIWIK analytics integration (#30).
+- Add task review mode for challenge owners.
+- Show task map and table to challenge owners when managing a challenge.
+- Indicate to challenge owners if challenge tasks are still being built
+  (or failed to build) when managing a challenge (#85).
+- Offer cancel controls on various forms used by challenge owners.
+- Show popup with task properties when feature is clicked on map while
+  working on a task.
+- Add user control for determining whether subsequent tasks in a challenge
+  are loaded by random or by geographic proximity.
+
+### Changed
+- Improve labels and descriptions of project, challenge, and task form fields
+  for challenge owners during the creation and editing process.
+- Challenge tasks now load randomly by default, rather than by
+  geographic proximity. This can be managed by the user on a per-challenge
+  basis (#82).
+
+### Fixed
+- Fix clicking on project name as challenge owner when project search yields a
+  single result (#116).
+- Internationalize keyboard-shortcut labels.
+
+
 ## [v3.00-alpha.4] - 2018-02-12
 ### Added
 - Dedicated route for challenge browse mode so it can be linked to directly.
