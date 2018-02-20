@@ -19,6 +19,26 @@ export default defineMessages({
     defaultMessage: "Metrics",
   },
 
+  asOf: {
+    id: "Admin.Challenge.status.asOf.label",
+    defaultMessage: "as of",
+  },
+
+  tasksBuilding: {
+    id: "Admin.Challenge.tasksBuilding",
+    defaultMessage: "Tasks Building...",
+  },
+
+  tasksFailed: {
+    id: "Admin.Challenge.tasksFailed",
+    defaultMessage: "Tasks Failed to Build",
+  },
+
+  refreshStatusLabel: {
+    id: "Admin.Challenge.controls.refreshStatus.label",
+    defaultMessage: "Refresh Status",
+  },
+
   tasksHeader: {
     id: "Admin.Tasks.header",
     defaultMessage: "Tasks",

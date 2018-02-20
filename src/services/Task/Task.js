@@ -406,6 +406,18 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
                             normalizedTaskResults.result
 
     if (!_isUndefined(retrievedTaskId)) {
+      // Some API requests give back the parent as `parentId` instead
+      // of `parent`, and the geometries back as `geometry` instead of
+      // `geometries`. Normalize these.
+      const taskEntity = normalizedTaskResults.entities.tasks[retrievedTaskId]
+      if (!_isNumber(taskEntity.parent)) {
+        taskEntity.parent = taskEntity.parentId
+      }
+
+      if (!_isObject(taskEntity.geometries)) {
+        taskEntity.geometries = taskEntity.geometry
+      }
+
       dispatch(receiveTasks(normalizedTaskResults.entities))
 
       // Kick off fetches of supplementary data, but don't wait for them.
@@ -415,7 +427,7 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
 
       fetchTaskComments(retrievedTaskId)(dispatch)
 
-      return normalizedTaskResults.entities.tasks[retrievedTaskId]
+      return taskEntity
     }
   }).catch((error) => {
     dispatch(addError(buildError(

@@ -33,10 +33,11 @@ const WithCurrentChallenge = function(WrappedComponent,
     currentChallengeId = () =>
       parseInt(_get(this.props, 'match.params.challengeId'), 10)
 
-    componentDidMount() {
+    loadChallenge = () => {
       const challengeId = this.currentChallengeId()
 
       if (!isNaN(challengeId)) {
+        this.setState({loadingChallenge: true})
         const timelineStartDate = subMonths(new Date(), historicalMonths)
 
         Promise.all([
@@ -55,6 +56,10 @@ const WithCurrentChallenge = function(WrappedComponent,
       else {
         this.setState({loadingChallenge: false, loadingTasks: false})
       }
+    }
+
+    componentDidMount() {
+      this.loadChallenge()
     }
 
     render() {
@@ -79,6 +84,7 @@ const WithCurrentChallenge = function(WrappedComponent,
                                clusteredTasks={clusteredTasks}
                                loadingChallenge={this.state.loadingChallenge}
                                loadingTasks={this.state.loadingTasks}
+                               refreshStatus={this.loadChallenge}
                                {..._omit(this.props, ['entities',
                                                       'fetchChallenge',
                                                       'fetchChallengeComments',
