@@ -3,6 +3,25 @@
 .admin__manage.view-challenge {
   .admin__manage__primary-content {
     padding-top: 0;
+
+    .challenge-tasks-status {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+
+      h3 {
+        font-size: $size-3;
+
+        &.is-danger {
+          color: $coral;
+        }
+      }
+
+      .refresh-control {
+        margin-top: 50px;
+      }
+    }
   }
 
   section {

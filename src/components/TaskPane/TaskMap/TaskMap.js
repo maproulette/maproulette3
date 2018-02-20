@@ -13,6 +13,7 @@ import { MIN_ZOOM,
          MAX_ZOOM,
           DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
+import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.css'
 
 const VisibleLayerToggle = WithVisibleLayer(WithLayerSources(LayerToggle))
@@ -53,7 +54,7 @@ export default class TaskMap extends Component {
 
   render() {
     if (!this.props.task || !_isObject(this.props.task.parent)) {
-      return null
+      return <BusySpinner />
     }
 
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
