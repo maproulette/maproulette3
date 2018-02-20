@@ -46,6 +46,12 @@ export class EditProject extends Component {
     }
   }
 
+  cancel = () => {
+    _isObject(this.props.project) ?
+      this.props.history.push(`/admin/project/${this.props.project.id}`) :
+      this.props.history.push('/admin/manage')
+  }
+
   render() {
     const projectData = _merge({}, this.props.project, this.state.formData)
 
@@ -86,6 +92,12 @@ export class EditProject extends Component {
               onChange={this.changeHandler}
               onSubmit={this.finish}>
           <div className="form-controls">
+            <button className="button is-secondary is-outlined"
+                    disabled={this.state.isSaving}
+                    onClick={this.cancel}>
+              <FormattedMessage {...messages.cancel} />
+            </button>
+
             <button className={classNames("button is-primary is-outlined has-svg-icon",
                                           {"is-loading": this.state.isSaving})}
                     onClick={this.props.finish}>

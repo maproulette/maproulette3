@@ -47,6 +47,11 @@ export class EditTask extends Component {
     }
   }
 
+  cancel = () => {
+    this.props.history.push(
+      `/admin/project/${this.props.projectId}/challenge/${this.props.challengeId}`)
+  }
+
   render() {
     const taskData = _merge({}, this.props.task, this.state.formData)
 
@@ -102,6 +107,12 @@ export class EditTask extends Component {
               onChange={this.changeHandler}
               onSubmit={this.finish}>
           <div className="form-controls">
+            <button className="button is-secondary is-outlined"
+                    disabled={this.state.isSaving}
+                    onClick={this.props.cancel}>
+              <FormattedMessage {...messages.cancel} />
+            </button>
+
             <button className={classNames("button is-primary is-outlined has-svg-icon",
                                           {"is-loading": this.state.isSaving})}
                     onClick={this.props.finish}>

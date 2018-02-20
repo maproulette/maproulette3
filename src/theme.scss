@@ -208,6 +208,16 @@ button.is-primary.is-loading {
   }
 }
 
+.button-group {
+  button.button {
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
 .full-width {
   width: 100%;
 }

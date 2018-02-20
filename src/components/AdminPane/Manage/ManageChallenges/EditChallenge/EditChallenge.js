@@ -10,7 +10,8 @@ import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import Steps from '../../../../Bulma/Steps'
-import StepNavigation from '../../../../Bulma/StepNavigation'
+import StepNavigation
+       from '../../../../Bulma/StepNavigation/StepNavigation'
 import { CustomFieldTemplate,
          MarkdownDescriptionField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
@@ -139,6 +140,13 @@ export class EditChallenge extends Component {
         }
       })
     }
+  }
+
+  cancel = () => {
+    _isObject(this.props.challenge) ?
+      this.props.history.push(
+        `/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`) :
+      this.props.history.push(`/admin/project/${this.props.project.id}`)
   }
 
   /** Receive updates to the form data, along with any validation errors */
@@ -292,7 +300,7 @@ export class EditChallenge extends Component {
         <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
                         canPrev={this.canPrev} prevStep={this.prevStep}
                         canNext={this.canNext} nextStep={this.nextStep}
-                        finish={this.finish} />
+                        finish={this.finish} cancel={this.cancel} />
       </div>
     )
   }
