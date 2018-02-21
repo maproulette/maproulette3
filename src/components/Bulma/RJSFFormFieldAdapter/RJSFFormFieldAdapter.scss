@@ -4,6 +4,10 @@
 // framework. While we try to customize the markup, rjsf customization
 // is a bit clunky and requires some fine-tuning here.
 form.rjsf {
+  .array-item-remove::after {
+    content: 'Remove';
+  }
+
   fieldset {
     border: 6px solid $grey-lightest;
     border-radius: 6px;
@@ -16,6 +20,20 @@ form.rjsf {
       padding: 0 5px;
       margin-bottom: 40px;
       font-weight: $weight-medium;
+    }
+
+    fieldset {
+      border: 1px solid $grey-lightest;
+      padding: 25px;
+
+      legend {
+        display: none;
+      }
+
+      fieldset {
+        border: none;
+        padding: 0;
+      }
     }
   }
 
@@ -46,6 +64,57 @@ form.rjsf {
 
   .form-fields-wrapper {
     margin: 20px 0;
+
+    .field .control fieldset {
+      legend {
+        display: none;
+      }
+
+      .field-label {
+        flex-grow: 0;
+        display: none;
+      }
+
+      .array-field {
+        &__item {
+          margin-top: 1em;
+
+          .inline {
+            .field-label {
+              display: none;
+            }
+
+            .field.is-horizontal {
+              display: inline-block;
+              width: auto;
+              margin-right: 1em;
+
+              &:last-child {
+                margin-right: 0;
+              }
+
+              input[type='text'] {
+                width: auto;
+              }
+            }
+
+            .array-field__item__control {
+              display: inline-block;
+              .icon {
+                svg {
+                  height: 20px;
+                  width: auto;
+                }
+              }
+            }
+          }
+        }
+
+        &__block-controls {
+          margin-top: 1em;
+        }
+      }
+    }
   }
 
   .form-controls {

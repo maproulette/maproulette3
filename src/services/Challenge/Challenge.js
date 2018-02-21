@@ -1,6 +1,5 @@
 import { normalize, schema } from 'normalizr'
 import _get from 'lodash/get'
-import _isObject from 'lodash/isObject'
 import _compact from 'lodash/compact'
 import _pick from 'lodash/pick'
 import _map from 'lodash/map'
@@ -12,6 +11,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isEmpty from 'lodash/isEmpty'
 import _isString from 'lodash/isString'
 import _isNumber from 'lodash/isNumber'
+import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
@@ -536,12 +536,23 @@ const removeChallengeKeywords = function(challengeId, oldKeywords=[]) {
  * @private
  */
 const reduceChallengesFurther = function(mergedState, oldState, challengeEntities) {
-  // The generic reduction will merge arrays, creating a union of values.
-  // We don't want that for keywords/tags: we want to replace the old array
-  // with the new one.
+  // The generic reduction will merge arrays and objects, and some fields
+  // we want to simply overwrite with the latest data.
   challengeEntities.forEach(entity => {
     if (_isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags
+    }
+
+    if (_isObject(entity.highPriorityRule)) {
+      mergedState[entity.id].highPriorityRule = entity.highPriorityRule
+    }
+
+    if (_isObject(entity.mediumPriorityRule)) {
+      mergedState[entity.id].mediumPriorityRule = entity.mediumPriorityRule
+    }
+
+    if (_isObject(entity.lowPriorityRule)) {
+      mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule
     }
   })
 }

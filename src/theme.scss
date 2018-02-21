@@ -98,6 +98,12 @@ $tablet: 40px;
   .icon:first-child:last-child, .icon:first-child:not(:last-child) {
     margin-left: 0;
     margin-right: 0;
+
+    &.is-danger {
+      svg {
+        fill: $danger;
+      }
+    }
   }
 }
 

@@ -28,6 +28,47 @@ export const jsSchema = intl => {
     title: intl.formatMessage(messages.step3Label),
     description: intl.formatMessage(messages.step3Description),
     type: "object",
+    definitions: {
+      priorityRuleGroup: {
+        title: " ", // empty title
+        type: "object",
+        properties: {
+          condition: {
+            title: " ", // empty title
+            type: "string",
+            enum: ["AND", "OR"],
+            default: "AND",
+          },
+          rules: {
+            title: " ", // empty title
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                key: {
+                  title: "Key",
+                  type: "string",
+                },
+                operator: {
+                  type: "string",
+                  enum: ["equal", "not_equal",
+                        "contains", "not_contains",
+                        "is_empty", "is_not_empty"],
+                  enumNames: ["equals", "doesn't equal",
+                              "contains", "doesn't contain",
+                              "is empty", "isn't empty"],
+                  default: "equal",
+                },
+                value: {
+                  title: "Value",
+                  type: "string",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     properties: {
       defaultPriority: {
         title: intl.formatMessage(messages.defaultPriorityLabel),
@@ -37,8 +78,60 @@ export const jsSchema = intl => {
         enumNames: _map(ChallengePriority, (value, key) => localizedPriorityLabels[key]),
         default: ChallengePriority.high,
       },
+      highPriorityRules: {
+        title: "High Priority Rules",
+        type: "object",
+        properties: {
+          ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
+        },
+      },
+      mediumPriorityRules: {
+        title: "Medium Priority Rules",
+        type: "object",
+        properties: {
+          ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
+        },
+      },
+      lowPriorityRules: {
+        title: "Low Priority Rules",
+        type: "object",
+        properties: {
+          ruleGroup: { "$ref": "#/definitions/priorityRuleGroup" },
+        },
+      },
     },
   }
+}
+
+/**
+ * react-jsonschema-form doesn't currently support uiSchema entries for
+ * definitions, so we define a schema snippet here for the priorityRuleGroup
+ * definition that can be used in the uiSchema without duplicating it over and
+ * over for each field referencing a priorityRuleGroup.
+ *
+ * @private
+ */
+const priorityRuleGroupUISchema = {
+  condition: {
+    "ui:widget": "select",
+  },
+  rules: {
+    items: {
+      "ui:options": { inline: true, label: false },
+      keyType: {
+        "ui:widget": "select",
+      },
+      key: {
+        "ui:placeholder": "OSM Tag Name",
+      },
+      operator: {
+        "ui:widget": "select",
+      },
+      value: {
+        "ui:placeholder": "Value",
+      },
+    }
+  },
 }
 
 /**
@@ -54,5 +147,14 @@ export const jsSchema = intl => {
 export const uiSchema = {
   defaultPriority: {
     "ui:widget": "select",
-  }
+  },
+  highPriorityRules: {
+    ruleGroup: priorityRuleGroupUISchema,
+  },
+  mediumPriorityRules: {
+    ruleGroup: priorityRuleGroupUISchema,
+  },
+  lowPriorityRules: {
+    ruleGroup: priorityRuleGroupUISchema,
+  },
 }
