@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import Form from "react-jsonschema-form"
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
-import _filter from 'lodash/filter'
 import _isString from 'lodash/isString'
 import _isEmpty from 'lodash/isEmpty'
+import _filter from 'lodash/filter'
 import _difference from 'lodash/difference'
 import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
@@ -13,6 +13,7 @@ import Steps from '../../../../Bulma/Steps'
 import StepNavigation
        from '../../../../Bulma/StepNavigation/StepNavigation'
 import { CustomFieldTemplate,
+         CustomArrayFieldTemplate,
          MarkdownDescriptionField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import WithCurrentProject
@@ -26,6 +27,8 @@ import { ChallengeCategoryKeywords,
          rawCategoryKeywords }
        from '../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
+import { preparePriorityRuleGroupForForm,
+         preparePriorityRuleGroupForSaving } from './PriorityRuleGroup'
 import { jsSchema as step1jsSchema,
          uiSchema as step1uiSchema } from './Step1Schema'
 import { jsSchema as step2jsSchema,
@@ -171,6 +174,21 @@ export class EditChallenge extends Component {
       this.state.formData
     )
 
+    if (!this.state.formData.highPriorityRules) {
+      challengeData.highPriorityRules =
+        preparePriorityRuleGroupForForm(challengeData.highPriorityRule)
+    }
+
+    if (!this.state.formData.mediumPriorityRules) {
+      challengeData.mediumPriorityRules =
+        preparePriorityRuleGroupForForm(challengeData.mediumPriorityRule)
+    }
+
+    if (!this.state.formData.lowPriorityRules) {
+      challengeData.lowPriorityRules =
+        preparePriorityRuleGroupForForm(challengeData.lowPriorityRule)
+    }
+
     // Since we represent the challenge category as just another keyword behind
     // the scenes, we need to separate the category keyword and the rest of
     // the keywords so that they're all presented properly in the form. First,
@@ -201,6 +219,18 @@ export class EditChallenge extends Component {
       this.prepareChallengeDataForForm(this.props.challenge),
       this.state.formData,
     )
+
+    challengeData.highPriorityRule =
+      preparePriorityRuleGroupForSaving(challengeData.highPriorityRules.ruleGroup)
+    delete challengeData.highPriorityRules
+
+    challengeData.mediumPriorityRule =
+      preparePriorityRuleGroupForSaving(challengeData.mediumPriorityRules.ruleGroup)
+    delete challengeData.mediumPriorityRules
+
+    challengeData.lowPriorityRule =
+      preparePriorityRuleGroupForSaving(challengeData.lowPriorityRules.ruleGroup)
+    delete challengeData.lowPriorityRules
 
     challengeData.tags = ChallengeCategoryKeywords[challengeData.category] ||
                          ChallengeCategoryKeywords.other
@@ -286,6 +316,7 @@ export class EditChallenge extends Component {
         <Form schema={currentStep.jsSchema(this.props.intl, this.props.user)}
               uiSchema={currentStep.uiSchema}
               FieldTemplate={CustomFieldTemplate}
+              ArrayFieldTemplate={CustomArrayFieldTemplate}
               fields={customFields}
               liveValidate
               noHtml5Validate

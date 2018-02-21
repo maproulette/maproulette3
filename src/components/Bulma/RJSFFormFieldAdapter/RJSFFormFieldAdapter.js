@@ -1,6 +1,8 @@
 import React from 'react'
+import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
+import _map from 'lodash/map'
 import Dropzone from 'react-dropzone'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
@@ -45,6 +47,40 @@ export const CustomFieldTemplate = props => {
     default:
       return InputField(props)
   }
+}
+
+export const CustomArrayFieldTemplate = props => {
+  const itemFields = _map(props.items, element =>
+    <div key={element.index} className="array-field__item">
+      <div className={classNames({
+        inline: _get(props, 'uiSchema.items.ui:options.inline')}
+      )}>
+        {element.children}
+
+        {element.hasRemove &&
+        <button className="button is-clear array-field__item__control remove-item-button"
+                onClick={element.onDropIndexClick(element.index)}>
+          <span className="icon is-danger">
+            <SvgSymbol sym="trash-icon" viewBox='0 0 20 20' />
+          </span>
+        </button>
+        }
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="array-field">
+      {itemFields}
+      {props.canAdd &&
+       <div className="array-field__block-controls">
+         <button className="button add-item-button" onClick={props.onAddClick}>
+           Add a Rule
+         </button>
+       </div>
+      }
+    </div>
+  )
 }
 
 /**

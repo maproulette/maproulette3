@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`preparePriorityRuleGroupForForm condition and rules are added into results, with parsed keys and values 1`] = `
+Object {
+  "condition": "AND",
+  "rules": Array [
+    Object {
+      "key": "firstTag",
+      "operator": "equals",
+      "value": "foo",
+    },
+    Object {
+      "key": "secondTag",
+      "operator": "contains",
+      "value": "bar",
+    },
+  ],
+}
+`;
+
+exports[`preparePriorityRuleGroupForForm empty values are represented as an empty string string 1`] = `
+Object {
+  "condition": "AND",
+  "rules": Array [
+    Object {
+      "key": "thirdTag",
+      "operator": "is_empty",
+      "value": "",
+    },
+  ],
+}
+`;
+
+exports[`preparePriorityRuleGroupForSaving condition and rules are added into results, with dot-separated key and value 1`] = `
+Object {
+  "condition": "AND",
+  "rules": Array [
+    Object {
+      "field": "tag",
+      "operator": "equals",
+      "type": "string",
+      "value": "firstTag.foo",
+    },
+    Object {
+      "field": "tag",
+      "operator": "contains",
+      "type": "string",
+      "value": "secondTag.bar",
+    },
+  ],
+}
+`;
+
+exports[`preparePriorityRuleGroupForSaving empty values are represented as a space in dot-separated string 1`] = `
+Object {
+  "condition": "AND",
+  "rules": Array [
+    Object {
+      "field": "tag",
+      "operator": "is_empty",
+      "type": "string",
+      "value": "thirdTag. ",
+    },
+  ],
+}
+`;
