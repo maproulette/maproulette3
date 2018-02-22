@@ -86,7 +86,7 @@ export const openEditor = function(state=null, action) {
   }
 }
 
-const constructIdURI = function(task, mapBounds) {
+export const constructIdURI = function(task, mapBounds) {
   const baseUriComponent =
     `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
 
@@ -95,19 +95,20 @@ const constructIdURI = function(task, mapBounds) {
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
 
   const featureStrings = _compact(task.geometries.features.map((feature) => {
-    if (!feature.properties.osmid) {
+    const osmId = featureOSMId(feature)
+    if (!osmId) {
       return null
     }
 
     switch (feature.geometry.type) {
       case 'Point':
-        return `n${feature.properties.osmid}`
+        return `n${osmId}`
       case 'LineString':
-        return `w${feature.properties.osmid}`
+        return `w${osmId}`
       case 'Polygon':
-        return `w${feature.properties.osmid}`
+        return `w${osmId}`
       case 'MultiPolygon':
-        return `r${feature.properties.osmid}`
+        return `r${osmId}`
       default:
         return null
     }
@@ -120,7 +121,13 @@ const constructIdURI = function(task, mapBounds) {
          [idUriComponent, mapUriComponent, commentUriComponent].join('&')
 }
 
-const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
+/**
+ * Builds a URI for the JOSM Remote Control plugin to load the given task
+ * features and zoom to the given map bounds.
+ *
+ * @see See https://wiki.openstreetmap.org/wiki/JOSM/RemoteControl
+ */
+export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
   const sw = mapBounds.bounds.getSouthWest()
   const ne = mapBounds.bounds.getNorthEast()
   let uri = `http://127.0.0.1:8111/load_and_zoom?left=${sw.lng}&right=${ne.lng}` +
@@ -130,19 +137,20 @@ const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
   let selects = []
   if (task.geometries && task.geometries.features) {
     selects = _compact(task.geometries.features.map((feature) => {
-      if (!feature.properties.osmid) {
+      const osmId = featureOSMId(feature)
+      if (!osmId) {
         return null
       }
 
       switch (feature.geometry.type) {
         case 'Point':
-          return `node${feature.properties.osmid}`
+          return `node${osmId}`
         case 'LineString':
-          return `way${feature.properties.osmid}`
+          return `way${osmId}`
         case 'Polygon':
-          return `way${feature.properties.osmid}`
+          return `way${osmId}`
         case 'MultiPolygon':
-          return `relation${feature.properties.osmid}`
+          return `relation${osmId}`
         default:
           return null
       }
@@ -171,4 +179,25 @@ const openJOSM = function(dispatch, editor, task, uri) {
     )))
     dispatch(editorOpened(editor, task.id, RequestStatus.error))
   })
+}
+
+/**
+ * Return an OSM id for the given feature, if available. Right
+ * now we support `osmid` and `@id` properties on the feature.
+ */
+export const featureOSMId = function(feature) {
+  if (!feature.properties) {
+    return null
+  }
+
+  if (feature.properties.osmid) {
+    return feature.properties.osmid
+  }
+  else if (feature.properties['@id']) {
+    // The @id property will often contain a representation of the feature type
+    // prior to the numerical id, which we strip out as different editors may
+    // expect different representations.
+    const match = /[^\d]*(\d+)$/.exec(feature.properties['@id'])
+    return (match && match.length > 1) ? match[1] : null
+  }
 }
