@@ -115,7 +115,8 @@ export const constructIdURI = function(task, mapBounds) {
 	}))
 
   const idUriComponent = "id=" + featureStrings.join(',')
-  const commentUriComponent = "comment=" + encodeURI(task.parent.checkinComment)
+  const commentUriComponent = "comment=" +
+                              encodeURIComponent(task.parent.checkinComment)
 
   return baseUriComponent +
          [idUriComponent, mapUriComponent, commentUriComponent].join('&')
@@ -132,7 +133,7 @@ export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
   const ne = mapBounds.bounds.getNorthEast()
   let uri = `http://127.0.0.1:8111/load_and_zoom?left=${sw.lng}&right=${ne.lng}` +
             `&top=${ne.lat}&bottom=${sw.lat}&new_layer=${asNewLayer ? 'true' : 'false'}` +
-            `&changeset_comment=${encodeURI(task.parent.checkinComment)}&select=`
+            `&changeset_comment=${encodeURIComponent(task.parent.checkinComment)}&select=`
 
   let selects = []
   if (task.geometries && task.geometries.features) {
@@ -190,14 +191,13 @@ export const featureOSMId = function(feature) {
     return null
   }
 
-  if (feature.properties.osmid) {
-    return feature.properties.osmid
+  const idValue = feature.properties.osmid || feature.properties['@id']
+  if (!idValue) {
+    return null
   }
-  else if (feature.properties['@id']) {
-    // The @id property will often contain a representation of the feature type
-    // prior to the numerical id, which we strip out as different editors may
-    // expect different representations.
-    const match = /[^\d]*(\d+)$/.exec(feature.properties['@id'])
-    return (match && match.length > 1) ? match[1] : null
-  }
+
+  // id properties may contain additional information, such as a representation
+  // of the feature type. We want to return just the the numerical OSM id.
+  const match = /(\d+)/.exec(idValue)
+  return (match && match.length > 1) ? match[1] : null
 }
