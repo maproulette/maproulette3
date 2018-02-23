@@ -79,6 +79,7 @@ export const toLatLngBounds = function(arrayBounds) {
 const SET_LOCATOR_MAP_BOUNDS = 'SET_LOCATOR_MAP_BOUNDS'
 const SET_CHALLENGE_MAP_BOUNDS = 'SET_CHALLENGE_MAP_BOUNDS'
 const SET_TASK_MAP_BOUNDS = 'SET_TASK_MAP_BOUNDS'
+const SET_CHALLENGE_OWNER_MAP_BOUNDS = 'SET_CHALLENGE_OWNER_MAP_BOUNDS'
 
 // redux action creators
 
@@ -105,8 +106,8 @@ export const setLocatorMapBounds = function(bounds, fromUserAction=false) {
 }
 
 /**
- * Set the given bounds of the challenge (browsing) map in the redux store as
- * the current bounds.
+ * Update the redux store with the given bounds of the challenge (browsing)
+ * map.
  *
  * @param bounds - either a LatLngBounds instance or an array of
  *       [west, south, east, north]
@@ -114,6 +115,21 @@ export const setLocatorMapBounds = function(bounds, fromUserAction=false) {
 export const setChallengeMapBounds = function(challengeId, bounds, zoom) {
   return {
     type: SET_CHALLENGE_MAP_BOUNDS,
+    challengeId,
+    bounds: fromLatLngBounds(bounds),
+    zoom,
+  }
+}
+
+/**
+ * Update the redux store with the given bounds of a challenge-owner map.
+ *
+ * @param bounds - either a LatLngBounds instance or an array of
+ *       [west, south, east, north]
+ */
+export const setChallengeOwnerMapBounds = function(challengeId, bounds, zoom) {
+  return {
+    type: SET_CHALLENGE_OWNER_MAP_BOUNDS,
     challengeId,
     bounds: fromLatLngBounds(bounds),
     zoom,
@@ -152,44 +168,40 @@ const defaultState = {
 }
 
 export const currentMapBounds = function(state=defaultState, action) {
-  if (action.type === SET_LOCATOR_MAP_BOUNDS) {
-    return Object.assign(
-      {},
-      state,
-      {
+  switch(action.type) {
+    case SET_LOCATOR_MAP_BOUNDS:
+      return Object.assign({}, state, {
         locator: {
           bounds: action.bounds,
-          fromUserAction: action.fromUserAction
+          fromUserAction: action.fromUserAction,
         }
-      },
-    )
-  }
-  else if (action.type === SET_CHALLENGE_MAP_BOUNDS) {
-    return Object.assign(
-      {},
-      state,
-      {
+      })
+    case SET_CHALLENGE_MAP_BOUNDS:
+      return Object.assign({}, state, {
         challenge: {
           challengeId: action.challengeId,
           bounds: action.bounds,
           zoom: action.zoom,
         }
-      },
-    )
-  }
-  else if (action.type === SET_TASK_MAP_BOUNDS) {
-    return Object.assign(
-      {},
-      state,
-      {
+      })
+    case SET_TASK_MAP_BOUNDS:
+      return Object.assign({}, state, {
         task: {
           bounds: action.bounds,
           zoom: action.zoom,
-          fromUserAction: action.fromUserAction
+          fromUserAction: action.fromUserAction,
         }
-      },
-    )
+      })
+    case SET_CHALLENGE_OWNER_MAP_BOUNDS:
+      return Object.assign({}, state, {
+        challengeOwner: {
+          challengeId: action.challengeId,
+          bounds: action.bounds,
+          zoom: action.zoom,
+          updatedAt: Date.now(),
+        }
+      })
+    default:
+      return state
   }
-
-  return state
 }
