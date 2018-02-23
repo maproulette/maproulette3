@@ -136,13 +136,11 @@ describe('constructJosmURI', () => {
   })
 
   test("uri includes a URI-encoded checkin comment from the task challenge", () => {
+    challenge.checkinComment = "###Non-Conforming"
     const uri = constructJosmURI(true, task, mapBounds)
 
-    expect(uri).toEqual(
-      expect.stringContaining(
-        `changeset_comment=${encodeURI(challenge.checkinComment)}`
-      )
-    )
+    expect(uri).toEqual(expect.stringContaining("Conforming"))
+    expect(uri).not.toEqual(expect.stringContaining("#"))
   })
 
   test("uri includes a node selection for Point features with an OSM id", () => {
@@ -322,16 +320,16 @@ describe('featureOSMId', () => {
     expect(featureOSMId(basicFeature)).toBeNull()
   })
 
-  test("returns the `osmid` property if it exists", () => {
-    basicFeature.properties.osmid = '123'
+  test("returns the numeical id from the `osmid` property if it exists", () => {
+    basicFeature.properties.osmid = '"123"'
 
     expect(featureOSMId(basicFeature)).toEqual('123')
   })
 
-  test("returns the id from the `@id` property if it exists", () => {
-    basicFeature.properties['@id'] = 'way/456'
+  test("returns the numerical id from the `@id` property if it exists", () => {
+    basicFeature.properties['@id'] = '"node/1042007773"'
 
-    expect(featureOSMId(basicFeature)).toEqual('456')
+    expect(featureOSMId(basicFeature)).toEqual('1042007773')
   })
 
   test("favors osmid over @id if both are present", () => {
