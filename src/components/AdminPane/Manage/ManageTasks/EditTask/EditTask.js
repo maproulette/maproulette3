@@ -5,9 +5,14 @@ import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
-import { CustomFieldTemplate } from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
-import WithCurrentProject from '../../../HOCs/WithCurrentProject/WithCurrentProject'
-import WithCurrentChallenge from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
+import { CustomFieldTemplate,
+         MarkdownDescriptionField,
+         MarkdownEditField }
+       from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import WithCurrentProject
+       from '../../../HOCs/WithCurrentProject/WithCurrentProject'
+import WithCurrentChallenge
+       from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentTask from '../../../HOCs/WithCurrentTask/WithCurrentTask'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
@@ -60,6 +65,13 @@ export class EditTask extends Component {
       taskData.geometries = JSON.stringify(taskData.geometries)
     }
 
+    // Override the standard form-field description renderer with our own that
+    // supports Markdown. We pass this in to the `fields` prop on the Form.
+    const customFields = {
+      DescriptionField: MarkdownDescriptionField,
+      markdown: MarkdownEditField,
+    }
+
     return (
       <div className="admin__manage edit-task">
         <div className="admin__manage__header">
@@ -100,6 +112,7 @@ export class EditTask extends Component {
         <Form schema={jsSchema(this.props.intl, this.props.task)}
               uiSchema={uiSchema}
               FieldTemplate={CustomFieldTemplate}
+              fields={customFields}
               liveValidate
               noHtml5Validate
               showErrorList={false}

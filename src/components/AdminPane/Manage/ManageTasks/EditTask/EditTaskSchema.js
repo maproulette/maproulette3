@@ -91,7 +91,7 @@ export const jsSchema = (intl, task) => {
  */
 export const uiSchema = {
   instruction: {
-    "ui:widget": "textarea",
+    "ui:field": "markdown",
   },
   geometries: {
     "ui:widget": "textarea",

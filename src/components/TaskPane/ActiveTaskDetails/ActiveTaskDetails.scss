@@ -130,6 +130,7 @@
     font-size: $size-7;
     line-height: 24px;
     @include constrained-text-content();
+    @include markdown-content();
   }
 
   &--comment-badge {

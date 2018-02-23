@@ -68,6 +68,10 @@
   .challenge-list__item__blurb {
     margin: 15px 0 20px 0px;
     @include constrained-text-content();
+    @include markdown-content();
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
   }
 
   .challenge-list__item__task-progress {

@@ -14,7 +14,8 @@ import StepNavigation
        from '../../../../Bulma/StepNavigation/StepNavigation'
 import { CustomFieldTemplate,
          CustomArrayFieldTemplate,
-         MarkdownDescriptionField }
+         MarkdownDescriptionField,
+         MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import WithCurrentProject
        from '../../../HOCs/WithCurrentProject/WithCurrentProject'
@@ -267,6 +268,7 @@ export class EditChallenge extends Component {
     // supports Markdown. We pass this in to the `fields` prop on the Form.
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
+      markdown: MarkdownEditField,
     }
 
     // Each time we render, start formContext.isValid at true. It'll be set

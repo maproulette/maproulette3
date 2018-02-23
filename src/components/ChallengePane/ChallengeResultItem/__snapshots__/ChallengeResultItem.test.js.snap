@@ -106,7 +106,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -339,7 +339,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -473,7 +473,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -483,7 +483,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -668,7 +668,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -901,7 +901,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -1035,7 +1035,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -1045,7 +1045,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
@@ -1291,7 +1291,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -1566,7 +1566,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -1715,7 +1715,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -1725,7 +1725,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -1980,7 +1980,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -2255,7 +2255,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -2404,7 +2404,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -2414,7 +2414,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
@@ -2713,7 +2713,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -2960,7 +2960,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -3108,7 +3108,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -3118,7 +3118,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -3364,7 +3364,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -3611,7 +3611,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -3759,7 +3759,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -3769,7 +3769,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
@@ -4067,7 +4067,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -4314,7 +4314,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -4462,7 +4462,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -4472,7 +4472,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -4718,7 +4718,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -4965,7 +4965,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -5113,7 +5113,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -5123,7 +5123,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
@@ -5432,7 +5432,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -5679,7 +5679,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -5827,7 +5827,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -5837,7 +5837,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -6083,7 +6083,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -6330,7 +6330,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -6478,7 +6478,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -6488,7 +6488,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
@@ -6786,7 +6786,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -7033,7 +7033,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -7181,7 +7181,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -7191,7 +7191,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -7437,7 +7437,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -7684,7 +7684,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -7832,7 +7832,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -7842,7 +7842,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
@@ -8140,7 +8140,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -8387,7 +8387,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -8535,7 +8535,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -8545,7 +8545,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -8791,7 +8791,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -9038,7 +9038,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -9186,7 +9186,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -9196,7 +9196,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
@@ -9503,7 +9503,7 @@ ShallowWrapper {
                     className="challenge-list__item__blurb"
           >
                     <MarkdownContent
-                              markdown="Challenge 309 blurb"
+                              markdown="Challenge 309 description"
                     />
           </div>
           <ChallengeProgress
@@ -9779,7 +9779,7 @@ ShallowWrapper {
               className="challenge-list__item__blurb"
 >
               <MarkdownContent
-                            markdown="Challenge 309 blurb"
+                            markdown="Challenge 309 description"
               />
 </div>,
             <ChallengeProgress
@@ -9927,7 +9927,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                markdown="Challenge 309 blurb"
+                markdown="Challenge 309 description"
 />,
               "className": "challenge-list__item__blurb",
             },
@@ -9937,7 +9937,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "markdown": "Challenge 309 blurb",
+                "markdown": "Challenge 309 description",
               },
               "ref": null,
               "rendered": null,
@@ -10188,7 +10188,7 @@ ShallowWrapper {
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
-                                    markdown="Challenge 309 blurb"
+                                    markdown="Challenge 309 description"
                         />
             </div>
             <ChallengeProgress
@@ -10464,7 +10464,7 @@ ShallowWrapper {
                 className="challenge-list__item__blurb"
 >
                 <MarkdownContent
-                                markdown="Challenge 309 blurb"
+                                markdown="Challenge 309 description"
                 />
 </div>,
               <ChallengeProgress
@@ -10612,7 +10612,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  markdown="Challenge 309 blurb"
+                  markdown="Challenge 309 description"
 />,
                 "className": "challenge-list__item__blurb",
               },
@@ -10622,7 +10622,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "markdown": "Challenge 309 blurb",
+                  "markdown": "Challenge 309 description",
                 },
                 "ref": null,
                 "rendered": null,
