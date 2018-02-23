@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage,
          FormattedRelative } from 'react-intl'
@@ -20,9 +21,16 @@ import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
+// Setup child components with necessary HOCs
 const BoundedTaskTable =
   WithBoundedTasks(TaskAnalysisTable, 'filteredClusteredTasks', 'taskInfo')
 
+/**
+ * ViewChallengeTasks displays challenge tasks as both a map and a table,
+ * along with filtering controls for showing subsets of tasks.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export default class ViewChallengeTasks extends Component {
   state = {
     mapBounds: null,
@@ -47,7 +55,7 @@ export default class ViewChallengeTasks extends Component {
 
             <button className={classNames("button is-primary is-outlined has-svg-icon refresh-control",
                                           {"is-loading": this.props.loadingChallenge})}
-                    onClick={this.props.refreshStatus}>
+                    onClick={this.props.refreshChallengeStatus}>
               <SvgSymbol viewBox='0 0 20 20' sym="refresh-icon" />
               <FormattedMessage {...messages.refreshStatusLabel} />
             </button>
@@ -80,10 +88,10 @@ export default class ViewChallengeTasks extends Component {
     const statusFilters = _map(TaskStatus, status => (
       <div key={status} className="status-filter is-narrow">
         <div className={classNames("field", keysByStatus[status])}
-             onClick={() => this.props.toggleIncludedStatus(status)}>
+             onClick={() => this.props.toggleIncludedTaskStatus(status)}>
           <input className="is-checkradio is-circle has-background-color is-success"
                  type="checkbox"
-                 checked={this.props.includeStatuses[status]}
+                 checked={this.props.includeTaskStatuses[status]}
                  onChange={() => null} />
           <label>
             <FormattedMessage {...messagesByStatus[status]} />
@@ -93,7 +101,7 @@ export default class ViewChallengeTasks extends Component {
     ))
 
     const filterOptions = {
-      includeStatuses: this.props.includeStatuses,
+      includeStatuses: this.props.includeTaskStatuses,
       withinBounds: this.state.mapBounds,
     }
 
@@ -120,4 +128,27 @@ export default class ViewChallengeTasks extends Component {
       </div>
     )
   }
+}
+
+ViewChallengeTasks.propTypes = {
+  /** The tasks to display */
+  filteredClusteredTasks: PropTypes.shape({
+    challengeId: PropTypes.number,
+    loading: PropTypes.bool,
+    tasks: PropTypes.array,
+  }),
+  /** Challenge the tasks belong to */
+  challenge: PropTypes.object,
+  /** Set to true if challenge data is loading */
+  loadingChallenge: PropTypes.bool,
+  /** Invoked to refresh the status of the challenge */
+  refreshChallengeStatus: PropTypes.func.isRequired,
+  /** Object enumerating whether each task status filter is on or off. */
+  includeTaskStatuses: PropTypes.object,
+  /** Invoked to toggle filtering of a task status on or off */
+  toggleIncludedTaskStatus: PropTypes.func.isRequired,
+}
+
+ViewChallengeTasks.defaultProps = {
+  loadingChallenge: false,
 }

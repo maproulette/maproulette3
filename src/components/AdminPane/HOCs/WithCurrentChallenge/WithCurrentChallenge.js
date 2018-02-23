@@ -5,6 +5,7 @@ import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import { subMonths } from 'date-fns'
 import { challengeDenormalizationSchema,
+         challengeResultEntity,
          fetchChallenge,
          fetchChallengeComments,
          fetchChallengeActivity,
@@ -12,6 +13,8 @@ import { challengeDenormalizationSchema,
          saveChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
+import { isUsableChallengeStatus }
+       from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithClusteredTasks
        from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
 
@@ -40,18 +43,29 @@ const WithCurrentChallenge = function(WrappedComponent,
         this.setState({loadingChallenge: true})
         const timelineStartDate = subMonths(new Date(), historicalMonths)
 
-        Promise.all([
-          this.props.fetchChallenge(challengeId),
-          this.props.fetchChallengeComments(challengeId),
-          this.props.fetchChallengeActivity(challengeId, timelineStartDate),
-          this.props.fetchChallengeActions(challengeId),
-        ]).then(() => this.setState({loadingChallenge: false}))
+        // Start by fetching the challenge. Then fetch follow-up data.
+        this.props.fetchChallenge(challengeId).then(normalizedChallengeData => {
+          const challenge = challengeResultEntity(normalizedChallengeData)
 
-        if (includeTasks) {
-          this.props.fetchClusteredTasks(challengeId).then(() =>
-            this.setState({loadingTasks: false})
-          )
-        }
+          Promise.all([
+            this.props.fetchChallengeComments(challengeId),
+            this.props.fetchChallengeActivity(challengeId, timelineStartDate),
+            this.props.fetchChallengeActions(challengeId),
+          ]).then(() => this.setState({loadingChallenge: false}))
+
+          if (includeTasks) {
+            // Only fetch tasks if the challenge is in a usable status. Otherwise
+            // we risk errors if the tasks are still building or failed to build.
+            if (isUsableChallengeStatus(challenge.status)) {
+              this.props.fetchClusteredTasks(challengeId).then(() =>
+                this.setState({loadingTasks: false})
+              )
+            }
+            else {
+              this.setState({loadingTasks: false})
+            }
+          }
+        })
       }
       else {
         this.setState({loadingChallenge: false, loadingTasks: false})
@@ -84,7 +98,7 @@ const WithCurrentChallenge = function(WrappedComponent,
                                clusteredTasks={clusteredTasks}
                                loadingChallenge={this.state.loadingChallenge}
                                loadingTasks={this.state.loadingTasks}
-                               refreshStatus={this.loadChallenge}
+                               refreshChallengeStatus={this.loadChallenge}
                                {..._omit(this.props, ['entities',
                                                       'fetchChallenge',
                                                       'fetchChallengeComments',

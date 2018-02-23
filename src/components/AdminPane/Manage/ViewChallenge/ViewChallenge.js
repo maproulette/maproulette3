@@ -21,8 +21,8 @@ import messages from './Messages'
 import './ViewChallenge.css'
 
 /**
- * ViewChallenge displays various challenge details and metrics of interest
- * to challenge owners, along with a list of the challenge tasks.
+ * ViewChallenge displays various challenge details and metrics of interest to
+ * challenge owners, along with the challenge tasks.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -107,9 +107,14 @@ export class ViewChallenge extends Component {
 }
 
 ViewChallenge.propTypes = {
+  /** The parent project of the challenge */
   project: PropTypes.object,
+  /** The current challenge to view */
   challenge: PropTypes.object,
-  loadingTasks: PropTypes.bool.isRequired,
+  /** Set to true if challenge data is still loading */
+  loadingChallenge: PropTypes.bool.isRequired,
+  /** Invoked to signal the user wishes to delete the challenge */
+  deleteChallenge: PropTypes.func.isRequired,
 }
 
 export default WithCurrentChallenge(

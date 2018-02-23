@@ -9,6 +9,15 @@ import _omit from 'lodash/omit'
 import { TaskStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 
+/**
+ * WithFilteredClusteredTasks applies local filters to the given clustered
+ * tasks, along with a `toggleIncludedTaskStatus` function for toggling filtering
+ * on and off for a given status. The filter settings for each task status are
+ * passed down in the `includeTaskStatuses` props. By default, all statuses are
+ * enabled (so tasks in any status will pass through).
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export default function WithFilteredClusteredTasks(WrappedComponent,
                                                    tasksProp='clusteredTasks',
                                                    outputProp) {
@@ -17,6 +26,9 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
     }
 
+    /**
+     * Toggle filtering on or off for the given task status
+     */
     toggleIncludedStatus = status => {
       this.setState({includeStatuses: Object.assign(
         {},
@@ -43,8 +55,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       }
 
       return <WrappedComponent {...{[outputProp]: filteredTasks}}
-                               includeStatuses={this.state.includeStatuses}
-                               toggleIncludedStatus={this.toggleIncludedStatus}
+                               includeTaskStatuses={this.state.includeStatuses}
+                               toggleIncludedTaskStatus={this.toggleIncludedStatus}
                                {..._omit(this.props, outputProp)} />
     }
   }
