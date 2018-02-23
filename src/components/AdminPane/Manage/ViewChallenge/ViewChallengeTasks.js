@@ -13,6 +13,7 @@ import { TaskStatus,
 import { MAPBOX_LIGHT,
          layerSourceWithName }
        from '../../../../services/VisibleLayer/LayerSources'
+import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 import WithBoundedTasks
        from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
@@ -31,17 +32,7 @@ const BoundedTaskTable =
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class ViewChallengeTasks extends Component {
-  state = {
-    mapBounds: null,
-    mapZoom: null,
-    renderingProgress: null,
-  }
-
-  /** Invoked by the map when the user pans or zooms */
-  updateMapBounds = (challengeId, bounds, zoom) =>
-    this.setState({mapBounds: bounds, mapZoom: zoom})
-
+export class ViewChallengeTasks extends Component {
   render() {
     if (this.props.challenge.status === ChallengeStatus.building) {
       return (
@@ -74,6 +65,17 @@ export default class ViewChallengeTasks extends Component {
       )
     }
 
+    // Only use challenge-owner map bounds and zoom if they've been previously
+    // saved for this challenge.
+    let mapBounds = null
+    let mapZoom = null
+    const challengeOwnerBounds = _get(this.props.mapBounds, 'challengeOwner')
+    if (challengeOwnerBounds &&
+        challengeOwnerBounds.challengeId === this.props.challenge.id) {
+      mapBounds = challengeOwnerBounds.bounds
+      mapZoom = challengeOwnerBounds.zoom
+    }
+
     // Use CSS Modules once supported by create-react-app
     const statusColors = {
       [TaskStatus.created]: '#0082C8',       // $status-created-color
@@ -102,7 +104,7 @@ export default class ViewChallengeTasks extends Component {
 
     const filterOptions = {
       includeStatuses: this.props.includeTaskStatuses,
-      withinBounds: this.state.mapBounds,
+      withinBounds: mapBounds,
     }
 
     return (
@@ -113,9 +115,9 @@ export default class ViewChallengeTasks extends Component {
 
         <MapPane>
           <ChallengeTaskMap taskInfo={this.props.filteredClusteredTasks}
-                            setChallengeMapBounds={this.updateMapBounds}
-                            lastBounds={this.state.mapBounds}
-                            lastZoom={this.state.mapZoom}
+                            setChallengeOwnerMapBounds={this.props.setChallengeOwnerMapBounds}
+                            lastBounds={mapBounds}
+                            lastZoom={mapZoom}
                             statusColors={statusColors}
                             filterOptions={filterOptions}
                             monochromaticClusters
@@ -147,8 +149,14 @@ ViewChallengeTasks.propTypes = {
   includeTaskStatuses: PropTypes.object,
   /** Invoked to toggle filtering of a task status on or off */
   toggleIncludedTaskStatus: PropTypes.func.isRequired,
+  /** Latest map bounds */
+  mapBounds: PropTypes.object.isRequired,
+  /** Invoked when the challenge owner pans or zooms the challenge map */
+  setChallengeOwnerMapBounds: PropTypes.func.isRequired,
 }
 
 ViewChallengeTasks.defaultProps = {
   loadingChallenge: false,
 }
+
+export default WithMapBounds(ViewChallengeTasks)

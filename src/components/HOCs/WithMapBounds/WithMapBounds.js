@@ -5,7 +5,9 @@ import _isEmpty from 'lodash/isEmpty'
 import _uniqueId from 'lodash/uniqueId'
 import { setLocatorMapBounds,
          setChallengeMapBounds,
-         setTaskMapBounds }
+         setTaskMapBounds,
+         setChallengeOwnerMapBounds,
+       }
        from '../../../services/MapBounds/MapBounds'
 import { fetchChallengesWithinBoundingBox }
        from '../../../services/Challenge/Challenge'
@@ -43,6 +45,7 @@ const mapStateToProps = state => ({
     locator: convertBounds(_get(state, 'currentMapBounds.locator')),
     challenge: convertBounds(_get(state, 'currentMapBounds.challenge')),
     task: convertBounds(_get(state, 'currentMapBounds.task')),
+    challengeOwner: convertBounds(_get(state, 'currentMapBounds.challengeOwner')),
   }
 })
 
@@ -54,6 +57,10 @@ const mapDispatchToProps = dispatch => {
 
     setChallengeMapBounds: (challengeId, bounds, zoom) => {
       dispatch(setChallengeMapBounds(challengeId, bounds, zoom))
+    },
+
+    setChallengeOwnerMapBounds: (challengeId, bounds, zoom) => {
+      dispatch(setChallengeOwnerMapBounds(challengeId, bounds, zoom))
     },
 
     updateBoundedChallenges: bounds => {

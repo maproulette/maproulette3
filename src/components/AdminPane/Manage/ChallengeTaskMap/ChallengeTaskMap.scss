@@ -41,6 +41,21 @@
   .leaflet-container {
     height: 400px;
     width: auto;
+
+    .leaflet-popup-content-wrapper {
+      .leaflet-popup-content {
+        width: 200px;
+        padding: 10px;
+
+        .marker-popup-content {
+          text-align: center;
+
+          &__links {
+            margin-top: 10px;
+          }
+        }
+      }
+    }
   }
 
   .cluster-tasks-control {
@@ -53,14 +68,6 @@
     padding: 5px;
     border: 1px solid $grey-lighter;
     border-radius: $radius-medium;
-  }
-
-  .marker-popup-content {
-    text-align: center;
-
-    &__links {
-      margin-top: 10px;
-    }
   }
 
   .greyscale-cluster {

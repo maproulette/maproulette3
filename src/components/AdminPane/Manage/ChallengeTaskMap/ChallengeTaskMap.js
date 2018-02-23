@@ -108,9 +108,9 @@ export class ChallengeTaskMap extends Component {
     }
 
     this.currentBounds = bounds
-    if (this.props.setChallengeMapBounds) {
-      this.props.setChallengeMapBounds(this.props.challenge.id,
-                                       bounds, zoom)
+    if (this.props.setChallengeOwnerMapBounds) {
+      this.props.setChallengeOwnerMapBounds(this.props.challenge.id,
+                                            bounds, zoom)
     }
   }
 
@@ -306,7 +306,7 @@ ChallengeTaskMap.propTypes = {
   /** Options for filtering displayed tasks */
   filterOptions: PropTypes.object,
   /** Invoked when the user moves or zooms the map */
-  setChallengeMapBounds: PropTypes.func,
+  setChallengeOwnerMapBounds: PropTypes.func,
   /** Optional default map layer to display */
   defaultLayer: PropTypes.object,
   /** Set to true to render monochromatic cluster icons */
