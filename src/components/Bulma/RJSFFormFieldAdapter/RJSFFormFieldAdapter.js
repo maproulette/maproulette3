@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
@@ -104,6 +104,23 @@ export const SelectField = ({id, label, required, rawDescription, children}) => 
     </div>
   </div>
 )
+
+/**
+ * MarkdownEditField renders a textarea and markdown preview side-by-side.
+ */
+export class MarkdownEditField extends Component {
+  render() {
+    return (
+      <div className="markdown-edit-field">
+        <textarea className="form-control"
+                  onChange={e => this.props.onChange(e.target.value)}>
+          {this.props.formData}
+        </textarea>
+        <MarkdownContent className="markdown-preview" markdown={this.props.formData} />
+      </div>
+    )
+  }
+}
 
 /**
  * InputField is a Bulma template for RJSF text input fields. It's also compatible

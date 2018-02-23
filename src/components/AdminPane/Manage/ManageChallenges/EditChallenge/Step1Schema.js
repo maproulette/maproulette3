@@ -125,13 +125,10 @@ export const uiSchema = {
     "ui:widget": "radio",
   },
   description: {
-    "ui:widget": "textarea",
-  },
-  blurb: {
-    "ui:widget": "textarea",
+    "ui:field": "markdown",
   },
   instruction: {
-    "ui:widget": "textarea",
+    "ui:field": "markdown",
   },
   difficulty: {
     "ui:widget": "select",

@@ -65,6 +65,40 @@
   hyphens: auto;
 }
 
+@mixin markdown-content() {
+  p {
+    margin-bottom: 1em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 1em;
+    margin-bottom: 1em;
+
+    > li > ul {
+      list-style-type: circle;
+
+      > li > ul {
+        list-style-type: square;
+      }
+    }
+  }
+
+  ol {
+    margin-left: 1em;
+    margin-bottom: 1em;
+  }
+
+  pre {
+    padding: 10px;
+    margin-bottom: 1em;
+  }
+}
+
 @mixin busy-spinner-color($color) {
   .busy-spinner-icon {
     border-color: $color;

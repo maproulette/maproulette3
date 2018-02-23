@@ -1,4 +1,4 @@
-@import '../../../theme.scss';
+@import 'theme.scss';
 
 // Customizations for react-jsonschema-form to adapt it to the Bulma
 // framework. While we try to customize the markup, rjsf customization
@@ -113,6 +113,31 @@ form.rjsf {
         &__block-controls {
           margin-top: 1em;
         }
+      }
+    }
+
+    .markdown-edit-field {
+      display: flex;
+
+      textarea {
+        flex: 1 1 50%;
+        margin-right: 10px;
+        min-width: auto;
+        height: 200px;
+      }
+
+      .markdown-preview {
+        border: 1px solid $grey-lightest-more;
+        padding: 10px;
+        min-width: 350px;
+        width: 350px;
+        height: 200px;
+        color: $grey;
+        font-size: $size-7;
+        line-height: 24px;
+        @include constrained-text-content();
+        @include markdown-content();
+        overflow-y: auto;
       }
     }
   }

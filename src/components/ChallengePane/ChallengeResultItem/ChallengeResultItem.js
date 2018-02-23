@@ -214,8 +214,8 @@ export class ChallengeResultItem extends Component {
           </div>
 
           <div className="challenge-list__item__blurb">
-            <MarkdownContent markdown={this.props.challenge.blurb ||
-                                       this.props.challenge.description} />
+            <MarkdownContent markdown={this.props.challenge.description ||
+                                       this.props.challenge.blurb} />
           </div>
 
           <ChallengeProgress challenge={this.props.challenge} />
