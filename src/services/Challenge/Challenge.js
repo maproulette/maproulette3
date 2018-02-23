@@ -44,6 +44,25 @@ export const challengeDenormalizationSchema = function() {
   })
 }
 
+// utility functions
+
+/**
+ * Retrieves the resulting challenge entity object from the given
+ * normalizedChallengeResults, or null if there is no result.
+ *
+ * > Note that if the results contain multiple challenges, only the
+ * > first challenge entity is returned.
+ */
+export const challengeResultEntity = function(normalizedChallengeResults) {
+  const challengeId = _isArray(normalizedChallengeResults.result) ?
+                      normalizedChallengeResults.result[0] :
+                      normalizedChallengeResults.result
+
+  return _isNumber(challengeId) ?
+         normalizedChallengeResults.entities.challenges[challengeId] :
+         null
+}
+
 // redux actions -- see Server/ChallengeActions
 
 // redux action creators
@@ -495,11 +514,11 @@ export const deleteChallenge = function(challengeId) {
  * > parent project of the first result is retrieved.
  */
 const fetchParentProject = function(dispatch, normalizedChallengeResults) {
-  const challengeId = _isArray(normalizedChallengeResults.result) ?
-                      normalizedChallengeResults.result[0] :
-                      normalizedChallengeResults.result
-  const projectId = normalizedChallengeResults.entities.challenges[challengeId].parent
-  return dispatch(fetchProject(projectId))
+  const challenge = challengeResultEntity(normalizedChallengeResults)
+
+  if (challenge) {
+    return dispatch(fetchProject(challenge.parent))
+  }
 }
 
 /**

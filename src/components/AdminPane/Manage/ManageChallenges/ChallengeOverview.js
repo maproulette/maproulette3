@@ -4,6 +4,7 @@ import { FormattedMessage,
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import { ChallengeStatus,
+         isUsableChallengeStatus,
          messagesByStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import ChallengeActivityTimeline
@@ -50,7 +51,7 @@ export class ChallengeOverview extends Component {
             </div>
           </div>
 
-          {status !== ChallengeStatus.failed &&
+          {isUsableChallengeStatus(status) &&
            <div className="view-challenge">
              <Link to={`/challenge/${this.props.challenge.id}`}>
                <FormattedMessage {...messages.startChallengeLabel} />

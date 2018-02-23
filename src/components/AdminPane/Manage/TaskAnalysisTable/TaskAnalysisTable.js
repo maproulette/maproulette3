@@ -14,14 +14,27 @@ import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './TaskAnalysisTable.css'
 
+// Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 
+/**
+ * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
+ * performed from summary info, like that given by clusteredTasks, but an
+ * individual task can be expanded to see additional details provided by
+ * the ViewTask component.
+ *
+ * @see See ViewTask
+ * @see See [react-table](https://react-table.js.org)
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export class TaskAnalysisTable extends Component {
   render() {
     const taskBaseRoute = 
       `/admin/project/${this.props.challenge.parent.id}` +
       `/challenge/${this.props.challenge.id}/task`
 
+    // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'taskInfo.tasks', [])
     const columns = [{
       id: 'id',
@@ -55,6 +68,8 @@ export class TaskAnalysisTable extends Component {
         </div>
     }]
 
+    // Setup wrapper that displays total tasks available, percentage
+    // currrently included in the table, etc.
     const taskCountWrapper = [{
       id: 'taskCount',
       Header: () => {
@@ -98,6 +113,10 @@ TaskAnalysisTable.propTypes = {
     loading: PropTypes.bool,
     tasks: PropTypes.array,
   }),
+  /** Challenge the tasks belong to */
+  challenge: PropTypes.object,
+  /** Total tasks available (we may receive a subset) */
+  totalTaskCount: PropTypes.number,
 }
 
 export default injectIntl(TaskAnalysisTable)
