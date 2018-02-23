@@ -5,21 +5,31 @@ import _filter from 'lodash/filter'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
+import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 
-export default function WithBoundedTasks(WrappedComponent,
+export const WithBoundedTasks = function(WrappedComponent,
                                          tasksProp='clusteredTasks',
                                          outputProp) {
   return class extends Component {
     render() {
       let boundedTasks = this.props[tasksProp]
-      let withinBounds = _get(this.props, 'filterOptions.withinBounds',
-                              this.props.withinBounds)
+      let mapBounds = null
+      let mapZoom = null
 
-      if (withinBounds && _isArray(_get(boundedTasks, 'tasks'))) {
+      // Only use challenge-owner map bounds and zoom if they match this
+      // this challenge.
+      const challengeOwnerBounds = _get(this.props.mapBounds, 'challengeOwner')
+      if (challengeOwnerBounds &&
+          challengeOwnerBounds.challengeId === this.props.challenge.id) {
+        mapBounds = challengeOwnerBounds.bounds
+        mapZoom = challengeOwnerBounds.zoom
+      }
+
+      if (mapBounds && _isArray(_get(boundedTasks, 'tasks'))) {
         boundedTasks = Object.assign({}, boundedTasks, {
           tasks: _filter(boundedTasks.tasks, task =>
             task.point &&
-            withinBounds.contains(new LatLng(task.point.lat, task.point.lng))
+            mapBounds.contains(new LatLng(task.point.lat, task.point.lng))
           )
         })
       }
@@ -29,7 +39,12 @@ export default function WithBoundedTasks(WrappedComponent,
       }
 
       return <WrappedComponent {...{[outputProp]: boundedTasks}}
-                               {..._omit(this.props, outputProp)} />
+                               mapBounds={mapBounds}
+                               mapZoom={mapZoom}
+                               {..._omit(this.props, [outputProp, 'mapBounds'])} />
     }
   }
 }
+
+export default (WrappedComponent, tasksProp='clusteredTasks', outputProp) =>
+  WithMapBounds(WithBoundedTasks(WrappedComponent, tasksProp, outputProp))
