@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import { Link } from 'react-router-dom'
 import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import Sidebar from '../../../Sidebar/Sidebar'
-import CommentList from '../../../CommentList/CommentList'
+import ChallengeComments from '../ChallengeComments/ChallengeComments'
 import ChallengeOverview from '../ManageChallenges/ChallengeOverview'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
@@ -42,8 +41,7 @@ export class ViewChallenge extends Component {
         <ChallengeOverview challenge={this.props.challenge} />,
 
       [this.props.intl.formatMessage(messages.challengeCommentsTabLabel)]:
-        <CommentList includeTaskLinks
-                               comments={_get(this.props, 'challenge.comments', [])} />,
+        <ChallengeComments challenge={this.props.challenge} />,
 
       [this.props.intl.formatMessage(messages.challengeMetricsTabLabel)]:
         <ChallengeMetrics challenges={[this.props.challenge]} />,
@@ -85,7 +83,7 @@ export class ViewChallenge extends Component {
             <div className="column is-narrow admin__manage__controls--control">
               <ConfirmAction>
                 <a className='button is-clear' onClick={this.deleteChallenge}>
-                  <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
+                  <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
                 </a>
               </ConfirmAction>
             </div>

@@ -169,7 +169,7 @@ $tablet: 40px;
   }
 }
 
-.button.has-svg-icon {
+.has-svg-icon {
   svg {
     height: 15px;
     width: auto;
@@ -195,19 +195,19 @@ $tablet: 40px;
   }
 }
 
-button.is-secondary {
+.button.is-secondary {
   @include invert-on-hover($grey, $white);
 }
 
-button.is-green {
+.button.is-green {
   @include invert-on-hover($green, $white);
 }
 
-button.is-danger {
+.button.is-danger {
   @include invert-on-hover($coral, $white);
 }
 
-button.is-primary.is-loading {
+.button.is-primary.is-loading {
   &:enabled:focus:after {
     // Change spinner color. Bulma css has !important so we have to as well.
     border-color: transparent transparent $primary-invert $primary-invert !important;
