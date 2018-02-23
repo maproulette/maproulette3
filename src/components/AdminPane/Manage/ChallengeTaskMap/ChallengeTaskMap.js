@@ -30,6 +30,12 @@ import messages from './Messages'
 import './ChallengeTaskMap.css'
 
 /**
+ * An uncluster option will be offered if no more than this number of tasks
+ * will be shown.
+ */
+const UNCLUSTER_THRESHOLD=1000 // max number of tasks
+
+/**
  * ChallengeTaskMap displays a map of the given challenge tasks for use by
  * challenge owners, with tasks coded by status and priority.
  *
@@ -190,6 +196,8 @@ export class ChallengeTaskMap extends Component {
     let loadingClusteredTasks = false
     const markers = []
     let bounding = null
+    const canUncluster =
+      _get(this.props, 'taskInfo.tasks.length', 0) <= UNCLUSTER_THRESHOLD
 
     // Create map markers for the tasks.
     const statusIcons = _fromPairs(_map(this.props.statusColors, (color, status) => [
@@ -255,14 +263,16 @@ export class ChallengeTaskMap extends Component {
     return (
       <div key={this.props.challenge.id}
            className={classNames('challenge-task-map', this.props.className)}>
-        <div className="field cluster-tasks-control" onClick={this.toggleClusterTasks}>
-          <input type="checkbox" className="switch is-rounded"
-                  checked={this.state.clusterTasks}
-                  onChange={() => null} />
-          <label>
-            <FormattedMessage {...messages.clusterTasksLabel } />
-          </label>
-        </div>
+        {canUncluster &&
+         <div className="field cluster-tasks-control" onClick={this.toggleClusterTasks}>
+           <input type="checkbox" className="switch is-rounded"
+                   checked={this.state.clusterTasks}
+                   onChange={() => null} />
+           <label>
+             <FormattedMessage {...messages.clusterTasksLabel } />
+           </label>
+         </div>
+        }
 
         <LayerToggle {...this.props} />
         <EnhancedMap center={latLng(0, 45)}
@@ -278,7 +288,7 @@ export class ChallengeTaskMap extends Component {
           {markers.length > 0 &&
               <MarkerClusterGroup key={Date.now()} markers={markers}
                 options={{
-                  disableClusteringAtZoom: this.state.clusterTasks ? 19 : 1,
+                  disableClusteringAtZoom: (canUncluster && !this.state.clusterTasks) ? 1 : 19,
                   iconCreateFunction: this.props.monochromaticClusters ?
                                       this.clusterIcon : undefined,
                 }}
