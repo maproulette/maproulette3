@@ -53,6 +53,10 @@ export class ActiveTaskControls extends Component {
                             taskStatus, this.state.comment, this.props.taskLoadBy)
   }
 
+  next = (challengeId, taskId) => {
+    this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment)
+  }
+
   render() {
     // If the user is not logged in, show a sign-in button instead of controls.
     if (!_get(this.props, 'user.isLoggedIn')) {
@@ -84,8 +88,6 @@ export class ActiveTaskControls extends Component {
       const allowedProgressions =
         allowedStatusProgressions(this.props.task.status)
 
-      const canProgress = allowedProgressions.size > 0
-
       const hasExistingStatus = _isNumber(this.props.task.status) &&
                                 this.props.task.status !== TaskStatus.created
 
@@ -95,22 +97,22 @@ export class ActiveTaskControls extends Component {
           <TaskTrackControls className="active-task-controls__track-task"
                              {..._omit(this.props, 'className')} />
 
-          {canProgress &&
-           <TaskCommentInput className="active-task-controls__task-comment"
-                             value={this.state.comment}
-                             commentChanged={this.setComment}
-                             {..._omit(this.props, 'className')} />
-          }
+          <TaskCommentInput className="active-task-controls__task-comment"
+                            value={this.state.comment}
+                            commentChanged={this.setComment}
+                            {..._omit(this.props, 'className')} />
 
           {!isEditingTask &&
            <TaskCompletionStep1 allowedProgressions={allowedProgressions}
                                 pickEditor={this.pickEditor}
                                 complete={this.complete}
-                                {...this.props} />
+                                nextTask={this.next}
+                                {..._omit(this.props, 'nextTask')} />
           }
 
           {!isEditingTask && hasExistingStatus &&
-           <TaskNextControl {...this.props} />
+           <TaskNextControl nextTask={this.next}
+                            {..._omit(this.props, 'nextTask')} />
           }
 
           {isEditingTask &&

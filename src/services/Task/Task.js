@@ -98,13 +98,18 @@ export const completeTask = function(taskId, challengeId, taskStatus) {
 }
 
 /**
- * Add a comment to the given task, using the given status.
+ * Add a comment to the given task, associating the given task status if
+ * provided.
  */
 export const addTaskComment = function(taskId, comment, taskStatus) {
   return function(dispatch) {
+    const params = {comment}
+    if (_isNumber(taskStatus)) {
+      params.actionId = taskStatus
+    }
+
     return new Endpoint(
-      api.task.addComment,
-      {variables: {id: taskId}, params: {comment, actionId: taskStatus}}
+      api.task.addComment, {variables: {id: taskId}, params}
     ).execute().then(() => {
       fetchTaskComments(taskId)(dispatch)
       fetchTask(taskId)(dispatch) // Refresh task data

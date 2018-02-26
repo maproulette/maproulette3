@@ -64,6 +64,7 @@ export default class TaskTrackControls extends Component {
       control = (
         <div className="field" onClick={this.toggleSaved}>
           <input type="checkbox" className="switch is-thin"
+                 onChange={() => {}}
                  checked={this.taskIsTracked()} />
           <label>
             <FormattedMessage {...messages.trackLabel } />
