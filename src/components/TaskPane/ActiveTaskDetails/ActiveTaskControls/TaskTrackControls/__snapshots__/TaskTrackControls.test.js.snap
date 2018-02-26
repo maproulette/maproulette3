@@ -52,6 +52,7 @@ ShallowWrapper {
         <input
                 checked={true}
                 className="switch is-thin"
+                onChange={[Function]}
                 type="checkbox"
         />
         <label>
@@ -74,6 +75,7 @@ ShallowWrapper {
           <input
             checked={true}
             className="switch is-thin"
+            onChange={[Function]}
             type="checkbox"
 />,
           <label>
@@ -96,6 +98,7 @@ ShallowWrapper {
           "props": Object {
             "checked": true,
             "className": "switch is-thin",
+            "onChange": [Function],
             "type": "checkbox",
           },
           "ref": null,
@@ -147,6 +150,7 @@ ShallowWrapper {
           <input
                     checked={true}
                     className="switch is-thin"
+                    onChange={[Function]}
                     type="checkbox"
           />
           <label>
@@ -169,6 +173,7 @@ ShallowWrapper {
             <input
               checked={true}
               className="switch is-thin"
+              onChange={[Function]}
               type="checkbox"
 />,
             <label>
@@ -191,6 +196,7 @@ ShallowWrapper {
             "props": Object {
               "checked": true,
               "className": "switch is-thin",
+              "onChange": [Function],
               "type": "checkbox",
             },
             "ref": null,
@@ -288,6 +294,7 @@ ShallowWrapper {
         <input
                 checked={false}
                 className="switch is-thin"
+                onChange={[Function]}
                 type="checkbox"
         />
         <label>
@@ -310,6 +317,7 @@ ShallowWrapper {
           <input
             checked={false}
             className="switch is-thin"
+            onChange={[Function]}
             type="checkbox"
 />,
           <label>
@@ -332,6 +340,7 @@ ShallowWrapper {
           "props": Object {
             "checked": false,
             "className": "switch is-thin",
+            "onChange": [Function],
             "type": "checkbox",
           },
           "ref": null,
@@ -383,6 +392,7 @@ ShallowWrapper {
           <input
                     checked={false}
                     className="switch is-thin"
+                    onChange={[Function]}
                     type="checkbox"
           />
           <label>
@@ -405,6 +415,7 @@ ShallowWrapper {
             <input
               checked={false}
               className="switch is-thin"
+              onChange={[Function]}
               type="checkbox"
 />,
             <label>
@@ -427,6 +438,7 @@ ShallowWrapper {
             "props": Object {
               "checked": false,
               "className": "switch is-thin",
+              "onChange": [Function],
               "type": "checkbox",
             },
             "ref": null,

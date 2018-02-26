@@ -86,12 +86,24 @@ test("shows track/untrack controls", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test("shows a completion comment field if status is appropriate", () => {
+test("shows a completion comment field", () => {
   const wrapper = shallow(
     <ActiveTaskControls {...basicProps} />
   )
 
   expect(wrapper.find('TaskCommentInput').exists()).toBe(true)
+})
+
+test("shows a comment field even for tasks that cannot progress further", () => {
+  basicProps.task.status = TaskStatus.fixed
+
+  const wrapper = shallow(
+    <ActiveTaskControls {...basicProps} />
+  )
+
+  expect(wrapper.find('TaskCommentInput').exists()).toBe(true)
+
+  expect(wrapper).toMatchSnapshot()
 })
 
 test("the comment field contains the current comment", () => {
@@ -103,18 +115,6 @@ test("the comment field contains the current comment", () => {
   wrapper.update()
 
   expect(wrapper.find('TaskCommentInput[value="Foo"]').exists()).toBe(true)
-})
-
-test("does not show comment field if task cannot progress to new status", () => {
-  basicProps.task.status = TaskStatus.fixed
-
-  const wrapper = shallow(
-    <ActiveTaskControls {...basicProps} />
-  )
-
-  expect(wrapper.find('TaskCommentInput').exists()).toBe(false)
-
-  expect(wrapper).toMatchSnapshot()
 })
 
 test("shows completion controls if the user has begun editing the task", () => {
