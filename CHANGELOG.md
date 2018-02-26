@@ -7,6 +7,25 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-alpha.6] - 2018-02-26
+### Added
+- Visual priority-rule builder for tasks when creating/editing challenges.
+- Support for overpass turbo `@id` feature property when editing tasks.
+- Live preview of Markdown content during editing.
+- Restoration of challenge-owner map state when returning to it (#123).
+- Option for challenge-owners to export challenge comments as CSV.
+
+### Changed
+- Users can comment on a task regardless of task status (#113).
+- Ignore unclustering setting on challenge-owner map and always cluster tasks
+  if more than 1000 tasks would be visible.
+- Unclustering option only shown when at most 1000 tasks would be visible.
+
+### Fixed
+- Don't fetch task data if tasks are still building or failed to build (#127).
+- Properly url-encode comments sent to external editors.
+
+
 ## [v3.00-alpha.5] - 2018-02-19
 ### Added
 - Support Matomo/PIWIK analytics integration (#30).
