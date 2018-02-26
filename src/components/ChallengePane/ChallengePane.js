@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import _isEqual from 'lodash/isEqual'
+import _get from 'lodash/get'
 import { MAPBOX_STREETS } from '../../services/VisibleLayer/LayerSources'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
@@ -10,11 +11,26 @@ import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
+import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
+import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
+import WithMapBoundedTasks from '../HOCs/WithMapBoundedTasks/WithMapBoundedTasks'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import './ChallengePane.css'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
+const BrowseChallengeMap = WithTaskMarkers(ChallengeMap, 'clusteredTasks')
+let DiscoveryMap = null
+
+// If the map-bounded task browsing feature is enabled, set up the LocatorMap
+// to use it.
+if (_get(process.env,
+         'REACT_APP_FEATURE_BOUNDED_TASK_BROWSING') === 'enabled') {
+  DiscoveryMap = WithTaskMarkers(LocatorMap, 'mapBoundedTasks')
+}
+else {
+  DiscoveryMap = LocatorMap
+}
 
 /**
  * ChallengePane represents the top-level view when the user is browsing,
@@ -36,7 +52,7 @@ export class ChallengePane extends Component {
   }
 
   render() {
-    const Map = this.props.browsedChallenge ? ChallengeMap : LocatorMap
+    const Map = this.props.browsedChallenge ? BrowseChallengeMap : DiscoveryMap
     return (
       <span>
         <ChallengeFilterSubnav {...this.props} />
@@ -58,4 +74,12 @@ export class ChallengePane extends Component {
   }
 }
 
-export default WithMapBounds(WithChallenges(WithBrowsedChallenge(ChallengePane)))
+export default WithMapBounds(
+  WithChallenges(
+    WithMapBoundedTasks(
+      WithClusteredTasks(
+        WithBrowsedChallenge(ChallengePane)
+      )
+    )
+  )
+)

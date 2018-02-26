@@ -17,5 +17,10 @@ export default defineMessages({
   noResults: {
     id: "Challenge.results.noResults",
     defaultMessage: "No Results",
-  }
+  },
+
+  createVirtualChallenge: {
+    id: "VirtualChallenge.controls.create.label",
+    defaultMessage: "Work on Mapped Tasks",
+  },
 })

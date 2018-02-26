@@ -66,7 +66,7 @@ test("selecting promixity option signals change to taskLoadBy preference", () =>
   wrapper.find('.task-randomness-control__proximity-option').simulate('change')
   expect(
     basicProps.setTaskLoadBy
-  ).toHaveBeenCalledWith(challengeId, TaskLoadMethod.proximity)
+  ).toHaveBeenCalledWith(challengeId, false, TaskLoadMethod.proximity)
 })
 
 test("selecting random option signals change to taskLoadBy preference", () => {
@@ -77,5 +77,5 @@ test("selecting random option signals change to taskLoadBy preference", () => {
   wrapper.find('.task-randomness-control__random-option').simulate('change')
   expect(
     basicProps.setTaskLoadBy
-  ).toHaveBeenCalledWith(challengeId, TaskLoadMethod.random)
+  ).toHaveBeenCalledWith(challengeId, false, TaskLoadMethod.random)
 })

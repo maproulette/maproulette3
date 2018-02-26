@@ -83,8 +83,8 @@ export const currentClusteredTasks = function(state={}, action) {
       return {
         challengeId: action.challengeId,
         loading: action.status === RequestStatus.inProgress,
-        tasks: _isArray(action.tasks) ? action.tasks : [],
         fetchId: action.fetchId,
+        tasks: _isArray(action.tasks) ? action.tasks : []
       }
     }
     else {

@@ -205,6 +205,25 @@ export const loadRandomTaskFromChallenge = function(challengeId, priorTaskId) {
 }
 
 /**
+ * Retrieve a random task from the given virtual challenge. If priorTaskId is
+ * given, then an attempt will be made to retrieve a task geographically
+ * proximate to the given task.
+ */
+export const loadRandomTaskFromVirtualChallenge = function(virtualChallengeId,
+                                                           priorTaskId) {
+  return function(dispatch) {
+    return retrieveChallengeTask(dispatch, new Endpoint(
+      api.virtualChallenge.randomTask,
+      {
+        schema: taskSchema(),
+        variables: {id: virtualChallengeId},
+        params: _isNumber(priorTaskId) ? {proximity: priorTaskId} : undefined
+      }
+    ))
+  }
+}
+
+/**
  * Retrieve the previous sequential task from the given challenge (primarily
  * intended for use during challenge review by challenge owners).
  */

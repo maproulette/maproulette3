@@ -170,7 +170,7 @@ describe("mapDispatchToProps", () => {
     const mappedProps = mapDispatchToProps(dispatch, {challenge, setVisibleMapLayer})
     mappedProps.changeLayer("FooLayer")
 
-    expect(setVisibleMapLayer).toBeCalledWith(challenge.id, "FooLayer")
+    expect(setVisibleMapLayer).toBeCalledWith(challenge.id, false, "FooLayer")
   })
 
   test("changeLayer sets the global visible layer no challenge is given", () => {

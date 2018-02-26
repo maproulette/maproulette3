@@ -135,7 +135,7 @@ ActiveTaskControls.propTypes = {
   /** Current editor status */
   editor: PropTypes.object,
   /** Current setting of whether to load tasks randomly or by proximity */
-  taskLoadBy: PropTypes.string.isRequired,
+  taskLoadBy: PropTypes.string,
 }
 
 ActiveTaskControls.defaultProps = {

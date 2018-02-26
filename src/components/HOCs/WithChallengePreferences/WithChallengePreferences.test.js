@@ -7,19 +7,30 @@ import { TaskLoadMethod }
 import { BING }
        from '../../../services/VisibleLayer/LayerSources'
 import { setPreferences,
-         CHALLENGES_PREFERENCE_GROUP }
+         CHALLENGES_PREFERENCE_GROUP,
+         VIRTUAL_CHALLENGES_PREFERENCE_GROUP }
        from '../../../services/Preferences/Preferences'
 
 jest.mock('../../../services/Preferences/Preferences')
 
-let challenge = null
+let challengeId = null
+let virtualChallengeId = null
+let challengePrefs = null
+let virtualChallengePrefs = null
 let basicState = null
 
 beforeEach(() => {
   setPreferences.mockClear()
 
-  challenge = {
-    id: 123,
+  challengeId = 123
+  virtualChallengeId = 987
+
+  challengePrefs = {
+    minimize: true,
+    collapseInstructions: true,
+  }
+
+  virtualChallengePrefs = {
     minimize: true,
     collapseInstructions: true,
   }
@@ -27,111 +38,192 @@ beforeEach(() => {
   basicState = {
     currentPreferences: {
       challenges: {
-        [challenge.id]: challenge,
+        [challengeId]: challengePrefs,
+      },
+      virtualChallenges: {
+        [virtualChallengeId]: virtualChallengePrefs,
       }
     },
   }
 })
 
-test("maps minimizeChallenge to current minimize preference", () => {
-  basicState.currentPreferences.challenges[challenge.id].minimize = false
-  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
+test("maps challenge minimizeChallenge to current minimize preference", () => {
+  basicState.currentPreferences.challenges[challengeId].minimize = false
+  const mappedProps = mapStateToProps(basicState, {challengeId})
+
+  expect(mappedProps.minimizeChallenge).toBe(false)
+})
+
+test("maps virtual challenge minimizeChallenge to current minimize preference", () => {
+  basicState.currentPreferences.virtualChallenges[virtualChallengeId].minimize = false
+  const mappedProps = mapStateToProps(basicState, {virtualChallengeId})
 
   expect(mappedProps.minimizeChallenge).toBe(false)
 })
 
 test("minimizeChallenge defaults to false if no preference set", () => {
-  basicState.currentPreferences.challenges[challenge.id].minimize = undefined
-  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
+  basicState.currentPreferences.challenges[challengeId].minimize = undefined
+  const mappedProps = mapStateToProps(basicState, {challengeId})
 
   expect(mappedProps.minimizeChallenge).toBe(false)
 })
 
-test("maps collapseInstructions to collapseInstructions preference", () => {
+test("maps challenge collapseInstructions to collapseInstructions preference", () => {
   basicState.currentPreferences.challenges[
-    challenge.id
+    challengeId
   ].collapseInstructions = false
-  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
+  const mappedProps = mapStateToProps(basicState, {challengeId})
+
+  expect(mappedProps.collapseInstructions).toBe(false)
+})
+
+test("maps virtual challenge collapseInstructions to collapseInstructions preference", () => {
+  basicState.currentPreferences.virtualChallenges[
+    virtualChallengeId
+  ].collapseInstructions = false
+  const mappedProps = mapStateToProps(basicState, {virtualChallengeId})
 
   expect(mappedProps.collapseInstructions).toBe(false)
 })
 
 test("collapseInstructions defaults to false if no preference set", () => {
   basicState.currentPreferences.challenges[
-    challenge.id
+    challengeId
   ].collapseInstructions = undefined
-  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
+  const mappedProps = mapStateToProps(basicState, {challengeId})
 
   expect(mappedProps.collapseInstructions).toBe(false)
 })
 
-test("maps taskLoadBy to current taskLoadMethod preference", () => {
+test("maps challenge taskLoadBy to current taskLoadMethod preference", () => {
   basicState.currentPreferences.challenges[
-    challenge.id
+    challengeId
   ].taskLoadMethod = TaskLoadMethod.proximity
 
-  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
+  const mappedProps = mapStateToProps(basicState, {challengeId})
   expect(mappedProps.taskLoadBy).toBe(TaskLoadMethod.proximity)
 })
 
-test("maps visibleMapLayer to current visibleMapLayer preference", () => {
-  basicState.currentPreferences.challenges[
-    challenge.id
-  ].visibleMapLayer = BING
+test("maps virtual challenge taskLoadBy to current taskLoadMethod preference", () => {
+  basicState.currentPreferences.virtualChallenges[
+    virtualChallengeId
+  ].taskLoadMethod = TaskLoadMethod.proximity
 
-  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
-  expect(mappedProps.visibleMapLayer).toEqual(BING)
+  const mappedProps = mapStateToProps(basicState, {virtualChallengeId})
+  expect(mappedProps.taskLoadBy).toBe(TaskLoadMethod.proximity)
 })
 
 test("taskLoadBy defaults to random if no preference set", () => {
   basicState.currentPreferences.challenges[
-    challenge.id
+    challengeId
   ].taskLoadMethod = undefined
 
-  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
+  const mappedProps = mapStateToProps(basicState, {challengeId})
   expect(mappedProps.taskLoadBy).toBe(TaskLoadMethod.random)
 })
 
-test("setChallengeMinimization updates the challenge's minimize preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
-  const mappedProps = mapDispatchToProps(dispatch)
+test("maps challenge visibleMapLayer to current visibleMapLayer preference", () => {
+  basicState.currentPreferences.challenges[
+    challengeId
+  ].visibleMapLayer = BING
 
-  mappedProps.setChallengeMinimization(challenge.id, true)
-  expect(dispatch).toBeCalled()
-  expect(setPreferences).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
-                                        {[challenge.id]: {minimize: true}})
+  const mappedProps = mapStateToProps(basicState, {challengeId})
+  expect(mappedProps.visibleMapLayer).toEqual(BING)
 })
 
-test("setInstructionsCollapsed updates the challenge's collapseInstructions preference", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
-  const mappedProps = mapDispatchToProps(dispatch)
+test("maps virtual challenge visibleMapLayer to current visibleMapLayer preference", () => {
+  basicState.currentPreferences.virtualChallenges[
+    virtualChallengeId
+  ].visibleMapLayer = BING
 
-  mappedProps.setInstructionsCollapsed(challenge.id, true)
-  expect(dispatch).toBeCalled()
-  expect(setPreferences).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
-                                        {[challenge.id]: {collapseInstructions: true}})
+  const mappedProps = mapStateToProps(basicState, {virtualChallengeId})
+  expect(mappedProps.visibleMapLayer).toEqual(BING)
 })
 
-test("setLoadTasksBy updates the challenge's taskLoadMethod preference", () => {
+test("setChallengeMinimization with virtual false updates the challenge minimize preference", () => {
   const dispatch = jest.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
-  mappedProps.setTaskLoadBy(challenge.id, TaskLoadMethod.proximity)
+  mappedProps.setChallengeMinimization(challengeId, false, true)
+  expect(dispatch).toBeCalled()
+  expect(setPreferences).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
+                                        {[challengeId]: {minimize: true}})
+})
+
+test("setChallengeMinimization with virtual true updates the virtual challenge minimize preference", () => {
+  const dispatch = jest.fn(() => Promise.resolve())
+  const mappedProps = mapDispatchToProps(dispatch)
+
+  mappedProps.setChallengeMinimization(challengeId, true, true)
+  expect(dispatch).toBeCalled()
+  expect(setPreferences).toBeCalledWith(VIRTUAL_CHALLENGES_PREFERENCE_GROUP,
+                                        {[challengeId]: {minimize: true}})
+})
+
+test("setInstructionsCollapsed with virtual false updates the challenge collapseInstructions preference", () => {
+  const dispatch = jest.fn(() => Promise.resolve())
+  const mappedProps = mapDispatchToProps(dispatch)
+
+  mappedProps.setInstructionsCollapsed(challengeId, false, true)
+  expect(dispatch).toBeCalled()
+  expect(setPreferences).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
+                                        {[challengeId]: {collapseInstructions: true}})
+})
+
+test("setInstructionsCollapsed with virtual true updates the virtual challenge collapseInstructions preference", () => {
+  const dispatch = jest.fn(() => Promise.resolve())
+  const mappedProps = mapDispatchToProps(dispatch)
+
+  mappedProps.setInstructionsCollapsed(challengeId, true, true)
+  expect(dispatch).toBeCalled()
+  expect(setPreferences).toBeCalledWith(VIRTUAL_CHALLENGES_PREFERENCE_GROUP,
+                                        {[challengeId]: {collapseInstructions: true}})
+})
+
+test("setLoadTasksBy with virtual false updates the challenge taskLoadMethod preference", () => {
+  const dispatch = jest.fn(() => Promise.resolve())
+  const mappedProps = mapDispatchToProps(dispatch)
+
+  mappedProps.setTaskLoadBy(challengeId, false, TaskLoadMethod.proximity)
   expect(dispatch).toBeCalled()
   expect(
     setPreferences
   ).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
-                   {[challenge.id]: {taskLoadMethod: TaskLoadMethod.proximity}})
+                   {[challengeId]: {taskLoadMethod: TaskLoadMethod.proximity}})
 })
 
-test("setVisibleMapLayer updates the challenge's visibleMapLayer preference", () => {
+test("setLoadTasksBy with virtual true updates the virtual challenge taskLoadMethod preference", () => {
   const dispatch = jest.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch)
 
-  mappedProps.setVisibleMapLayer(challenge.id, BING)
+  mappedProps.setTaskLoadBy(challengeId, true, TaskLoadMethod.proximity)
+  expect(dispatch).toBeCalled()
+  expect(
+    setPreferences
+  ).toBeCalledWith(VIRTUAL_CHALLENGES_PREFERENCE_GROUP,
+                   {[challengeId]: {taskLoadMethod: TaskLoadMethod.proximity}})
+})
+
+test("setVisibleMapLayer with virtual false updates the challenge visibleMapLayer preference", () => {
+  const dispatch = jest.fn(() => Promise.resolve())
+  const mappedProps = mapDispatchToProps(dispatch)
+
+  mappedProps.setVisibleMapLayer(challengeId, false, BING)
   expect(dispatch).toBeCalled()
   expect(
     setPreferences
   ).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
-                   {[challenge.id]: {visibleMapLayer: BING}})
+                   {[challengeId]: {visibleMapLayer: BING}})
+})
+
+test("setVisibleMapLayer with virtual true updates the virtual challenge visibleMapLayer preference", () => {
+  const dispatch = jest.fn(() => Promise.resolve())
+  const mappedProps = mapDispatchToProps(dispatch)
+
+  mappedProps.setVisibleMapLayer(challengeId, true, BING)
+  expect(dispatch).toBeCalled()
+  expect(
+    setPreferences
+  ).toBeCalledWith(VIRTUAL_CHALLENGES_PREFERENCE_GROUP,
+                   {[challengeId]: {visibleMapLayer: BING}})
 })

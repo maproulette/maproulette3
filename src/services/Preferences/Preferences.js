@@ -5,6 +5,7 @@ import _merge from 'lodash/merge'
 import _omit from 'lodash/omit'
 
 export const CHALLENGES_PREFERENCE_GROUP = 'challenges'
+export const VIRTUAL_CHALLENGES_PREFERENCE_GROUP = 'virtualChallenges'
 
 // redux actions
 export const SET_PREFERENCES = 'SET_PREFERENCES'
@@ -54,4 +55,3 @@ export const currentPreferences = function(state={}, action) {
       return state
   }
 }
-

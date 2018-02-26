@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`a busy indicator is displayed if clustered tasks are loading 1`] = `
+exports[`a busy indicator is displayed if tasks are loading 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
@@ -8,12 +8,6 @@ ShallowWrapper {
     browsedChallenge={
         Object {
             "id": 123,
-          }
-    }
-    clusteredTasks={
-        Object {
-            "challengeId": 123,
-            "loading": true,
           }
     }
     layerSourceId="foo"
@@ -35,6 +29,8 @@ ShallowWrapper {
           }
     }
     setChallengeMapBounds={[Function]}
+    taskMarkers={Array []}
+    tasksLoading={true}
     updateBoundedChallenges={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -56,12 +52,6 @@ ShallowWrapper {
                               "id": 123,
                             }
           }
-          clusteredTasks={
-                    Object {
-                              "challengeId": 123,
-                              "loading": true,
-                            }
-          }
           layerSourceId="foo"
           mapBounds={
                     Object {
@@ -81,6 +71,8 @@ ShallowWrapper {
                             }
           }
           setChallengeMapBounds={[Function]}
+          taskMarkers={Array []}
+          tasksLoading={true}
           updateBoundedChallenges={[Function]}
 />,
         <EnhancedMap
@@ -110,12 +102,6 @@ ShallowWrapper {
                                         "id": 123,
                                       }
                     }
-                    clusteredTasks={
-                              Object {
-                                        "challengeId": 123,
-                                        "loading": true,
-                                      }
-                    }
                     defaultLayer="foo"
                     layerSourceId="foo"
                     mapBounds={
@@ -136,6 +122,8 @@ ShallowWrapper {
                                       }
                     }
                     setChallengeMapBounds={[Function]}
+                    taskMarkers={Array []}
+                    tasksLoading={true}
                     updateBoundedChallenges={[Function]}
           />
 </EnhancedMap>,
@@ -152,10 +140,6 @@ ShallowWrapper {
         "props": Object {
           "browsedChallenge": Object {
             "id": 123,
-          },
-          "clusteredTasks": Object {
-            "challengeId": 123,
-            "loading": true,
           },
           "layerSourceId": "foo",
           "mapBounds": Object {
@@ -174,6 +158,8 @@ ShallowWrapper {
             },
           },
           "setChallengeMapBounds": [Function],
+          "taskMarkers": Array [],
+          "tasksLoading": true,
           "updateBoundedChallenges": [Function],
         },
         "ref": null,
@@ -200,12 +186,6 @@ ShallowWrapper {
                                           "id": 123,
                                         }
               }
-              clusteredTasks={
-                            Object {
-                                          "challengeId": 123,
-                                          "loading": true,
-                                        }
-              }
               defaultLayer="foo"
               layerSourceId="foo"
               mapBounds={
@@ -226,6 +206,8 @@ ShallowWrapper {
                                         }
               }
               setChallengeMapBounds={[Function]}
+              taskMarkers={Array []}
+              tasksLoading={true}
               updateBoundedChallenges={[Function]}
 />,
             false,
@@ -261,10 +243,6 @@ ShallowWrapper {
               "browsedChallenge": Object {
                 "id": 123,
               },
-              "clusteredTasks": Object {
-                "challengeId": 123,
-                "loading": true,
-              },
               "defaultLayer": "foo",
               "layerSourceId": "foo",
               "mapBounds": Object {
@@ -283,6 +261,8 @@ ShallowWrapper {
                 },
               },
               "setChallengeMapBounds": [Function],
+              "taskMarkers": Array [],
+              "tasksLoading": true,
               "updateBoundedChallenges": [Function],
             },
             "ref": null,
@@ -318,12 +298,6 @@ ShallowWrapper {
                                     "id": 123,
                                   }
             }
-            clusteredTasks={
-                        Object {
-                                    "challengeId": 123,
-                                    "loading": true,
-                                  }
-            }
             layerSourceId="foo"
             mapBounds={
                         Object {
@@ -343,6 +317,8 @@ ShallowWrapper {
                                   }
             }
             setChallengeMapBounds={[Function]}
+            taskMarkers={Array []}
+            tasksLoading={true}
             updateBoundedChallenges={[Function]}
 />,
           <EnhancedMap
@@ -372,12 +348,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                         }
-                        clusteredTasks={
-                                    Object {
-                                                "challengeId": 123,
-                                                "loading": true,
-                                              }
-                        }
                         defaultLayer="foo"
                         layerSourceId="foo"
                         mapBounds={
@@ -398,6 +368,8 @@ ShallowWrapper {
                                               }
                         }
                         setChallengeMapBounds={[Function]}
+                        taskMarkers={Array []}
+                        tasksLoading={true}
                         updateBoundedChallenges={[Function]}
             />
 </EnhancedMap>,
@@ -414,10 +386,6 @@ ShallowWrapper {
           "props": Object {
             "browsedChallenge": Object {
               "id": 123,
-            },
-            "clusteredTasks": Object {
-              "challengeId": 123,
-              "loading": true,
             },
             "layerSourceId": "foo",
             "mapBounds": Object {
@@ -436,6 +404,8 @@ ShallowWrapper {
               },
             },
             "setChallengeMapBounds": [Function],
+            "taskMarkers": Array [],
+            "tasksLoading": true,
             "updateBoundedChallenges": [Function],
           },
           "ref": null,
@@ -462,12 +432,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                 }
-                clusteredTasks={
-                                Object {
-                                                "challengeId": 123,
-                                                "loading": true,
-                                              }
-                }
                 defaultLayer="foo"
                 layerSourceId="foo"
                 mapBounds={
@@ -488,6 +452,8 @@ ShallowWrapper {
                                               }
                 }
                 setChallengeMapBounds={[Function]}
+                taskMarkers={Array []}
+                tasksLoading={true}
                 updateBoundedChallenges={[Function]}
 />,
               false,
@@ -523,10 +489,6 @@ ShallowWrapper {
                 "browsedChallenge": Object {
                   "id": 123,
                 },
-                "clusteredTasks": Object {
-                  "challengeId": 123,
-                  "loading": true,
-                },
                 "defaultLayer": "foo",
                 "layerSourceId": "foo",
                 "mapBounds": Object {
@@ -545,6 +507,8 @@ ShallowWrapper {
                   },
                 },
                 "setChallengeMapBounds": [Function],
+                "taskMarkers": Array [],
+                "tasksLoading": true,
                 "updateBoundedChallenges": [Function],
               },
               "ref": null,
@@ -588,12 +552,6 @@ ShallowWrapper {
             "id": 123,
           }
     }
-    clusteredTasks={
-        Object {
-            "challengeId": 123,
-            "loading": false,
-          }
-    }
     layerSourceId="foo"
     mapBounds={
         Object {
@@ -613,6 +571,7 @@ ShallowWrapper {
           }
     }
     setChallengeMapBounds={[Function]}
+    taskMarkers={Array []}
     updateBoundedChallenges={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -634,12 +593,6 @@ ShallowWrapper {
                               "id": 123,
                             }
           }
-          clusteredTasks={
-                    Object {
-                              "challengeId": 123,
-                              "loading": false,
-                            }
-          }
           layerSourceId="foo"
           mapBounds={
                     Object {
@@ -659,6 +612,7 @@ ShallowWrapper {
                             }
           }
           setChallengeMapBounds={[Function]}
+          taskMarkers={Array []}
           updateBoundedChallenges={[Function]}
 />,
         <EnhancedMap
@@ -688,12 +642,6 @@ ShallowWrapper {
                                         "id": 123,
                                       }
                     }
-                    clusteredTasks={
-                              Object {
-                                        "challengeId": 123,
-                                        "loading": false,
-                                      }
-                    }
                     defaultLayer="foo"
                     layerSourceId="foo"
                     mapBounds={
@@ -714,6 +662,7 @@ ShallowWrapper {
                                       }
                     }
                     setChallengeMapBounds={[Function]}
+                    taskMarkers={Array []}
                     updateBoundedChallenges={[Function]}
           />
 </EnhancedMap>,
@@ -730,10 +679,6 @@ ShallowWrapper {
         "props": Object {
           "browsedChallenge": Object {
             "id": 123,
-          },
-          "clusteredTasks": Object {
-            "challengeId": 123,
-            "loading": false,
           },
           "layerSourceId": "foo",
           "mapBounds": Object {
@@ -752,6 +697,7 @@ ShallowWrapper {
             },
           },
           "setChallengeMapBounds": [Function],
+          "taskMarkers": Array [],
           "updateBoundedChallenges": [Function],
         },
         "ref": null,
@@ -778,12 +724,6 @@ ShallowWrapper {
                                           "id": 123,
                                         }
               }
-              clusteredTasks={
-                            Object {
-                                          "challengeId": 123,
-                                          "loading": false,
-                                        }
-              }
               defaultLayer="foo"
               layerSourceId="foo"
               mapBounds={
@@ -804,6 +744,7 @@ ShallowWrapper {
                                         }
               }
               setChallengeMapBounds={[Function]}
+              taskMarkers={Array []}
               updateBoundedChallenges={[Function]}
 />,
             false,
@@ -839,10 +780,6 @@ ShallowWrapper {
               "browsedChallenge": Object {
                 "id": 123,
               },
-              "clusteredTasks": Object {
-                "challengeId": 123,
-                "loading": false,
-              },
               "defaultLayer": "foo",
               "layerSourceId": "foo",
               "mapBounds": Object {
@@ -861,6 +798,7 @@ ShallowWrapper {
                 },
               },
               "setChallengeMapBounds": [Function],
+              "taskMarkers": Array [],
               "updateBoundedChallenges": [Function],
             },
             "ref": null,
@@ -888,12 +826,6 @@ ShallowWrapper {
                                     "id": 123,
                                   }
             }
-            clusteredTasks={
-                        Object {
-                                    "challengeId": 123,
-                                    "loading": false,
-                                  }
-            }
             layerSourceId="foo"
             mapBounds={
                         Object {
@@ -913,6 +845,7 @@ ShallowWrapper {
                                   }
             }
             setChallengeMapBounds={[Function]}
+            taskMarkers={Array []}
             updateBoundedChallenges={[Function]}
 />,
           <EnhancedMap
@@ -942,12 +875,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                         }
-                        clusteredTasks={
-                                    Object {
-                                                "challengeId": 123,
-                                                "loading": false,
-                                              }
-                        }
                         defaultLayer="foo"
                         layerSourceId="foo"
                         mapBounds={
@@ -968,6 +895,7 @@ ShallowWrapper {
                                               }
                         }
                         setChallengeMapBounds={[Function]}
+                        taskMarkers={Array []}
                         updateBoundedChallenges={[Function]}
             />
 </EnhancedMap>,
@@ -984,10 +912,6 @@ ShallowWrapper {
           "props": Object {
             "browsedChallenge": Object {
               "id": 123,
-            },
-            "clusteredTasks": Object {
-              "challengeId": 123,
-              "loading": false,
             },
             "layerSourceId": "foo",
             "mapBounds": Object {
@@ -1006,6 +930,7 @@ ShallowWrapper {
               },
             },
             "setChallengeMapBounds": [Function],
+            "taskMarkers": Array [],
             "updateBoundedChallenges": [Function],
           },
           "ref": null,
@@ -1032,12 +957,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                 }
-                clusteredTasks={
-                                Object {
-                                                "challengeId": 123,
-                                                "loading": false,
-                                              }
-                }
                 defaultLayer="foo"
                 layerSourceId="foo"
                 mapBounds={
@@ -1058,6 +977,7 @@ ShallowWrapper {
                                               }
                 }
                 setChallengeMapBounds={[Function]}
+                taskMarkers={Array []}
                 updateBoundedChallenges={[Function]}
 />,
               false,
@@ -1093,10 +1013,6 @@ ShallowWrapper {
                 "browsedChallenge": Object {
                   "id": 123,
                 },
-                "clusteredTasks": Object {
-                  "challengeId": 123,
-                  "loading": false,
-                },
                 "defaultLayer": "foo",
                 "layerSourceId": "foo",
                 "mapBounds": Object {
@@ -1115,6 +1031,7 @@ ShallowWrapper {
                   },
                 },
                 "setChallengeMapBounds": [Function],
+                "taskMarkers": Array [],
                 "updateBoundedChallenges": [Function],
               },
               "ref": null,
@@ -1150,12 +1067,6 @@ ShallowWrapper {
             "id": 123,
           }
     }
-    clusteredTasks={
-        Object {
-            "challengeId": 123,
-            "loading": false,
-          }
-    }
     layerSourceId="foo"
     mapBounds={
         Object {
@@ -1175,6 +1086,8 @@ ShallowWrapper {
           }
     }
     setChallengeMapBounds={[Function]}
+    taskMarkers={Array []}
+    tasksLoading={false}
     updateBoundedChallenges={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -1196,12 +1109,6 @@ ShallowWrapper {
                               "id": 123,
                             }
           }
-          clusteredTasks={
-                    Object {
-                              "challengeId": 123,
-                              "loading": false,
-                            }
-          }
           layerSourceId="foo"
           mapBounds={
                     Object {
@@ -1221,6 +1128,8 @@ ShallowWrapper {
                             }
           }
           setChallengeMapBounds={[Function]}
+          taskMarkers={Array []}
+          tasksLoading={false}
           updateBoundedChallenges={[Function]}
 />,
         <EnhancedMap
@@ -1250,12 +1159,6 @@ ShallowWrapper {
                                         "id": 123,
                                       }
                     }
-                    clusteredTasks={
-                              Object {
-                                        "challengeId": 123,
-                                        "loading": false,
-                                      }
-                    }
                     defaultLayer="foo"
                     layerSourceId="foo"
                     mapBounds={
@@ -1276,6 +1179,8 @@ ShallowWrapper {
                                       }
                     }
                     setChallengeMapBounds={[Function]}
+                    taskMarkers={Array []}
+                    tasksLoading={false}
                     updateBoundedChallenges={[Function]}
           />
 </EnhancedMap>,
@@ -1292,10 +1197,6 @@ ShallowWrapper {
         "props": Object {
           "browsedChallenge": Object {
             "id": 123,
-          },
-          "clusteredTasks": Object {
-            "challengeId": 123,
-            "loading": false,
           },
           "layerSourceId": "foo",
           "mapBounds": Object {
@@ -1314,6 +1215,8 @@ ShallowWrapper {
             },
           },
           "setChallengeMapBounds": [Function],
+          "taskMarkers": Array [],
+          "tasksLoading": false,
           "updateBoundedChallenges": [Function],
         },
         "ref": null,
@@ -1340,12 +1243,6 @@ ShallowWrapper {
                                           "id": 123,
                                         }
               }
-              clusteredTasks={
-                            Object {
-                                          "challengeId": 123,
-                                          "loading": false,
-                                        }
-              }
               defaultLayer="foo"
               layerSourceId="foo"
               mapBounds={
@@ -1366,6 +1263,8 @@ ShallowWrapper {
                                         }
               }
               setChallengeMapBounds={[Function]}
+              taskMarkers={Array []}
+              tasksLoading={false}
               updateBoundedChallenges={[Function]}
 />,
             false,
@@ -1401,10 +1300,6 @@ ShallowWrapper {
               "browsedChallenge": Object {
                 "id": 123,
               },
-              "clusteredTasks": Object {
-                "challengeId": 123,
-                "loading": false,
-              },
               "defaultLayer": "foo",
               "layerSourceId": "foo",
               "mapBounds": Object {
@@ -1423,6 +1318,8 @@ ShallowWrapper {
                 },
               },
               "setChallengeMapBounds": [Function],
+              "taskMarkers": Array [],
+              "tasksLoading": false,
               "updateBoundedChallenges": [Function],
             },
             "ref": null,
@@ -1450,12 +1347,6 @@ ShallowWrapper {
                                     "id": 123,
                                   }
             }
-            clusteredTasks={
-                        Object {
-                                    "challengeId": 123,
-                                    "loading": false,
-                                  }
-            }
             layerSourceId="foo"
             mapBounds={
                         Object {
@@ -1475,6 +1366,8 @@ ShallowWrapper {
                                   }
             }
             setChallengeMapBounds={[Function]}
+            taskMarkers={Array []}
+            tasksLoading={false}
             updateBoundedChallenges={[Function]}
 />,
           <EnhancedMap
@@ -1504,12 +1397,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                         }
-                        clusteredTasks={
-                                    Object {
-                                                "challengeId": 123,
-                                                "loading": false,
-                                              }
-                        }
                         defaultLayer="foo"
                         layerSourceId="foo"
                         mapBounds={
@@ -1530,6 +1417,8 @@ ShallowWrapper {
                                               }
                         }
                         setChallengeMapBounds={[Function]}
+                        taskMarkers={Array []}
+                        tasksLoading={false}
                         updateBoundedChallenges={[Function]}
             />
 </EnhancedMap>,
@@ -1546,10 +1435,6 @@ ShallowWrapper {
           "props": Object {
             "browsedChallenge": Object {
               "id": 123,
-            },
-            "clusteredTasks": Object {
-              "challengeId": 123,
-              "loading": false,
             },
             "layerSourceId": "foo",
             "mapBounds": Object {
@@ -1568,6 +1453,8 @@ ShallowWrapper {
               },
             },
             "setChallengeMapBounds": [Function],
+            "taskMarkers": Array [],
+            "tasksLoading": false,
             "updateBoundedChallenges": [Function],
           },
           "ref": null,
@@ -1594,12 +1481,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                 }
-                clusteredTasks={
-                                Object {
-                                                "challengeId": 123,
-                                                "loading": false,
-                                              }
-                }
                 defaultLayer="foo"
                 layerSourceId="foo"
                 mapBounds={
@@ -1620,6 +1501,8 @@ ShallowWrapper {
                                               }
                 }
                 setChallengeMapBounds={[Function]}
+                taskMarkers={Array []}
+                tasksLoading={false}
                 updateBoundedChallenges={[Function]}
 />,
               false,
@@ -1655,10 +1538,6 @@ ShallowWrapper {
                 "browsedChallenge": Object {
                   "id": 123,
                 },
-                "clusteredTasks": Object {
-                  "challengeId": 123,
-                  "loading": false,
-                },
                 "defaultLayer": "foo",
                 "layerSourceId": "foo",
                 "mapBounds": Object {
@@ -1677,6 +1556,8 @@ ShallowWrapper {
                   },
                 },
                 "setChallengeMapBounds": [Function],
+                "taskMarkers": Array [],
+                "tasksLoading": false,
                 "updateBoundedChallenges": [Function],
               },
               "ref": null,

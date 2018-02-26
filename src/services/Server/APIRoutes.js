@@ -50,8 +50,13 @@ const apiRoutes = factory => {
       'removeKeywords': factory.delete('/challenge/:id/tags'),
       'delete': factory.delete('/challenge/:id'),
     },
+    'virtualChallenge': {
+      'create': factory.post('/virtualchallenge'),
+      'randomTask': factory.get('/virtualchallenge/:id/task'),
+    },
     'tasks': {
       'random': factory.get('/tasks/random'),
+      'withinBounds': factory.get('/tasks/box/:left/:bottom/:right/:top'),
     },
     'task': {
       'single': factory.get('/task/:id'),

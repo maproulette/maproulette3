@@ -1,6 +1,7 @@
 import _isEmpty from 'lodash/isEmpty'
 import _isFunction from 'lodash/isFunction'
 import _isArray from 'lodash/isArray'
+import _max from 'lodash/max'
 import { LatLngBounds, LatLng } from 'leaflet'
 
 /** Default map bounds in absence of any state */
@@ -73,6 +74,17 @@ export const toLatLngBounds = function(arrayBounds) {
   else {
     throw new Error("Invalid bounds array given")
   }
+}
+
+/**
+ * Determines if the largest dimension of the given bounding box is less
+ * than the given maxAllowedDegrees.
+ */
+export const boundsWithinAllowedMaxDegrees = function(bounds, maxAllowedDegrees) {
+  const normalizedBounds = toLatLngBounds(bounds)
+  return maxAllowedDegrees >
+         _max([normalizedBounds.getEast() - normalizedBounds.getWest(),
+               normalizedBounds.getNorth() - normalizedBounds.getSouth()])
 }
 
 // redux actions

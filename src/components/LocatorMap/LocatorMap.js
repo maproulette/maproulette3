@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 import _get from 'lodash/get'
 import { latLng } from 'leaflet'
 import { ChallengeLocation }
@@ -12,6 +13,7 @@ import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import WithChallengeFilters from '../HOCs/WithChallengeFilters/WithChallengeFilters'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
+import BusySpinner from '../BusySpinner/BusySpinner'
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
@@ -46,6 +48,17 @@ export class LocatorMap extends Component {
 
     // the layer has been changed, or
     if (nextProps.layerSourceId !== this.props.layerSourceId) {
+      return true
+    }
+
+    // the task markers have changed
+    if (_get(nextProps, 'taskMarkers.length') !==
+        _get(this.props, 'taskMarkers.length')) {
+      return true
+    }
+
+    // the loading status of tasks has been changed
+    if (!!nextProps.tasksLoading !== !!this.props.tasksLoading) {
       return true
     }
 
@@ -98,7 +111,13 @@ export class LocatorMap extends Component {
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
           <VisibleTileLayer defaultLayer={this.props.layerSourceId} />
+          {_get(this.props, 'taskMarkers.length', 0) > 0 &&
+            <MarkerClusterGroup markers={this.props.taskMarkers}
+                                onMarkerClick={this.markerClicked} />
+          }
         </EnhancedMap>
+
+        {!!this.props.tasksLoading && <BusySpinner />}
       </div>
     )
   }
@@ -117,6 +136,8 @@ LocatorMap.propTypes = {
   layerSourceId: PropTypes.string,
   /** The currently enabled challenge filter, if any */
   challengeFilter: PropTypes.object,
+  /** Task markers to display */
+  taskMarkers: PropTypes.array,
 }
 
 export default WithChallengeFilters(WithMapBounds(LocatorMap))

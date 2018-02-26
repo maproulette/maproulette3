@@ -25,11 +25,19 @@ export default {
     fetchFailure: messages.clusteredTaskFetchFailure,
   },
 
+  boundedTask: {
+    fetchFailure: messages.boundedTaskFetchFailure,
+  },
+
   challenge: {
     fetchFailure: messages.challengeFetchFailure,
     searchFailure: messages.challengeSearchFailure,
     deleteFailure: messages.challengeDeleteFailure,
     saveFailure: messages.challengeSaveFailure,
+  },
+
+  virtualChallenge: {
+    createFailure: messages.virtualChallengeCreateFailure,
   },
 
   project: {

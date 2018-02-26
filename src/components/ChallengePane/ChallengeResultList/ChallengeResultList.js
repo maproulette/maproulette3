@@ -55,6 +55,23 @@ export class ChallengeResultList extends Component {
       )
     }
 
+    // If there are map-bounded tasks visible (and we're not browsing a
+    // challenge), offer the user an option to start a virtual challenge to
+    // work on those mapped tasks.
+    let virtualChallengeOption = null
+    if (_get(this.props, 'mapBoundedTasks.tasks.length', 0) > 0 &&
+        !_isObject(this.props.browsedChallenge)) {
+      virtualChallengeOption = (
+        <div className="challenge-result-list__virtual-challenge-option">
+          <button className={classNames("button is-outlined is-primary",
+                                        {"is-loading": this.props.creatingVirtualChallenge})}
+                  onClick={this.props.startMapBoundedTasks}>
+            <FormattedMessage {...messages.createVirtualChallenge} />
+          </button>
+        </div>
+      )
+    }
+
     let results = null
     if (challengeResults.length === 0) {
       results = (
@@ -90,6 +107,7 @@ export class ChallengeResultList extends Component {
           {clearFiltersControl}
         </div>
 
+        {virtualChallengeOption}
         {results}
       </div>
     )
