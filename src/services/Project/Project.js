@@ -4,9 +4,9 @@ import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
-import { buildError,
-         buildServerError,
+import { addServerError,
          addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
 import { logoutUser } from '../User/User'
 import _get from 'lodash/get'
 import _isNumber from 'lodash/isNumber'
@@ -46,10 +46,7 @@ export const fetchProjects = function(limit=50) {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Project.fetchFailure", "Unable to retrieve latest project data from server."
-      )))
-
+      dispatch(addError(AppErrors.project.fetchFailure))
       console.log(error.response || error)
     })
   }
@@ -71,15 +68,10 @@ export const fetchManageableProjects = function(limit=50) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).
         dispatch(logoutUser())
-        dispatch(addError(buildError(
-          "User.unauthorized", "Please sign in to continue."
-        )))
+        dispatch(addError(AppErrors.user.unauthorized))
       }
       else {
-        dispatch(addError(buildError(
-          "Project.fetchFailure", "Unable to retrieve latest project data from server."
-        )))
-
+        dispatch(addError(AppErrors.project.fetchFailure))
         console.log(error.response || error)
       }
     })
@@ -97,10 +89,7 @@ export const fetchProject = function(projectId) {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Project.fetchFailure", "Unable to retrieve latest project data from server."
-      )))
-
+      dispatch(addError(AppErrors.project.fetchFailure))
       console.log(error.response || error)
     })
   }
@@ -119,10 +108,7 @@ export const searchProjects = function(query) {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Project.fetchFailure", "Unable to search projects."
-      )))
-
+      dispatch(addError(AppErrors.project.searchFailure))
       console.log(error.response || error)
     })
   }
@@ -154,15 +140,11 @@ export const saveProject = function(projectData) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).
         dispatch(logoutUser())
-        dispatch(addError(buildError(
-          "User.unauthorized", "Please sign in to continue."
-        )))
+        dispatch(addError(AppErrors.user.unauthorized))
       }
       else {
         console.log(error.response || error)
-        buildServerError(
-          "Project.saveFailure", "Unable to save your changes", error
-        ).then(errorObject => dispatch(addError(errorObject)))
+        dispatch(addServerError(AppErrors.project.saveFailure, error))
       }
     })
   }

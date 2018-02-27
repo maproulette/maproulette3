@@ -14,7 +14,8 @@ import { fetchChallengesWithinBoundingBox }
 import { pushFetchChallenges,
          popFetchChallenges } from '../../../services/Status/Status'
 import { userLocation } from '../../../services/User/User'
-import { buildError, addError } from '../../../services/Error/Error'
+import { addError } from '../../../services/Error/Error'
+import AppErrors from '../../../services/Error/AppErrors'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 
 const WithMapBounds =
@@ -87,9 +88,7 @@ const mapDispatchToProps = dispatch => {
         updateChallenges(dispatch, userBounds)
       }
       else {
-        dispatch(addError(buildError(
-          "User.missingHomeLocation",
-          "No home location found. Please set your home location in your openstreetmap.org settings and then refresh this page to try again.")))
+        dispatch(addError(AppErrors.user.missingHomeLocation))
       }
     },
 

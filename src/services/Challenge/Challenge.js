@@ -21,9 +21,8 @@ import { commentSchema, receiveComments } from '../Comment/Comment'
 import { projectSchema, fetchProject } from '../Project/Project'
 import { logoutUser } from '../User/User'
 import { toLatLngBounds } from '../MapBounds/MapBounds'
-import { buildError,
-         buildServerError,
-         addError } from '../Error/Error'
+import { addError, addServerError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
 import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
 import { parseQueryString } from '../Search/Search'
@@ -107,10 +106,7 @@ export const fetchFeaturedChallenges = function(limit = 50) {
       dispatch(receiveChallenges(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Challenge.fetchFailure", "Unable to retrieve latest challenge data from server."
-      )))
-
+      dispatch(addError(AppErrors.challenge.fetchFailure))
       console.log(error.response || error)
     })
   }
@@ -134,10 +130,7 @@ export const fetchChallengesWithKeywords = function(keywords, limit=50) {
       dispatch(receiveChallenges(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Challenge.fetchFailure", "Unable to retrieve latest challenge data from server."
-      )))
-
+      dispatch(addError(AppErrors.challenge.fetchFailure))
       console.log(error.response || error)
     })
   }
@@ -182,10 +175,7 @@ export const searchChallenges = function(queryString, limit=50) {
       dispatch(receiveChallenges(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Challenge.searchFailure", "Unable to search challenges on server."
-      )))
-
+      dispatch(addError(AppErrors.challenge.searchFailure))
       console.log(error.response || error)
     })
   }
@@ -213,10 +203,7 @@ export const fetchChallengesWithinBoundingBox = function(bounds, limit=50) {
       dispatch(receiveChallenges(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Challenge.searchFailure", "Unable to search challenges on server."
-      )))
-
+      dispatch(addError(AppErrors.challenge.searchFailure))
       console.log(error.response || error)
     })
   }
@@ -243,10 +230,7 @@ export const fetchChallengeActions = function(challengeId = null) {
         dispatch(logoutUser())
       }
       else {
-        dispatch(addError(buildError(
-          "Challenge.fetchFailure", "Unable to retrieve latest challenge data from server."
-        )))
-
+        dispatch(addError(AppErrors.challenge.fetchFailure))
         console.log(error.response || error)
       }
     })
@@ -290,10 +274,7 @@ export const fetchChallengeActivity = function(challengeId, startDate, endDate) 
         dispatch(logoutUser())
       }
       else {
-        dispatch(addError(buildError(
-          "Challenge.fetchFailure", "Unable to retrieve latest challenge data from server."
-        )))
-
+        dispatch(addError(AppErrors.challenge.fetchFailure))
         console.log(error.response || error)
       }
     })
@@ -349,11 +330,7 @@ export const fetchProjectChallenges = function(projectId, limit=50) {
       dispatch(receiveChallenges(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Challenge.fetchFailure",
-        "Unable to retrieve latest challenge data from server."
-      )))
-
+      dispatch(addError(AppErrors.challenge.fetchFailure))
       console.log(error.response || error)
     })
   }
@@ -375,10 +352,7 @@ export const fetchChallenge = function(challengeId, suppressReceive = false) {
 
       return normalizedResults
     }).catch((error) => {
-      dispatch(addError(buildError(
-        "Challenge.fetchFailure", "Unable to retrieve latest challenge data from server."
-      )))
-
+      dispatch(addError(AppErrors.challenge.fetchFailure))
       console.log(error.response || error)
     })
   }
@@ -399,10 +373,7 @@ export const loadCompleteChallenge = function(challengeId) {
         dispatch(receiveChallenges(normalizedChallengeResults.entities))
       ).then(() => normalizedChallengeResults)
     ).catch((error) => {
-      dispatch(addError(buildError(
-        "Challenge.fetchFailure", "Unable to retrieve latest challenge data from server."
-      )))
-
+      dispatch(addError(AppErrors.challenge.fetchFailure))
       console.log(error.response || error)
     })
   }
@@ -453,20 +424,16 @@ export const saveChallenge = function(originalChallengeData) {
       return saveEndpoint.execute().then(normalizedResults => {
         dispatch(receiveChallenges(normalizedResults.entities))
         return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`)
-      }).catch((error) => {
-        if (error.response && error.response.status === 401) {
+      }).catch((serverError) => {
+        if (serverError.response && serverError.response.status === 401) {
           // If we get an unauthorized, we assume the user is not logged
           // in (or no longer logged in with the server).
           dispatch(logoutUser())
-          dispatch(addError(buildError(
-            "User.unauthorized", "Please sign in to continue."
-          )))
+          dispatch(addError(AppErrors.user.unauthorized))
         }
         else {
-          console.log(error.response || error)
-          buildServerError(
-            "Challenge.saveFailure", "Unable to save your changes", error
-          ).then(errorObject => dispatch(addError(errorObject)))
+          console.log(serverError.response || serverError)
+          dispatch(addServerError(AppErrors.challenge.saveFailure, serverError))
         }
       })
     })
@@ -491,15 +458,10 @@ export const deleteChallenge = function(challengeId) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).
         dispatch(logoutUser())
-        dispatch(addError(buildError(
-          "User.unauthorized", "Please sign in to continue."
-        )))
+        dispatch(addError(AppErrors.user.unauthorized))
       }
       else {
-        dispatch(addError(buildError(
-          "Challenge.deleteFailure", "Unable to delete challenge."
-        )))
-
+        dispatch(addError(AppErrors.challenge.deleteFailure))
         console.log(error.response || error)
       }
     })

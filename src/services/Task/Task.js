@@ -7,7 +7,8 @@ import { challengeSchema,
          loadCompleteChallenge } from '../Challenge/Challenge'
 import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
-import { buildError, buildServerError, addError } from '../Error/Error'
+import { addServerError, addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
 import { logoutUser } from '../User/User'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
@@ -118,15 +119,10 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).
         dispatch(logoutUser())
-        dispatch(addError(buildError(
-          "User.unauthorized", "Please sign in to continue."
-        )))
+        dispatch(addError(AppErrors.user.unauthorized))
       }
       else {
-        dispatch(addError(buildError(
-          "Task.updateFailure", "Unable to save your changes."
-        )))
-
+        dispatch(addError(AppErrors.task.updateFailure))
         console.log(error.response || error)
       }
     })
@@ -272,15 +268,10 @@ const updateTaskStatus = function(dispatch, taskId, newStatus) {
       // If we get an unauthorized, we assume the user is not logged
       // in (or no longer logged in with the server).
       dispatch(logoutUser())
-      dispatch(addError(buildError(
-        "User.unauthorized", "Please sign in to continue."
-      )))
+      dispatch(addError(AppErrors.user.unauthorized))
     }
     else {
-      dispatch(addError(buildError(
-        "Task.updateFailure", "Unable to save your changes."
-      )))
-
+      dispatch(addError(AppErrors.task.updateFailure))
       console.log(error.response || error)
     }
   })
@@ -349,15 +340,11 @@ export const saveTask = function(originalTaskData) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).
         dispatch(logoutUser())
-        dispatch(addError(buildError(
-          "User.unauthorized", "Please sign in to continue."
-        )))
+        dispatch(addError(AppErrors.user.unauthorized))
       }
       else {
         console.log(error.response || error)
-        buildServerError(
-          "Task.saveFailure", "Unable to save your changes", error
-        ).then(errorObject => dispatch(addError(errorObject)))
+        dispatch(addServerError(AppErrors.task.saveFailure, error))
       }
     })
   }
@@ -377,15 +364,10 @@ export const deleteTask = function(taskId) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server).
         dispatch(logoutUser())
-        dispatch(addError(buildError(
-          "User.unauthorized", "Please sign in to continue."
-        )))
+        dispatch(addError(AppErrors.user.unauthorized))
       }
       else {
-        dispatch(addError(buildError(
-          "Task.deleteFailure", "Unable to delete task."
-        )))
-
+        dispatch(addError(AppErrors.task.deleteFailure))
         console.log(error.response || error)
       }
     })
@@ -435,10 +417,7 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
       return taskEntity
     }
   }).catch((error) => {
-    dispatch(addError(buildError(
-      "Task.fetchFailure", "Unable to fetch a task to work on."
-    )))
-
+    dispatch(addError(AppErrors.task.fetchFailure))
     console.log(error.response || error)
   })
 }

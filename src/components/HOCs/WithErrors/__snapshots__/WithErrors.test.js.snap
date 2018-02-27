@@ -2,6 +2,11 @@
 
 exports[`mapStateToProps maps currentErrors to errors 1`] = `
 Object {
-  "errors": "some error",
+  "errors": Array [
+    Object {
+      "defaultMessage": "A foo bar baz error.",
+      "id": "Errors.foo.bar.baz",
+    },
+  ],
 }
 `;

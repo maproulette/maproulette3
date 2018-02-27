@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { buildError, addError, removeError, clearErrors } from '../../../services/Error/Error'
+import { addError, removeError, clearErrors } from '../../../services/Error/Error'
 
 export const mapStateToProps = (state, ownProps) => {
   return ({errors: state.currentErrors})
@@ -7,7 +7,6 @@ export const mapStateToProps = (state, ownProps) => {
 
 export const mapDispatchToProps = dispatch => {
   return {
-    buildError,
     addError: error => dispatch(addError(error)),
     removeError: error => dispatch(removeError(error)),
     clearErrors: () => dispatch(clearErrors()),

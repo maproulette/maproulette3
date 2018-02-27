@@ -2,7 +2,8 @@ import _compact from 'lodash/compact'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import RequestStatus from '../Server/RequestStatus'
-import { buildError, addError } from '../Error/Error'
+import { addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
 import messages from './Messages'
 
 // Editor constants defined on server
@@ -162,22 +163,16 @@ export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
 }
 
 const openJOSM = function(dispatch, editor, task, uri) {
-  fetch(uri).then((response) => {
+  fetch(uri).then(response => {
     if (response.status === 200) {
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
     }
     else {
-      dispatch(addError(buildError(
-        "JOSM.noResponse",
-        "OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?"
-      )))
+      dispatch(addError(AppErrors.josm.noResponse))
       dispatch(editorOpened(editor, task.id, RequestStatus.error))
     }
-  }).catch((error) => {
-    dispatch(addError(buildError(
-      "JOSM.noResponse",
-      "OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?"
-    )))
+  }).catch(error => {
+    dispatch(addError(AppErrors.josm.noResponse))
     dispatch(editorOpened(editor, task.id, RequestStatus.error))
   })
 }

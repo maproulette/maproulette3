@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithErrors'
-import { buildError,
-         addError,
+import { addError,
          removeError,
          clearErrors } from '../../../services/Error/Error'
 
 jest.mock('../../../services/Error/Error')
 
 let basicState = null
+let anError = null
 
 beforeEach(() => {
+  anError = {
+    id: "Errors.foo.bar.baz",
+    defaultMessage: "A foo bar baz error.",
+  }
+
   basicState = {
-    currentErrors: "some error"
+    currentErrors: [anError],
   }
 })
 
@@ -22,29 +27,13 @@ test("mapStateToProps maps currentErrors to errors", () => {
   expect(mappedProps).toMatchSnapshot()
 })
 
-test("mapDispatchToProps maps function buildError", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
-  const mappedProps = mapDispatchToProps(dispatch, {})
-
-  expect(mappedProps.buildError).toBe(buildError)
-})
-
 test("mapDispatchToProps maps function addError", () => {
   const dispatch = jest.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {})
 
-  mappedProps.addError("thisError")
+  mappedProps.addError(anError)
   expect(dispatch).toBeCalled()
-  expect(addError).toBeCalledWith("thisError")
-})
-
-test("mapDispatchToProps maps function addError", () => {
-  const dispatch = jest.fn(() => Promise.resolve())
-  const mappedProps = mapDispatchToProps(dispatch, {})
-
-  mappedProps.addError("thisError")
-  expect(dispatch).toBeCalled()
-  expect(addError).toBeCalledWith("thisError")
+  expect(addError).toBeCalledWith(anError)
 })
 
 test("mapDispatchToProps maps function clearErrors", () => {
