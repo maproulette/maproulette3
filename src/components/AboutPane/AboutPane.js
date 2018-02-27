@@ -15,7 +15,7 @@ export default class AboutPane extends Component {
     return (
       <div className="about-pane">
         <MapPane>
-          <LocatorMap layerSourceName={MAPBOX_STREETS} className="about" {...this.props} />
+          <LocatorMap layerSourceId={MAPBOX_STREETS} className="about" {...this.props} />
         </MapPane>
 
         <AboutModal {...this.props} />

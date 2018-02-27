@@ -5,12 +5,12 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   statusPrompt: {
-    id: 'ActiveTask.status.prompt',
+    id: 'ActiveTask.subheading.status',
     defaultMessage: "Existing Status",
   },
 
   statusTooltip: {
-    id: 'ActiveTask.status.control.toolTip',
+    id: 'ActiveTask.controls.status.tooltip',
     defaultMessage: "Existing Status",
   }
 })

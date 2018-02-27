@@ -5,15 +5,15 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   difficultyLabel: {
-    id: 'ChallengeFilterSubnav.difficultyLabel',
+    id: 'ChallengeFilterSubnav.filter.difficulty.label',
     defaultMessage: 'Difficulty',
   },
   keywordLabel: {
-    id: 'ChallengeFilterSubnav.keywordLabel',
+    id: 'ChallengeFilterSubnav.filter.keyword.label',
     defaultMessage: 'Work on',
   },
   locationLabel: {
-    id: 'ChallengeFilterSubnav.locationLabel',
+    id: 'ChallengeFilterSubnav.filter.location.label',
     defaultMessage: 'Location',
   },
 })

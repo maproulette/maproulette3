@@ -5,52 +5,52 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   editProject: {
-    id: 'EditProject.header',
+    id: 'Admin.EditProject.edit.header',
     defaultMessage: "Edit",
   },
 
   newProject: {
-    id: 'NewProject.header',
+    id: 'Admin.EditProject.new.header',
     defaultMessage: "New Project",
   },
 
   save: {
-    id: 'EditProject.save',
+    id: 'Admin.EditProject.controls.save.label',
     defaultMessage: "Save",
   },
 
   cancel: {
-    id: 'EditProject.cancel',
+    id: 'Admin.EditProject.controls.cancel.label',
     defaultMessage: "Cancel",
   },
 
   nameLabel: {
-    id: 'EditProject.form.name.label',
+    id: 'Admin.EditProject.form.name.label',
     defaultMessage: "Name",
   },
 
   nameDescription: {
-    id: 'EditProject.form.name.description',
+    id: 'Admin.EditProject.form.name.description',
     defaultMessage: "Name of the project",
   },
 
   displayNameLabel: {
-    id: 'EditProject.form.displayName.label',
+    id: 'Admin.EditProject.form.displayName.label',
     defaultMessage: "Display Name",
   },
 
   displayNameDescription: {
-    id: 'EditProject.form.displayName.description',
+    id: 'Admin.EditProject.form.displayName.description',
     defaultMessage: "Displayed name of the project",
   },
 
   enabledLabel: {
-    id: 'EditProject.form.enabled.label',
+    id: 'Admin.EditProject.form.enabled.label',
     defaultMessage: "Visible",
   },
 
   enabledDescription: {
-    id: 'EditProject.form.enabled.description',
+    id: 'Admin.EditProject.form.enabled.description',
     defaultMessage: "If you set your project to Visible, all Challenges under " +
       "it that are also set to Visible will be available, discoverable, and " +
       "searchable for other users. Effectively, making your Project visible " +
@@ -61,12 +61,12 @@ export default defineMessages({
   },
 
   descriptionLabel: {
-    id: 'EditProject.form.description.label',
+    id: 'Admin.EditProject.form.description.label',
     defaultMessage: "Description",
   },
 
   descriptionDescription: {
-    id: 'EditProject.form.description.description',
+    id: 'Admin.EditProject.form.description.description',
     defaultMessage: "Description of the project",
   },
 })

@@ -206,7 +206,7 @@ export class ChallengeResultItem extends Component {
         <div className="card-content">
           <div className="challenge-list__item__difficulty">
             <span className="challenge-list__item__field-label">
-              <FormattedMessage {...messages.difficultyLabel} />
+              <FormattedMessage {...messages.difficulty} />
             </span>
             <span className="challenge-list__item__field-value">
               <FormattedMessage {...messagesByDifficulty[this.props.challenge.difficulty]} />

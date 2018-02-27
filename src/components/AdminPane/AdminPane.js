@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, withRouter } from 'react-router-dom'
-import { FormattedMessage } from 'react-intl'
 import AsManager from '../../services/User/AsManager'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
@@ -14,7 +13,6 @@ import ViewChallenge from './Manage/ViewChallenge/ViewChallenge'
 import ViewProject from './Manage/ViewProject/ViewProject'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
-import messages from './Messages'
 import './AdminPane.css'
 
 // Setup child components with needed HOCs.
@@ -41,9 +39,7 @@ export class AdminPane extends Component {
     if (!manager.isLoggedIn()) {
       return (
         <div className="admin">
-          <SignInButton {...this.props}>
-            <FormattedMessage {...messages.control} />
-          </SignInButton>
+          <SignInButton {...this.props} />
         </div>
       )
     }

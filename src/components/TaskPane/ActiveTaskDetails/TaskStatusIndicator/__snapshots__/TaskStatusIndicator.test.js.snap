@@ -83,7 +83,7 @@ ShallowWrapper {
 >
           <FormattedMessage
                     defaultMessage="Existing Status"
-                    id="ActiveTask.status.prompt"
+                    id="ActiveTask.subheading.status"
                     values={Object {}}
           />
 </div>,
@@ -110,7 +110,7 @@ ShallowWrapper {
         "props": Object {
           "children": <FormattedMessage
             defaultMessage="Existing Status"
-            id="ActiveTask.status.prompt"
+            id="ActiveTask.subheading.status"
             values={Object {}}
 />,
           "className": "active-task-details--sub-heading",
@@ -122,7 +122,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "defaultMessage": "Existing Status",
-            "id": "ActiveTask.status.prompt",
+            "id": "ActiveTask.subheading.status",
             "values": Object {},
           },
           "ref": null,
@@ -192,7 +192,7 @@ ShallowWrapper {
 >
             <FormattedMessage
                         defaultMessage="Existing Status"
-                        id="ActiveTask.status.prompt"
+                        id="ActiveTask.subheading.status"
                         values={Object {}}
             />
 </div>,
@@ -219,7 +219,7 @@ ShallowWrapper {
           "props": Object {
             "children": <FormattedMessage
               defaultMessage="Existing Status"
-              id="ActiveTask.status.prompt"
+              id="ActiveTask.subheading.status"
               values={Object {}}
 />,
             "className": "active-task-details--sub-heading",
@@ -231,7 +231,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "defaultMessage": "Existing Status",
-              "id": "ActiveTask.status.prompt",
+              "id": "ActiveTask.subheading.status",
               "values": Object {},
             },
             "ref": null,
@@ -343,7 +343,7 @@ ShallowWrapper {
           >
                     <FormattedMessage
                               defaultMessage="Existing Status"
-                              id="ActiveTask.status.prompt"
+                              id="ActiveTask.subheading.status"
                               values={Object {}}
                     />
           </h3>
@@ -398,7 +398,7 @@ ShallowWrapper {
 >
             <FormattedMessage
                         defaultMessage="Existing Status"
-                        id="ActiveTask.status.prompt"
+                        id="ActiveTask.subheading.status"
                         values={Object {}}
             />
 </h3>,
@@ -412,7 +412,7 @@ ShallowWrapper {
           "props": Object {
             "children": <FormattedMessage
               defaultMessage="Existing Status"
-              id="ActiveTask.status.prompt"
+              id="ActiveTask.subheading.status"
               values={Object {}}
 />,
             "className": "info-popout--name",
@@ -424,7 +424,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "defaultMessage": "Existing Status",
-              "id": "ActiveTask.status.prompt",
+              "id": "ActiveTask.subheading.status",
               "values": Object {},
             },
             "ref": null,
@@ -500,7 +500,7 @@ ShallowWrapper {
             >
                         <FormattedMessage
                                     defaultMessage="Existing Status"
-                                    id="ActiveTask.status.prompt"
+                                    id="ActiveTask.subheading.status"
                                     values={Object {}}
                         />
             </h3>
@@ -555,7 +555,7 @@ ShallowWrapper {
 >
               <FormattedMessage
                             defaultMessage="Existing Status"
-                            id="ActiveTask.status.prompt"
+                            id="ActiveTask.subheading.status"
                             values={Object {}}
               />
 </h3>,
@@ -569,7 +569,7 @@ ShallowWrapper {
             "props": Object {
               "children": <FormattedMessage
                 defaultMessage="Existing Status"
-                id="ActiveTask.status.prompt"
+                id="ActiveTask.subheading.status"
                 values={Object {}}
 />,
               "className": "info-popout--name",
@@ -581,7 +581,7 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "defaultMessage": "Existing Status",
-                "id": "ActiveTask.status.prompt",
+                "id": "ActiveTask.subheading.status",
                 "values": Object {},
               },
               "ref": null,
@@ -693,7 +693,7 @@ ShallowWrapper {
 >
           <FormattedMessage
                     defaultMessage="Existing Status"
-                    id="ActiveTask.status.prompt"
+                    id="ActiveTask.subheading.status"
                     values={Object {}}
           />
 </div>,
@@ -720,7 +720,7 @@ ShallowWrapper {
         "props": Object {
           "children": <FormattedMessage
             defaultMessage="Existing Status"
-            id="ActiveTask.status.prompt"
+            id="ActiveTask.subheading.status"
             values={Object {}}
 />,
           "className": "active-task-details--sub-heading",
@@ -732,7 +732,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "defaultMessage": "Existing Status",
-            "id": "ActiveTask.status.prompt",
+            "id": "ActiveTask.subheading.status",
             "values": Object {},
           },
           "ref": null,
@@ -802,7 +802,7 @@ ShallowWrapper {
 >
             <FormattedMessage
                         defaultMessage="Existing Status"
-                        id="ActiveTask.status.prompt"
+                        id="ActiveTask.subheading.status"
                         values={Object {}}
             />
 </div>,
@@ -829,7 +829,7 @@ ShallowWrapper {
           "props": Object {
             "children": <FormattedMessage
               defaultMessage="Existing Status"
-              id="ActiveTask.status.prompt"
+              id="ActiveTask.subheading.status"
               values={Object {}}
 />,
             "className": "active-task-details--sub-heading",
@@ -841,7 +841,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "defaultMessage": "Existing Status",
-              "id": "ActiveTask.status.prompt",
+              "id": "ActiveTask.subheading.status",
               "values": Object {},
             },
             "ref": null,

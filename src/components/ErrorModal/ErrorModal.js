@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { injectIntl } from 'react-intl'
 import _isArray from 'lodash/isArray'
 import { errorShape } from '../../services/Error/Error'
 import WithErrors from '../HOCs/WithErrors/WithErrors'
@@ -29,7 +29,8 @@ export class ErrorModal extends Component {
                     onClick={() => this.props.removeError(error)} />
           </div>
           <div className="message-body">
-            <FormattedMessage id={error.id} defaultMessage={error.defaultMessage} />
+            {this.props.formatMessage({id: error.id,
+                                       defaultMessage: error.defaultMessage})}
           </div>
         </article>
       </li>
@@ -56,4 +57,4 @@ ErrorModal.defaultProps = {
   errors: [],
 }
 
-export default WithErrors(ErrorModal)
+export default WithErrors(injectIntl(ErrorModal))

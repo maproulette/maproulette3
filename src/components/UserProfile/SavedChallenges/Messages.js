@@ -9,7 +9,7 @@ export default defineMessages({
     defaultMessage: "Saved Challenges",
   },
   unsave: {
-    id: "Challenge.unsave.control.tooltip",
+    id: "Challenge.controls.unsave.tooltip",
     defaultMessage: "Unsave Challenge",
   }
 })

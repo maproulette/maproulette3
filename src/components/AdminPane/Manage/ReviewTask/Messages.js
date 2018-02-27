@@ -5,7 +5,7 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   reviewTask: {
-    id: 'ReviewTask.header',
+    id: "Admin.ReviewTask.header",
     defaultMessage: "Review Tasks",
   },
 })

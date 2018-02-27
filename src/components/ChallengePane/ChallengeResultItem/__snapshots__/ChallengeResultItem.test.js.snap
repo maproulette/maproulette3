@@ -88,7 +88,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -135,7 +135,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -321,7 +321,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -368,7 +368,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -390,7 +390,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -415,7 +415,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -427,7 +427,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -526,7 +526,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -549,7 +549,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -563,7 +563,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge",
@@ -576,7 +576,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -650,7 +650,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -697,7 +697,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -883,7 +883,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -930,7 +930,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -952,7 +952,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -977,7 +977,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -989,7 +989,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -1088,7 +1088,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -1111,7 +1111,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -1125,7 +1125,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge",
@@ -1138,7 +1138,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -1225,7 +1225,7 @@ ShallowWrapper {
 >
           <FormattedMessage
                     defaultMessage="Featured"
-                    id="Task.status.featured.label"
+                    id="Task.fields.featured.label"
                     values={Object {}}
           />
 </div>,
@@ -1273,7 +1273,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -1321,7 +1321,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -1335,7 +1335,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Save"
-                                                  id="Challenge.save"
+                                                  id="Challenge.controls.save.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -1354,7 +1354,7 @@ ShallowWrapper {
         "props": Object {
           "children": <FormattedMessage
             defaultMessage="Featured"
-            id="Task.status.featured.label"
+            id="Task.fields.featured.label"
             values={Object {}}
 />,
           "className": "challenge-list__item--featured-indicator",
@@ -1366,7 +1366,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "defaultMessage": "Featured",
-            "id": "Task.status.featured.label",
+            "id": "Task.fields.featured.label",
             "values": Object {},
           },
           "ref": null,
@@ -1548,7 +1548,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -1596,7 +1596,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -1610,7 +1610,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Save"
-                                                        id="Challenge.save"
+                                                        id="Challenge.controls.save.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -1632,7 +1632,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -1657,7 +1657,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -1669,7 +1669,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -1769,7 +1769,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -1783,7 +1783,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Save"
-                                                      id="Challenge.save"
+                                                      id="Challenge.controls.save.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -1805,7 +1805,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -1819,7 +1819,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge",
@@ -1832,7 +1832,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -1854,7 +1854,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Save"
-                                        id="Challenge.save"
+                                        id="Challenge.controls.save.label"
                                         values={Object {}}
                     />
 </button>,
@@ -1868,7 +1868,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Save"
-                      id="Challenge.save"
+                      id="Challenge.controls.save.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined save-challenge-toggle",
@@ -1881,7 +1881,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Save",
-                      "id": "Challenge.save",
+                      "id": "Challenge.controls.save.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -1914,7 +1914,7 @@ ShallowWrapper {
 >
             <FormattedMessage
                         defaultMessage="Featured"
-                        id="Task.status.featured.label"
+                        id="Task.fields.featured.label"
                         values={Object {}}
             />
 </div>,
@@ -1962,7 +1962,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -2010,7 +2010,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -2024,7 +2024,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -2043,7 +2043,7 @@ ShallowWrapper {
           "props": Object {
             "children": <FormattedMessage
               defaultMessage="Featured"
-              id="Task.status.featured.label"
+              id="Task.fields.featured.label"
               values={Object {}}
 />,
             "className": "challenge-list__item--featured-indicator",
@@ -2055,7 +2055,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "defaultMessage": "Featured",
-              "id": "Task.status.featured.label",
+              "id": "Task.fields.featured.label",
               "values": Object {},
             },
             "ref": null,
@@ -2237,7 +2237,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -2285,7 +2285,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -2299,7 +2299,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Save"
-                                                                id="Challenge.save"
+                                                                id="Challenge.controls.save.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -2321,7 +2321,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -2346,7 +2346,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -2358,7 +2358,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -2458,7 +2458,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -2472,7 +2472,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -2494,7 +2494,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -2508,7 +2508,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge",
@@ -2521,7 +2521,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -2543,7 +2543,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Save"
-                                            id="Challenge.save"
+                                            id="Challenge.controls.save.label"
                                             values={Object {}}
                       />
 </button>,
@@ -2557,7 +2557,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Save"
-                        id="Challenge.save"
+                        id="Challenge.controls.save.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined save-challenge-toggle",
@@ -2570,7 +2570,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Save",
-                        "id": "Challenge.save",
+                        "id": "Challenge.controls.save.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -2695,7 +2695,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -2742,7 +2742,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -2756,7 +2756,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Save"
-                                                  id="Challenge.save"
+                                                  id="Challenge.controls.save.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -2942,7 +2942,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -2989,7 +2989,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -3003,7 +3003,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Save"
-                                                        id="Challenge.save"
+                                                        id="Challenge.controls.save.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -3025,7 +3025,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -3050,7 +3050,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -3062,7 +3062,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -3161,7 +3161,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -3175,7 +3175,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Save"
-                                                      id="Challenge.save"
+                                                      id="Challenge.controls.save.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -3197,7 +3197,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -3211,7 +3211,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge",
@@ -3224,7 +3224,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -3246,7 +3246,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Save"
-                                        id="Challenge.save"
+                                        id="Challenge.controls.save.label"
                                         values={Object {}}
                     />
 </button>,
@@ -3260,7 +3260,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Save"
-                      id="Challenge.save"
+                      id="Challenge.controls.save.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined save-challenge-toggle",
@@ -3273,7 +3273,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Save",
-                      "id": "Challenge.save",
+                      "id": "Challenge.controls.save.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -3346,7 +3346,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -3393,7 +3393,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -3407,7 +3407,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -3593,7 +3593,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -3640,7 +3640,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -3654,7 +3654,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Save"
-                                                                id="Challenge.save"
+                                                                id="Challenge.controls.save.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -3676,7 +3676,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -3701,7 +3701,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -3713,7 +3713,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -3812,7 +3812,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -3826,7 +3826,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -3848,7 +3848,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -3862,7 +3862,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge",
@@ -3875,7 +3875,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -3897,7 +3897,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Save"
-                                            id="Challenge.save"
+                                            id="Challenge.controls.save.label"
                                             values={Object {}}
                       />
 </button>,
@@ -3911,7 +3911,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Save"
-                        id="Challenge.save"
+                        id="Challenge.controls.save.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined save-challenge-toggle",
@@ -3924,7 +3924,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Save",
-                        "id": "Challenge.save",
+                        "id": "Challenge.controls.save.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -4049,7 +4049,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -4096,7 +4096,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -4110,7 +4110,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Save"
-                                                  id="Challenge.save"
+                                                  id="Challenge.controls.save.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -4296,7 +4296,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -4343,7 +4343,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -4357,7 +4357,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Save"
-                                                        id="Challenge.save"
+                                                        id="Challenge.controls.save.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -4379,7 +4379,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -4404,7 +4404,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -4416,7 +4416,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -4515,7 +4515,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -4529,7 +4529,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Save"
-                                                      id="Challenge.save"
+                                                      id="Challenge.controls.save.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -4551,7 +4551,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -4565,7 +4565,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge",
@@ -4578,7 +4578,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -4600,7 +4600,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Save"
-                                        id="Challenge.save"
+                                        id="Challenge.controls.save.label"
                                         values={Object {}}
                     />
 </button>,
@@ -4614,7 +4614,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Save"
-                      id="Challenge.save"
+                      id="Challenge.controls.save.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined save-challenge-toggle",
@@ -4627,7 +4627,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Save",
-                      "id": "Challenge.save",
+                      "id": "Challenge.controls.save.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -4700,7 +4700,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -4747,7 +4747,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -4761,7 +4761,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -4947,7 +4947,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -4994,7 +4994,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -5008,7 +5008,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Save"
-                                                                id="Challenge.save"
+                                                                id="Challenge.controls.save.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -5030,7 +5030,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -5055,7 +5055,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -5067,7 +5067,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -5166,7 +5166,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -5180,7 +5180,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -5202,7 +5202,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -5216,7 +5216,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge",
@@ -5229,7 +5229,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -5251,7 +5251,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Save"
-                                            id="Challenge.save"
+                                            id="Challenge.controls.save.label"
                                             values={Object {}}
                       />
 </button>,
@@ -5265,7 +5265,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Save"
-                        id="Challenge.save"
+                        id="Challenge.controls.save.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined save-challenge-toggle",
@@ -5278,7 +5278,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Save",
-                        "id": "Challenge.save",
+                        "id": "Challenge.controls.save.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -5414,7 +5414,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -5461,7 +5461,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -5475,7 +5475,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Save"
-                                                  id="Challenge.save"
+                                                  id="Challenge.controls.save.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -5661,7 +5661,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -5708,7 +5708,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -5722,7 +5722,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Save"
-                                                        id="Challenge.save"
+                                                        id="Challenge.controls.save.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -5744,7 +5744,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -5769,7 +5769,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -5781,7 +5781,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -5880,7 +5880,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -5894,7 +5894,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Save"
-                                                      id="Challenge.save"
+                                                      id="Challenge.controls.save.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -5916,7 +5916,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -5930,7 +5930,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge",
@@ -5943,7 +5943,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -5965,7 +5965,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Save"
-                                        id="Challenge.save"
+                                        id="Challenge.controls.save.label"
                                         values={Object {}}
                     />
 </button>,
@@ -5979,7 +5979,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Save"
-                      id="Challenge.save"
+                      id="Challenge.controls.save.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined save-challenge-toggle",
@@ -5992,7 +5992,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Save",
-                      "id": "Challenge.save",
+                      "id": "Challenge.controls.save.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -6065,7 +6065,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -6112,7 +6112,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -6126,7 +6126,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -6312,7 +6312,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -6359,7 +6359,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -6373,7 +6373,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Save"
-                                                                id="Challenge.save"
+                                                                id="Challenge.controls.save.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -6395,7 +6395,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -6420,7 +6420,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -6432,7 +6432,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -6531,7 +6531,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -6545,7 +6545,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -6567,7 +6567,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -6581,7 +6581,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge",
@@ -6594,7 +6594,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -6616,7 +6616,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Save"
-                                            id="Challenge.save"
+                                            id="Challenge.controls.save.label"
                                             values={Object {}}
                       />
 </button>,
@@ -6630,7 +6630,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Save"
-                        id="Challenge.save"
+                        id="Challenge.controls.save.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined save-challenge-toggle",
@@ -6643,7 +6643,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Save",
-                        "id": "Challenge.save",
+                        "id": "Challenge.controls.save.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -6768,7 +6768,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -6815,7 +6815,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -6829,7 +6829,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Save"
-                                                  id="Challenge.save"
+                                                  id="Challenge.controls.save.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -7015,7 +7015,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -7062,7 +7062,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -7076,7 +7076,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Save"
-                                                        id="Challenge.save"
+                                                        id="Challenge.controls.save.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -7098,7 +7098,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -7123,7 +7123,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -7135,7 +7135,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -7234,7 +7234,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -7248,7 +7248,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Save"
-                                                      id="Challenge.save"
+                                                      id="Challenge.controls.save.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -7270,7 +7270,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -7284,7 +7284,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge",
@@ -7297,7 +7297,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -7319,7 +7319,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Save"
-                                        id="Challenge.save"
+                                        id="Challenge.controls.save.label"
                                         values={Object {}}
                     />
 </button>,
@@ -7333,7 +7333,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Save"
-                      id="Challenge.save"
+                      id="Challenge.controls.save.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined save-challenge-toggle",
@@ -7346,7 +7346,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Save",
-                      "id": "Challenge.save",
+                      "id": "Challenge.controls.save.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -7419,7 +7419,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -7466,7 +7466,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -7480,7 +7480,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -7666,7 +7666,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -7713,7 +7713,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -7727,7 +7727,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Save"
-                                                                id="Challenge.save"
+                                                                id="Challenge.controls.save.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -7749,7 +7749,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -7774,7 +7774,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -7786,7 +7786,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -7885,7 +7885,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -7899,7 +7899,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -7921,7 +7921,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -7935,7 +7935,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge",
@@ -7948,7 +7948,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -7970,7 +7970,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Save"
-                                            id="Challenge.save"
+                                            id="Challenge.controls.save.label"
                                             values={Object {}}
                       />
 </button>,
@@ -7984,7 +7984,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Save"
-                        id="Challenge.save"
+                        id="Challenge.controls.save.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined save-challenge-toggle",
@@ -7997,7 +7997,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Save",
-                        "id": "Challenge.save",
+                        "id": "Challenge.controls.save.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -8122,7 +8122,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -8169,7 +8169,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -8183,7 +8183,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Save"
-                                                  id="Challenge.save"
+                                                  id="Challenge.controls.save.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -8369,7 +8369,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -8416,7 +8416,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -8430,7 +8430,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Save"
-                                                        id="Challenge.save"
+                                                        id="Challenge.controls.save.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -8452,7 +8452,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -8477,7 +8477,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -8489,7 +8489,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -8588,7 +8588,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -8602,7 +8602,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Save"
-                                                      id="Challenge.save"
+                                                      id="Challenge.controls.save.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -8624,7 +8624,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -8638,7 +8638,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge is-loading",
@@ -8651,7 +8651,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -8673,7 +8673,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Save"
-                                        id="Challenge.save"
+                                        id="Challenge.controls.save.label"
                                         values={Object {}}
                     />
 </button>,
@@ -8687,7 +8687,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Save"
-                      id="Challenge.save"
+                      id="Challenge.controls.save.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined save-challenge-toggle",
@@ -8700,7 +8700,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Save",
-                      "id": "Challenge.save",
+                      "id": "Challenge.controls.save.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -8773,7 +8773,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -8820,7 +8820,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -8834,7 +8834,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -9020,7 +9020,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -9067,7 +9067,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -9081,7 +9081,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Save"
-                                                                id="Challenge.save"
+                                                                id="Challenge.controls.save.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -9103,7 +9103,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -9128,7 +9128,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -9140,7 +9140,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -9239,7 +9239,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -9253,7 +9253,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Save"
-                                                            id="Challenge.save"
+                                                            id="Challenge.controls.save.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -9275,7 +9275,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -9289,7 +9289,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge is-loading",
@@ -9302,7 +9302,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -9324,7 +9324,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Save"
-                                            id="Challenge.save"
+                                            id="Challenge.controls.save.label"
                                             values={Object {}}
                       />
 </button>,
@@ -9338,7 +9338,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Save"
-                        id="Challenge.save"
+                        id="Challenge.controls.save.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined save-challenge-toggle",
@@ -9351,7 +9351,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Save",
-                        "id": "Challenge.save",
+                        "id": "Challenge.controls.save.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -9485,7 +9485,7 @@ ShallowWrapper {
                     >
                               <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                               />
                     </span>
@@ -9532,7 +9532,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Start"
-                                                  id="Challenge.start"
+                                                  id="Challenge.controls.start.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -9546,7 +9546,7 @@ ShallowWrapper {
                               >
                                         <FormattedMessage
                                                   defaultMessage="Unsave"
-                                                  id="Challenge.unsave"
+                                                  id="Challenge.controls.unsave.label"
                                                   values={Object {}}
                                         />
                               </button>
@@ -9761,7 +9761,7 @@ ShallowWrapper {
               >
                             <FormattedMessage
                                           defaultMessage="Difficulty"
-                                          id="ChallengeResultList.difficultyLabel"
+                                          id="Challenge.fields.difficulty.label"
                                           values={Object {}}
                             />
               </span>
@@ -9808,7 +9808,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Start"
-                                                        id="Challenge.start"
+                                                        id="Challenge.controls.start.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -9822,7 +9822,7 @@ ShallowWrapper {
                             >
                                           <FormattedMessage
                                                         defaultMessage="Unsave"
-                                                        id="Challenge.unsave"
+                                                        id="Challenge.controls.unsave.label"
                                                         values={Object {}}
                                           />
                             </button>
@@ -9844,7 +9844,7 @@ ShallowWrapper {
 >
                   <FormattedMessage
                                     defaultMessage="Difficulty"
-                                    id="ChallengeResultList.difficultyLabel"
+                                    id="Challenge.fields.difficulty.label"
                                     values={Object {}}
                   />
 </span>,
@@ -9869,7 +9869,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": <FormattedMessage
                     defaultMessage="Difficulty"
-                    id="ChallengeResultList.difficultyLabel"
+                    id="Challenge.fields.difficulty.label"
                     values={Object {}}
 />,
                   "className": "challenge-list__item__field-label",
@@ -9881,7 +9881,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "defaultMessage": "Difficulty",
-                    "id": "ChallengeResultList.difficultyLabel",
+                    "id": "Challenge.fields.difficulty.label",
                     "values": Object {},
                   },
                   "ref": null,
@@ -9980,7 +9980,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Start"
-                                                      id="Challenge.start"
+                                                      id="Challenge.controls.start.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -9995,7 +9995,7 @@ ShallowWrapper {
                   >
                                     <FormattedMessage
                                                       defaultMessage="Unsave"
-                                                      id="Challenge.unsave"
+                                                      id="Challenge.controls.unsave.label"
                                                       values={Object {}}
                                     />
                   </button>
@@ -10016,7 +10016,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Start"
-                                        id="Challenge.start"
+                                        id="Challenge.controls.start.label"
                                         values={Object {}}
                     />
 </button>,
@@ -10030,7 +10030,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Start"
-                      id="Challenge.start"
+                      id="Challenge.controls.start.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined start-challenge",
@@ -10043,7 +10043,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Start",
-                      "id": "Challenge.start",
+                      "id": "Challenge.controls.start.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -10066,7 +10066,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Unsave"
-                                        id="Challenge.unsave"
+                                        id="Challenge.controls.unsave.label"
                                         values={Object {}}
                     />
 </button>,
@@ -10080,7 +10080,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Unsave"
-                      id="Challenge.unsave"
+                      id="Challenge.controls.unsave.label"
                       values={Object {}}
 />,
                     "className": "button is-outlined save-challenge-toggle",
@@ -10093,7 +10093,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Unsave",
-                      "id": "Challenge.unsave",
+                      "id": "Challenge.controls.unsave.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -10170,7 +10170,7 @@ ShallowWrapper {
                         >
                                     <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                     />
                         </span>
@@ -10217,7 +10217,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -10231,7 +10231,7 @@ ShallowWrapper {
                                     >
                                                 <FormattedMessage
                                                             defaultMessage="Unsave"
-                                                            id="Challenge.unsave"
+                                                            id="Challenge.controls.unsave.label"
                                                             values={Object {}}
                                                 />
                                     </button>
@@ -10446,7 +10446,7 @@ ShallowWrapper {
                 >
                                 <FormattedMessage
                                                 defaultMessage="Difficulty"
-                                                id="ChallengeResultList.difficultyLabel"
+                                                id="Challenge.fields.difficulty.label"
                                                 values={Object {}}
                                 />
                 </span>
@@ -10493,7 +10493,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Start"
-                                                                id="Challenge.start"
+                                                                id="Challenge.controls.start.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -10507,7 +10507,7 @@ ShallowWrapper {
                                 >
                                                 <FormattedMessage
                                                                 defaultMessage="Unsave"
-                                                                id="Challenge.unsave"
+                                                                id="Challenge.controls.unsave.label"
                                                                 values={Object {}}
                                                 />
                                 </button>
@@ -10529,7 +10529,7 @@ ShallowWrapper {
 >
                     <FormattedMessage
                                         defaultMessage="Difficulty"
-                                        id="ChallengeResultList.difficultyLabel"
+                                        id="Challenge.fields.difficulty.label"
                                         values={Object {}}
                     />
 </span>,
@@ -10554,7 +10554,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": <FormattedMessage
                       defaultMessage="Difficulty"
-                      id="ChallengeResultList.difficultyLabel"
+                      id="Challenge.fields.difficulty.label"
                       values={Object {}}
 />,
                     "className": "challenge-list__item__field-label",
@@ -10566,7 +10566,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "defaultMessage": "Difficulty",
-                      "id": "ChallengeResultList.difficultyLabel",
+                      "id": "Challenge.fields.difficulty.label",
                       "values": Object {},
                     },
                     "ref": null,
@@ -10665,7 +10665,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Start"
-                                                            id="Challenge.start"
+                                                            id="Challenge.controls.start.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -10680,7 +10680,7 @@ ShallowWrapper {
                     >
                                         <FormattedMessage
                                                             defaultMessage="Unsave"
-                                                            id="Challenge.unsave"
+                                                            id="Challenge.controls.unsave.label"
                                                             values={Object {}}
                                         />
                     </button>
@@ -10701,7 +10701,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Start"
-                                            id="Challenge.start"
+                                            id="Challenge.controls.start.label"
                                             values={Object {}}
                       />
 </button>,
@@ -10715,7 +10715,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Start"
-                        id="Challenge.start"
+                        id="Challenge.controls.start.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined start-challenge",
@@ -10728,7 +10728,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Start",
-                        "id": "Challenge.start",
+                        "id": "Challenge.controls.start.label",
                         "values": Object {},
                       },
                       "ref": null,
@@ -10751,7 +10751,7 @@ ShallowWrapper {
 >
                       <FormattedMessage
                                             defaultMessage="Unsave"
-                                            id="Challenge.unsave"
+                                            id="Challenge.controls.unsave.label"
                                             values={Object {}}
                       />
 </button>,
@@ -10765,7 +10765,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": <FormattedMessage
                         defaultMessage="Unsave"
-                        id="Challenge.unsave"
+                        id="Challenge.controls.unsave.label"
                         values={Object {}}
 />,
                       "className": "button is-outlined save-challenge-toggle",
@@ -10778,7 +10778,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "defaultMessage": "Unsave",
-                        "id": "Challenge.unsave",
+                        "id": "Challenge.controls.unsave.label",
                         "values": Object {},
                       },
                       "ref": null,

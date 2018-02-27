@@ -19,19 +19,40 @@ ShallowWrapper {
     "props": Object {
       "layerSources": Array [
         Object {
-          "attributionId": "map.attribution.OpenStreetMap",
-          "name": "OpenStreetMap",
+          "attribution": Object {
+            "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+            "id": "map.attribution.openStreetMap",
+          },
+          "layerId": "OpenStreetMap",
+          "name": Object {
+            "defaultMessage": "OpenStreetMap",
+            "id": "map.name.openStreetMap",
+          },
           "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         },
         Object {
-          "attributionId": "map.attribution.OpenCycleMap",
-          "name": "OpenCycleMap",
+          "attribution": Object {
+            "defaultMessage": "&copy; OpenCycleMap, Map data &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+            "id": "map.attribution.openCycleMap",
+          },
+          "layerId": "OpenCycleMap",
+          "name": Object {
+            "defaultMessage": "OpenCycleMap",
+            "id": "map.name.openCycleMap",
+          },
           "url": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
         },
         Object {
-          "attributionId": "map.attribution.Bing",
+          "attribution": Object {
+            "defaultMessage": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+            "id": "map.attribution.bing",
+          },
           "detectRetina": true,
-          "name": "Bing",
+          "layerId": "Bing",
+          "name": Object {
+            "defaultMessage": "Bing",
+            "id": "map.name.bing",
+          },
           "tileSize": 256,
           "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         },
@@ -49,19 +70,40 @@ ShallowWrapper {
       "props": Object {
         "layerSources": Array [
           Object {
-            "attributionId": "map.attribution.OpenStreetMap",
-            "name": "OpenStreetMap",
+            "attribution": Object {
+              "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+              "id": "map.attribution.openStreetMap",
+            },
+            "layerId": "OpenStreetMap",
+            "name": Object {
+              "defaultMessage": "OpenStreetMap",
+              "id": "map.name.openStreetMap",
+            },
             "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           },
           Object {
-            "attributionId": "map.attribution.OpenCycleMap",
-            "name": "OpenCycleMap",
+            "attribution": Object {
+              "defaultMessage": "&copy; OpenCycleMap, Map data &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+              "id": "map.attribution.openCycleMap",
+            },
+            "layerId": "OpenCycleMap",
+            "name": Object {
+              "defaultMessage": "OpenCycleMap",
+              "id": "map.name.openCycleMap",
+            },
             "url": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
           },
           Object {
-            "attributionId": "map.attribution.Bing",
+            "attribution": Object {
+              "defaultMessage": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+              "id": "map.attribution.bing",
+            },
             "detectRetina": true,
-            "name": "Bing",
+            "layerId": "Bing",
+            "name": Object {
+              "defaultMessage": "Bing",
+              "id": "map.name.bing",
+            },
             "tileSize": 256,
             "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
           },

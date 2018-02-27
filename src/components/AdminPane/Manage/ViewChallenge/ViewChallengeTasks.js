@@ -11,7 +11,7 @@ import { TaskStatus,
          keysByStatus,
          messagesByStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import { MAPBOX_LIGHT,
-         layerSourceWithName }
+         layerSourceWithId }
        from '../../../../services/VisibleLayer/LayerSources'
 import WithBoundedTasks
        from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
@@ -105,7 +105,7 @@ export class ViewChallengeTasks extends Component {
                             statusColors={statusColors}
                             filterOptions={filterOptions}
                             monochromaticClusters
-                            defaultLayer={layerSourceWithName(MAPBOX_LIGHT)}
+                            defaultLayer={layerSourceWithId(MAPBOX_LIGHT)}
                             {...this.props} />
         </MapPane>
         <TaskAnalysisTable filterOptions={filterOptions}

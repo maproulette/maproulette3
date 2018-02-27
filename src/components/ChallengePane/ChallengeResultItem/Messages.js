@@ -5,32 +5,32 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   unsave: {
-    id: 'Challenge.unsave',
+    id: 'Challenge.controls.unsave.label',
     defaultMessage: 'Unsave',
   },
 
   save: {
-    id: 'Challenge.save',
+    id: 'Challenge.controls.save.label',
     defaultMessage: 'Save',
   },
 
-  difficultyLabel: {
-    id: 'ChallengeResultList.difficultyLabel',
+  difficulty: {
+    id: 'Challenge.fields.difficulty.label',
     defaultMessage: 'Difficulty',
   },
 
   start: {
-    id: 'Challenge.start',
+    id: 'Challenge.controls.start.label',
     defaultMessage: 'Start',
   },
 
   saved: {
-    id: "Task.status.saved.label",
+    id: "Task.fields.saved.label",
     defaultMessage: "Saved",
   },
 
   featured: {
-    id: "Task.status.featured.label",
+    id: "Task.fields.featured.label",
     defaultMessage: "Featured",
   },
 })

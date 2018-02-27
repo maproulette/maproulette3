@@ -48,7 +48,7 @@ export class ChallengePane extends Component {
           </Sidebar>
 
           <MapPane>
-            <Map layerSourceName={MAPBOX_STREETS} {...this.props} />
+            <Map layerSourceId={MAPBOX_STREETS} {...this.props} />
           </MapPane>
         </div>
       </span>

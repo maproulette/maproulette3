@@ -42,7 +42,7 @@ export class ChallengeMap extends Component {
     // re-render if something meaningful changes:
 
     // the layer has been changed, or
-    if (nextProps.layerSourceName !== this.props.layerSourceName) {
+    if (nextProps.layerSourceId !== this.props.layerSourceId) {
       return true
     }
 
@@ -163,7 +163,7 @@ export class ChallengeMap extends Component {
                      justFitFeatures={markers.length > 0}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
-          <VisibleTileLayer defaultLayer={this.props.layerSourceName} />
+          <VisibleTileLayer defaultLayer={this.props.layerSourceId} />
           {markers.length > 0 &&
            <MarkerClusterGroup markers={markers} onMarkerClick={this.markerClicked} />
           }
@@ -182,8 +182,8 @@ ChallengeMap.propTypes = {
   setChallengeMapBounds: PropTypes.func.isRequired,
   /** Invoked when the user clicks on an individual task marker */
   onTaskClick: PropTypes.func,
-  /** Name of default layer to display */
-  layerSourceName: PropTypes.string,
+  /** layerId of default layer to display */
+  layerSourceId: PropTypes.string,
 }
 
 export default WithMapBounds(WithStatus(ChallengeMap))

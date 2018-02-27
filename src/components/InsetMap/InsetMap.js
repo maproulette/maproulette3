@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { Map, Marker } from 'react-leaflet'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import { MAPBOX_LIGHT,
-         layerSourceWithName,
+         layerSourceWithId,
          defaultLayerSource } from '../../services/VisibleLayer/LayerSources'
 import './InsetMap.css'
 
@@ -13,7 +13,7 @@ export default class InsetMap extends Component {
     // Use requested layer source, otherwise Mapbox Light if it's available,
     // otherwise the default source.
     const layerSource =
-      layerSourceWithName(this.props.layerSourceName || MAPBOX_LIGHT) ||
+      layerSourceWithId(this.props.layerSourceId || MAPBOX_LIGHT) ||
       defaultLayerSource()
 
     return (
@@ -34,9 +34,12 @@ export default class InsetMap extends Component {
 }
 
 InsetMap.propTypes = {
+  /** Desired center-point of the map */
   centerPoint: PropTypes.object.isRequired,
+  /** Desired zoom of the map */
   fixedZoom: PropTypes.number,
-  layerSourceName: PropTypes.string,
+  /** layerId of default layer to display */
+  layerSourceId: PropTypes.string,
 }
 
 InsetMap.defaultProps = {

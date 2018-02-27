@@ -5,12 +5,12 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   editTaskTooltip: {
-    id: 'Task.controls.editTask.tooltip',
+    id: "Admin.Task.controls.editTask.tooltip",
     defaultMessage: "Edit Task",
   },
 
   editTaskLabel: {
-    id: 'Task.controls.editTask.label',
+    id: "Admin.Task.controls.editTask.label",
     defaultMessage: "Edit",
   },
 })

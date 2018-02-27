@@ -21,6 +21,8 @@ import { currentErrors } from './services/Error/Error'
 import { adminContext } from './services/AdminContext/AdminContext'
 import { currentPreferences } from './services/Preferences/Preferences'
 
+const DATA_MODEL_VERSION = 6
+
 /**
  * initializePersistedStore sets up the redux store in combination with
  * redux-persist so that it'll be persisted to local storage. The redux store
@@ -67,6 +69,19 @@ export const initializePersistedStore = callback => {
       }
 
       return state
+    },
+    6: state => {
+      // Reset visibleLayer
+      delete state.visibleLayer
+
+      // Ensure now-blacklisted fields are reset
+      delete state.currentStatus
+      delete state.currentErrors
+      delete state.openEditor
+      delete state.currentKeyboardShortcuts
+      delete state.currentClusteredTasks
+
+      return state
     }
   }
 
@@ -75,13 +90,14 @@ export const initializePersistedStore = callback => {
   const persistenceConfig = {
     key: 'mr-react',
     storage: localForage,
-    version: process.env.REACT_APP_VERSION_DATAMODEL,
+    version: DATA_MODEL_VERSION,
     migrate: createMigrate(dataMigrations, { debug: false }),
     debug: false,
     blacklist: [ // don't persist
       'currentStatus',
       'currentErrors',
       'openEditor',
+      'currentKeyboardShortcuts',
       'currentClusteredTasks',
     ],
   }

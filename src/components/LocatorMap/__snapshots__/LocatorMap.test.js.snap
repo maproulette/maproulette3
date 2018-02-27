@@ -5,7 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <LocatorMap
-    layerSourceName="foo"
+    layerSourceId="foo"
     mapBounds={
         Object {
             "locator": Object {
@@ -39,7 +39,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <Connect(Component)
-          layerSourceName="foo"
+          layerSourceId="foo"
           mapBounds={
                     Object {
                               "locator": Object {
@@ -104,7 +104,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "layerSourceName": "foo",
+          "layerSourceId": "foo",
           "mapBounds": Object {
             "locator": Object {
               "bounds": Object {
@@ -200,7 +200,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <Connect(Component)
-            layerSourceName="foo"
+            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "locator": Object {
@@ -265,7 +265,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "layerSourceName": "foo",
+            "layerSourceId": "foo",
             "mapBounds": Object {
               "locator": Object {
                 "bounds": Object {

@@ -80,7 +80,7 @@ ShallowWrapper {
                                                   "formatMessage": [Function],
                                                 }
                               }
-                              layerSourceName="Mapbox"
+                              layerSourceId="Mapbox"
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
                               unsaveChallenge={[Function]}
@@ -151,7 +151,7 @@ ShallowWrapper {
                                                         "formatMessage": [Function],
                                                       }
                             }
-                            layerSourceName="Mapbox"
+                            layerSourceId="Mapbox"
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
                             unsaveChallenge={[Function]}
@@ -226,7 +226,7 @@ ShallowWrapper {
                                                 "formatMessage": [Function],
                                               }
                 }
-                layerSourceName="Mapbox"
+                layerSourceId="Mapbox"
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
                 unsaveChallenge={[Function]}
@@ -247,7 +247,7 @@ ShallowWrapper {
                 "intl": Object {
                   "formatMessage": [Function],
                 },
-                "layerSourceName": "Mapbox",
+                "layerSourceId": "Mapbox",
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
                 "unsaveChallenge": [Function],
@@ -322,7 +322,7 @@ ShallowWrapper {
                                                             "formatMessage": [Function],
                                                           }
                                     }
-                                    layerSourceName="Mapbox"
+                                    layerSourceId="Mapbox"
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
                                     unsaveChallenge={[Function]}
@@ -393,7 +393,7 @@ ShallowWrapper {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
-                                layerSourceName="Mapbox"
+                                layerSourceId="Mapbox"
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
                                 unsaveChallenge={[Function]}
@@ -468,7 +468,7 @@ ShallowWrapper {
                                                       "formatMessage": [Function],
                                                     }
                   }
-                  layerSourceName="Mapbox"
+                  layerSourceId="Mapbox"
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
                   unsaveChallenge={[Function]}
@@ -489,7 +489,7 @@ ShallowWrapper {
                   "intl": Object {
                     "formatMessage": [Function],
                   },
-                  "layerSourceName": "Mapbox",
+                  "layerSourceId": "Mapbox",
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
                   "unsaveChallenge": [Function],

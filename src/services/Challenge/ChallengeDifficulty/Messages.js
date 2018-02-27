@@ -9,7 +9,7 @@ export default defineMessages({
     defaultMessage: "Easy",
   },
   normal: {
-    id: "Challenge.basemap.openStreetMap",
+    id: "Challenge.difficulty.normal",
     defaultMessage: "Normal",
   },
   expert: {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
@@ -18,10 +19,12 @@ export class LayerToggle extends Component {
   render() {
     const layerButtons = _map(this.props.layerSources, (layer) => (
       <a className={classNames('dropdown-item',
-                               {'is-active': this.props.source.name === layer.name})}
-         key={layer.name}
-         onClick={() => this.props.changeLayer(layer.name)}
-      >{layer.name}</a>
+                               {'is-active': this.props.source.layerId === layer.layerId})}
+         key={layer.layerId}
+         onClick={() => this.props.changeLayer(layer.layerId)}
+      >
+        <FormattedMessage {...layer.name} />
+      </a>
     ))
 
     return (

@@ -19,7 +19,7 @@ beforeEach(() => {
         bounds: toLatLngBounds([0, 0, 0, 0]),
       }
     },
-    layerSourceName: "foo",
+    layerSourceId: "foo",
     clusteredTasks: {
       challengeId: challenge.id,
       loading: false,
@@ -50,13 +50,13 @@ test("doesn't rerender simply because the map bounds change", () => {
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(false)
 })
 
-test("rerenders if the default layer name changes", () => {
+test("rerenders if the default layer id changes", () => {
   const wrapper = shallow(
     <ChallengeMap {...basicProps} />
   )
 
   const newProps = _cloneDeep(basicProps)
-  newProps.layerSourceName = 'bar'
+  newProps.layerSourceId = 'bar'
 
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })

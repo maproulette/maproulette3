@@ -5,12 +5,12 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   header: {
-    id: 'Admin.challenges.header',
+    id: "Admin.ManageChallenges.header",
     defaultMessage: "Challenges",
   },
 
   intro: {
-    id: 'Admin.challengesIntro',
+    id: "Admin.ManageChallenges.help.info",
     defaultMessage: "Challenges consist of many tasks that all " +
                     "help address a specific problem or shortcoming " +
                     "with OpenStreetMap data. Tasks are typically " +
@@ -22,22 +22,22 @@ export default defineMessages({
   },
 
   placeholder: {
-    id: "Admin.challenges.search.placeholder",
+    id: "Admin.ManageChallenges.search.placeholder",
     defaultMessage: "Name",
   },
 
   allProjectChallenge: {
-    id: 'Admin.challenges.allProjectChallenge',
+    id: "Admin.ManageChallenges.allProjectChallenge",
     defaultMessage: "All",
   },
 
   creationDate: {
-    id: "Admin.Challenge.creationDate.label",
+    id: "Admin.Challenge.fields.creationDate.label",
     defaultMessage: "Created:",
   },
 
   status: {
-    id: "Admin.Challenge.status.label",
+    id: "Admin.Challenge.fields.status.label",
     defaultMessage: "Status:",
   },
 
