@@ -64,6 +64,33 @@
     }
   }
 
+  &__user-settings {
+    form.rjsf {
+      margin-right: 30px;
+
+      .form-fields-wrapper {
+        margin: 0;
+        margin-top: 15px;
+
+        .field.is-horizontal {
+          .field-label label {
+            font-weight: $weight-semibold;
+            margin-top: 6px;
+          }
+
+          .field-body {
+            flex-grow: 4;
+          }
+        }
+      }
+
+      fieldset {
+        border: none;
+        padding: 0;
+      }
+    }
+  }
+
   pre {
     overflow-x: auto;
 

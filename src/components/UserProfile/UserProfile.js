@@ -8,6 +8,7 @@ import SignInButton from '../SignInButton/SignInButton'
 import messages from './Messages'
 import SavedTasks from './SavedTasks/SavedTasks'
 import SavedChallenges from './SavedChallenges/SavedChallenges'
+import UserSettings from './UserSettings/UserSettings'
 import './UserProfile.css'
 
 export class UserProfile extends Component {
@@ -45,6 +46,10 @@ export class UserProfile extends Component {
 
           <section className="user-profile__saved-tasks">
             <SavedTasks {...this.props} />
+          </section>
+
+          <section className="user-profile__user-settings">
+            <UserSettings {...this.props} />
           </section>
 
           <section className="user-profile__api-key">

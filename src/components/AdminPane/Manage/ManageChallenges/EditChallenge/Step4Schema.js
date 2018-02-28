@@ -5,7 +5,7 @@ import { ZOOM_LEVELS,
        from '../../../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import { CHALLENGE_BASEMAP_NONE,
          ChallengeBasemap,
-         basemapLayerLabels }
+         challengeOwnerBasemapLayerLabels }
        from '../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
@@ -29,7 +29,7 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = intl => {
-  const localizedBasemapLabels = basemapLayerLabels(intl)
+  const localizedBasemapLabels = challengeOwnerBasemapLayerLabels(intl)
 
   return {
     "$schema": "http://json-schema.org/draft-06/schema#",

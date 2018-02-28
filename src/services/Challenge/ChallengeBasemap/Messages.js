@@ -6,6 +6,10 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   none: {
     id: "Challenge.basemap.none",
+    defaultMessage: "None",
+  },
+  noneChallengeOwner: {
+    id: "Admin.Challenge.basemap.none",
     defaultMessage: "User Default",
   },
   openStreetMap: {
@@ -14,7 +18,7 @@ export default defineMessages({
   },
   openCycleMap: {
     id: "Challenge.basemap.openCycleMap",
-    defaultMessage: "Open Cycle Map",
+    defaultMessage: "OpenCycleMap",
   },
   bing: {
     id: "Challenge.basemap.bing",

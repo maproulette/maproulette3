@@ -209,6 +209,20 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
     })
   }
 }
+/**
+ * Update the given user's settings with the given settings.
+ */
+export const updateUserSettings = function(userId, settings) {
+  return updateUser(userId, (dispatch) => {
+    // Optimistically assume it will succeed and update the local store.
+    // If it doesn't, it'll get updated properly by the server response.
+    dispatch(receiveUsers({[userId]: {id: userId, settings}}))
+
+    return new Endpoint(
+      api.user.updateSettings, {variables: {userId}, json: settings}
+    ).execute()
+  })
+}
 
 /**
  * Add the given challenge to the given user's list of saved challenges.

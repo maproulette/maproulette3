@@ -29,7 +29,7 @@ export const messagesByStatus = _fromPairs(
 )
 
 /** Returns object containing localized labels  */
-export const basemapLayerLabels = intl => _fromPairs(
+export const statusLayerLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
 )
 

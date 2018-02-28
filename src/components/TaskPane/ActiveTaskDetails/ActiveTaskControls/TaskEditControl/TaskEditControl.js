@@ -65,11 +65,11 @@ export default class TaskEditControl extends Component {
 
     const editControlContent = [
       <span key="control-icon" className="control-icon"
-            title={this.props.intl.formatMessage(messages.fixTooltip)}>
+            title={this.props.intl.formatMessage(messages.editTooltip)}>
         <SvgSymbol viewBox='0 0 20 20' sym="edit-icon" />
       </span>,
       <span key="control-label" className="control-label">
-        <FormattedMessage {...messages.fixLabel} />
+        <FormattedMessage {...messages.editLabel} />
       </span>
     ]
 
