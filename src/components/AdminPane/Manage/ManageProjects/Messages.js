@@ -5,54 +5,54 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   header: {
-    id: 'Projects.header',
+    id: "Admin.ManageProjects.header",
     defaultMessage: "Projects",
   },
 
   help: {
-    id: 'Projects.help.info',
+    id: "Admin.ManageProjects.help.info",
     defaultMessage: "Projects serve as a means of grouping related " +
                     "challenges together. All challenges must belong " +
                     "to a project.",
   },
 
   placeholder: {
-    id: "Projects.search.placeholder",
+    id: "Admin.ManageProjects.search.placeholder",
     defaultMessage: "Name",
   },
 
   enabledTooltip: {
-    id: "Project.status.enabled.tooltip",
+    id: "Admin.Project.fields.enabled.tooltip",
     defaultMessage: "Enabled",
   },
 
   disabledTooltip: {
-    id: "Project.status.disabled.tooltip",
+    id: "Admin.Project.fields.disabled.tooltip",
     defaultMessage: "Disabled",
   },
 
   viewProjectTooltip: {
-    id: "Project.controls.viewProject.tooltip",
+    id: "Admin.Project.controls.viewProject.tooltip",
     defaultMessage: "View Project",
   },
 
   viewProjectLabel: {
-    id: "Project.controls.viewProject.label",
+    id: "Admin.Project.controls.viewProject.label",
     defaultMessage: "View",
   },
 
   editProjectTooltip: {
-    id: "Project.controls.editProject.tooltip",
+    id: "Admin.Project.controls.editProject.tooltip",
     defaultMessage: "Edit Project",
   },
 
   editProjectLabel: {
-    id: "Project.controls.editProject.label",
+    id: "Admin.Project.controls.editProject.label",
     defaultMessage: "Edit",
   },
 
   addChallengeTooltip: {
-    id: "Project.controls.addChallenge.tooltip",
+    id: "Admin.Project.controls.addChallenge.tooltip",
     defaultMessage: "New Challenge",
   },
 })

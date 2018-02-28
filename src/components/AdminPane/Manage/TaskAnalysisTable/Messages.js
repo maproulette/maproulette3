@@ -5,33 +5,32 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   taskCountShownStatus: {
-    id: 'TaskAnalysisTable.taskCountStatus',
+    id: "Admin.TaskAnalysisTable.taskCountStatus",
     defaultMessage: "Shown: {countShown} Tasks",
   },
 
   taskPercentShownStatus: {
-    id: 'TaskAnalysisTable.taskPercentStatus',
+    id: "Admin.TaskAnalysisTable.taskPercentStatus",
     defaultMessage: "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
   },
 
   actionsColumnHeader: {
-    id: 'TaskAnalysisTable.columnHeaders.actions',
+    id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
   idLabel: {
-    id: 'Task.fields.id.label',
+    id: "Task.fields.id.label",
     defaultMessage: "Task Id",
   },
 
   nameLabel: {
-    id: 'Task.fields.name.label',
+    id: "Task.fields.name.label",
     defaultMessage: "Name",
   },
 
   statusLabel: {
-    id: 'Task.fields.status.label',
+    id: "Task.fields.status.label",
     defaultMessage: "Status",
   },
 })
-

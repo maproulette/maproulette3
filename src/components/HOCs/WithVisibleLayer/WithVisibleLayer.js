@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { layerSourceWithName,
+import { layerSourceWithId,
          defaultLayerSource } from '../../../services/VisibleLayer/LayerSources'
 import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
 import _isString from 'lodash/isString'
@@ -26,7 +26,7 @@ export const mapStateToProps = (state, ownProps) => {
 
   let layer = state.visibleLayer
   if (!layer && _isString(ownProps.defaultLayer)) {
-    layer = layerSourceWithName(ownProps.defaultLayer)
+    layer = layerSourceWithId(ownProps.defaultLayer)
   }
 
   return ({source: layer ? layer : defaultLayerSource()})
@@ -34,7 +34,7 @@ export const mapStateToProps = (state, ownProps) => {
 
 export const mapDispatchToProps = dispatch => {
   return {
-    changeLayer: layerSource => dispatch(changeVisibleLayer(layerSource))
+    changeLayer: layerId => dispatch(changeVisibleLayer(layerId))
   }
 }
 

@@ -10,22 +10,22 @@ const CHANGE_VISIBLE_LAYER = 'ChangeVisibleLayer'
  * Set the given map tile layer as the current visible tile layer in the redux
  * store.
  *
- * @param {string} layerName - the name of the layer to set. It must correspond
- *        to the layerName of a valid layer source.
+ * @param {string} layerId - the layerId of the layer to set. It must correspond
+ *        to a valid layer source layerId.
  *
  * @see See VisibleLayer/LayerSources
  */
-export const changeVisibleLayer = function(layerName) {
+export const changeVisibleLayer = function(layerId) {
   return {
     type: CHANGE_VISIBLE_LAYER,
-    layerName,
+    layerId,
   }
 }
 
 // redux reducers
 export const visibleLayer = function(state=null, action) {
   if (action.type === CHANGE_VISIBLE_LAYER) {
-    return _find(LayerSources, {name: action.layerName})
+    return _find(LayerSources, {layerId: action.layerId})
   }
   else {
     return state

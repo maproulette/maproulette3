@@ -5,7 +5,7 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   exportLabel: {
-    id: "ChallengeComments.export.label",
+    id: "Admin.ChallengeComments.controls.export.label",
     defaultMessage: "Export"
   },
 })

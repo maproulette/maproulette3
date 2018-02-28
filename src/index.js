@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
+import fr from 'react-intl/locale-data/fr'
+import es from 'react-intl/locale-data/es'
+import de from 'react-intl/locale-data/de'
+import af from 'react-intl/locale-data/af'
 import { Router } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import PiwikReactRouter from 'piwik-react-router'
@@ -10,7 +14,6 @@ import _get from 'lodash/get'
 import _keys from 'lodash/keys'
 import _isNumber from 'lodash/isNumber'
 import _isEmpty from 'lodash/isEmpty'
-import messages from './lang/en.json'
 import App from './App';
 import BusySpinner from './components/BusySpinner/BusySpinner'
 import { initializePersistedStore } from './PersistedStore'
@@ -22,25 +25,26 @@ import { fetchFeaturedChallenges,
 import { ChallengeCategoryKeywords }
        from './services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import { loadCompleteUser, GUEST_USER_ID } from './services/User/User'
-import { clearErrors } from './services/Error/Error'
-import { clearKeyboardShortcuts }
-       from './services/KeyboardShortcuts/KeyboardShortcuts'
 import { setCheckingLoginStatus,
-         clearCheckingLoginStatus,
-         clearFetchingChallenges } from './services/Status/Status'
+         clearCheckingLoginStatus } from './services/Status/Status'
+import WithUserLocale from './components/HOCs/WithUserLocale/WithUserLocale'
 import './theme.css'
 import './index.css'
 import '../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import '../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
 
-addLocaleData([...en])
+addLocaleData([...en, ...fr, ...es, ...de, ...af])
+
+/** Attach user's current locale to react-intl IntlProvider */
+const ConnectedIntl = WithUserLocale(props => (
+  <IntlProvider key={props.locale} locale={props.locale} messages={props.messages}>
+    {props.children}
+  </IntlProvider>
+))
 
 const configFromServer = window.mr3Config
 const {store} = initializePersistedStore((store) => {
-  store.dispatch(clearErrors())
-  store.dispatch(clearKeyboardShortcuts())
   store.dispatch(setCheckingLoginStatus())
-  store.dispatch(clearFetchingChallenges())
 
   // Fetch initial data to initialize app
   const categoryKeywords = _keys(ChallengeCategoryKeywords).join(',')
@@ -59,9 +63,7 @@ const {store} = initializePersistedStore((store) => {
   if (_isNumber(currentUserId) && currentUserId !== GUEST_USER_ID) {
     store.dispatch(
       loadCompleteUser(currentUserId)
-    ).then(() =>
-      store.dispatch(clearCheckingLoginStatus())
-    )
+    ).then(() => store.dispatch(clearCheckingLoginStatus()))
 
     // Perform requests requiring an authenticated user.
     store.dispatch(fetchChallengeActions())
@@ -99,13 +101,13 @@ const {store} = initializePersistedStore((store) => {
 
   // Render the app
   ReactDOM.render(
-    <IntlProvider locale="en" messages={messages}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ConnectedIntl {...this.props}>
         <Router history={routerHistory}>
           <App initialUserId={currentUserId} />
         </Router>
-      </Provider>
-    </IntlProvider>,
+      </ConnectedIntl>
+    </Provider>,
     document.getElementById('root')
   )
 })
@@ -120,8 +122,7 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-if (!_isEmpty(process.env.REACT_APP_DEBUG) &&
-    process.env.REACT_APP_DEBUG !== 'disabled') {
+if (process.env.REACT_APP_DEBUG === 'enabled') {
   // eslint-disable-next-line
   store.subscribe(() => {
     console.log('')

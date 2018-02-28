@@ -14,7 +14,7 @@ beforeEach(() => {
         bounds: toLatLngBounds([0, 0, 0, 0]),
       }
     },
-    layerSourceName: "foo",
+    layerSourceId: "foo",
     setLocatorMapBounds: jest.fn(),
     updateBoundedChallenges: jest.fn(),
   }
@@ -53,13 +53,13 @@ test("rerenders if the map bounds change is response to an external user action"
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })
 
-test("rerenders if the default layer name changes", () => {
+test("rerenders if the default layer id changes", () => {
   const wrapper = shallow(
     <LocatorMap {...basicProps} />
   )
 
   const newProps = _cloneDeep(basicProps)
-  newProps.layerSourceName = 'bar'
+  newProps.layerSourceId = 'bar'
 
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })

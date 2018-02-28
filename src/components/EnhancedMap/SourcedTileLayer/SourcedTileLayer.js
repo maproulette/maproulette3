@@ -17,10 +17,9 @@ export class SourcedTileLayer extends Component {
   render() {
     const attribution =
       this.props.skipAttribution ? null :
-      this.props.intl.formatMessage({id: this.props.source.attributionId,
-                                     defaultMessage: ' '})
+      this.props.intl.formatMessage(this.props.source.attribution)
 
-    return <TileLayer key={this.props.source.name}
+    return <TileLayer key={this.props.source.layerId}
                       {...this.props.source}
                       attribution={attribution}
                       {...this.props} />

@@ -45,7 +45,7 @@ export class LocatorMap extends Component {
     // re-render if something meaningful changes:
 
     // the layer has been changed, or
-    if (nextProps.layerSourceName !== this.props.layerSourceName) {
+    if (nextProps.layerSourceId !== this.props.layerSourceId) {
       return true
     }
 
@@ -97,7 +97,7 @@ export class LocatorMap extends Component {
                      zoomControl={false} animate={true}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
-          <VisibleTileLayer defaultLayer={this.props.layerSourceName} />
+          <VisibleTileLayer defaultLayer={this.props.layerSourceId} />
         </EnhancedMap>
       </div>
     )
@@ -113,8 +113,8 @@ LocatorMap.propTypes = {
   mapBounds: PropTypes.object,
   /** Invoked when the user moves the locator map */
   setLocatorMapBounds: PropTypes.func.isRequired,
-  /** Name of default layer to display */
-  layerSourceName: PropTypes.string,
+  /** layerId of default layer to display */
+  layerSourceId: PropTypes.string,
   /** The currently enabled challenge filter, if any */
   challengeFilter: PropTypes.object,
 }

@@ -40,7 +40,7 @@ export default defineMessages({
   },
 
   tasksHeader: {
-    id: "Admin.Tasks.header",
+    id: "Admin.ManageTasks.header",
     defaultMessage: "Tasks",
   },
 

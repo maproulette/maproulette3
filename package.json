@@ -48,6 +48,7 @@
     "route-matcher": "^0.1.0"
   },
   "devDependencies": {
+    "combine-react-intl-messages": "^1.0.6",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "node-sass-chokidar": "^0.0.3",
@@ -58,12 +59,11 @@
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "build-intl": "yarn run combine-messages -i './src/**/*.js' -o './src/lang/en-US.json'",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build",
+    "build": "npm run build-css && yarn run build-intl && react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "styleguide": "styleguidist server",
-    "styleguide:build": "styleguidist build",
     "eject": "react-scripts eject"
   }
 }

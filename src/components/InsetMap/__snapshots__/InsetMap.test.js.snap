@@ -42,8 +42,15 @@ ShallowWrapper {
                 skipAttribution={true}
                 source={
                         Object {
-                                "attributionId": "map.attribution.OpenStreetMap",
-                                "name": "OpenStreetMap",
+                                "attribution": Object {
+                                  "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                  "id": "map.attribution.openStreetMap",
+                                },
+                                "layerId": "OpenStreetMap",
+                                "name": Object {
+                                  "defaultMessage": "OpenStreetMap",
+                                  "id": "map.name.openStreetMap",
+                                },
                                 "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                               }
                 }
@@ -75,8 +82,15 @@ ShallowWrapper {
             skipAttribution={true}
             source={
                         Object {
-                                    "attributionId": "map.attribution.OpenStreetMap",
-                                    "name": "OpenStreetMap",
+                                    "attribution": Object {
+                                      "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                      "id": "map.attribution.openStreetMap",
+                                    },
+                                    "layerId": "OpenStreetMap",
+                                    "name": Object {
+                                      "defaultMessage": "OpenStreetMap",
+                                      "id": "map.name.openStreetMap",
+                                    },
                                     "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                                   }
             }
@@ -104,8 +118,15 @@ ShallowWrapper {
           "props": Object {
             "skipAttribution": true,
             "source": Object {
-              "attributionId": "map.attribution.OpenStreetMap",
-              "name": "OpenStreetMap",
+              "attribution": Object {
+                "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                "id": "map.attribution.openStreetMap",
+              },
+              "layerId": "OpenStreetMap",
+              "name": Object {
+                "defaultMessage": "OpenStreetMap",
+                "id": "map.name.openStreetMap",
+              },
               "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             },
           },
@@ -155,8 +176,15 @@ ShallowWrapper {
                     skipAttribution={true}
                     source={
                               Object {
-                                        "attributionId": "map.attribution.OpenStreetMap",
-                                        "name": "OpenStreetMap",
+                                        "attribution": Object {
+                                          "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                          "id": "map.attribution.openStreetMap",
+                                        },
+                                        "layerId": "OpenStreetMap",
+                                        "name": Object {
+                                          "defaultMessage": "OpenStreetMap",
+                                          "id": "map.name.openStreetMap",
+                                        },
                                         "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                                       }
                     }
@@ -188,8 +216,15 @@ ShallowWrapper {
               skipAttribution={true}
               source={
                             Object {
-                                          "attributionId": "map.attribution.OpenStreetMap",
-                                          "name": "OpenStreetMap",
+                                          "attribution": Object {
+                                            "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                            "id": "map.attribution.openStreetMap",
+                                          },
+                                          "layerId": "OpenStreetMap",
+                                          "name": Object {
+                                            "defaultMessage": "OpenStreetMap",
+                                            "id": "map.name.openStreetMap",
+                                          },
                                           "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                                         }
               }
@@ -217,8 +252,15 @@ ShallowWrapper {
             "props": Object {
               "skipAttribution": true,
               "source": Object {
-                "attributionId": "map.attribution.OpenStreetMap",
-                "name": "OpenStreetMap",
+                "attribution": Object {
+                  "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                  "id": "map.attribution.openStreetMap",
+                },
+                "layerId": "OpenStreetMap",
+                "name": Object {
+                  "defaultMessage": "OpenStreetMap",
+                  "id": "map.name.openStreetMap",
+                },
                 "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
               },
             },

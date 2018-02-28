@@ -5,12 +5,12 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   info: {
-    id: "Task.controls.info.label",
+    id: "ActiveTask.controls.info.tooltip",
     defaultMessage: "Task Details",
   },
 
   viewComments: {
-    id: "Task.controls.comments.label",
+    id: "ActiveTask.controls.comments.tooltip",
     defaultMessage: "View Comments",
   },
 

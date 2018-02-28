@@ -112,8 +112,19 @@ Everything is pulled together (including Bulma's own Sass) into the
 ## Internationalization and Localization
 
 Internationalization and localization is performed via
-[react-intl](https://github.com/yahoo/react-intl/wiki). Each component features
-a co-located Messages.js file that contains messages intended for display,
-along with a default (English) version of each message. Given that the app is
-still under active development and seeing significant UI changes, no
-translation files have been generated yet.
+[react-intl](https://github.com/yahoo/react-intl/wiki). Most components feature
+co-located Messages.js files that contain messages intended for display,
+along with default (U.S. English) versions of each message. Translation files
+that contain translated versions of these messages for supported locales are
+stored in the src/lang/ directory. A fresh en-US.json file can be built from
+the latest messages using `yarn run build-intl`, which is also run
+automatically as part of the `yarn build` script used for creating production
+builds. Translation files for other locales must be updated manually.
+
+By default, the en-US locale will be used for users who have not set a locale in
+their MapRoulette user settings. This default locale can be changed with the
+`REACT_APP_DEFAULT_LOCALE` .env setting. Users who have set a locale will
+always have their locale honored regardless of the default locale.
+
+> Note that MapRoulette makes use of its own locale setting and does not use
+> the setting from the user's OpenStreetMap account at this time.

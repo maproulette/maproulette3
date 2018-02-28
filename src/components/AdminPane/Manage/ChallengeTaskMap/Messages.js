@@ -5,28 +5,28 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   clusterTasksLabel: {
-    id: "Admin.Tasks.controls.clusterTasks.label",
+    id: "Admin.ChallengeTaskMap.controls.clusterTasks.label",
     defaultMessage: "Cluster Tasks",
   },
 
-  nameLabel: {
-    id: "Admin.Task.name.label",
-    defaultMessage: "Task:",
-  },
-
-  statusLabel: {
-    id: "Admin.Task.status.label",
-    defaultMessage: "Status:",
-  },
-
   reviewTaskLabel: {
-    id: "Admin.Task.controls.reviewTask.label",
+    id: "Admin.ChallengeTaskMap.controls.reviewTask.label",
     defaultMessage: "Review Task",
   },
 
   editTaskLabel: {
-    id: "Admin.Task.controls.editTask.label",
+    id: "Admin.ChallengeTaskMap.controls.editTask.label",
     defaultMessage: "Edit Task",
+  },
+
+  nameLabel: {
+    id: "Admin.Task.fields.name.label",
+    defaultMessage: "Task:",
+  },
+
+  statusLabel: {
+    id: "Admin.Task.fields.status.label",
+    defaultMessage: "Status:",
   },
 })
 

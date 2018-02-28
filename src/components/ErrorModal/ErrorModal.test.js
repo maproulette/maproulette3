@@ -21,6 +21,7 @@ beforeEach(() => {
     ],
     removeError: jest.fn(),
     clearErrors: jest.fn(),
+    formatMessage: jest.fn((params) => params.defaultMessage),
   }
 })
 
@@ -32,9 +33,4 @@ test('it renders a list of the given errors', () => {
   expect(wrapper.find('li').length).toBe(basicProps.errors.length)
 
   expect(wrapper).toMatchSnapshot()
-
-  // Make sure each error is represented in the list
-  basicProps.errors.forEach(error => {
-    expect(wrapper.find('FormattedMessage[id="' + error.id + '"]').exists()).toBe(true)
-  })
 })

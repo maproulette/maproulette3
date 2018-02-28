@@ -16,7 +16,7 @@ ShallowWrapper {
             "loading": true,
           }
     }
-    layerSourceName="foo"
+    layerSourceId="foo"
     mapBounds={
         Object {
             "challenge": Object {
@@ -62,7 +62,7 @@ ShallowWrapper {
                               "loading": true,
                             }
           }
-          layerSourceName="foo"
+          layerSourceId="foo"
           mapBounds={
                     Object {
                               "challenge": Object {
@@ -126,7 +126,7 @@ ShallowWrapper {
             "challengeId": 123,
             "loading": true,
           },
-          "layerSourceName": "foo",
+          "layerSourceId": "foo",
           "mapBounds": Object {
             "challenge": Object {
               "bounds": Object {
@@ -237,7 +237,7 @@ ShallowWrapper {
                                     "loading": true,
                                   }
             }
-            layerSourceName="foo"
+            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "challenge": Object {
@@ -301,7 +301,7 @@ ShallowWrapper {
               "challengeId": 123,
               "loading": true,
             },
-            "layerSourceName": "foo",
+            "layerSourceId": "foo",
             "mapBounds": Object {
               "challenge": Object {
                 "bounds": Object {
@@ -420,7 +420,7 @@ ShallowWrapper {
             "loading": false,
           }
     }
-    layerSourceName="foo"
+    layerSourceId="foo"
     mapBounds={
         Object {
             "challenge": Object {
@@ -466,7 +466,7 @@ ShallowWrapper {
                               "loading": false,
                             }
           }
-          layerSourceName="foo"
+          layerSourceId="foo"
           mapBounds={
                     Object {
                               "challenge": Object {
@@ -530,7 +530,7 @@ ShallowWrapper {
             "challengeId": 123,
             "loading": false,
           },
-          "layerSourceName": "foo",
+          "layerSourceId": "foo",
           "mapBounds": Object {
             "challenge": Object {
               "bounds": Object {
@@ -633,7 +633,7 @@ ShallowWrapper {
                                     "loading": false,
                                   }
             }
-            layerSourceName="foo"
+            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "challenge": Object {
@@ -697,7 +697,7 @@ ShallowWrapper {
               "challengeId": 123,
               "loading": false,
             },
-            "layerSourceName": "foo",
+            "layerSourceId": "foo",
             "mapBounds": Object {
               "challenge": Object {
                 "bounds": Object {
@@ -808,7 +808,7 @@ ShallowWrapper {
             "loading": false,
           }
     }
-    layerSourceName="foo"
+    layerSourceId="foo"
     mapBounds={
         Object {
             "challenge": Object {
@@ -854,7 +854,7 @@ ShallowWrapper {
                               "loading": false,
                             }
           }
-          layerSourceName="foo"
+          layerSourceId="foo"
           mapBounds={
                     Object {
                               "challenge": Object {
@@ -918,7 +918,7 @@ ShallowWrapper {
             "challengeId": 123,
             "loading": false,
           },
-          "layerSourceName": "foo",
+          "layerSourceId": "foo",
           "mapBounds": Object {
             "challenge": Object {
               "bounds": Object {
@@ -1021,7 +1021,7 @@ ShallowWrapper {
                                     "loading": false,
                                   }
             }
-            layerSourceName="foo"
+            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "challenge": Object {
@@ -1085,7 +1085,7 @@ ShallowWrapper {
               "challengeId": 123,
               "loading": false,
             },
-            "layerSourceName": "foo",
+            "layerSourceId": "foo",
             "mapBounds": Object {
               "challenge": Object {
                 "bounds": Object {

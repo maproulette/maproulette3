@@ -5,32 +5,27 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   editChallenge: {
-    id: 'EditChallenge.header',
+    id: 'Admin.EditChallenge.edit.header',
     defaultMessage: "Edit",
   },
 
   newChallenge: {
-    id: 'NewChallenge.header',
+    id: 'Admin.EditChallenge.new.header',
     defaultMessage: "New Challenge",
   },
 
-  formTitle: {
-    id: 'EditChallenge.form.formTitle',
+  step1Label: {
+    id: 'Admin.EditChallenge.form.step1.label',
     defaultMessage: "General",
   },
 
-  formDescription: {
-    id: 'EditChallenge.form.formDescription',
-    defaultMessage: "Standard challenge information",
-  },
-
   visibleLabel: {
-    id: 'EditChallenge.form.visible.label',
+    id: 'Admin.EditChallenge.form.visible.label',
     defaultMessage: "Visible",
   },
 
   visibleDescription: {
-    id: 'EditChallenge.form.visible.description',
+    id: 'Admin.EditChallenge.form.visible.description',
     defaultMessage: "Allow your challenge to be visible and discoverable to " +
       "other users (subject to project visibility). Unless you are really " +
       "confident in creating new Challenges, we would recommend leaving this set " +
@@ -41,12 +36,12 @@ export default defineMessages({
   },
 
   nameLabel: {
-    id: 'EditChallenge.form.name.label',
+    id: 'Admin.EditChallenge.form.name.label',
     defaultMessage: "Name",
   },
 
   nameDescription: {
-    id: 'EditChallenge.form.name.description',
+    id: 'Admin.EditChallenge.form.name.description',
     defaultMessage: "Your Challenge name as it will appear in many places " +
       "throughout the application. This is also what your challenge will be " +
       "searchable by using the Search box. This field is required and only " +
@@ -54,35 +49,35 @@ export default defineMessages({
   },
 
   descriptionLabel: {
-    id: 'EditChallenge.form.description.label',
+    id: 'Admin.EditChallenge.form.description.label',
     defaultMessage: "Description",
   },
 
   descriptionDescription: {
-    id: 'EditChallenge.form.description.description',
+    id: 'Admin.EditChallenge.form.description.description',
     defaultMessage: "The primary, longer description of your challenge that " +
       "is shown to users when they click on the challenge to learn more about " +
       "it. This field supports Markdown.",
   },
 
   blurbLabel: {
-    id: 'EditChallenge.form.blurb.label',
+    id: 'Admin.EditChallenge.form.blurb.label',
     defaultMessage: "Blurb",
   },
 
   blurbDescription: {
-    id: 'EditChallenge.form.blurb.description',
+    id: 'Admin.EditChallenge.form.blurb.description',
     defaultMessage: "A very brief description of your challenge suitable for " +
       "small spaces, such as a map marker popup. This field supports Markdown.",
   },
 
   instructionLabel: {
-    id: 'EditChallenge.form.instruction.label',
+    id: 'Admin.EditChallenge.form.instruction.label',
     defaultMessage: "Instructions",
   },
 
   instructionDescription: {
-    id: 'EditChallenge.form.instruction.description',
+    id: 'Admin.EditChallenge.form.instruction.description',
     defaultMessage: "The instruction tells a mapper how to resolve a Task in " +
       "your Challenge. This is what mappers see in the Instructions box every time " +
       "a task is loaded, and is the primary piece of information for the mapper " +
@@ -92,23 +87,23 @@ export default defineMessages({
   },
 
   checkinCommentLabel: {
-    id: 'EditChallenge.form.checkinComment.label',
+    id: 'Admin.EditChallenge.form.checkinComment.label',
     defaultMessage: "Changeset Description",
   },
 
   checkinCommentDescription: {
-    id: 'EditChallenge.form.checkinComment.description',
+    id: 'Admin.EditChallenge.form.checkinComment.description',
     defaultMessage: "Comment to be associated with changes made by " +
                     "users in editor",
   },
 
   difficultyLabel: {
-    id: 'EditChallenge.form.difficulty.label',
+    id: 'Admin.EditChallenge.form.difficulty.label',
     defaultMessage: "Difficulty",
   },
 
   difficultyDescription: {
-    id: 'EditChallenge.form.difficulty.description',
+    id: 'Admin.EditChallenge.form.difficulty.description',
     defaultMessage: "Choose between Easy, Normal and Expert to give an " +
       "indication to mappers what skill level is required to resolve the " +
       "Tasks in your Challenge. Easy challenges should be suitable for " +
@@ -116,12 +111,12 @@ export default defineMessages({
   },
 
   categoryLabel: {
-    id: 'EditChallenge.form.category.label',
+    id: 'Admin.EditChallenge.form.category.label',
     defaultMessage: "Category",
   },
 
   categoryDescription: {
-    id: 'EditChallenge.form.category.description',
+    id: 'Admin.EditChallenge.form.category.description',
     defaultMessage: "Selecting an appropriate high-level category for your " +
       "challenge can aid users in quickly discovering challenges that " + 
       "match their interests. Choose the Other category if nothing seems " +
@@ -129,12 +124,12 @@ export default defineMessages({
   },
 
   additionalKeywordsLabel: {
-    id: 'EditChallenge.form.additionalKeywords.label',
+    id: 'Admin.EditChallenge.form.additionalKeywords.label',
     defaultMessage: "Keywords",
   },
 
   additionalKeywordsDescription: {
-    id: 'EditChallenge.form.additionalKeywords.description',
+    id: 'Admin.EditChallenge.form.additionalKeywords.description',
     defaultMessage: "You can optionally provide additional, comma-separated " +
     "keywords that can be used to aid discovery of your challenge. Users " +
     "can search by keyword from the Other option of the Category dropdown " +
@@ -143,24 +138,24 @@ export default defineMessages({
   },
 
   featuredLabel: {
-    id: 'EditChallenge.form.featured.label',
+    id: 'Admin.EditChallenge.form.featured.label',
     defaultMessage: "Featured",
   },
 
   featuredDescription: {
-    id: 'EditChallenge.form.featured.description',
+    id: 'Admin.EditChallenge.form.featured.description',
     defaultMessage: "Featured challenges are shown at the top of the list " +
       "when browsing and searching challenges. Only super-users may mark a " +
       "a challenge as featured.",
   },
 
   step2Label: {
-    id: 'EditChallenge.form.step2.label',
+    id: 'Admin.EditChallenge.form.step2.label',
     defaultMessage: "GeoJSON Source",
   },
 
   step2Description: {
-    id: 'EditChallenge.form.step2.description',
+    id: 'Admin.EditChallenge.form.step2.description',
     defaultMessage: `
 Every Task in MapRoulette basically consists of a geometry: a point, line or
 polygon indicating on the map what it is that you want the mapper to evaluate.
@@ -202,49 +197,49 @@ will not be able to make sense of it.
   },
 
   sourceLabel: {
-    id: 'EditChallenge.form.source.label',
+    id: 'Admin.EditChallenge.form.source.label',
     defaultMessage: "GeoJSON Source",
   },
 
   overpassQLLabel: {
-    id: 'EditChallenge.form.overpassQL.label',
+    id: 'Admin.EditChallenge.form.overpassQL.label',
     defaultMessage: "Overpass API Query",
   },
 
   overpassQLDescription: {
-    id: 'EditChallenge.form.overpassQL.description',
+    id: 'Admin.EditChallenge.form.overpassQL.description',
     defaultMessage: "Please provide a suitable bounding box when inserting " +
       "an overpass query, as this can potentially generate large amounts " +
       "of data and bog the system down."
   },
 
   localGeoJsonLabel: {
-    id: 'EditChallenge.form.localGeoJson.label',
+    id: 'Admin.EditChallenge.form.localGeoJson.label',
     defaultMessage: "Upload File",
   },
 
   localGeoJsonDescription: {
-    id: 'EditChallenge.form.localGeoJson.description',
+    id: 'Admin.EditChallenge.form.localGeoJson.description',
     defaultMessage: "Please upload the local GeoJSON file from your computer",
   },
 
   remoteGeoJsonLabel: {
-    id: 'EditChallenge.form.remoteGeoJson.label',
+    id: 'Admin.EditChallenge.form.remoteGeoJson.label',
     defaultMessage: "Remote URL",
   },
 
   remoteGeoJsonDescription: {
-    id: 'EditChallenge.form.remoteGeoJsonn.description',
+    id: 'Admin.EditChallenge.form.remoteGeoJson.description',
     defaultMessage: "Remote URL location from which to retrieve the GeoJSON",
   },
 
   step3Label: {
-    id: 'EditChallenge.form.step3.label',
+    id: 'Admin.EditChallenge.form.step3.label',
     defaultMessage: "Priorities",
   },
 
   step3Description: {
-    id: 'EditChallenge.form.step3.description',
+    id: 'Admin.EditChallenge.form.step3.description',
     defaultMessage:
       "The priority of tasks can be defined as High, Medium and Low. All " +
       "high priority tasks will be shown first, then medium and finally " +
@@ -252,34 +247,34 @@ will not be able to make sense of it.
   },
 
   defaultPriorityLabel: {
-    id: 'EditChallenge.form.defaultPriority.label',
+    id: 'Admin.EditChallenge.form.defaultPriority.label',
     defaultMessage: "Default Priority",
   },
 
   defaultPriorityDescription: {
-    id: 'EditChallenge.form.defaultPriority.description',
+    id: 'Admin.EditChallenge.form.defaultPriority.description',
     defaultMessage: "Default priority level for tasks in this challenge",
   },
 
   step4Label: {
-    id: 'EditChallenge.form.step4.label',
+    id: 'Admin.EditChallenge.form.step4.label',
     defaultMessage: "Extra",
   },
 
   step4Description: {
-    id: 'EditChallenge.form.step4.description',
+    id: 'Admin.EditChallenge.form.step4.description',
     defaultMessage:
       "Extra information that can be optionally set to give a better " +
       "mapping experience specific to the requirements of the challenge",
   },
 
   updateTasksLabel: {
-    id: 'EditChallenge.form.updateTasks.label',
+    id: 'Admin.EditChallenge.form.updateTasks.label',
     defaultMessage: "Remove Stale Tasks",
   },
 
   updateTasksDescription: {
-    id: 'EditChallenge.form.updateTasks.description',
+    id: 'Admin.EditChallenge.form.updateTasks.description',
     defaultMessage:
       "Periodically delete old, stale (not updated in ~30 days) tasks " +
       "still in Created or Skipped state. This can be useful if you are " +
@@ -289,12 +284,12 @@ will not be able to make sense of it.
   },
 
   defaultZoomLabel: {
-    id: 'EditChallenge.form.defaultZoom.label',
+    id: 'Admin.EditChallenge.form.defaultZoom.label',
     defaultMessage: "Default Zoom Level",
   },
 
   defaultZoomDescription: {
-    id: 'EditChallenge.form.defaultZoom.description',
+    id: 'Admin.EditChallenge.form.defaultZoom.description',
     defaultMessage: "When a user begins work on a task, MapRoulette will " +
       "attempt to automatically use a zoom level that fits the bounds of the " +
       "task's feature. But if that's not possible, then this default zoom level " +
@@ -303,12 +298,12 @@ will not be able to make sense of it.
   },
 
   minZoomLabel: {
-    id: 'EditChallenge.form.minZoom.label',
+    id: 'Admin.EditChallenge.form.minZoom.label',
     defaultMessage: "Minimum Zoom Level",
   },
 
   minZoomDescription: {
-    id: 'EditChallenge.form.minZoom.description',
+    id: 'Admin.EditChallenge.form.minZoom.description',
     defaultMessage: "The minimum allowed zoom level for your challenge. " +
       "This should be set to a level that allows the user to sufficiently " +
       "zoom out to work on tasks while keeping them from zooming out to " +
@@ -316,12 +311,12 @@ will not be able to make sense of it.
   },
 
   maxZoomLabel: {
-    id: 'EditChallenge.form.maxZoom.label',
+    id: 'Admin.EditChallenge.form.maxZoom.label',
     defaultMessage: "Maximum Zoom Level",
   },
 
   maxZoomDescription: {
-    id: 'EditChallenge.form.maxZoom.description',
+    id: 'Admin.EditChallenge.form.maxZoom.description',
     defaultMessage: "The maximum allowed zoom level for your challenge. " +
       "This should be set to a level that allows the user to sufficiently " +
       "zoom in to work on the tasks while keeping them from zooming in " +
@@ -330,12 +325,12 @@ will not be able to make sense of it.
   },
 
   defaultBasemapLabel: {
-    id: 'EditChallenge.form.defaultBasemap.label',
+    id: 'Admin.EditChallenge.form.defaultBasemap.label',
     defaultMessage: "Challenge Basemap",
   },
 
   defaultBasemapDescription: {
-    id: 'EditChallenge.form.defaultBasemap.description',
+    id: 'Admin.EditChallenge.form.defaultBasemap.description',
     defaultMessage:
       "The default basemap to use for the challenge, overriding any " +
       "user settings that define a default basemap",
