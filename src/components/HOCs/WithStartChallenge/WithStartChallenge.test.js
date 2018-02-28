@@ -8,7 +8,6 @@ import { denormalize } from 'normalizr'
 import { loadRandomTaskFromChallenge,
          fetchClusteredTasks } from '../../../services/Task/Task'
 import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
-import { buildError, addError } from '../../../services/Error/Error'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 
 jest.mock('../../../services/Task/Task')
@@ -96,4 +95,3 @@ test("chooseVisibleTask skips tasks not in a created or skipped status", () => {
                      clusteredTasks)
   ).toBeFalsy()
 })
-

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import _isString from 'lodash/isString'
 import _clone from 'lodash/clone'
-import _isEmpty from 'lodash/isEmpty'
 import _remove from 'lodash/remove'
 import _find from 'lodash/find'
+import _cloneDeep from 'lodash/cloneDeep'
 
 export const errorShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
@@ -16,46 +16,35 @@ export const REMOVE_ERROR = 'REMOVE_ERROR'
 export const CLEAR_ERRORS = 'CLEAR_ERRORS'
 
 /**
- * Build an error suitable for passing to addError. Errors should have id and
- * optional defaultMessage strings, which correspond to the id and
- * defaultMessage fields utilized by react-intl for displaying
- * internationalized messages. An optional detailMessage can be provided which,
- * if defined, will be appended on to the defaultMessage.
- */
-export const buildError = function(id, defaultMessage, detailMessage) {
-  if (!_isString(id) || id.length === 0) {
-    throw new Error('Error id must be a valid string.')
-  }
-
-  const message = !_isEmpty(detailMessage) ?
-    `${defaultMessage}: ${detailMessage}` :
-    defaultMessage
-
-  return {id, defaultMessage: message}
-}
-
-/**
- * Convenience method that delegates to buildError and attempts to extract an
- * error message from the given serverError and use it as the detailed message.
- * Note that this method returns a Promise that resolves with the built error
- * object.
+ * Convenience method that attempts to extract an error message from the given
+ * serverError and use it as the detailed message.
  *
- * @returns a Promise that resolves with the built error.
+ * @returns error
  */
-export const buildServerError = function(id, defaultMessage, serverError) {
-  return new Promise(resolve => {
-    if (serverError && serverError.response) {
-      serverError.response.json().then(json => {
-        resolve(buildError(id, defaultMessage,
-                           _isString(json.message) ? json.message : undefined))
-      }).catch(error => {
-        resolve(buildError(id, defaultMessage))
-      })
-    }
-    else {
-      resolve(buildError(id, defaultMessage))
-    }
-  })
+export const addServerError = function(error, serverError) {
+  return function(dispatch) {
+    return new Promise(resolve => {
+      if (!serverError || !serverError.response) {
+        dispatch(addError(error))
+        resolve(error)
+      }
+
+      const detailedError = _cloneDeep(error)
+
+      if (serverError && serverError.response) {
+        serverError.response.json().then(json => {
+          if (_isString(json.message)) {
+            detailedError.defaultMessage += `: ${json.message}`
+          }
+        }).catch(
+          error => {} // if message isn't valid json, just ignore
+        ).then(() => {
+          dispatch(addError(detailedError))
+          resolve(detailedError)
+        })
+      }
+    })
+  }
 }
 
 

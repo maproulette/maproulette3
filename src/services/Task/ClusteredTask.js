@@ -2,7 +2,8 @@ import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import { taskSchema } from './Task'
-import { buildError, addError } from '../Error/Error'
+import { addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
 import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _values from 'lodash/values'
@@ -65,10 +66,7 @@ export const fetchClusteredTasks = function(challengeId) {
       return tasks
     }).catch((error) => {
       dispatch(receiveClusteredTasks(challengeId, [], RequestStatus.error, fetchId))
-      dispatch(addError(buildError(
-        "ClusteredTask.fetchFailure", "Unable to fetch task clusters"
-      )))
-
+      dispatch(addError(AppErrors.clusteredTask.fetchFailure))
       console.log(error.response || error)
     })
   }

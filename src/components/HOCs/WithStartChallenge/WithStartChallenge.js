@@ -7,7 +7,8 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { BasemapLayerSources }
        from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
-import { buildError, addError } from '../../../services/Error/Error'
+import { addError } from '../../../services/Error/Error'
+import AppErrors from '../../../services/Error/AppErrors'
 
 /**
  * WithStartChallenge passes down a startChallenge function that, when invoked,
@@ -73,9 +74,7 @@ export const openTask = (dispatch, challenge, task, history) => {
   }
   else {
     // No tasks left in this challenge, back to challenges.
-    dispatch(addError(buildError(
-      "Task.none", "No tasks remain in this challenge."
-    )))
+    dispatch(addError(AppErrors.task.none))
   }
 }
 

@@ -1,13 +1,4 @@
 import { schema } from 'normalizr'
-import { defaultRoutes as api } from '../Server/Server'
-import Endpoint from '../Server/Endpoint'
-import RequestStatus from '../Server/RequestStatus'
-import genericEntityReducer from '../Server/GenericEntityReducer'
-import { challengeSchema, receiveChallenges } from '../Challenge/Challenge'
-import { taskSchema,
-         taskDenormalizationSchema,
-         receiveTasks } from '../Task/Task'
-import { buildError, addError } from '../Error/Error'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isNumber from 'lodash/isNumber'
@@ -16,6 +7,16 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _pull from 'lodash/pull'
 import _keys from 'lodash/keys'
+import { defaultRoutes as api } from '../Server/Server'
+import Endpoint from '../Server/Endpoint'
+import RequestStatus from '../Server/RequestStatus'
+import genericEntityReducer from '../Server/GenericEntityReducer'
+import { challengeSchema, receiveChallenges } from '../Challenge/Challenge'
+import { taskSchema,
+         taskDenormalizationSchema,
+         receiveTasks } from '../Task/Task'
+import { addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
@@ -298,15 +299,10 @@ const updateUser = function(userId, updateFunction) {
         // If we get an unauthorized, we assume the user is not logged
         // in (or no longer logged in with the server, anyway).
         dispatch(logoutUser())
-        dispatch(addError(buildError(
-          "User.unauthorized", "Please sign in to continue."
-        )))
+        dispatch(addError(AppErrors.user.unauthorized))
       }
       else {
-        dispatch(addError(buildError(
-          "User.updateFailure", "Unable to update your user on server."
-        )))
-
+        dispatch(addError(AppErrors.user.updateFailure))
         console.log(error.response || error)
       }
     })
