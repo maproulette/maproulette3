@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
+import WithErrors from '../../HOCs/WithErrors/WithErrors'
+import AppErrors from '../../../services/Error/AppErrors'
 import './MapPane.css'
 
 /**
@@ -7,8 +10,25 @@ import './MapPane.css'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class MapPane extends Component {
+export class MapPane extends Component {
+  state = {hasError: false}
+
+  componentDidCatch(error, info) {
+    this.setState({hasError: true})
+    this.props.addError(AppErrors.map.renderFailure)
+  }
+
   render() {
+    if (this.state.hasError) {
+      return (
+        <div className="map-pane container is-fluid">
+          <div className="notification">
+            <FormattedMessage {...AppErrors.map.renderFailure} />
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="map-pane">
         {this.props.children || this.props.map}
@@ -16,3 +36,5 @@ export default class MapPane extends Component {
     )
   }
 }
+
+export default WithErrors(MapPane)

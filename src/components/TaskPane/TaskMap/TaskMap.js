@@ -75,7 +75,7 @@ export default class TaskMap extends Component {
                      onBoundsChange={this.updateTaskBounds}
         >
           <ZoomControl position='topright' />
-          <VisibleTileLayer maxZoom={maxZoom} />
+          <VisibleTileLayer maxZoom={maxZoom} {...this.props} />
         </EnhancedMap>
       </div>
     )

@@ -37,6 +37,10 @@ export const mapStateToProps = (state, ownProps) => {
       _get(state.currentPreferences,
            `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.taskLoadMethod`,
            TaskLoadMethod.random)
+
+    mappedProps.visibleMapLayer =
+      _get(state.currentPreferences,
+           `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.visibleMapLayer`)
   }
 
   return mappedProps
@@ -54,6 +58,10 @@ export const mapDispatchToProps = dispatch => ({
   setTaskLoadBy: (challengeId, taskLoadMethod) =>
     dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
                             {[challengeId]: {taskLoadMethod}})),
+
+  setVisibleMapLayer: (challengeId, visibleMapLayerId) =>
+    dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
+                            {[challengeId]: {visibleMapLayer: visibleMapLayerId}})),
 })
 
 export default WithChallengePreferences

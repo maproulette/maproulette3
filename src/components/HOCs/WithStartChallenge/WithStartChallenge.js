@@ -4,9 +4,6 @@ import _get from 'lodash/get'
 import _sample from 'lodash/sample'
 import { loadRandomTaskFromChallenge} from '../../../services/Task/Task'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
-import { BasemapLayerSources }
-       from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
-import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -65,12 +62,6 @@ export const chooseVisibleTask = (challenge, challengeBounds, clusteredTasks) =>
 export const openTask = (dispatch, challenge, task, history) => {
   if (task) {
     history.push(`/challenge/${task.parent}/task/${task.id}`)
-
-    // If the challenge defines a default basemap layer, use it.
-    const defaultLayer = BasemapLayerSources[challenge.defaultBasemap]
-    if (defaultLayer) {
-      dispatch(changeVisibleLayer(defaultLayer))
-    }
   }
   else {
     // No tasks left in this challenge, back to challenges.

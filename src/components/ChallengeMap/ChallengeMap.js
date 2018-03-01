@@ -163,7 +163,7 @@ export class ChallengeMap extends Component {
                      justFitFeatures={markers.length > 0}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
-          <VisibleTileLayer defaultLayer={this.props.layerSourceId} />
+          <VisibleTileLayer defaultLayer={this.props.layerSourceId} {...this.props} />
           {markers.length > 0 &&
            <MarkerClusterGroup markers={markers} onMarkerClick={this.markerClicked} />
           }

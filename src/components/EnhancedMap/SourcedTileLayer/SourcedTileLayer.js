@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
+import _isEmpty from 'lodash/isEmpty'
 import { layerSourceShape } from '../../../services/VisibleLayer/LayerSources'
 
 /**
@@ -16,7 +17,8 @@ import { layerSourceShape } from '../../../services/VisibleLayer/LayerSources'
 export class SourcedTileLayer extends Component {
   render() {
     const attribution =
-      this.props.skipAttribution ? null :
+      this.props.skipAttribution || _isEmpty(this.props.source.attribution) ?
+      null :
       this.props.intl.formatMessage(this.props.source.attribution)
 
     return <TileLayer key={this.props.source.layerId}

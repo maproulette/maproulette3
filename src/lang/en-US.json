@@ -63,6 +63,8 @@
   "Admin.EditChallenge.form.maxZoom.description": "The maximum allowed zoom level for your challenge. This should be set to a level that allows the user to sufficiently zoom in to work on the tasks while keeping them from zooming in to a level that isn't useful or exceeds the available resolution of the map/imagery in the geographic region.",
   "Admin.EditChallenge.form.defaultBasemap.label": "Challenge Basemap",
   "Admin.EditChallenge.form.defaultBasemap.description": "The default basemap to use for the challenge, overriding any user settings that define a default basemap",
+  "Admin.EditChallenge.form.customBasemap.label": "Custom Basemap",
+  "Admin.EditChallenge.form.customBasemap.description": "Insert a custom base map URL here. Eg. `http://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png`",
   "Admin.ManageChallenges.header": "Challenges",
   "Admin.ManageChallenges.help.info": "Challenges consist of many tasks that all help address a specific problem or shortcoming with OpenStreetMap data. Tasks are typically generated automatically from an overpassQL query you provide when creating a new challenge, but can also be loaded from a local file or remote URL containing GeoJSON features. You can create as many challenges as you'd like.",
   "Admin.ManageChallenges.search.placeholder": "Name",
@@ -280,6 +282,7 @@
   "Errors.project.saveFailure": "Unable to save your changes",
   "Errors.project.fetchFailure": "Unable to retrieve latest project data from server.",
   "Errors.project.searchFailure": "Unable to search projects.",
+  "Errors.map.renderFailure": "Unable to render the map. This is usally caused by a problematic custom basemap.",
   "Errors.josm.noResponse": "OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?",
   "KeyMapping.openEditor.editId": "Edit in Id",
   "KeyMapping.openEditor.editJosm": "Edit in JOSM",
@@ -313,5 +316,6 @@
   "map.name.mapbox": "Mapbox",
   "map.name.mapboxLight": "Mapbox Light",
   "map.name.mapboxSatellite": "Mapbox Satellite",
-  "map.attribution.mapbox": "&copy <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>, &copy <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>"
+  "map.attribution.mapbox": "&copy <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>, &copy <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+  "map.name.custom": "Custom"
 }
