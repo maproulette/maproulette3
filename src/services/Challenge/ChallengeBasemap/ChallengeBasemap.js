@@ -42,3 +42,12 @@ export const messagesByBasemapLayer = _fromPairs(
 export const basemapLayerLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
 )
+
+export const challengeOwnerBasemapLayerLabels = intl => {
+  // Use a different `none` label for challenge owners in order to promote
+  // clarity as to what `none` means in the context of creating a challenge.
+  const labels = basemapLayerLabels(intl)
+  labels.none = intl.formatMessage(messages.noneChallengeOwner)
+
+  return labels
+}

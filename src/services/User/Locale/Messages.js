@@ -4,25 +4,25 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Locale
  */
 export default defineMessages({
-  usEnglishLabel: {
+  'en-US': {
     id: "Locale.en-US.label",
-    defaultMessage: "U.S. English"
+    defaultMessage: "en-US (U.S. English)",
   },
-  spanishLabel: {
+  es: {
     id: "Locale.es.label",
-    defaultMessage: "Spanish"
+    defaultMessage: "es (Spanish)",
   },
-  deutschLabel: {
+  de: {
     id: "Locale.de.label",
-    defaultMessage: "Deutsch"
+    defaultMessage: "de (Deutsch)",
   },
-  frenchLabel: {
+  fr: {
     id: "Locale.fr.label",
-    defaultMessage: "Français"
+    defaultMessage: "fr (Français)",
   },
-  afrikaansLabel: {
-    id: "Locale.en.label",
-    defaultMessage: "Afrikaans"
+  af: {
+    id: "Locale.af.label",
+    defaultMessage: "af (Afrikaans)",
   },
 })
 

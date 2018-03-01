@@ -202,6 +202,21 @@ ShallowWrapper {
                     />
           </section>
           <section
+                    className="user-profile__user-settings"
+          >
+                    <InjectIntl(UserSettings)
+                              user={
+                                        Object {
+                                                  "id": 357,
+                                                  "isLoggedIn": true,
+                                                  "osmProfile": Object {
+                                                    "avatarURL": "some/url",
+                                                  },
+                                                }
+                              }
+                    />
+          </section>
+          <section
                     className="user-profile__api-key"
           >
                     <h2
@@ -383,6 +398,21 @@ ShallowWrapper {
               />
 </section>,
             <section
+              className="user-profile__user-settings"
+>
+              <InjectIntl(UserSettings)
+                            user={
+                                          Object {
+                                                        "id": 357,
+                                                        "isLoggedIn": true,
+                                                        "osmProfile": Object {
+                                                          "avatarURL": "some/url",
+                                                        },
+                                                      }
+                            }
+              />
+</section>,
+            <section
               className="user-profile__api-key"
 >
               <h2
@@ -458,6 +488,44 @@ ShallowWrapper {
                 }
 />,
               "className": "user-profile__saved-tasks",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "user": Object {
+                  "id": 357,
+                  "isLoggedIn": true,
+                  "osmProfile": Object {
+                    "avatarURL": "some/url",
+                  },
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "section",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <InjectIntl(UserSettings)
+                user={
+                                Object {
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "some/url",
+                                                },
+                                              }
+                }
+/>,
+              "className": "user-profile__user-settings",
             },
             "ref": null,
             "rendered": Object {
@@ -606,6 +674,21 @@ ShallowWrapper {
                         className="user-profile__saved-tasks"
             >
                         <SavedTasks
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                    }
+                        />
+            </section>
+            <section
+                        className="user-profile__user-settings"
+            >
+                        <InjectIntl(UserSettings)
                                     user={
                                                 Object {
                                                             "id": 357,
@@ -799,6 +882,21 @@ ShallowWrapper {
                 />
 </section>,
               <section
+                className="user-profile__user-settings"
+>
+                <InjectIntl(UserSettings)
+                                user={
+                                                Object {
+                                                                "id": 357,
+                                                                "isLoggedIn": true,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "some/url",
+                                                                },
+                                                              }
+                                }
+                />
+</section>,
+              <section
                 className="user-profile__api-key"
 >
                 <h2
@@ -874,6 +972,44 @@ ShallowWrapper {
                   }
 />,
                 "className": "user-profile__saved-tasks",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": true,
+                    "osmProfile": Object {
+                      "avatarURL": "some/url",
+                    },
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "section",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <InjectIntl(UserSettings)
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": true,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "some/url",
+                                                      },
+                                                    }
+                  }
+/>,
+                "className": "user-profile__user-settings",
               },
               "ref": null,
               "rendered": Object {

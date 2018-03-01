@@ -4,6 +4,7 @@ import _get from 'lodash/get'
 import { logoutUser,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,
+         updateUserSettings,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../services/User/AsEndUser'
 
@@ -53,6 +54,9 @@ export const mapDispatchToProps = dispatch => {
 
     unsaveTask: (userId, taskId) =>
       dispatch(unsaveTask(userId, taskId)),
+
+    updateUserSettings: (userId, settings) =>
+      dispatch(updateUserSettings(userId, settings))
   }
 }
 

@@ -59,7 +59,11 @@ ShallowWrapper {
                         <div
                                 className="message-body"
                         >
-                                First Error
+                                <FormattedMessage
+                                        defaultMessage="First Error"
+                                        id="first-error"
+                                        values={Object {}}
+                                />
                         </div>
                 </article>
         </li>
@@ -82,7 +86,11 @@ ShallowWrapper {
                         <div
                                 className="message-body"
                         >
-                                Second Error
+                                <FormattedMessage
+                                        defaultMessage="Second Error"
+                                        id="second-error"
+                                        values={Object {}}
+                                />
                         </div>
                 </article>
         </li>
@@ -105,7 +113,11 @@ ShallowWrapper {
                         <div
                                 className="message-body"
                         >
-                                Third Error
+                                <FormattedMessage
+                                        defaultMessage="Third Error"
+                                        id="third-error"
+                                        values={Object {}}
+                                />
                         </div>
                 </article>
         </li>
@@ -140,7 +152,11 @@ ShallowWrapper {
                         <div
                                     className="message-body"
                         >
-                                    First Error
+                                    <FormattedMessage
+                                                defaultMessage="First Error"
+                                                id="first-error"
+                                                values={Object {}}
+                                    />
                         </div>
             </article>
 </li>,
@@ -163,7 +179,11 @@ ShallowWrapper {
                         <div
                                     className="message-body"
                         >
-                                    Second Error
+                                    <FormattedMessage
+                                                defaultMessage="Second Error"
+                                                id="second-error"
+                                                values={Object {}}
+                                    />
                         </div>
             </article>
 </li>,
@@ -186,7 +206,11 @@ ShallowWrapper {
                         <div
                                     className="message-body"
                         >
-                                    Third Error
+                                    <FormattedMessage
+                                                defaultMessage="Third Error"
+                                                id="third-error"
+                                                values={Object {}}
+                                    />
                         </div>
             </article>
 </li>,
@@ -218,7 +242,11 @@ ShallowWrapper {
               <div
                             className="message-body"
               >
-                            First Error
+                            <FormattedMessage
+                                          defaultMessage="First Error"
+                                          id="first-error"
+                                          values={Object {}}
+                            />
               </div>
 </article>,
           },
@@ -244,7 +272,11 @@ ShallowWrapper {
                 <div
                   className="message-body"
 >
-                  First Error
+                  <FormattedMessage
+                                    defaultMessage="First Error"
+                                    id="first-error"
+                                    values={Object {}}
+                  />
 </div>,
               ],
               "className": "message is-danger",
@@ -302,11 +334,27 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "First Error",
+                  "children": <FormattedMessage
+                    defaultMessage="First Error"
+                    id="first-error"
+                    values={Object {}}
+/>,
                   "className": "message-body",
                 },
                 "ref": null,
-                "rendered": "First Error",
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "First Error",
+                    "id": "first-error",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
                 "type": "div",
               },
             ],
@@ -337,7 +385,11 @@ ShallowWrapper {
               <div
                             className="message-body"
               >
-                            Second Error
+                            <FormattedMessage
+                                          defaultMessage="Second Error"
+                                          id="second-error"
+                                          values={Object {}}
+                            />
               </div>
 </article>,
           },
@@ -363,7 +415,11 @@ ShallowWrapper {
                 <div
                   className="message-body"
 >
-                  Second Error
+                  <FormattedMessage
+                                    defaultMessage="Second Error"
+                                    id="second-error"
+                                    values={Object {}}
+                  />
 </div>,
               ],
               "className": "message is-danger",
@@ -421,11 +477,27 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "Second Error",
+                  "children": <FormattedMessage
+                    defaultMessage="Second Error"
+                    id="second-error"
+                    values={Object {}}
+/>,
                   "className": "message-body",
                 },
                 "ref": null,
-                "rendered": "Second Error",
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Second Error",
+                    "id": "second-error",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
                 "type": "div",
               },
             ],
@@ -456,7 +528,11 @@ ShallowWrapper {
               <div
                             className="message-body"
               >
-                            Third Error
+                            <FormattedMessage
+                                          defaultMessage="Third Error"
+                                          id="third-error"
+                                          values={Object {}}
+                            />
               </div>
 </article>,
           },
@@ -482,7 +558,11 @@ ShallowWrapper {
                 <div
                   className="message-body"
 >
-                  Third Error
+                  <FormattedMessage
+                                    defaultMessage="Third Error"
+                                    id="third-error"
+                                    values={Object {}}
+                  />
 </div>,
               ],
               "className": "message is-danger",
@@ -540,11 +620,27 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "Third Error",
+                  "children": <FormattedMessage
+                    defaultMessage="Third Error"
+                    id="third-error"
+                    values={Object {}}
+/>,
                   "className": "message-body",
                 },
                 "ref": null,
-                "rendered": "Third Error",
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Third Error",
+                    "id": "third-error",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
                 "type": "div",
               },
             ],
@@ -585,7 +681,11 @@ ShallowWrapper {
                               <div
                                         className="message-body"
                               >
-                                        First Error
+                                        <FormattedMessage
+                                                  defaultMessage="First Error"
+                                                  id="first-error"
+                                                  values={Object {}}
+                                        />
                               </div>
                     </article>
           </li>
@@ -608,7 +708,11 @@ ShallowWrapper {
                               <div
                                         className="message-body"
                               >
-                                        Second Error
+                                        <FormattedMessage
+                                                  defaultMessage="Second Error"
+                                                  id="second-error"
+                                                  values={Object {}}
+                                        />
                               </div>
                     </article>
           </li>
@@ -631,7 +735,11 @@ ShallowWrapper {
                               <div
                                         className="message-body"
                               >
-                                        Third Error
+                                        <FormattedMessage
+                                                  defaultMessage="Third Error"
+                                                  id="third-error"
+                                                  values={Object {}}
+                                        />
                               </div>
                     </article>
           </li>
@@ -666,7 +774,11 @@ ShallowWrapper {
                             <div
                                           className="message-body"
                             >
-                                          First Error
+                                          <FormattedMessage
+                                                        defaultMessage="First Error"
+                                                        id="first-error"
+                                                        values={Object {}}
+                                          />
                             </div>
               </article>
 </li>,
@@ -689,7 +801,11 @@ ShallowWrapper {
                             <div
                                           className="message-body"
                             >
-                                          Second Error
+                                          <FormattedMessage
+                                                        defaultMessage="Second Error"
+                                                        id="second-error"
+                                                        values={Object {}}
+                                          />
                             </div>
               </article>
 </li>,
@@ -712,7 +828,11 @@ ShallowWrapper {
                             <div
                                           className="message-body"
                             >
-                                          Third Error
+                                          <FormattedMessage
+                                                        defaultMessage="Third Error"
+                                                        id="third-error"
+                                                        values={Object {}}
+                                          />
                             </div>
               </article>
 </li>,
@@ -744,7 +864,11 @@ ShallowWrapper {
                 <div
                                 className="message-body"
                 >
-                                First Error
+                                <FormattedMessage
+                                                defaultMessage="First Error"
+                                                id="first-error"
+                                                values={Object {}}
+                                />
                 </div>
 </article>,
             },
@@ -770,7 +894,11 @@ ShallowWrapper {
                   <div
                     className="message-body"
 >
-                    First Error
+                    <FormattedMessage
+                                        defaultMessage="First Error"
+                                        id="first-error"
+                                        values={Object {}}
+                    />
 </div>,
                 ],
                 "className": "message is-danger",
@@ -828,11 +956,27 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": "First Error",
+                    "children": <FormattedMessage
+                      defaultMessage="First Error"
+                      id="first-error"
+                      values={Object {}}
+/>,
                     "className": "message-body",
                   },
                   "ref": null,
-                  "rendered": "First Error",
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "First Error",
+                      "id": "first-error",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
                   "type": "div",
                 },
               ],
@@ -863,7 +1007,11 @@ ShallowWrapper {
                 <div
                                 className="message-body"
                 >
-                                Second Error
+                                <FormattedMessage
+                                                defaultMessage="Second Error"
+                                                id="second-error"
+                                                values={Object {}}
+                                />
                 </div>
 </article>,
             },
@@ -889,7 +1037,11 @@ ShallowWrapper {
                   <div
                     className="message-body"
 >
-                    Second Error
+                    <FormattedMessage
+                                        defaultMessage="Second Error"
+                                        id="second-error"
+                                        values={Object {}}
+                    />
 </div>,
                 ],
                 "className": "message is-danger",
@@ -947,11 +1099,27 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": "Second Error",
+                    "children": <FormattedMessage
+                      defaultMessage="Second Error"
+                      id="second-error"
+                      values={Object {}}
+/>,
                     "className": "message-body",
                   },
                   "ref": null,
-                  "rendered": "Second Error",
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Second Error",
+                      "id": "second-error",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
                   "type": "div",
                 },
               ],
@@ -982,7 +1150,11 @@ ShallowWrapper {
                 <div
                                 className="message-body"
                 >
-                                Third Error
+                                <FormattedMessage
+                                                defaultMessage="Third Error"
+                                                id="third-error"
+                                                values={Object {}}
+                                />
                 </div>
 </article>,
             },
@@ -1008,7 +1180,11 @@ ShallowWrapper {
                   <div
                     className="message-body"
 >
-                    Third Error
+                    <FormattedMessage
+                                        defaultMessage="Third Error"
+                                        id="third-error"
+                                        values={Object {}}
+                    />
 </div>,
                 ],
                 "className": "message is-danger",
@@ -1066,11 +1242,27 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": "Third Error",
+                    "children": <FormattedMessage
+                      defaultMessage="Third Error"
+                      id="third-error"
+                      values={Object {}}
+/>,
                     "className": "message-body",
                   },
                   "ref": null,
-                  "rendered": "Third Error",
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Third Error",
+                      "id": "third-error",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
                   "type": "div",
                 },
               ],

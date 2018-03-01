@@ -119,7 +119,7 @@ ShallowWrapper {
 >
         <span
                 className="control-icon"
-                title="Fix"
+                title="Edit"
         >
                 <SvgSymbol
                         sym="edit-icon"
@@ -130,8 +130,8 @@ ShallowWrapper {
                 className="control-label"
         >
                 <FormattedMessage
-                        defaultMessage="Fix"
-                        id="Task.controls.fix.label"
+                        defaultMessage="Edit"
+                        id="Task.controls.edit.label"
                         values={Object {}}
                 />
         </span>
@@ -146,17 +146,17 @@ ShallowWrapper {
       "options": Array [
         Object {
           "key": 0,
-          "text": "Edit in iD",
+          "text": "iD",
           "value": 0,
         },
         Object {
           "key": 1,
-          "text": "Edit in JOSM",
+          "text": "JOSM",
           "value": 1,
         },
         Object {
           "key": 2,
-          "text": "Edit in new JOSM layer",
+          "text": "JOSM with new layer",
           "value": 2,
         },
       ],
@@ -174,7 +174,7 @@ ShallowWrapper {
         "children": Array [
           <span
             className="control-icon"
-            title="Fix"
+            title="Edit"
 >
             <SvgSymbol
                         sym="edit-icon"
@@ -185,8 +185,8 @@ ShallowWrapper {
             className="control-label"
 >
             <FormattedMessage
-                        defaultMessage="Fix"
-                        id="Task.controls.fix.label"
+                        defaultMessage="Edit"
+                        id="Task.controls.edit.label"
                         values={Object {}}
             />
 </span>,
@@ -205,7 +205,7 @@ ShallowWrapper {
               viewBox="0 0 20 20"
 />,
             "className": "control-icon",
-            "title": "Fix",
+            "title": "Edit",
           },
           "ref": null,
           "rendered": Object {
@@ -228,8 +228,8 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <FormattedMessage
-              defaultMessage="Fix"
-              id="Task.controls.fix.label"
+              defaultMessage="Edit"
+              id="Task.controls.edit.label"
               values={Object {}}
 />,
             "className": "control-label",
@@ -240,8 +240,8 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "defaultMessage": "Fix",
-              "id": "Task.controls.fix.label",
+              "defaultMessage": "Edit",
+              "id": "Task.controls.edit.label",
               "values": Object {},
             },
             "ref": null,
@@ -266,7 +266,7 @@ ShallowWrapper {
 >
           <span
                     className="control-icon"
-                    title="Fix"
+                    title="Edit"
           >
                     <SvgSymbol
                               sym="edit-icon"
@@ -277,8 +277,8 @@ ShallowWrapper {
                     className="control-label"
           >
                     <FormattedMessage
-                              defaultMessage="Fix"
-                              id="Task.controls.fix.label"
+                              defaultMessage="Edit"
+                              id="Task.controls.edit.label"
                               values={Object {}}
                     />
           </span>
@@ -293,17 +293,17 @@ ShallowWrapper {
         "options": Array [
           Object {
             "key": 0,
-            "text": "Edit in iD",
+            "text": "iD",
             "value": 0,
           },
           Object {
             "key": 1,
-            "text": "Edit in JOSM",
+            "text": "JOSM",
             "value": 1,
           },
           Object {
             "key": 2,
-            "text": "Edit in new JOSM layer",
+            "text": "JOSM with new layer",
             "value": 2,
           },
         ],
@@ -321,7 +321,7 @@ ShallowWrapper {
           "children": Array [
             <span
               className="control-icon"
-              title="Fix"
+              title="Edit"
 >
               <SvgSymbol
                             sym="edit-icon"
@@ -332,8 +332,8 @@ ShallowWrapper {
               className="control-label"
 >
               <FormattedMessage
-                            defaultMessage="Fix"
-                            id="Task.controls.fix.label"
+                            defaultMessage="Edit"
+                            id="Task.controls.edit.label"
                             values={Object {}}
               />
 </span>,
@@ -352,7 +352,7 @@ ShallowWrapper {
                 viewBox="0 0 20 20"
 />,
               "className": "control-icon",
-              "title": "Fix",
+              "title": "Edit",
             },
             "ref": null,
             "rendered": Object {
@@ -375,8 +375,8 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <FormattedMessage
-                defaultMessage="Fix"
-                id="Task.controls.fix.label"
+                defaultMessage="Edit"
+                id="Task.controls.edit.label"
                 values={Object {}}
 />,
               "className": "control-label",
@@ -387,8 +387,8 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "defaultMessage": "Fix",
-                "id": "Task.controls.fix.label",
+                "defaultMessage": "Edit",
+                "id": "Task.controls.edit.label",
                 "values": Object {},
               },
               "ref": null,
@@ -532,7 +532,7 @@ ShallowWrapper {
       "children": Array [
         <span
           className="control-icon"
-          title="Fix"
+          title="Edit"
 >
           <SvgSymbol
                     sym="edit-icon"
@@ -543,8 +543,8 @@ ShallowWrapper {
           className="control-label"
 >
           <FormattedMessage
-                    defaultMessage="Fix"
-                    id="Task.controls.fix.label"
+                    defaultMessage="Edit"
+                    id="Task.controls.edit.label"
                     values={Object {}}
           />
 </span>,
@@ -564,7 +564,7 @@ ShallowWrapper {
             viewBox="0 0 20 20"
 />,
           "className": "control-icon",
-          "title": "Fix",
+          "title": "Edit",
         },
         "ref": null,
         "rendered": Object {
@@ -587,8 +587,8 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <FormattedMessage
-            defaultMessage="Fix"
-            id="Task.controls.fix.label"
+            defaultMessage="Edit"
+            id="Task.controls.edit.label"
             values={Object {}}
 />,
           "className": "control-label",
@@ -599,8 +599,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "defaultMessage": "Fix",
-            "id": "Task.controls.fix.label",
+            "defaultMessage": "Edit",
+            "id": "Task.controls.edit.label",
             "values": Object {},
           },
           "ref": null,
@@ -621,7 +621,7 @@ ShallowWrapper {
         "children": Array [
           <span
             className="control-icon"
-            title="Fix"
+            title="Edit"
 >
             <SvgSymbol
                         sym="edit-icon"
@@ -632,8 +632,8 @@ ShallowWrapper {
             className="control-label"
 >
             <FormattedMessage
-                        defaultMessage="Fix"
-                        id="Task.controls.fix.label"
+                        defaultMessage="Edit"
+                        id="Task.controls.edit.label"
                         values={Object {}}
             />
 </span>,
@@ -653,7 +653,7 @@ ShallowWrapper {
               viewBox="0 0 20 20"
 />,
             "className": "control-icon",
-            "title": "Fix",
+            "title": "Edit",
           },
           "ref": null,
           "rendered": Object {
@@ -676,8 +676,8 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <FormattedMessage
-              defaultMessage="Fix"
-              id="Task.controls.fix.label"
+              defaultMessage="Edit"
+              id="Task.controls.edit.label"
               values={Object {}}
 />,
             "className": "control-label",
@@ -688,8 +688,8 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "defaultMessage": "Fix",
-              "id": "Task.controls.fix.label",
+              "defaultMessage": "Edit",
+              "id": "Task.controls.edit.label",
               "values": Object {},
             },
             "ref": null,
@@ -831,7 +831,7 @@ ShallowWrapper {
       "children": Array [
         <span
           className="control-icon"
-          title="Fix"
+          title="Edit"
 >
           <SvgSymbol
                     sym="edit-icon"
@@ -842,8 +842,8 @@ ShallowWrapper {
           className="control-label"
 >
           <FormattedMessage
-                    defaultMessage="Fix"
-                    id="Task.controls.fix.label"
+                    defaultMessage="Edit"
+                    id="Task.controls.edit.label"
                     values={Object {}}
           />
 </span>,
@@ -863,7 +863,7 @@ ShallowWrapper {
             viewBox="0 0 20 20"
 />,
           "className": "control-icon",
-          "title": "Fix",
+          "title": "Edit",
         },
         "ref": null,
         "rendered": Object {
@@ -886,8 +886,8 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <FormattedMessage
-            defaultMessage="Fix"
-            id="Task.controls.fix.label"
+            defaultMessage="Edit"
+            id="Task.controls.edit.label"
             values={Object {}}
 />,
           "className": "control-label",
@@ -898,8 +898,8 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "defaultMessage": "Fix",
-            "id": "Task.controls.fix.label",
+            "defaultMessage": "Edit",
+            "id": "Task.controls.edit.label",
             "values": Object {},
           },
           "ref": null,
@@ -920,7 +920,7 @@ ShallowWrapper {
         "children": Array [
           <span
             className="control-icon"
-            title="Fix"
+            title="Edit"
 >
             <SvgSymbol
                         sym="edit-icon"
@@ -931,8 +931,8 @@ ShallowWrapper {
             className="control-label"
 >
             <FormattedMessage
-                        defaultMessage="Fix"
-                        id="Task.controls.fix.label"
+                        defaultMessage="Edit"
+                        id="Task.controls.edit.label"
                         values={Object {}}
             />
 </span>,
@@ -952,7 +952,7 @@ ShallowWrapper {
               viewBox="0 0 20 20"
 />,
             "className": "control-icon",
-            "title": "Fix",
+            "title": "Edit",
           },
           "ref": null,
           "rendered": Object {
@@ -975,8 +975,8 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <FormattedMessage
-              defaultMessage="Fix"
-              id="Task.controls.fix.label"
+              defaultMessage="Edit"
+              id="Task.controls.edit.label"
               values={Object {}}
 />,
             "className": "control-label",
@@ -987,8 +987,8 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "defaultMessage": "Fix",
-              "id": "Task.controls.fix.label",
+              "defaultMessage": "Edit",
+              "id": "Task.controls.edit.label",
               "values": Object {},
             },
             "ref": null,

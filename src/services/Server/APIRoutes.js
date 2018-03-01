@@ -75,6 +75,7 @@ const apiRoutes = factory => {
       'savedTasks': factory.get('/user/:userId/savedTasks'),
       'saveTask': factory.post('/user/:userId/saveTask/:taskId'),
       'unsaveTask': factory.delete('/user/:userId/unsaveTask/:taskId'),
+      'updateSettings': factory.put('/user/:userId'),
     },
   }
 }
