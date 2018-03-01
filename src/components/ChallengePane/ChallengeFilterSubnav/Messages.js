@@ -16,4 +16,8 @@ export default defineMessages({
     id: 'ChallengeFilterSubnav.filter.location.label',
     defaultMessage: 'Location',
   },
+  searchLabel: {
+    id: 'ChallengeFilterSubnav.filter.search.label',
+    defaultMessage: 'Search for a challenge...',
+  },
 })

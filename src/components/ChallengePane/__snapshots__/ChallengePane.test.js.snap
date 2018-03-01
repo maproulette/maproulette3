@@ -33,7 +33,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Connect(ChallengeFilterSubnav))
+        <Connect(Connect(InjectIntl(ChallengeFilterSubnav)))
           intl={
                     Object {
                               "formatMessage": [Function],
@@ -275,7 +275,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Connect(ChallengeFilterSubnav))
+          <Connect(Connect(InjectIntl(ChallengeFilterSubnav)))
             intl={
                         Object {
                                     "formatMessage": [Function],

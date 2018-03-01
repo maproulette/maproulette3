@@ -192,7 +192,7 @@ ShallowWrapper {
                                         "formatMessage": [Function],
                                       }
                         }
-                        placeholder="Search for a challenge..."
+                        placeholder={undefined}
                         user={
                                 Object {
                                         "id": 11,
@@ -347,7 +347,7 @@ ShallowWrapper {
                                         "formatMessage": [Function],
                                       }
                     }
-                    placeholder="Search for a challenge..."
+                    placeholder={undefined}
                     user={
                               Object {
                                         "id": 11,
@@ -499,7 +499,7 @@ ShallowWrapper {
                                           "formatMessage": [Function],
                                         }
               }
-              placeholder="Search for a challenge..."
+              placeholder={undefined}
               user={
                             Object {
                                           "id": 11,
@@ -652,7 +652,7 @@ ShallowWrapper {
               "intl": Object {
                 "formatMessage": [Function],
               },
-              "placeholder": "Search for a challenge...",
+              "placeholder": undefined,
               "user": Object {
                 "id": 11,
                 "savedChallenges": Array [],
@@ -816,7 +816,7 @@ ShallowWrapper {
                                                   "formatMessage": [Function],
                                                 }
                               }
-                              placeholder="Search for a challenge..."
+                              placeholder={undefined}
                               user={
                                         Object {
                                                   "id": 11,
@@ -971,7 +971,7 @@ ShallowWrapper {
                                                 "formatMessage": [Function],
                                               }
                         }
-                        placeholder="Search for a challenge..."
+                        placeholder={undefined}
                         user={
                                     Object {
                                                 "id": 11,
@@ -1123,7 +1123,7 @@ ShallowWrapper {
                                                 "formatMessage": [Function],
                                               }
                 }
-                placeholder="Search for a challenge..."
+                placeholder={undefined}
                 user={
                                 Object {
                                                 "id": 11,
@@ -1276,7 +1276,7 @@ ShallowWrapper {
                 "intl": Object {
                   "formatMessage": [Function],
                 },
-                "placeholder": "Search for a challenge...",
+                "placeholder": undefined,
                 "user": Object {
                   "id": 11,
                   "savedChallenges": Array [],
