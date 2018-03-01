@@ -5,7 +5,7 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   addChallengeLabel: {
-    id: 'Project.controls.addChallenge.label',
+    id: 'Admin.Project.controls.addChallenge.label',
     defaultMessage: "Add Challenge",
   },
 })

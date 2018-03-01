@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { injectIntl } from 'react-intl'
 import { searchChallenges } from '../../../services/Challenge/Challenge'
 import WithSearchExecution from '../../HOCs/WithSearchExecution/WithSearchExecution'
 import SearchBox from '../../SearchBox/SearchBox'
@@ -9,6 +10,7 @@ import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
 import FilterByLocation from './FilterByLocation'
 import './ChallengeFilterSubnav.css'
+import messages from './Messages'
 
 // Setup child components with necessary HOCs
 const LocationFilter = WithCurrentUser(FilterByLocation)
@@ -38,7 +40,7 @@ export class ChallengeFilterSubnav extends Component {
             <FilterByDifficulty {...this.props} />
             <LocationFilter {...this.props} />
             <ChallengeSearch className='navbar-item'
-                             placeholder='Search for a challenge...'
+                             placeholder={this.props.intl.formatMessage(messages.searchLabel)}
                              {...this.props} />
           </div>
 				</div>
@@ -47,4 +49,4 @@ export class ChallengeFilterSubnav extends Component {
   }
 }
 
-export default WithChallengeFilters(WithMapBounds(ChallengeFilterSubnav))
+export default WithChallengeFilters(WithMapBounds(injectIntl(ChallengeFilterSubnav)))
