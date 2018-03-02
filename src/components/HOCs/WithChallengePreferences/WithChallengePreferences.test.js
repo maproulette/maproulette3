@@ -4,6 +4,8 @@ import { mapStateToProps,
          mapDispatchToProps } from './WithChallengePreferences'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
+import { BING }
+       from '../../../services/VisibleLayer/LayerSources'
 import { setPreferences,
          CHALLENGES_PREFERENCE_GROUP }
        from '../../../services/Preferences/Preferences'
@@ -72,6 +74,15 @@ test("maps taskLoadBy to current taskLoadMethod preference", () => {
   expect(mappedProps.taskLoadBy).toBe(TaskLoadMethod.proximity)
 })
 
+test("maps visibleMapLayer to current visibleMapLayer preference", () => {
+  basicState.currentPreferences.challenges[
+    challenge.id
+  ].visibleMapLayer = BING
+
+  const mappedProps = mapStateToProps(basicState, {challengeId: challenge.id})
+  expect(mappedProps.visibleMapLayer).toEqual(BING)
+})
+
 test("taskLoadBy defaults to random if no preference set", () => {
   basicState.currentPreferences.challenges[
     challenge.id
@@ -111,4 +122,16 @@ test("setLoadTasksBy updates the challenge's taskLoadMethod preference", () => {
     setPreferences
   ).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
                    {[challenge.id]: {taskLoadMethod: TaskLoadMethod.proximity}})
+})
+
+test("setVisibleMapLayer updates the challenge's visibleMapLayer preference", () => {
+  const dispatch = jest.fn(() => Promise.resolve())
+  const mappedProps = mapDispatchToProps(dispatch)
+
+  mappedProps.setVisibleMapLayer(challenge.id, BING)
+  expect(dispatch).toBeCalled()
+  expect(
+    setPreferences
+  ).toBeCalledWith(CHALLENGES_PREFERENCE_GROUP,
+                   {[challenge.id]: {visibleMapLayer: BING}})
 })

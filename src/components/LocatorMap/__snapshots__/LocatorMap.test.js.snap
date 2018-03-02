@@ -38,7 +38,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Component)
+        <Connect(Connect(Connect(Component)))
           layerSourceId="foo"
           mapBounds={
                     Object {
@@ -90,7 +90,7 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
-          <Connect(InjectIntl(SourcedTileLayer))
+          <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                     defaultLayer="foo"
           />
 </EnhancedMap>,
@@ -140,7 +140,7 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
               defaultLayer="foo"
 />,
           ],
@@ -199,7 +199,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Component)
+          <Connect(Connect(Connect(Component)))
             layerSourceId="foo"
             mapBounds={
                         Object {
@@ -251,7 +251,7 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                         defaultLayer="foo"
             />
 </EnhancedMap>,
@@ -301,7 +301,7 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
-              <Connect(InjectIntl(SourcedTileLayer))
+              <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                 defaultLayer="foo"
 />,
             ],

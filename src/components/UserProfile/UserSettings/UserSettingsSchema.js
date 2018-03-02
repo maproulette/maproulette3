@@ -1,5 +1,6 @@
 import _map from 'lodash/map'
 import _values from 'lodash/values'
+import _without from 'lodash/without'
 import { Locale,
          localeLabels,
          defaultLocale } from '../../../services/User/Locale/Locale'
@@ -26,7 +27,7 @@ export const jsSchema = intl => {
   const localizedEditorLabels = editorLabels(intl)
   const localizedBasemapLabels = basemapLayerLabels(intl)
 
-  const schemaFields = {
+  return {
     "$schema": "http://json-schema.org/draft-06/schema#",
     type: "object",
     properties: {
@@ -38,19 +39,6 @@ export const jsSchema = intl => {
         enumNames: _map(Editor, (value, key) => localizedEditorLabels[key]),
         default: Editor.none,
       },
-      defaultBasemap: {
-        title: intl.formatMessage(messages.defaultBasemapLabel),
-        description: intl.formatMessage(messages.defaultBasemapDescription),
-        type: "number",
-        enum: _values(ChallengeBasemap),
-        enumNames: _map(ChallengeBasemap, (value, key) => localizedBasemapLabels[key]),
-        default: ChallengeBasemap.none,
-      },
-      customBasemap: {
-        title: intl.formatMessage(messages.customBasemapLabel),
-        description: intl.formatMessage(messages.customBasemapDescription),
-        type: "string",
-      },
       locale: {
         title: intl.formatMessage(messages.localeLabel),
         description: intl.formatMessage(messages.localeDescription),
@@ -59,10 +47,42 @@ export const jsSchema = intl => {
         enumNames: _map(Locale, value => localizedLocaleLabels[value]),
         default: defaultLocale(),
       },
+      defaultBasemap: {
+        title: intl.formatMessage(messages.defaultBasemapLabel),
+        description: intl.formatMessage(messages.defaultBasemapDescription),
+        type: "number",
+        enum: _values(ChallengeBasemap),
+        enumNames: _map(ChallengeBasemap, (value, key) => localizedBasemapLabels[key]),
+        default: ChallengeBasemap.none,
+      },
     },
+    dependencies: { // Only show customBasemap if defaultBasemap set to Custom
+      defaultBasemap: {
+        oneOf: [
+          {
+            properties: {
+              defaultBasemap: {
+                enum: _without(_values(ChallengeBasemap), ChallengeBasemap.custom),
+              }
+            }
+          },
+          {
+            properties: {
+              defaultBasemap: {
+                enum: [ChallengeBasemap.custom],
+              },
+              customBasemap: {
+                title: intl.formatMessage(messages.customBasemapLabel),
+                description: intl.formatMessage(messages.customBasemapDescription),
+                type: "string",
+              },
+            },
+            required: ['customBasemap']
+          }
+        ]
+      }
+    }
   }
-
-  return schemaFields
 }
 
 /**

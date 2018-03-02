@@ -50,7 +50,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Component)
+        <Connect(Connect(Connect(Component)))
           browsedChallenge={
                     Object {
                               "id": 123,
@@ -104,8 +104,39 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
-          <Connect(InjectIntl(SourcedTileLayer))
+          <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                    browsedChallenge={
+                              Object {
+                                        "id": 123,
+                                      }
+                    }
+                    clusteredTasks={
+                              Object {
+                                        "challengeId": 123,
+                                        "loading": true,
+                                      }
+                    }
                     defaultLayer="foo"
+                    layerSourceId="foo"
+                    mapBounds={
+                              Object {
+                                        "challenge": Object {
+                                          "bounds": Object {
+                                            "_northEast": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                            "_southWest": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                          },
+                                          "challengeId": 123,
+                                        },
+                                      }
+                    }
+                    setChallengeMapBounds={[Function]}
+                    updateBoundedChallenges={[Function]}
           />
 </EnhancedMap>,
         <BusySpinner />,
@@ -163,8 +194,39 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+              browsedChallenge={
+                            Object {
+                                          "id": 123,
+                                        }
+              }
+              clusteredTasks={
+                            Object {
+                                          "challengeId": 123,
+                                          "loading": true,
+                                        }
+              }
               defaultLayer="foo"
+              layerSourceId="foo"
+              mapBounds={
+                            Object {
+                                          "challenge": Object {
+                                            "bounds": Object {
+                                              "_northEast": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                              "_southWest": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                            },
+                                            "challengeId": 123,
+                                          },
+                                        }
+              }
+              setChallengeMapBounds={[Function]}
+              updateBoundedChallenges={[Function]}
 />,
             false,
           ],
@@ -196,7 +258,32 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
+              "browsedChallenge": Object {
+                "id": 123,
+              },
+              "clusteredTasks": Object {
+                "challengeId": 123,
+                "loading": true,
+              },
               "defaultLayer": "foo",
+              "layerSourceId": "foo",
+              "mapBounds": Object {
+                "challenge": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              },
+              "setChallengeMapBounds": [Function],
+              "updateBoundedChallenges": [Function],
             },
             "ref": null,
             "rendered": null,
@@ -225,7 +312,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Component)
+          <Connect(Connect(Connect(Component)))
             browsedChallenge={
                         Object {
                                     "id": 123,
@@ -279,8 +366,39 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                        browsedChallenge={
+                                    Object {
+                                                "id": 123,
+                                              }
+                        }
+                        clusteredTasks={
+                                    Object {
+                                                "challengeId": 123,
+                                                "loading": true,
+                                              }
+                        }
                         defaultLayer="foo"
+                        layerSourceId="foo"
+                        mapBounds={
+                                    Object {
+                                                "challenge": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                  "challengeId": 123,
+                                                },
+                                              }
+                        }
+                        setChallengeMapBounds={[Function]}
+                        updateBoundedChallenges={[Function]}
             />
 </EnhancedMap>,
           <BusySpinner />,
@@ -338,8 +456,39 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
-              <Connect(InjectIntl(SourcedTileLayer))
+              <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                browsedChallenge={
+                                Object {
+                                                "id": 123,
+                                              }
+                }
+                clusteredTasks={
+                                Object {
+                                                "challengeId": 123,
+                                                "loading": true,
+                                              }
+                }
                 defaultLayer="foo"
+                layerSourceId="foo"
+                mapBounds={
+                                Object {
+                                                "challenge": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                  "challengeId": 123,
+                                                },
+                                              }
+                }
+                setChallengeMapBounds={[Function]}
+                updateBoundedChallenges={[Function]}
 />,
               false,
             ],
@@ -371,7 +520,32 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
+                "browsedChallenge": Object {
+                  "id": 123,
+                },
+                "clusteredTasks": Object {
+                  "challengeId": 123,
+                  "loading": true,
+                },
                 "defaultLayer": "foo",
+                "layerSourceId": "foo",
+                "mapBounds": Object {
+                  "challenge": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                },
+                "setChallengeMapBounds": [Function],
+                "updateBoundedChallenges": [Function],
               },
               "ref": null,
               "rendered": null,
@@ -454,7 +628,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Component)
+        <Connect(Connect(Connect(Component)))
           browsedChallenge={
                     Object {
                               "id": 123,
@@ -508,8 +682,39 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
-          <Connect(InjectIntl(SourcedTileLayer))
+          <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                    browsedChallenge={
+                              Object {
+                                        "id": 123,
+                                      }
+                    }
+                    clusteredTasks={
+                              Object {
+                                        "challengeId": 123,
+                                        "loading": false,
+                                      }
+                    }
                     defaultLayer="foo"
+                    layerSourceId="foo"
+                    mapBounds={
+                              Object {
+                                        "challenge": Object {
+                                          "bounds": Object {
+                                            "_northEast": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                            "_southWest": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                          },
+                                          "challengeId": 123,
+                                        },
+                                      }
+                    }
+                    setChallengeMapBounds={[Function]}
+                    updateBoundedChallenges={[Function]}
           />
 </EnhancedMap>,
         false,
@@ -567,8 +772,39 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+              browsedChallenge={
+                            Object {
+                                          "id": 123,
+                                        }
+              }
+              clusteredTasks={
+                            Object {
+                                          "challengeId": 123,
+                                          "loading": false,
+                                        }
+              }
               defaultLayer="foo"
+              layerSourceId="foo"
+              mapBounds={
+                            Object {
+                                          "challenge": Object {
+                                            "bounds": Object {
+                                              "_northEast": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                              "_southWest": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                            },
+                                            "challengeId": 123,
+                                          },
+                                        }
+              }
+              setChallengeMapBounds={[Function]}
+              updateBoundedChallenges={[Function]}
 />,
             false,
           ],
@@ -600,7 +836,32 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
+              "browsedChallenge": Object {
+                "id": 123,
+              },
+              "clusteredTasks": Object {
+                "challengeId": 123,
+                "loading": false,
+              },
               "defaultLayer": "foo",
+              "layerSourceId": "foo",
+              "mapBounds": Object {
+                "challenge": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              },
+              "setChallengeMapBounds": [Function],
+              "updateBoundedChallenges": [Function],
             },
             "ref": null,
             "rendered": null,
@@ -621,7 +882,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Component)
+          <Connect(Connect(Connect(Component)))
             browsedChallenge={
                         Object {
                                     "id": 123,
@@ -675,8 +936,39 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                        browsedChallenge={
+                                    Object {
+                                                "id": 123,
+                                              }
+                        }
+                        clusteredTasks={
+                                    Object {
+                                                "challengeId": 123,
+                                                "loading": false,
+                                              }
+                        }
                         defaultLayer="foo"
+                        layerSourceId="foo"
+                        mapBounds={
+                                    Object {
+                                                "challenge": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                  "challengeId": 123,
+                                                },
+                                              }
+                        }
+                        setChallengeMapBounds={[Function]}
+                        updateBoundedChallenges={[Function]}
             />
 </EnhancedMap>,
           false,
@@ -734,8 +1026,39 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
-              <Connect(InjectIntl(SourcedTileLayer))
+              <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                browsedChallenge={
+                                Object {
+                                                "id": 123,
+                                              }
+                }
+                clusteredTasks={
+                                Object {
+                                                "challengeId": 123,
+                                                "loading": false,
+                                              }
+                }
                 defaultLayer="foo"
+                layerSourceId="foo"
+                mapBounds={
+                                Object {
+                                                "challenge": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                  "challengeId": 123,
+                                                },
+                                              }
+                }
+                setChallengeMapBounds={[Function]}
+                updateBoundedChallenges={[Function]}
 />,
               false,
             ],
@@ -767,7 +1090,32 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
+                "browsedChallenge": Object {
+                  "id": 123,
+                },
+                "clusteredTasks": Object {
+                  "challengeId": 123,
+                  "loading": false,
+                },
                 "defaultLayer": "foo",
+                "layerSourceId": "foo",
+                "mapBounds": Object {
+                  "challenge": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                },
+                "setChallengeMapBounds": [Function],
+                "updateBoundedChallenges": [Function],
               },
               "ref": null,
               "rendered": null,
@@ -842,7 +1190,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Component)
+        <Connect(Connect(Connect(Component)))
           browsedChallenge={
                     Object {
                               "id": 123,
@@ -896,8 +1244,39 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
-          <Connect(InjectIntl(SourcedTileLayer))
+          <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                    browsedChallenge={
+                              Object {
+                                        "id": 123,
+                                      }
+                    }
+                    clusteredTasks={
+                              Object {
+                                        "challengeId": 123,
+                                        "loading": false,
+                                      }
+                    }
                     defaultLayer="foo"
+                    layerSourceId="foo"
+                    mapBounds={
+                              Object {
+                                        "challenge": Object {
+                                          "bounds": Object {
+                                            "_northEast": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                            "_southWest": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                          },
+                                          "challengeId": 123,
+                                        },
+                                      }
+                    }
+                    setChallengeMapBounds={[Function]}
+                    updateBoundedChallenges={[Function]}
           />
 </EnhancedMap>,
         false,
@@ -955,8 +1334,39 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+              browsedChallenge={
+                            Object {
+                                          "id": 123,
+                                        }
+              }
+              clusteredTasks={
+                            Object {
+                                          "challengeId": 123,
+                                          "loading": false,
+                                        }
+              }
               defaultLayer="foo"
+              layerSourceId="foo"
+              mapBounds={
+                            Object {
+                                          "challenge": Object {
+                                            "bounds": Object {
+                                              "_northEast": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                              "_southWest": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                            },
+                                            "challengeId": 123,
+                                          },
+                                        }
+              }
+              setChallengeMapBounds={[Function]}
+              updateBoundedChallenges={[Function]}
 />,
             false,
           ],
@@ -988,7 +1398,32 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
+              "browsedChallenge": Object {
+                "id": 123,
+              },
+              "clusteredTasks": Object {
+                "challengeId": 123,
+                "loading": false,
+              },
               "defaultLayer": "foo",
+              "layerSourceId": "foo",
+              "mapBounds": Object {
+                "challenge": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              },
+              "setChallengeMapBounds": [Function],
+              "updateBoundedChallenges": [Function],
             },
             "ref": null,
             "rendered": null,
@@ -1009,7 +1444,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Component)
+          <Connect(Connect(Connect(Component)))
             browsedChallenge={
                         Object {
                                     "id": 123,
@@ -1063,8 +1498,39 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                        browsedChallenge={
+                                    Object {
+                                                "id": 123,
+                                              }
+                        }
+                        clusteredTasks={
+                                    Object {
+                                                "challengeId": 123,
+                                                "loading": false,
+                                              }
+                        }
                         defaultLayer="foo"
+                        layerSourceId="foo"
+                        mapBounds={
+                                    Object {
+                                                "challenge": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                  "challengeId": 123,
+                                                },
+                                              }
+                        }
+                        setChallengeMapBounds={[Function]}
+                        updateBoundedChallenges={[Function]}
             />
 </EnhancedMap>,
           false,
@@ -1122,8 +1588,39 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
-              <Connect(InjectIntl(SourcedTileLayer))
+              <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                browsedChallenge={
+                                Object {
+                                                "id": 123,
+                                              }
+                }
+                clusteredTasks={
+                                Object {
+                                                "challengeId": 123,
+                                                "loading": false,
+                                              }
+                }
                 defaultLayer="foo"
+                layerSourceId="foo"
+                mapBounds={
+                                Object {
+                                                "challenge": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                  "challengeId": 123,
+                                                },
+                                              }
+                }
+                setChallengeMapBounds={[Function]}
+                updateBoundedChallenges={[Function]}
 />,
               false,
             ],
@@ -1155,7 +1652,32 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
+                "browsedChallenge": Object {
+                  "id": 123,
+                },
+                "clusteredTasks": Object {
+                  "challengeId": 123,
+                  "loading": false,
+                },
                 "defaultLayer": "foo",
+                "layerSourceId": "foo",
+                "mapBounds": Object {
+                  "challenge": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                },
+                "setChallengeMapBounds": [Function],
+                "updateBoundedChallenges": [Function],
               },
               "ref": null,
               "rendered": null,

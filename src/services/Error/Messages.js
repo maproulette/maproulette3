@@ -75,6 +75,11 @@ export default defineMessages({
     defaultMessage: "Unable to search projects.",
   },
 
+  mapRenderFailure: {
+    id: 'Errors.map.renderFailure',
+    defaultMessage: "Unable to render the map. This is usally caused by a problematic custom basemap.",
+  },
+
   josmNoResponse: {
     id: 'Errors.josm.noResponse',
     defaultMessage: "OSM remote control did not respond. Do you have JOSM " +

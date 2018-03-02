@@ -1,8 +1,20 @@
 import { connect } from 'react-redux'
-import { layerSourceWithId,
-         defaultLayerSource } from '../../../services/VisibleLayer/LayerSources'
-import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
+import _get from 'lodash/get'
+import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
+import _isObject from 'lodash/isObject'
+import _isEmpty from 'lodash/isEmpty'
+import { layerSourceWithId,
+         defaultLayerSource,
+         createDynamicLayerSource }
+       from '../../../services/VisibleLayer/LayerSources'
+import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
+import { ChallengeBasemap,
+         BasemapLayerSources }
+       from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
+import WithChallengePreferences
+       from '../WithChallengePreferences/WithChallengePreferences'
 
 /**
  * WithVisibleLayer provides the wrapped component with the proper tile layer
@@ -15,26 +27,83 @@ import _isString from 'lodash/isString'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithVisibleLayer =
-  WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
+const WithVisibleLayer = WrappedComponent =>
+  WithCurrentUser(WithChallengePreferences(
+    connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
+  ))
 
-export const mapStateToProps = (state, ownProps) => {
-  // If a specific layer has been chosen, use it. Otherwise, if a specific
-  // default layer has been given, use that. Otherwise try to find a default
-  // layer based on the layer configuration, and finally just give back the
-  // very first layer source if no default can be found.
+/**
+ * Determine which map layer should be used as a default. If a challenge
+ * default basemap is given, it will be used. Otherwise if a user default
+ * basemap is given, it will be used. Otherwise if a `defaultLayer` prop was
+ * given, it will be used. Otherwise the default layer source from LayerSources
+ * will be used.
+ */
+export const defaultLayer = ownProps => {
+  const challengeDefaultBasemap = _get(ownProps, 'challenge.defaultBasemap')
+  const userDefaultBasemap = _get(ownProps, 'user.settings.defaultBasemap')
+  let layer = null
 
-  let layer = state.visibleLayer
-  if (!layer && _isString(ownProps.defaultLayer)) {
+  if (_isNumber(challengeDefaultBasemap) &&
+      challengeDefaultBasemap !== ChallengeBasemap.none) {
+    if (challengeDefaultBasemap !== ChallengeBasemap.custom) {
+      layer = layerSourceWithId(BasemapLayerSources[challengeDefaultBasemap])
+    }
+    else if (!_isEmpty(ownProps.challenge.customBasemap)) {
+      layer = createDynamicLayerSource(`challenge_${ownProps.challenge.id}`,
+                                       ownProps.challenge.customBasemap)
+    }
+  }
+  else if (_isNumber(userDefaultBasemap) &&
+           userDefaultBasemap !== ChallengeBasemap.none) {
+    if (userDefaultBasemap !== ChallengeBasemap.custom) {
+      layer = layerSourceWithId(BasemapLayerSources[userDefaultBasemap])
+    }
+    else if (!_isEmpty(ownProps.user.settings.customBasemap)) {
+      layer = createDynamicLayerSource(`user_${ownProps.user.id}`,
+                                       ownProps.user.settings.customBasemap)
+    }
+  }
+  else if (_isObject(ownProps.defaultLayer)) {
+    layer = ownProps.defaultLayer
+  }
+  else if (_isString(ownProps.defaultLayer)) {
     layer = layerSourceWithId(ownProps.defaultLayer)
   }
 
-  return ({source: layer ? layer : defaultLayerSource()})
+  return layer ? layer : defaultLayerSource()
 }
 
-export const mapDispatchToProps = dispatch => {
+export const mapStateToProps = (state, ownProps) => {
+  const challengeId = _get(ownProps, 'challenge.id')
+  let source = null
+
+  if (_isNumber(challengeId)) {
+    if (_isString(ownProps.visibleMapLayer)) {
+      source = layerSourceWithId(ownProps.visibleMapLayer)
+    }
+  }
+  else if (state.visibleLayer) {
+    source = state.visibleLayer
+  }
+
   return {
-    changeLayer: layerId => dispatch(changeVisibleLayer(layerId))
+    source: source ? source : defaultLayer(ownProps)
+  }
+}
+
+export const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    changeLayer: layerId => {
+      const challengeId = _get(ownProps, 'challenge.id')
+
+      if (_isNumber(challengeId) && ownProps.setVisibleMapLayer) {
+        ownProps.setVisibleMapLayer(challengeId, layerId)
+      }
+      else {
+        dispatch(changeVisibleLayer(layerId))
+      }
+    },
   }
 }
 

@@ -3,12 +3,12 @@ import { ZOOM_LEVELS,
          MAX_ZOOM,
          DEFAULT_ZOOM }
        from '../../../../../services/Challenge/ChallengeZoom/ChallengeZoom'
-import { CHALLENGE_BASEMAP_NONE,
-         ChallengeBasemap,
+import { ChallengeBasemap,
          challengeOwnerBasemapLayerLabels }
        from '../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
+import _without from 'lodash/without'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
 import messages from './Messages'
@@ -75,9 +75,35 @@ export const jsSchema = intl => {
         type: "number",
         enum: _values(ChallengeBasemap),
         enumNames: _map(ChallengeBasemap, (value, key) => localizedBasemapLabels[key]),
-        default: CHALLENGE_BASEMAP_NONE,
-      }
+        default: ChallengeBasemap.none,
+      },
     },
+    dependencies: { // Only show customBasemap if defaultBasemap set to Custom
+      defaultBasemap: {
+        oneOf: [
+          {
+            properties: {
+              defaultBasemap: {
+                enum: _without(_values(ChallengeBasemap), ChallengeBasemap.custom),
+              }
+            }
+          },
+          {
+            properties: {
+              defaultBasemap: {
+                enum: [ChallengeBasemap.custom],
+              },
+              customBasemap: {
+                title: intl.formatMessage(messages.customBasemapLabel),
+                description: intl.formatMessage(messages.customBasemapDescription),
+                type: "string",
+              },
+            },
+            required: ['customBasemap']
+          }
+        ]
+      }
+    }
   }
 }
 
@@ -106,7 +132,10 @@ export const uiSchema = {
   },
   defaultBasemap: {
     "ui:widget": "select",
-  }
+  },
+  customBasemap: {
+    "ui:emptyValue": "",
+  },
 }
 
 export const numericEnvSetting = (settingName, defaultValue) => {

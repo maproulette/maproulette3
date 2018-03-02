@@ -38,6 +38,10 @@ export default {
     searchFailure: messages.projectSearchFailure
   },
 
+  map: {
+    renderFailure: messages.mapRenderFailure,
+  },
+
   josm: {
     noResponse: messages.josmNoResponse,
   },

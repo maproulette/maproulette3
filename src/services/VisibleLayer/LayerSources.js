@@ -4,13 +4,31 @@ import PropTypes from 'prop-types'
 import messages from './Messages'
 
 export const layerSourceShape = PropTypes.shape({
-  name: PropTypes.object.isRequired,
+  /** Unique id for layer */
+  layerId: PropTypes.string.isRequired,
+  /** Human-readable name of layer formatted as react-intl message */
+  name: PropTypes.object,
+  /** Tile server URL. Supports substitutions: {x}, {y}, {z}, {accessToken} */
   url: PropTypes.string.isRequired,
+  /** Human-readable attribution of layer formatted as react-intl message */
   attribution: PropTypes.object,
+  /** Width/height of tiles */
   tileSize: PropTypes.number,
-  default: PropTypes.bool,
-  public: PropTypes.bool,
+  /**
+   * Set to true to adjust non-retina tiles for retina displays. tileSize may
+   * also need to be adjusted.
+   *
+   * @see See http://leafletjs.com/reference-1.0.3.html#tilelayer-detectretina
+   */
+  detectRetina: PropTypes.bool,
+  /** Access token for substitution in tile server url */
   accessToken: PropTypes.string,
+  /** Set to true to mark as the default layer */
+  default: PropTypes.bool,
+  /** Set to false if layer should not be offered to users for selection */
+  isSelectable: PropTypes.bool,
+  /** Set to true for dynamically-created layers, such as custom basemaps */
+  isDynamic: PropTypes.bool,
 })
 
 export const OPEN_STREET_MAP = 'OpenStreetMap'
@@ -20,6 +38,7 @@ export const MAPBOX_STREETS = 'Mapbox'
 export const MAPBOX_LIGHT = 'MapboxLight'
 export const MAPBOX_SATELLITE_STREETS = 'MapboxSatellite'
 
+/** Array of available layer sources */
 export const LayerSources = [{
     layerId: OPEN_STREET_MAP,
     name: messages.openStreetMapName,
@@ -68,11 +87,33 @@ if (!_isEmpty(process.env.REACT_APP_MAPBOX_ACCESS_TOKEN)) {
   })
 }
 
+/**
+ * Returns a default layer source for use in situations where no layer source
+ * has been specified.
+ */
 export const defaultLayerSource = function() {
   const configuredDefault = _find(LayerSources, {default: true})
   return configuredDefault ? configuredDefault : LayerSources[0]
 }
 
+/**
+ * Retrieves the (static) layer source with a matching id. Dynamic layer
+ * sources are not searched.
+ */
 export const layerSourceWithId = function(layerId) {
   return _find(LayerSources, {layerId})
+}
+
+/**
+ * Create and return a dynamic layer source with the given layerId
+ * and url. Primarily intended for use with custom basemaps.
+ */
+export const createDynamicLayerSource = function(layerId, url) {
+  return {
+    layerId,
+    name: messages.customName,
+    url,
+    isSelectable: false,
+    isDynamic: true,
+  }
 }

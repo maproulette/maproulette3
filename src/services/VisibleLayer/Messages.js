@@ -53,4 +53,9 @@ export default defineMessages({
     id: "map.attribution.mapbox",
     defaultMessage: "&copy <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>, &copy <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
   },
+
+  customName: {
+    id: "map.name.custom",
+    defaultMessage: "Custom",
+  }
 })

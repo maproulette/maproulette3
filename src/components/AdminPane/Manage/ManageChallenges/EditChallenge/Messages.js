@@ -335,4 +335,14 @@ will not be able to make sense of it.
       "The default basemap to use for the challenge, overriding any " +
       "user settings that define a default basemap",
   },
+
+  customBasemapLabel: {
+    id: "Admin.EditChallenge.form.customBasemap.label",
+    defaultMessage: "Custom Basemap",
+  },
+
+  customBasemapDescription: {
+    id: "Admin.EditChallenge.form.customBasemap.description",
+    defaultMessage: "Insert a custom base map URL here. Eg. `http://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png`",
+  },
 })

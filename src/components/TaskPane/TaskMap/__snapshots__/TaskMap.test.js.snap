@@ -39,7 +39,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Component)
+        <Connect(Connect(Connect(Component)))
           centerPoint={
                     Object {
                               "lat": 0,
@@ -80,8 +80,28 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
-          <Connect(InjectIntl(SourcedTileLayer))
+          <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                    centerPoint={
+                              Object {
+                                        "lat": 0,
+                                        "lng": 0,
+                                      }
+                    }
                     maxZoom={0}
+                    setTaskMapBounds={[Function]}
+                    task={
+                              Object {
+                                        "geometries": Object {
+                                          "features": null,
+                                        },
+                                        "id": 2,
+                                        "parent": Object {
+                                          "defaultZoom": 2,
+                                          "maxZoom": 0,
+                                          "minZoom": 1,
+                                        },
+                                      }
+                    }
           />
 </EnhancedMap>,
       ],
@@ -128,8 +148,28 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+              centerPoint={
+                            Object {
+                                          "lat": 0,
+                                          "lng": 0,
+                                        }
+              }
               maxZoom={0}
+              setTaskMapBounds={[Function]}
+              task={
+                            Object {
+                                          "geometries": Object {
+                                            "features": null,
+                                          },
+                                          "id": 2,
+                                          "parent": Object {
+                                            "defaultZoom": 2,
+                                            "maxZoom": 0,
+                                            "minZoom": 1,
+                                          },
+                                        }
+              }
 />,
           ],
           "features": null,
@@ -159,7 +199,23 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
+              "centerPoint": Object {
+                "lat": 0,
+                "lng": 0,
+              },
               "maxZoom": 0,
+              "setTaskMapBounds": [Function],
+              "task": Object {
+                "geometries": Object {
+                  "features": null,
+                },
+                "id": 2,
+                "parent": Object {
+                  "defaultZoom": 2,
+                  "maxZoom": 0,
+                  "minZoom": 1,
+                },
+              },
             },
             "ref": null,
             "rendered": null,
@@ -178,7 +234,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Component)
+          <Connect(Connect(Connect(Component)))
             centerPoint={
                         Object {
                                     "lat": 0,
@@ -219,8 +275,28 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
-            <Connect(InjectIntl(SourcedTileLayer))
+            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                        centerPoint={
+                                    Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              }
+                        }
                         maxZoom={0}
+                        setTaskMapBounds={[Function]}
+                        task={
+                                    Object {
+                                                "geometries": Object {
+                                                  "features": null,
+                                                },
+                                                "id": 2,
+                                                "parent": Object {
+                                                  "defaultZoom": 2,
+                                                  "maxZoom": 0,
+                                                  "minZoom": 1,
+                                                },
+                                              }
+                        }
             />
 </EnhancedMap>,
         ],
@@ -267,8 +343,28 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
-              <Connect(InjectIntl(SourcedTileLayer))
+              <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
+                centerPoint={
+                                Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              }
+                }
                 maxZoom={0}
+                setTaskMapBounds={[Function]}
+                task={
+                                Object {
+                                                "geometries": Object {
+                                                  "features": null,
+                                                },
+                                                "id": 2,
+                                                "parent": Object {
+                                                  "defaultZoom": 2,
+                                                  "maxZoom": 0,
+                                                  "minZoom": 1,
+                                                },
+                                              }
+                }
 />,
             ],
             "features": null,
@@ -298,7 +394,23 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
+                "centerPoint": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
                 "maxZoom": 0,
+                "setTaskMapBounds": [Function],
+                "task": Object {
+                  "geometries": Object {
+                    "features": null,
+                  },
+                  "id": 2,
+                  "parent": Object {
+                    "defaultZoom": 2,
+                    "maxZoom": 0,
+                    "minZoom": 1,
+                  },
+                },
               },
               "ref": null,
               "rendered": null,

@@ -73,8 +73,9 @@ ShallowWrapper {
                               }
                     />
           </Sidebar>
-          <MapPane>
+          <Connect(MapPane)>
                     <Connect(Connect(LocatorMap))
+                              challenge={undefined}
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
@@ -91,7 +92,7 @@ ShallowWrapper {
                                                 }
                               }
                     />
-          </MapPane>
+          </Connect(MapPane)>
 </div>,
       ],
     },
@@ -144,8 +145,9 @@ ShallowWrapper {
                             }
               />
 </Sidebar>,
-            <MapPane>
+            <Connect(MapPane)>
               <Connect(Connect(LocatorMap))
+                            challenge={undefined}
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
@@ -162,7 +164,7 @@ ShallowWrapper {
                                                       }
                             }
               />
-</MapPane>,
+</Connect(MapPane)>,
           ],
           "className": "challenge-pane",
         },
@@ -221,6 +223,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <Connect(Connect(LocatorMap))
+                challenge={undefined}
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
@@ -244,6 +247,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
+                "challenge": undefined,
                 "intl": Object {
                   "formatMessage": [Function],
                 },
@@ -315,8 +319,9 @@ ShallowWrapper {
                                     }
                         />
             </Sidebar>
-            <MapPane>
+            <Connect(MapPane)>
                         <Connect(Connect(LocatorMap))
+                                    challenge={undefined}
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
@@ -333,7 +338,7 @@ ShallowWrapper {
                                                           }
                                     }
                         />
-            </MapPane>
+            </Connect(MapPane)>
 </div>,
         ],
       },
@@ -386,8 +391,9 @@ ShallowWrapper {
                                 }
                 />
 </Sidebar>,
-              <MapPane>
+              <Connect(MapPane)>
                 <Connect(Connect(LocatorMap))
+                                challenge={undefined}
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
@@ -404,7 +410,7 @@ ShallowWrapper {
                                                               }
                                 }
                 />
-</MapPane>,
+</Connect(MapPane)>,
             ],
             "className": "challenge-pane",
           },
@@ -463,6 +469,7 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <Connect(Connect(LocatorMap))
+                  challenge={undefined}
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
@@ -486,6 +493,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
+                  "challenge": undefined,
                   "intl": Object {
                     "formatMessage": [Function],
                   },
