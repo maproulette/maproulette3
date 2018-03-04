@@ -95,10 +95,12 @@ export const mapStateToProps = (state, ownProps) => {
 export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     changeLayer: layerId => {
-      const challengeId = _get(ownProps, 'challenge.id')
+      const isVirtual = _isNumber(ownProps.virtualChallengeId)
+      const challengeId = isVirtual ? ownProps.virtualChallengeId :
+                                      _get(ownProps, 'challenge.id')
 
       if (_isNumber(challengeId) && ownProps.setVisibleMapLayer) {
-        ownProps.setVisibleMapLayer(challengeId, layerId)
+        ownProps.setVisibleMapLayer(challengeId, isVirtual, layerId)
       }
       else {
         dispatch(changeVisibleLayer(layerId))

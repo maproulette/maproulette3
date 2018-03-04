@@ -3,12 +3,14 @@ import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isObject from 'lodash/isObject'
+import _debounce from 'lodash/debounce'
 import { taskDenormalizationSchema,
          loadCompleteTask,
          loadRandomTaskFromChallenge,
+         loadRandomTaskFromVirtualChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
 import { TaskLoadMethod }
@@ -33,20 +35,15 @@ const WithCurrentTask = WrappedComponent =>
 
 /**
  * WithLoadedTask is a private HOC used to fetch an up-to-date copy of the task
- * from the server.
+ * and parent challenge from the server.
  *
  * @private
  */
 const WithLoadedTask = function(WrappedComponent) {
   return class extends Component {
     loadNeededTask = props => {
-      if (!isNaN(props.taskId)) {
-        // Load task if we don't already have it or if the data is stale
-        const fetchedAt = _get(props, 'task._meta.fetchedAt')
-
-        if (!_isNumber(fetchedAt) || Date.now() - fetchedAt > FRESHNESS_THRESHOLD) {
-          props.loadTask(props.taskId)
-        }
+      if (_isFinite(props.taskId)) {
+        props.loadTask(props.taskId)
       }
     }
 
@@ -71,11 +68,8 @@ const WithLoadedTask = function(WrappedComponent) {
 export const mapStateToProps = (state, ownProps) => {
   const mappedProps = {task: null}
 
-  // Pull taskId from route
-  const taskId =
-    parseInt(_get(ownProps, 'match.params.taskId', ownProps.taskId), 10)
-
-  if (!isNaN(taskId)) {
+  const taskId = taskIdFromRoute(ownProps, ownProps.taskId)
+  if (_isFinite(taskId)) {
     mappedProps.taskId = taskId
     const taskEntity = _get(state, `entities.tasks.${taskId}`)
 
@@ -85,6 +79,8 @@ export const mapStateToProps = (state, ownProps) => {
         denormalize(taskEntity, taskDenormalizationSchema(), state.entities)
 
       mappedProps.challengeId = _get(mappedProps.task, 'parent.id')
+      mappedProps.virtualChallengeId =
+        virtualChallengeIdFromRoute(ownProps, ownProps.virtualChallengeId)
     }
   }
 
@@ -98,7 +94,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      *
      * @private
      */
-    loadTask: taskId => dispatch(loadCompleteTask(taskId)),
+    loadTask: _debounce(taskId => dispatch(loadCompleteTask(taskId)),
+                        FRESHNESS_THRESHOLD),
 
     /**
      * Invoke to mark as a task as complete with the given status
@@ -114,13 +111,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       })
 
       // Load the next task from the challenge.
-      dispatch(
-        loadRandomTaskFromChallenge(
-          challengeId,
-          taskLoadBy === TaskLoadMethod.proximity ? taskId : undefined
-        )
-      ).then(newTask =>
-        visitNewTask(challengeId, taskId, newTask, ownProps.history)
+      nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+        visitNewTask(ownProps, taskId, newTask)
       )
     },
 
@@ -133,15 +125,69 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(addTaskComment(taskId, comment))
       }
 
-      dispatch(
-        loadRandomTaskFromChallenge(
-          challengeId,
-          taskLoadBy === TaskLoadMethod.proximity ? taskId : undefined
-        )
-      ).then(newTask =>
-        visitNewTask(challengeId, taskId, newTask, ownProps.history)
+      nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+        visitNewTask(ownProps, taskId, newTask)
       )
     },
+  }
+}
+
+/**
+ * Retrieve the task id from the route, falling back to the given defaultId if
+ * none is available.
+ */
+export const taskIdFromRoute = (props, defaultId) => {
+  const taskId = parseInt(_get(props, 'match.params.taskId'), 10)
+  return _isFinite(taskId) ? taskId : defaultId
+}
+
+/**
+ * Retrieve the challenge id from the route, falling back to the given
+ * defaultId if none is available.
+ */
+export const challengeIdFromRoute = (props, defaultId) => {
+  const challengeId =
+    parseInt(_get(props, 'match.params.challengeId'), 10)
+
+  return _isFinite(challengeId) ? challengeId : defaultId
+}
+
+/**
+ * Retrieve the virtual challenge id from the route, falling back to the given
+ * defaultId if none is available.
+ */
+export const virtualChallengeIdFromRoute = (props, defaultId) => {
+  const virtualChallengeId =
+    parseInt(_get(props, 'match.params.virtualChallengeId'), 10)
+
+  return _isFinite(virtualChallengeId) ? virtualChallengeId : defaultId
+}
+
+/**
+ * Load a new random task, handling the differences between standard challenges
+ * and virtual challenges.
+ */
+export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
+  // We need to make different requests depending on whether we're working on a
+  // virtual challenge or a standard challenge.
+  const virtualChallengeId =
+    virtualChallengeIdFromRoute(props, props.virtualChallengeId)
+
+  if (_isFinite(virtualChallengeId)) {
+    return dispatch(
+      loadRandomTaskFromVirtualChallenge(
+        virtualChallengeId,
+        taskLoadBy === TaskLoadMethod.proximity ? currentTaskId : undefined
+      )
+    )
+  }
+  else {
+    return dispatch(
+      loadRandomTaskFromChallenge(
+        challengeIdFromRoute(props, props.challengeId),
+        taskLoadBy === TaskLoadMethod.proximity ? currentTaskId : undefined
+      )
+    )
   }
 }
 
@@ -149,13 +195,23 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
  * Route to the given new task, if valid. Otherwise route back to the home
  * page.
  */
-export const visitNewTask = function(challengeId, currentTaskId, newTask, history) {
+export const visitNewTask = function(props, currentTaskId, newTask) {
   if (_isObject(newTask) && newTask.id !== currentTaskId) {
-    history.push(`/challenge/${challengeId}/task/${newTask.id}`)
+    // The route we use is different for virtual challenges vs standard
+    // challenges.
+    const virtualChallengeId =
+      virtualChallengeIdFromRoute(props, props.virtualChallengeId)
+    if (_isFinite(virtualChallengeId)) {
+      props.history.push(`/virtual/${virtualChallengeId}/task/${newTask.id}`)
+    }
+    else {
+      const challengeId = challengeIdFromRoute(props, props.challengeId)
+      props.history.push(`/challenge/${challengeId}/task/${newTask.id}`)
+    }
   }
   else {
     // Probably no tasks left in this challenge, back to challenges.
-    history.push('/')
+    props.history.push('/')
   }
 }
 

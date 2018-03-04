@@ -45,6 +45,11 @@ export default defineMessages({
     defaultMessage: "Unable to fetch task clusters",
   },
 
+  boundedTaskFetchFailure: {
+    id: 'Errors.boundedTask.fetchFailure',
+    defaultMessage: "Unable to fetch map-bounded tasks",
+  },
+
   challengeFetchFailure: {
     id: 'Errors.challenge.fetchFailure',
     defaultMessage: "Unable to retrieve latest challenge data from server."
@@ -60,6 +65,11 @@ export default defineMessages({
   challengeSaveFailure: {
     id: 'Errors.challenge.saveFailure',
     defaultMessage: "Unable to save your changes",
+  },
+
+  virtualChallengeCreateFailure: {
+    id: 'Errors.virtualChallenge.createFailure',
+    defaultMessage: "Unable to create a virtual challenge",
   },
 
   projectSaveFailure: {

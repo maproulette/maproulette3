@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { TransitionGroup,
          CSSTransition } from 'react-transition-group'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
@@ -61,7 +61,7 @@ export class TaskPane extends Component {
   }
 
   render() {
-    if (!_isNumber(_get(this.props, 'task.id'))) {
+    if (!_isFinite(_get(this.props, 'task.id'))) {
       return <BusySpinner />
     }
 

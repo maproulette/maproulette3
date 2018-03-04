@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import _isFinite from 'lodash/isFinite'
 import { FormattedMessage } from 'react-intl'
 import { TaskLoadMethod,
          messagesByLoadMethod }
@@ -15,8 +16,12 @@ import './TaskRandomnessControl.css'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskRandomnessControl extends Component {
-  loadBy = loadMethod =>
-    this.props.setTaskLoadBy(this.props.challengeId, loadMethod)
+  loadBy = loadMethod => {
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    this.props.challengeId
+    this.props.setTaskLoadBy(challengeId, isVirtual, loadMethod)
+  }
 
   render() {
     if (!this.props.user || !this.props.task) {

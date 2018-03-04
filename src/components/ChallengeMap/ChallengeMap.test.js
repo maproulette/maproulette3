@@ -20,10 +20,7 @@ beforeEach(() => {
       }
     },
     layerSourceId: "foo",
-    clusteredTasks: {
-      challengeId: challenge.id,
-      loading: false,
-    },
+    taskMarkers: [],
     setChallengeMapBounds: jest.fn(),
     updateBoundedChallenges: jest.fn(),
   }
@@ -72,14 +69,14 @@ test("rerenders if the challenge being browsed changes", () => {
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })
 
-test("rerenders if the challenge's clustered tasks have loaded", () => {
-  basicProps.clusteredTasks.loading = true
+test("rerenders if the challenge's tasks have loaded", () => {
+  basicProps.tasksLoading = true
   const wrapper = shallow(
     <ChallengeMap {...basicProps} />
   )
 
   const newProps = _cloneDeep(basicProps)
-  newProps.clusteredTasks.loading = false
+  newProps.tasksLoading = false
 
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })
@@ -98,8 +95,8 @@ test("moving the map signals that the challenge bounds are to be updated", () =>
   ).toBeCalledWith(basicProps.browsedChallenge.id, bounds, zoom)
 })
 
-test("a busy indicator is displayed if clustered tasks are loading", () => {
-  basicProps.clusteredTasks.loading = true
+test("a busy indicator is displayed if tasks are loading", () => {
+  basicProps.tasksLoading = true
 
   const wrapper = shallow(
     <ChallengeMap {...basicProps} />
@@ -111,7 +108,7 @@ test("a busy indicator is displayed if clustered tasks are loading", () => {
 })
 
 test("the busy indicator is removed once tasks are done loading", () => {
-  basicProps.clusteredTasks.loading = false
+  basicProps.tasksLoading = false
 
   const wrapper = shallow(
     <ChallengeMap {...basicProps} />

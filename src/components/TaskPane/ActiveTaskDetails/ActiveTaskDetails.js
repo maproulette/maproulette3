@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _startCase from 'lodash/startCase'
 import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
+import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -24,6 +26,7 @@ import PlaceDescription from '../PlaceDescription/PlaceDescription'
 import ChallengeShareControls from '../ChallengeShareControls/ChallengeShareControls'
 import WithDeactivateOnOutsideClick from
        '../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
+import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
 import './ActiveTaskDetails.css'
 
@@ -49,9 +52,13 @@ export class ActiveTaskDetails extends Component {
    * Invoked to toggle minimization of the sidebar
    */
   toggleIsMinimized = () => {
-    const challengeId = _get(this.props.task, 'parent.id')
-    if (_isNumber(challengeId)) {
-      this.props.setChallengeMinimization(challengeId, !this.props.minimizeChallenge)
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    _get(this.props.task, 'parent.id')
+    if (_isFinite(challengeId)) {
+      this.props.setChallengeMinimization(challengeId,
+                                          isVirtual,
+                                          !this.props.minimizeChallenge)
     }
   }
 
@@ -59,15 +66,23 @@ export class ActiveTaskDetails extends Component {
    * Invoked to toggle minimization of the challenge instructions.
    */
   toggleInstructionsCollapsed = () => {
-    const challengeId = _get(this.props.task, 'parent.id')
-    if (_isNumber(challengeId)) {
-      this.props.setInstructionsCollapsed(challengeId, !this.props.collapseInstructions)
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    _get(this.props.task, 'parent.id')
+    if (_isFinite(challengeId)) {
+      this.props.setInstructionsCollapsed(challengeId,
+                                          isVirtual,
+                                          !this.props.collapseInstructions)
     }
   }
 
   render() {
     if (!this.props.task) {
       return null
+    }
+
+    if (!_isObject(this.props.task.parent)) {
+      return <BusySpinner />
     }
 
     const isEditingTask = _get(this, 'props.editor.taskId') === this.props.task.id &&
@@ -200,6 +215,7 @@ export class ActiveTaskDetails extends Component {
                     }
                   </div>
                 }
+                {_isUndefined(taskInstructions) && <BusySpinner />}
               </div>
             }
 

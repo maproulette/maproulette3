@@ -12,7 +12,7 @@ import createBrowserHistory from 'history/createBrowserHistory'
 import PiwikReactRouter from 'piwik-react-router'
 import _get from 'lodash/get'
 import _keys from 'lodash/keys'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
 import App from './App';
 import BusySpinner from './components/BusySpinner/BusySpinner'
@@ -52,15 +52,14 @@ const {store} = initializePersistedStore((store) => {
   // Load current user. Look first for config from server, but if that's not
   // found then ensure user id from last session (if any) is still logged in.
   let currentUserId = parseInt(_get(configFromServer, 'userId'), 10)
-  if (!_isNumber(currentUserId) || isNaN(currentUserId) ||
-      currentUserId === GUEST_USER_ID) {
+  if (!_isFinite(currentUserId) || currentUserId === GUEST_USER_ID) {
     // If there's a current user from the last session, let's refresh their
     // user data and preferences (which will also ensure they're still logged
     // in with the server).
     currentUserId = _get(store.getState(), 'currentUser.userId')
   }
 
-  if (_isNumber(currentUserId) && currentUserId !== GUEST_USER_ID) {
+  if (_isFinite(currentUserId) && currentUserId !== GUEST_USER_ID) {
     store.dispatch(
       loadCompleteUser(currentUserId)
     ).then(() => store.dispatch(clearCheckingLoginStatus()))

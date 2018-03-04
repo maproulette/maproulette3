@@ -60,6 +60,7 @@ export class App extends Component {
         <Route path='/browse/challenges/:challengeId?' component={ChallengePane} />
         <Route exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
         <Route exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
+        <Route exact path='/virtual/:virtualChallengeId/task/:taskId' component={CurrentTaskPane} />
         <Route exact path='/task/:taskId' component={CurrentTaskPane} />
         <Route exact path='/about' component={AboutPane} />
         <Route path='/user/profile' component={UserProfile} />

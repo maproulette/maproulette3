@@ -94,6 +94,7 @@ ShallowWrapper {
                     defaultLayer="foo"
           />
 </EnhancedMap>,
+        false,
       ],
       "className": "full-screen-map",
     },
@@ -143,6 +144,7 @@ ShallowWrapper {
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
               defaultLayer="foo"
 />,
+            false,
           ],
           "initialBounds": Object {
             "_northEast": Object {
@@ -186,9 +188,11 @@ ShallowWrapper {
             "rendered": null,
             "type": [Function],
           },
+          false,
         ],
         "type": [Function],
       },
+      false,
     ],
     "type": "div",
   },
@@ -255,6 +259,7 @@ ShallowWrapper {
                         defaultLayer="foo"
             />
 </EnhancedMap>,
+          false,
         ],
         "className": "full-screen-map",
       },
@@ -304,6 +309,7 @@ ShallowWrapper {
               <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                 defaultLayer="foo"
 />,
+              false,
             ],
             "initialBounds": Object {
               "_northEast": Object {
@@ -347,9 +353,11 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
+            false,
           ],
           "type": [Function],
         },
+        false,
       ],
       "type": "div",
     },

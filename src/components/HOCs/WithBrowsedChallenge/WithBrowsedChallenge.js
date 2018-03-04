@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
+import _isFinite from 'lodash/isFinite'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
-import WithClusteredTasks from '../WithClusteredTasks/WithClusteredTasks'
 
 /**
  * WithBrowsedChallenge provides functions for starting and stopping browsing
@@ -15,10 +16,19 @@ import WithClusteredTasks from '../WithClusteredTasks/WithClusteredTasks'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const WithBrowsedChallenge = function(WrappedComponent) {
-  return class extends Component {
+  class _WithBrowsedChallenge extends Component {
     state = {
       browsedChallenge: null,
     }
+
+    /**
+     * Parses the challenge id from the matched params of the route
+     *
+     * @private
+     */
+    currentChallengeId = (props) =>
+      parseInt(_get(props, 'match.params.challengeId'), 10)
+
 
     /**
      * Updates the local state to set the browsedChallenge to that indicated in
@@ -28,9 +38,9 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
      * @private
      */
     updateBrowsedChallenge = props => {
-      const challengeId = parseInt(_get(props, 'match.params.challengeId'), 10)
+      const challengeId = this.currentChallengeId(props)
 
-      if (!isNaN(challengeId)) {
+      if (_isFinite(challengeId)) {
         if (_get(this.state, 'browsedChallenge.id') !== challengeId) {
           const challenge = _find(props.challenges, {id: challengeId})
 
@@ -73,14 +83,29 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
     }
 
     render() {
+      // Only pass down clusteredTasks if they match this challenge.
+      const challengeId = this.currentChallengeId(this.props)
+      const clusteredTasks = challengeId ===
+                             _get(this.props, 'clusteredTasks.challengeId') ?
+            this.props.clusteredTasks :
+            null
+
       return (
         <WrappedComponent browsedChallenge = {this.state.browsedChallenge}
                           startBrowsingChallenge={this.startBrowsingChallenge}
                           stopBrowsingChallenge={this.stopBrowsingChallenge}
-                          {..._omit(this.props, 'entities')} />
+                          clusteredTasks={clusteredTasks}
+                          {..._omit(this.props, ['entities', 'clusteredTasks'])} />
       )
     }
   }
+
+  _WithBrowsedChallenge.propTypes = {
+    clusteredTasks: PropTypes.object,
+    fetchClusteredTasks: PropTypes.func.isRequired,
+  }
+
+  return _WithBrowsedChallenge
 }
 
 const mapStateToProps = state => ({
@@ -88,4 +113,4 @@ const mapStateToProps = state => ({
 })
 
 export default WrappedComponent =>
-  connect(mapStateToProps)(WithClusteredTasks(WithBrowsedChallenge(WrappedComponent)))
+  connect(mapStateToProps)(WithBrowsedChallenge(WrappedComponent))

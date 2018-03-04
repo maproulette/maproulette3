@@ -7,6 +7,7 @@ import { mapStateToProps,
 import { taskDenormalizationSchema,
          loadCompleteTask,
          loadRandomTaskFromChallenge,
+         loadRandomTaskFromVirtualChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
 import { TaskLoadMethod }
@@ -21,6 +22,7 @@ denormalize.mockImplementation((challenge, schema, entities) => challenge)
 
 let task = null
 let challenge = null
+let virtualChallenge = null
 let completionStatus = null
 let basicState = null
 
@@ -31,6 +33,11 @@ beforeEach(() => {
     difficulty: "hard",
     actions: {available: 3},
     enabled: true,
+  }
+
+  virtualChallenge = {
+    id: 246,
+    name: "virtualChallenge246",
   }
 
   task = {
@@ -51,6 +58,9 @@ beforeEach(() => {
       },
     },
   }
+
+  loadRandomTaskFromChallenge.mockClear()
+  loadRandomTaskFromVirtualChallenge.mockClear()
 })
 
 test("mapStateToProps maps task from the taskId in the route", () => {
@@ -72,15 +82,6 @@ test("mapDispatchToProps maps some functions", () => {
   const mappedProps = mapDispatchToProps(dispatch, {})
 
   expect(mappedProps).toMatchSnapshot()
-})
-
-test("mapDispatchToProps loadTask calls loadCompleteTask", () => {
-  const dispatch  = jest.fn(() => Promise.resolve())
-  const mappedProps = mapDispatchToProps(dispatch, {})
-
-  mappedProps.loadTask(task.id)
-  expect(dispatch).toBeCalled()
-  expect(loadCompleteTask).toBeCalledWith(task.id)
 })
 
 test("mapDispatchToProps completeTask calls completeTask", () => {
@@ -129,7 +130,7 @@ test("completeTask calls loadRandomTaskFromChallenge without proximate task by d
    push: jest.fn(),
   }
 
-  const mappedProps = mapDispatchToProps(dispatch, {history})
+  const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
   mappedProps.completeTask(task.id, challenge.id, completionStatus)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, undefined)
@@ -141,7 +142,7 @@ test("completeTask calls loadRandomTaskFromChallenge with task if proximate load
    push: jest.fn(),
   }
 
-  const mappedProps = mapDispatchToProps(dispatch, {history})
+  const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
   mappedProps.completeTask(task.id, challenge.id,
                            completionStatus, "", TaskLoadMethod.proximity)
@@ -170,10 +171,27 @@ test("completeTask routes the user to the new task if there is one", async () =>
     push: jest.fn(),
   }
 
-  const mappedProps = mapDispatchToProps(dispatch, {history})
+  const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
   await mappedProps.completeTask(task.id, challenge.id, completionStatus)
   expect(history.push).toBeCalledWith(`/challenge/${challenge.id}/task/${nextTask.id}`)
+})
+
+test("completeTask routes the user to the new task in a virtual challenge", async () => {
+  const nextTask = {id: 654}
+
+  completeTask.mockReturnValueOnce(Promise.resolve())
+  loadRandomTaskFromVirtualChallenge.mockReturnValueOnce(Promise.resolve(nextTask))
+  const dispatch = jest.fn(value => value)
+  const history = {
+    push: jest.fn(),
+  }
+
+  const mappedProps =
+    mapDispatchToProps(dispatch, {history, virtualChallengeId: virtualChallenge.id})
+
+  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  expect(history.push).toBeCalledWith(`/virtual/${virtualChallenge.id}/task/${nextTask.id}`)
 })
 
 test("completeTask routes the user home if the next task isn't new", async () => {

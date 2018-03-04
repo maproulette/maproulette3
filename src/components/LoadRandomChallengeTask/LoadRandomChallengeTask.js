@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
+import _isFinite from 'lodash/isFinite'
 import { loadRandomTaskFromChallenge } from '../../services/Task/Task'
 import BusySpinner from '../BusySpinner/BusySpinner'
 
@@ -9,7 +10,7 @@ const _LoadRandomChallengeTask = class extends Component {
   componentDidMount() {
     const challengeId = parseInt(_get(this.props, 'match.params.challengeId'), 10)
 
-    if (!isNaN(challengeId)) {
+    if (_isFinite(challengeId)) {
       this.props.loadRandomTaskFromChallenge(challengeId)
         .then(task => this.props.history.replace(
                 `/challenge/${challengeId}/task/${task.id}`)

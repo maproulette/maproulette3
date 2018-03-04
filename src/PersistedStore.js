@@ -7,15 +7,19 @@ import { visibleLayer } from './services/VisibleLayer/VisibleLayer'
 import { currentUser, userEntities } from './services/User/User'
 import { projectEntities } from './services/Project/Project'
 import { challengeEntities } from './services/Challenge/Challenge'
+import { virtualChallengeEntities }
+       from './services/VirtualChallenge/VirtualChallenge'
 import { taskEntities } from './services/Task/Task'
 import { currentClusteredTasks } from './services/Task/ClusteredTask'
+import { currentBoundedTasks } from './services/Task/BoundedTask'
 import { commentEntities } from './services/Comment/Comment'
 import { placeEntities } from './services/Place/Place'
 import { currentFilters } from './services/Filter/Filter'
 import { currentSearch } from './services/Search/Search'
 import { openEditor } from './services/Editor/Editor'
 import { currentMapBounds } from './services/MapBounds/MapBounds'
-import { currentKeyboardShortcuts } from './services/KeyboardShortcuts/KeyboardShortcuts'
+import { currentKeyboardShortcuts }
+       from './services/KeyboardShortcuts/KeyboardShortcuts'
 import { currentStatus } from './services/Status/Status'
 import { currentErrors } from './services/Error/Error'
 import { adminContext } from './services/AdminContext/AdminContext'
@@ -99,6 +103,7 @@ export const initializePersistedStore = callback => {
       'openEditor',
       'currentKeyboardShortcuts',
       'currentClusteredTasks',
+      'currentBoundedTasks',
     ],
   }
 
@@ -108,6 +113,7 @@ export const initializePersistedStore = callback => {
     users: userEntities,
     projects: projectEntities,
     challenges: challengeEntities,
+    virtualChallenges: virtualChallengeEntities,
     tasks: taskEntities,
     comments: commentEntities,
     places: placeEntities,
@@ -127,6 +133,7 @@ export const initializePersistedStore = callback => {
       adminContext,
       currentPreferences,
       currentClusteredTasks,
+      currentBoundedTasks,
       entities,
   })
 

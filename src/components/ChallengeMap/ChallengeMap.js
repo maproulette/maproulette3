@@ -7,10 +7,8 @@ import { point, featureCollection } from '@turf/helpers'
 import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
-import _each from 'lodash/each'
 import _map from 'lodash/map'
 import { latLng } from 'leaflet'
-import { TaskStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
@@ -52,21 +50,14 @@ export class ChallengeMap extends Component {
       return true
     }
 
-    // the challenge id of the clustered tasks change
-    if (_get(nextProps, 'clusteredTasks.challengeId') !==
-        _get(this.props, 'clusteredTasks.challengeId')) {
+    // the task markers have changed
+    if (_get(nextProps, 'taskMarkers.length') !==
+        _get(this.props, 'taskMarkers.length')) {
       return true
     }
 
-    // the loading status of clustered tasks change
-    if (_get(nextProps, 'clusteredTasks.loading') !==
-        _get(this.props, 'clusteredTasks.loading')) {
-      return true
-    }
-
-    // the clustered tasks themselves change
-    if (_get(nextProps, 'clusteredTasks.tasks.length') !==
-        _get(this.props, 'clusteredTasks.tasks.length')) {
+    // the loading status of tasks change
+    if (!!nextProps.tasksLoading !== !!this.props.tasksLoading) {
       return true
     }
 
@@ -108,45 +99,23 @@ export class ChallengeMap extends Component {
       return null
     }
 
-    let fetchingClusteredTasks = false
-    const markers = []
     let bounding = null
-
-    // If we have clustered tasks for our challenge, create markers for them.
-    if (_get(this.props, 'clusteredTasks.challengeId') ===
-        this.props.browsedChallenge.id) {
-      fetchingClusteredTasks = this.props.clusteredTasks.loading
-
-      if (_get(this.props, 'clusteredTasks.tasks.length') > 0) {
-        _each(this.props.clusteredTasks.tasks, task => {
-          // Only show created or skipped tasks
-          if (task.status === TaskStatus.created ||
-              task.status === TaskStatus.skipped) {
-            markers.push({
-              position: [task.point.lat, task.point.lng],
-              options: {
-                challengeId: task.parent,
-                taskId: task.id,
-              },
-            })
-          }
-        })
-      }
-    }
-
     // Get the challenge bounding so we know which part of the map to display.
     // Right now API double-nests bounding, but that will likely change.
     bounding = _get(this.props, 'browsedChallenge.bounding.bounding') ||
                _get(this.props, 'browsedChallenge.bounding')
 
 
+    const hasTaskMarkers = _get(this.props, 'taskMarkers.length', 0) > 0
+
     // If the challenge doesn't have a bounding polygon, build one from the
-    // markers instead. This is extra work and requires waiting for the clustered
-    // task data to arrive, so not ideal.
-    if (!bounding && markers.length > 0) {
+    // markers instead. This is extra work and requires waiting for the task
+    // data to arrive, so not ideal.
+    if (!bounding && hasTaskMarkers) {
       bounding = bboxPolygon(
         bbox(featureCollection(
-          _map(markers, marker => point([marker.position[1], marker.position[0]]))
+          _map(this.props.taskMarkers,
+               marker => point([marker.position[1], marker.position[0]]))
         ))
       )
     }
@@ -160,16 +129,17 @@ export class ChallengeMap extends Component {
                      initialBounds = {this.currentBounds}
                      zoomControl={false} animate={true}
                      features={bounding}
-                     justFitFeatures={markers.length > 0}
+                     justFitFeatures={hasTaskMarkers}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
           <VisibleTileLayer defaultLayer={this.props.layerSourceId} {...this.props} />
-          {markers.length > 0 &&
-           <MarkerClusterGroup markers={markers} onMarkerClick={this.markerClicked} />
+          {hasTaskMarkers &&
+            <MarkerClusterGroup markers={this.props.taskMarkers}
+                                onMarkerClick={this.markerClicked} />
           }
         </EnhancedMap>
 
-        {fetchingClusteredTasks && <BusySpinner />}
+        {!!this.props.tasksLoading && <BusySpinner />}
       </div>
     )
   }
@@ -178,6 +148,10 @@ export class ChallengeMap extends Component {
 ChallengeMap.propTypes = {
   /** The current challenge being browsed */
   browsedChallenge: PropTypes.object.isRequired,
+  /** Map markers for the tasks to display */
+  taskMarkers: PropTypes.array.isRequired,
+  /** Set to true if tasks are still loading */
+  tasksLoading: PropTypes.bool,
   /** Invoked when the user moves the map */
   setChallengeMapBounds: PropTypes.func.isRequired,
   /** Invoked when the user clicks on an individual task marker */

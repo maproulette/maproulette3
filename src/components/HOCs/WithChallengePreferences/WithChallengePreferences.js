@@ -4,7 +4,8 @@ import _isNumber from 'lodash/isNumber'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { setPreferences,
-         CHALLENGES_PREFERENCE_GROUP }
+         CHALLENGES_PREFERENCE_GROUP,
+         VIRTUAL_CHALLENGES_PREFERENCE_GROUP }
        from '../../../services/Preferences/Preferences'
 
 /**
@@ -19,49 +20,56 @@ const WithChallengePreferences = WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
 export const mapStateToProps = (state, ownProps) => {
-  const challengeId = _get(ownProps, 'challenge.id', ownProps.challengeId)
+  const isVirtual = _isNumber(ownProps.virtualChallengeId)
+  const challengeId = isVirtual ? ownProps.virtualChallengeId :
+                      _get(ownProps, 'challenge.id', ownProps.challengeId)
   const mappedProps = {}
 
   if (_isNumber(challengeId)) {
     mappedProps.minimizeChallenge =
       _get(state.currentPreferences,
-           `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.minimize`,
+           `${preferenceGroup(isVirtual)}.${challengeId}.minimize`,
            false)
 
     mappedProps.collapseInstructions =
       _get(state.currentPreferences,
-           `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.collapseInstructions`,
+           `${preferenceGroup(isVirtual)}.${challengeId}.collapseInstructions`,
            false)
 
     mappedProps.taskLoadBy =
       _get(state.currentPreferences,
-           `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.taskLoadMethod`,
+           `${preferenceGroup(isVirtual)}.${challengeId}.taskLoadMethod`,
            TaskLoadMethod.random)
 
     mappedProps.visibleMapLayer =
       _get(state.currentPreferences,
-           `${CHALLENGES_PREFERENCE_GROUP}.${challengeId}.visibleMapLayer`)
+           `${preferenceGroup(isVirtual)}.${challengeId}.visibleMapLayer`)
   }
 
   return mappedProps
 }
 
 export const mapDispatchToProps = dispatch => ({
-  setChallengeMinimization: (challengeId, minimize=false) =>
-    dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
+  setChallengeMinimization: (challengeId, isVirtual, minimize=false) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual),
                             {[challengeId]: {minimize}})),
 
-  setInstructionsCollapsed: (challengeId, collapseInstructions=false) =>
-    dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
+  setInstructionsCollapsed: (challengeId, isVirtual, collapseInstructions=false) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual),
                             {[challengeId]: {collapseInstructions}})),
 
-  setTaskLoadBy: (challengeId, taskLoadMethod) =>
-    dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
+  setTaskLoadBy: (challengeId, isVirtual, taskLoadMethod) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual),
                             {[challengeId]: {taskLoadMethod}})),
 
-  setVisibleMapLayer: (challengeId, visibleMapLayerId) =>
-    dispatch(setPreferences(CHALLENGES_PREFERENCE_GROUP,
+  setVisibleMapLayer: (challengeId, isVirtual, visibleMapLayerId) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual),
                             {[challengeId]: {visibleMapLayer: visibleMapLayerId}})),
 })
+
+export const preferenceGroup = function(isVirtualChallenge) {
+  return isVirtualChallenge ? VIRTUAL_CHALLENGES_PREFERENCE_GROUP :
+                              CHALLENGES_PREFERENCE_GROUP
+}
 
 export default WithChallengePreferences
