@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Form from 'react-jsonschema-form'
 import _merge from 'lodash/merge'
+import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
@@ -41,21 +42,34 @@ export class EditTask extends Component {
 
   changeHandler = ({formData}) => this.setState({formData})
 
+  /**
+   * Reroute after challenge owner is done, either to Task Review if we
+   * came from there, or to Challenge Management if not.
+   */
+  rerouteAfterCompletion = () => {
+    if (_get(this.props, 'location.state.fromTaskReview')) {
+      this.props.history.push(
+        `/admin/project/${this.props.projectId}/` +
+        `challenge/${this.props.challengeId}/task/${this.props.task.id}/review`
+      )
+    }
+    else {
+      this.props.history.push(`/admin/project/${this.props.projectId}/` +
+                              `challenge/${this.props.challengeId}`)
+    }
+  }
+
   finish = ({formData, errors}) => {
     if (!this.state.isSaving && errors.length === 0) {
       this.setState({isSaving: true})
 
-      this.props.saveTask(formData).then(task => {
-        this.props.history.push(
-          `/admin/project/${this.props.projectId}/challenge/${this.props.challengeId}`)
-      })
+      this.props.saveTask(formData).then(task =>
+        this.rerouteAfterCompletion()
+      )
     }
   }
 
-  cancel = () => {
-    this.props.history.push(
-      `/admin/project/${this.props.projectId}/challenge/${this.props.challengeId}`)
-  }
+  cancel = () => this.rerouteAfterCompletion()
 
   render() {
     const taskData = _merge({}, this.props.task, this.state.formData)
@@ -122,7 +136,7 @@ export class EditTask extends Component {
           <div className="form-controls">
             <button className="button is-secondary is-outlined"
                     disabled={this.state.isSaving}
-                    onClick={this.props.cancel}>
+                    onClick={this.cancel}>
               <FormattedMessage {...messages.cancel} />
             </button>
 
