@@ -36,6 +36,11 @@ export default defineMessages({
     defaultMessage: "Created:",
   },
 
+  lastModifiedDate: {
+    id: "Admin.Challenge.fields.lastModifiedDate.label",
+    defaultMessage: "Modified:",
+  },
+
   status: {
     id: "Admin.Challenge.fields.status.label",
     defaultMessage: "Status:",
