@@ -41,6 +41,7 @@ export class ActiveTaskControls extends Component {
     this.props.editTask(value, this.props.task, this.props.mapBounds.task)
   }
 
+  /** Indicate the editor has been closed without completing the task */
   cancelEditing = () => {
     this.setState({taskBeingCompleted: null})
     this.props.closeEditor()
@@ -53,6 +54,7 @@ export class ActiveTaskControls extends Component {
                             taskStatus, this.state.comment, this.props.taskLoadBy)
   }
 
+  /** Move to the next task without modifying the task status */
   next = (challengeId, taskId) => {
     this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment)
   }

@@ -63,8 +63,12 @@ export class TaskAnalysisTable extends Component {
       sortable: false,
       Cell: ({row}) =>
         <div className="task-row-controls">
-          <Link to={`${taskBaseRoute}/${row.id}/review`}>Review</Link>
-          <Link to={`${taskBaseRoute}/${row.id}/edit`}>Edit</Link>
+          <Link to={`${taskBaseRoute}/${row.id}/review`}>
+            <FormattedMessage {...messages.reviewTaskLabel} />
+          </Link>
+          <Link to={`${taskBaseRoute}/${row.id}/edit`}>
+            <FormattedMessage {...messages.editTaskLabel} />
+          </Link>
         </div>
     }]
 

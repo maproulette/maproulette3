@@ -5,15 +5,19 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   previousTaskLabel: {
-    id: 'TaskReview.controls.previousTask.label',
-    defaultMessage: 'Prior Task',
+    id: "Admin.TaskReview.controls.previousTask.label",
+    defaultMessage: "Prior Task",
   },
   nextTaskLabel: {
-    id: 'TaskReview.controls.nextTask.label',
-    defaultMessage: 'Next Task',
+    id: "Admin.TaskReview.controls.nextTask.label",
+    defaultMessage: "Next Task",
   },
   editTaskLabel: {
-    id: 'TaskReview.controls.editTask.label',
-    defaultMessage: 'Edit Task',
+    id: "Admin.TaskReview.controls.editTask.label",
+    defaultMessage: "Edit Task",
+  },
+  modifyTaskLabel: {
+    id: "Admin.TaskReview.controls.modifyTask.label",
+    defaultMessage: "Modify Task Data",
   },
 })

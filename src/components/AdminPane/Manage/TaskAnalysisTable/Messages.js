@@ -33,4 +33,14 @@ export default defineMessages({
     id: "Task.fields.status.label",
     defaultMessage: "Status",
   },
+
+  reviewTaskLabel: {
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
+    defaultMessage: "Review",
+  },
+
+  editTaskLabel: {
+    id: "Admin.TaskAnalysisTable.controls.editTask.label",
+    defaultMessage: "Edit",
+  },
 })
