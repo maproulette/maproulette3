@@ -68,6 +68,7 @@
     "Admin.ManageChallenges.search.placeholder": "Name",
     "Admin.ManageChallenges.allProjectChallenge": "Alle",
     "Admin.Challenge.fields.creationDate.label": "Erstellt",
+    "Admin.Challenge.fields.lastModifiedDate.label": "Geändert",
     "Admin.Challenge.fields.status.label": "Status",
     "Admin.Challenge.controls.startChallenge.label": "Starten",
     "Admin.Challenge.activity.label": "Neueste Aktivität",

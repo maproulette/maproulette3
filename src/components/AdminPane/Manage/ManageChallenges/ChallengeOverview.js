@@ -29,7 +29,7 @@ export class ChallengeOverview extends Component {
       <div className="challenge-overview">
         <section className="challenge-overview--status">
           <div className="columns">
-            <div className="column is-narrow status-label">
+            <div className="column is-one-quarter status-label">
               <FormattedMessage {...messages.creationDate} />
             </div>
 
@@ -40,9 +40,21 @@ export class ChallengeOverview extends Component {
                              day='2-digit' />
             </div>
           </div>
+          <div className="columns">
+            <div className="column is-one-quarter status-label">
+              <FormattedMessage {...messages.lastModifiedDate} />
+            </div>
+
+            <div className="column is-narrow">
+              <FormattedDate value={new Date(this.props.challenge.modified)}
+                             year='numeric'
+                             month='long'
+                             day='2-digit' />
+            </div>
+          </div>
 
           <div className="columns">
-            <div className="column is-narrow status-label">
+            <div className="column is-one-quarter status-label">
               <FormattedMessage {...messages.status} />
             </div>
 
