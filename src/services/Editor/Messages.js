@@ -10,14 +10,14 @@ export default defineMessages({
   },
   id: {
     id: "Editor.id.label",
-    defaultMessage: "iD"
+    defaultMessage: "Edit in iD (web editor)"
   },
   josm: {
     id: "Editor.josm.label",
-    defaultMessage: "JOSM"
+    defaultMessage: "Edit in JOSM"
   },
   josmLayer: {
     id: "Editor.josmLayer.label",
-    defaultMessage: "JOSM with new layer"
+    defaultMessage: "Edit in new JOSM layer"
   },
 })
