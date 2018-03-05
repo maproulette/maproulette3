@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-alpha.7] - 2018-03-05
+### Added
+- Localization and partial translations for fr, es, de, and af locales derived
+  from existing translations in MR2 project (#136).
+- User settings for locale, default editor, and custom basemap on the
+  User Profile page (#83).
+- Experimental support (disabled by default) for map-bounded task browsing and
+  creation of virtual challenges (#135).
+- Display challenge last-modified timestamp to challenge owners (#142).
+- Offer edit and modify controls in task-review mode (#139).
+
+### Changed
+- Update styling on View Challenge page for challenge owners.
+- Change label of Fix button to "Edit" (#140).
+- Other minor styling and labeling updates.
+
+### Fixed
+- Honor challenge and user custom basemaps (#144).
+
+
 ## [v3.00-alpha.6] - 2018-02-26
 ### Added
 - Visual priority-rule builder for tasks when creating/editing challenges.
