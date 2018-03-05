@@ -265,7 +265,7 @@ export class ChallengeTaskMap extends Component {
            className={classNames('challenge-task-map', this.props.className)}>
         {canUncluster &&
          <div className="field cluster-tasks-control" onClick={this.toggleClusterTasks}>
-           <input type="checkbox" className="switch is-rounded"
+           <input type="checkbox" className="switch is-rounded short-and-wide"
                    checked={this.state.clusterTasks}
                    onChange={() => null} />
            <label>

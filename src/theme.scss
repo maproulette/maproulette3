@@ -261,3 +261,28 @@ code {
   font-family: $family-sans-serif;
   font-size: inherit;
 }
+
+.button.is-primary.is-outlined {
+  background-color: $white;
+}
+
+// Add a short-and-wide variant of the rounded Bulma switch
+.switch[type="checkbox"].is-rounded.short-and-wide + label::before {
+  width: 60px;
+  height: 20px;
+}
+
+.switch[type="checkbox"].is-rounded.short-and-wide + label::after {
+  height: 14px;
+  width: 14px;
+  top: 3px;
+}
+
+.switch[type="checkbox"].short-and-wide:checked + label::after {
+  left: 41px;
+}
+
+.switch[type="checkbox"].short-and-wide + label {
+  padding-left: 74px;
+  padding-top: 0;
+}

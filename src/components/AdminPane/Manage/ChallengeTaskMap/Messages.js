@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   clusterTasksLabel: {
     id: "Admin.ChallengeTaskMap.controls.clusterTasks.label",
-    defaultMessage: "Cluster Tasks",
+    defaultMessage: "Group Tasks",
   },
 
   reviewTaskLabel: {

@@ -13,12 +13,16 @@ $grey-light-less: #979797;
 $grey-light: #AAAAAA;
 $grey-lighter: #CCCCCC;
 $grey-lighter-more: #D8D8D8;
+$grey-lightest-less: #E3E3E3;
 $grey-lightest: #EEEEEE;
 $grey-lightest-more: #F6F6F6;
 $green: #00A592; // persian green
 $green-light: #A4DBD5;
 $yellow: #FCCB4E; // mustard
 $coral: #E05054; // coral
+$orange: #EA8433;
+$cyan: #38E5DB;
+$purple: #9D6ADC;
 
 $primary: $blue;
 $danger: $coral;
@@ -31,13 +35,13 @@ $box-shadow-color: rgba(0,0,0, 0.15);
 
 // Status colors
 // From https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors
-$status-created-color: #0082C8;
-$status-fixed-color: #3CB44B;
-$status-falsePositive-color: #F58231;
-$status-skipped-color: #FFE119;
-$status-deleted-color: #46F0F0;
-$status-alreadyFixed-color: #911EB4;
-$status-tooHard-color: #E6194B;
+$status-created-color: $blue;
+$status-fixed-color: $green;
+$status-falsePositive-color: $orange;
+$status-skipped-color: $yellow;
+$status-deleted-color: $cyan;
+$status-alreadyFixed-color: $purple;
+$status-tooHard-color: $coral;
 
 // Typography
 $family-sans-serif: 'Roboto', sans-serif;
@@ -47,6 +51,7 @@ $weight-normal: 400;
 $weight-semibold: 500;
 $weight-bold: 700;
 
+$size-6-plus: 18px;
 $size-7: 0.875rem;
 $size-8: 0.75rem;
 $size-9: 0.625rem;
