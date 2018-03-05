@@ -146,17 +146,17 @@ ShallowWrapper {
       "options": Array [
         Object {
           "key": 0,
-          "text": "iD",
+          "text": "Edit in iD (web editor)",
           "value": 0,
         },
         Object {
           "key": 1,
-          "text": "JOSM",
+          "text": "Edit in JOSM",
           "value": 1,
         },
         Object {
           "key": 2,
-          "text": "JOSM with new layer",
+          "text": "Edit in new JOSM layer",
           "value": 2,
         },
       ],
@@ -293,17 +293,17 @@ ShallowWrapper {
         "options": Array [
           Object {
             "key": 0,
-            "text": "iD",
+            "text": "Edit in iD (web editor)",
             "value": 0,
           },
           Object {
             "key": 1,
-            "text": "JOSM",
+            "text": "Edit in JOSM",
             "value": 1,
           },
           Object {
             "key": 2,
-            "text": "JOSM with new layer",
+            "text": "Edit in new JOSM layer",
             "value": 2,
           },
         ],

@@ -33,18 +33,6 @@
     margin-bottom: 20px;
   }
 
-  &__task-comment {
-    width: 100%;
-
-    input {
-      width: 100%;
-      font-size: 16px;
-      padding: 5px;
-      border: 2px solid $grey;
-      border-radius: $radius-medium;
-    }
-  }
-
   &.is-minimized {
     .active-task-controls__control-block {
       flex-direction: column;
