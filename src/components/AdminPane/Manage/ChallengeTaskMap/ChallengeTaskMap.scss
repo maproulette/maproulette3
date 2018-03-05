@@ -41,6 +41,7 @@
   .leaflet-container {
     height: 400px;
     width: auto;
+    border-radius: $radius-medium;
 
     .leaflet-popup-content-wrapper {
       .leaflet-popup-content {
@@ -60,14 +61,15 @@
 
   .cluster-tasks-control {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    bottom: 10px;
+    right: 10px;
     z-index: $layer-map-control;
     color: $green;
     background-color: $white;
-    padding: 5px;
     border: 1px solid $grey-lighter;
-    border-radius: $radius-medium;
+    border-radius: 30px;
+    padding: 5px 8px;
+    padding-right: 15px;
   }
 
   .greyscale-cluster {

@@ -10,7 +10,7 @@
   "Admin.ChallengeComments.controls.export.label": "Export",
   "Challenge.metrics.tasks.heading": "Tasks",
   "Challenge.metrics.tasks.available.heading": "Remaining",
-  "Admin.ChallengeTaskMap.controls.clusterTasks.label": "Cluster Tasks",
+  "Admin.ChallengeTaskMap.controls.clusterTasks.label": "Group Tasks",
   "Admin.ChallengeTaskMap.controls.reviewTask.label": "Review Task",
   "Admin.ChallengeTaskMap.controls.editTask.label": "Edit Task",
   "Admin.Task.fields.name.label": "Task:",

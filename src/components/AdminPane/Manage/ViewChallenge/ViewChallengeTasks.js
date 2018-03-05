@@ -62,13 +62,13 @@ export class ViewChallengeTasks extends Component {
 
     // Use CSS Modules once supported by create-react-app
     const statusColors = {
-      [TaskStatus.created]: '#0082C8',       // $status-created-color
-      [TaskStatus.fixed]: '#3CB44B',         // $status-fixed-color
-      [TaskStatus.falsePositive]: '#F58231', // $status-falsePositive-color
-      [TaskStatus.skipped]: '#FFE119',       // $status-skipped-color
-      [TaskStatus.deleted]: '#46F0F0',       // $status-deleted-color
-      [TaskStatus.alreadyFixed]: '#911EB4',  // $status-alreadyFixed-color
-      [TaskStatus.tooHard]: '#E6194B',       // $status-tooHard-color
+      [TaskStatus.created]: '#2281C2',       // $status-created-color
+      [TaskStatus.fixed]: '#00A592',         // $status-fixed-color
+      [TaskStatus.falsePositive]: '#EA8433', // $status-falsePositive-color
+      [TaskStatus.skipped]: '#FCCB4E',       // $status-skipped-color
+      [TaskStatus.deleted]: '#38E5DB',       // $status-deleted-color
+      [TaskStatus.alreadyFixed]: '#9D6ADC',  // $status-alreadyFixed-color
+      [TaskStatus.tooHard]: '#E05054',       // $status-tooHard-color
     }
 
     const statusFilters = _map(TaskStatus, status => (
@@ -93,10 +93,6 @@ export class ViewChallengeTasks extends Component {
 
     return (
       <div className='admin__manage-tasks'>
-        <div className="status-filter-options">
-          {statusFilters}
-        </div>
-
         <MapPane>
           <ChallengeTaskMap taskInfo={this.props.taskInfo}
                             setChallengeOwnerMapBounds={this.props.setChallengeOwnerMapBounds}
@@ -108,6 +104,11 @@ export class ViewChallengeTasks extends Component {
                             defaultLayer={layerSourceWithId(MAPBOX_LIGHT)}
                             {...this.props} />
         </MapPane>
+
+        <div className="status-filter-options">
+          {statusFilters}
+        </div>
+
         <TaskAnalysisTable filterOptions={filterOptions}
                            totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
                            {...this.props} />

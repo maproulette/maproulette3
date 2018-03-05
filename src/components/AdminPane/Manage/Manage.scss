@@ -42,6 +42,7 @@
 
     li.is-active a {
       color: $green;
+      font-weight: $weight-semibold;
 
       .busy-spinner {
         margin-left: 10px;
@@ -62,7 +63,7 @@
   }
 
   &__controls.columns {
-    font-size: $size-4;
+    font-size: $size-5;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -73,7 +74,6 @@
 
       a {
         color: $grey-light;
-        font-weight: $weight-light;
 
         &:hover {
           color: $grey-darkest;
@@ -107,6 +107,7 @@
     flex: 2 1 350px;
     margin-right: 15px;
     padding-bottom: 0;
+    box-shadow: 0 2px 4px 0px $box-shadow-color;
 
     &.is-minimized {
       min-width: 50px;

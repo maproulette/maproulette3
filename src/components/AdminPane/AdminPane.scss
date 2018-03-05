@@ -11,13 +11,18 @@
   .admin-pane {
     padding: 10px 40px 20px 40px;
     width: 100%;
-    max-width: 1250px;
+    max-width: 1300px;
   }
 
   h1 {
     font-size: $size-2;
     font-weight: $title-weight;
     color: $title-color;
+  }
+
+  h3.subtitle {
+    color: $primary;
+    font-weight: $weight-normal;
   }
 
   .search-box {
@@ -37,4 +42,34 @@
   &--intro {
     margin-bottom: 1.5em;
   }
+
+  .tabs {
+    ul {
+      border-bottom: 2px solid $grey-lightest-less;
+
+      li {
+        a {
+          font-size: $size-5;
+          color: $green;
+          font-weight: $weight-light;
+          letter-spacing: $letter-spacing-medium;
+          padding: 10px 0px 12px 0px;
+          margin: 0px 13px;
+          border-bottom: none;
+        }
+
+        &.is-active {
+          margin-bottom: -2px;
+
+          a {
+            font-weight: $weight-semibold;
+            color: $green;
+            border-bottom: 3px solid $green;
+            padding-bottom: 11px;
+          }
+        }
+      }
+    }
+  }
+
 }

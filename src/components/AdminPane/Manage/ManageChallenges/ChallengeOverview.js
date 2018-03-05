@@ -27,13 +27,13 @@ export class ChallengeOverview extends Component {
 
     return (
       <div className="challenge-overview">
-        <section className="challenge-overview--status">
+        <section className="challenge-overview__status">
           <div className="columns">
             <div className="column is-one-quarter status-label">
               <FormattedMessage {...messages.creationDate} />
             </div>
 
-            <div className="column is-narrow">
+            <div className="column is-narrow status-value">
               <FormattedDate value={new Date(this.props.challenge.created)}
                              year='numeric'
                              month='long'
@@ -45,7 +45,7 @@ export class ChallengeOverview extends Component {
               <FormattedMessage {...messages.lastModifiedDate} />
             </div>
 
-            <div className="column is-narrow">
+            <div className="column is-narrow status-value">
               <FormattedDate value={new Date(this.props.challenge.modified)}
                              year='numeric'
                              month='long'
@@ -58,14 +58,15 @@ export class ChallengeOverview extends Component {
               <FormattedMessage {...messages.status} />
             </div>
 
-            <div className="column is-narrow">
+            <div className="column is-narrow status-value">
               <FormattedMessage {...messagesByStatus[status]} />
             </div>
           </div>
 
           {isUsableChallengeStatus(status) &&
            <div className="view-challenge">
-             <Link to={`/challenge/${this.props.challenge.id}`}>
+             <Link to={`/challenge/${this.props.challenge.id}`}
+                   className="button is-outlined is-primary start-challenge-control">
                <FormattedMessage {...messages.startChallengeLabel} />
              </Link>
            </div>

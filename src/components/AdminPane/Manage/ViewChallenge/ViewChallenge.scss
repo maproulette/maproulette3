@@ -1,6 +1,10 @@
 @import '../../../../variables.scss';
 
 .admin__manage.view-challenge {
+  .sidebar {
+    min-width: 375px;
+  }
+
   .admin__manage__primary-content {
     padding-top: 0;
 
@@ -29,7 +33,7 @@
   }
 
   .tab-content {
-    padding: 0 15px 15px 15px;
+    padding: 15px 30px 20px 30px;
     min-height: 300px;
   }
 
@@ -38,7 +42,9 @@
       margin-bottom: 15px;
     }
 
-    &--status {
+    &__status {
+      margin-bottom: 35px;
+
       .columns {
         margin-bottom: 0;
         margin-left: -0.25em;
@@ -50,14 +56,29 @@
 
       .status-label {
         font-weight: $weight-light;
+        color: $grey;
+        font-size: $size-6-plus;
+      }
+
+      .status-value {
+        color: $grey;
+        font-size: $size-6-plus;
+      }
+
+      .start-challenge-control {
+        margin: 15px 0px 5px 0px;
       }
     }
   }
 
   .labeled-progress {
-    .progress-label {
-      font-size: $size-6;
-      font-weight: $weight-light;
+    .progress-label, .progress-made {
+      font-size: $size-8;
+      color: $grey;
+    }
+
+    progress {
+      height: 1.25rem;
     }
   }
 
@@ -65,6 +86,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    margin: 20px 0px 25px 0px;
 
     .status-filter {
       margin-bottom: 5px;

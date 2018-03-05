@@ -1,16 +1,124 @@
-@import 'variables.scss';
+@import 'theme.scss';
 @import 'react-table/react-table';
 
 .task-analysis-table {
-  .ReactTable .rt-thead.-header {
-    box-shadow: 0 4px 15px -4px rgba(0, 0, 0, 0.15)
+  .ReactTable {
+    $table-border-color: $grey-lightest-more;
+    $table-border-width: 2px;
+    $table-header-font-size: $size-5;
+
+    border: none;
+
+    .rt-table {
+      border-radius: $radius-medium $radius-medium 0 0;
+
+      .rt-thead.-headerGroups {
+        background-color: $primary;
+        color: $white;
+        font-size: $table-header-font-size;
+        padding: 5px;
+
+        .rt-th {
+          border: none;
+        }
+      }
+
+      .rt-thead.-header {
+        background-color: $grey-lightest-less;
+        color: $grey;
+        font-weight: $weight-semibold;
+        font-size: $table-header-font-size;
+
+        box-shadow: none;
+
+        .rt-tr {
+          border-left: $table-border-width solid $grey-lightest-less;
+          border-right: $table-border-width solid $grey-lightest-less;
+        }
+
+        .rt-th {
+          border-width: $table-border-width;
+          border-color: $table-border-color;
+        }
+      }
+
+      .rt-tbody {
+        border-left: $table-border-width solid $table-border-color;
+        border-right: $table-border-width solid $table-border-color;
+        color: $grey;
+      }
+
+      .rt-tr-group {
+        border-width: $table-border-width;
+        border-color: $table-border-color;
+        border-left-width: $table-border-width;
+      }
+
+      .rt-td {
+        padding: 15px;
+        border-width: $table-border-width;
+        border-color: $table-border-color;
+
+        &.rt-expandable {
+          padding-top: 10px;
+
+          .rt-expander {
+            margin: 0 -7px;
+
+            &:after {
+              @include arrow($grey);
+              @include dropdown-arrow();
+              transform: rotate(225deg);
+              border-width: $table-border-width;
+            }
+
+            &.-open {
+              &:after {
+                transform: rotate(315deg);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .pagination-bottom {
+      background-color: $grey-lightest-less;
+      padding: 5px;
+      color: $grey;
+      border-radius: 0 0 $radius-medium $radius-medium;
+
+      .-pagination {
+        border-top: none;
+        box-shadow: none;
+
+        .-btn {
+          border-radius: 20px;
+          height: 30px;
+          padding: 0 30px 2px 30px;
+          margin-top: 3px;
+          background-color: $grey-light;
+          color: $white;
+
+          &:disabled {
+            background-color: $white;
+            color: $grey-light;
+          }
+        }
+
+        select {
+          height: 30px;
+          color: $grey;
+        }
+      }
+    }
   }
 
   .status-icon {
-    height: 15px;
+    height: 20px;
     width: auto;
     vertical-align: middle;
-    margin-right: 10px;
+    margin-right: 15px;
 
     &.created {
       fill: $status-created-color;
