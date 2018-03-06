@@ -40,11 +40,12 @@ export class EditTask extends Component {
     isSaving: false,
   }
 
+  /** Receive updates to the form data, along with any validation errors */
   changeHandler = ({formData}) => this.setState({formData})
 
   /**
-   * Reroute after challenge owner is done, either to Task Review if we
-   * came from there, or to Challenge Management if not.
+   * Reroute after challenge owner is done, either to Task Review if we came
+   * from there, or to View Challenge if not.
    */
   rerouteAfterCompletion = () => {
     if (_get(this.props, 'location.state.fromTaskReview')) {
@@ -59,6 +60,7 @@ export class EditTask extends Component {
     }
   }
 
+  /** Save modified task data */
   finish = ({formData, errors}) => {
     if (!this.state.isSaving && errors.length === 0) {
       this.setState({isSaving: true})
@@ -69,6 +71,7 @@ export class EditTask extends Component {
     }
   }
 
+  /** Cancel editing */
   cancel = () => this.rerouteAfterCompletion()
 
   render() {

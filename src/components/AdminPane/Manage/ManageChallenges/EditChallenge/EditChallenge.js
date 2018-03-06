@@ -95,6 +95,13 @@ export class EditChallenge extends Component {
     isSaving: false,
   }
 
+  /**
+   * Returns true if this challenge's data is being cloned from another
+   * challenge.
+   */
+  isCloningChallenge = () =>
+    !!_get(this.props, 'location.state.cloneChallenge')
+
   /** Can the workflow back up to the previous step? */
   canPrev = () => this.state.activeStep > 0
 
@@ -146,6 +153,7 @@ export class EditChallenge extends Component {
     }
   }
 
+  /** Cancel editing */
   cancel = () => {
     _isObject(this.props.challenge) ?
       this.props.history.push(
@@ -174,6 +182,15 @@ export class EditChallenge extends Component {
       this.props.challenge,
       this.state.formData
     )
+
+    // If we're cloning a challenge, reset the id and name.
+    if (this.isCloningChallenge()) {
+      delete challengeData.id
+
+      if (_isEmpty(this.state.formData.name)) {
+        delete challengeData.name
+      }
+    }
 
     if (!this.state.formData.highPriorityRules) {
       challengeData.highPriorityRules =
@@ -303,9 +320,11 @@ export class EditChallenge extends Component {
               <li className="is-active">
                 <a aria-current="page">
                   {
-                    _isObject(this.props.challenge) ?
-                    <FormattedMessage {...messages.editChallenge} /> :
-                    <FormattedMessage {...messages.newChallenge} />
+                    this.isCloningChallenge() ?
+                    <FormattedMessage {...messages.cloneChallenge} /> :
+                    (_isObject(this.props.challenge) ?
+                     <FormattedMessage {...messages.editChallenge} /> :
+                     <FormattedMessage {...messages.newChallenge} />)
                   }
                 </a>
                 {this.props.loadingChallenge && <BusySpinner inline />}

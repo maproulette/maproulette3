@@ -24,6 +24,16 @@ export default defineMessages({
     defaultMessage: "as of",
   },
 
+  editChallengeLabel: {
+    id: "Admin.Challenge.controls.edit.label",
+    defaultMessage: "Edit",
+  },
+
+  cloneChallengeLabel: {
+    id: "Admin.Challenge.controls.clone.label",
+    defaultMessage: "Clone",
+  },
+
   tasksBuilding: {
     id: "Admin.Challenge.tasksBuilding",
     defaultMessage: "Tasks Building...",
@@ -42,10 +52,5 @@ export default defineMessages({
   tasksHeader: {
     id: "Admin.ManageTasks.header",
     defaultMessage: "Tasks",
-  },
-
-  editTaskLabel: {
-    id: "Admin.Task.controls.edit.label",
-    defaultMessage: "Edit",
   },
 })

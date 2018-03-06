@@ -60,6 +60,8 @@ export class AdminPane extends Component {
                    component={EditChallenge} />
             <Route exact path='/admin/project/:projectId/challenge/:challengeId/edit'
                    component={EditChallenge} />
+            <Route exact path='/admin/project/:projectId/challenge/:challengeId/clone'
+                   component={EditChallenge} />
             <Route exact path='/admin/project/:projectId/edit' component={EditProject} />
             <Route exact path='/admin/project/:projectId' component={ViewProject} />
             <Route exact path='/admin/projects/new' component={EditProject} />

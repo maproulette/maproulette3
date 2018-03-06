@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Edit",
   },
 
+  cloneChallenge: {
+    id: 'Admin.EditChallenge.clone.header',
+    defaultMessage: "Clone",
+  },
+
   newChallenge: {
     id: 'Admin.EditChallenge.new.header',
     defaultMessage: "New Challenge",
