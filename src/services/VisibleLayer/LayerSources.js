@@ -48,6 +48,7 @@ export const LayerSources = [{
     layerId: OPEN_CYCLE_MAP,
     name: messages.openCycleMapName,
     url: process.env.REACT_APP_OPEN_CYCLE_MAP_TILESERVER_URL,
+    accessToken: process.env.REACT_APP_THUNDERFOREST_ACCESS_TOKEN,
     attribution: messages.openCycleMapAttribution,
   }, {
     layerId: BING,
@@ -55,6 +56,14 @@ export const LayerSources = [{
     url: process.env.REACT_APP_BING_MAP_TILESERVER_URL,
     attribution: messages.bingAttribution,
   }]
+
+// If a Thunderforest api key has been provided, switch from the old
+// opencyclemap.org url to the new thunderforest.com url so that the
+// "API Key Required" overlay will be removed (and we get retina).
+if (!_isEmpty(process.env.REACT_APP_THUNDERFOREST_ACCESS_TOKEN)) {
+  _find(LayerSources, {layerId: OPEN_CYCLE_MAP}).url =
+    process.env.REACT_APP_THUNDERFOREST_TILESERVER_URL
+}
 
 // If a Mapbox access/api token has been provided, then add Mapbox layer
 // sources.
