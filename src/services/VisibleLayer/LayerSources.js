@@ -54,8 +54,6 @@ export const LayerSources = [{
     name: messages.bingName,
     url: process.env.REACT_APP_BING_MAP_TILESERVER_URL,
     attribution: messages.bingAttribution,
-    detectRetina: true,
-    tileSize: 256,
   }]
 
 // If a Mapbox access/api token has been provided, then add Mapbox layer
