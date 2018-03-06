@@ -76,7 +76,15 @@ export class ViewChallenge extends Component {
             <div className="column is-narrow admin__manage__controls--control">
               <Link to={`/admin/project/${this.props.challenge.parent.id}/` +
                         `challenge/${this.props.challenge.id}/edit`}>
-                <FormattedMessage {...messages.editTaskLabel } />
+                <FormattedMessage {...messages.editChallengeLabel } />
+              </Link>
+            </div>
+
+            <div className="column is-narrow admin__manage__controls--control">
+              <Link to={{pathname: `/admin/project/${this.props.challenge.parent.id}/` +
+                                   `challenge/${this.props.challenge.id}/clone`,
+                         state: {cloneChallenge: true}}}>
+                <FormattedMessage {...messages.cloneChallengeLabel } />
               </Link>
             </div>
 
