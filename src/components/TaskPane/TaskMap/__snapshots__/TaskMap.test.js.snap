@@ -69,6 +69,7 @@ ShallowWrapper {
                             }
           }
           features={null}
+          fitFeaturesOnlyOnce={true}
           justFitFeatures={false}
           maxZoom={0}
           minZoom={1}
@@ -173,6 +174,7 @@ ShallowWrapper {
 />,
           ],
           "features": null,
+          "fitFeaturesOnlyOnce": true,
           "justFitFeatures": false,
           "maxZoom": 0,
           "minZoom": 1,
@@ -264,6 +266,7 @@ ShallowWrapper {
                                   }
             }
             features={null}
+            fitFeaturesOnlyOnce={true}
             justFitFeatures={false}
             maxZoom={0}
             minZoom={1}
@@ -368,6 +371,7 @@ ShallowWrapper {
 />,
             ],
             "features": null,
+            "fitFeaturesOnlyOnce": true,
             "justFitFeatures": false,
             "maxZoom": 0,
             "minZoom": 1,

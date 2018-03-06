@@ -200,6 +200,7 @@
   "ActiveTask.controls.comments.tooltip": "View Comments",
   "ActiveTask.subheading.comments": "Comments",
   "ActiveTask.heading": "Challenge Information",
+  "Task.controls.contactOwner.label": "Contact Owner",
   "ActiveTask.subheading.instructions": "Instructions",
   "ActiveTask.subheading.location": "Location",
   "ActiveTask.subheading.social": "Share",

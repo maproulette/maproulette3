@@ -42,7 +42,8 @@ export default class EnhancedMap extends Map {
   }
 
   updateFeatures = (newFeatures) => {
-    if (!_isEmpty(this.currentFeatures)) {
+    const hasExistingFeatures = !_isEmpty(this.currentFeatures)
+    if (hasExistingFeatures) {
       this.currentFeatures.remove()
     }
 
@@ -57,7 +58,11 @@ export default class EnhancedMap extends Map {
         this.currentFeatures.addTo(this.leafletElement)
       }
 
-      this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
+      // If we're only supposed to fit the features once, don't do it
+      // if we already had features.
+      if (!this.props.fitFeaturesOnlyOnce || !hasExistingFeatures) {
+        this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
+      }
     }
   }
 
