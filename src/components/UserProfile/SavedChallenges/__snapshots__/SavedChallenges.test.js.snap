@@ -227,7 +227,7 @@ ShallowWrapper {
                     className="columns saved-challenges__challenge"
           >
                     <div
-                              className="column"
+                              className="column is-four-fifths"
                     >
                               <Link
                                         replace={false}
@@ -256,7 +256,7 @@ ShallowWrapper {
                     className="columns saved-challenges__challenge"
           >
                     <div
-                              className="column"
+                              className="column is-four-fifths"
                     >
                               <Link
                                         replace={false}
@@ -285,7 +285,7 @@ ShallowWrapper {
                     className="columns saved-challenges__challenge"
           >
                     <div
-                              className="column"
+                              className="column is-four-fifths"
                     >
                               <Link
                                         replace={false}
@@ -354,7 +354,7 @@ ShallowWrapper {
               className="columns saved-challenges__challenge"
 >
               <div
-                            className="column"
+                            className="column is-four-fifths"
               >
                             <Link
                                           replace={false}
@@ -383,7 +383,7 @@ ShallowWrapper {
               className="columns saved-challenges__challenge"
 >
               <div
-                            className="column"
+                            className="column is-four-fifths"
               >
                             <Link
                                           replace={false}
@@ -412,7 +412,7 @@ ShallowWrapper {
               className="columns saved-challenges__challenge"
 >
               <div
-                            className="column"
+                            className="column is-four-fifths"
               >
                             <Link
                                           replace={false}
@@ -448,7 +448,7 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="column"
+                  className="column is-four-fifths"
 >
                   <Link
                                     replace={false}
@@ -488,7 +488,7 @@ ShallowWrapper {
 >
                     First Challenge
 </Link>,
-                  "className": "column",
+                  "className": "column is-four-fifths",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -567,7 +567,7 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="column"
+                  className="column is-four-fifths"
 >
                   <Link
                                     replace={false}
@@ -607,7 +607,7 @@ ShallowWrapper {
 >
                     Second Challenge
 </Link>,
-                  "className": "column",
+                  "className": "column is-four-fifths",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -686,7 +686,7 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="column"
+                  className="column is-four-fifths"
 >
                   <Link
                                     replace={false}
@@ -726,7 +726,7 @@ ShallowWrapper {
 >
                     Third Challenge
 </Link>,
-                  "className": "column",
+                  "className": "column is-four-fifths",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -825,7 +825,7 @@ ShallowWrapper {
                         className="columns saved-challenges__challenge"
             >
                         <div
-                                    className="column"
+                                    className="column is-four-fifths"
                         >
                                     <Link
                                                 replace={false}
@@ -854,7 +854,7 @@ ShallowWrapper {
                         className="columns saved-challenges__challenge"
             >
                         <div
-                                    className="column"
+                                    className="column is-four-fifths"
                         >
                                     <Link
                                                 replace={false}
@@ -883,7 +883,7 @@ ShallowWrapper {
                         className="columns saved-challenges__challenge"
             >
                         <div
-                                    className="column"
+                                    className="column is-four-fifths"
                         >
                                     <Link
                                                 replace={false}
@@ -952,7 +952,7 @@ ShallowWrapper {
                 className="columns saved-challenges__challenge"
 >
                 <div
-                                className="column"
+                                className="column is-four-fifths"
                 >
                                 <Link
                                                 replace={false}
@@ -981,7 +981,7 @@ ShallowWrapper {
                 className="columns saved-challenges__challenge"
 >
                 <div
-                                className="column"
+                                className="column is-four-fifths"
                 >
                                 <Link
                                                 replace={false}
@@ -1010,7 +1010,7 @@ ShallowWrapper {
                 className="columns saved-challenges__challenge"
 >
                 <div
-                                className="column"
+                                className="column is-four-fifths"
                 >
                                 <Link
                                                 replace={false}
@@ -1046,7 +1046,7 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="column"
+                    className="column is-four-fifths"
 >
                     <Link
                                         replace={false}
@@ -1086,7 +1086,7 @@ ShallowWrapper {
 >
                       First Challenge
 </Link>,
-                    "className": "column",
+                    "className": "column is-four-fifths",
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1165,7 +1165,7 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="column"
+                    className="column is-four-fifths"
 >
                     <Link
                                         replace={false}
@@ -1205,7 +1205,7 @@ ShallowWrapper {
 >
                       Second Challenge
 </Link>,
-                    "className": "column",
+                    "className": "column is-four-fifths",
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1284,7 +1284,7 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="column"
+                    className="column is-four-fifths"
 >
                     <Link
                                         replace={false}
@@ -1324,7 +1324,7 @@ ShallowWrapper {
 >
                       Third Challenge
 </Link>,
-                    "className": "column",
+                    "className": "column is-four-fifths",
                   },
                   "ref": null,
                   "rendered": Object {

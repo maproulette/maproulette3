@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Form from 'react-jsonschema-form'
+import _debounce from 'lodash/debounce'
 import _merge from 'lodash/merge'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { CustomFieldTemplate } from '../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import { jsSchema, uiSchema } from './UserSettingsSchema'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
+import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
 
 /**
@@ -25,20 +28,42 @@ export class UserSettings extends Component {
   state = {
     formData: {},
     isSaving: false,
+    saveComplete: false,
   }
 
+  /**
+   * Save the latest settings modified by the user. Debounced to save
+   * at most once per second.
+   */
+  saveLatestSettings = _debounce(settings => {
+    this.setState({isSaving: true, saveComplete: false})
+    this.props.updateUserSettings(this.props.user.id, settings).then(() =>
+      this.setState({isSaving: false, saveComplete: true})
+    )
+  }, 750, {leading: true})
+
+  /** Invoked when the form data is modified */
   changeHandler = ({formData}) => {
-    this.setState({formData})
-    this.props.updateUserSettings(this.props.user.id, formData)
+    this.setState({formData, saveComplete: false})
+    this.saveLatestSettings(formData)
   }
 
   render() {
     const userSettings = _merge({}, this.props.user.settings, this.state.formData)
 
+    let saveIndicator = null
+    if (this.state.isSaving) {
+      saveIndicator = <BusySpinner inline />
+    }
+    else if (this.state.saveComplete) {
+      saveIndicator = <SvgSymbol sym="check-icon" viewBox="0 0 20 20" />
+    }
+
     return (
       <div className="user-settings">
         <h2 className="subtitle">
           <FormattedMessage {...messages.header} />
+          {saveIndicator}
         </h2>
 
         <Form schema={jsSchema(this.props.intl)}

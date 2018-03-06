@@ -13,7 +13,7 @@ export default class SavedChallenges extends Component {
     const challengeItems =
       _map(_get(this.props, 'user.savedChallenges', []), challenge =>
         <li key={challenge.id} className="columns saved-challenges__challenge">
-          <div className="column">
+          <div className="column is-four-fifths">
             <Link to={`/browse/challenges/${challenge.id}`}>
               {challenge.name}
             </Link>
