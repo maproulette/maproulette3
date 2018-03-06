@@ -11,6 +11,23 @@ $tablet: 40px;
   justify-content: center;
 }
 
+.subtitle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  svg {
+    fill: $subtitle-color;
+    height: 1em;
+    width: auto;
+    margin-left: 1em;
+  }
+
+  .busy-spinner {
+    margin-left: 1em;
+  }
+}
+
 .modal.is-active {
   z-index: $layer-modal;
 }
