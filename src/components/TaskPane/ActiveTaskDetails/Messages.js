@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: 'Challenge Information',
   },
 
+  contactOwnerLabel: {
+    id: 'Task.controls.contactOwner.label',
+    defaultMessage: 'Contact Owner',
+  },
+
   instructions: {
     id: 'ActiveTask.subheading.instructions',
     defaultMessage: 'Instructions',

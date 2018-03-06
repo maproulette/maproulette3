@@ -15,6 +15,7 @@ import { taskDenormalizationSchema,
          completeTask } from '../../../services/Task/Task'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
+import { contactOSMUserURL } from '../../../services/OSMUser/OSMUser'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 
 const FRESHNESS_THRESHOLD = 5000 // 5 seconds
@@ -129,6 +130,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         visitNewTask(ownProps, taskId, newTask)
       )
     },
+
+    contactTaskOwnerURL: ownerOSMId => contactOSMUserURL(ownerOSMId),
   }
 }
 
