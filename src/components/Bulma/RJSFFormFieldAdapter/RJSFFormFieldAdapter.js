@@ -113,9 +113,8 @@ export class MarkdownEditField extends Component {
     return (
       <div className="markdown-edit-field">
         <textarea className="form-control"
-                  onChange={e => this.props.onChange(e.target.value)}>
-          {this.props.formData}
-        </textarea>
+                  onChange={e => this.props.onChange(e.target.value)}
+                  value={this.props.formData} />
         <MarkdownContent className="markdown-preview" markdown={this.props.formData} />
       </div>
     )
