@@ -1,0 +1,26 @@
+@import 'variables.scss';
+
+.admin__manage__managed-item-list.challenge-list {
+  .challenge-list-item {
+    border-bottom: 2px solid $grey-lightest-less;
+    margin-bottom: 0.25rem;
+
+    .challenge-name {
+      word-break: break-word;
+    }
+  }
+
+  .challenge-list__controls {
+    .button.new-challenge {
+      margin: 20px 0px 12px 0px;
+      padding: 0px 30px 32px 30px;
+      font-size: $size-5;
+      font-weight: $weight-normal;
+    }
+  }
+
+  .challenge-list__no-results {
+    text-align: center;
+    color: $grey;
+  }
+}

@@ -300,7 +300,7 @@ export class EditChallenge extends Component {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
-                <Link to={`/admin/manage/${this.props.project.id}`}>
+                <Link to={'/admin/projects'}>
                   <FormattedMessage {...manageMessages.manageHeader} />
                 </Link>
               </li>

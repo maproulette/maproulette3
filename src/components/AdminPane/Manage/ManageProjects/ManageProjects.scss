@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import 'variables.scss';
 
 .admin__manage__sidebar.projects-sidebar {
   .sidebar__content {
@@ -7,13 +7,31 @@
 }
 
 .admin__manage__projects {
+  $sidebar-padding: 15px;
+
   .admin__manage--heading {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0px $sidebar-padding 20px $sidebar-padding;
 
     &.level:not(:last-child) {
       margin-bottom: 20px;
     }
+
+    border-bottom: 2px solid $grey-lightest-less;
+  }
+
+  &__intro {
+    padding: 0px $sidebar-padding;
+    color: $grey;
+    font-size: $size-6-plus;
+    line-height: 1.3em;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .admin__manage__projects__searchbox.search-box {
+    margin: 10px $sidebar-padding 0px $sidebar-padding;
+    background-color: $white;
+    max-width: calc(100% - #{$sidebar-padding * 2});
   }
 
   .heading-name {
@@ -21,43 +39,4 @@
     transform: rotate(0deg) translate(0px, 0px);
     transition: transform 0.5s;
   }
-
-  .search-box {
-    margin-top: 10px;
-    background-color: $white;
-  }
-
-  .project-list {
-    font-size: $size-6;
-    overflow-y: auto;
-    min-height: 200px;
-    max-height: 45vh;
-    padding-top: 15px;
-
-    .columns {
-      margin-left: 0;
-      margin-right: 0;
-    }
-
-    svg.icon {
-      height: 15px;
-      width: auto;
-    }
-
-    .item-entry {
-      &:not(:last-child) {
-        border-bottom: none;
-        margin-bottom: 0.25rem;
-      }
-
-      .project-list-item {
-        align-items: center;
-      }
-    }
-
-    .column.edit-control {
-      font-size: $size-7;
-    }
-  }
 }
-

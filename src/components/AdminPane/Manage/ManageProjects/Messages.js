@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   header: {
     id: "Admin.ManageProjects.header",
-    defaultMessage: "Projects",
+    defaultMessage: "Projects & Challenges",
   },
 
   help: {
@@ -18,37 +18,7 @@ export default defineMessages({
 
   placeholder: {
     id: "Admin.ManageProjects.search.placeholder",
-    defaultMessage: "Name",
-  },
-
-  enabledTooltip: {
-    id: "Admin.Project.fields.enabled.tooltip",
-    defaultMessage: "Enabled",
-  },
-
-  disabledTooltip: {
-    id: "Admin.Project.fields.disabled.tooltip",
-    defaultMessage: "Disabled",
-  },
-
-  viewProjectTooltip: {
-    id: "Admin.Project.controls.viewProject.tooltip",
-    defaultMessage: "View Project",
-  },
-
-  viewProjectLabel: {
-    id: "Admin.Project.controls.viewProject.label",
-    defaultMessage: "View",
-  },
-
-  editProjectTooltip: {
-    id: "Admin.Project.controls.editProject.tooltip",
-    defaultMessage: "Edit Project",
-  },
-
-  editProjectLabel: {
-    id: "Admin.Project.controls.editProject.label",
-    defaultMessage: "Edit",
+    defaultMessage: "Search Project Name",
   },
 
   addChallengeTooltip: {

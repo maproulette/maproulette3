@@ -246,7 +246,7 @@ export class ActiveTaskDetails extends Component {
                 {!_isEmpty(taskInstructions) &&
                   <div className={classNames('active-task-details--instructions',
                     {'active-task-details--bordered': !isMinimized,
-                     'is-collapsed': this.props.collapseInstructions})}>
+                     'is-expanded': !this.props.collapseInstructions})}>
                      <div className="active-task-details--sub-heading collapsible"
                           onClick={this.toggleInstructionsCollapsed} >
                       <FormattedMessage {...messages.instructions} />

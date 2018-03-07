@@ -12,4 +12,38 @@
   .burndown-chart {
     margin-bottom: 1em;
   }
+
+  &__completion {
+    display: flex;
+    flex-wrap: wrap;
+
+    .completion-radar-chart {
+      min-width: 325px;
+      flex: 1 1 500px;
+      margin-right: 20px;
+      max-width: 500px;
+    }
+
+    .completion-stats {
+      flex: 1 2 250px;
+      min-width: 250px;
+      max-width: 500px;
+      margin-left: 20px;
+
+      .completion-progress {
+        &:not(:last-child) {
+          margin-bottom: 15px;
+        }
+
+        .progress-label, .progress-made {
+          font-size: $size-8;
+          color: $grey;
+        }
+
+        progress {
+          height: 1.25rem;
+        }
+      }
+    }
+  }
 }

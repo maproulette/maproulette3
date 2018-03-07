@@ -1,45 +1,50 @@
 import React, { Component } from 'react'
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
-import _find from 'lodash/find'
 import Sidebar from '../../Sidebar/Sidebar'
-import WithManageableChallenges from '../HOCs/WithManageableChallenges/WithManageableChallenges'
+import WithManageableProjects from '../HOCs/WithManageableProjects/WithManageableProjects'
+import WithCurrentProject from '../HOCs/WithCurrentProject/WithCurrentProject'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
-import ManageChallenges from './ManageChallenges/ManageChallenges'
 import ManageProjects from './ManageProjects/ManageProjects'
+import ChallengeMetrics from './ChallengeMetrics/ChallengeMetrics'
 import messages from './Messages'
 import './Manage.css'
 
 /**
- * Manage serves a landing page for project and challenge management and
- * creation.
+ * Manage serves as the landing page for project and challenge management.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class Manage extends Component {
   render() {
-    const selectedProjectId =
-      parseInt(_get(this.props, 'match.params.projectId'), 10)
-
-    let selectedProject = null
-    if (!isNaN(selectedProjectId)) {
-      selectedProject =
-        _find(this.props.projects, {id: selectedProjectId})
-    }
-    else if (_get(this.props, 'projects.length', 0) === 1) {
-      selectedProject = this.props.projects[0]
-    }
+    const manageBreadcrumb = this.props.project ? (
+      <li>
+        <Link to={`/admin/projects`}>
+          <FormattedMessage {...messages.manageHeader} />
+        </Link>
+      </li>
+    ) : (
+      <li className="is-active">
+        <a aria-current="page">
+          <FormattedMessage {...messages.manageHeader} />
+        </a>
+      </li>
+    )
 
     return (
       <div className="admin__manage">
         <div className="admin__manage__header">
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
-              <li className="is-active">
-                <a aria-current="page">
-                  <FormattedMessage {...messages.manageHeader} />
-                </a>
-              </li>
+              {manageBreadcrumb}
+              {this.props.project &&
+               <li className="is-active">
+                 <a aria-current="page">
+                   {_get(this.props, 'project.displayName', this.props.project.name)} 
+                 </a>
+               </li>
+              }
             </ul>
           </nav>
         </div>
@@ -47,20 +52,11 @@ export class Manage extends Component {
         <div className="admin__manage__pane-wrapper">
           <Sidebar className="admin__manage__sidebar projects-sidebar inline"
                    isActive={true}>
-            <ManageProjects selectedProject={selectedProject} {...this.props} />
-
-            {this.props.user.isSuperUser &&
-             <div className='admin__manage__sidebar__controls'>
-               <button className="button is-green is-outlined new-project"
-                       onClick={() => this.props.history.push('/admin/projects/new')}>
-                 <FormattedMessage {...messages.newProject} />
-               </button>
-             </div>
-            }
+            <ManageProjects {...this.props} />
           </Sidebar>
 
           <div className="admin__manage__primary-content">
-            <ManageChallenges selectedProject={selectedProject} {...this.props} />
+            <ChallengeMetrics burndownHeight={400} {...this.props} />
           </div>
         </div>
       </div>
@@ -68,11 +64,17 @@ export class Manage extends Component {
   }
 }
 
-export default WithManageableChallenges(
-  WithSearchResults(
-    injectIntl(Manage),
-    'adminProjects',
-    'projects',
-    'filteredProjects'
+export default WithManageableProjects(
+  WithCurrentProject(
+    WithSearchResults(
+      Manage,
+      'adminProjects',
+      'projects',
+      'filteredProjects'
+    ), {
+      includeChallenges: true,
+      defaultToOnlyProject: true,
+      restrictToGivenProjects: true,
+    }
   )
 )

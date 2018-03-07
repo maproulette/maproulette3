@@ -1,10 +1,6 @@
 @import '../../../../variables.scss';
 
 .admin__manage.view-challenge {
-  .sidebar {
-    min-width: 375px;
-  }
-
   .admin__manage__primary-content {
     padding-top: 0;
 
@@ -68,17 +64,6 @@
       .start-challenge-control {
         margin: 15px 0px 5px 0px;
       }
-    }
-  }
-
-  .labeled-progress {
-    .progress-label, .progress-made {
-      font-size: $size-8;
-      color: $grey;
-    }
-
-    progress {
-      height: 1.25rem;
     }
   }
 

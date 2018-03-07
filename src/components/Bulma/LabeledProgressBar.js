@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import _isFinite from 'lodash/isFinite'
 import './LabeledProgressBar.css'
 
 /**
@@ -16,9 +17,12 @@ export default class LabeledProgressBar extends Component {
         <div className="description">
           <div className="progress-label">{this.props.label}</div>
           <div className="progress-made">
-            <span className="value">{this.props.value}</span>
-            /
-            <span className="max">{this.props.max}</span>
+            {_isFinite(this.props.value) &&
+             <span className="value">{this.props.value}</span>
+            }
+            {_isFinite(this.props.max) &&
+             <span className="max">/{this.props.max}</span>
+            }
           </div>
         </div>
         <div className="visual">
@@ -37,9 +41,9 @@ LabeledProgressBar.propTypes = {
   /** Label for the progress bar */
   label: PropTypes.string,
   /** Current progress value */
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number,
   /** Max possible (completed) value */
-  max: PropTypes.number.isRequired,
+  max: PropTypes.number,
   /** Set to true for a larger progress bar */
   isMedium: PropTypes.bool,
 }

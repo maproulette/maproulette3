@@ -267,6 +267,23 @@ $tablet: 40px;
 @import "../node_modules/bulma-switch/dist/bulma-switch.sass";
 @import "../node_modules/bulma-checkradio/dist/bulma-checkradio.sass";
 
+.collapsible-icon {
+  height: 1em;
+
+  .icon {
+    @include arrow($minimizer-arrow-color);
+    @include dropdown-arrow();
+    position: static;
+  }
+}
+
+.is-expanded .collapsible-icon {
+  .icon {
+    margin-top: 5px;
+    transform: rotate(135deg);
+  }
+}
+
 code {
   color: $coral;
   background-color: transparent;

@@ -172,10 +172,9 @@ test("deactivate is called when escape is pressed", () => {
 
 test("classNames are included on the wrapper element", () => {
   const wrapper = shallow(
-    <SearchBox {...basicProps} classNames={['my-test', 'search-test']}/>
+    <SearchBox {...basicProps} className='my-class'/>
   )
 
-  expect(wrapper.find('.my-test').exists()).toBe(true)
-  expect(wrapper.find('.search-test').exists()).toBe(true)
+  expect(wrapper.find('.my-class').exists()).toBe(true)
   expect(wrapper).toMatchSnapshot()
 })

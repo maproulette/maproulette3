@@ -1,0 +1,69 @@
+@import 'variables.scss';
+
+.admin__manage__managed-item-list.project-list {
+  font-size: $size-5;
+  margin: 30px 20px 0 20px;
+
+  .columns {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  svg.icon {
+    height: 15px;
+    width: auto;
+  }
+
+  .column.edit-control {
+    font-size: $size-7;
+    font-weight: $weight-normal;
+  }
+
+  .project-list-item {
+    align-items: center;
+
+    &:not(:last-child) {
+      border-bottom: none;
+    }
+
+    &__project-name {
+      color: $primary
+    }
+
+    &.is-active {
+      background-color: $white;
+      font-weight: $weight-semibold;
+      margin-bottom: 0;
+      border-radius: $radius-medium $radius-medium 0 0;
+    }
+
+    .collapsible-icon {
+      .icon {
+        border-color: $grey-light;
+        border-bottom-width: 2px;
+        border-left-width: 2px;
+        margin-right: 10px;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .project-list__project-content {
+    background-color: $white;
+    border-radius: 0px 0px $radius-medium $radius-medium;
+    
+    .tabs ul li {
+      a {
+        padding-bottom: 3px;
+      }
+
+      &.is-active a {
+        padding-bottom: 3px;
+      }
+    }
+
+    .tab-content {
+      padding: 0 20px 20px 20px;
+    }
+  }
+}

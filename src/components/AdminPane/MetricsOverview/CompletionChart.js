@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Radar,
+import { ResponsiveContainer,
+         Radar,
          RadarChart,
          PolarGrid,
          PolarAngleAxis,
@@ -36,21 +37,21 @@ export default class CompletionChart extends Component {
     )
 
     return (
-      <RadarChart cx={this.props.centerX}
-                  cy={this.props.centerY}
-                  outerRadius={this.props.outerRadius}
-                  width={this.props.width}
-                  height={this.props.height}
-                  data={chartData}>
-        <PolarGrid />
-        <PolarAngleAxis dataKey="metric" />
-        <PolarRadiusAxis stroke={this.props.axisLabelColor} />
-        <Radar name="Tasks"
-          dataKey="value"
-          stroke={this.props.strokeColor}
-          fill={this.props.fillColor}
-          fillOpacity={this.props.fillOpacity}/>
-      </RadarChart>
+      <div className="completion-radar-chart">
+        <ResponsiveContainer height={425} width="100%">
+          <RadarChart outerRadius={this.props.outerRadius}
+                      data={chartData}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="metric" />
+            <PolarRadiusAxis stroke={this.props.axisLabelColor} />
+            <Radar name="Tasks"
+              dataKey="value"
+              stroke={this.props.strokeColor}
+              fill={this.props.fillColor}
+              fillOpacity={this.props.fillOpacity}/>
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
     )
   }
 }

@@ -53,7 +53,7 @@ export class ViewChallenge extends Component {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
-                <Link to={`/admin/manage/${this.props.challenge.parent.id}`}>
+                <Link to='/admin/projects'>
                   <FormattedMessage {...manageMessages.manageHeader} />
                 </Link>
               </li>

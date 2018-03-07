@@ -10,7 +10,10 @@ import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
+import { ResponsiveContainer,
+         AreaChart, Area,
+         XAxis, YAxis,
+         CartesianGrid, Tooltip } from 'recharts'
 import { parse } from 'date-fns'
 import { TaskStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -62,18 +65,18 @@ export class BurndownChart extends Component {
     // While we calculated going backwards in time, we display going forwards.
     return (
       <div className="burndown-chart">
-        <AreaChart width={this.props.width}
-                   height={this.props.height}
-                   data={_reverse(dailyMetrics)}>
-          <XAxis dataKey="dateString" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3"/>
-          <Tooltip />
-          <Area type="monotone"
-                dataKey="remaining"
-                stroke={this.props.strokeColor}
-                fill={this.props.fillColor} />
-        </AreaChart>
+        <ResponsiveContainer height={this.props.height} width="100%">
+          <AreaChart data={_reverse(dailyMetrics)}>
+            <XAxis dataKey="dateString" />
+            <YAxis />
+            <CartesianGrid strokeDasharray="3 3"/>
+            <Tooltip />
+            <Area type="monotone"
+                  dataKey="remaining"
+                  stroke={this.props.strokeColor}
+                  fill={this.props.fillColor} />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     )
   }
