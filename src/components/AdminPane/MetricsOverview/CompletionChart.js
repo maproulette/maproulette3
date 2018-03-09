@@ -22,7 +22,7 @@ export default class CompletionChart extends Component {
   render() {
     const completionStatusMetrics = 
       _pick(this.props.taskMetrics,
-            ['fixed', 'falsePositive', 'alreadyFixed', 'skipped', 'tooHard'])
+            ['falsePositive', 'tooHard', 'skipped', 'alreadyFixed', 'fixed'])
 
     const chartData = _compact(
       _map(completionStatusMetrics, (value, label) => {
@@ -38,9 +38,8 @@ export default class CompletionChart extends Component {
 
     return (
       <div className="completion-radar-chart">
-        <ResponsiveContainer height={425} width="100%">
-          <RadarChart outerRadius={this.props.outerRadius}
-                      data={chartData}>
+        <ResponsiveContainer height={this.props.height} width="100%">
+          <RadarChart data={chartData} outerRadius="65%">
             <PolarGrid />
             <PolarAngleAxis dataKey="metric" />
             <PolarRadiusAxis stroke={this.props.axisLabelColor} />

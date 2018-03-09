@@ -44,7 +44,8 @@ export class ViewChallenge extends Component {
         <ChallengeComments challenge={this.props.challenge} />,
 
       [this.props.intl.formatMessage(messages.challengeMetricsTabLabel)]:
-        <ChallengeMetrics challenges={[this.props.challenge]} />,
+        <ChallengeMetrics challenges={[this.props.challenge]}
+                          completionHeight={350} />,
     }
 
     return (

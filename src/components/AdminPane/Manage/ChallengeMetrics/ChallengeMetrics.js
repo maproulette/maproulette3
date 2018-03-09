@@ -23,15 +23,14 @@ export class ChallengeMetrics extends Component {
 
     return (
       <div className="challenge-metrics">
-        <h3 className="subtitle">
-          <FormattedMessage {...messages.tasksHeading} />
-        </h3>
         <p className="subheading">
           <FormattedMessage {...messages.tasksAvailableHeading} />
         </p>
-        <BurndownChart height={this.props.burndownHeight} {..._omit(this.props, 'height')} />
+        <BurndownChart height={this.props.burndownHeight}
+                       {..._omit(this.props, 'height')} />
         <div className="challenge-metrics__completion">
-          <CompletionChart {...this.props} />
+          <CompletionChart height={this.props.completionHeight}
+                           {..._omit(this.props, 'height')} />
           <CompletionMetrics {...this.props} />
         </div>
       </div>

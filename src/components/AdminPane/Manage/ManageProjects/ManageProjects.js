@@ -40,9 +40,11 @@ export class ManageProjects extends Component {
           </h3>
         </div>
 
-        <div className='admin__intro admin__manage__projects__intro'>
-          <FormattedMessage {...messages.help} />
-        </div>
+        {this.props.projects.length === 1 &&
+         <div className='admin__intro admin__manage__projects__intro'>
+           <FormattedMessage {...messages.help} />
+         </div>
+        }
 
         {this.props.projects.length > 1 &&
          <ProjectSearch className="admin__manage__projects__searchbox"

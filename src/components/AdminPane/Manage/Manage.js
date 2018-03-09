@@ -7,7 +7,7 @@ import WithManageableProjects from '../HOCs/WithManageableProjects/WithManageabl
 import WithCurrentProject from '../HOCs/WithCurrentProject/WithCurrentProject'
 import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
 import ManageProjects from './ManageProjects/ManageProjects'
-import ChallengeMetrics from './ChallengeMetrics/ChallengeMetrics'
+import ProjectMetrics from './ProjectMetrics/ProjectMetrics'
 import messages from './Messages'
 import './Manage.css'
 
@@ -56,7 +56,7 @@ export class Manage extends Component {
           </Sidebar>
 
           <div className="admin__manage__primary-content">
-            <ChallengeMetrics burndownHeight={400} {...this.props} />
+            <ProjectMetrics {...this.props} />
           </div>
         </div>
       </div>

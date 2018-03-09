@@ -6,6 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   evaluatedLabel: {
     id: "Metrics.tasks.evaluatedByUser.label",
-    defaultMessage: "Evaluated by User",
+    defaultMessage: "Seen by Users",
   },
 })
