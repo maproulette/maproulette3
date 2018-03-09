@@ -11,6 +11,6 @@ export default defineMessages({
 
   tasksAvailableHeading: {
     id: "Challenge.metrics.tasks.available.heading",
-    defaultMessage: "Remaining",
+    defaultMessage: "Tasks Remaining",
   },
 })

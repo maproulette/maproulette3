@@ -1,0 +1,42 @@
+@import 'variables.scss';
+
+.project-metrics {
+  &__header {
+    font-size: $size-3;
+    color: $white;
+    background-color: $green;
+    width: 100%;
+    border-radius: $radius-medium;
+    padding: 15px 40px;
+    margin-top: -14px; // align with top of sidebar
+    margin-bottom: 25px;
+  }
+
+  &__counts {
+    font-size: $size-2;
+    display: flex;
+    justify-content: flex-start;
+    font-weight: $weight-light;
+    border-bottom: 2px solid $grey-lightest-less;
+    margin-bottom: 25px;
+    padding-bottom: 21px;
+
+    .count {
+      font-weight: $weight-semibold;
+    }
+
+    &__projects-count {
+      color: $coral;
+      margin-right: 40px;
+    }
+
+    &__challenges-count {
+      color: $green;
+      margin-right: 40px;
+    }
+
+    &__tasks-count {
+      color: $blue;
+    }
+  }
+}
