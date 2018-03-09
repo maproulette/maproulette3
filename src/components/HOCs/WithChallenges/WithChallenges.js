@@ -33,6 +33,7 @@ export const mapStateToProps = (state, ownProps) => {
                             challenge.actions.available === 0 : false
 
       return challenge.enabled &&
+             !challenge.deleted &&
              !tasksComplete &&
              isUsableChallengeStatus(challenge.status)
     })
