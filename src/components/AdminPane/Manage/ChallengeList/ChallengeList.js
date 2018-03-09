@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
+import _compact from 'lodash/compact'
 import { Link } from 'react-router-dom'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
@@ -18,7 +19,11 @@ import './ChallengeList.css'
  */
 export default class ChallengeList extends Component {
   render() {
-    const challengeItems = _map(this.props.challenges, challenge => {
+    const challengeItems = _compact(_map(this.props.challenges, challenge => {
+      if (challenge.deleted) {
+        return null
+      }
+
       const projectId = _get(challenge, 'parent.id', challenge.parent)
 
       return (
@@ -38,7 +43,7 @@ export default class ChallengeList extends Component {
           </div>
         </div>
       )
-    })
+    }))
 
     return (
       <div className='admin__manage__managed-item-list challenge-list'>

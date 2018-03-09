@@ -520,6 +520,12 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
   // The generic reduction will merge arrays and objects, and some fields
   // we want to simply overwrite with the latest data.
   challengeEntities.forEach(entity => {
+    // Until we implement undelete, ignore deleted challenges.
+    if (entity.deleted) {
+      delete mergedState[entity.id]
+      return
+    }
+
     if (_isArray(entity.tags)) {
       mergedState[entity.id].tags = entity.tags
     }
