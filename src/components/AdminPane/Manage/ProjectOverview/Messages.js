@@ -5,8 +5,13 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   creationDate: {
-    id: "Project.creationDate.label",
+    id: "Admin.Project.fields.creationDate.label",
     defaultMessage: "Created:",
+  },
+
+  lastModifiedDate: {
+    id: "Admin.Project.fields.lastModifiedDate.label",
+    defaultMessage: "Modified:",
   },
 })
 

@@ -6,8 +6,7 @@ import WithSearchExecution from '../../../HOCs/WithSearchExecution/WithSearchExe
 import SearchBox from '../../../SearchBox/SearchBox'
 import { searchProjects } from '../../../../services/Project/Project'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import HelpPopout from '../../../HelpPopout/HelpPopout'
-import ProjectList from './ProjectList'
+import ProjectList from '../ProjectList/ProjectList'
 import messages from './Messages'
 import './ManageProjects.css'
 
@@ -17,10 +16,8 @@ const ProjectSearch =
 
 /**
  * ManageProjects displays a list of projects, along with some meta info.
- * Clicking on a project routes the user to a ManageChallenges component
- * for that project.
- *
- * @see See ManageChallenges
+ * Clicking on a project routes the user to a ManageChallenges component for
+ * that project.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -37,30 +34,28 @@ export class ManageProjects extends Component {
             <div className='level'>
               <span className='heading-name'>
                 <FormattedMessage {...messages.header} />
-                <HelpPopout>
-                  <FormattedMessage {...messages.help} />
-                </HelpPopout>
               </span>
               {this.props.loadingProjects && <BusySpinner inline />}
             </div>
           </h3>
+        </div>
 
-          {this.props.projects.length > 1 &&
-          <ProjectSearch placeholder={
+        <div className='admin__intro admin__manage__projects__intro'>
+          <FormattedMessage {...messages.help} />
+        </div>
+
+        {this.props.projects.length > 1 &&
+         <ProjectSearch className="admin__manage__projects__searchbox"
+                        placeholder={
                           this.props.intl.formatMessage(messages.placeholder)
-                          } />
-          }
-        </div>
+                        } />
+        }
 
-        <div className='admin__intro admin__manage-projects--intro'>
-        </div>
-
-        <div className='admin__manage__managed-item-list project-list'>
+        <div className="scroll-wrapper">
           <ProjectList projects={this.props.filteredProjects || this.props.projects}
                        allManageableProjects={this.props.projects}
                        {..._omit(this.props, ['projects'])} />
         </div>
-
       </div>
     )
   }
@@ -73,8 +68,6 @@ ManageProjects.propTypes = {
   filteredProjects: PropTypes.array,
   /** True if projects are currently being fetched from the server */
   loadingProjects: PropTypes.bool,
-  /** The currently selected project, if any */
-  selectedProject: PropTypes.object,
 }
 
 ManageProjects.defaultProps = {

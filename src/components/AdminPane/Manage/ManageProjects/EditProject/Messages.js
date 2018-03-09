@@ -4,6 +4,11 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with EditProject
  */
 export default defineMessages({
+  projectUnavailable: {
+    id: 'Admin.EditProject.unavailable',
+    defaultMessage: "Project Unavailable",
+  },
+
   editProject: {
     id: 'Admin.EditProject.edit.header',
     defaultMessage: "Edit",

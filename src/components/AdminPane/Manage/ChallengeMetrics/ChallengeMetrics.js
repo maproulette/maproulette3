@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
+import _isEmpty from 'lodash/isEmpty'
+import _omit from 'lodash/omit'
 import CompletionMetrics from '../../MetricsOverview/CompletionMetrics'
 import BurndownChart from '../BurndownChart/BurndownChart'
 import CompletionChart from '../../MetricsOverview/CompletionChart'
@@ -15,6 +17,10 @@ import './ChallengeMetrics.css'
  */
 export class ChallengeMetrics extends Component {
   render() {
+    if (_isEmpty(this.props.taskMetrics)) {
+      return null
+    }
+
     return (
       <div className="challenge-metrics">
         <h3 className="subtitle">
@@ -23,11 +29,11 @@ export class ChallengeMetrics extends Component {
         <p className="subheading">
           <FormattedMessage {...messages.tasksAvailableHeading} />
         </p>
-        <BurndownChart {...this.props} />
-        <CompletionMetrics {...this.props} />
-        <CompletionChart width={320} height={240}
-                         outerRadius={75} centerX={145} centerY={125}
-                         {...this.props} />
+        <BurndownChart height={this.props.burndownHeight} {..._omit(this.props, 'height')} />
+        <div className="challenge-metrics__completion">
+          <CompletionChart {...this.props} />
+          <CompletionMetrics {...this.props} />
+        </div>
       </div>
     )
   }

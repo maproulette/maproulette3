@@ -43,7 +43,8 @@ export default {
   project: {
     saveFailure: messages.projectSaveFailure,
     fetchFailure: messages.projectFetchFailure,
-    searchFailure: messages.projectSearchFailure
+    searchFailure: messages.projectSearchFailure,
+    notManager: messages.projectNotManager,
   },
 
   map: {

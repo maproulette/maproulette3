@@ -5,12 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    classNames={
-        Array [
-            "my-test",
-            "search-test",
-          ]
-    }
+    className="my-class"
     clearSearch={[Function]}
     deactivate={[Function]}
     fetchResults={[Function]}
@@ -59,7 +54,7 @@ ShallowWrapper {
                 </div>
         </div>
 </div>,
-      "className": "search-box my-test search-test",
+      "className": "search-box my-class",
     },
     "ref": null,
     "rendered": Object {
@@ -217,7 +212,7 @@ ShallowWrapper {
                     </div>
           </div>
 </div>,
-        "className": "search-box my-test search-test",
+        "className": "search-box my-class",
       },
       "ref": null,
       "rendered": Object {

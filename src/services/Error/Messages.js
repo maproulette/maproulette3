@@ -84,6 +84,10 @@ export default defineMessages({
     id: 'Errors.project.searchFailure',
     defaultMessage: "Unable to search projects.",
   },
+  projectNotManager: {
+    id: 'Errors.project.notManager',
+    defaultMessage: "You must be a manager of that project to proceed.",
+  },
 
   mapRenderFailure: {
     id: 'Errors.map.renderFailure',

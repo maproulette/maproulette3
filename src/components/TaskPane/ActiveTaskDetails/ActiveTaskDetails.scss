@@ -1,4 +1,5 @@
-@import '../../../theme.scss';
+@import 'variables.scss';
+@import 'mixins.scss';
 
 .active-task-details {
   background-color: $white;
@@ -83,29 +84,12 @@
       &:hover {
         cursor: pointer;
       }
-
-      .collapsible-icon {
-        height: 1em;
-
-        .icon {
-          @include arrow($minimizer-arrow-color);
-          @include dropdown-arrow();
-          position: static;
-        }
-      }
     }
   }
 
   .is-collapsed {
     .active-task-details--sub-heading {
       margin-bottom: 0px;
-
-      .collapsible-icon {
-        .icon {
-          margin-top: 5px;
-          transform: rotate(135deg);
-        }
-      }
     }
   }
 

@@ -65,7 +65,7 @@ export default class SearchBox extends Component {
 
 
     return (
-      <div className={classNames('search-box', this.props.classNames)}>
+      <div className={classNames('search-box', this.props.className)}>
         <div className='search-box__search-field'>
           <div className='control-wrapper'>
             {this.props.suppressIcon !== true &&

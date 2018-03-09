@@ -2,16 +2,20 @@ import React, { Component } from 'react'
 import Form from 'react-jsonschema-form'
 import _merge from 'lodash/merge'
 import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
-import { CustomFieldTemplate } from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import { CustomFieldTemplate }
+       from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import WithManageableProjects
+       from '../../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import { jsSchema, uiSchema } from './EditProjectSchema'
+import manageMessages from '../../Messages'
 import messages from './Messages'
 import './EditProject.css'
 
@@ -49,10 +53,18 @@ export class EditProject extends Component {
   cancel = () => {
     _isObject(this.props.project) ?
       this.props.history.push(`/admin/project/${this.props.project.id}`) :
-      this.props.history.push('/admin/manage')
+      this.props.history.push('/admin/projects')
   }
 
   render() {
+    // If a project id was specified, but there is no project, don't render
+    // the form.
+    if (_isFinite(this.props.routedProjectId) && !this.props.project) {
+      return (
+        <h1><FormattedMessage {...messages.projectUnavailable} /></h1>
+      )
+    }
+
     const projectData = _merge({}, this.props.project, this.state.formData)
 
     return (
@@ -60,7 +72,9 @@ export class EditProject extends Component {
         <nav className="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li>
-              <Link to={`/admin/manage/${_get(this.props, 'project.id', '')}`}>Manage</Link>
+              <Link to='/admin/projects'>
+                <FormattedMessage {...manageMessages.manageHeader} />
+              </Link>
             </li>
             {_isObject(this.props.project) &&
             <li>
@@ -82,7 +96,7 @@ export class EditProject extends Component {
           </ul>
         </nav>
 
-        <Form schema={jsSchema(this.props.intl, !_isNumber(projectData.id))}
+        <Form schema={jsSchema(this.props.intl, !_isFinite(projectData.id))}
               uiSchema={uiSchema}
               FieldTemplate={CustomFieldTemplate}
               liveValidate
@@ -111,4 +125,6 @@ export class EditProject extends Component {
   }
 }
 
-export default WithCurrentProject(injectIntl(EditProject))
+export default WithManageableProjects(
+  WithCurrentProject(injectIntl(EditProject), {restrictToGivenProjects: true})
+)

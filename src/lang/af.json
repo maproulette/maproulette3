@@ -113,7 +113,7 @@
     "Admin.Task.controls.editTask.label": "Edit",
     "Admin.manage.header": "Administrasie",
     "Admin.projects.newProject": "New Project",
-    "Project.creationDate.label": "Created:",
+    "Admin.Project.fields.creationDate.label": "Created:",
     "Admin.ReviewTask.header": "Review Tasks",
     "Admin.TaskAnalysisTable.taskCountStatus": "Shown: {countShown} Tasks",
     "Admin.TaskAnalysisTable.taskPercentStatus": "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
