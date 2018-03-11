@@ -8,6 +8,8 @@ import _get from 'lodash/get'
 import { messagesByStatus,
          keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
+import { messagesByPriority }
+       from '../../../../services/Task/TaskPriority/TaskPriority'
 import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
@@ -55,6 +57,15 @@ export class TaskAnalysisTable extends Component {
                      className={classNames("status-icon",
                                            keysByStatus[value])} />
           <FormattedMessage {...messagesByStatus[value]} />
+        </div>
+      ),
+    }, {
+      id: 'priority',
+      Header: this.props.intl.formatMessage(messages.priorityLabel),
+      accessor: 'priority',
+      Cell: ({value}) => (
+        <div>
+          <FormattedMessage {...messagesByPriority[value]} />
         </div>
       ),
     }, {

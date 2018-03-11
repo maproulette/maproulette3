@@ -1,6 +1,6 @@
-import { ChallengePriority,
-         challengePriorityLabels }
-       from '../../../../../services/Challenge/ChallengePriority/ChallengePriority'
+import { TaskPriority,
+         taskPriorityLabels }
+       from '../../../../../services/Task/TaskPriority/TaskPriority'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
 import messages from './Messages'
@@ -21,7 +21,7 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = intl => {
-  const localizedPriorityLabels = challengePriorityLabels(intl)
+  const localizedPriorityLabels = taskPriorityLabels(intl)
 
   return {
     "$schema": "http://json-schema.org/draft-06/schema#",
@@ -74,9 +74,9 @@ export const jsSchema = intl => {
         title: intl.formatMessage(messages.defaultPriorityLabel),
         description: intl.formatMessage(messages.defaultPriorityDescription),
         type: "number",
-        enum: _values(ChallengePriority),
-        enumNames: _map(ChallengePriority, (value, key) => localizedPriorityLabels[key]),
-        default: ChallengePriority.high,
+        enum: _values(TaskPriority),
+        enumNames: _map(TaskPriority, (value, key) => localizedPriorityLabels[key]),
+        default: TaskPriority.high,
       },
       highPriorityRules: {
         title: "High Priority Rules",
