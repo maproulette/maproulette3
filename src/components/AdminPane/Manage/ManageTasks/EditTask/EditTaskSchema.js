@@ -1,5 +1,5 @@
-import { ChallengePriority, challengePriorityLabels }
-       from '../../../../../services/Challenge/ChallengePriority/ChallengePriority'
+import { TaskPriority, taskPriorityLabels }
+       from '../../../../../services/Task/TaskPriority/TaskPriority'
 import { TaskStatus,
          messagesByStatus,
          allowedStatusProgressions }
@@ -21,7 +21,7 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl, task) => {
-  const localizedPriorityLabels = challengePriorityLabels(intl)
+  const localizedPriorityLabels = taskPriorityLabels(intl)
 
   // If the task exists, its status can limit the statuses allowed to be set
   // during editing.
@@ -60,9 +60,9 @@ export const jsSchema = (intl, task) => {
         title: intl.formatMessage(messages.priorityLabel),
         description: intl.formatMessage(messages.priorityDescription),
         type: "number",
-        enum: _values(ChallengePriority),
-        enumNames: _map(ChallengePriority, (value, key) => localizedPriorityLabels[key]),
-        default: ChallengePriority.high,
+        enum: _values(TaskPriority),
+        enumNames: _map(TaskPriority, (value, key) => localizedPriorityLabels[key]),
+        default: TaskPriority.high,
       },
       status: {
         title: intl.formatMessage(messages.statusLabel),
