@@ -3,6 +3,8 @@
   "version": "3.0.0-alpha.7",
   "private": true,
   "dependencies": {
+    "@nivo/line": "^0.33.0",
+    "@nivo/radar": "^0.33.0",
     "@turf/bbox": "^5.1.5",
     "@turf/bbox-polygon": "^5.1.5",
     "@turf/center": "^5.1.5",
@@ -39,7 +41,6 @@
     "react-share": "^1.16.0",
     "react-table": "^6.7.6",
     "react-transition-group": "^2.2.1",
-    "recharts": "^1.0.0-beta.1",
     "redux": "^3.7.0",
     "redux-persist": "^5.0.1",
     "redux-thunk": "^2.2.0",

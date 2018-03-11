@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { injectIntl } from 'react-intl'
 import _isEmpty from 'lodash/isEmpty'
-import _omit from 'lodash/omit'
 import CompletionMetrics from '../../MetricsOverview/CompletionMetrics'
 import BurndownChart from '../BurndownChart/BurndownChart'
 import CompletionChart from '../../MetricsOverview/CompletionChart'
@@ -23,14 +22,14 @@ export class ChallengeMetrics extends Component {
 
     return (
       <div className="challenge-metrics">
-        <p className="subheading">
-          <FormattedMessage {...messages.tasksAvailableHeading} />
-        </p>
-        <BurndownChart height={this.props.burndownHeight}
-                       {..._omit(this.props, 'height')} />
+        <BurndownChart chartTitle={this.props.intl.formatMessage(
+                                    messages.tasksAvailableHeading
+                                  )}
+                       activity={this.props.burndownActivity}
+                       {...this.props} />
+
         <div className="challenge-metrics__completion">
-          <CompletionChart height={this.props.completionHeight}
-                           {..._omit(this.props, 'height')} />
+          <CompletionChart {...this.props} />
           <CompletionMetrics {...this.props} />
         </div>
       </div>
@@ -42,4 +41,4 @@ ChallengeMetrics.propTypes = {
   challenges: PropTypes.array.isRequired,
 }
 
-export default WithComputedMetrics(ChallengeMetrics)
+export default WithComputedMetrics(injectIntl(ChallengeMetrics))

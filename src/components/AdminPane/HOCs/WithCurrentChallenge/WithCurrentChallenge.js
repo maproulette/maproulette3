@@ -3,7 +3,7 @@ import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
-import { subMonths } from 'date-fns'
+import subMonths from 'date-fns/sub_months'
 import { challengeDenormalizationSchema,
          challengeResultEntity,
          fetchChallenge,

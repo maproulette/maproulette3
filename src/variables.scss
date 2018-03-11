@@ -18,6 +18,7 @@ $grey-lightest: #EEEEEE;
 $grey-lightest-more: #F6F6F6;
 $green: #00A592; // persian green
 $green-light: #A4DBD5;
+$chart-green: #61CDBB;
 $yellow: #FCCB4E; // mustard
 $coral: #E05054; // coral
 $orange: #EA8433;
@@ -27,7 +28,7 @@ $purple: #9D6ADC;
 $primary: $blue;
 $danger: $coral;
 $primary-invert: $white;
-$progress-value-background-color: $green;
+$progress-value-background-color: $chart-green;
 $switch-background-active: $green;
 $default-icon-color: $grey-dark;
 $minimizer-arrow-color: $grey-light-less;
