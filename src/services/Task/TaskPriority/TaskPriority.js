@@ -1,4 +1,5 @@
 import _map from 'lodash/map'
+import _invert from 'lodash/invert'
 import _fromPairs from 'lodash/fromPairs'
 import messages from './Messages'
 
@@ -15,6 +16,8 @@ export const TaskPriority = Object.freeze({
   medium: TASK_PRIORITY_MEDIUM,
   low: TASK_PRIORITY_LOW,
 })
+
+export const keysByPriority = Object.freeze(_invert(TaskPriority))
 
 /**
  * Returns an object mapping priority values to raw internationalized

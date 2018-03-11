@@ -8,6 +8,8 @@ import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
 import { TaskStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskPriority }
+       from '../../../../services/Task/TaskPriority/TaskPriority'
 
 /**
  * WithFilteredClusteredTasks applies local filters to the given clustered
@@ -24,6 +26,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
   return class extends Component {
     state = {
       includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
+      includePriorities: _fromPairs(_map(TaskPriority, priority => [priority, true])),
     }
 
     /**
@@ -37,17 +40,26 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       })
     }
 
+    /**
+     * Toggle filtering on or off for the given task priority
+     */
+    toggleIncludedPriority = priority => {
+      this.setState({includePriorities: Object.assign(
+        {},
+        this.state.includePriorities,
+        {[priority]: !this.state.includePriorities[priority]})
+      })
+    }
+
     render() {
       let filteredTasks = null
       if (_isArray(_get(this.props[tasksProp], 'tasks'))) {
-        filteredTasks = Object.assign(
-          {},
-          this.props[tasksProp],
-          {
-            tasks: _filter(this.props[tasksProp].tasks,
-                           task => this.state.includeStatuses[task.status])
-          }
-        )
+        filteredTasks = Object.assign({}, this.props[tasksProp], {
+          tasks: _filter(this.props[tasksProp].tasks, task =>
+            this.state.includeStatuses[task.status] &&
+            this.state.includePriorities[task.priority]
+          ),
+        })
       }
 
       if (_isEmpty(outputProp)) {
@@ -56,7 +68,9 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       return <WrappedComponent {...{[outputProp]: filteredTasks}}
                                includeTaskStatuses={this.state.includeStatuses}
+                               includeTaskPriorities={this.state.includePriorities}
                                toggleIncludedTaskStatus={this.toggleIncludedStatus}
+                               toggleIncludedTaskPriority={this.toggleIncludedPriority}
                                {..._omit(this.props, outputProp)} />
     }
   }
