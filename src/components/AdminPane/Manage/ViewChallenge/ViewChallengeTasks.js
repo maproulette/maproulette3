@@ -5,11 +5,17 @@ import { FormattedMessage,
          FormattedRelative } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _reverse from 'lodash/reverse'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
          keysByStatus,
-         messagesByStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
+         messagesByStatus }
+       from '../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskPriority,
+         keysByPriority,
+         messagesByPriority }
+       from '../../../../services/Task/TaskPriority/TaskPriority'
 import { MAPBOX_LIGHT,
          layerSourceWithId }
        from '../../../../services/VisibleLayer/LayerSources'
@@ -72,7 +78,7 @@ export class ViewChallengeTasks extends Component {
     }
 
     const statusFilters = _map(TaskStatus, status => (
-      <div key={status} className="status-filter is-narrow">
+      <div key={status} className="filter-option status-filter is-narrow">
         <div className={classNames("field", keysByStatus[status])}
              onClick={() => this.props.toggleIncludedTaskStatus(status)}>
           <input className="is-checkradio is-circle has-background-color is-success"
@@ -85,6 +91,21 @@ export class ViewChallengeTasks extends Component {
         </div>
       </div>
     ))
+
+    const priorityFilters = _reverse(_map(TaskPriority, priority => (
+      <div key={priority} className="filter-option priority-filter is-narrow">
+        <div className={classNames("field", keysByPriority[priority])}
+             onClick={() => this.props.toggleIncludedTaskPriority(priority)}>
+          <input className="is-checkradio is-circle has-background-color is-success"
+                 type="checkbox"
+                 checked={this.props.includeTaskPriorities[priority]}
+                 onChange={() => null} />
+          <label>
+            <FormattedMessage {...messagesByPriority[priority]} />
+          </label>
+        </div>
+      </div>
+    )))
 
     const filterOptions = {
       includeStatuses: this.props.includeTaskStatuses,
@@ -105,8 +126,12 @@ export class ViewChallengeTasks extends Component {
                             {...this.props} />
         </MapPane>
 
-        <div className="status-filter-options">
+        <div className="filter-set">
           {statusFilters}
+        </div>
+
+        <div className="filter-set centered">
+          {priorityFilters}
         </div>
 
         <TaskAnalysisTable filterOptions={filterOptions}
