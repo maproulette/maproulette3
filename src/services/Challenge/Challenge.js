@@ -26,6 +26,7 @@ import AppErrors from '../Error/AppErrors'
 import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
 import { parseQueryString } from '../Search/Search'
+import startOfDay from 'date-fns/start_of_day'
 
 // normalizr schema
 export const challengeSchema = function() {
@@ -244,11 +245,11 @@ export const fetchChallengeActivity = function(challengeId, startDate, endDate) 
   return function(dispatch) {
     const params = {}
     if (startDate) {
-      params.start = startDate.toISOString()
+      params.start = startOfDay(startDate).toISOString()
     }
 
     if (endDate) {
-      params.end = endDate.toISOString()
+      params.end = startOfDay(endDate).toISOString()
     }
 
     return new Endpoint(
@@ -260,7 +261,7 @@ export const fetchChallengeActivity = function(challengeId, startDate, endDate) 
       const normalizedResults = {
         entities: {
           challenges: {
-            [challengeId]: {activity: rawActivity},
+            [challengeId]: {id: challengeId, activity: rawActivity},
           }
         }
       }
@@ -517,7 +518,7 @@ const removeChallengeKeywords = function(challengeId, oldKeywords=[]) {
  * @private
  */
 const reduceChallengesFurther = function(mergedState, oldState, challengeEntities) {
-  // The generic reduction will merge arrays and objects, and some fields
+  // The generic reduction will merge arrays and objects, but for some fields
   // we want to simply overwrite with the latest data.
   challengeEntities.forEach(entity => {
     // Until we implement undelete, ignore deleted challenges.
@@ -540,6 +541,10 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
 
     if (_isObject(entity.lowPriorityRule)) {
       mergedState[entity.id].lowPriorityRule = entity.lowPriorityRule
+    }
+
+    if (_isArray(entity.activity)) {
+      mergedState[entity.id].activity = entity.activity
     }
   })
 }

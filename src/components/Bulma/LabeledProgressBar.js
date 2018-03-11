@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FormattedNumber } from 'react-intl'
 import classNames from 'classnames'
 import _isFinite from 'lodash/isFinite'
 import './LabeledProgressBar.css'
@@ -18,10 +19,12 @@ export default class LabeledProgressBar extends Component {
           <div className="progress-label">{this.props.label}</div>
           <div className="progress-made">
             {_isFinite(this.props.value) &&
-             <span className="value">{this.props.value}</span>
+             <span className="value">
+               <FormattedNumber value={this.props.value} />
+             </span>
             }
             {_isFinite(this.props.max) &&
-             <span className="max">/{this.props.max}</span>
+             <span className="max"> / <FormattedNumber value={this.props.max} /></span>
             }
           </div>
         </div>

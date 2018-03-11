@@ -73,6 +73,8 @@ export default WithManageableProjects(
       'filteredProjects'
     ), {
       includeChallenges: true,
+      includeActivity: true,
+      historicalMonths: 2,
       defaultToOnlyProject: true,
       restrictToGivenProjects: true,
     }

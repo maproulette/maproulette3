@@ -1,55 +1,66 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { ResponsiveContainer,
-         Radar,
-         RadarChart,
-         PolarGrid,
-         PolarAngleAxis,
-         PolarRadiusAxis } from 'recharts'
+import { injectIntl } from 'react-intl'
+import { ResponsiveRadar } from '@nivo/radar'
+import { TaskStatus,
+         keysByStatus,
+         statusLabels } from '../../../services/Task/TaskStatus/TaskStatus'
 import _map from 'lodash/map'
-import _pick from 'lodash/pick'
-import _isNumber from 'lodash/isNumber'
-import _compact from 'lodash/compact'
-import _startCase from 'lodash/startCase'
 
 /**
- * Renders a radar chart displaying relative completion statuses
- * of tasks.
+ * Renders a radar chart displaying relative completion statuses of tasks.
  *
  * @see See http://recharts.org/#/en-US/examples/SimpleRadarChart
  */
-export default class CompletionChart extends Component {
+export class CompletionChart extends Component {
   render() {
-    const completionStatusMetrics = 
-      _pick(this.props.taskMetrics,
-            ['falsePositive', 'tooHard', 'skipped', 'alreadyFixed', 'fixed'])
+    const statusesToChart = [
+      keysByStatus[TaskStatus.falsePositive],
+      keysByStatus[TaskStatus.tooHard],
+      keysByStatus[TaskStatus.skipped],
+      keysByStatus[TaskStatus.alreadyFixed],
+      keysByStatus[TaskStatus.fixed],
+    ]
 
-    const chartData = _compact(
-      _map(completionStatusMetrics, (value, label) => {
-        if (!_isNumber(value)) {
-          return null
-        }
-
-        return {
-          metric: _startCase(label), value, fullMark: this.props.taskMetrics.total
-        }
-      })
-    )
+    const localizedLabels = statusLabels(this.props.intl)
+    const metrics = _map(statusesToChart, status => ({
+      status: localizedLabels[status],
+      tasks: this.props.taskMetrics[status],
+    }))
 
     return (
       <div className="completion-radar-chart">
-        <ResponsiveContainer height={this.props.height} width="100%">
-          <RadarChart data={chartData} outerRadius="65%">
-            <PolarGrid />
-            <PolarAngleAxis dataKey="metric" />
-            <PolarRadiusAxis stroke={this.props.axisLabelColor} />
-            <Radar name="Tasks"
-              dataKey="value"
-              stroke={this.props.strokeColor}
-              fill={this.props.fillColor}
-              fillOpacity={this.props.fillOpacity}/>
-          </RadarChart>
-        </ResponsiveContainer>
+        <ResponsiveRadar data={metrics}
+                         colors={["#61CDBB"]}
+                         keys={["tasks"]}
+                         indexBy="status"
+                         margin={{
+                           "top": 40,
+                           "right": 60,
+                           "bottom": 40,
+                           "left": 40,
+                         }}
+                         curve="catmullRomClosed"
+                         borderWidth={0}
+                         borderColor="inherit"
+                         gridLevels={5}
+                         gridShape="circular"
+                         gridLabelOffset={16}
+                         enableDots={true}
+                         dotSize={8}
+                         dotColor="inherit"
+                         dotBorderWidth={0}
+                         dotBorderColor="#ffffff"
+                         enableDotLabel={true}
+                         dotLabel="value"
+                         dotLabelYOffset={20}
+                         colorBy="key"
+                         fillOpacity={0.2}
+                         animate={true}
+                         motionStiffness={90}
+                         motionDamping={15}
+                         isInteractive={true}
+          />
       </div>
     )
   }
@@ -85,3 +96,5 @@ CompletionChart.defaultProps = {
   fillOpacity: 0.6,
   axisLabelColor: "#606060",
 }
+
+export default injectIntl(CompletionChart)

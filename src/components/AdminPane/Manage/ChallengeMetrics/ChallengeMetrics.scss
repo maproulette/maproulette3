@@ -10,6 +10,7 @@
   }
 
   .burndown-chart {
+    height: 350px;
     margin-bottom: 1em;
   }
 
@@ -21,6 +22,8 @@
       min-width: 200px;
       flex: 1 1 500px;
       max-width: 500px;
+      height: 350px;
+      margin-top: 50px;
     }
 
     .completion-stats {
@@ -28,6 +31,7 @@
       min-width: 250px;
       max-width: 500px;
       margin-left: 20px;
+      margin-top: 40px;
 
       .completion-progress {
         &:not(:last-child) {

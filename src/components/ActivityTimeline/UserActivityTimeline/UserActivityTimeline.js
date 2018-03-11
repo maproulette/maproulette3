@@ -7,7 +7,8 @@ import _toPairs from 'lodash/toPairs'
 import _isNumber from 'lodash/isNumber'
 import _reverse from 'lodash/reverse'
 import _sortBy from 'lodash/sortBy'
-import { parse, startOfDay } from 'date-fns'
+import parse from 'date-fns/parse'
+import startOfDay from 'date-fns/start_of_day'
 import { typeLabels,
          keysByType }
        from '../../../services/Activity/ActivityItemTypes/ActivityItemTypes'

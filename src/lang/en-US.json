@@ -11,7 +11,7 @@
   "Admin.Project.controls.addChallenge.label": "Add Challenge",
   "Admin.ChallengeList.noChallenges": "No Challenges",
   "Challenge.metrics.tasks.heading": "Tasks",
-  "Challenge.metrics.tasks.available.heading": "Tasks Remaining",
+  "Challenge.metrics.tasks.available.heading": "Tasks Remaining:",
   "Admin.ChallengeTaskMap.controls.clusterTasks.label": "Group Tasks",
   "Admin.ChallengeTaskMap.controls.reviewTask.label": "Review Task",
   "Admin.ChallengeTaskMap.controls.editTask.label": "Edit Task",

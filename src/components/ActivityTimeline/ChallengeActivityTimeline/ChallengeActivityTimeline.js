@@ -7,7 +7,7 @@ import _groupBy from 'lodash/groupBy'
 import _toPairs from 'lodash/toPairs'
 import _reverse from 'lodash/reverse'
 import _sortBy from 'lodash/sortBy'
-import { parse } from 'date-fns'
+import parse from 'date-fns/parse'
 import { statusLabels,
          keysByStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'

@@ -10,6 +10,8 @@ import AppErrors from '../Error/AppErrors'
 import { logoutUser } from '../User/User'
 import _get from 'lodash/get'
 import _isNumber from 'lodash/isNumber'
+import _isArray from 'lodash/isArray'
+import startOfDay from 'date-fns/start_of_day'
 
 /** normalizr schema for projects */
 export const projectSchema = function() {
@@ -150,9 +152,68 @@ export const saveProject = function(projectData) {
   }
 }
 
+/**
+ * Fetch activity timeline for the given project.
+ */
+export const fetchProjectActivity = function(projectId, startDate, endDate) {
+  return function(dispatch) {
+    const params = {projectList: projectId}
+    if (startDate) {
+      params.start = startOfDay(startDate).toISOString()
+    }
+
+    if (endDate) {
+      params.end = startOfDay(endDate).toISOString()
+    }
+
+    return new Endpoint(
+      api.project.activity, {params}
+    ).execute().then(rawActivity => {
+      const normalizedResults = {
+        entities: {
+          projects: {
+            [projectId]: {id: projectId, activity: rawActivity},
+          }
+        }
+      }
+
+      return dispatch(receiveProjects(normalizedResults.entities))
+    }).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        // If we get an unauthorized, we assume the user is not logged
+        // in (or no longer logged in with the server). There's nothing to
+        // do for this request except ensure we know the user is logged out.
+        dispatch(logoutUser())
+      }
+      else {
+        dispatch(addError(AppErrors.project.fetchFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
 // redux reducers
+
+const reduceProjectsFurther = function(mergedState, oldState, projectEntities) {
+  // The generic reduction will merge arrays and objects, but for some
+  // fields we want to simply overwrite with the latest data.
+  projectEntities.forEach(entity => {
+    // Ignore deleted projects.
+    if (entity.deleted) {
+      delete mergedState[entity.id]
+      return
+    }
+
+    if (_isArray(entity.activity)) {
+      mergedState[entity.id].activity = entity.activity
+    }
+  })
+}
 
 // Note that projects can also be nested within challenge responses, so we need
 // to process both project and challenge actions.
 export const projectEntities =
-  genericEntityReducer([RECEIVE_PROJECTS, RECEIVE_CHALLENGES], 'projects')
+  genericEntityReducer([RECEIVE_PROJECTS, RECEIVE_CHALLENGES],
+                       'projects',
+                       reduceProjectsFurther)

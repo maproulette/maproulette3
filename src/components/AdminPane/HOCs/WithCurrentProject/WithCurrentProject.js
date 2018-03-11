@@ -6,7 +6,9 @@ import _values from 'lodash/values'
 import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
+import subMonths from 'date-fns/sub_months'
 import { fetchProject,
+         fetchProjectActivity,
          saveProject } from '../../../../services/Project/Project'
 import { fetchProjectChallenges }
        from '../../../../services/Challenge/Challenge'
@@ -21,6 +23,8 @@ import { addError } from '../../../../services/Error/Error'
  *
  * Supported options:
  * - includeChallenges
+ * - includeActivity
+ * - historicalMonths
  * - defaultToOnlyProject
  * - restrictToGivenProjects
  *
@@ -64,9 +68,12 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       }
 
       if (_isFinite(projectId)) {
-        props.fetchProject(projectId).then(() =>
-          this.setState({loadingProject: false})
-        )
+        Promise.all([
+          props.fetchProject(projectId),
+          options.includeActivity ?
+            props.fetchProjectActivity(projectId, options.historicalMonths) :
+            Promise.resolve(),
+        ]).then(() => this.setState({loadingProject: false}))
 
         if (options.includeChallenges) {
           props.fetchProjectChallenges(projectId).then(() =>
@@ -122,6 +129,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchProject: projectId => dispatch(fetchProject(projectId)),
+  fetchProjectActivity: (projectId, historicalMonths=2) =>
+    dispatch(fetchProjectActivity(projectId,
+                                  subMonths(new Date(), historicalMonths))),
   saveProject: projectData => dispatch(saveProject(projectData)),
   fetchProjectChallenges: projectId =>
     dispatch(fetchProjectChallenges(projectId)),
