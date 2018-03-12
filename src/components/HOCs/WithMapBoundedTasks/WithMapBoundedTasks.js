@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _debounce from 'lodash/debounce'
+import _noop from 'lodash/noop'
 import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
 import { createVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
@@ -31,11 +32,13 @@ const maxAllowedDegrees = function() {
  *
  * @private
  */
-const doUpdateBoundedTasks = _debounce((dispatch, bounds) => {
-  if (boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
-    dispatch(fetchBoundedTasks(bounds, 1000))
-  }
-}, 500)
+const doUpdateBoundedTasks =
+  _get(process.env, 'REACT_APP_FEATURE_BOUNDED_TASK_BROWSING') === 'enabled' ?
+  _debounce((dispatch, bounds) => {
+    if (boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
+      dispatch(fetchBoundedTasks(bounds, 1000))
+    }
+  }, 500) : _noop
 
 /**
  * WithMapBoundedTasks retrieves map-bounded task clusters

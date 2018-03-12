@@ -38,6 +38,13 @@ export class ManageProjects extends Component {
               {this.props.loadingProjects && <BusySpinner inline />}
             </div>
           </h3>
+
+          {this.props.user.isSuperUser &&
+           <button className="button is-green is-outlined new-project"
+                   onClick={() => this.props.history.push('/admin/projects/new')}>
+             <FormattedMessage {...messages.newProject} />
+           </button>
+          }
         </div>
 
         {this.props.projects.length === 1 &&

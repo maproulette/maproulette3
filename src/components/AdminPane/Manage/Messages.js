@@ -8,9 +8,4 @@ export default defineMessages({
     id: 'Admin.manage.header',
     defaultMessage: "Create & Manage",
   },
-
-  newProject: {
-    id: 'Admin.projects.newProject',
-    defaultMessage: "New Project",
-  },
 })
