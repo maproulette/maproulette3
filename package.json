@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.0.0-alpha.7",
+  "version": "3.0.0-beta.1",
   "private": true,
   "dependencies": {
     "@nivo/line": "^0.33.0",

@@ -7,6 +7,27 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.1] - 2018-03-12
+### Added
+- Option to clone challenge for challenge owners (#84).
+- Saving indicator for user settings (#154).
+- Option to contact challenge owner when completing a task (#71).
+- Support for OpenCycleMap API key.
+- Support for asynchronous challenge deletion (#108).
+- Task priority filtering for challenge owners.
+- Task priority column in task list table for challenge owners.
+
+### Changed
+- Reorganized project management for challenge owners.
+- Switched charting libraries.
+- Updated content to reflect initial beta release (#153). 
+- Limit task clustering to max of 15,000 tasks.
+
+### Fixed
+- Bing layer no longer blank at high zoom (#76).
+- Honor project visibility on challenge search.
+
+
 ## [v3.00-alpha.7] - 2018-03-05
 ### Added
 - Localization and partial translations for fr, es, de, and af locales derived
