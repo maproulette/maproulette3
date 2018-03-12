@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import Tabs from '../../../Bulma/Tabs'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ProjectOverview from '../ProjectOverview/ProjectOverview'
 import ChallengeList from '../ChallengeList/ChallengeList'
 import messages from './Messages'
@@ -71,7 +72,10 @@ export default class ProjectList extends Component {
       if (this.managesSingleProject(this.props) && isSelected) {
         projectNameColumn = (
           <div className="column item-link project-list-item__project-name is-active">
-            {project.displayName || project.name}
+            <div className="level">
+              {project.displayName || project.name}
+              {isSelected && this.props.loadingChallenges && <BusySpinner inline />}
+            </div>
           </div>
         )
       }
@@ -79,9 +83,12 @@ export default class ProjectList extends Component {
         projectNameColumn = (
           <div className={classNames('column item-link',
                                      {'is-active': isSelected})}>
-            <a onClick={() => this.toggleRoute(project.id)}>
-              {project.displayName || project.name}
-            </a>
+            <div className="level">
+              <a onClick={() => this.toggleRoute(project.id)}>
+                {project.displayName || project.name}
+              </a>
+              {isSelected && this.props.loadingChallenges && <BusySpinner inline />}
+            </div>
           </div>
         )
 

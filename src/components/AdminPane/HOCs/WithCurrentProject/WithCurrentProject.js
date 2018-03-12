@@ -68,6 +68,11 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       }
 
       if (_isFinite(projectId)) {
+        this.setState({
+          loadingProject: true,
+          loadingChallenges: options.includeChallenges,
+        })
+
         Promise.all([
           props.fetchProject(projectId),
           options.includeActivity ?
