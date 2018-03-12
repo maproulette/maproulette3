@@ -11,6 +11,7 @@ Object {
       "enabled": true,
       "id": 123,
       "name": "challenge1",
+      "parent": 987,
     },
     Object {
       "actions": Object {
@@ -20,6 +21,7 @@ Object {
       "enabled": true,
       "id": 456,
       "name": "challenge2",
+      "parent": 987,
     },
     Object {
       "actions": Object {
@@ -29,6 +31,7 @@ Object {
       "enabled": true,
       "id": 789,
       "name": "challenge2",
+      "parent": 987,
     },
   ],
 }
@@ -45,6 +48,7 @@ Object {
       "enabled": true,
       "id": 123,
       "name": "challenge1",
+      "parent": 987,
     },
     Object {
       "actions": Object {
@@ -54,6 +58,7 @@ Object {
       "enabled": true,
       "id": 456,
       "name": "challenge2",
+      "parent": 987,
     },
     Object {
       "actions": Object {
@@ -63,6 +68,7 @@ Object {
       "enabled": true,
       "id": 789,
       "name": "challenge2",
+      "parent": 987,
     },
   ],
 }
@@ -79,6 +85,7 @@ Object {
       "enabled": true,
       "id": 456,
       "name": "challenge2",
+      "parent": 987,
     },
     Object {
       "actions": Object {
@@ -88,6 +95,7 @@ Object {
       "enabled": true,
       "id": 789,
       "name": "challenge2",
+      "parent": 987,
     },
   ],
 }
@@ -104,6 +112,7 @@ Object {
       "enabled": true,
       "id": 456,
       "name": "challenge2",
+      "parent": 987,
     },
     Object {
       "actions": Object {
@@ -113,8 +122,15 @@ Object {
       "enabled": true,
       "id": 789,
       "name": "challenge2",
+      "parent": 987,
     },
   ],
+}
+`;
+
+exports[`only challenges with enabled project are normally passed through 1`] = `
+Object {
+  "challenges": Array [],
 }
 `;
 
@@ -129,6 +145,7 @@ Object {
       "enabled": true,
       "id": 456,
       "name": "challenge2",
+      "parent": 987,
     },
     Object {
       "actions": Object {
@@ -138,31 +155,7 @@ Object {
       "enabled": true,
       "id": 789,
       "name": "challenge2",
-    },
-  ],
-}
-`;
-
-exports[`only enabled challenges are normally passed through 2`] = `
-Object {
-  "challenges": Array [
-    Object {
-      "actions": Object {
-        "available": 6,
-      },
-      "difficulty": "easy",
-      "enabled": true,
-      "id": 456,
-      "name": "challenge2",
-    },
-    Object {
-      "actions": Object {
-        "available": 1,
-      },
-      "difficulty": "easy",
-      "enabled": true,
-      "id": 789,
-      "name": "challenge2",
+      "parent": 987,
     },
   ],
 }

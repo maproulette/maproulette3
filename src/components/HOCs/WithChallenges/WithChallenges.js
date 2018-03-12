@@ -22,9 +22,9 @@ const WithChallenges =
 export const mapStateToProps = (state, ownProps) => {
   const challenges = _values(_get(state, 'entities.challenges')) || []
 
-  // By default, only pass through challenges that are enabled, have some
-  // tasks, and are in a usable status (unless the allStatuses prop is set to
-  // true).
+  // By default, only pass through challenges that are enabled (and belong to
+  // an enabled project), have some tasks, and are in a usable status (unless
+  // the allStatuses prop is set to true).
   let usableChallenges = challenges
   if (ownProps.allStatuses !== true) {
     usableChallenges = _filter(challenges, challenge => {
@@ -32,7 +32,9 @@ export const mapStateToProps = (state, ownProps) => {
       const tasksComplete = _isNumber(_get(challenge, 'actions.available')) ?
                             challenge.actions.available === 0 : false
 
+      const parent = _get(state, `entities.projects.${challenge.parent}`)
       return challenge.enabled &&
+             _get(parent, 'enabled', false) &&
              !challenge.deleted &&
              !tasksComplete &&
              isUsableChallengeStatus(challenge.status)
