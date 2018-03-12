@@ -55,10 +55,10 @@ ShallowWrapper {
                               Roulette
                     </span>
                     <span
-                              className="alpha-preview"
+                              className="beta-badge"
                     >
                               <FormattedMessage
-                                        defaultMessage="v3 ALPHA PREVIEW"
+                                        defaultMessage="v3 BETA"
                                         id="Navbar.preview.label"
                                         values={Object {}}
                               />
@@ -151,10 +151,10 @@ ShallowWrapper {
                         Roulette
             </span>
             <span
-                        className="alpha-preview"
+                        className="beta-badge"
             >
                         <FormattedMessage
-                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    defaultMessage="v3 BETA"
                                     id="Navbar.preview.label"
                                     values={Object {}}
                         />
@@ -185,10 +185,10 @@ ShallowWrapper {
                 Roulette
 </span>,
               <span
-                className="alpha-preview"
+                className="beta-badge"
 >
                 <FormattedMessage
-                                defaultMessage="v3 ALPHA PREVIEW"
+                                defaultMessage="v3 BETA"
                                 id="Navbar.preview.label"
                                 values={Object {}}
                 />
@@ -252,11 +252,11 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <FormattedMessage
-                  defaultMessage="v3 ALPHA PREVIEW"
+                  defaultMessage="v3 BETA"
                   id="Navbar.preview.label"
                   values={Object {}}
 />,
-                "className": "alpha-preview",
+                "className": "beta-badge",
               },
               "ref": null,
               "rendered": Object {
@@ -264,7 +264,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "defaultMessage": "v3 ALPHA PREVIEW",
+                  "defaultMessage": "v3 BETA",
                   "id": "Navbar.preview.label",
                   "values": Object {},
                 },
@@ -563,10 +563,10 @@ ShallowWrapper {
                                     Roulette
                         </span>
                         <span
-                                    className="alpha-preview"
+                                    className="beta-badge"
                         >
                                     <FormattedMessage
-                                                defaultMessage="v3 ALPHA PREVIEW"
+                                                defaultMessage="v3 BETA"
                                                 id="Navbar.preview.label"
                                                 values={Object {}}
                                     />
@@ -659,10 +659,10 @@ ShallowWrapper {
                             Roulette
               </span>
               <span
-                            className="alpha-preview"
+                            className="beta-badge"
               >
                             <FormattedMessage
-                                          defaultMessage="v3 ALPHA PREVIEW"
+                                          defaultMessage="v3 BETA"
                                           id="Navbar.preview.label"
                                           values={Object {}}
                             />
@@ -693,10 +693,10 @@ ShallowWrapper {
                   Roulette
 </span>,
                 <span
-                  className="alpha-preview"
+                  className="beta-badge"
 >
                   <FormattedMessage
-                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    defaultMessage="v3 BETA"
                                     id="Navbar.preview.label"
                                     values={Object {}}
                   />
@@ -760,11 +760,11 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <FormattedMessage
-                    defaultMessage="v3 ALPHA PREVIEW"
+                    defaultMessage="v3 BETA"
                     id="Navbar.preview.label"
                     values={Object {}}
 />,
-                  "className": "alpha-preview",
+                  "className": "beta-badge",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -772,7 +772,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "defaultMessage": "v3 ALPHA PREVIEW",
+                    "defaultMessage": "v3 BETA",
                     "id": "Navbar.preview.label",
                     "values": Object {},
                   },
@@ -1105,10 +1105,10 @@ ShallowWrapper {
                               Roulette
                     </span>
                     <span
-                              className="alpha-preview"
+                              className="beta-badge"
                     >
                               <FormattedMessage
-                                        defaultMessage="v3 ALPHA PREVIEW"
+                                        defaultMessage="v3 BETA"
                                         id="Navbar.preview.label"
                                         values={Object {}}
                               />
@@ -1216,10 +1216,10 @@ ShallowWrapper {
                         Roulette
             </span>
             <span
-                        className="alpha-preview"
+                        className="beta-badge"
             >
                         <FormattedMessage
-                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    defaultMessage="v3 BETA"
                                     id="Navbar.preview.label"
                                     values={Object {}}
                         />
@@ -1250,10 +1250,10 @@ ShallowWrapper {
                 Roulette
 </span>,
               <span
-                className="alpha-preview"
+                className="beta-badge"
 >
                 <FormattedMessage
-                                defaultMessage="v3 ALPHA PREVIEW"
+                                defaultMessage="v3 BETA"
                                 id="Navbar.preview.label"
                                 values={Object {}}
                 />
@@ -1317,11 +1317,11 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <FormattedMessage
-                  defaultMessage="v3 ALPHA PREVIEW"
+                  defaultMessage="v3 BETA"
                   id="Navbar.preview.label"
                   values={Object {}}
 />,
-                "className": "alpha-preview",
+                "className": "beta-badge",
               },
               "ref": null,
               "rendered": Object {
@@ -1329,7 +1329,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "defaultMessage": "v3 ALPHA PREVIEW",
+                  "defaultMessage": "v3 BETA",
                   "id": "Navbar.preview.label",
                   "values": Object {},
                 },
@@ -1705,10 +1705,10 @@ ShallowWrapper {
                                     Roulette
                         </span>
                         <span
-                                    className="alpha-preview"
+                                    className="beta-badge"
                         >
                                     <FormattedMessage
-                                                defaultMessage="v3 ALPHA PREVIEW"
+                                                defaultMessage="v3 BETA"
                                                 id="Navbar.preview.label"
                                                 values={Object {}}
                                     />
@@ -1816,10 +1816,10 @@ ShallowWrapper {
                             Roulette
               </span>
               <span
-                            className="alpha-preview"
+                            className="beta-badge"
               >
                             <FormattedMessage
-                                          defaultMessage="v3 ALPHA PREVIEW"
+                                          defaultMessage="v3 BETA"
                                           id="Navbar.preview.label"
                                           values={Object {}}
                             />
@@ -1850,10 +1850,10 @@ ShallowWrapper {
                   Roulette
 </span>,
                 <span
-                  className="alpha-preview"
+                  className="beta-badge"
 >
                   <FormattedMessage
-                                    defaultMessage="v3 ALPHA PREVIEW"
+                                    defaultMessage="v3 BETA"
                                     id="Navbar.preview.label"
                                     values={Object {}}
                   />
@@ -1917,11 +1917,11 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": <FormattedMessage
-                    defaultMessage="v3 ALPHA PREVIEW"
+                    defaultMessage="v3 BETA"
                     id="Navbar.preview.label"
                     values={Object {}}
 />,
-                  "className": "alpha-preview",
+                  "className": "beta-badge",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -1929,7 +1929,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "defaultMessage": "v3 ALPHA PREVIEW",
+                    "defaultMessage": "v3 BETA",
                     "id": "Navbar.preview.label",
                     "values": Object {},
                   },

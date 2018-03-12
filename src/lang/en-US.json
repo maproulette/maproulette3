@@ -1,7 +1,7 @@
 {
   "AboutModal.header": "Be an instant contributor to the world's maps",
-  "AboutModal.feedback.header": "Alpha Preview",
-  "AboutModal.feedback.info": "Welcome to the early preview of MapRoulette v3 alpha! Things are still rough around the edges and features are missing, but we'd love to hear your early feedback to help us drive things forward. Please record any thoughts or bug reports on our [github issues page](https://github.com/maproulette/maproulette3/issues) or email us at [maproulette@maproulette.org](mailto:maproulette@maproulette.org). Thank you!",
+  "AboutModal.feedback.header": "Feedback",
+  "AboutModal.feedback.info": "Welcome to MapRoulette v3 beta! We'd love to hear your feedback. Please record any thoughts or bug reports on our [github issues page](https://github.com/maproulette/maproulette3/issues) or email us at [maproulette@maproulette.org](mailto:maproulette@maproulette.org). Thank you!",
   "AboutModal.filterTagIntro": "Find tasks that address efforts important to you.",
   "AboutModal.filterLocationIntro": "Make fixes in local areas you care about.",
   "AboutModal.filterDifficultyIntro": "Work at your own level, from novice to expert.",
@@ -173,7 +173,7 @@
   "HelpPopout.control.label": "Help",
   "Navbar.links.userProfile": "User Profile",
   "Navbar.links.signout": "Sign out",
-  "Navbar.preview.label": "v3 ALPHA PREVIEW",
+  "Navbar.preview.label": "v3 BETA",
   "Navbar.links.about": "About",
   "Navbar.links.challengeResults": "Challenges",
   "Navbar.links.admin": "Create",

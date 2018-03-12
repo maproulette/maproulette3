@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   preview: {
     id: 'Navbar.preview.label',
-    defaultMessage: "v3 ALPHA PREVIEW",
+    defaultMessage: "v3 BETA",
   },
 
   about: {
