@@ -52,12 +52,11 @@ export class TaskPane extends Component {
     this.props.completeTask(taskId, challengeId, taskStatus, comment, taskLoadBy)
   }
 
-  componentWillReceiveProps(nextProps) {
-    // reset completingTask state if we're starting on a new task.
-    if (this.state.completingTask !== null &&
-        _get(nextProps, 'task.id') !== this.state.completingTask) {
+  clearCompletingTask = () => {
+    // Clear on next tick to give our animation transition a chance to clean up.
+    setTimeout(() => {
       this.setState({completingTask: null})
-    }
+    }, 0)
   }
 
   render() {
@@ -73,8 +72,9 @@ export class TaskPane extends Component {
         <MapPane>
           <TransitionGroup>
             {this.state.completingTask !== this.props.task.id &&
-              <CSSTransition key={this.props.task.id} timeout={{enter: 1500, exit: 500}}
-                             classNames="animate-slide">
+              <CSSTransition key={this.props.task.id} timeout={{enter: 1500, exit: 300}}
+                             classNames="animate-slide"
+                             onExited={this.clearCompletingTask}>
                 <DetailMap task={this.props.task}
                            challenge={this.props.task.parent}
                            {...this.props} />
