@@ -38,12 +38,12 @@ export class CompletionMetrics extends Component {
 
     return (
       <div className="completion-stats">
-        <LabeledProgressBar className='completion-progress'
+        {!this.props.onlyCompleted && <div>{statusProgressBars}</div>}
+        <LabeledProgressBar className='completion-progress evaluated-by-user'
                             key="total-completed"
                             label={this.props.intl.formatMessage(messages.evaluatedLabel)}
                             value={totalEvaluated}
                             max={this.props.taskMetrics.total} />
-        {!this.props.onlyCompleted && <div>{statusProgressBars}</div>}
       </div>
     )
   }

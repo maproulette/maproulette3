@@ -42,6 +42,10 @@
 
         .completion-progress {
           margin-top: 15px;
+
+          &.evaluated-by-user {
+            margin-top: 30px;
+          }
         }
       }
     }

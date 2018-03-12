@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Projects & Challenges",
   },
 
+  newProject: {
+    id: 'Admin.ManageProjects.newProject',
+    defaultMessage: "Add Project",
+  },
+
   help: {
     id: "Admin.ManageProjects.help.info",
     defaultMessage: "Projects serve as a means of grouping related " +

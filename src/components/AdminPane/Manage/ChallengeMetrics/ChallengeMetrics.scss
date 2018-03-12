@@ -46,6 +46,10 @@
         progress {
           height: 1.25rem;
         }
+
+        &.evaluated-by-user {
+          margin-top: 30px;
+        }
       }
     }
   }
