@@ -12,9 +12,10 @@ import './BusySpinner.css'
 export default class BusySpinner extends Component {
   render() {
     return (
-      <div className={classNames({'has-centered-children': this.props.inline !== true},
-                                  'busy-spinner',
-                                  this.props.className)}>
+      <div className={classNames('busy-spinner', {
+                                   'has-centered-children': this.props.inline !== true,
+                                   'inline': this.props.inline,
+                                 }, this.props.className)}>
         <div className="busy-spinner-icon" />
       </div>
     )

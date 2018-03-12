@@ -49,14 +49,17 @@ export const clearClusteredTasks = function() {
 /**
  * Retrieve clustered task data belonging to the given challenge
  */
-export const fetchClusteredTasks = function(challengeId) {
+export const fetchClusteredTasks = function(challengeId, limit=15000) {
   return function(dispatch) {
     const fetchId = _uniqueId()
     dispatch(receiveClusteredTasks(challengeId, [], RequestStatus.inProgress, fetchId))
 
     return new Endpoint(
-      api.challenge.clusteredTasks,
-      {schema: [ taskSchema() ], variables: {id: challengeId}}
+      api.challenge.clusteredTasks, {
+        schema: [ taskSchema() ],
+        variables: {id: challengeId},
+        params: {limit},
+      }
     ).execute().then(normalizedResults => {
       // Add parent field
       const tasks = _values(_get(normalizedResults, 'entities.tasks', {}))

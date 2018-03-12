@@ -1,6 +1,12 @@
 @import '../../theme.scss';
 
 .busy-spinner {
+  &.inline {
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
   .busy-spinner-icon {
     @include loader;
   }
