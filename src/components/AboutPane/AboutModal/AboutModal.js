@@ -37,10 +37,6 @@ export class AboutModal extends Component {
         <div className='about-modal__content'>
           <div className='columns'>
             <div className='column is-centered is-mobile about-modal__feedback-note'>
-              <h2 className='subtitle'>
-                <FormattedMessage {...messages.feedbackHeader} />
-              </h2>
-
               <MarkdownContent markdown={this.props.intl.formatMessage(messages.feedbackInfo)} />
             </div>
           </div>

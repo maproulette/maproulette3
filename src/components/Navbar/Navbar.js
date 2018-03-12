@@ -26,7 +26,7 @@ export default class Navbar extends Component {
             <span className="is-size-4">
               <span className="has-text-weight-bold">Map</span>Roulette
             </span>
-            <span className="alpha-preview">
+            <span className="beta-badge">
               <FormattedMessage {...messages.preview} />
             </span>
           </Link>

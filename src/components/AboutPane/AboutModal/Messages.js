@@ -11,12 +11,12 @@ export default defineMessages({
 
   feedbackHeader: {
     id: 'AboutModal.feedback.header',
-    defaultMessage: "Alpha Preview",
+    defaultMessage: "Feedback",
   },
 
   feedbackInfo: {
     id: 'AboutModal.feedback.info',
-    defaultMessage: "Welcome to the early preview of MapRoulette v3 alpha! Things are still rough around the edges and features are missing, but we'd love to hear your early feedback to help us drive things forward. Please record any thoughts or bug reports on our [github issues page](https://github.com/maproulette/maproulette3/issues) or email us at [maproulette@maproulette.org](mailto:maproulette@maproulette.org). Thank you!",
+    defaultMessage: "Welcome to MapRoulette v3 beta! We'd love to hear your feedback. Please record any thoughts or bug reports on our [github issues page](https://github.com/maproulette/maproulette3/issues) or email us at [maproulette@maproulette.org](mailto:maproulette@maproulette.org). Thank you!",
   },
 
   filterTagIntro: {
