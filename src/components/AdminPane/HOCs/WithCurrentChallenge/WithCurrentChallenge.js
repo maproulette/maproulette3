@@ -3,7 +3,7 @@ import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
-import subMonths from 'date-fns/sub_months'
+import _isFinite from 'lodash/isFinite'
 import { challengeDenormalizationSchema,
          challengeResultEntity,
          fetchChallenge,
@@ -25,8 +25,7 @@ import WithClusteredTasks
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 const WithCurrentChallenge = function(WrappedComponent,
-                                      includeTasks=false,
-                                      historicalMonths=2) {
+                                      includeTasks=false) {
   return class extends Component {
     state = {
       loadingChallenge: true,
@@ -39,9 +38,8 @@ const WithCurrentChallenge = function(WrappedComponent,
     loadChallenge = () => {
       const challengeId = this.currentChallengeId()
 
-      if (!isNaN(challengeId)) {
+      if (_isFinite(challengeId)) {
         this.setState({loadingChallenge: true})
-        const timelineStartDate = subMonths(new Date(), historicalMonths)
 
         // Start by fetching the challenge. Then fetch follow-up data.
         this.props.fetchChallenge(challengeId).then(normalizedChallengeData => {
@@ -49,7 +47,7 @@ const WithCurrentChallenge = function(WrappedComponent,
 
           Promise.all([
             this.props.fetchChallengeComments(challengeId),
-            this.props.fetchChallengeActivity(challengeId, timelineStartDate),
+            this.props.fetchChallengeActivity(challengeId, new Date(challenge.created)),
             this.props.fetchChallengeActions(challengeId),
           ]).then(() => this.setState({loadingChallenge: false}))
 
@@ -132,9 +130,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
 })
 
-export default (WrappedComponent, includeTasks, historicalMonths) =>
+export default (WrappedComponent, includeTasks) =>
   connect(mapStateToProps, mapDispatchToProps)(
     WithClusteredTasks(
-      WithCurrentChallenge(WrappedComponent, includeTasks, historicalMonths)
+      WithCurrentChallenge(WrappedComponent, includeTasks)
     )
   )

@@ -26,6 +26,32 @@ import { TaskStatus }
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class BurndownChart extends Component {
+  /**
+   * Includes the first and last datapoint, plus evenly-distributed samples
+   * from the remainder of the given data points.
+   */
+  distributedDataSamples(dataPoints, totalSamplesDesired) {
+    if (totalSamplesDesired >= dataPoints.length) {
+      return dataPoints
+    }
+
+    const samples = []
+    const sampleInterval = dataPoints.length / (totalSamplesDesired - 2)
+
+    samples.push(dataPoints[0])
+    for (let i = 1; i < totalSamplesDesired - 1; i++) {
+      const sampleIndex = Math.floor(i * sampleInterval)
+
+      // Don't add first or last element since we handle those separately
+      if (sampleIndex > 0 && sampleIndex < dataPoints.length - 1) {
+        samples.push(dataPoints[sampleIndex])
+      }
+    }
+    samples.push(dataPoints[dataPoints.length - 1])
+
+    return samples
+  }
+
   render() {
     if (_isEmpty(this.props.challenges)) {
       return null
@@ -55,7 +81,7 @@ export class BurndownChart extends Component {
         day,
         x: this.props.intl.formatDate(
                       day,
-                      {day: '2-digit', month: 'short'}
+                      {day: '2-digit', month: '2-digit', year: '2-digit'}
                     ),
         y: totalRemaining,
       }
@@ -84,6 +110,9 @@ export class BurndownChart extends Component {
         data: _reverse(weeklyMetrics),
     }]
 
+    const distributedLabels =
+      _map(this.distributedDataSamples(burndownMetrics[0].data, 12), 'x')
+
     return (
       <div className="burndown-chart">
         {!_isEmpty(this.props.chartTitle) &&
@@ -104,9 +133,10 @@ export class BurndownChart extends Component {
                         stacked={false}
                         axisBottom={{
                             "orient": "bottom",
-                            "tickSize": 5,
+                            "tickSize": 10,
                             "tickPadding": 5,
-                            "tickRotation": -90,
+                            "tickRotation": -45,
+                            "tickValues": distributedLabels,
                         }}
                         axisLeft={{
                             "orient": "left",
@@ -115,7 +145,7 @@ export class BurndownChart extends Component {
                             "tickRotation": 0,
                         }}
                         enableArea={true}
-                        enableDots={true}
+                        enableDots={false}
                         dotSize={10}
                         dotColor="inherit"
                         dotBorderWidth={2}
