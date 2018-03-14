@@ -32,6 +32,13 @@ export const chooseVisibleTask = (challenge, challengeBounds, clusteredTasks) =>
     return null
   }
 
+  // If no bounds available, or they don't match this challenge, just go with
+  // the first task
+  if (!challengeBounds || !challengeBounds.bounds ||
+      challengeBounds.challengeId !== challenge.id) {
+    return clusteredTasks[0]
+  }
+
   const createdTasks = []
   const skippedTasks = []
   let task = null
