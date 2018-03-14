@@ -16,10 +16,6 @@ import messages from './Messages'
  */
 export default class CalendarHeatmap extends Component {
   render() {
-    if (this.props.dailyMetrics.length === 0) {
-      return null
-    }
-
     const calendarData =
       _compact(_map(_reverse(this.props.dailyMetrics), metrics =>
         metrics.value === 0 ? null :
@@ -28,6 +24,10 @@ export default class CalendarHeatmap extends Component {
           value: metrics.value,
         })
     ))
+
+    if (calendarData.length === 0) {
+      return null
+    }
 
     return (
       <div className="calendar-heatmap">

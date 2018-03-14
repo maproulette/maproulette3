@@ -57,3 +57,13 @@ test('it renders a div with class none if there are no saved challenges', () => 
   expect(wrapper).toMatchSnapshot()
 })
 
+test("it will skip null or empty challenges", () => {
+  basicProps.user.savedChallenges.unshift(null)
+  basicProps.user.savedChallenges.unshift({})
+
+  const wrapper = shallow(
+    <SavedChallenges {...basicProps} />
+  )
+
+  expect(wrapper.find('li').length).toBe(basicProps.user.savedChallenges.length - 2)
+})

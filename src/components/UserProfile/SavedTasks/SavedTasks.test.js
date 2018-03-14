@@ -68,3 +68,28 @@ test('it renders a div with class none if there are no saved tasks', () => {
 
   expect(wrapper).toMatchSnapshot()
 })
+
+test("it will skip null or empty tasks", () => {
+  basicProps.user.savedTasks.unshift(null)
+  basicProps.user.savedTasks.unshift({})
+
+  const wrapper = shallow(
+    <SavedTasks {...basicProps} />
+  )
+
+  expect(wrapper.find('li').length).toBe(basicProps.user.savedTasks.length - 2)
+})
+
+test("it will skip tasks with incomplete challenge data", () => {
+  basicProps.user.savedTasks.unshift({
+    id: 246,
+    name: "Incomplete Task",
+    parent: {}
+  })
+
+  const wrapper = shallow(
+    <SavedTasks {...basicProps} />
+  )
+
+  expect(wrapper.find('li').length).toBe(basicProps.user.savedTasks.length - 1)
+})

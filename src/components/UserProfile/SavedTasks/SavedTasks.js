@@ -4,6 +4,8 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
+import _compact from 'lodash/compact'
+import _isFinite from 'lodash/isFinite'
 import { Link } from 'react-router-dom'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
@@ -18,23 +20,30 @@ import messages from './Messages'
 export default class SavedTasks extends Component {
   render() {
     const taskItems =
-      _map(_get(this.props, 'user.savedTasks', []), task =>
-        <li key={task.id} className="columns saved-tasks__task">
-          <div className="column is-four-fifths">
-            <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>
-              {task.name} &mdash; {task.parent.name}
-            </Link>
-          </div>
+      _compact(_map(_get(this.props, 'user.savedTasks', []), task => {
+        if (!_isFinite(_get(task, 'parent.id'))) {
+          return null
+        }
 
-          <div className="column">
-            <a className='button is-clear'
-               onClick={() => this.props.unsaveTask(this.props.user.id, task.id)}
-               title={this.props.intl.formatMessage(messages.unsave)}>
-              <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
-            </a>
-          </div>
-        </li>
-      )
+        return (
+          <li key={task.id} className="columns saved-tasks__task">
+            <div className="column is-four-fifths">
+              <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>
+                {task.name} &mdash; {task.parent.name}
+              </Link>
+            </div>
+
+            <div className="column">
+              <a className='button is-clear'
+                onClick={() => this.props.unsaveTask(this.props.user.id, task.id)}
+                title={this.props.intl.formatMessage(messages.unsave)}>
+                <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
+              </a>
+            </div>
+          </li>
+        )
+      }
+    ))
 
     const savedTasks = taskItems.length > 0 ?
                        <ul>{taskItems}</ul> :
