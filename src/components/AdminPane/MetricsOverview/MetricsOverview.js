@@ -6,7 +6,7 @@ import _round from 'lodash/round'
 import _startCase from 'lodash/startCase'
 import WithComputedMetrics from '../HOCs/WithComputedMetrics/WithComputedMetrics'
 import CompletionMetrics from './CompletionMetrics'
-import CompletionChart from './CompletionChart'
+import CompletionRadar from '../Manage/CompletionRadar/CompletionRadar'
 import './MetricsOverview.css'
 
 
@@ -50,7 +50,7 @@ export class MetricsOverview extends Component {
         <div className="columns stats">{headlineStats}</div>
 
         <div className="task-stats">
-          <CompletionChart {...this.props} />
+          <CompletionRadar {...this.props} />
           <CompletionMetrics {...this.props} />
         </div>
       </div>

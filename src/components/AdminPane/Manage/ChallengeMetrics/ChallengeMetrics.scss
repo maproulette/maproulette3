@@ -1,6 +1,8 @@
 @import '../../../../variables.scss';
 
 .challenge-metrics {
+  margin-bottom: 30px;
+
   h5 {
     margin-bottom: 1em;
   }
@@ -10,20 +12,35 @@
   }
 
   .burndown-chart {
-    height: 350px;
-    margin-bottom: 1em;
+    height: 375px;
+    margin-bottom: 30px;
+  }
+
+  .calendar-heatmap {
+    margin: 30px 0;
+    height: 765px;
+    min-width: 300px;
+    max-width: 400px;
+    flex: 1 1 400px;
+  }
+
+  &__additional-metrics {
+    display: flex;
+    flex-wrap: wrap;
   }
 
   &__completion {
     display: flex;
     flex-wrap: wrap;
+    min-width: 250px;
+    flex: 1 1 400px;
 
     .completion-radar-chart {
+      margin: 30px 0px;
       min-width: 200px;
       flex: 1 1 500px;
       max-width: 500px;
       height: 350px;
-      margin-top: 50px;
     }
 
     .completion-stats {

@@ -3,6 +3,7 @@ import { FormattedMessage,
          FormattedDate } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
+import _takeRight from 'lodash/takeRight'
 import { ChallengeStatus,
          isUsableChallengeStatus,
          messagesByStatus }
@@ -81,8 +82,9 @@ export class ChallengeOverview extends Component {
           <h3 className="subtitle">
             <FormattedMessage {...messages.activity} />
           </h3>
-          <ChallengeActivityTimeline activity={_get(this.props,
-                                                    'challenge.activity', [])} />
+          <ChallengeActivityTimeline activity={
+            _takeRight(_get(this.props, 'challenge.activity', []), 90)
+          } maxEntries={14} />
         </section>
       </div>
     )
