@@ -239,6 +239,31 @@ export const fetchChallengeActions = function(challengeId = null) {
 }
 
 /**
+ * Fetch action metrics for all challenges in the given project.
+ */
+export const fetchProjectChallengeActions = function(projectId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenges.actions,
+      {schema: [ challengeSchema() ], params: {projectList: projectId}}
+    ).execute().then(normalizedResults => {
+      dispatch(receiveChallenges(normalizedResults.entities))
+    }).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        // If we get an unauthorized, we assume the user is not logged
+        // in (or no longer logged in with the server). There's nothing to
+        // do for this request except ensure we know the user is logged out.
+        dispatch(logoutUser())
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.fetchFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
  * Fetch activity timeline for the given challenge
  */
 export const fetchChallengeActivity = function(challengeId, startDate, endDate) {
