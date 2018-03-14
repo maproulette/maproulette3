@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
+import _get from 'lodash/get'
 import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithFilteredClusteredTasks
@@ -59,7 +60,7 @@ export class ViewChallenge extends Component {
                 </Link>
               </li>
               <li>
-                <Link to={`/admin/project/${this.props.challenge.parent.id}`}>
+                <Link to={`/admin/project/${_get(this.props, 'challenge.parent.id')}`}>
                   {this.props.challenge.parent.displayName ||
                   this.props.challenge.parent.name}
                 </Link>

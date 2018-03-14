@@ -51,7 +51,7 @@ export default class ProjectMetrics extends Component {
 
         <div className="project-metrics__stats">
           <ChallengeMetrics burndownHeight={400}
-                            burndownActivity={_get(this.props, 'project.activity', [])}
+                            activity={_get(this.props, 'project.activity', [])}
                             {...this.props} />
         </div>
       </div>

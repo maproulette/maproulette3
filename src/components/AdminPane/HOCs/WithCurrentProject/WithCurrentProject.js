@@ -9,7 +9,8 @@ import _omit from 'lodash/omit'
 import { fetchProject,
          fetchProjectActivity,
          saveProject } from '../../../../services/Project/Project'
-import { fetchProjectChallenges }
+import { fetchProjectChallenges,
+         fetchProjectChallengeActions }
        from '../../../../services/Challenge/Challenge'
 import AppErrors from '../../../../services/Error/AppErrors'
 import { addError } from '../../../../services/Error/Error'
@@ -86,7 +87,14 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
         })
 
         if (options.includeChallenges) {
-          props.fetchProjectChallenges(projectId).then(() =>
+          const retrievals = []
+          retrievals.push(props.fetchProjectChallenges(projectId))
+
+          if (options.includeActivity) {
+            retrievals.push(props.fetchProjectChallengeActions(projectId))
+          }
+
+          Promise.all(retrievals).then(() =>
             this.setState({loadingChallenges: false})
           )
         }
@@ -144,6 +152,8 @@ const mapDispatchToProps = dispatch => ({
   saveProject: projectData => dispatch(saveProject(projectData)),
   fetchProjectChallenges: projectId =>
     dispatch(fetchProjectChallenges(projectId)),
+  fetchProjectChallengeActions: projectId =>
+    dispatch(fetchProjectChallengeActions(projectId)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),
 })
 
