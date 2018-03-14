@@ -7,6 +7,8 @@ import _groupBy from 'lodash/groupBy'
 import _toPairs from 'lodash/toPairs'
 import _reverse from 'lodash/reverse'
 import _sortBy from 'lodash/sortBy'
+import _take from 'lodash/take'
+import _isFinite from 'lodash/isFinite'
 import parse from 'date-fns/parse'
 import { statusLabels,
          keysByStatus }
@@ -37,7 +39,7 @@ export class ChallengeActivityTimeline extends Component {
 
     // Build timeline entries for each day, showing each (non-zero) type of
     // activity with a badge displaying the count.
-    const timelineItems = _compact(_map(latestEntries, entriesByDate => {
+    let timelineItems = _compact(_map(latestEntries, entriesByDate => {
       const isoDate = entriesByDate[0]
       const statusEntries = entriesByDate[1]
 
@@ -68,6 +70,11 @@ export class ChallengeActivityTimeline extends Component {
         </div>
       )
     }))
+
+    // If a limit on timeline entries has been given, honor it.
+    if (_isFinite(this.props.maxEntries)) {
+      timelineItems = _take(timelineItems, this.props.maxEntries)
+    }
 
     // If there is no reportable activity, show that on the timeline.
     if (timelineItems.length === 0) {
