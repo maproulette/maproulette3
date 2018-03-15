@@ -49,7 +49,10 @@ export default class TaskMap extends Component {
   }
 
   updateTaskBounds = (bounds, zoom) => {
-    this.props.setTaskMapBounds(this.props.task, bounds, zoom, false)
+    // Don't update map bounds if we're in the process of completing.
+    if (this.props.task.id !== this.props.completingTask) {
+      this.props.setTaskMapBounds(this.props.task.id, bounds, zoom, false)
+    }
   }
 
   render() {

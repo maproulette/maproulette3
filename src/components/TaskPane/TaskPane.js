@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { TransitionGroup,
-         CSSTransition } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group'
 import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
@@ -69,18 +68,16 @@ export class TaskPane extends Component {
         <TaskDetailsSidebar task={this.props.task}
                             completeTask={this.completeTask}
                             {..._omit(this.props, 'completeTask')} />
-        <MapPane>
-          <TransitionGroup>
-            {this.state.completingTask !== this.props.task.id &&
-              <CSSTransition key={this.props.task.id} timeout={{enter: 1500, exit: 300}}
-                             classNames="animate-slide"
-                             onExited={this.clearCompletingTask}>
-                <DetailMap task={this.props.task}
-                           challenge={this.props.task.parent}
-                           {...this.props} />
-              </CSSTransition>
-            }
-          </TransitionGroup>
+        <MapPane completingTask={this.state.completingTask}>
+          <CSSTransition key={this.props.task.id} timeout={{exit: 300, enter: 1500}}
+                         classNames="animate-slide"
+                         in={this.state.completingTask !== this.props.task.id}
+                         unmountOnExit
+                         onExited={this.clearCompletingTask}>
+            <DetailMap task={this.props.task}
+                       challenge={this.props.task.parent}
+                       {...this.props} />
+          </CSSTransition>
         </MapPane>
       </div>
     )

@@ -2,6 +2,8 @@ import _compact from 'lodash/compact'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import RequestStatus from '../Server/RequestStatus'
+import AsMappable from '../Task/AsMappable'
+import { toLatLngBounds  } from '../MapBounds/MapBounds'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import messages from './Messages'
@@ -91,7 +93,11 @@ export const constructIdURI = function(task, mapBounds) {
   const baseUriComponent =
     `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
 
-  const centerPoint = mapBounds.bounds.getCenter()
+  // If the mapbounds don't match the task, compute our own centerpoint.
+  const centerPoint = mapBounds.taskId === task.id ?
+                      mapBounds.bounds.getCenter() :
+                      AsMappable(task).calculateCenterPoint()
+
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
 
@@ -130,8 +136,13 @@ export const constructIdURI = function(task, mapBounds) {
  * @see See https://wiki.openstreetmap.org/wiki/JOSM/RemoteControl
  */
 export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
-  const sw = mapBounds.bounds.getSouthWest()
-  const ne = mapBounds.bounds.getNorthEast()
+  // If the mapbounds don't match the task, compute our own bounds.
+  const bounds = mapBounds.taskId === task.id ?
+                 mapBounds.bounds :
+                 toLatLngBounds(AsMappable(task).calculateBBox())
+
+  const sw = bounds.getSouthWest()
+  const ne = bounds.getNorthEast()
   let uri = `http://127.0.0.1:8111/load_and_zoom?left=${sw.lng}&right=${ne.lng}` +
             `&top=${ne.lat}&bottom=${sw.lat}&new_layer=${asNewLayer ? 'true' : 'false'}` +
             `&changeset_comment=${encodeURIComponent(task.parent.checkinComment)}&select=`

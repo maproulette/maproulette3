@@ -64,6 +64,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(setChallengeOwnerMapBounds(challengeId, bounds, zoom))
     },
 
+    setTaskMapBounds: (taskId, bounds, zoom, fromUserAction=false) => {
+      dispatch(setTaskMapBounds(taskId, bounds, zoom, fromUserAction))
+    },
+
     updateBoundedChallenges: bounds => {
       if (!_isEmpty(bounds)) {
         updateChallenges(dispatch, bounds)
@@ -90,10 +94,6 @@ const mapDispatchToProps = dispatch => {
       else {
         dispatch(addError(AppErrors.user.missingHomeLocation))
       }
-    },
-
-    setTaskMapBounds: (task, bounds, zoom, fromUserAction=false) => {
-      dispatch(setTaskMapBounds(bounds, zoom, fromUserAction))
     },
   }
 }
