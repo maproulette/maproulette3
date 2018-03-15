@@ -162,9 +162,10 @@ export const setChallengeOwnerMapBounds = function(challengeId, bounds, zoom) {
  *        action, false if the bounds are simply being altered in response
  *        to normal panning and zooming.
  */
-export const setTaskMapBounds = function(bounds, zoom, fromUserAction=false) {
+export const setTaskMapBounds = function(taskId, bounds, zoom, fromUserAction=false) {
   return {
     type: SET_TASK_MAP_BOUNDS,
+    taskId,
     bounds: fromLatLngBounds(bounds),
     zoom,
     fromUserAction,
@@ -199,6 +200,7 @@ export const currentMapBounds = function(state=defaultState, action) {
     case SET_TASK_MAP_BOUNDS:
       return Object.assign({}, state, {
         task: {
+          taskId: action.taskId,
           bounds: action.bounds,
           zoom: action.zoom,
           fromUserAction: action.fromUserAction,
