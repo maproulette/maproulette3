@@ -173,6 +173,7 @@
   "ConfirmAction.cancel": "Cancel",
   "ConfirmAction.proceed": "Proceed",
   "HelpPopout.control.label": "Help",
+  "LocatorMap.controls.startChallenge.label": "Start Challenge",
   "Navbar.links.userProfile": "User Profile",
   "Navbar.links.signout": "Sign out",
   "Navbar.preview.label": "v3 BETA",

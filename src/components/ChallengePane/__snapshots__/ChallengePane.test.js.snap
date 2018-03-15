@@ -56,7 +56,7 @@ ShallowWrapper {
                     className="inline full-screen-height with-shadow challenge-pane__results"
                     isActive={true}
           >
-                    <Connect(Connect(Connect(Connect(Component))))
+                    <Connect(Connect(Connect(WithSortedChallenges)))
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
@@ -74,7 +74,7 @@ ShallowWrapper {
                     />
           </Sidebar>
           <Connect(MapPane)>
-                    <Connect(Connect(LocatorMap))
+                    <Connect(Connect(InjectIntl(LocatorMap)))
                               challenge={undefined}
                               intl={
                                         Object {
@@ -128,7 +128,7 @@ ShallowWrapper {
               className="inline full-screen-height with-shadow challenge-pane__results"
               isActive={true}
 >
-              <Connect(Connect(Connect(Connect(Component))))
+              <Connect(Connect(Connect(WithSortedChallenges)))
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
@@ -146,7 +146,7 @@ ShallowWrapper {
               />
 </Sidebar>,
             <Connect(MapPane)>
-              <Connect(Connect(LocatorMap))
+              <Connect(Connect(InjectIntl(LocatorMap)))
                             challenge={undefined}
                             intl={
                                           Object {
@@ -175,7 +175,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Connect(Connect(Connect(Connect(Component))))
+              "children": <Connect(Connect(Connect(WithSortedChallenges)))
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
@@ -222,7 +222,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Connect(Connect(LocatorMap))
+              "children": <Connect(Connect(InjectIntl(LocatorMap)))
                 challenge={undefined}
                 intl={
                                 Object {
@@ -302,7 +302,7 @@ ShallowWrapper {
                         className="inline full-screen-height with-shadow challenge-pane__results"
                         isActive={true}
             >
-                        <Connect(Connect(Connect(Connect(Component))))
+                        <Connect(Connect(Connect(WithSortedChallenges)))
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
@@ -320,7 +320,7 @@ ShallowWrapper {
                         />
             </Sidebar>
             <Connect(MapPane)>
-                        <Connect(Connect(LocatorMap))
+                        <Connect(Connect(InjectIntl(LocatorMap)))
                                     challenge={undefined}
                                     intl={
                                                 Object {
@@ -374,7 +374,7 @@ ShallowWrapper {
                 className="inline full-screen-height with-shadow challenge-pane__results"
                 isActive={true}
 >
-                <Connect(Connect(Connect(Connect(Component))))
+                <Connect(Connect(Connect(WithSortedChallenges)))
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
@@ -392,7 +392,7 @@ ShallowWrapper {
                 />
 </Sidebar>,
               <Connect(MapPane)>
-                <Connect(Connect(LocatorMap))
+                <Connect(Connect(InjectIntl(LocatorMap)))
                                 challenge={undefined}
                                 intl={
                                                 Object {
@@ -421,7 +421,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Connect(Connect(Connect(Connect(Component))))
+                "children": <Connect(Connect(Connect(WithSortedChallenges)))
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
@@ -468,7 +468,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Connect(Connect(LocatorMap))
+                "children": <Connect(Connect(InjectIntl(LocatorMap)))
                   challenge={undefined}
                   intl={
                                     Object {

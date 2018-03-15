@@ -156,6 +156,7 @@
     "ConfirmAction.cancel": "Annuler",
     "ConfirmAction.proceed": "Proceed",
     "HelpPopout.control.label": "Help",
+    "LocatorMap.controls.startChallenge.label": "Démarrer",
     "Navbar.links.userProfile": "Profil de l'utilisateur",
     "Navbar.links.signout": "Déconnexion",
     "Navbar.preview.label": "v3 BETA",
