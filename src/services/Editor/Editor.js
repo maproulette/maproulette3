@@ -1,6 +1,7 @@
 import _compact from 'lodash/compact'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
+import _find from 'lodash/find'
 import RequestStatus from '../Server/RequestStatus'
 import AsMappable from '../Task/AsMappable'
 import { toLatLngBounds  } from '../MapBounds/MapBounds'
@@ -13,6 +14,12 @@ export const NONE = -1
 export const ID = 0
 export const JOSM = 1
 export const JOSM_LAYER = 2
+
+/**
+ * Supported names of properties used to identify an OSM entity associated with
+ * a feature.
+ */
+export const osmNodeIdentifiers = ['osmid', '@id', 'osmIdentifier']
 
 // Reference to open editor window
 let editorWindowReference = null
@@ -189,15 +196,15 @@ const openJOSM = function(dispatch, editor, task, uri) {
 }
 
 /**
- * Return an OSM id for the given feature, if available. Right
- * now we support `osmid` and `@id` properties on the feature.
+ * Return an OSM id for the given feature, if available.
  */
 export const featureOSMId = function(feature) {
   if (!feature.properties) {
     return null
   }
 
-  const idValue = feature.properties.osmid || feature.properties['@id']
+  const osmIdProperty = _find(osmNodeIdentifiers, idName => feature.properties[idName])
+  const idValue = osmIdProperty ? feature.properties[osmIdProperty] : null
   if (!idValue) {
     return null
   }
