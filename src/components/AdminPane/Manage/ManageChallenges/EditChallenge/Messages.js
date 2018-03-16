@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "New Challenge",
   },
 
+  lineNumber: {
+    id: "Admin.EditChallenge.lineNumber",
+    defaultMessage: "Line {line, number}: ",
+  },
+
   step1Label: {
     id: 'Admin.EditChallenge.form.step1.label',
     defaultMessage: "General",
