@@ -75,7 +75,7 @@ export const CustomArrayFieldTemplate = props => {
       {props.canAdd &&
        <div className="array-field__block-controls">
          <button className="button add-item-button" onClick={props.onAddClick}>
-           Add a Rule
+           <FormattedMessage {...messages.addPriorityRuleLabel} />
          </button>
        </div>
       }
@@ -137,7 +137,11 @@ export const InputField = ({id, label, required, rawDescription, rawErrors, chil
       <div className="field">
         <div className="control">
           {_get(rawErrors, 'length', 0) > 0 &&
-           <div className="errors">{rawErrors.join('; ')}</div>
+            <div className="errors">
+              {_map(rawErrors, (error, index) =>
+                <div className="error" key={index}>{error}</div>
+              )}
+            </div>
           }
           {children}
           <MarkdownContent className="help" markdown={rawDescription} />
@@ -184,16 +188,12 @@ export const DropzoneTextUpload = ({required, onChange}) => (
               extractFileContentAsString(files[0]).then(content => onChange(content))}>
     {({acceptedFiles}) => {
       if (acceptedFiles.length > 0) {
-        return (
-          <p>
-            <SvgSymbol className="success" viewBox='0 0 20 20' sym="check-icon" />
-          </p>
-        )
+        return <p>{acceptedFiles[0].name}</p>
       }
       else {
         return (
           <div>
-            <FormattedMessage {...messages.prompt} />
+            <FormattedMessage {...messages.uploadFilePrompt} />
             <p><SvgSymbol viewBox='0 0 20 20' sym="upload-icon" /></p>
           </div>
         )

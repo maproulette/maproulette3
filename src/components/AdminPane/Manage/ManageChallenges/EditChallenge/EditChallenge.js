@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import Form from "react-jsonschema-form"
+import geojsonhint from '@mapbox/geojsonhint'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
 import _isEmpty from 'lodash/isEmpty'
+import _each from 'lodash/each'
 import _filter from 'lodash/filter'
 import _difference from 'lodash/difference'
 import _get from 'lodash/get'
@@ -109,6 +111,25 @@ export class EditChallenge extends Component {
   canNext = () => {
     return this.state.activeStep < challengeSteps.length &&
            this.state.formContext.isValid
+  }
+
+  /**
+   * Perform additional validation checks beyond schema validation. Primarily
+   * we lint any GeoJSON to ensure it's valid.
+   */
+  additionalValidation = (formData, errors) => {
+    if (!_isEmpty(formData.localGeoJSON)) {
+      const lintErrors = geojsonhint.hint(formData.localGeoJSON)
+
+      _each(lintErrors, lintError =>
+        errors.localGeoJSON.addError(
+          this.props.intl.formatMessage(messages.lineNumber, {line: lintError.line}) +
+          lintError.message
+        )
+      )
+    }
+
+    return errors
   }
 
   /** Back up to the previous step in the workflow */
@@ -335,6 +356,7 @@ export class EditChallenge extends Component {
 
         <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
         <Form schema={currentStep.jsSchema(this.props.intl, this.props.user)}
+              validate={this.additionalValidation}
               uiSchema={currentStep.uiSchema}
               FieldTemplate={CustomFieldTemplate}
               ArrayFieldTemplate={CustomArrayFieldTemplate}
