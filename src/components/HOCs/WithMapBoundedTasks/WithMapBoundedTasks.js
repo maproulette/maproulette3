@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
+import _each from 'lodash/each'
+import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
 import _debounce from 'lodash/debounce'
 import _noop from 'lodash/noop'
@@ -49,7 +51,8 @@ const doUpdateBoundedTasks =
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const WithMapBoundedTasks = function(WrappedComponent,
-                                            mapType='locator') {
+                                            mapType='locator',
+                                            matchChallenges=true) {
   return class extends Component {
     state = {
       creatingVirtualChallenge: false,
@@ -64,6 +67,22 @@ export const WithMapBoundedTasks = function(WrappedComponent,
       this.props.startBoundedTasks(
         this.normalizedBounds(this.props)
       ).then(() => this.setState({creatingVirtualChallenge: false}))
+    }
+
+    allowedTasks = boundedTasks => {
+      if (!matchChallenges || _get(boundedTasks, 'tasks.length', 0) === 0) {
+        return boundedTasks
+      }
+
+      const allowedChallenges = new Set()
+      _each(this.props.challenges,
+            challenge => allowedChallenges.add(challenge.id))
+
+      const filteredTasks = _filter(boundedTasks.tasks,
+        task => allowedChallenges.has(task.parentId)
+      )
+
+      return Object.assign({}, boundedTasks, {tasks: filteredTasks})
     }
 
     componentWillMount() {
@@ -89,7 +108,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
       const bounds = this.normalizedBounds(this.props)
       const mapBoundedTasks = 
         bounds && boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees()) ?
-        this.props.mapBoundedTasks : null
+        this.allowedTasks(this.props.mapBoundedTasks) : null
 
       return (
         <WrappedComponent mapBoundedTasks={mapBoundedTasks}

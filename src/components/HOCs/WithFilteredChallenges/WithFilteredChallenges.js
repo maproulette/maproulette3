@@ -34,6 +34,7 @@ export default function WithFilteredChallenges(WrappedComponent,
       }
 
       return <WrappedComponent {...{[outputProp]: filteredChallenges}}
+                               unfilteredChallenges={this.props[challengesProp]}
                                {..._omit(this.props, outputProp)} />
     }
   }

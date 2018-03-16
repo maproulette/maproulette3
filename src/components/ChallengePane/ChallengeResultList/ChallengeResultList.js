@@ -7,11 +7,8 @@ import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
-import WithChallengeFilters from '../../HOCs/WithChallengeFilters/WithChallengeFilters'
 import WithStartChallenge from '../../HOCs/WithStartChallenge/WithStartChallenge'
-import WithFilteredChallenges from '../../HOCs/WithFilteredChallenges/WithFilteredChallenges'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
-import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -34,7 +31,7 @@ export class ChallengeResultList extends Component {
   }
 
   render() {
-    const challengeResults = this.props.filteredChallenges
+    const challengeResults = this.props.challenges
 
     // If the user is actively browsing a challenge, include that challenge even if
     // it didn't pass the filters.
@@ -45,7 +42,8 @@ export class ChallengeResultList extends Component {
     }
 
     let clearFiltersControl = null
-    if (this.props.challenges.length > this.props.filteredChallenges.length) {
+    if (this.props.unfilteredChallenges.length >
+        this.props.challenges.length) {
       clearFiltersControl = (
         <button className="button is-clear has-svg-icon challenge-result-list__clear-filters-control"
                 onClick={this.clearFilters}>
@@ -119,27 +117,16 @@ ChallengeResultList.propTypes = {
    * Candidate challenges to which any current filters, search, etc. should be
    * applied
    */
-  challenges: PropTypes.array.isRequired,
+  unfilteredChallenges: PropTypes.array.isRequired,
 
   /** Remaining challenges after all filters, searches, etc. applied */
-  filteredChallenges: PropTypes.array.isRequired,
+  challenges: PropTypes.array.isRequired,
 }
 
 export default WithCurrentUser(
   WithStartChallenge(
-    WithChallengeFilters(
-      WithFilteredChallenges(
-        WithSearchResults(
-          WithSortedChallenges(
-            ChallengeResultList,
-            'filteredChallenges'
-          ),
-          'challenges',
-          'filteredChallenges'
-        ),
-        'challenges',
-        'filteredChallenges'
-      )
-    )
+    WithSortedChallenges(
+      ChallengeResultList,
+    ),
   )
 )

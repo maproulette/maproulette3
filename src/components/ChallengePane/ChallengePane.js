@@ -9,6 +9,11 @@ import LocatorMap from '../LocatorMap/LocatorMap'
 import ChallengeMap from '../ChallengeMap/ChallengeMap'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
+import WithFilteredChallenges
+       from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
+import WithChallengeFilters
+       from '../HOCs/WithChallengeFilters/WithChallengeFilters'
+import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
@@ -76,9 +81,17 @@ export class ChallengePane extends Component {
 
 export default WithMapBounds(
   WithChallenges(
-    WithMapBoundedTasks(
-      WithClusteredTasks(
-        WithBrowsedChallenge(ChallengePane)
+    WithChallengeFilters(
+      WithFilteredChallenges(
+        WithSearchResults(
+          WithMapBoundedTasks(
+            WithClusteredTasks(
+              WithBrowsedChallenge(ChallengePane)
+            )
+          ),
+          'challenges',
+          'challenges'
+        )
       )
     )
   )

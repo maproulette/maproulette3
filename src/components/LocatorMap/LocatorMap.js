@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import { injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import { ZoomControl } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import _get from 'lodash/get'
+import _each from 'lodash/each'
 import { latLng } from 'leaflet'
 import { ChallengeLocation }
        from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
@@ -14,6 +17,7 @@ import WithChallengeFilters from '../HOCs/WithChallengeFilters/WithChallengeFilt
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import messages from './Messages'
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
@@ -99,7 +103,45 @@ export class LocatorMap extends Component {
     }
   }
 
+  /**
+   * Invoked to request popup content when a task marker on the map is clicked
+   */
+  popupContent = marker => {
+    const content = (
+      <div className="marker-popup-content">
+        <h3>
+          <a onClick={() => this.props.history.push(
+            `/browse/challenges/${marker.options.challengeId}`
+          )}>
+            {marker.options.challengeName}
+          </a>
+        </h3>
+
+        <div className="marker-popup-content__links">
+          <div>
+            <a onClick={() => this.props.history.push(
+              `/challenge/${marker.options.challengeId}/task/${marker.options.taskId}`
+            )}>
+              {this.props.intl.formatMessage(messages.startChallengeLabel)}
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+
+
+    const contentElement = document.createElement('div')
+    ReactDOM.render(content, contentElement)
+    return contentElement
+  }
+
   render() {
+    const hasMarkers = _get(this.props, 'taskMarkers.length', 0) > 0
+
+    if (hasMarkers) {
+      _each(this.props.taskMarkers, marker => marker.popup = this.popupContent)
+    }
+
     return (
       <div key='locator'
            className={classNames('full-screen-map', this.props.className)}>
@@ -111,9 +153,8 @@ export class LocatorMap extends Component {
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
           <VisibleTileLayer defaultLayer={this.props.layerSourceId} />
-          {_get(this.props, 'taskMarkers.length', 0) > 0 &&
-            <MarkerClusterGroup markers={this.props.taskMarkers}
-                                onMarkerClick={this.markerClicked} />
+          {hasMarkers &&
+           <MarkerClusterGroup markers={this.props.taskMarkers} />
           }
         </EnhancedMap>
 
@@ -140,4 +181,4 @@ LocatorMap.propTypes = {
   taskMarkers: PropTypes.array,
 }
 
-export default WithChallengeFilters(WithMapBounds(LocatorMap))
+export default WithChallengeFilters(WithMapBounds(injectIntl(LocatorMap)))

@@ -53,6 +53,22 @@
         overflow-y: auto;
         margin: 0;
 
+        h3 {
+          text-align: center;
+          color: $primary;
+          font-size: $size-6;
+          font-weight: $weight-medium;
+          padding: 12px 19px 12px 19px;
+          margin-bottom: 12px;
+          border-bottom: 2px solid $grey-lightest-more;
+        }
+
+        .marker-popup-content__links {
+          text-align: center;
+          font-size: $size-7;
+          margin: 12px;
+        }
+
         .feature-properties {
           color: $grey;
           font-size: $size-7;
@@ -61,12 +77,8 @@
           overflow-y: auto;
 
           h3 {
-            color: $primary;
-            font-size: $size-6;
-            font-weight: $weight-medium;
-            padding: 0 19px 12px 19px;
-            margin-bottom: 12px;
-            border-bottom: 2px solid $grey-lightest-more;
+            text-align: left;
+            padding-top: 0;
           }
 
           .name {

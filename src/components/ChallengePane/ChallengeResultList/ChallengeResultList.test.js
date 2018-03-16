@@ -36,8 +36,8 @@ beforeEach(() => {
       id: 11,
       savedChallenges: [],
     },
+    unfilteredChallenges: challenges,
     challenges,
-    filteredChallenges: challenges,
     startChallenge: jest.fn(),
     saveChallenge: jest.fn(),
     unsaveChallenge: jest.fn(),
@@ -56,7 +56,7 @@ test("renders with props as expected", () => {
 })
 
 test("renders with no challenges", () => {
-  basicProps.filteredChallenges = []
+  basicProps.challenges = []
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} />
   )
@@ -75,8 +75,8 @@ test("renders with props className in encapsulating div", () => {
 })
 
 test("renders with a busySpinner if props fetchingChallenges", () => {
-  const fetchingChallenges = basicProps.filteredChallenges
-  basicProps.filteredChallenges = []
+  const fetchingChallenges = basicProps.challenges
+  basicProps.challenges = []
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} fetchingChallenges={fetchingChallenges} />
@@ -87,8 +87,8 @@ test("renders with a busySpinner if props fetchingChallenges", () => {
 })
 
 test("always includes actively browsed challenge in the result list", () => {
-  const browsed = basicProps.filteredChallenges[0]
-  basicProps.filteredChallenges = []
+  const browsed = basicProps.challenges[0]
+  basicProps.challenges = []
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} browsedChallenge={browsed} />
@@ -101,8 +101,8 @@ test("always includes actively browsed challenge in the result list", () => {
 })
 
 test("doesn't duplicate actively browsed challenge in the result list", () => {
-  const browsed = basicProps.filteredChallenges[0]
-  basicProps.filteredChallenges = [browsed]
+  const browsed = basicProps.challenges[0]
+  basicProps.challenges = [browsed]
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} browsedChallenge={browsed} />
@@ -115,7 +115,7 @@ test("doesn't duplicate actively browsed challenge in the result list", () => {
 })
 
 test("shows a clear-filters button if some challenges are filtered", () => {
-  basicProps.filteredChallenges = [challenges[0]]
+  basicProps.challenges = [challenges[0]]
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} />
@@ -127,7 +127,7 @@ test("shows a clear-filters button if some challenges are filtered", () => {
 })
 
 test("does not show a clear-filters button if no challenges filtered", () => {
-  basicProps.filteredChallenges = challenges
+  basicProps.challenges = challenges
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} />
@@ -135,5 +135,42 @@ test("does not show a clear-filters button if no challenges filtered", () => {
 
   expect(
     wrapper.find('.challenge-result-list__clear-filters-control').exists()
-  ).not.toBe(true)
+  ).toBe(false)
+})
+
+test("shows virtual-challenge start control if map-bounded tasks", () => {
+  basicProps.mapBoundedTasks = {tasks: [{id: 123}]}
+
+  const wrapper = shallow(
+    <ChallengeResultList {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-result-list__virtual-challenge-option').exists()
+  ).toBe(true)
+})
+
+test("doesn't show virtual-challenge start control if no map-bounded tasks", () => {
+  basicProps.mapBoundedTasks = {tasks: []}
+
+  const wrapper = shallow(
+    <ChallengeResultList {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-result-list__virtual-challenge-option').exists()
+  ).toBe(false)
+})
+
+test("doesn't show virtual-challenge start control if browsing a challenge", () => {
+  basicProps.mapBoundedTasks = {tasks: [{id: 123}]}
+  basicProps.browsedChallenge = challenges[0]
+
+  const wrapper = shallow(
+    <ChallengeResultList {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-result-list__virtual-challenge-option').exists()
+  ).toBe(false)
 })
