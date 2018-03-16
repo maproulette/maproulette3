@@ -41,7 +41,7 @@
   "Admin.EditChallenge.form.category.label": "Category",
   "Admin.EditChallenge.form.category.description": "Selecting an appropriate high-level category for your challenge can aid users in quickly discovering challenges that match their interests. Choose the Other category if nothing seems appropriate.",
   "Admin.EditChallenge.form.additionalKeywords.label": "Keywords",
-  "Admin.EditChallenge.form.additionalKeywords.description": "You can optionally provide additional, comma-separated keywords that can be used to aid discovery of your challenge. Users can search by keyword from the Other option of the Category dropdown filter, or in the Search box by prepending with a hash sign (e.g. #tourism).",
+  "Admin.EditChallenge.form.additionalKeywords.description": "You can optionally provide additional keywords that can be used to aid discovery of your challenge. Users can search by keyword from the Other option of the Category dropdown filter, or in the Search box by prepending with a hash sign (e.g. #tourism).",
   "Admin.EditChallenge.form.featured.label": "Featured",
   "Admin.EditChallenge.form.featured.description": "Featured challenges are shown at the top of the list when browsing and searching challenges. Only super-users may mark a a challenge as featured.",
   "Admin.EditChallenge.form.step2.label": "GeoJSON Source",

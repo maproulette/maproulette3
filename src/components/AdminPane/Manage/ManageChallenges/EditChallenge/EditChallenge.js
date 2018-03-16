@@ -16,6 +16,7 @@ import StepNavigation
        from '../../../../Bulma/StepNavigation/StepNavigation'
 import { CustomFieldTemplate,
          CustomArrayFieldTemplate,
+         TagsInputField,
          MarkdownDescriptionField,
          MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
@@ -307,6 +308,7 @@ export class EditChallenge extends Component {
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
+      tags: TagsInputField,
     }
 
     // Each time we render, start formContext.isValid at true. It'll be set

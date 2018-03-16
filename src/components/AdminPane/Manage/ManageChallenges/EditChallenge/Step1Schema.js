@@ -137,6 +137,6 @@ export const uiSchema = {
     "ui:widget": "select",
   },
   additionalKeywords: {
-    "ui:emptyValue": "", // ensure empty string (vs undefined) when blank
-  }
+    "ui:field": "tags",
+  },
 }

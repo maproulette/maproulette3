@@ -140,7 +140,7 @@ export default defineMessages({
 
   additionalKeywordsDescription: {
     id: 'Admin.EditChallenge.form.additionalKeywords.description',
-    defaultMessage: "You can optionally provide additional, comma-separated " +
+    defaultMessage: "You can optionally provide additional " +
     "keywords that can be used to aid discovery of your challenge. Users " +
     "can search by keyword from the Other option of the Category dropdown " +
     "filter, or in the Search box by prepending with a hash sign (e.g. " +
