@@ -105,6 +105,16 @@ ShallowWrapper {
           <div
                     className="navbar-end"
           >
+                    <a
+                              className="navbar-item back-to-old-ui"
+                              href="/"
+                    >
+                              <FormattedMessage
+                                        defaultMessage="Return to old layout"
+                                        id="Navbar.links.oldLayout"
+                                        values={Object {}}
+                              />
+                    </a>
                     <InjectIntl(AccountNavItem)
                               location={
                                         Object {
@@ -322,6 +332,16 @@ ShallowWrapper {
             <div
               className="navbar-end"
 >
+              <a
+                            className="navbar-item back-to-old-ui"
+                            href="/"
+              >
+                            <FormattedMessage
+                                          defaultMessage="Return to old layout"
+                                          id="Navbar.links.oldLayout"
+                                          values={Object {}}
+                            />
+              </a>
               <InjectIntl(AccountNavItem)
                             location={
                                           Object {
@@ -490,39 +510,82 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <InjectIntl(AccountNavItem)
-                location={
-                                Object {
-                                                "pathname": "/some/path",
-                                              }
-                }
-                user={
-                                Object {
-                                                "id": 357,
-                                                "isLoggedIn": false,
-                                              }
-                }
+              "children": Array [
+                <a
+                  className="navbar-item back-to-old-ui"
+                  href="/"
+>
+                  <FormattedMessage
+                                    defaultMessage="Return to old layout"
+                                    id="Navbar.links.oldLayout"
+                                    values={Object {}}
+                  />
+</a>,
+                <InjectIntl(AccountNavItem)
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": false,
+                                                    }
+                  }
 />,
+              ],
               "className": "navbar-end",
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "location": Object {
-                  "pathname": "/some/path",
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="Return to old layout"
+                    id="Navbar.links.oldLayout"
+                    values={Object {}}
+/>,
+                  "className": "navbar-item back-to-old-ui",
+                  "href": "/",
                 },
-                "user": Object {
-                  "id": 357,
-                  "isLoggedIn": false,
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Return to old layout",
+                    "id": "Navbar.links.oldLayout",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
                 },
+                "type": "a",
               },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": false,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
             "type": "div",
           },
         ],
@@ -613,6 +676,16 @@ ShallowWrapper {
             <div
                         className="navbar-end"
             >
+                        <a
+                                    className="navbar-item back-to-old-ui"
+                                    href="/"
+                        >
+                                    <FormattedMessage
+                                                defaultMessage="Return to old layout"
+                                                id="Navbar.links.oldLayout"
+                                                values={Object {}}
+                                    />
+                        </a>
                         <InjectIntl(AccountNavItem)
                                     location={
                                                 Object {
@@ -830,6 +903,16 @@ ShallowWrapper {
               <div
                 className="navbar-end"
 >
+                <a
+                                className="navbar-item back-to-old-ui"
+                                href="/"
+                >
+                                <FormattedMessage
+                                                defaultMessage="Return to old layout"
+                                                id="Navbar.links.oldLayout"
+                                                values={Object {}}
+                                />
+                </a>
                 <InjectIntl(AccountNavItem)
                                 location={
                                                 Object {
@@ -998,39 +1081,82 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <InjectIntl(AccountNavItem)
-                  location={
-                                    Object {
-                                                      "pathname": "/some/path",
-                                                    }
-                  }
-                  user={
-                                    Object {
-                                                      "id": 357,
-                                                      "isLoggedIn": false,
-                                                    }
-                  }
+                "children": Array [
+                  <a
+                    className="navbar-item back-to-old-ui"
+                    href="/"
+>
+                    <FormattedMessage
+                                        defaultMessage="Return to old layout"
+                                        id="Navbar.links.oldLayout"
+                                        values={Object {}}
+                    />
+</a>,
+                  <InjectIntl(AccountNavItem)
+                    location={
+                                        Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                    }
 />,
+                ],
                 "className": "navbar-end",
               },
               "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "location": Object {
-                    "pathname": "/some/path",
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Return to old layout"
+                      id="Navbar.links.oldLayout"
+                      values={Object {}}
+/>,
+                    "className": "navbar-item back-to-old-ui",
+                    "href": "/",
                   },
-                  "user": Object {
-                    "id": 357,
-                    "isLoggedIn": false,
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Return to old layout",
+                      "id": "Navbar.links.oldLayout",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
                   },
+                  "type": "a",
                 },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "location": Object {
+                      "pathname": "/some/path",
+                    },
+                    "user": Object {
+                      "id": 357,
+                      "isLoggedIn": false,
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
               "type": "div",
             },
           ],
@@ -1170,6 +1296,16 @@ ShallowWrapper {
           <div
                     className="navbar-end"
           >
+                    <a
+                              className="navbar-item back-to-old-ui"
+                              href="/"
+                    >
+                              <FormattedMessage
+                                        defaultMessage="Return to old layout"
+                                        id="Navbar.links.oldLayout"
+                                        values={Object {}}
+                              />
+                    </a>
                     <InjectIntl(AccountNavItem)
                               location={
                                         Object {
@@ -1402,6 +1538,16 @@ ShallowWrapper {
             <div
               className="navbar-end"
 >
+              <a
+                            className="navbar-item back-to-old-ui"
+                            href="/"
+              >
+                            <FormattedMessage
+                                          defaultMessage="Return to old layout"
+                                          id="Navbar.links.oldLayout"
+                                          values={Object {}}
+                            />
+              </a>
               <InjectIntl(AccountNavItem)
                             location={
                                           Object {
@@ -1632,39 +1778,82 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <InjectIntl(AccountNavItem)
-                location={
-                                Object {
-                                                "pathname": "/some/path",
-                                              }
-                }
-                user={
-                                Object {
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                              }
-                }
+              "children": Array [
+                <a
+                  className="navbar-item back-to-old-ui"
+                  href="/"
+>
+                  <FormattedMessage
+                                    defaultMessage="Return to old layout"
+                                    id="Navbar.links.oldLayout"
+                                    values={Object {}}
+                  />
+</a>,
+                <InjectIntl(AccountNavItem)
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": true,
+                                                    }
+                  }
 />,
+              ],
               "className": "navbar-end",
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "location": Object {
-                  "pathname": "/some/path",
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="Return to old layout"
+                    id="Navbar.links.oldLayout"
+                    values={Object {}}
+/>,
+                  "className": "navbar-item back-to-old-ui",
+                  "href": "/",
                 },
-                "user": Object {
-                  "id": 357,
-                  "isLoggedIn": true,
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Return to old layout",
+                    "id": "Navbar.links.oldLayout",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
                 },
+                "type": "a",
               },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": true,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
             "type": "div",
           },
         ],
@@ -1770,6 +1959,16 @@ ShallowWrapper {
             <div
                         className="navbar-end"
             >
+                        <a
+                                    className="navbar-item back-to-old-ui"
+                                    href="/"
+                        >
+                                    <FormattedMessage
+                                                defaultMessage="Return to old layout"
+                                                id="Navbar.links.oldLayout"
+                                                values={Object {}}
+                                    />
+                        </a>
                         <InjectIntl(AccountNavItem)
                                     location={
                                                 Object {
@@ -2002,6 +2201,16 @@ ShallowWrapper {
               <div
                 className="navbar-end"
 >
+                <a
+                                className="navbar-item back-to-old-ui"
+                                href="/"
+                >
+                                <FormattedMessage
+                                                defaultMessage="Return to old layout"
+                                                id="Navbar.links.oldLayout"
+                                                values={Object {}}
+                                />
+                </a>
                 <InjectIntl(AccountNavItem)
                                 location={
                                                 Object {
@@ -2232,39 +2441,82 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <InjectIntl(AccountNavItem)
-                  location={
-                                    Object {
-                                                      "pathname": "/some/path",
-                                                    }
-                  }
-                  user={
-                                    Object {
-                                                      "id": 357,
-                                                      "isLoggedIn": true,
-                                                    }
-                  }
+                "children": Array [
+                  <a
+                    className="navbar-item back-to-old-ui"
+                    href="/"
+>
+                    <FormattedMessage
+                                        defaultMessage="Return to old layout"
+                                        id="Navbar.links.oldLayout"
+                                        values={Object {}}
+                    />
+</a>,
+                  <InjectIntl(AccountNavItem)
+                    location={
+                                        Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                    }
 />,
+                ],
                 "className": "navbar-end",
               },
               "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "location": Object {
-                    "pathname": "/some/path",
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Return to old layout"
+                      id="Navbar.links.oldLayout"
+                      values={Object {}}
+/>,
+                    "className": "navbar-item back-to-old-ui",
+                    "href": "/",
                   },
-                  "user": Object {
-                    "id": 357,
-                    "isLoggedIn": true,
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Return to old layout",
+                      "id": "Navbar.links.oldLayout",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
                   },
+                  "type": "a",
                 },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "location": Object {
+                      "pathname": "/some/path",
+                    },
+                    "user": Object {
+                      "id": 357,
+                      "isLoggedIn": true,
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
               "type": "div",
             },
           ],

@@ -182,6 +182,7 @@
   "Navbar.links.about": "About",
   "Navbar.links.challengeResults": "Challenges",
   "Navbar.links.admin": "Create",
+  "Navbar.links.oldLayout": "Return to old layout",
   "SignIn.control.label": "Sign in",
   "Task.controls.alreadyFixed.label": "Already fixed",
   "Task.controls.alreadyFixed.tooltip": "Already fixed",

@@ -23,4 +23,9 @@ export default defineMessages({
     id: 'Navbar.links.admin',
     defaultMessage: "Create",
   },
+
+  oldLayout: {
+    id: 'Navbar.links.oldLayout',
+    defaultMessage: "Return to old layout",
+  }
 })

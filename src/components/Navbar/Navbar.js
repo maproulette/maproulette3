@@ -62,6 +62,10 @@ export default class Navbar extends Component {
           </div>
 
           <div className="navbar-end">
+            <a className="navbar-item back-to-old-ui" href="/">
+              <FormattedMessage {...messages.oldLayout} />
+            </a>
+
             <AccountNavItem {...this.props} />
           </div>
 				</div>
