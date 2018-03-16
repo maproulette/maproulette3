@@ -3,11 +3,13 @@ import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _map from 'lodash/map'
+import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
+import 'react-tagsinput/react-tagsinput.css'
 import './RJSFFormFieldAdapter.css'
 
 /**
@@ -150,6 +152,17 @@ export const InputField = ({id, label, required, rawDescription, rawErrors, chil
     </div>
   </div>
 )
+
+export const TagsInputField = props => {
+  return (
+    <div className="tags-field">
+      <TagsInput inputProps={{placeholder: "Add keyword"}}
+                 value={props.formData ? props.formData.split(',') : []}
+                 onChange={tags => props.onChange(tags.join(','))}
+                 addOnBlur />
+    </div>
+  )
+}
 
 /**
  * CheckboxField is a Bulma template for RJSF checkbox fields. It's also compatible
