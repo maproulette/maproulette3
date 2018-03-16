@@ -88,5 +88,11 @@
         }
       }
     }
+
+    .back-to-old-ui {
+      background-color: rgba($black, 0.08);
+      border-radius: $radius-medium;
+      margin: 18px 45px;
+    }
   }
 }
