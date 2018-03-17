@@ -41,6 +41,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.0",
     "react-share": "^1.16.0",
+    "react-syntax-highlighter": "^7.0.2",
     "react-table": "^6.7.6",
     "react-tagsinput": "^3.19.0",
     "react-transition-group": "^2.2.1",
