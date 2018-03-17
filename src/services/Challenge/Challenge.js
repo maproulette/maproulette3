@@ -466,6 +466,28 @@ export const saveChallenge = function(originalChallengeData) {
   }
 }
 
+export const rebuildChallenge = function(challengeId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenge.rebuild,
+      {variables: {id: challengeId}}
+    ).execute().then(() =>
+      fetchChallenge(challengeId)(dispatch) // Refresh challenge data
+    ).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        // If we get an unauthorized, we assume the user is not logged
+        // in (or no longer logged in with the server).
+        dispatch(logoutUser())
+        dispatch(addError(AppErrors.user.unauthorized))
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.rebuildFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
 /**
  * Deletes the given challenge from the server.
  */
@@ -478,7 +500,7 @@ export const deleteChallenge = function(challengeId) {
       dispatch(removeChallenge(challengeId))
     ).catch((error) => {
       // Update with the latest challenge data.
-      this.fetchChallenge(challengeId)(dispatch)
+      fetchChallenge(challengeId)(dispatch)
 
       if (error.response && error.response.status === 401) {
         // If we get an unauthorized, we assume the user is not logged

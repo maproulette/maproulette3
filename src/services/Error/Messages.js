@@ -66,6 +66,10 @@ export default defineMessages({
     id: 'Errors.challenge.saveFailure',
     defaultMessage: "Unable to save your changes",
   },
+  challengeRebuildFailure: {
+    id: 'Errors.challenge.rebuildFailure',
+    defaultMessage: "Unable to rebuild challenge tasks",
+  },
 
   virtualChallengeCreateFailure: {
     id: 'Errors.virtualChallenge.createFailure',

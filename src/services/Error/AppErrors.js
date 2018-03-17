@@ -34,6 +34,7 @@ export default {
     searchFailure: messages.challengeSearchFailure,
     deleteFailure: messages.challengeDeleteFailure,
     saveFailure: messages.challengeSaveFailure,
+    rebuildFailure: messages.challengeRebuildFailure,
   },
 
   virtualChallenge: {

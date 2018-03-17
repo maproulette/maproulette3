@@ -127,6 +127,7 @@
     "Admin.Challenge.tabs.metrics.label": "Statistiken",
     "Admin.Challenge.status.asOf.label": "as of",
     "Admin.Challenge.controls.edit.label": "Bearbeiten",
+    "Admin.Challenge.controls.rebuild.label": "Neu erstellen",
     "Admin.Challenge.controls.clone.label": "Klonen",
     "Admin.Challenge.tasksBuilding": "Tasks Building...",
     "Admin.Challenge.tasksFailed": "Tasks Failed to Build",

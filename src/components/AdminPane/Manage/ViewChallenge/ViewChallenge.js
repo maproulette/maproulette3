@@ -82,6 +82,14 @@ export class ViewChallenge extends Component {
               </Link>
             </div>
 
+            {this.props.challenge.isRebuildable() &&
+             <div className="column is-narrow admin__manage__controls--control">
+               <a onClick={() => this.props.rebuildChallenge(this.props.challenge.id)}>
+                 <FormattedMessage {...messages.rebuildChallengeLabel } />
+               </a>
+             </div>
+            }
+
             <div className="column is-narrow admin__manage__controls--control">
               <Link to={{pathname: `/admin/project/${this.props.challenge.parent.id}/` +
                                    `challenge/${this.props.challenge.id}/clone`,
