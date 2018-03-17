@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
-import _startCase from 'lodash/startCase'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
@@ -191,7 +190,7 @@ export class ChallengeResultItem extends Component {
                 {savedIcon}
               </div>
               <div className="challenge-list__item__name">
-                {_startCase(this.props.challenge.name)}
+                {this.props.challenge.name}
               </div>
             </div>
             <div className="challenge-list__item__project-name">
