@@ -48,6 +48,7 @@ const apiRoutes = factory => {
       'comments': factory.get('/challenge/:id/comments'),
       'create': factory.post('/challenge'),
       'edit': factory.put('/challenge/:id'),
+      'rebuild': factory.put('/challenge/:id/rebuild'),
       'removeKeywords': factory.delete('/challenge/:id/tags'),
       'delete': factory.delete('/challenge/:id'),
     },

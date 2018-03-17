@@ -11,8 +11,10 @@ import { challengeDenormalizationSchema,
          fetchChallengeActivity,
          fetchChallengeActions,
          saveChallenge,
+         rebuildChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
+import AsManageable from '../../../../services/Challenge/AsManageable'
 import { isUsableChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithClusteredTasks
@@ -80,10 +82,11 @@ const WithCurrentChallenge = function(WrappedComponent,
       let clusteredTasks = null
 
       if (!isNaN(challengeId)) {
-        challenge =
+        challenge = AsManageable(
           denormalize(_get(this.props, `entities.challenges.${challengeId}`),
                       challengeDenormalizationSchema(),
                       this.props.entities)
+        )
 
         if (includeTasks &&
             _get(this.props, 'clusteredTasks.challengeId') === challengeId) {
@@ -120,6 +123,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchChallengeActions: challengeId =>
     dispatch(fetchChallengeActions(challengeId)),
   saveChallenge: challengeData => dispatch(saveChallenge(challengeData)),
+  rebuildChallenge: challengeId => dispatch(rebuildChallenge(challengeId)),
   deleteChallenge: (projectId, challengeId) => {
     // Optimistically remove the challenge.
     dispatch(removeChallenge(challengeId))
