@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _startCase from 'lodash/startCase'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
@@ -127,7 +126,7 @@ export class ActiveTaskDetails extends Component {
 
     const challengeNameLink =
       <Link to={`/browse/challenges/${_get(this.props.task, 'parent.id', '')}`}>
-        {_startCase(_get(this.props.task, 'parent.name'))}
+        {_get(this.props.task, 'parent.name')}
       </Link>
 
     const taskInstructions = !_isEmpty(this.props.task.instruction) ?

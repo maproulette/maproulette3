@@ -15,7 +15,7 @@ beforeEach(() => {
     },
     challenge: {
       id: 309,
-      name: "Challenge 309",
+      name: "Challenge-309",
       blurb: "Challenge 309 blurb",
       description: "Challenge 309 description",
       difficulty: ChallengeDifficulty.expert,
@@ -39,6 +39,28 @@ test("renders with props as expected", () => {
   )
 
   expect(wrapper.find('.challenge-list__item').exists()).toBe(true)
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("shows the name of the challenge", () => {
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-list__item__name').text()
+  ).toBe(basicProps.challenge.name)
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("shows the name of the parent project", () => {
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-list__item__project-name').text()
+  ).toBe(basicProps.challenge.parent.displayName)
   expect(wrapper).toMatchSnapshot()
 })
 

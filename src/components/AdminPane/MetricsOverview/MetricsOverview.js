@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _round from 'lodash/round'
-import _startCase from 'lodash/startCase'
 import WithComputedMetrics from '../HOCs/WithComputedMetrics/WithComputedMetrics'
 import CompletionMetrics from './CompletionMetrics'
 import CompletionRadar from '../Manage/CompletionRadar/CompletionRadar'
@@ -26,7 +25,7 @@ export class MetricsOverview extends Component {
       return (
         <div className="column stat" key={label}>
           <div className="value">{_round(value, 1)}%</div>
-          <div className="name">{_startCase(label)}</div>
+          <div className="name">{label}</div>
         </div>
       )
     }))
