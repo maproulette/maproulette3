@@ -7,6 +7,29 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.2] - 2018-03-19
+### Added
+- Back-to-MR2 banner link in navbar (#172).
+- Heatmap calendar of task activity for challenge owners.
+- Support for `osmIdentifier` as OSM id property in GeoJSON.
+- Application of challenge filters to (experimental) map-bounded tasks.
+- Validation of locally-uploaded GeoJSON when creating/editing a challenge.
+- Syntax highlighting of GeoJSON when viewing a task as challenge owner.
+- Tag-style input of additional keywords when creating/editing a challenge.
+- Support for rebuilding challenges.
+- Support for custom keyword category configuration in .env file.
+
+### Changed
+- Burn-down charts for challenge owners now go back to the creation
+  date of the project/challenge in question.
+- Challenge names shown in results are no longer start-cased.
+
+### Fixed
+- User profile page is now more resilient to slow-loading or incomplete data
+  (#177).
+- Prevent stale map data from inadvertently being sent to editors (#180).
+
+
 ## [v3.00-beta.1] - 2018-03-12
 ### Added
 - Option to clone challenge for challenge owners (#84).
