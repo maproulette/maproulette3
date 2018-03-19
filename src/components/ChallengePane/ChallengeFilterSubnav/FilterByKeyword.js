@@ -6,8 +6,8 @@ import _isEmpty from 'lodash/isEmpty'
 import _first from 'lodash/first'
 import { injectIntl } from 'react-intl'
 import { CHALLENGE_CATEGORY_OTHER,
-         ChallengeCategoryKeywords,
          categoryMatchingKeywords,
+         combinedCategoryKeywords,
          keywordLabels }
        from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import NavDropdown from '../../Bulma/NavDropdown'
@@ -34,7 +34,7 @@ export class FilterByKeyword extends Component {
       this.props.removeChallengeFilters(['keywords'])
     }
     else {
-      this.props.setKeywordFilter(ChallengeCategoryKeywords[value])
+      this.props.setKeywordFilter(combinedCategoryKeywords[value])
     }
   }
 
@@ -47,10 +47,10 @@ export class FilterByKeyword extends Component {
   }
 
   render() {
-    const localizedKeywordLabels = keywordLabels(this.props.intl)
+    const localizedKeywordLabels = keywordLabels(this.props.intl, true)
 
-    const categories = _without(_keys(ChallengeCategoryKeywords), 'other')
-    const activeCategory = categoryMatchingKeywords(this.props.challengeFilter.keywords)
+    const categories = _without(_keys(combinedCategoryKeywords), 'other')
+    const activeCategory = categoryMatchingKeywords(this.props.challengeFilter.keywords, true)
     const selectOptions = categories.map(keyword => ({
       key: keyword,
       text: localizedKeywordLabels[keyword],
