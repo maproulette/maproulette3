@@ -72,7 +72,6 @@ export class TaskPane extends Component {
           <CSSTransition key={this.props.task.id} timeout={{exit: 300, enter: 1500}}
                          classNames="animate-slide"
                          in={this.state.completingTask !== this.props.task.id}
-                         unmountOnExit
                          onExited={this.clearCompletingTask}>
             <DetailMap task={this.props.task}
                        challenge={this.props.task.parent}

@@ -600,7 +600,7 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
 export const challengeEntities = function(state, action) {
   if (action.type === REMOVE_CHALLENGE) {
     const mergedState = _cloneDeep(state)
-    delete mergedState[action.challengeId]
+    mergedState[action.challengeId].deleted = true
     return mergedState
   }
   else {

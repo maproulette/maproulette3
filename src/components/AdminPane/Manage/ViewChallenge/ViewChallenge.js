@@ -61,8 +61,8 @@ export class ViewChallenge extends Component {
               </li>
               <li>
                 <Link to={`/admin/project/${_get(this.props, 'challenge.parent.id')}`}>
-                  {this.props.challenge.parent.displayName ||
-                  this.props.challenge.parent.name}
+                  {_get(this.props, 'challenge.parent.displayName') ||
+                   _get(this.props, 'challenge.parent.name')}
                 </Link>
               </li>
               <li className="is-active">
