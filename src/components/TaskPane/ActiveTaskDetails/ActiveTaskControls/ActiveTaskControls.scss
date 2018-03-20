@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import 'variables.scss';
 
 .active-task-controls {
   &__control-block {
@@ -33,6 +33,56 @@
     margin-bottom: 20px;
   }
 
+  &__additional-controls {
+    border: 2px solid $grey-lightest-more;
+    border-radius: 4px;
+    padding: 10px 0px;
+
+    .collapsible-section__heading {
+      justify-content: center;
+      color: $grey-light-less;
+      font-size: $size-6;
+      font-weight: $weight-medium;
+      transition: color 0.25s;
+
+      .has-svg-icon {
+        display: flex;
+        align-items: center;
+
+        svg {
+          height: 20px;
+          fill: $grey-light-less;
+          transition: fill 0.25s;
+        }
+      }
+
+      &:hover {
+        color: $primary;
+
+        svg {
+          fill: $primary;
+        }
+      }
+    }
+
+    &.is-expanded {
+      .collapsible-section__heading {
+        border-bottom: 2px solid $grey-lightest-more;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        color: $primary;
+
+        svg {
+          fill: $primary;
+        }
+      }
+
+      .more-options-control__body {
+        padding: 10px;
+      }
+    }
+  }
+
   &.is-minimized {
     .active-task-controls__control-block {
       flex-direction: column;
@@ -60,6 +110,26 @@
 
     .control-label {
       display: none;
+    }
+
+    .active-task-controls__additional-controls {
+      border: none;
+      padding: 0;
+
+      .popout-trigger button {
+        margin-bottom: 0;
+        height: 1.5em;
+
+        svg {
+          fill: $grey-light-less;
+        }
+
+        &:hover, &:enabled:focus {
+          svg {
+            fill: $nearly-black;
+          }
+        }
+      }
     }
   }
 }

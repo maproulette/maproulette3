@@ -15,8 +15,7 @@ import messages from './Messages'
  */
 export default class TaskSkipControl extends Component {
   handleKeyboardShortcuts = (event) => {
-    // Ignore typing in inputs.
-    if (event.target.nodeName.toLowerCase() === 'input') {
+    if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 
@@ -43,7 +42,7 @@ export default class TaskSkipControl extends Component {
       <button className={classNames("button skip-control",
                                     this.props.className,
                                     {"large-and-wide": !this.props.isMinimized,
-                                    "icon-only": this.props.isMinimized})}
+                                     "icon-only": this.props.isMinimized})}
               onClick={() => this.props.complete(TaskStatus.skipped)}>
         <span className="control-icon"
               title={this.props.intl.formatMessage(messages.skipTooltip)}>

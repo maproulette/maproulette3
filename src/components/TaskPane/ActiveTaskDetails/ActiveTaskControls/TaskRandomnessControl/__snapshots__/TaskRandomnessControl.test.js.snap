@@ -43,7 +43,7 @@ ShallowWrapper {
       "children": <div
         className="control"
 >
-        <span
+        <div
                 className="task-randomness-control__prompt"
         >
                 <FormattedMessage
@@ -51,39 +51,43 @@ ShallowWrapper {
                         id="Challenge.controls.taskLoadBy.label"
                         values={Object {}}
                 />
-        </span>
-        <label
-                className="radio"
+        </div>
+        <div
+                className="task-randomness-control__options"
         >
-                <input
-                        checked={false}
-                        className="task-randomness-control__random-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-                />
-                <FormattedMessage
-                        defaultMessage="Random"
-                        id="Task.loadByMethod.random"
-                        values={Object {}}
-                />
-        </label>
-        <label
-                className="radio"
-        >
-                <input
-                        checked={true}
-                        className="task-randomness-control__proximity-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-                />
-                <FormattedMessage
-                        defaultMessage="Proximity"
-                        id="Task.loadByMethod.proximity"
-                        values={Object {}}
-                />
-        </label>
+                <label
+                        className="radio"
+                >
+                        <input
+                                checked={false}
+                                className="task-randomness-control__random-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                        />
+                        <FormattedMessage
+                                defaultMessage="Random"
+                                id="Task.loadByMethod.random"
+                                values={Object {}}
+                        />
+                </label>
+                <label
+                        className="radio"
+                >
+                        <input
+                                checked={true}
+                                className="task-randomness-control__proximity-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                        />
+                        <FormattedMessage
+                                defaultMessage="Proximity"
+                                id="Task.loadByMethod.proximity"
+                                values={Object {}}
+                        />
+                </label>
+        </div>
 </div>,
       "className": "task-randomness-control",
     },
@@ -94,7 +98,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <span
+          <div
             className="task-randomness-control__prompt"
 >
             <FormattedMessage
@@ -102,39 +106,43 @@ ShallowWrapper {
                         id="Challenge.controls.taskLoadBy.label"
                         values={Object {}}
             />
-</span>,
-          <label
-            className="radio"
+</div>,
+          <div
+            className="task-randomness-control__options"
 >
-            <input
-                        checked={false}
-                        className="task-randomness-control__random-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-            />
-            <FormattedMessage
-                        defaultMessage="Random"
-                        id="Task.loadByMethod.random"
-                        values={Object {}}
-            />
-</label>,
-          <label
-            className="radio"
->
-            <input
-                        checked={true}
-                        className="task-randomness-control__proximity-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-            />
-            <FormattedMessage
-                        defaultMessage="Proximity"
-                        id="Task.loadByMethod.proximity"
-                        values={Object {}}
-            />
-</label>,
+            <label
+                        className="radio"
+            >
+                        <input
+                                    checked={false}
+                                    className="task-randomness-control__random-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Random"
+                                    id="Task.loadByMethod.random"
+                                    values={Object {}}
+                        />
+            </label>
+            <label
+                        className="radio"
+            >
+                        <input
+                                    checked={true}
+                                    className="task-randomness-control__proximity-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Proximity"
+                                    id="Task.loadByMethod.proximity"
+                                    values={Object {}}
+                        />
+            </label>
+</div>,
         ],
         "className": "control",
       },
@@ -166,7 +174,7 @@ ShallowWrapper {
             "rendered": null,
             "type": [Function],
           },
-          "type": "span",
+          "type": "div",
         },
         Object {
           "instance": null,
@@ -174,20 +182,40 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <input
-                checked={false}
-                className="task-randomness-control__random-option"
-                name="randomnessPreference"
-                onChange={[Function]}
-                type="radio"
-/>,
-              <FormattedMessage
-                defaultMessage="Random"
-                id="Task.loadByMethod.random"
-                values={Object {}}
-/>,
+              <label
+                className="radio"
+>
+                <input
+                                checked={false}
+                                className="task-randomness-control__random-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                />
+                <FormattedMessage
+                                defaultMessage="Random"
+                                id="Task.loadByMethod.random"
+                                values={Object {}}
+                />
+</label>,
+              <label
+                className="radio"
+>
+                <input
+                                checked={true}
+                                className="task-randomness-control__proximity-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                />
+                <FormattedMessage
+                                defaultMessage="Proximity"
+                                id="Task.loadByMethod.proximity"
+                                values={Object {}}
+                />
+</label>,
             ],
-            "className": "radio",
+            "className": "task-randomness-control__options",
           },
           "ref": null,
           "rendered": Array [
@@ -196,85 +224,111 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "checked": false,
-                "className": "task-randomness-control__random-option",
-                "name": "randomnessPreference",
-                "onChange": [Function],
-                "type": "radio",
+                "children": Array [
+                  <input
+                    checked={false}
+                    className="task-randomness-control__random-option"
+                    name="randomnessPreference"
+                    onChange={[Function]}
+                    type="radio"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Random"
+                    id="Task.loadByMethod.random"
+                    values={Object {}}
+/>,
+                ],
+                "className": "radio",
               },
               "ref": null,
-              "rendered": null,
-              "type": "input",
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "checked": false,
+                    "className": "task-randomness-control__random-option",
+                    "name": "randomnessPreference",
+                    "onChange": [Function],
+                    "type": "radio",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "input",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Random",
+                    "id": "Task.loadByMethod.random",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "label",
             },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Random",
-                "id": "Task.loadByMethod.random",
-                "values": Object {},
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-          ],
-          "type": "label",
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <input
-                checked={true}
-                className="task-randomness-control__proximity-option"
-                name="randomnessPreference"
-                onChange={[Function]}
-                type="radio"
-/>,
-              <FormattedMessage
-                defaultMessage="Proximity"
-                id="Task.loadByMethod.proximity"
-                values={Object {}}
-/>,
-            ],
-            "className": "radio",
-          },
-          "ref": null,
-          "rendered": Array [
             Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "checked": true,
-                "className": "task-randomness-control__proximity-option",
-                "name": "randomnessPreference",
-                "onChange": [Function],
-                "type": "radio",
+                "children": Array [
+                  <input
+                    checked={true}
+                    className="task-randomness-control__proximity-option"
+                    name="randomnessPreference"
+                    onChange={[Function]}
+                    type="radio"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Proximity"
+                    id="Task.loadByMethod.proximity"
+                    values={Object {}}
+/>,
+                ],
+                "className": "radio",
               },
               "ref": null,
-              "rendered": null,
-              "type": "input",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Proximity",
-                "id": "Task.loadByMethod.proximity",
-                "values": Object {},
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "checked": true,
+                    "className": "task-randomness-control__proximity-option",
+                    "name": "randomnessPreference",
+                    "onChange": [Function],
+                    "type": "radio",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "input",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Proximity",
+                    "id": "Task.loadByMethod.proximity",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "label",
             },
           ],
-          "type": "label",
+          "type": "div",
         },
       ],
       "type": "div",
@@ -290,7 +344,7 @@ ShallowWrapper {
         "children": <div
           className="control"
 >
-          <span
+          <div
                     className="task-randomness-control__prompt"
           >
                     <FormattedMessage
@@ -298,39 +352,43 @@ ShallowWrapper {
                               id="Challenge.controls.taskLoadBy.label"
                               values={Object {}}
                     />
-          </span>
-          <label
-                    className="radio"
+          </div>
+          <div
+                    className="task-randomness-control__options"
           >
-                    <input
-                              checked={false}
-                              className="task-randomness-control__random-option"
-                              name="randomnessPreference"
-                              onChange={[Function]}
-                              type="radio"
-                    />
-                    <FormattedMessage
-                              defaultMessage="Random"
-                              id="Task.loadByMethod.random"
-                              values={Object {}}
-                    />
-          </label>
-          <label
-                    className="radio"
-          >
-                    <input
-                              checked={true}
-                              className="task-randomness-control__proximity-option"
-                              name="randomnessPreference"
-                              onChange={[Function]}
-                              type="radio"
-                    />
-                    <FormattedMessage
-                              defaultMessage="Proximity"
-                              id="Task.loadByMethod.proximity"
-                              values={Object {}}
-                    />
-          </label>
+                    <label
+                              className="radio"
+                    >
+                              <input
+                                        checked={false}
+                                        className="task-randomness-control__random-option"
+                                        name="randomnessPreference"
+                                        onChange={[Function]}
+                                        type="radio"
+                              />
+                              <FormattedMessage
+                                        defaultMessage="Random"
+                                        id="Task.loadByMethod.random"
+                                        values={Object {}}
+                              />
+                    </label>
+                    <label
+                              className="radio"
+                    >
+                              <input
+                                        checked={true}
+                                        className="task-randomness-control__proximity-option"
+                                        name="randomnessPreference"
+                                        onChange={[Function]}
+                                        type="radio"
+                              />
+                              <FormattedMessage
+                                        defaultMessage="Proximity"
+                                        id="Task.loadByMethod.proximity"
+                                        values={Object {}}
+                              />
+                    </label>
+          </div>
 </div>,
         "className": "task-randomness-control",
       },
@@ -341,7 +399,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": Array [
-            <span
+            <div
               className="task-randomness-control__prompt"
 >
               <FormattedMessage
@@ -349,39 +407,43 @@ ShallowWrapper {
                             id="Challenge.controls.taskLoadBy.label"
                             values={Object {}}
               />
-</span>,
-            <label
-              className="radio"
+</div>,
+            <div
+              className="task-randomness-control__options"
 >
-              <input
-                            checked={false}
-                            className="task-randomness-control__random-option"
-                            name="randomnessPreference"
-                            onChange={[Function]}
-                            type="radio"
-              />
-              <FormattedMessage
-                            defaultMessage="Random"
-                            id="Task.loadByMethod.random"
-                            values={Object {}}
-              />
-</label>,
-            <label
-              className="radio"
->
-              <input
-                            checked={true}
-                            className="task-randomness-control__proximity-option"
-                            name="randomnessPreference"
-                            onChange={[Function]}
-                            type="radio"
-              />
-              <FormattedMessage
-                            defaultMessage="Proximity"
-                            id="Task.loadByMethod.proximity"
-                            values={Object {}}
-              />
-</label>,
+              <label
+                            className="radio"
+              >
+                            <input
+                                          checked={false}
+                                          className="task-randomness-control__random-option"
+                                          name="randomnessPreference"
+                                          onChange={[Function]}
+                                          type="radio"
+                            />
+                            <FormattedMessage
+                                          defaultMessage="Random"
+                                          id="Task.loadByMethod.random"
+                                          values={Object {}}
+                            />
+              </label>
+              <label
+                            className="radio"
+              >
+                            <input
+                                          checked={true}
+                                          className="task-randomness-control__proximity-option"
+                                          name="randomnessPreference"
+                                          onChange={[Function]}
+                                          type="radio"
+                            />
+                            <FormattedMessage
+                                          defaultMessage="Proximity"
+                                          id="Task.loadByMethod.proximity"
+                                          values={Object {}}
+                            />
+              </label>
+</div>,
           ],
           "className": "control",
         },
@@ -413,7 +475,7 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-            "type": "span",
+            "type": "div",
           },
           Object {
             "instance": null,
@@ -421,20 +483,40 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <input
-                  checked={false}
-                  className="task-randomness-control__random-option"
-                  name="randomnessPreference"
-                  onChange={[Function]}
-                  type="radio"
-/>,
-                <FormattedMessage
-                  defaultMessage="Random"
-                  id="Task.loadByMethod.random"
-                  values={Object {}}
-/>,
+                <label
+                  className="radio"
+>
+                  <input
+                                    checked={false}
+                                    className="task-randomness-control__random-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                  />
+                  <FormattedMessage
+                                    defaultMessage="Random"
+                                    id="Task.loadByMethod.random"
+                                    values={Object {}}
+                  />
+</label>,
+                <label
+                  className="radio"
+>
+                  <input
+                                    checked={true}
+                                    className="task-randomness-control__proximity-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                  />
+                  <FormattedMessage
+                                    defaultMessage="Proximity"
+                                    id="Task.loadByMethod.proximity"
+                                    values={Object {}}
+                  />
+</label>,
               ],
-              "className": "radio",
+              "className": "task-randomness-control__options",
             },
             "ref": null,
             "rendered": Array [
@@ -443,85 +525,111 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "checked": false,
-                  "className": "task-randomness-control__random-option",
-                  "name": "randomnessPreference",
-                  "onChange": [Function],
-                  "type": "radio",
+                  "children": Array [
+                    <input
+                      checked={false}
+                      className="task-randomness-control__random-option"
+                      name="randomnessPreference"
+                      onChange={[Function]}
+                      type="radio"
+/>,
+                    <FormattedMessage
+                      defaultMessage="Random"
+                      id="Task.loadByMethod.random"
+                      values={Object {}}
+/>,
+                  ],
+                  "className": "radio",
                 },
                 "ref": null,
-                "rendered": null,
-                "type": "input",
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "checked": false,
+                      "className": "task-randomness-control__random-option",
+                      "name": "randomnessPreference",
+                      "onChange": [Function],
+                      "type": "radio",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "input",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Random",
+                      "id": "Task.loadByMethod.random",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "label",
               },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "defaultMessage": "Random",
-                  "id": "Task.loadByMethod.random",
-                  "values": Object {},
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-            ],
-            "type": "label",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <input
-                  checked={true}
-                  className="task-randomness-control__proximity-option"
-                  name="randomnessPreference"
-                  onChange={[Function]}
-                  type="radio"
-/>,
-                <FormattedMessage
-                  defaultMessage="Proximity"
-                  id="Task.loadByMethod.proximity"
-                  values={Object {}}
-/>,
-              ],
-              "className": "radio",
-            },
-            "ref": null,
-            "rendered": Array [
               Object {
                 "instance": null,
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "checked": true,
-                  "className": "task-randomness-control__proximity-option",
-                  "name": "randomnessPreference",
-                  "onChange": [Function],
-                  "type": "radio",
+                  "children": Array [
+                    <input
+                      checked={true}
+                      className="task-randomness-control__proximity-option"
+                      name="randomnessPreference"
+                      onChange={[Function]}
+                      type="radio"
+/>,
+                    <FormattedMessage
+                      defaultMessage="Proximity"
+                      id="Task.loadByMethod.proximity"
+                      values={Object {}}
+/>,
+                  ],
+                  "className": "radio",
                 },
                 "ref": null,
-                "rendered": null,
-                "type": "input",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "defaultMessage": "Proximity",
-                  "id": "Task.loadByMethod.proximity",
-                  "values": Object {},
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "checked": true,
+                      "className": "task-randomness-control__proximity-option",
+                      "name": "randomnessPreference",
+                      "onChange": [Function],
+                      "type": "radio",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "input",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Proximity",
+                      "id": "Task.loadByMethod.proximity",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "label",
               },
             ],
-            "type": "label",
+            "type": "div",
           },
         ],
         "type": "div",
@@ -582,7 +690,7 @@ ShallowWrapper {
       "children": <div
         className="control"
 >
-        <span
+        <div
                 className="task-randomness-control__prompt"
         >
                 <FormattedMessage
@@ -590,39 +698,43 @@ ShallowWrapper {
                         id="Challenge.controls.taskLoadBy.label"
                         values={Object {}}
                 />
-        </span>
-        <label
-                className="radio"
+        </div>
+        <div
+                className="task-randomness-control__options"
         >
-                <input
-                        checked={true}
-                        className="task-randomness-control__random-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-                />
-                <FormattedMessage
-                        defaultMessage="Random"
-                        id="Task.loadByMethod.random"
-                        values={Object {}}
-                />
-        </label>
-        <label
-                className="radio"
-        >
-                <input
-                        checked={false}
-                        className="task-randomness-control__proximity-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-                />
-                <FormattedMessage
-                        defaultMessage="Proximity"
-                        id="Task.loadByMethod.proximity"
-                        values={Object {}}
-                />
-        </label>
+                <label
+                        className="radio"
+                >
+                        <input
+                                checked={true}
+                                className="task-randomness-control__random-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                        />
+                        <FormattedMessage
+                                defaultMessage="Random"
+                                id="Task.loadByMethod.random"
+                                values={Object {}}
+                        />
+                </label>
+                <label
+                        className="radio"
+                >
+                        <input
+                                checked={false}
+                                className="task-randomness-control__proximity-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                        />
+                        <FormattedMessage
+                                defaultMessage="Proximity"
+                                id="Task.loadByMethod.proximity"
+                                values={Object {}}
+                        />
+                </label>
+        </div>
 </div>,
       "className": "task-randomness-control",
     },
@@ -633,7 +745,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <span
+          <div
             className="task-randomness-control__prompt"
 >
             <FormattedMessage
@@ -641,39 +753,43 @@ ShallowWrapper {
                         id="Challenge.controls.taskLoadBy.label"
                         values={Object {}}
             />
-</span>,
-          <label
-            className="radio"
+</div>,
+          <div
+            className="task-randomness-control__options"
 >
-            <input
-                        checked={true}
-                        className="task-randomness-control__random-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-            />
-            <FormattedMessage
-                        defaultMessage="Random"
-                        id="Task.loadByMethod.random"
-                        values={Object {}}
-            />
-</label>,
-          <label
-            className="radio"
->
-            <input
-                        checked={false}
-                        className="task-randomness-control__proximity-option"
-                        name="randomnessPreference"
-                        onChange={[Function]}
-                        type="radio"
-            />
-            <FormattedMessage
-                        defaultMessage="Proximity"
-                        id="Task.loadByMethod.proximity"
-                        values={Object {}}
-            />
-</label>,
+            <label
+                        className="radio"
+            >
+                        <input
+                                    checked={true}
+                                    className="task-randomness-control__random-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Random"
+                                    id="Task.loadByMethod.random"
+                                    values={Object {}}
+                        />
+            </label>
+            <label
+                        className="radio"
+            >
+                        <input
+                                    checked={false}
+                                    className="task-randomness-control__proximity-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                        />
+                        <FormattedMessage
+                                    defaultMessage="Proximity"
+                                    id="Task.loadByMethod.proximity"
+                                    values={Object {}}
+                        />
+            </label>
+</div>,
         ],
         "className": "control",
       },
@@ -705,7 +821,7 @@ ShallowWrapper {
             "rendered": null,
             "type": [Function],
           },
-          "type": "span",
+          "type": "div",
         },
         Object {
           "instance": null,
@@ -713,20 +829,40 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <input
-                checked={true}
-                className="task-randomness-control__random-option"
-                name="randomnessPreference"
-                onChange={[Function]}
-                type="radio"
-/>,
-              <FormattedMessage
-                defaultMessage="Random"
-                id="Task.loadByMethod.random"
-                values={Object {}}
-/>,
+              <label
+                className="radio"
+>
+                <input
+                                checked={true}
+                                className="task-randomness-control__random-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                />
+                <FormattedMessage
+                                defaultMessage="Random"
+                                id="Task.loadByMethod.random"
+                                values={Object {}}
+                />
+</label>,
+              <label
+                className="radio"
+>
+                <input
+                                checked={false}
+                                className="task-randomness-control__proximity-option"
+                                name="randomnessPreference"
+                                onChange={[Function]}
+                                type="radio"
+                />
+                <FormattedMessage
+                                defaultMessage="Proximity"
+                                id="Task.loadByMethod.proximity"
+                                values={Object {}}
+                />
+</label>,
             ],
-            "className": "radio",
+            "className": "task-randomness-control__options",
           },
           "ref": null,
           "rendered": Array [
@@ -735,85 +871,111 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "checked": true,
-                "className": "task-randomness-control__random-option",
-                "name": "randomnessPreference",
-                "onChange": [Function],
-                "type": "radio",
+                "children": Array [
+                  <input
+                    checked={true}
+                    className="task-randomness-control__random-option"
+                    name="randomnessPreference"
+                    onChange={[Function]}
+                    type="radio"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Random"
+                    id="Task.loadByMethod.random"
+                    values={Object {}}
+/>,
+                ],
+                "className": "radio",
               },
               "ref": null,
-              "rendered": null,
-              "type": "input",
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "checked": true,
+                    "className": "task-randomness-control__random-option",
+                    "name": "randomnessPreference",
+                    "onChange": [Function],
+                    "type": "radio",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "input",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Random",
+                    "id": "Task.loadByMethod.random",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "label",
             },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Random",
-                "id": "Task.loadByMethod.random",
-                "values": Object {},
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-          ],
-          "type": "label",
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <input
-                checked={false}
-                className="task-randomness-control__proximity-option"
-                name="randomnessPreference"
-                onChange={[Function]}
-                type="radio"
-/>,
-              <FormattedMessage
-                defaultMessage="Proximity"
-                id="Task.loadByMethod.proximity"
-                values={Object {}}
-/>,
-            ],
-            "className": "radio",
-          },
-          "ref": null,
-          "rendered": Array [
             Object {
               "instance": null,
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "checked": false,
-                "className": "task-randomness-control__proximity-option",
-                "name": "randomnessPreference",
-                "onChange": [Function],
-                "type": "radio",
+                "children": Array [
+                  <input
+                    checked={false}
+                    className="task-randomness-control__proximity-option"
+                    name="randomnessPreference"
+                    onChange={[Function]}
+                    type="radio"
+/>,
+                  <FormattedMessage
+                    defaultMessage="Proximity"
+                    id="Task.loadByMethod.proximity"
+                    values={Object {}}
+/>,
+                ],
+                "className": "radio",
               },
               "ref": null,
-              "rendered": null,
-              "type": "input",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Proximity",
-                "id": "Task.loadByMethod.proximity",
-                "values": Object {},
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "checked": false,
+                    "className": "task-randomness-control__proximity-option",
+                    "name": "randomnessPreference",
+                    "onChange": [Function],
+                    "type": "radio",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "input",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Proximity",
+                    "id": "Task.loadByMethod.proximity",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "label",
             },
           ],
-          "type": "label",
+          "type": "div",
         },
       ],
       "type": "div",
@@ -829,7 +991,7 @@ ShallowWrapper {
         "children": <div
           className="control"
 >
-          <span
+          <div
                     className="task-randomness-control__prompt"
           >
                     <FormattedMessage
@@ -837,39 +999,43 @@ ShallowWrapper {
                               id="Challenge.controls.taskLoadBy.label"
                               values={Object {}}
                     />
-          </span>
-          <label
-                    className="radio"
+          </div>
+          <div
+                    className="task-randomness-control__options"
           >
-                    <input
-                              checked={true}
-                              className="task-randomness-control__random-option"
-                              name="randomnessPreference"
-                              onChange={[Function]}
-                              type="radio"
-                    />
-                    <FormattedMessage
-                              defaultMessage="Random"
-                              id="Task.loadByMethod.random"
-                              values={Object {}}
-                    />
-          </label>
-          <label
-                    className="radio"
-          >
-                    <input
-                              checked={false}
-                              className="task-randomness-control__proximity-option"
-                              name="randomnessPreference"
-                              onChange={[Function]}
-                              type="radio"
-                    />
-                    <FormattedMessage
-                              defaultMessage="Proximity"
-                              id="Task.loadByMethod.proximity"
-                              values={Object {}}
-                    />
-          </label>
+                    <label
+                              className="radio"
+                    >
+                              <input
+                                        checked={true}
+                                        className="task-randomness-control__random-option"
+                                        name="randomnessPreference"
+                                        onChange={[Function]}
+                                        type="radio"
+                              />
+                              <FormattedMessage
+                                        defaultMessage="Random"
+                                        id="Task.loadByMethod.random"
+                                        values={Object {}}
+                              />
+                    </label>
+                    <label
+                              className="radio"
+                    >
+                              <input
+                                        checked={false}
+                                        className="task-randomness-control__proximity-option"
+                                        name="randomnessPreference"
+                                        onChange={[Function]}
+                                        type="radio"
+                              />
+                              <FormattedMessage
+                                        defaultMessage="Proximity"
+                                        id="Task.loadByMethod.proximity"
+                                        values={Object {}}
+                              />
+                    </label>
+          </div>
 </div>,
         "className": "task-randomness-control",
       },
@@ -880,7 +1046,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": Array [
-            <span
+            <div
               className="task-randomness-control__prompt"
 >
               <FormattedMessage
@@ -888,39 +1054,43 @@ ShallowWrapper {
                             id="Challenge.controls.taskLoadBy.label"
                             values={Object {}}
               />
-</span>,
-            <label
-              className="radio"
+</div>,
+            <div
+              className="task-randomness-control__options"
 >
-              <input
-                            checked={true}
-                            className="task-randomness-control__random-option"
-                            name="randomnessPreference"
-                            onChange={[Function]}
-                            type="radio"
-              />
-              <FormattedMessage
-                            defaultMessage="Random"
-                            id="Task.loadByMethod.random"
-                            values={Object {}}
-              />
-</label>,
-            <label
-              className="radio"
->
-              <input
-                            checked={false}
-                            className="task-randomness-control__proximity-option"
-                            name="randomnessPreference"
-                            onChange={[Function]}
-                            type="radio"
-              />
-              <FormattedMessage
-                            defaultMessage="Proximity"
-                            id="Task.loadByMethod.proximity"
-                            values={Object {}}
-              />
-</label>,
+              <label
+                            className="radio"
+              >
+                            <input
+                                          checked={true}
+                                          className="task-randomness-control__random-option"
+                                          name="randomnessPreference"
+                                          onChange={[Function]}
+                                          type="radio"
+                            />
+                            <FormattedMessage
+                                          defaultMessage="Random"
+                                          id="Task.loadByMethod.random"
+                                          values={Object {}}
+                            />
+              </label>
+              <label
+                            className="radio"
+              >
+                            <input
+                                          checked={false}
+                                          className="task-randomness-control__proximity-option"
+                                          name="randomnessPreference"
+                                          onChange={[Function]}
+                                          type="radio"
+                            />
+                            <FormattedMessage
+                                          defaultMessage="Proximity"
+                                          id="Task.loadByMethod.proximity"
+                                          values={Object {}}
+                            />
+              </label>
+</div>,
           ],
           "className": "control",
         },
@@ -952,7 +1122,7 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-            "type": "span",
+            "type": "div",
           },
           Object {
             "instance": null,
@@ -960,20 +1130,40 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <input
-                  checked={true}
-                  className="task-randomness-control__random-option"
-                  name="randomnessPreference"
-                  onChange={[Function]}
-                  type="radio"
-/>,
-                <FormattedMessage
-                  defaultMessage="Random"
-                  id="Task.loadByMethod.random"
-                  values={Object {}}
-/>,
+                <label
+                  className="radio"
+>
+                  <input
+                                    checked={true}
+                                    className="task-randomness-control__random-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                  />
+                  <FormattedMessage
+                                    defaultMessage="Random"
+                                    id="Task.loadByMethod.random"
+                                    values={Object {}}
+                  />
+</label>,
+                <label
+                  className="radio"
+>
+                  <input
+                                    checked={false}
+                                    className="task-randomness-control__proximity-option"
+                                    name="randomnessPreference"
+                                    onChange={[Function]}
+                                    type="radio"
+                  />
+                  <FormattedMessage
+                                    defaultMessage="Proximity"
+                                    id="Task.loadByMethod.proximity"
+                                    values={Object {}}
+                  />
+</label>,
               ],
-              "className": "radio",
+              "className": "task-randomness-control__options",
             },
             "ref": null,
             "rendered": Array [
@@ -982,85 +1172,111 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "checked": true,
-                  "className": "task-randomness-control__random-option",
-                  "name": "randomnessPreference",
-                  "onChange": [Function],
-                  "type": "radio",
+                  "children": Array [
+                    <input
+                      checked={true}
+                      className="task-randomness-control__random-option"
+                      name="randomnessPreference"
+                      onChange={[Function]}
+                      type="radio"
+/>,
+                    <FormattedMessage
+                      defaultMessage="Random"
+                      id="Task.loadByMethod.random"
+                      values={Object {}}
+/>,
+                  ],
+                  "className": "radio",
                 },
                 "ref": null,
-                "rendered": null,
-                "type": "input",
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "checked": true,
+                      "className": "task-randomness-control__random-option",
+                      "name": "randomnessPreference",
+                      "onChange": [Function],
+                      "type": "radio",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "input",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Random",
+                      "id": "Task.loadByMethod.random",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "label",
               },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "defaultMessage": "Random",
-                  "id": "Task.loadByMethod.random",
-                  "values": Object {},
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-            ],
-            "type": "label",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <input
-                  checked={false}
-                  className="task-randomness-control__proximity-option"
-                  name="randomnessPreference"
-                  onChange={[Function]}
-                  type="radio"
-/>,
-                <FormattedMessage
-                  defaultMessage="Proximity"
-                  id="Task.loadByMethod.proximity"
-                  values={Object {}}
-/>,
-              ],
-              "className": "radio",
-            },
-            "ref": null,
-            "rendered": Array [
               Object {
                 "instance": null,
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "checked": false,
-                  "className": "task-randomness-control__proximity-option",
-                  "name": "randomnessPreference",
-                  "onChange": [Function],
-                  "type": "radio",
+                  "children": Array [
+                    <input
+                      checked={false}
+                      className="task-randomness-control__proximity-option"
+                      name="randomnessPreference"
+                      onChange={[Function]}
+                      type="radio"
+/>,
+                    <FormattedMessage
+                      defaultMessage="Proximity"
+                      id="Task.loadByMethod.proximity"
+                      values={Object {}}
+/>,
+                  ],
+                  "className": "radio",
                 },
                 "ref": null,
-                "rendered": null,
-                "type": "input",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "defaultMessage": "Proximity",
-                  "id": "Task.loadByMethod.proximity",
-                  "values": Object {},
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "checked": false,
+                      "className": "task-randomness-control__proximity-option",
+                      "name": "randomnessPreference",
+                      "onChange": [Function],
+                      "type": "radio",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "input",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Proximity",
+                      "id": "Task.loadByMethod.proximity",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "label",
               },
             ],
-            "type": "label",
+            "type": "div",
           },
         ],
         "type": "div",

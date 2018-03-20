@@ -33,6 +33,7 @@ beforeEach(() => {
   virtualChallengePrefs = {
     minimize: true,
     collapseInstructions: true,
+    collapseMoreOptions: true,
   }
 
   basicState = {
@@ -93,6 +94,33 @@ test("collapseInstructions defaults to false if no preference set", () => {
   const mappedProps = mapStateToProps(basicState, {challengeId})
 
   expect(mappedProps.collapseInstructions).toBe(false)
+})
+
+test("maps challenge collapseMoreOptions to collapseMoreOptions preference", () => {
+  basicState.currentPreferences.challenges[
+    challengeId
+  ].collapseMoreOptions = false
+  const mappedProps = mapStateToProps(basicState, {challengeId})
+
+  expect(mappedProps.collapseMoreOptions).toBe(false)
+})
+
+test("maps virtual challenge collapseMoreOptions to collapseMoreOptions preference", () => {
+  basicState.currentPreferences.virtualChallenges[
+    virtualChallengeId
+  ].collapseMoreOptions = false
+  const mappedProps = mapStateToProps(basicState, {virtualChallengeId})
+
+  expect(mappedProps.collapseMoreOptions).toBe(false)
+})
+
+test("collapseMoreOptions defaults to true if no preference set", () => {
+  basicState.currentPreferences.challenges[
+    challengeId
+  ].collapseMoreOptions = undefined
+  const mappedProps = mapStateToProps(basicState, {challengeId})
+
+  expect(mappedProps.collapseMoreOptions).toBe(true)
 })
 
 test("maps challenge taskLoadBy to current taskLoadMethod preference", () => {

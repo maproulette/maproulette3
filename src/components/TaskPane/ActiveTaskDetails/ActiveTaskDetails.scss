@@ -6,7 +6,7 @@
 
   .popout-content {
     padding: 0;
-    min-width: 220px;
+    min-width: 275px;
 
     .popout-content__header {
       padding: 20px 20px 12px 20px;
@@ -75,19 +75,9 @@
 
   &--sub-heading {
     margin-bottom: 10px;
-
-    &.collapsible {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
   }
 
-  .is-collapsed {
+  .collapsible-section.is-collapsed {
     .active-task-details--sub-heading {
       margin-bottom: 0px;
     }

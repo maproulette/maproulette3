@@ -36,6 +36,11 @@ export const mapStateToProps = (state, ownProps) => {
            `${preferenceGroup(isVirtual)}.${challengeId}.collapseInstructions`,
            false)
 
+    mappedProps.collapseMoreOptions =
+      _get(state.currentPreferences,
+           `${preferenceGroup(isVirtual)}.${challengeId}.collapseMoreOptions`,
+           true)
+
     mappedProps.taskLoadBy =
       _get(state.currentPreferences,
            `${preferenceGroup(isVirtual)}.${challengeId}.taskLoadMethod`,
@@ -57,6 +62,10 @@ export const mapDispatchToProps = dispatch => ({
   setInstructionsCollapsed: (challengeId, isVirtual, collapseInstructions=false) =>
     dispatch(setPreferences(preferenceGroup(isVirtual),
                             {[challengeId]: {collapseInstructions}})),
+
+  setMoreOptionsCollapsed: (challengeId, isVirtual, collapseMoreOptions=true) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual),
+                            {[challengeId]: {collapseMoreOptions}})),
 
   setTaskLoadBy: (challengeId, isVirtual, taskLoadMethod) =>
     dispatch(setPreferences(preferenceGroup(isVirtual),

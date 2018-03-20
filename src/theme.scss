@@ -316,3 +316,13 @@ code {
   padding-left: 74px;
   padding-top: 0;
 }
+
+.switch-backdrop {
+  height: auto;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 12px;
+  background-color: $grey-lightest-more;
+  color: $green;
+  display: inline-block;
+}
