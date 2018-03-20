@@ -15,8 +15,7 @@ import './TaskCancelEditingControl.css'
  */
 export default class TaskCancelEditingControl extends Component {
   handleKeyboardShortcuts = (event) => {
-    // Ignore typing in inputs.
-    if (event.target.nodeName.toLowerCase() === 'input') {
+    if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 

@@ -32,6 +32,10 @@ const mapDispatchToProps = dispatch => {
       document.removeEventListener("keydown", handler)
       dispatch(removeKeyboardShortcut(groupName, shortcutName))
     },
+    textInputActive: event => (
+      event.target.nodeName.toLowerCase() === 'input' &&
+      event.target.getAttribute('type').toLowerCase() === 'text'
+    ),
   }
 }
 

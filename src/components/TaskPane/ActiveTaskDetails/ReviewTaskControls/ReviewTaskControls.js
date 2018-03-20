@@ -32,8 +32,7 @@ export class ReviewTaskControls extends Component {
 
   /** Process keyboard shortcuts for the review controls */
   handleKeyboardShortcuts = (event) => {
-    // Ignore typing in inputs.
-    if (event.target.nodeName.toLowerCase() === 'input') {
+    if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 

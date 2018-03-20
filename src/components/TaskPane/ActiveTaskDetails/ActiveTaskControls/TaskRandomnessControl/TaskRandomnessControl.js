@@ -36,24 +36,26 @@ export default class TaskRandomnessControl extends Component {
     return (
       <div className={classNames("task-randomness-control", this.props.className)}>
         <div className="control">
-          <span className="task-randomness-control__prompt">
+          <div className="task-randomness-control__prompt">
             <FormattedMessage {...messages.taskLoadByLabel} />
-          </span>
+          </div>
 
-          <label className="radio">
-            <input type="radio" name="randomnessPreference"
-                   className="task-randomness-control__random-option"
-                   checked={this.props.taskLoadBy === TaskLoadMethod.random}
-                   onChange={() => this.loadBy(TaskLoadMethod.random)} />
-            <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
-          </label>
-          <label className="radio">
-            <input type="radio" name="randomnessPreference" 
-                   className="task-randomness-control__proximity-option"
-                   checked={this.props.taskLoadBy === TaskLoadMethod.proximity}
-                   onChange={() => this.loadBy(TaskLoadMethod.proximity)} />
-            <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
-          </label>
+          <div className="task-randomness-control__options">
+            <label className="radio">
+              <input type="radio" name="randomnessPreference"
+                    className="task-randomness-control__random-option"
+                    checked={this.props.taskLoadBy === TaskLoadMethod.random}
+                    onChange={() => this.loadBy(TaskLoadMethod.random)} />
+              <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
+            </label>
+            <label className="radio">
+              <input type="radio" name="randomnessPreference"
+                    className="task-randomness-control__proximity-option"
+                    checked={this.props.taskLoadBy === TaskLoadMethod.proximity}
+                    onChange={() => this.loadBy(TaskLoadMethod.proximity)} />
+              <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
+            </label>
+          </div>
         </div>
       </div>
     )

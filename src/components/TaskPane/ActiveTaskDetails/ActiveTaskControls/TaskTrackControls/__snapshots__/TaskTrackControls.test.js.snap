@@ -46,22 +46,30 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <div
-        className="field"
-        onClick={[Function]}
+        className="has-centered-children"
 >
-        <input
-                checked={true}
-                className="switch is-thin"
-                onChange={[Function]}
-                type="checkbox"
-        />
-        <label>
-                <FormattedMessage
-                        defaultMessage="Track this Task"
-                        id="Task.controls.track.label"
-                        values={Object {}}
-                />
-        </label>
+        <div
+                className="switch-backdrop"
+        >
+                <div
+                        className="field"
+                        onClick={[Function]}
+                >
+                        <input
+                                checked={true}
+                                className="switch is-rounded short-and-wide"
+                                onChange={[Function]}
+                                type="checkbox"
+                        />
+                        <label>
+                                <FormattedMessage
+                                        defaultMessage="Track this Task"
+                                        id="Task.controls.track.label"
+                                        values={Object {}}
+                                />
+                        </label>
+                </div>
+        </div>
 </div>,
       "className": "task-track-controls",
     },
@@ -71,68 +79,128 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "host",
       "props": Object {
-        "children": Array [
-          <input
-            checked={true}
-            className="switch is-thin"
-            onChange={[Function]}
-            type="checkbox"
-/>,
-          <label>
-            <FormattedMessage
-                        defaultMessage="Track this Task"
-                        id="Task.controls.track.label"
-                        values={Object {}}
-            />
-</label>,
-        ],
-        "className": "field",
-        "onClick": [Function],
+        "children": <div
+          className="switch-backdrop"
+>
+          <div
+                    className="field"
+                    onClick={[Function]}
+          >
+                    <input
+                              checked={true}
+                              className="switch is-rounded short-and-wide"
+                              onChange={[Function]}
+                              type="checkbox"
+                    />
+                    <label>
+                              <FormattedMessage
+                                        defaultMessage="Track this Task"
+                                        id="Task.controls.track.label"
+                                        values={Object {}}
+                              />
+                    </label>
+          </div>
+</div>,
+        "className": "has-centered-children",
       },
       "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "checked": true,
-            "className": "switch is-thin",
-            "onChange": [Function],
-            "type": "checkbox",
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "input",
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <div
+            className="field"
+            onClick={[Function]}
+>
+            <input
+                        checked={true}
+                        className="switch is-rounded short-and-wide"
+                        onChange={[Function]}
+                        type="checkbox"
+            />
+            <label>
+                        <FormattedMessage
+                                    defaultMessage="Track this Task"
+                                    id="Task.controls.track.label"
+                                    values={Object {}}
+                        />
+            </label>
+</div>,
+          "className": "switch-backdrop",
         },
-        Object {
+        "ref": null,
+        "rendered": Object {
           "instance": null,
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <FormattedMessage
-              defaultMessage="Track this Task"
-              id="Task.controls.track.label"
-              values={Object {}}
+            "children": Array [
+              <input
+                checked={true}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
 />,
+              <label>
+                <FormattedMessage
+                                defaultMessage="Track this Task"
+                                id="Task.controls.track.label"
+                                values={Object {}}
+                />
+</label>,
+            ],
+            "className": "field",
+            "onClick": [Function],
           },
           "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "class",
-            "props": Object {
-              "defaultMessage": "Track this Task",
-              "id": "Task.controls.track.label",
-              "values": Object {},
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "checked": true,
+                "className": "switch is-rounded short-and-wide",
+                "onChange": [Function],
+                "type": "checkbox",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
             },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          "type": "label",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+/>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Track this Task",
+                  "id": "Task.controls.track.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "label",
+            },
+          ],
+          "type": "div",
         },
-      ],
+        "type": "div",
+      },
       "type": "div",
     },
     "type": "div",
@@ -144,22 +212,30 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <div
-          className="field"
-          onClick={[Function]}
+          className="has-centered-children"
 >
-          <input
-                    checked={true}
-                    className="switch is-thin"
-                    onChange={[Function]}
-                    type="checkbox"
-          />
-          <label>
-                    <FormattedMessage
-                              defaultMessage="Track this Task"
-                              id="Task.controls.track.label"
-                              values={Object {}}
-                    />
-          </label>
+          <div
+                    className="switch-backdrop"
+          >
+                    <div
+                              className="field"
+                              onClick={[Function]}
+                    >
+                              <input
+                                        checked={true}
+                                        className="switch is-rounded short-and-wide"
+                                        onChange={[Function]}
+                                        type="checkbox"
+                              />
+                              <label>
+                                        <FormattedMessage
+                                                  defaultMessage="Track this Task"
+                                                  id="Task.controls.track.label"
+                                                  values={Object {}}
+                                        />
+                              </label>
+                    </div>
+          </div>
 </div>,
         "className": "task-track-controls",
       },
@@ -169,68 +245,128 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": Array [
-            <input
-              checked={true}
-              className="switch is-thin"
-              onChange={[Function]}
-              type="checkbox"
-/>,
-            <label>
-              <FormattedMessage
-                            defaultMessage="Track this Task"
-                            id="Task.controls.track.label"
-                            values={Object {}}
-              />
-</label>,
-          ],
-          "className": "field",
-          "onClick": [Function],
+          "children": <div
+            className="switch-backdrop"
+>
+            <div
+                        className="field"
+                        onClick={[Function]}
+            >
+                        <input
+                                    checked={true}
+                                    className="switch is-rounded short-and-wide"
+                                    onChange={[Function]}
+                                    type="checkbox"
+                        />
+                        <label>
+                                    <FormattedMessage
+                                                defaultMessage="Track this Task"
+                                                id="Task.controls.track.label"
+                                                values={Object {}}
+                                    />
+                        </label>
+            </div>
+</div>,
+          "className": "has-centered-children",
         },
         "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "checked": true,
-              "className": "switch is-thin",
-              "onChange": [Function],
-              "type": "checkbox",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": "input",
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <div
+              className="field"
+              onClick={[Function]}
+>
+              <input
+                            checked={true}
+                            className="switch is-rounded short-and-wide"
+                            onChange={[Function]}
+                            type="checkbox"
+              />
+              <label>
+                            <FormattedMessage
+                                          defaultMessage="Track this Task"
+                                          id="Task.controls.track.label"
+                                          values={Object {}}
+                            />
+              </label>
+</div>,
+            "className": "switch-backdrop",
           },
-          Object {
+          "ref": null,
+          "rendered": Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <FormattedMessage
-                defaultMessage="Track this Task"
-                id="Task.controls.track.label"
-                values={Object {}}
+              "children": Array [
+                <input
+                  checked={true}
+                  className="switch is-rounded short-and-wide"
+                  onChange={[Function]}
+                  type="checkbox"
 />,
+                <label>
+                  <FormattedMessage
+                                    defaultMessage="Track this Task"
+                                    id="Task.controls.track.label"
+                                    values={Object {}}
+                  />
+</label>,
+              ],
+              "className": "field",
+              "onClick": [Function],
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Track this Task",
-                "id": "Task.controls.track.label",
-                "values": Object {},
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "checked": true,
+                  "className": "switch is-rounded short-and-wide",
+                  "onChange": [Function],
+                  "type": "checkbox",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "input",
               },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            "type": "label",
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="Track this Task"
+                    id="Task.controls.track.label"
+                    values={Object {}}
+/>,
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Track this Task",
+                    "id": "Task.controls.track.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "label",
+              },
+            ],
+            "type": "div",
           },
-        ],
+          "type": "div",
+        },
         "type": "div",
       },
       "type": "div",
@@ -288,22 +424,30 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <div
-        className="field"
-        onClick={[Function]}
+        className="has-centered-children"
 >
-        <input
-                checked={false}
-                className="switch is-thin"
-                onChange={[Function]}
-                type="checkbox"
-        />
-        <label>
-                <FormattedMessage
-                        defaultMessage="Track this Task"
-                        id="Task.controls.track.label"
-                        values={Object {}}
-                />
-        </label>
+        <div
+                className="switch-backdrop"
+        >
+                <div
+                        className="field"
+                        onClick={[Function]}
+                >
+                        <input
+                                checked={false}
+                                className="switch is-rounded short-and-wide"
+                                onChange={[Function]}
+                                type="checkbox"
+                        />
+                        <label>
+                                <FormattedMessage
+                                        defaultMessage="Track this Task"
+                                        id="Task.controls.track.label"
+                                        values={Object {}}
+                                />
+                        </label>
+                </div>
+        </div>
 </div>,
       "className": "task-track-controls",
     },
@@ -313,68 +457,128 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "host",
       "props": Object {
-        "children": Array [
-          <input
-            checked={false}
-            className="switch is-thin"
-            onChange={[Function]}
-            type="checkbox"
-/>,
-          <label>
-            <FormattedMessage
-                        defaultMessage="Track this Task"
-                        id="Task.controls.track.label"
-                        values={Object {}}
-            />
-</label>,
-        ],
-        "className": "field",
-        "onClick": [Function],
+        "children": <div
+          className="switch-backdrop"
+>
+          <div
+                    className="field"
+                    onClick={[Function]}
+          >
+                    <input
+                              checked={false}
+                              className="switch is-rounded short-and-wide"
+                              onChange={[Function]}
+                              type="checkbox"
+                    />
+                    <label>
+                              <FormattedMessage
+                                        defaultMessage="Track this Task"
+                                        id="Task.controls.track.label"
+                                        values={Object {}}
+                              />
+                    </label>
+          </div>
+</div>,
+        "className": "has-centered-children",
       },
       "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "checked": false,
-            "className": "switch is-thin",
-            "onChange": [Function],
-            "type": "checkbox",
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "input",
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <div
+            className="field"
+            onClick={[Function]}
+>
+            <input
+                        checked={false}
+                        className="switch is-rounded short-and-wide"
+                        onChange={[Function]}
+                        type="checkbox"
+            />
+            <label>
+                        <FormattedMessage
+                                    defaultMessage="Track this Task"
+                                    id="Task.controls.track.label"
+                                    values={Object {}}
+                        />
+            </label>
+</div>,
+          "className": "switch-backdrop",
         },
-        Object {
+        "ref": null,
+        "rendered": Object {
           "instance": null,
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <FormattedMessage
-              defaultMessage="Track this Task"
-              id="Task.controls.track.label"
-              values={Object {}}
+            "children": Array [
+              <input
+                checked={false}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
 />,
+              <label>
+                <FormattedMessage
+                                defaultMessage="Track this Task"
+                                id="Task.controls.track.label"
+                                values={Object {}}
+                />
+</label>,
+            ],
+            "className": "field",
+            "onClick": [Function],
           },
           "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "class",
-            "props": Object {
-              "defaultMessage": "Track this Task",
-              "id": "Task.controls.track.label",
-              "values": Object {},
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "checked": false,
+                "className": "switch is-rounded short-and-wide",
+                "onChange": [Function],
+                "type": "checkbox",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
             },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          "type": "label",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+/>,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Track this Task",
+                  "id": "Task.controls.track.label",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "label",
+            },
+          ],
+          "type": "div",
         },
-      ],
+        "type": "div",
+      },
       "type": "div",
     },
     "type": "div",
@@ -386,22 +590,30 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <div
-          className="field"
-          onClick={[Function]}
+          className="has-centered-children"
 >
-          <input
-                    checked={false}
-                    className="switch is-thin"
-                    onChange={[Function]}
-                    type="checkbox"
-          />
-          <label>
-                    <FormattedMessage
-                              defaultMessage="Track this Task"
-                              id="Task.controls.track.label"
-                              values={Object {}}
-                    />
-          </label>
+          <div
+                    className="switch-backdrop"
+          >
+                    <div
+                              className="field"
+                              onClick={[Function]}
+                    >
+                              <input
+                                        checked={false}
+                                        className="switch is-rounded short-and-wide"
+                                        onChange={[Function]}
+                                        type="checkbox"
+                              />
+                              <label>
+                                        <FormattedMessage
+                                                  defaultMessage="Track this Task"
+                                                  id="Task.controls.track.label"
+                                                  values={Object {}}
+                                        />
+                              </label>
+                    </div>
+          </div>
 </div>,
         "className": "task-track-controls",
       },
@@ -411,68 +623,128 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": Array [
-            <input
-              checked={false}
-              className="switch is-thin"
-              onChange={[Function]}
-              type="checkbox"
-/>,
-            <label>
-              <FormattedMessage
-                            defaultMessage="Track this Task"
-                            id="Task.controls.track.label"
-                            values={Object {}}
-              />
-</label>,
-          ],
-          "className": "field",
-          "onClick": [Function],
+          "children": <div
+            className="switch-backdrop"
+>
+            <div
+                        className="field"
+                        onClick={[Function]}
+            >
+                        <input
+                                    checked={false}
+                                    className="switch is-rounded short-and-wide"
+                                    onChange={[Function]}
+                                    type="checkbox"
+                        />
+                        <label>
+                                    <FormattedMessage
+                                                defaultMessage="Track this Task"
+                                                id="Task.controls.track.label"
+                                                values={Object {}}
+                                    />
+                        </label>
+            </div>
+</div>,
+          "className": "has-centered-children",
         },
         "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "checked": false,
-              "className": "switch is-thin",
-              "onChange": [Function],
-              "type": "checkbox",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": "input",
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <div
+              className="field"
+              onClick={[Function]}
+>
+              <input
+                            checked={false}
+                            className="switch is-rounded short-and-wide"
+                            onChange={[Function]}
+                            type="checkbox"
+              />
+              <label>
+                            <FormattedMessage
+                                          defaultMessage="Track this Task"
+                                          id="Task.controls.track.label"
+                                          values={Object {}}
+                            />
+              </label>
+</div>,
+            "className": "switch-backdrop",
           },
-          Object {
+          "ref": null,
+          "rendered": Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <FormattedMessage
-                defaultMessage="Track this Task"
-                id="Task.controls.track.label"
-                values={Object {}}
+              "children": Array [
+                <input
+                  checked={false}
+                  className="switch is-rounded short-and-wide"
+                  onChange={[Function]}
+                  type="checkbox"
 />,
+                <label>
+                  <FormattedMessage
+                                    defaultMessage="Track this Task"
+                                    id="Task.controls.track.label"
+                                    values={Object {}}
+                  />
+</label>,
+              ],
+              "className": "field",
+              "onClick": [Function],
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Track this Task",
-                "id": "Task.controls.track.label",
-                "values": Object {},
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "checked": false,
+                  "className": "switch is-rounded short-and-wide",
+                  "onChange": [Function],
+                  "type": "checkbox",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "input",
               },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            "type": "label",
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="Track this Task"
+                    id="Task.controls.track.label"
+                    values={Object {}}
+/>,
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "defaultMessage": "Track this Task",
+                    "id": "Task.controls.track.label",
+                    "values": Object {},
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "label",
+              },
+            ],
+            "type": "div",
           },
-        ],
+          "type": "div",
+        },
         "type": "div",
       },
       "type": "div",

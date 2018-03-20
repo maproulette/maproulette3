@@ -25,8 +25,7 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 export default class TaskEditControl extends Component {
   /** Process keyboard shortcuts for the edit controls */
   handleKeyboardShortcuts = (event) => {
-    // Ignore typing in inputs.
-    if (event.target.nodeName.toLowerCase() === 'input') {
+    if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 

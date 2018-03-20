@@ -16,8 +16,7 @@ import messages from './Messages'
  */
 export default class TaskFalsePositiveControl extends Component {
   handleKeyboardShortcuts = (event) => {
-    // Ignore typing in inputs.
-    if (event.target.nodeName.toLowerCase() === 'input') {
+    if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 

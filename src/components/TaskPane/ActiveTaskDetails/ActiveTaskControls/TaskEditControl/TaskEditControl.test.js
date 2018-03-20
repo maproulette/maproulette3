@@ -25,6 +25,7 @@ beforeEach(() => {
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
     activateKeyboardShortcutGroup: jest.fn(),
     deactivateKeyboardShortcutGroup: jest.fn(),
+    textInputActive: jest.fn(event => false),
   }
 })
 
@@ -132,4 +133,38 @@ test("using the shortcut key for JOSM layer signals choosing of the JOSM editor 
   expect(
     basicProps.pickEditor.mock.calls[0][0].value
   ).toBe(Editor.josmLayer)
+})
+
+test("iD shortcut key is ignored when typing in a text input", () => {
+  const event = {
+    target: {
+      nodeName: "div"
+    },
+    key: keyMappings.openEditor.editId.key,
+  }
+  basicProps.textInputActive = jest.fn(e => true)
+
+  const wrapper = shallow(
+    <TaskEditControl {...basicProps} />
+  )
+
+  wrapper.instance().handleKeyboardShortcuts(event)
+  expect(basicProps.pickEditor).not.toBeCalled()
+})
+
+test("josm shortcut key is ignored when typing in a text input", () => {
+  const event = {
+    target: {
+      nodeName: "div"
+    },
+    key: keyMappings.openEditor.editJosmLayer.key,
+  }
+  basicProps.textInputActive = jest.fn(e => true)
+
+  const wrapper = shallow(
+    <TaskEditControl {...basicProps} />
+  )
+
+  wrapper.instance().handleKeyboardShortcuts(event)
+  expect(basicProps.pickEditor).not.toBeCalled()
 })

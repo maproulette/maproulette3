@@ -12,17 +12,16 @@ import Delayed from 'react-delayed'
 import Sidebar from '../../Sidebar/Sidebar'
 import Popout from '../../Bulma/Popout'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import WithKeyboardShortcuts from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import TaskStatusIndicator from './TaskStatusIndicator/TaskStatusIndicator'
 import ActiveTaskControls from './ActiveTaskControls/ActiveTaskControls'
 import ReviewTaskControls from './ReviewTaskControls/ReviewTaskControls'
-import KeyboardShortcutReference from './KeyboardShortcutReference/KeyboardShortcutReference'
 import TaskLocationMap from './TaskLocationMap/TaskLocationMap'
 import CommentList from '../../CommentList/CommentList'
 import CommentCountBadge from '../../CommentList/CommentCountBadge/CommentCountBadge'
 import PlaceDescription from '../PlaceDescription/PlaceDescription'
 import ChallengeShareControls from '../ChallengeShareControls/ChallengeShareControls'
+import CollapsibleSection from './CollapsibleSection/CollapsibleSection'
 import WithDeactivateOnOutsideClick from
        '../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -32,8 +31,6 @@ import './ActiveTaskDetails.css'
 const SIDEBAR_TRANSITION_DELAY = 500 // milliseconds
 
 const DeactivatablePopout = WithDeactivateOnOutsideClick(Popout)
-const KeyboardReferencePopout =
-  WithKeyboardShortcuts(WithDeactivateOnOutsideClick(KeyboardShortcutReference))
 
 /**
  * ActiveTaskDetails wraps, within a Sidebar, all of the relevant details about
@@ -66,16 +63,34 @@ export class ActiveTaskDetails extends Component {
   }
 
   /**
-   * Invoked to toggle minimization of the challenge instructions.
+   * Invoked to toggle minimization of the challenge instructions. If the user
+   * is working through a virtual challenge, we nevertheless set the preference
+   * on the actual challenge being worked on (not the virtual challenge) as the
+   * instructions will obviously vary from challenge to challenge if the user
+   * works through tasks from multiple challenges.
    */
   toggleInstructionsCollapsed = () => {
+    const challengeId = _get(this.props.task, 'parent.id')
+    if (_isFinite(challengeId)) {
+      this.props.setInstructionsCollapsed(challengeId,
+                                          false,
+                                          !this.props.collapseInstructions)
+    }
+  }
+
+  /**
+   * Invoked to toggle minimization of the additional controls. If the user is
+   * working through a virtual challenge, the preference is set on the virtual
+   * challenge
+   */
+  toggleMoreOptionsCollapsed = () => {
     const isVirtual = _isFinite(this.props.virtualChallengeId)
     const challengeId = isVirtual ? this.props.virtualChallengeId :
                                     _get(this.props.task, 'parent.id')
     if (_isFinite(challengeId)) {
-      this.props.setInstructionsCollapsed(challengeId,
-                                          isVirtual,
-                                          !this.props.collapseInstructions)
+      this.props.setMoreOptionsCollapsed(challengeId,
+                                         isVirtual,
+                                         !this.props.collapseMoreOptions)
     }
   }
 
@@ -134,10 +149,11 @@ export class ActiveTaskDetails extends Component {
                              _get(this.props.task, 'parent.instruction')
 
     const taskControls = this.props.reviewTask ?
-      <ReviewTaskControls className="active-task-details__controls"
+      <ReviewTaskControls className="active-task-details__controls active-task-details--bordered"
                           {...this.props} /> :
-      <ActiveTaskControls className="active-task-details__controls"
+      <ActiveTaskControls className="active-task-details__controls active-task-details--bordered"
                           isMinimized={isMinimized}
+                          toggleMoreOptionsCollapsed={this.toggleMoreOptionsCollapsed}
                           {...this.props} />
 
     let infoPopout = null
@@ -243,21 +259,18 @@ export class ActiveTaskDetails extends Component {
             {!isMinimized &&
               <div>
                 {!_isEmpty(taskInstructions) &&
-                  <div className={classNames('active-task-details--instructions',
-                    {'active-task-details--bordered': !isMinimized,
-                     'is-expanded': !this.props.collapseInstructions})}>
-                     <div className="active-task-details--sub-heading collapsible"
-                          onClick={this.toggleInstructionsCollapsed} >
-                      <FormattedMessage {...messages.instructions} />
-
-                      <a className="collapsible-icon" aria-label="more options">
-                        <span className="icon"></span>
-                      </a>
-                    </div>
-                    {!this.props.collapseInstructions &&
-                     <MarkdownContent markdown={taskInstructions} />
-                    }
-                  </div>
+                 <CollapsibleSection
+                   className='active-task-details--instructions active-task-details--bordered'
+                   heading={
+                     <div className='active-task-details--sub-heading'>
+                       <FormattedMessage {...messages.instructions} />
+                     </div>
+                   }
+                   isExpanded={!this.props.collapseInstructions}
+                   toggle={this.toggleInstructionsCollapsed}
+                 >
+                   <MarkdownContent markdown={taskInstructions} />
+                 </CollapsibleSection>
                 }
                 {_isUndefined(taskInstructions) && <BusySpinner />}
               </div>
@@ -267,9 +280,6 @@ export class ActiveTaskDetails extends Component {
                                  isMinimized={isMinimized}
                                  {...this.props} />
             {taskControls}
-            <KeyboardReferencePopout isMinimized={isMinimized}
-                                    className='active-task-details--bordered'
-                                    {...this.props} />
 
             {!isMinimized &&
               <Delayed mounted={true} mountAfter={SIDEBAR_TRANSITION_DELAY}>

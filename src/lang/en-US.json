@@ -185,6 +185,7 @@
   "Navbar.links.admin": "Create",
   "Navbar.links.oldLayout": "Return to old layout",
   "SignIn.control.label": "Sign in",
+  "Task.controls.moreOptions.label": "More Options",
   "Task.controls.alreadyFixed.label": "Already fixed",
   "Task.controls.alreadyFixed.tooltip": "Already fixed",
   "Task.controls.cancelEditing.label": "Go Back",

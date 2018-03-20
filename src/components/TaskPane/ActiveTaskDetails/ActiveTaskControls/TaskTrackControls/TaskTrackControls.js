@@ -62,13 +62,17 @@ export default class TaskTrackControls extends Component {
     }
     else {
       control = (
-        <div className="field" onClick={this.toggleSaved}>
-          <input type="checkbox" className="switch is-thin"
-                 onChange={() => {}}
-                 checked={this.taskIsTracked()} />
-          <label>
-            <FormattedMessage {...messages.trackLabel } />
-          </label>
+        <div className="has-centered-children">
+          <div className="switch-backdrop">
+            <div className="field" onClick={this.toggleSaved}>
+              <input type="checkbox" className="switch is-rounded short-and-wide"
+                    onChange={() => {}}
+                    checked={this.taskIsTracked()} />
+              <label>
+                <FormattedMessage {...messages.trackLabel } />
+              </label>
+            </div>
+          </div>
         </div>
       )
     }

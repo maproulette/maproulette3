@@ -95,6 +95,7 @@ ShallowWrapper {
             "status": 0,
           }
     }
+    textInputActive={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],

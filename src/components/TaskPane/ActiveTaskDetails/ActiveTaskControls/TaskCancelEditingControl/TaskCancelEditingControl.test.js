@@ -19,6 +19,7 @@ beforeEach(() => {
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
     activateKeyboardShortcut: jest.fn(),
     deactivateKeyboardShortcut: jest.fn(),
+    textInputActive: jest.fn(event => false),
   }
 })
 
@@ -56,4 +57,21 @@ test("using the shortcut key signals cancellation of editing", () => {
 
   wrapper.instance().handleKeyboardShortcuts(event)
   expect(basicProps.cancelEditing).toBeCalled()
+})
+
+test("shortcut key is ignored when typing in a text input", () => {
+  const event = {
+    target: {
+      nodeName: "div"
+    },
+    key: keyMappings.taskEditing.cancel.key,
+  }
+  basicProps.textInputActive = jest.fn(e => true)
+
+  const wrapper = shallow(
+    <TaskCancelEditingControl {...basicProps} />
+  )
+
+  wrapper.instance().handleKeyboardShortcuts(event)
+  expect(basicProps.cancelEditing).not.toBeCalled()
 })

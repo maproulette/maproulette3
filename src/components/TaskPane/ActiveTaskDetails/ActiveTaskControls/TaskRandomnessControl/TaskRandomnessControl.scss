@@ -1,11 +1,26 @@
 @import 'variables.scss';
 
 .task-randomness-control {
+  margin: 15px 0px;
+
+  .control {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   &__prompt {
     margin-right: 0.5em;
   }
 
-  input {
-    margin: 0 5px;
+  &__options {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    input {
+      margin: 0 5px;
+    }
   }
 }

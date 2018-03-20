@@ -11,15 +11,24 @@ import TaskCommentInput from './TaskCommentInput/TaskCommentInput'
 import TaskTrackControls from './TaskTrackControls/TaskTrackControls'
 import TaskRandomnessControl
        from './TaskRandomnessControl/TaskRandomnessControl'
+import MoreOptionsControl
+       from './MoreOptionsControl/MoreOptionsControl'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
+import WithDeactivateOnOutsideClick from
+       '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import KeyboardShortcutReference
+       from '../KeyboardShortcutReference/KeyboardShortcutReference'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
 import './ActiveTaskControls.css'
+
+const KeyboardReferencePopout =
+  WithKeyboardShortcuts(WithDeactivateOnOutsideClick(KeyboardShortcutReference))
 
 /**
  * ActiveTaskControls renders the appropriate controls for the given
@@ -96,8 +105,6 @@ export class ActiveTaskControls extends Component {
       return (
         <div className={classNames('active-task-controls', this.props.className,
                                   {'is-minimized': this.props.isMinimized})}>
-          <TaskTrackControls className="active-task-controls__track-task"
-                             {..._omit(this.props, 'className')} />
 
           <TaskCommentInput className="active-task-controls__task-comment"
                             value={this.state.comment}
@@ -124,7 +131,15 @@ export class ActiveTaskControls extends Component {
                                 {...this.props} />
           }
 
-          <TaskRandomnessControl {...this.props} />
+          <MoreOptionsControl className="active-task-controls__additional-controls"
+                              {..._omit(this.props, 'className')} >
+            <TaskTrackControls className="active-task-controls__track-task"
+                              {..._omit(this.props, ['className', 'isMinimized'])} />
+            <TaskRandomnessControl {..._omit(this.props, ['className', 'isMinimized'])} />
+            {!this.props.isMinimized &&
+             <KeyboardReferencePopout {..._omit(this.props, ['className'])} />
+            }
+          </MoreOptionsControl>
         </div>
       )
     }
