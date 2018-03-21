@@ -27,10 +27,26 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskMap extends Component {
+  state = {
+    showTaskFeatures: true,
+  }
+
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * task features on or off.
+   */
+  toggleTaskFeatureVisibility = () => {
+    this.setState({showTaskFeatures: !this.state.showTaskFeatures})
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     // We want to avoid constantly re-rendering, so we only re-render if the
-    // task changes. We care about changes to the task id, its geometries, and
-    // a few settings on the parent challenge.
+    // task or our internal state changes. We care about changes to the task
+    // id, its geometries, and a few settings on the parent challenge.
+    if (nextState.showTaskFeatures !== this.state.showTaskFeatures) {
+      return true
+    }
+
     if(_get(nextProps, 'task.id') !== _get(this.props, 'task.id')) {
       return true
     }
@@ -49,7 +65,9 @@ export default class TaskMap extends Component {
   }
 
   updateTaskBounds = (bounds, zoom) => {
-    // Don't update map bounds if we're in the process of completing.
+    // Don't update map bounds if this task is in the process of completing.
+    // We don't want to risk sending updates on a stale task as this one gets
+    // unloaded.
     if (this.props.task.id !== this.props.completingTask) {
       this.props.setTaskMapBounds(this.props.task.id, bounds, zoom, false)
     }
@@ -70,11 +88,14 @@ export default class TaskMap extends Component {
 
     return (
       <div className={classNames("task-map full-screen-map task")}>
-        <VisibleLayerToggle {...this.props} />
+        <VisibleLayerToggle showTaskFeatures={this.state.showTaskFeatures}
+                            toggleTaskFeatures={this.toggleTaskFeatureVisibility}
+                            {...this.props} />
         <EnhancedMap key={this.props.task.id}
                      center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom}
                      features={_get(this.props.task, 'geometries.features')}
+                     justFitFeatures={!this.state.showTaskFeatures}
                      fitFeaturesOnlyOnce
                      onBoundsChange={this.updateTaskBounds}
         >
