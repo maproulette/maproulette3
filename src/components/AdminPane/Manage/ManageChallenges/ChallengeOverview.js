@@ -8,10 +8,11 @@ import { ChallengeStatus,
          isUsableChallengeStatus,
          messagesByStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
+import ChallengeProgress
+       from '../../../ChallengeProgress/ChallengeProgress'
 import ChallengeActivityTimeline
        from '../../../ActivityTimeline/ChallengeActivityTimeline/ChallengeActivityTimeline'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
-import CompletionMetrics from '../../MetricsOverview/CompletionMetrics'
 import messages from './Messages'
 
 /**
@@ -64,6 +65,8 @@ export class ChallengeOverview extends Component {
             </div>
           </div>
 
+          <ChallengeProgress challenge={this.props.challenge} />
+
           {isUsableChallengeStatus(status) &&
            <div className="view-challenge">
              <Link to={`/challenge/${this.props.challenge.id}`}
@@ -72,10 +75,6 @@ export class ChallengeOverview extends Component {
              </Link>
            </div>
           }
-
-          <CompletionMetrics onlyCompleted
-                             challenges={this.props.challenge}
-                             {...this.props} />
         </section>
 
         <section className="challenge-overview--activity">

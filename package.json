@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@mapbox/geojsonhint": "^2.0.1",
+    "@nivo/bar": "^0.33.0",
     "@nivo/calendar": "^0.33.0",
     "@nivo/line": "^0.33.0",
     "@nivo/radar": "^0.33.0",
