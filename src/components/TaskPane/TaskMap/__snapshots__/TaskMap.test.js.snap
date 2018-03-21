@@ -47,6 +47,7 @@ ShallowWrapper {
                             }
           }
           setTaskMapBounds={[Function]}
+          showTaskFeatures={true}
           task={
                     Object {
                               "geometries": Object {
@@ -60,6 +61,7 @@ ShallowWrapper {
                               },
                             }
           }
+          toggleTaskFeatures={[Function]}
 />,
         <EnhancedMap
           center={
@@ -120,6 +122,7 @@ ShallowWrapper {
             "lng": 0,
           },
           "setTaskMapBounds": [Function],
+          "showTaskFeatures": true,
           "task": Object {
             "geometries": Object {
               "features": null,
@@ -131,6 +134,7 @@ ShallowWrapper {
               "minZoom": 1,
             },
           },
+          "toggleTaskFeatures": [Function],
         },
         "ref": null,
         "rendered": null,
@@ -244,6 +248,7 @@ ShallowWrapper {
                                   }
             }
             setTaskMapBounds={[Function]}
+            showTaskFeatures={true}
             task={
                         Object {
                                     "geometries": Object {
@@ -257,6 +262,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            toggleTaskFeatures={[Function]}
 />,
           <EnhancedMap
             center={
@@ -317,6 +323,7 @@ ShallowWrapper {
               "lng": 0,
             },
             "setTaskMapBounds": [Function],
+            "showTaskFeatures": true,
             "task": Object {
               "geometries": Object {
                 "features": null,
@@ -328,6 +335,7 @@ ShallowWrapper {
                 "minZoom": 1,
               },
             },
+            "toggleTaskFeatures": [Function],
           },
           "ref": null,
           "rendered": null,

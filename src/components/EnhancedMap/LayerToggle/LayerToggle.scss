@@ -16,4 +16,16 @@
     height: auto;
     stroke-width: 2px;
   }
+
+  .layer-toggle__option-controls {
+    label {
+      font-size: $size-7;
+      padding-left: 1rem;
+      color: $grey-dark;
+
+      &:hover {
+        color: $grey-dark;
+      }
+    }
+  }
 }
