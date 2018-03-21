@@ -17,7 +17,7 @@ export default class Endpoint {
    * {object} variables - any named variables required by the endpoint
    * {object} params - named params to be added as URL parameters
    * {object|array} schema - normalization schema to be used to normalize
-   *                resopnse data
+   *                response data
    * {object} json - JSON body to be sent with the request
    *
    * @param route - the desired route for this endpoint
@@ -49,7 +49,8 @@ export default class Endpoint {
         return deleteContent(this.url())
       default:
         return fetchContent(this.url(),
-                            this.normalizationSchema)
+                            this.normalizationSchema,
+                            {noCache: !!this.route.options.noCache})
     }
   }
 

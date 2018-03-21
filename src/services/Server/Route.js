@@ -17,11 +17,12 @@ import _isEmpty from 'lodash/isEmpty'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class Route {
-  constructor(baseURL, apiVersion, routePath, method='GET') {
+  constructor(baseURL, apiVersion, routePath, method='GET', options={}) {
     this.rawPath = routePath
     this.baseURL = baseURL
     this.route = routeMatcher(`/api/${apiVersion}${routePath}`)
     this.method = method
+    this.options = options
   }
 
   /**

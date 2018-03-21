@@ -33,14 +33,14 @@ export default class RouteFactory {
    *
    * @returns {APIRoute} an APIRoute instance
    */
-  route = (path, method='GET') =>
-    new Route(this.baseURL, this.apiVersion, path, method)
+  route = (path, method='GET', options) =>
+    new Route(this.baseURL, this.apiVersion, path, method, options)
 
-  get = path => this.route(path, 'GET')
+  get = (path, options) => this.route(path, 'GET', options)
 
-  post = path => this.route(path, 'POST')
+  post = (path, options) => this.route(path, 'POST', options)
 
-  put = path => this.route(path, 'PUT')
+  put = (path, options) => this.route(path, 'PUT', options)
 
-  delete = path => this.route(path, 'DELETE')
+  delete = (path, options) => this.route(path, 'DELETE', options)
 }
