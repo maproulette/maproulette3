@@ -69,12 +69,12 @@ export class ViewChallengeTasks extends Component {
     // Use CSS Modules once supported by create-react-app
     const statusColors = {
       [TaskStatus.created]: '#2281C2',       // $status-created-color
-      [TaskStatus.fixed]: '#00A592',         // $status-fixed-color
-      [TaskStatus.falsePositive]: '#EA8433', // $status-falsePositive-color
-      [TaskStatus.skipped]: '#FCCB4E',       // $status-skipped-color
-      [TaskStatus.deleted]: '#38E5DB',       // $status-deleted-color
-      [TaskStatus.alreadyFixed]: '#9D6ADC',  // $status-alreadyFixed-color
-      [TaskStatus.tooHard]: '#E05054',       // $status-tooHard-color
+      [TaskStatus.fixed]: '#61CDBB',         // $status-fixed-color
+      [TaskStatus.falsePositive]: '#F1E15B', // $status-falsePositive-color
+      [TaskStatus.skipped]: '#E8A838',       // $status-skipped-color
+      [TaskStatus.deleted]: '#9D6ADC',       // $status-deleted-color
+      [TaskStatus.alreadyFixed]: '#97E3D5',  // $status-alreadyFixed-color
+      [TaskStatus.tooHard]: '#F47560',       // $status-tooHard-color
     }
 
     const statusFilters = _map(TaskStatus, status => (

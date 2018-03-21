@@ -151,6 +151,8 @@
     "Challenge.results.heading": "Challenges",
     "Challenge.controls.clearFilters.label": "Clear Filters",
     "Challenge.results.noResults": "No Results",
+    "Task.fauxStatus.available": "Beskikbaar",
+    "ChallengeProgress.tooltip.label": "Take",
     "CommentList.controls.viewTask.label": "View Task",
     "ConfirmAction.title": "Please Confirm",
     "ConfirmAction.prompt": "Are you sure? This cannot be undone.",

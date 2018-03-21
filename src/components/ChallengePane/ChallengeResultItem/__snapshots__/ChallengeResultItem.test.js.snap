@@ -109,7 +109,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -342,7 +342,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -671,7 +671,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -904,7 +904,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -1294,7 +1294,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -1569,7 +1569,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -1983,7 +1983,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -2258,7 +2258,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -2716,7 +2716,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -2963,7 +2963,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -3367,7 +3367,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -3614,7 +3614,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -4070,7 +4070,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -4317,7 +4317,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -4721,7 +4721,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -4968,7 +4968,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -5435,7 +5435,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -5682,7 +5682,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -6086,7 +6086,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -6333,7 +6333,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -6789,7 +6789,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -7036,7 +7036,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -7440,7 +7440,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -7687,7 +7687,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -8143,7 +8143,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -8390,7 +8390,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -8794,7 +8794,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -9041,7 +9041,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -9497,7 +9497,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -9744,7 +9744,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -10148,7 +10148,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -10395,7 +10395,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -10851,7 +10851,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -11098,7 +11098,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -11502,7 +11502,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -11749,7 +11749,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -12214,7 +12214,7 @@ ShallowWrapper {
                               markdown="Challenge 309 description"
                     />
           </div>
-          <ChallengeProgress
+          <InjectIntl(ChallengeProgress)
                     challenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -12490,7 +12490,7 @@ ShallowWrapper {
                             markdown="Challenge 309 description"
               />
 </div>,
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
               challenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -12899,7 +12899,7 @@ ShallowWrapper {
                                     markdown="Challenge 309 description"
                         />
             </div>
-            <ChallengeProgress
+            <InjectIntl(ChallengeProgress)
                         challenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -13175,7 +13175,7 @@ ShallowWrapper {
                                 markdown="Challenge 309 description"
                 />
 </div>,
-              <ChallengeProgress
+              <InjectIntl(ChallengeProgress)
                 challenge={
                                 Object {
                                                 "blurb": "Challenge 309 blurb",

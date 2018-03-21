@@ -39,6 +39,11 @@ export default defineMessages({
     defaultMessage: 'Location',
   },
 
+  progress: {
+    id: 'ActiveTask.subheading.progress',
+    defaultMessage: 'Progress',
+  },
+
   social: {
     id: 'ActiveTask.subheading.social',
     defaultMessage: 'Share',

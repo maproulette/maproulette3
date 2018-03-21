@@ -1,18 +1,17 @@
 import React from 'react'
-import ChallengeProgress from './ChallengeProgress'
+import { ChallengeProgress } from './ChallengeProgress'
 import _cloneDeep from 'lodash/cloneDeep'
-
-const propsFixture = {
-  challenge: {
-    id: 123,
-    actions: {total: 5, available: 3, completed: 2}
-  },
-}
 
 let basicProps = null
 
 beforeEach(() => {
-  basicProps = _cloneDeep(propsFixture)
+  basicProps = {
+    challenge: {
+      id: 123,
+      actions: {total: 5, available: 3, completed: 2}
+    },
+    intl: {formatMessage: jest.fn()},
+  }
 })
 
 test("renders with props as expected", () => {
@@ -25,8 +24,9 @@ test("renders with props as expected", () => {
 })
 
 test("does not explode with null challenge", () => {
+  delete basicProps.challenge
   const wrapper = shallow(
-    <ChallengeProgress />
+    <ChallengeProgress {...basicProps} />
   )
 
   expect(wrapper).toMatchSnapshot()

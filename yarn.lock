@@ -12,6 +12,17 @@
     vfile "2.0.0"
     vfile-reporter "3.0.0"
 
+"@nivo/bar@^0.33.0":
+  version "0.33.0"
+  resolved "https://registry.yarnpkg.com/@nivo/bar/-/bar-0.33.0.tgz#95e60871b381fc14f4980ba22569b2fd7b0ac6b4"
+  dependencies:
+    "@nivo/core" "0.33.0"
+    "@nivo/legends" "0.33.0"
+    d3-scale "^1.0.6"
+    d3-shape "^1.2.0"
+    react-motion "^0.5.2"
+    recompose "^0.26.0"
+
 "@nivo/calendar@^0.33.0":
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/@nivo/calendar/-/calendar-0.33.0.tgz#32fb3fdcbbf1881da4beb63cb993f0b4fd132cef"

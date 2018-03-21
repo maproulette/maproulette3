@@ -151,6 +151,8 @@
     "Challenge.results.heading": "Retos",
     "Challenge.controls.clearFilters.label": "Clear Filters",
     "Challenge.results.noResults": "No se encontraron Retos",
+    "Task.fauxStatus.available": "Disponible",
+    "ChallengeProgress.tooltip.label": "Tareas",
     "CommentList.controls.viewTask.label": "View Task",
     "ConfirmAction.title": "Please Confirm",
     "ConfirmAction.prompt": "Are you sure? This cannot be undone.",

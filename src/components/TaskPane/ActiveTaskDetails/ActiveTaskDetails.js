@@ -12,6 +12,7 @@ import Delayed from 'react-delayed'
 import Sidebar from '../../Sidebar/Sidebar'
 import Popout from '../../Bulma/Popout'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
+import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import TaskStatusIndicator from './TaskStatusIndicator/TaskStatusIndicator'
 import ActiveTaskControls from './ActiveTaskControls/ActiveTaskControls'
@@ -295,6 +296,15 @@ export class ActiveTaskDetails extends Component {
                                     className="active-task-details--place active-task-details--bordered"/>
                 </div>
               </Delayed>
+            }
+
+            {!isMinimized &&
+             <div className="active-task-details--progress active-task-details--bordered">
+               <div className="active-task-details--sub-heading">
+                 <FormattedMessage {...messages.progress} />
+               </div>
+               <ChallengeProgress challenge={this.props.task.parent} />
+             </div>
             }
 
             {process.env.REACT_APP_FEATURE_SOCIAL_SHARING !== 'disabled' &&
