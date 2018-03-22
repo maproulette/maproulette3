@@ -84,6 +84,9 @@ $tablet: 40px;
     outline: 0 !important;
     box-shadow: none !important;
   }
+  svg {
+    transition: all .25s ease-in-out;
+  }
 }
 
 .button.is-outlined {
