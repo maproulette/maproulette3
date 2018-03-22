@@ -67,7 +67,7 @@
 
 @mixin markdown-content() {
   p {
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 
     &:last-child {
       margin-bottom: 0;
@@ -76,8 +76,8 @@
 
   ul {
     list-style-type: disc;
-    margin-left: 1em;
-    margin-bottom: 1em;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
 
     > li > ul {
       list-style-type: circle;
@@ -89,13 +89,13 @@
   }
 
   ol {
-    margin-left: 1em;
-    margin-bottom: 1em;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
   }
 
   pre {
     padding: 10px;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
   }
 }
 

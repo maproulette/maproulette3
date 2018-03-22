@@ -18,13 +18,20 @@ $grey-lightest: #EEEEEE;
 $grey-lightest-more: #F6F6F6;
 $green: #00A592; // persian green
 $green-light: #A4DBD5;
-$chart-green: #61CDBB;
 $yellow: #FCCB4E; // mustard
 $coral: #E05054; // coral
 $orange: #EA8433;
 $cyan: #38E5DB;
 $purple: #9D6ADC;
 $nearly-black: #0A0A0A;
+
+// Chart colors
+$chart-green: #61CDBB;
+$chart-green-light: #97E3D5;
+$chart-yellow: #F1E15B;
+$chart-orange: #E8A838;
+$chart-red: #F47560;
+$chart-brown: #E8C1A0;
 
 $primary: $blue;
 $danger: $coral;
@@ -35,15 +42,14 @@ $default-icon-color: $grey-dark;
 $minimizer-arrow-color: $grey-light-less;
 $box-shadow-color: rgba(0,0,0, 0.15);
 
-// Status colors
-// From https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors
+// Task status colors
 $status-created-color: $blue;
-$status-fixed-color: $green;
-$status-falsePositive-color: $orange;
-$status-skipped-color: $yellow;
-$status-deleted-color: $cyan;
-$status-alreadyFixed-color: $purple;
-$status-tooHard-color: $coral;
+$status-fixed-color: $chart-green;
+$status-falsePositive-color: $chart-yellow;
+$status-skipped-color: $chart-orange;
+$status-deleted-color: $purple;
+$status-alreadyFixed-color: $chart-green-light;
+$status-tooHard-color: $chart-red;
 
 // Typography
 $family-sans-serif: 'Roboto', sans-serif;

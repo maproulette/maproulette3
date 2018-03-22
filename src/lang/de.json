@@ -152,6 +152,8 @@
     "Challenge.results.heading": "Kampagnen",
     "Challenge.controls.clearFilters.label": "Clear Filters",
     "Challenge.results.noResults": "Keine Kampagnen gefunden",
+    "Task.fauxStatus.available": "Verfügbar",
+    "ChallengeProgress.tooltip.label": "Aufgaben",
     "CommentList.controls.viewTask.label": "View Task",
     "ConfirmAction.title": "Please Confirm",
     "ConfirmAction.prompt": "Are you sure? This cannot be undone.",

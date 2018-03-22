@@ -151,6 +151,8 @@
     "Challenge.results.heading": "Défis",
     "Challenge.controls.clearFilters.label": "Clear Filters",
     "Challenge.results.noResults": "Aucun défi trouvé",
+    "Task.fauxStatus.available": "Disponible",
+    "ChallengeProgress.tooltip.label": "Tâches",
     "CommentList.controls.viewTask.label": "View Task",
     "ConfirmAction.title": "Please Confirm",
     "ConfirmAction.prompt": "Are you sure? This cannot be undone.",
