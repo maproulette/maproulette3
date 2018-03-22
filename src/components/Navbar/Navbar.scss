@@ -2,7 +2,7 @@
 
 .navbar.top-nav {
   height: $navbar-height;
-
+  
   .navbar-brand {
     position: relative;
 
@@ -56,6 +56,7 @@
       .item-text {
         padding: 7px 5px 5px 5px;
         border-bottom: 2px solid transparent;
+        transition: border-color .25s ease-in-out;
 
         &:hover {
           border-color: rgba($navbar-item-color, 0.5);
@@ -90,9 +91,14 @@
     }
 
     .back-to-old-ui {
-      background-color: rgba($black, 0.08);
-      border-radius: $radius-medium;
+      background-color: rgba($black, 0.1);
+      border-radius: $radius-rounded;
       margin: 18px 45px;
+      padding: 0 1.5rem;
+      transition: background-color .25s ease-in-out;
+      &:hover {
+        background-color: rgba($black, 0.2);
+      }
     }
   }
 }

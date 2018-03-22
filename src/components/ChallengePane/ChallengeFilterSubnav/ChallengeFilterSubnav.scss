@@ -4,7 +4,7 @@
   z-index: $layer-subnav;
   height: $subnav-height;
   background-color: $white;
-  border-bottom: 1px solid $grey-light;
+  border-bottom: 2px solid $grey-lighter;
 
   .navbar-brand {
     width: 24px;
@@ -32,7 +32,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      border-right: 1px solid $grey-lighter;
+      border-right: 2px solid $grey-lightest;
 
       &:after {
         @include arrow($minimizer-arrow-color);
