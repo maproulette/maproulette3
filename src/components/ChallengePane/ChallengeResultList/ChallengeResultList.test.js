@@ -41,6 +41,7 @@ beforeEach(() => {
     startChallenge: jest.fn(),
     saveChallenge: jest.fn(),
     unsaveChallenge: jest.fn(),
+    startMapBoundedTasks: jest.fn(),
     intl: {formatMessage: jest.fn()},
   }
 })
@@ -145,9 +146,7 @@ test("shows virtual-challenge start control if map-bounded tasks", () => {
     <ChallengeResultList {...basicProps} />
   )
 
-  expect(
-    wrapper.find('.challenge-result-list__virtual-challenge-option').exists()
-  ).toBe(true)
+  expect(wrapper.find('StartVirtualChallenge').exists()).toBe(true)
 })
 
 test("doesn't show virtual-challenge start control if no map-bounded tasks", () => {
@@ -157,9 +156,7 @@ test("doesn't show virtual-challenge start control if no map-bounded tasks", () 
     <ChallengeResultList {...basicProps} />
   )
 
-  expect(
-    wrapper.find('.challenge-result-list__virtual-challenge-option').exists()
-  ).toBe(false)
+  expect(wrapper.find('StartVirtualChallenge').exists()).toBe(false)
 })
 
 test("doesn't show virtual-challenge start control if browsing a challenge", () => {
@@ -170,7 +167,5 @@ test("doesn't show virtual-challenge start control if browsing a challenge", () 
     <ChallengeResultList {...basicProps} />
   )
 
-  expect(
-    wrapper.find('.challenge-result-list__virtual-challenge-option').exists()
-  ).toBe(false)
+  expect(wrapper.find('StartVirtualChallenge').exists()).toBe(false)
 })

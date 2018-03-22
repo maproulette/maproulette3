@@ -96,12 +96,13 @@ export const WithMapBoundedTasks = function(WrappedComponent,
      * Invoked when the user wishes to start work on the mapped tasks,
      * creating a virtual challenge.
      */
-    startMapBoundedTasks = () => {
+    startMapBoundedTasks = name => {
       const tasks = _get(this.allowedTasks(), 'tasks')
       if (tasks && tasks.length > 0) {
         this.setState({creatingVirtualChallenge: true})
 
         this.props.startBoundedTasks(
+          name,
           _map(tasks, 'id')
         ).then(() => this.setState({creatingVirtualChallenge: false}))
       }
@@ -145,9 +146,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateBoundedTasks: bounds => doUpdateBoundedTasks(dispatch, bounds),
 
-  startBoundedTasks: taskIds => {
+  startBoundedTasks: (name, taskIds) => {
     return dispatch(
-      createVirtualChallenge(taskIds)
+      createVirtualChallenge(name, taskIds)
     ).then(virtualChallenge => {
       dispatch(
         loadRandomTaskFromVirtualChallenge(virtualChallenge.id)

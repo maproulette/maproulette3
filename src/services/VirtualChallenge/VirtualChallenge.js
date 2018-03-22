@@ -34,13 +34,31 @@ export const receiveVirtualChallenges = function(normalizedEntities,
 // async action creators
 
 /**
- * Creates a new virtual challenge containing tasks within the given bounding
- * box, regardless of their individual parent challenges.
+ * Fetch data for the given virtual challenge.
  */
-export const createVirtualChallenge = function(taskIds) {
+export const fetchVirtualChallenge = function(virtualChallengeId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.virtualChallenge.single,
+      {schema: virtualChallengeSchema(), variables: {id: virtualChallengeId}}
+    ).execute().then(normalizedResults => {
+      dispatch(receiveVirtualChallenges(normalizedResults.entities))
+
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(AppErrors.virtualChallenge.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
+ * Creates a new virtual challenge with the given name and tasks.
+ */
+export const createVirtualChallenge = function(name, taskIds) {
   return function(dispatch) {
     const challengeData = {
-      name: `Virtual Challenge ${Date.now()}`,
+      name,
       taskIdList: taskIds,
     }
 

@@ -18,6 +18,5 @@ Object {
     "parent": 123,
   },
   "taskId": 987,
-  "virtualChallengeId": undefined,
 }
 `;

@@ -17,6 +17,12 @@
         font-size: $size-6;
         font-weight: $weight-medium;
       }
+
+      h4 {
+        color: $coral;
+        font-size: $size-7;
+        font-weight: $weight-medium;
+      }
     }
 
     .popout-content__body {
@@ -95,6 +101,12 @@
     padding-bottom: 20px;
     margin-bottom: 20px;
     border-bottom: 2px solid $grey-lightest-more;
+  }
+
+  &--virtual-name {
+    color: $coral;
+    font-size: $size-6;
+    margin-bottom: 10px;
   }
 
   &--name {

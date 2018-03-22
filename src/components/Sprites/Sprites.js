@@ -8,6 +8,9 @@ export default function () {
   return (
     <div className="sprites">
       <svg xmlns="http://www.w3.org/2000/svg" hidden>
+        <symbol id="cancel-icon" viewBox="0 0 20 20">
+          <path d="M0 10a10 10 0 1 1 20 0 10 10 0 0 1-20 0zm16.32-4.9L5.09 16.31A8 8 0 0 0 16.32 5.09zm-1.41-1.42A8 8 0 0 0 3.68 14.91L14.91 3.68z"/>
+        </symbol>
         <symbol id="navigation-more-icon" viewBox="0 0 20 20">
           <path d="M4 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
         </symbol>

@@ -38,6 +38,7 @@ export default {
   },
 
   virtualChallenge: {
+    fetchFailure: messages.virtualChallengeFetchFailure,
     createFailure: messages.virtualChallengeCreateFailure,
   },
 

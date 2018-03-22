@@ -71,6 +71,10 @@ export default defineMessages({
     defaultMessage: "Unable to rebuild challenge tasks",
   },
 
+  virtualChallengeFetchFailure: {
+    id: 'Errors.virtualChallenge.fetchFailure',
+    defaultMessage: "Unable to retrieve latest virtual challenge data from server."
+  },
   virtualChallengeCreateFailure: {
     id: 'Errors.virtualChallenge.createFailure',
     defaultMessage: "Unable to create a virtual challenge",
