@@ -4,7 +4,6 @@ import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
-import { toLatLngBounds } from '../MapBounds/MapBounds'
 import { logoutUser } from '../User/User'
 import { addError, addServerError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
@@ -38,19 +37,11 @@ export const receiveVirtualChallenges = function(normalizedEntities,
  * Creates a new virtual challenge containing tasks within the given bounding
  * box, regardless of their individual parent challenges.
  */
-export const createVirtualChallenge = function(bounds) {
+export const createVirtualChallenge = function(taskIds) {
   return function(dispatch) {
-    const normalizedBounds = toLatLngBounds(bounds)
     const challengeData = {
       name: `Virtual Challenge ${Date.now()}`,
-      searchParameters: {
-        location: {
-          left: normalizedBounds.getWest(),
-          bottom: normalizedBounds.getSouth(),
-          right: normalizedBounds.getEast(),
-          top: normalizedBounds.getNorth(),
-        }
-      }
+      taskIdList: taskIds,
     }
 
     return new Endpoint(api.virtualChallenge.create, {

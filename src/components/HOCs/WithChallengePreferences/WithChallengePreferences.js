@@ -21,8 +21,8 @@ const WithChallengePreferences = WrappedComponent =>
 
 export const mapStateToProps = (state, ownProps) => {
   const isVirtual = _isNumber(ownProps.virtualChallengeId)
-  const challengeId = isVirtual ? ownProps.virtualChallengeId :
-                      _get(ownProps, 'challenge.id', ownProps.challengeId)
+  const concreteChallengeId = _get(ownProps, 'challenge.id', ownProps.challengeId)
+  const challengeId = isVirtual ? ownProps.virtualChallengeId : concreteChallengeId
   const mappedProps = {}
 
   if (_isNumber(challengeId)) {
@@ -31,9 +31,10 @@ export const mapStateToProps = (state, ownProps) => {
            `${preferenceGroup(isVirtual)}.${challengeId}.minimize`,
            false)
 
+    // Instruction preferences are always tied to the concrete challenge.
     mappedProps.collapseInstructions =
       _get(state.currentPreferences,
-           `${preferenceGroup(isVirtual)}.${challengeId}.collapseInstructions`,
+           `${preferenceGroup(false)}.${concreteChallengeId}.collapseInstructions`,
            false)
 
     mappedProps.collapseMoreOptions =
