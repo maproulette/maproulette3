@@ -17,15 +17,22 @@
       margin-bottom: 10px;
     }
 
+    button {
+      &.false-positive-control, &.skip-control {
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+    }
+
     button.button.large-and-wide {
       
-      width: 100%;
+      // width: 100%;
       // margin-bottom: 10px;
 
       &.false-positive-control, &.skip-control {
         flex: 1;
-        margin-left: 5px;
-        margin-right: 5px;
+        // margin-left: 5px;
+        // margin-right: 5px;
       }
 
       .control-icon svg {
