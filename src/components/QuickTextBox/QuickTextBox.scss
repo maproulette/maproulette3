@@ -1,0 +1,29 @@
+@import 'variables.scss';
+
+.quick-text-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .control-wrapper {
+    margin-right: 10px;
+    flex: 1 1 100%;
+  }
+
+  button.button {
+    height: 45px;
+    margin-right: 5px;
+  }
+
+  &__done-button.button {
+    svg {
+      fill: $green;
+    }
+  }
+
+  &__cancel-button.button {
+    svg {
+      fill: $coral;
+    }
+  }
+}

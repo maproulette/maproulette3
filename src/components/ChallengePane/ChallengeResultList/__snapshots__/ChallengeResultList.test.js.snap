@@ -38,6 +38,7 @@ ShallowWrapper {
     }
     saveChallenge={[Function]}
     startChallenge={[Function]}
+    startMapBoundedTasks={[Function]}
     unfilteredChallenges={
         Array [
             Object {
@@ -161,6 +162,7 @@ ShallowWrapper {
                               }
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
+                              startMapBoundedTasks={[Function]}
                               unfilteredChallenges={
                                         Array [
                                                   Object {
@@ -368,6 +370,7 @@ ShallowWrapper {
                             }
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
+                            startMapBoundedTasks={[Function]}
                             unfilteredChallenges={
                                           Array [
                                                         Object {
@@ -457,6 +460,7 @@ ShallowWrapper {
                 }
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
+                startMapBoundedTasks={[Function]}
                 unfilteredChallenges={
                                 Array [
                                                 Object {
@@ -533,6 +537,7 @@ ShallowWrapper {
                 },
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
+                "startMapBoundedTasks": [Function],
                 "unfilteredChallenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
@@ -658,6 +663,7 @@ ShallowWrapper {
                                     }
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
+                                    startMapBoundedTasks={[Function]}
                                     unfilteredChallenges={
                                                 Array [
                                                             Object {
@@ -865,6 +871,7 @@ ShallowWrapper {
                                 }
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
+                                startMapBoundedTasks={[Function]}
                                 unfilteredChallenges={
                                                 Array [
                                                                 Object {
@@ -954,6 +961,7 @@ ShallowWrapper {
                   }
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
+                  startMapBoundedTasks={[Function]}
                   unfilteredChallenges={
                                     Array [
                                                       Object {
@@ -1030,6 +1038,7 @@ ShallowWrapper {
                   },
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
+                  "startMapBoundedTasks": [Function],
                   "unfilteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
@@ -1119,6 +1128,7 @@ ShallowWrapper {
     }
     saveChallenge={[Function]}
     startChallenge={[Function]}
+    startMapBoundedTasks={[Function]}
     unfilteredChallenges={
         Array [
             Object {
@@ -1242,6 +1252,7 @@ ShallowWrapper {
                               }
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
+                              startMapBoundedTasks={[Function]}
                               unfilteredChallenges={
                                         Array [
                                                   Object {
@@ -1449,6 +1460,7 @@ ShallowWrapper {
                             }
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
+                            startMapBoundedTasks={[Function]}
                             unfilteredChallenges={
                                           Array [
                                                         Object {
@@ -1538,6 +1550,7 @@ ShallowWrapper {
                 }
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
+                startMapBoundedTasks={[Function]}
                 unfilteredChallenges={
                                 Array [
                                                 Object {
@@ -1614,6 +1627,7 @@ ShallowWrapper {
                 },
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
+                "startMapBoundedTasks": [Function],
                 "unfilteredChallenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
@@ -1739,6 +1753,7 @@ ShallowWrapper {
                                     }
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
+                                    startMapBoundedTasks={[Function]}
                                     unfilteredChallenges={
                                                 Array [
                                                             Object {
@@ -1946,6 +1961,7 @@ ShallowWrapper {
                                 }
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
+                                startMapBoundedTasks={[Function]}
                                 unfilteredChallenges={
                                                 Array [
                                                                 Object {
@@ -2035,6 +2051,7 @@ ShallowWrapper {
                   }
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
+                  startMapBoundedTasks={[Function]}
                   unfilteredChallenges={
                                     Array [
                                                       Object {
@@ -2111,6 +2128,7 @@ ShallowWrapper {
                   },
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
+                  "startMapBoundedTasks": [Function],
                   "unfilteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
@@ -2199,6 +2217,7 @@ ShallowWrapper {
     }
     saveChallenge={[Function]}
     startChallenge={[Function]}
+    startMapBoundedTasks={[Function]}
     unfilteredChallenges={
         Array [
             Object {
@@ -2717,6 +2736,7 @@ ShallowWrapper {
     }
     saveChallenge={[Function]}
     startChallenge={[Function]}
+    startMapBoundedTasks={[Function]}
     unfilteredChallenges={
         Array [
             Object {
@@ -3240,6 +3260,7 @@ ShallowWrapper {
     }
     saveChallenge={[Function]}
     startChallenge={[Function]}
+    startMapBoundedTasks={[Function]}
     unfilteredChallenges={
         Array [
             Object {
@@ -3347,6 +3368,7 @@ ShallowWrapper {
                               }
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
+                              startMapBoundedTasks={[Function]}
                               unfilteredChallenges={
                                         Array [
                                                   Object {
@@ -3425,6 +3447,7 @@ ShallowWrapper {
                               }
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
+                              startMapBoundedTasks={[Function]}
                               unfilteredChallenges={
                                         Array [
                                                   Object {
@@ -3569,6 +3592,7 @@ ShallowWrapper {
                             }
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
+                            startMapBoundedTasks={[Function]}
                             unfilteredChallenges={
                                           Array [
                                                         Object {
@@ -3647,6 +3671,7 @@ ShallowWrapper {
                             }
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
+                            startMapBoundedTasks={[Function]}
                             unfilteredChallenges={
                                           Array [
                                                         Object {
@@ -3734,6 +3759,7 @@ ShallowWrapper {
                 }
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
+                startMapBoundedTasks={[Function]}
                 unfilteredChallenges={
                                 Array [
                                                 Object {
@@ -3810,6 +3836,7 @@ ShallowWrapper {
                 },
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
+                "startMapBoundedTasks": [Function],
                 "unfilteredChallenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
@@ -3893,6 +3920,7 @@ ShallowWrapper {
                 }
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
+                startMapBoundedTasks={[Function]}
                 unfilteredChallenges={
                                 Array [
                                                 Object {
@@ -3969,6 +3997,7 @@ ShallowWrapper {
                 },
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
+                "startMapBoundedTasks": [Function],
                 "unfilteredChallenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
@@ -4078,6 +4107,7 @@ ShallowWrapper {
                                     }
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
+                                    startMapBoundedTasks={[Function]}
                                     unfilteredChallenges={
                                                 Array [
                                                             Object {
@@ -4156,6 +4186,7 @@ ShallowWrapper {
                                     }
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
+                                    startMapBoundedTasks={[Function]}
                                     unfilteredChallenges={
                                                 Array [
                                                             Object {
@@ -4300,6 +4331,7 @@ ShallowWrapper {
                                 }
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
+                                startMapBoundedTasks={[Function]}
                                 unfilteredChallenges={
                                                 Array [
                                                                 Object {
@@ -4378,6 +4410,7 @@ ShallowWrapper {
                                 }
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
+                                startMapBoundedTasks={[Function]}
                                 unfilteredChallenges={
                                                 Array [
                                                                 Object {
@@ -4465,6 +4498,7 @@ ShallowWrapper {
                   }
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
+                  startMapBoundedTasks={[Function]}
                   unfilteredChallenges={
                                     Array [
                                                       Object {
@@ -4541,6 +4575,7 @@ ShallowWrapper {
                   },
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
+                  "startMapBoundedTasks": [Function],
                   "unfilteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
@@ -4624,6 +4659,7 @@ ShallowWrapper {
                   }
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
+                  startMapBoundedTasks={[Function]}
                   unfilteredChallenges={
                                     Array [
                                                       Object {
@@ -4700,6 +4736,7 @@ ShallowWrapper {
                   },
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
+                  "startMapBoundedTasks": [Function],
                   "unfilteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
@@ -4788,6 +4825,7 @@ ShallowWrapper {
     }
     saveChallenge={[Function]}
     startChallenge={[Function]}
+    startMapBoundedTasks={[Function]}
     unfilteredChallenges={
         Array [
             Object {
@@ -4896,6 +4934,7 @@ ShallowWrapper {
                               }
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
+                              startMapBoundedTasks={[Function]}
                               unfilteredChallenges={
                                         Array [
                                                   Object {
@@ -4975,6 +5014,7 @@ ShallowWrapper {
                               }
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
+                              startMapBoundedTasks={[Function]}
                               unfilteredChallenges={
                                         Array [
                                                   Object {
@@ -5120,6 +5160,7 @@ ShallowWrapper {
                             }
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
+                            startMapBoundedTasks={[Function]}
                             unfilteredChallenges={
                                           Array [
                                                         Object {
@@ -5199,6 +5240,7 @@ ShallowWrapper {
                             }
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
+                            startMapBoundedTasks={[Function]}
                             unfilteredChallenges={
                                           Array [
                                                         Object {
@@ -5287,6 +5329,7 @@ ShallowWrapper {
                 }
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
+                startMapBoundedTasks={[Function]}
                 unfilteredChallenges={
                                 Array [
                                                 Object {
@@ -5364,6 +5407,7 @@ ShallowWrapper {
                 },
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
+                "startMapBoundedTasks": [Function],
                 "unfilteredChallenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
@@ -5448,6 +5492,7 @@ ShallowWrapper {
                 }
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
+                startMapBoundedTasks={[Function]}
                 unfilteredChallenges={
                                 Array [
                                                 Object {
@@ -5525,6 +5570,7 @@ ShallowWrapper {
                 },
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
+                "startMapBoundedTasks": [Function],
                 "unfilteredChallenges": Array [
                   Object {
                     "blurb": "Challenge 309 blurb",
@@ -5635,6 +5681,7 @@ ShallowWrapper {
                                     }
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
+                                    startMapBoundedTasks={[Function]}
                                     unfilteredChallenges={
                                                 Array [
                                                             Object {
@@ -5714,6 +5761,7 @@ ShallowWrapper {
                                     }
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
+                                    startMapBoundedTasks={[Function]}
                                     unfilteredChallenges={
                                                 Array [
                                                             Object {
@@ -5859,6 +5907,7 @@ ShallowWrapper {
                                 }
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
+                                startMapBoundedTasks={[Function]}
                                 unfilteredChallenges={
                                                 Array [
                                                                 Object {
@@ -5938,6 +5987,7 @@ ShallowWrapper {
                                 }
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
+                                startMapBoundedTasks={[Function]}
                                 unfilteredChallenges={
                                                 Array [
                                                                 Object {
@@ -6026,6 +6076,7 @@ ShallowWrapper {
                   }
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
+                  startMapBoundedTasks={[Function]}
                   unfilteredChallenges={
                                     Array [
                                                       Object {
@@ -6103,6 +6154,7 @@ ShallowWrapper {
                   },
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
+                  "startMapBoundedTasks": [Function],
                   "unfilteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",
@@ -6187,6 +6239,7 @@ ShallowWrapper {
                   }
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
+                  startMapBoundedTasks={[Function]}
                   unfilteredChallenges={
                                     Array [
                                                       Object {
@@ -6264,6 +6317,7 @@ ShallowWrapper {
                   },
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
+                  "startMapBoundedTasks": [Function],
                   "unfilteredChallenges": Array [
                     Object {
                       "blurb": "Challenge 309 blurb",

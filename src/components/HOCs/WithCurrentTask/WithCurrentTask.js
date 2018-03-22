@@ -80,8 +80,6 @@ export const mapStateToProps = (state, ownProps) => {
         denormalize(taskEntity, taskDenormalizationSchema(), state.entities)
 
       mappedProps.challengeId = _get(mappedProps.task, 'parent.id')
-      mappedProps.virtualChallengeId =
-        virtualChallengeIdFromRoute(ownProps, ownProps.virtualChallengeId)
     }
   }
 
@@ -156,30 +154,16 @@ export const challengeIdFromRoute = (props, defaultId) => {
 }
 
 /**
- * Retrieve the virtual challenge id from the route, falling back to the given
- * defaultId if none is available.
- */
-export const virtualChallengeIdFromRoute = (props, defaultId) => {
-  const virtualChallengeId =
-    parseInt(_get(props, 'match.params.virtualChallengeId'), 10)
-
-  return _isFinite(virtualChallengeId) ? virtualChallengeId : defaultId
-}
-
-/**
  * Load a new random task, handling the differences between standard challenges
  * and virtual challenges.
  */
 export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
   // We need to make different requests depending on whether we're working on a
   // virtual challenge or a standard challenge.
-  const virtualChallengeId =
-    virtualChallengeIdFromRoute(props, props.virtualChallengeId)
-
-  if (_isFinite(virtualChallengeId)) {
+  if (_isFinite(props.virtualChallengeId)) {
     return dispatch(
       loadRandomTaskFromVirtualChallenge(
-        virtualChallengeId,
+        props.virtualChallengeId,
         taskLoadBy === TaskLoadMethod.proximity ? currentTaskId : undefined
       )
     )
@@ -202,10 +186,8 @@ export const visitNewTask = function(props, currentTaskId, newTask) {
   if (_isObject(newTask) && newTask.id !== currentTaskId) {
     // The route we use is different for virtual challenges vs standard
     // challenges.
-    const virtualChallengeId =
-      virtualChallengeIdFromRoute(props, props.virtualChallengeId)
-    if (_isFinite(virtualChallengeId)) {
-      props.history.push(`/virtual/${virtualChallengeId}/task/${newTask.id}`)
+    if (_isFinite(props.virtualChallengeId)) {
+      props.history.push(`/virtual/${props.virtualChallengeId}/task/${newTask.id}`)
     }
     else {
       const challengeId = challengeIdFromRoute(props, props.challengeId)

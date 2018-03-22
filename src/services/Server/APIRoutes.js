@@ -53,6 +53,7 @@ const apiRoutes = factory => {
       'delete': factory.delete('/challenge/:id'),
     },
     'virtualChallenge': {
+      'single': factory.get('/virtualchallenge/:id'),
       'create': factory.post('/virtualchallenge'),
       'randomTask': factory.get('/virtualchallenge/:id/task'),
     },

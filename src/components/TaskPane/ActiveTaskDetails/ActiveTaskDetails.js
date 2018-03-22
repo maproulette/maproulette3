@@ -174,6 +174,11 @@ export class ActiveTaskDetails extends Component {
                              className='active-task-details__info-popout'
                              control={infoPopoutButton}>
           <div className="popout-content__header active-task-details--bordered">
+            {_isFinite(this.props.virtualChallengeId) &&
+             <h4 className="info-popout--virtual-name">
+               {_get(this.props, 'virtualChallenge.name')}
+             </h4>
+            }
             <h3 className="info-popout--name">{challengeNameLink}</h3>
 
             <div className="info-popout--project-name">
@@ -237,6 +242,11 @@ export class ActiveTaskDetails extends Component {
               <FormattedMessage {...messages.challengeHeading} />
             </div>
 
+            {_isFinite(this.props.virtualChallengeId) &&
+             <h3 className="active-task-details--virtual-name">
+               {_get(this.props, 'virtualChallenge.name')}
+             </h3>
+            }
             <h2 className="active-task-details--name">{challengeNameLink}</h2>
 
             <div className="active-task-details--project-name">

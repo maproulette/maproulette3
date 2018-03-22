@@ -12,6 +12,7 @@ import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChal
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
+import StartVirtualChallenge from './StartVirtualChallenge'
 import messages from './Messages'
 import './ChallengeResultList.css'
 
@@ -55,19 +56,14 @@ export class ChallengeResultList extends Component {
 
     // If there are map-bounded tasks visible (and we're not browsing a
     // challenge), offer the user an option to start a virtual challenge to
-    // work on those mapped tasks.
+    // work on those mapped tasks. If they click it, ask them for a name
+    // for their virtual challenge.
     let virtualChallengeOption = null
     if (_get(this.props, 'mapBoundedTasks.tasks.length', 0) > 0 &&
         !_isObject(this.props.browsedChallenge)) {
-      virtualChallengeOption = (
-        <div className="challenge-result-list__virtual-challenge-option">
-          <button className={classNames("button is-outlined is-primary",
-                                        {"is-loading": this.props.creatingVirtualChallenge})}
-                  onClick={this.props.startMapBoundedTasks}>
-            <FormattedMessage {...messages.createVirtualChallenge} />
-          </button>
-        </div>
-      )
+      virtualChallengeOption =
+        <StartVirtualChallenge startMapBoundedTasks={this.props.startMapBoundedTasks}
+                               creatingVirtualChallenge={this.props.creatingVirtualChallenge} />
     }
 
     let results = null

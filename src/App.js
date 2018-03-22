@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import _isNumber from 'lodash/isNumber'
 import AboutPane from './components/AboutPane/AboutPane'
@@ -9,7 +9,12 @@ import AdminPane from './components/AdminPane/AdminPane'
 import { GUEST_USER_ID } from './services/User/User'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithCurrentTask from './components/HOCs/WithCurrentTask/WithCurrentTask'
-import LoadRandomChallengeTask from './components/LoadRandomChallengeTask/LoadRandomChallengeTask'
+import WithVirtualChallenge
+       from './components/HOCs/WithVirtualChallenge/WithVirtualChallenge'
+import LoadRandomChallengeTask
+       from './components/LoadRandomChallengeTask/LoadRandomChallengeTask'
+import LoadRandomVirtualChallengeTask
+       from './components/LoadRandomVirtualChallengeTask/LoadRandomVirtualChallengeTask'
 import Navbar from './components/Navbar/Navbar'
 import UserProfile from './components/UserProfile/UserProfile'
 import ErrorModal from './components/ErrorModal/ErrorModal'
@@ -19,6 +24,8 @@ import './App.css'
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
 const CurrentTaskPane = WithCurrentTask(TaskPane)
+const CurrentVirtualChallengeTaskPane =
+  WithVirtualChallenge(WithCurrentTask(TaskPane))
 
 /**
  * App represents the top level component of the application.  It renders a
@@ -56,15 +63,20 @@ export class App extends Component {
       <div className="App">
         <TopNav />
 
-        <Route exact path='/' component={ChallengePane} />
-        <Route path='/browse/challenges/:challengeId?' component={ChallengePane} />
-        <Route exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
-        <Route exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
-        <Route exact path='/virtual/:virtualChallengeId/task/:taskId' component={CurrentTaskPane} />
-        <Route exact path='/task/:taskId' component={CurrentTaskPane} />
-        <Route exact path='/about' component={AboutPane} />
-        <Route path='/user/profile' component={UserProfile} />
-        <Route path='/admin' component={AdminPane} />
+        <Switch>
+          <Route exact path='/' component={ChallengePane} />
+          <Route path='/browse/challenges/:challengeId?' component={ChallengePane} />
+          <Route exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
+          <Route exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
+          <Route exact path='/virtual/:virtualChallengeId/task/:taskId'
+                 component={CurrentVirtualChallengeTaskPane} />
+          <Route exact path='/virtual/:virtualChallengeId'
+                 component={LoadRandomVirtualChallengeTask} />
+          <Route exact path='/task/:taskId' component={CurrentTaskPane} />
+          <Route exact path='/about' component={AboutPane} />
+          <Route path='/user/profile' component={UserProfile} />
+          <Route path='/admin' component={AdminPane} />
+        </Switch>
 
         {firstTimeModal}
         <ErrorModal />
