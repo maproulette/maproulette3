@@ -14,7 +14,7 @@ export default class ChallengeComments extends Component {
         <div className="challenge-comments__controls">
           <a target="_blank"
             href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
-            className="button is-outlined is-secondary has-svg-icon export-control">
+            className="button is-outlined is-green has-svg-icon export-control">
             <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
             <FormattedMessage {...messages.exportLabel} />
           </a>

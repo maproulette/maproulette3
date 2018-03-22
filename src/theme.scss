@@ -79,6 +79,7 @@ $tablet: 40px;
 }
 
 .button {
+  transition: all .25s ease-in-out;
   &:focus {
     outline: 0 !important;
     box-shadow: none !important;
@@ -129,8 +130,11 @@ $tablet: 40px;
     fill: $green;
   }
 
-  width: 140px;
-  height: 75px;
+  height: auto;
+  padding: 1rem;
+  line-height: 1;
+  //width: 140px;
+  //height: 75px;
   background-color: $grey-lightest-more;
   font-size: $size-6;
   font-weight: $weight-medium;

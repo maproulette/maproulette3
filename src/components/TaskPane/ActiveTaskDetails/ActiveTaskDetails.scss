@@ -43,7 +43,8 @@
 
     .task-content__task-body {
       padding: 0px 30px 30px 30px;
-      width: 350px;
+      // width: 350px;
+      width: 100%;
     }
   }
 
@@ -105,6 +106,7 @@
   &--project-name {
     font-size: $size-8;
     color: $grey-light;
+    margin-bottom: .25rem;
   }
 
   &__contact-owner {

@@ -117,7 +117,11 @@ if (!_isEmpty(process.env.REACT_APP_TITLE)) {
 
 // render a loading pane.
 ReactDOM.render(
-  <h1 className='title has-text-centered'>Loading <BusySpinner /></h1>,
+  <div className='loading'>
+    <div className='loading__content'>
+      <h1 className='title has-text-centered'>Loading <BusySpinner /></h1>
+    </div>
+  </div>,
   document.getElementById('root')
 )
 
