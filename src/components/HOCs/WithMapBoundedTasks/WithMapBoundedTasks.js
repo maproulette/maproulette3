@@ -5,6 +5,7 @@ import _each from 'lodash/each'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
 import _debounce from 'lodash/debounce'
+import _map from 'lodash/map'
 import _noop from 'lodash/noop'
 import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
 import { createVirtualChallenge }
@@ -58,31 +59,52 @@ export const WithMapBoundedTasks = function(WrappedComponent,
       creatingVirtualChallenge: false,
     }
 
+    /**
+     * Ensure bounds are represented as LatLngBounds object.
+     */
     normalizedBounds = props =>
       toLatLngBounds(_get(props, `mapBounds.${mapType}.bounds`))
 
-    startMapBoundedTasks = () => {
-      this.setState({creatingVirtualChallenge: true})
+    /**
+     * Applies bounds and challenge filters to the map-bounded tasks, as appropriate,
+     * returning only those tasks that pass the filters.
+     */
+    allowedTasks = () => {
+      const bounds = this.normalizedBounds(this.props)
+      let mapBoundedTasks = null
 
-      this.props.startBoundedTasks(
-        this.normalizedBounds(this.props)
-      ).then(() => this.setState({creatingVirtualChallenge: false}))
-    }
+      if (bounds && boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
+        mapBoundedTasks = this.props.mapBoundedTasks
+      }
 
-    allowedTasks = boundedTasks => {
-      if (!matchChallenges || _get(boundedTasks, 'tasks.length', 0) === 0) {
-        return boundedTasks
+      if (!matchChallenges || _get(mapBoundedTasks, 'tasks.length', 0) === 0) {
+        return mapBoundedTasks
       }
 
       const allowedChallenges = new Set()
       _each(this.props.challenges,
             challenge => allowedChallenges.add(challenge.id))
 
-      const filteredTasks = _filter(boundedTasks.tasks,
+      const filteredTasks = _filter(mapBoundedTasks.tasks,
         task => allowedChallenges.has(task.parentId)
       )
 
-      return Object.assign({}, boundedTasks, {tasks: filteredTasks})
+      return Object.assign({}, mapBoundedTasks, {tasks: filteredTasks})
+    }
+
+    /**
+     * Invoked when the user wishes to start work on the mapped tasks,
+     * creating a virtual challenge.
+     */
+    startMapBoundedTasks = () => {
+      const tasks = _get(this.allowedTasks(), 'tasks')
+      if (tasks && tasks.length > 0) {
+        this.setState({creatingVirtualChallenge: true})
+
+        this.props.startBoundedTasks(
+          _map(tasks, 'id')
+        ).then(() => this.setState({creatingVirtualChallenge: false}))
+      }
     }
 
     componentWillMount() {
@@ -105,13 +127,8 @@ export const WithMapBoundedTasks = function(WrappedComponent,
     }
 
     render() {
-      const bounds = this.normalizedBounds(this.props)
-      const mapBoundedTasks = 
-        bounds && boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees()) ?
-        this.allowedTasks(this.props.mapBoundedTasks) : null
-
       return (
-        <WrappedComponent mapBoundedTasks={mapBoundedTasks}
+        <WrappedComponent mapBoundedTasks={this.allowedTasks()}
                           startMapBoundedTasks={this.startMapBoundedTasks}
                           creatingVirtualChallenge={this.state.creatingVirtualChallenge}
                           {..._omit(this.props, ['mapBoundedTasks',
@@ -128,8 +145,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateBoundedTasks: bounds => doUpdateBoundedTasks(dispatch, bounds),
 
-  startBoundedTasks: bounds => {
-    return dispatch(createVirtualChallenge(bounds)).then(virtualChallenge => {
+  startBoundedTasks: taskIds => {
+    return dispatch(
+      createVirtualChallenge(taskIds)
+    ).then(virtualChallenge => {
       dispatch(
         loadRandomTaskFromVirtualChallenge(virtualChallenge.id)
       ).then(task => {
