@@ -2,6 +2,8 @@
 
 .task-location-map {
   position: relative;
+  border: 2px solid $grey-lighter;
+  border-radius: $radius;
 
   &__extent-map {
     position: absolute;
@@ -11,7 +13,8 @@
     width: 90px;
     box-shadow: -4px 5px 20px -6px $grey-darkest;
     z-index: $intralayer-bump;
-    border: 1px solid $grey;
+    border: 2px solid $grey-lighter;
+    border-radius: $radius;
 
     .leaflet-container {
       height: 100%;

@@ -91,7 +91,7 @@
     background-color: $white;
     color: $blue;
     font-weight: $weight-normal;
-    padding: 17px 10px 10px 10px;
+    padding: 1rem;
     border-radius: $radius-medium;
     justify-content: space-between;
     align-items: flex-start;
@@ -115,19 +115,24 @@
     font-size: $size-7;
     max-height: 0;
     transition: max-height 0.25s, padding 0.25s;
-    padding: 0 1.5rem;
+    padding: 0 2.5rem;
     overflow: hidden;
   }
 
   &.is-active {
+
+    box-shadow: 0 1px 2px rgba(10, 10, 10, 0.1);
+
     .card-content {
       max-height: 400px;
       overflow-y: auto;
-      padding: 1.5rem;
+      padding: 1.5rem 2.5rem;
     }
 
     .card-header {
       border-radius: $radius-medium $radius-medium 0 0;
+      box-shadow: none;
+      border-bottom: 2px solid $grey-lightest-more;
 
       .icon {
         margin-top: 5px;

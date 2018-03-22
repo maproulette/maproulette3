@@ -2,3 +2,12 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.loading {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  &__content {
+    flex: auto;
+  }
+}
