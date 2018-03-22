@@ -200,6 +200,7 @@
     "ActiveTask.heading": "Challenge Information",
     "ActiveTask.subheading.instructions": "Anleitung",
     "ActiveTask.subheading.location": "Ort",
+    "ActiveTask.subheading.progress": "Kampagnenfortschritt",
     "ActiveTask.subheading.social": "Share",
     "Admin.TaskReview.controls.previousTask.label": "Vorherige",
     "Admin.TaskReview.controls.nextTask.label": "Nächste",

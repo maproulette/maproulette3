@@ -60,8 +60,14 @@ export class ChallengeResultItem extends Component {
       return true
     }
 
-    // if the user object changed, or
-    if (!_isEqual(nextProps.user, this.props.user)) {
+    // if the user has changed or
+    if (_get(nextProps, 'user.id') !== _get(this.props, 'user.id')) {
+      return true
+    }
+
+    // if the user's savedChallenges have changed
+    if (_get(nextProps.user, 'savedChallenges.length') !==
+        _get(this.props.user, 'savedChallenges.length')) {
       return true
     }
 
