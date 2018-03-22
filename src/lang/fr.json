@@ -199,6 +199,7 @@
     "ActiveTask.heading": "Challenge Information",
     "ActiveTask.subheading.instructions": "Instruction",
     "ActiveTask.subheading.location": "Localisation",
+    "ActiveTask.subheading.progress": "Progression du défi",
     "ActiveTask.subheading.social": "Share",
     "Admin.TaskReview.controls.previousTask.label": "Précédent",
     "Admin.TaskReview.controls.nextTask.label": "Suivant",

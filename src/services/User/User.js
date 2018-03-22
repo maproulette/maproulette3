@@ -221,7 +221,7 @@ export const updateUserSettings = function(userId, settings) {
     return new Endpoint(
       api.user.updateSettings, {variables: {userId}, json: settings}
     ).execute()
-  })
+  }, true)
 }
 
 /**
@@ -298,16 +298,23 @@ export const logoutUser = function() {
 }
 
 /**
- * Updates the given user, delegating to the given update function to
- * perform the actual server request to update whatever portion of
- * user data is desired, but handling and processing the response here.
+ * Updates the given user, delegating to the given update function to perform
+ * the actual server request to update whatever portion of user data is
+ * desired, but handling and processing the response here.
+ *
+ * If reloadOnSuccess is true, a request for the latest user data will be made
+ * following the successful update. A request will always be made if there is
+ * an error to ensure the local store reflects the latest data from the server
+ * in the event optimistic local updates were made.
  */
-const updateUser = function(userId, updateFunction) {
+const updateUser = function(userId, updateFunction, reloadOnSuccess=false) {
   return function(dispatch) {
     return updateFunction(dispatch)
     .then(() => {
       // Reload the current user to get the updated data
-      return dispatch(loadCompleteUser(userId))
+      if (reloadOnSuccess) {
+        return dispatch(loadCompleteUser(userId))
+      }
     }).catch((error) => {
       if (error.response && error.response.status === 401) {
         // If we get an unauthorized, we assume the user is not logged
@@ -318,6 +325,10 @@ const updateUser = function(userId, updateFunction) {
       else {
         dispatch(addError(AppErrors.user.updateFailure))
         console.log(error.response || error)
+
+        // Reload user data to ensure our local store is in sync with the
+        // server in case optimistic changes were made.
+        dispatch(loadCompleteUser(userId))
       }
     })
   }
