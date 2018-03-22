@@ -41,7 +41,7 @@ export default defineMessages({
 
   progress: {
     id: 'ActiveTask.subheading.progress',
-    defaultMessage: 'Progress',
+    defaultMessage: 'Challenge Progress',
   },
 
   social: {

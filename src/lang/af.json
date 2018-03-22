@@ -199,6 +199,7 @@
     "ActiveTask.heading": "Challenge Information",
     "ActiveTask.subheading.instructions": "Instructions",
     "ActiveTask.subheading.location": "Location",
+    "ActiveTask.subheading.progress": "Uitdaging Vordering",
     "ActiveTask.subheading.social": "Share",
     "Admin.TaskReview.controls.previousTask.label": "Prior Task",
     "Admin.TaskReview.controls.nextTask.label": "Next Task",

@@ -5,6 +5,7 @@ import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _each from 'lodash/each'
+import _isEqual from 'lodash/isEqual'
 import { TaskStatus, keysByStatus, statusLabels }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { ResponsiveBar } from '@nivo/bar'
@@ -13,6 +14,19 @@ import './ChallengeProgress.css'
 
 export class ChallengeProgress extends Component {
   percent = (value, total) => Math.round(value / total * 100)
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // Only re-render if the challenge or actions changed
+    if (_get(nextProps, 'challenge.id') !== _get(this.props, 'challenge.id')) {
+      return true
+    }
+
+    if (!_isEqual(nextProps.challenge.actions, this.props.challenge.actions)) {
+      return true
+    }
+
+    return false
+  }
 
   render() {
     const localizedStatuses = statusLabels(this.props.intl)
