@@ -176,6 +176,10 @@ export class ActiveTaskDetails extends Component {
           <div className="popout-content__header active-task-details--bordered">
             {_isFinite(this.props.virtualChallengeId) &&
              <h4 className="info-popout--virtual-name">
+               <span className="active-task-details__virtual-badge"
+                     title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
+                <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
+               </span>
                {_get(this.props, 'virtualChallenge.name')}
              </h4>
             }
@@ -243,9 +247,15 @@ export class ActiveTaskDetails extends Component {
             </div>
 
             {_isFinite(this.props.virtualChallengeId) &&
-             <h3 className="active-task-details--virtual-name">
-               {_get(this.props, 'virtualChallenge.name')}
-             </h3>
+             <div className="active-task-details--virtual-name">
+               <span className="active-task-details__virtual-badge"
+                     title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
+                <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
+               </span>
+               <h3>
+                 {_get(this.props, 'virtualChallenge.name')}
+               </h3>
+             </div>
             }
             <h2 className="active-task-details--name">{challengeNameLink}</h2>
 

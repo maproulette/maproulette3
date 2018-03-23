@@ -4,6 +4,14 @@ import classNames from 'classnames'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import './QuickTextBox.css'
 
+/**
+ * QuickTextBox renders a simple text input field with icon-only done/cancel
+ * buttons, intended for quick one-off requests for text data in situations
+ * where a whole form is overkill. It supports keyboard shortcuts Enter for
+ * done and ESC for cancel.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export default class QuickTextBox extends Component {
   /**
    * Esc signals cancellation, Enter signals completion.
@@ -29,7 +37,7 @@ export default class QuickTextBox extends Component {
                   maxLength="50"
                   onChange={(e) => this.props.setText(e.target.value)}
                   onKeyDown={this.checkForSpecialKeys}
-                  value={this.props.text || ''} />
+                  value={this.props.text} />
         </div>
 
         <button className="button has-svg-icon quick-text-box__done-button"

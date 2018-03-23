@@ -23,6 +23,16 @@
         font-size: $size-7;
         font-weight: $weight-medium;
       }
+
+      .info-popout--virtual-name {
+        .active-task-details__virtual-badge {
+          padding: 1px 4px;
+          height: 18px;
+          display: inline-block;
+          position: relative;
+          top: 1px;
+        }
+      }
     }
 
     .popout-content__body {
@@ -105,9 +115,36 @@
   }
 
   &--virtual-name {
-    color: $coral;
-    font-size: $size-6;
     margin-bottom: 10px;
+    display: flex;
+
+    h3 {
+      color: $coral;
+      font-size: $size-6;
+      margin-right: 10px;
+    }
+
+    .active-task-details__virtual-badge {
+      svg {
+        height: 10px;
+      }
+    }
+  }
+
+  &__virtual-badge {
+    background-color: $grey-lightest;
+    padding: 0px 5px;
+    border-radius: 50%;
+    height: 20px;
+    margin-right: 5px;
+    margin-top: 1px;
+
+    svg {
+      height: 10px;
+      width: auto;
+      fill: $coral;
+      margin-bottom: 2px;
+    }
   }
 
   &--name {

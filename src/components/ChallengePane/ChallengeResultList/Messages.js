@@ -23,4 +23,9 @@ export default defineMessages({
     id: "VirtualChallenge.controls.create.label",
     defaultMessage: "Work on Mapped Tasks",
   },
+
+  virtualChallengeNameLabel: {
+    id: "VirtualChallenge.fields.name.label",
+    defaultMessage: 'Name your "virtual" challenge',
+  },
 })

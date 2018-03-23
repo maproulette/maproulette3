@@ -1,5 +1,6 @@
 import { schema } from 'normalizr'
 import _get from 'lodash/get'
+import _isFinite from 'lodash/isFinite'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -42,6 +43,11 @@ export const fetchVirtualChallenge = function(virtualChallengeId) {
       api.virtualChallenge.single,
       {schema: virtualChallengeSchema(), variables: {id: virtualChallengeId}}
     ).execute().then(normalizedResults => {
+      // Mark that the challenge is virtual.
+      if (_isFinite(normalizedResults.result)) {
+        normalizedResults.entities.virtualChallenges[normalizedResults.result].isVirtual = true
+      }
+
       dispatch(receiveVirtualChallenges(normalizedResults.entities))
 
       return normalizedResults

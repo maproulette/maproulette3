@@ -35,6 +35,12 @@
         fill: $coral;
       }
     }
+
+    &.virtual {
+      svg {
+        fill: $coral;
+      }
+    }
   }
 
   .challenge-list__item-title {

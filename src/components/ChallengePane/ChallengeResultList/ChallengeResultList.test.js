@@ -146,7 +146,9 @@ test("shows virtual-challenge start control if map-bounded tasks", () => {
     <ChallengeResultList {...basicProps} />
   )
 
-  expect(wrapper.find('StartVirtualChallenge').exists()).toBe(true)
+  expect(wrapper.find('InjectIntl(StartVirtualChallenge)').exists()).toBe(true)
+
+  expect(wrapper).toMatchSnapshot()
 })
 
 test("doesn't show virtual-challenge start control if no map-bounded tasks", () => {
@@ -156,7 +158,9 @@ test("doesn't show virtual-challenge start control if no map-bounded tasks", () 
     <ChallengeResultList {...basicProps} />
   )
 
-  expect(wrapper.find('StartVirtualChallenge').exists()).toBe(false)
+  expect(wrapper.find('InjectIntl(StartVirtualChallenge)').exists()).toBe(false)
+
+  expect(wrapper).toMatchSnapshot()
 })
 
 test("doesn't show virtual-challenge start control if browsing a challenge", () => {
@@ -167,5 +171,7 @@ test("doesn't show virtual-challenge start control if browsing a challenge", () 
     <ChallengeResultList {...basicProps} />
   )
 
-  expect(wrapper.find('StartVirtualChallenge').exists()).toBe(false)
+  expect(wrapper.find('InjectIntl(StartVirtualChallenge)').exists()).toBe(false)
+
+  expect(wrapper).toMatchSnapshot()
 })

@@ -2,7 +2,9 @@ import { connect } from 'react-redux'
 import { LatLng } from 'leaflet'
 import _get from 'lodash/get'
 import _sample from 'lodash/sample'
-import { loadRandomTaskFromChallenge} from '../../../services/Task/Task'
+import { loadRandomTaskFromChallenge,
+         loadRandomTaskFromVirtualChallenge }
+       from '../../../services/Task/Task'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
@@ -83,16 +85,28 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
    * the current challenge map bounds. Otherwise a random task is loaded.
    */
   startChallenge: challenge => {
-    const visibleTask = chooseVisibleTask(challenge,
-                                          _get(ownProps, 'mapBounds.challenge'),
-                                          ownProps.clusteredTasks)
-    if (visibleTask) {
-      openTask(dispatch, challenge, visibleTask, ownProps.history)
+    if (challenge.isVirtual) {
+      dispatch(loadRandomTaskFromVirtualChallenge(challenge.id)).then(task => {
+        if (task) {
+          ownProps.history.push(`/virtual/${challenge.id}/task/${task.id}`)
+        }
+        else {
+          dispatch(addError(AppErrors.task.none))
+        }
+      })
     }
     else {
-      dispatch(loadRandomTaskFromChallenge(challenge.id)).then(task => {
-        openTask(dispatch, challenge, task, ownProps.history)
-      })
+      const visibleTask = chooseVisibleTask(challenge,
+                                            _get(ownProps, 'mapBounds.challenge'),
+                                            ownProps.clusteredTasks)
+      if (visibleTask) {
+        openTask(dispatch, challenge, visibleTask, ownProps.history)
+      }
+      else {
+        dispatch(loadRandomTaskFromChallenge(challenge.id)).then(task => {
+          openTask(dispatch, challenge, task, ownProps.history)
+        })
+      }
     }
   }
 })

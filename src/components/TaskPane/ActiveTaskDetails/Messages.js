@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: 'Challenge Information',
   },
 
+  virtualChallengeTooltip: {
+    id: 'ActiveTask.indicators.virtualChallenge.tooltip',
+    defaultMessage: 'Virtual Challenge',
+  },
+
   contactOwnerLabel: {
     id: 'Task.controls.contactOwner.label',
     defaultMessage: 'Contact Owner',

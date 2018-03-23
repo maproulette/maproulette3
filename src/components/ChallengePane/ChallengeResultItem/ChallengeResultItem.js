@@ -106,7 +106,9 @@ export class ChallengeResultItem extends Component {
    */
   startBrowsing = () => {
     this.setState({isBrowsing: true})
-    setTimeout(() => this.props.startBrowsingChallenge(this.props.challenge), 0)
+    setTimeout(() => {
+      this.props.startBrowsingChallenge(this.props.challenge)
+    }, 0)
   }
 
   /**
@@ -149,7 +151,7 @@ export class ChallengeResultItem extends Component {
     let unsaveChallengeButton = null
     let saveChallengeButton = null
 
-    if (_isObject(this.props.user)) {
+    if (_isObject(this.props.user) && !this.props.challenge.isVirtual) {
       if (_findIndex(this.props.user.savedChallenges,
                      {id: this.props.challenge.id}) !== -1) {
         savedIcon =
@@ -191,10 +193,18 @@ export class ChallengeResultItem extends Component {
         <header className="card-header" onClick={this.toggleActive}>
           <div>
             <div className="challenge-list__item-title">
+              {!this.props.challenge.isVirtual &&
               <div className="challenge-list__item-indicator-icon saved"
                    title={this.props.intl.formatMessage(messages.saved)}>
                 {savedIcon}
               </div>
+              }
+              {this.props.challenge.isVirtual &&
+               <div className="challenge-list__item-indicator-icon virtual"
+                    title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
+                <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
+               </div>
+              }
               <div className="challenge-list__item__name">
                 {this.props.challenge.name}
               </div>
@@ -209,34 +219,38 @@ export class ChallengeResultItem extends Component {
         </header>
 
         <div className="card-content">
-          <div className="challenge-list__item__difficulty">
-            <span className="challenge-list__item__field-label">
-              <FormattedMessage {...messages.difficulty} />
-            </span>
-            <span className="challenge-list__item__field-value">
-              <FormattedMessage {...messagesByDifficulty[this.props.challenge.difficulty]} />
-            </span>
-          </div>
+          {this.state.isBrowsing &&
+          <React.Fragment>
+            <div className="challenge-list__item__difficulty">
+              <span className="challenge-list__item__field-label">
+                <FormattedMessage {...messages.difficulty} />
+              </span>
+              <span className="challenge-list__item__field-value">
+                <FormattedMessage {...messagesByDifficulty[this.props.challenge.difficulty]} />
+              </span>
+            </div>
 
-          <div className="challenge-list__item__blurb">
-            <MarkdownContent markdown={this.props.challenge.description ||
-                                       this.props.challenge.blurb} />
-          </div>
+            <div className="challenge-list__item__blurb">
+              <MarkdownContent markdown={this.props.challenge.description ||
+                                        this.props.challenge.blurb} />
+            </div>
 
-          <ChallengeProgress challenge={this.props.challenge} />
+            <ChallengeProgress challenge={this.props.challenge} />
 
-          <div className="field is-grouped">
-            <p className="control">
-              <button className={classNames("button is-outlined start-challenge",
-                                            {"is-loading": this.state.isStarting})}
-                      onClick={this.startChallenge}>
-                <FormattedMessage {...messages.start} />
-              </button>
-            </p>
+            <div className="field is-grouped">
+              <p className="control">
+                <button className={classNames("button is-outlined start-challenge",
+                                              {"is-loading": this.state.isStarting})}
+                        onClick={this.startChallenge}>
+                  <FormattedMessage {...messages.start} />
+                </button>
+              </p>
 
-            {saveChallengeButton}
-            {unsaveChallengeButton}
-          </div>
+              {saveChallengeButton}
+              {unsaveChallengeButton}
+            </div>
+          </React.Fragment>
+          }
         </div>
       </div>
     )

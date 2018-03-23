@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: 'Difficulty',
   },
 
+  virtualChallengeTooltip: {
+    id: 'Challenge.indicators.virtualChallenge.tooltip',
+    defaultMessage: 'Virtual Challenge',
+  },
+
   start: {
     id: 'Challenge.controls.start.label',
     defaultMessage: 'Start',
