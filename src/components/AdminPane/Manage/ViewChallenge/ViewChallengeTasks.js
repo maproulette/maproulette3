@@ -62,6 +62,10 @@ export class ViewChallengeTasks extends Component {
           <h3 className="is-danger">
             <FormattedMessage {...messages.tasksFailed} />
           </h3>
+
+          <pre className="challenge-tasks-status__status-message">
+            {this.props.challenge.statusMessage}
+          </pre>
         </div>
       )
     }
