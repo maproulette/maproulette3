@@ -12,6 +12,7 @@
 
       h3 {
         font-size: $size-3;
+        margin-bottom: 20px;
 
         &.is-danger {
           color: $coral;
@@ -20,6 +21,13 @@
 
       .refresh-control {
         margin-top: 50px;
+      }
+
+      &__status-message {
+        font-size: $size-6;
+        white-space: pre-wrap;
+        max-width: 100%;
+        border-radius: $radius-medium;
       }
     }
   }
