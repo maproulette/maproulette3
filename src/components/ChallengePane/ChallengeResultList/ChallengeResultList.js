@@ -56,14 +56,14 @@ export class ChallengeResultList extends Component {
 
     // If there are map-bounded tasks visible (and we're not browsing a
     // challenge), offer the user an option to start a virtual challenge to
-    // work on those mapped tasks. If they click it, ask them for a name
-    // for their virtual challenge.
+    // work on those mapped tasks.
     let virtualChallengeOption = null
     if (_get(this.props, 'mapBoundedTasks.tasks.length', 0) > 0 &&
         !_isObject(this.props.browsedChallenge)) {
       virtualChallengeOption =
-        <StartVirtualChallenge startMapBoundedTasks={this.props.startMapBoundedTasks}
-                               creatingVirtualChallenge={this.props.creatingVirtualChallenge} />
+        <StartVirtualChallenge
+          createVirtualChallenge={this.props.startMapBoundedTasks}
+          creatingVirtualChallenge={this.props.creatingVirtualChallenge} />
     }
 
     let results = null

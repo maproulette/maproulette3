@@ -26,6 +26,7 @@ const TopNav = withRouter(WithCurrentUser(Navbar))
 const CurrentTaskPane = WithCurrentTask(TaskPane)
 const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
+const VirtualChallengePane = WithVirtualChallenge(ChallengePane)
 
 /**
  * App represents the top level component of the application.  It renders a
@@ -66,6 +67,7 @@ export class App extends Component {
         <Switch>
           <Route exact path='/' component={ChallengePane} />
           <Route path='/browse/challenges/:challengeId?' component={ChallengePane} />
+          <Route path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
           <Route exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
           <Route exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
           <Route exact path='/virtual/:virtualChallengeId/task/:taskId'

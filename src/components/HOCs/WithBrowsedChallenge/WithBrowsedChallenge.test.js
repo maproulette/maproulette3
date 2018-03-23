@@ -78,5 +78,20 @@ test("clustered task loading is kicked off for a new browsed challenge", async (
                       challenges={challenges} />
   )
 
-  expect(fetchTasks).toHaveBeenCalledWith(challenge.id)
+  expect(fetchTasks).toHaveBeenCalledWith(challenge.id, false)
+})
+
+test("virtual challenges get virtual=true when fetching tasks", async () => {
+  challenge.isVirtual = true
+  match.params = {virtualChallengeId: challenge.id}
+
+  const wrapper = shallow(
+    <WrappedComponent match={match}
+                      fetchClusteredTasks={fetchTasks}
+                      history={history}
+                      virtualChallenge={challenge}
+                      challenges={challenges} />
+  )
+
+  expect(fetchTasks).toHaveBeenCalledWith(challenge.id, true)
 })

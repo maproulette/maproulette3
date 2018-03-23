@@ -1,26 +1,41 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import QuickTextBox from '../../QuickTextBox/QuickTextBox'
 import messages from './Messages'
 
-export default class StartVirtualChallenge extends Component {
+/**
+ * StartVirtualChallenge renders a control for initiating creation of
+ * a new virtual challenge. When clicked, the user will be asked for
+ * the name of their new virtual challenge, and then cration will be
+ * initiated.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
+export class StartVirtualChallenge extends Component {
   state = {
+    /** Determines whether to show the name input */
     editingName: false,
-    challengeName: null,
+    /** Current value of name input */
+    challengeName: '',
   }
 
-  startEditing = () => this.setState({editingName: true, challengeName: null})
+  /** Invoked to display the virtual challenge name input field */
+  startEditing = () => this.setState({editingName: true, challengeName: ''})
 
+  /** Updates the current value of the challenge name */
   setChallengeName = challengeName => this.setState({challengeName})
 
+  /** Invoked to successfully complete editing of the name */
   finishEditing = () => {
-    this.props.startMapBoundedTasks(this.state.challengeName)
-    this.setState({editingName: false, challengeName: null})
+    this.props.createVirtualChallenge(this.state.challengeName)
+    this.setState({editingName: false, challengeName: ''})
   }
 
-  cancelEditing = () => this.setState({editingName: false, challengeName: null})
+  /** Invoked to cancel editing of the name */
+  cancelEditing = () => this.setState({editingName: false, challengeName: ''})
 
   render() {
     let creationStep = null
@@ -30,7 +45,9 @@ export default class StartVirtualChallenge extends Component {
                       setText={this.setChallengeName}
                       done={this.finishEditing}
                       cancel={this.cancelEditing}
-                      placeholder='Name for your "virtual" challenge' />
+                      placeholder={this.props.intl.formatMessage(
+                        messages.virtualChallengeNameLabel
+                      )} />
     }
     else {
       creationStep =
@@ -51,10 +68,14 @@ export default class StartVirtualChallenge extends Component {
 }
 
 StartVirtualChallenge.propTypes = {
-  startMapBoundedTasks: PropTypes.func.isRequired,
+  /** Invoked to create the virtual challenge */
+  createVirtualChallenge: PropTypes.func.isRequired,
+  /** Set to true if the virtual challenge is in process of being created */
   creatingVirtualChallenge: PropTypes.bool,
 }
 
 StartVirtualChallenge.defaultProps = {
   creatingVirtualChallenge: false,
 }
+
+export default injectIntl(StartVirtualChallenge)

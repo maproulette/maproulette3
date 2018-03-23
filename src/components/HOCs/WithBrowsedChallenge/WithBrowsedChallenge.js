@@ -19,6 +19,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
   class _WithBrowsedChallenge extends Component {
     state = {
       browsedChallenge: null,
+      isVirtual: false,
     }
 
     /**
@@ -26,9 +27,32 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
      *
      * @private
      */
-    currentChallengeId = (props) =>
+    standardChallengeId = props =>
       parseInt(_get(props, 'match.params.challengeId'), 10)
 
+    /**
+     * Parses the virtual challenge id from the matched params of the route
+     *
+     * @private
+     */
+    virtualChallengeId = props =>
+      parseInt(_get(props, 'match.params.virtualChallengeId'), 10)
+
+    /**
+     * Determines whether this challenge is a virtual challenge
+     *
+     * @private
+     */
+    isVirtualChallenge = props => _isFinite(this.virtualChallengeId(props))
+
+    /**
+     * Parses the current standard or virtual challenge id from the matched params
+     * of the route.
+     *
+     * @private
+     */
+    currentChallengeId = props => this.isVirtualChallenge(props) ?
+      this.virtualChallengeId(props) : this.standardChallengeId(props)
 
     /**
      * Updates the local state to set the browsedChallenge to that indicated in
@@ -39,22 +63,26 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
      */
     updateBrowsedChallenge = props => {
       const challengeId = this.currentChallengeId(props)
+      const isVirtual = this.isVirtualChallenge(props)
 
       if (_isFinite(challengeId)) {
-        if (_get(this.state, 'browsedChallenge.id') !== challengeId) {
-          const challenge = _find(props.challenges, {id: challengeId})
+        if (_get(this.state, 'browsedChallenge.id') !== challengeId ||
+            this.state.isVirtual !== isVirtual) {
+          const challenge = isVirtual ? this.props.virtualChallenge :
+                            _find(props.challenges, {id: challengeId})
 
           if (_isObject(challenge)) {
-            this.setState({browsedChallenge: challenge})
+            this.setState({browsedChallenge: challenge, isVirtual})
 
-            if (challenge.id !== _get(this.props, 'clusteredTasks.challengeId')) {
-              this.props.fetchClusteredTasks(challenge.id)
+            if (challenge.id !== _get(this.props, 'clusteredTasks.challengeId') ||
+                isVirtual !== _get(this.props, 'clusteredTasks.isVirtualChallenge')) {
+              this.props.fetchClusteredTasks(challenge.id, isVirtual)
             }
           }
         }
       }
       else if (_isObject(this.state.browsedChallenge)) {
-        this.setState({browsedChallenge: null})
+        this.setState({browsedChallenge: null, isVirtual: false})
       }
     }
 
@@ -71,12 +99,17 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
      * during challenge discovery.
      */
     startBrowsingChallenge = challenge => {
-      this.props.history.push(`/browse/challenges/${challenge.id}`)
+      if (challenge.isVirtual) {
+        this.props.history.push(`/browse/virtual/${challenge.id}`)
+      }
+      else {
+        this.props.history.push(`/browse/challenges/${challenge.id}`)
+      }
     }
 
     /**
-     * Invoked to indicate that the user has stopped browsing (minimized) the given
-     * challenge during challenge discovery.
+     * Invoked to indicate that the user has stopped browsing (minimized) the
+     * challenge.
      */
     stopBrowsingChallenge = () => {
       this.props.history.push('/browse/challenges')
@@ -85,10 +118,13 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
     render() {
       // Only pass down clusteredTasks if they match this challenge.
       const challengeId = this.currentChallengeId(this.props)
-      const clusteredTasks = challengeId ===
-                             _get(this.props, 'clusteredTasks.challengeId') ?
-            this.props.clusteredTasks :
-            null
+      const isVirtual = this.isVirtualChallenge(this.props)
+
+      let clusteredTasks = null
+      if (challengeId === _get(this.props, 'clusteredTasks.challengeId') &&
+          isVirtual === _get(this.props, 'clusteredTasks.isVirtualChallenge')) {
+        clusteredTasks = this.props.clusteredTasks
+      }
 
       return (
         <WrappedComponent browsedChallenge = {this.state.browsedChallenge}

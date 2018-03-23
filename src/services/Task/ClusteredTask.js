@@ -20,6 +20,7 @@ const CLEAR_CLUSTERED_TASKS = 'CLEAR_CLUSTERED_TASKS'
  * Add or replace the clustered tasks in the redux store
  */
 export const receiveClusteredTasks = function(challengeId,
+                                              isVirtualChallenge,
                                               tasks,
                                               status=RequestStatus.success,
                                               fetchId) {
@@ -27,6 +28,7 @@ export const receiveClusteredTasks = function(challengeId,
     type: RECEIVE_CLUSTERED_TASKS,
     status,
     challengeId,
+    isVirtualChallenge,
     tasks,
     fetchId,
     receivedAt: Date.now(),
@@ -49,13 +51,15 @@ export const clearClusteredTasks = function() {
 /**
  * Retrieve clustered task data belonging to the given challenge
  */
-export const fetchClusteredTasks = function(challengeId, limit=15000) {
+export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=false, limit=15000) {
   return function(dispatch) {
     const fetchId = _uniqueId()
-    dispatch(receiveClusteredTasks(challengeId, [], RequestStatus.inProgress, fetchId))
+    dispatch(receiveClusteredTasks(
+      challengeId, isVirtualChallenge, [], RequestStatus.inProgress, fetchId
+    ))
 
     return new Endpoint(
-      api.challenge.clusteredTasks, {
+      (isVirtualChallenge ? api.virtualChallenge : api.challenge).clusteredTasks, {
         schema: [ taskSchema() ],
         variables: {id: challengeId},
         params: {limit},
@@ -65,10 +69,15 @@ export const fetchClusteredTasks = function(challengeId, limit=15000) {
       const tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
       _each(tasks, task => task.parent = challengeId)
 
-      dispatch(receiveClusteredTasks(challengeId, tasks, RequestStatus.success, fetchId))
+      dispatch(receiveClusteredTasks(
+        challengeId, isVirtualChallenge, tasks, RequestStatus.success, fetchId
+      ))
+
       return tasks
     }).catch((error) => {
-      dispatch(receiveClusteredTasks(challengeId, [], RequestStatus.error, fetchId))
+      dispatch(receiveClusteredTasks(
+        challengeId, isVirtualChallenge, [], RequestStatus.error, fetchId
+      ))
       dispatch(addError(AppErrors.clusteredTask.fetchFailure))
       console.log(error.response || error)
     })
@@ -85,6 +94,7 @@ export const currentClusteredTasks = function(state={}, action) {
     if (parseInt(action.fetchId, 10) >= currentFetch) {
       return {
         challengeId: action.challengeId,
+        isVirtualChallenge: action.isVirtualChallenge,
         loading: action.status === RequestStatus.inProgress,
         fetchId: action.fetchId,
         tasks: _isArray(action.tasks) ? action.tasks : []

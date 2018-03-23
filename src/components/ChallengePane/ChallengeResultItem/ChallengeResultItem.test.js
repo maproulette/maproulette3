@@ -74,6 +74,36 @@ test("renders featured challenges with a featured icon", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
+test("renders virtual challenges with a virtual-challenge icon", () => {
+  basicProps.challenge.featured = true
+  basicProps.challenge.isVirtual = true
+
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-list__item-indicator-icon.virtual').exists()
+  ).toBe(true)
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("doesn't show virtual-challenge icon for standard challenges", () => {
+  basicProps.challenge.featured = true
+  basicProps.challenge.isVirtual = false
+
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(
+    wrapper.find('.challenge-list__item-indicator-icon.virtual'
+  ).exists()).toBe(false)
+
+  expect(wrapper).toMatchSnapshot()
+})
+
 test("shows collapsed view if not being actively browsed", () => {
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />
@@ -118,6 +148,7 @@ test("clicking when active challenge signals that user is done browsing", () => 
 })
 
 test("when start challenge button is clicked startChallenge is called", () => {
+  basicProps.browsedChallenge = basicProps.challenge
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />
   )
@@ -129,6 +160,7 @@ test("when start challenge button is clicked startChallenge is called", () => {
 
 test("Save and Unsave toggles do not show if there is no user", () => {
   basicProps.user = null
+  basicProps.browsedChallenge = basicProps.challenge
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />
   )
@@ -139,6 +171,7 @@ test("Save and Unsave toggles do not show if there is no user", () => {
 })
 
 test("when save challenge button is clicked saveChallenge is called", () => {
+  basicProps.browsedChallenge = basicProps.challenge
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />
   )
@@ -149,6 +182,7 @@ test("when save challenge button is clicked saveChallenge is called", () => {
 })
 
 test("when unsave challenge button is clicked saveChallenge is called", () => {
+  basicProps.browsedChallenge = basicProps.challenge
   basicProps.user.savedChallenges = [{id: basicProps.challenge.id}]
   const wrapper = shallow(
     <ChallengeResultItem {...basicProps} />
