@@ -49,6 +49,11 @@ export default defineMessages({
     defaultMessage: "Tasks Failed to Build",
   },
 
+  tasksNone: {
+    id: "Admin.Challenge.tasksNone",
+    defaultMessage: "No Task GeoJSON",
+  },
+
   refreshStatusLabel: {
     id: "Admin.Challenge.controls.refreshStatus.label",
     defaultMessage: "Refresh Status",
