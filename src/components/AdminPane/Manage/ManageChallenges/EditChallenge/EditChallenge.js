@@ -357,7 +357,7 @@ export class EditChallenge extends Component {
         </div>
 
         <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
-        <Form schema={currentStep.jsSchema(this.props.intl, this.props.user)}
+        <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
               validate={this.additionalValidation}
               uiSchema={currentStep.uiSchema}
               FieldTemplate={CustomFieldTemplate}
