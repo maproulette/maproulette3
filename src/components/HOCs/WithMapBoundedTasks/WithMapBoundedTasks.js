@@ -104,7 +104,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
         this.props.startBoundedTasks(
           name,
           _map(tasks, 'id')
-        ).then(() => this.setState({creatingVirtualChallenge: false}))
+        ).catch(e => {}).then(() => this.setState({creatingVirtualChallenge: false}))
       }
     }
 
