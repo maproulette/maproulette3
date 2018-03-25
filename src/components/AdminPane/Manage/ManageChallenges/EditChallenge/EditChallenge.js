@@ -205,9 +205,10 @@ export class EditChallenge extends Component {
       this.state.formData
     )
 
-    // If we're cloning a challenge, reset the id and name.
+    // If we're cloning a challenge, reset the id, status, and name.
     if (this.isCloningChallenge()) {
       delete challengeData.id
+      delete challengeData.status
 
       if (_isEmpty(this.state.formData.name)) {
         delete challengeData.name
