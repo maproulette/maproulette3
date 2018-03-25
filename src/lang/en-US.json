@@ -147,6 +147,7 @@
   "Admin.Challenge.controls.clone.label": "Clone",
   "Admin.Challenge.tasksBuilding": "Tasks Building...",
   "Admin.Challenge.tasksFailed": "Tasks Failed to Build",
+  "Admin.Challenge.tasksNone": "No Task GeoJSON",
   "Admin.Challenge.controls.refreshStatus.label": "Refresh Status",
   "Admin.ManageTasks.header": "Tasks",
   "Metrics.tasks.evaluatedByUser.label": "Tasks Evaluated by Users",
