@@ -25,7 +25,7 @@ export default defineMessages({
   },
   taskSaveFailure: {
     id: 'Errors.task.saveFailure',
-    defaultMessage: "Unable to save your changes",
+    defaultMessage: "Unable to save your changes{details}",
   },
   taskUpdateFailure: {
     id: 'Errors.task.updateFailure',
@@ -64,7 +64,7 @@ export default defineMessages({
   },
   challengeSaveFailure: {
     id: 'Errors.challenge.saveFailure',
-    defaultMessage: "Unable to save your changes",
+    defaultMessage: "Unable to save your changes{details}",
   },
   challengeRebuildFailure: {
     id: 'Errors.challenge.rebuildFailure',
@@ -77,12 +77,12 @@ export default defineMessages({
   },
   virtualChallengeCreateFailure: {
     id: 'Errors.virtualChallenge.createFailure',
-    defaultMessage: "Unable to create a virtual challenge",
+    defaultMessage: "Unable to create a virtual challenge{details}",
   },
 
   projectSaveFailure: {
     id: 'Errors.project.saveFailure',
-    defaultMessage: "Unable to save your changes",
+    defaultMessage: "Unable to save your changes{details}",
   },
   projectFetchFailure: {
     id: 'Errors.project.fetchFailure',
