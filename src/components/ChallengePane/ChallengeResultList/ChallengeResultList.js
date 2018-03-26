@@ -34,10 +34,19 @@ export class ChallengeResultList extends Component {
   render() {
     const challengeResults = this.props.challenges
 
+    if (this.props.loadingBrowsedChallenge) {
+      return (
+        <div className="pane-loading">
+          <BusySpinner />
+        </div>
+      )
+    }
+
     // If the user is actively browsing a challenge, include that challenge even if
     // it didn't pass the filters.
-    if (_isObject(this.props.browsedChallenge)) {
-      if (_findIndex(challengeResults, {id: this.props.browsedChallenge.id}) === -1) {
+    if (_isObject(this.props.browsedChallenge) && !this.props.loadingBrowsedChallenge) {
+      if (this.props.browsedChallenge.isVirtual ||
+          _findIndex(challengeResults, {id: this.props.browsedChallenge.id}) === -1) {
         challengeResults.push(this.props.browsedChallenge)
       }
     }

@@ -4,8 +4,13 @@ import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
+import _debounce from 'lodash/debounce'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
+import { fetchChallenge }
+       from '../../../services/Challenge/Challenge'
+
+const FRESHNESS_THRESHOLD = 5000 // 5 seconds
 
 /**
  * WithBrowsedChallenge provides functions for starting and stopping browsing
@@ -19,6 +24,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
   class _WithBrowsedChallenge extends Component {
     state = {
       browsedChallenge: null,
+      loadingBrowsedChallenge: false,
       isVirtual: false,
     }
 
@@ -67,21 +73,37 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
 
       if (_isFinite(challengeId)) {
         if (_get(this.state, 'browsedChallenge.id') !== challengeId ||
-            this.state.isVirtual !== isVirtual) {
+            this.state.isVirtual !== isVirtual ||
+            this.state.loadingBrowsedChallenge) {
           const challenge = isVirtual ? this.props.virtualChallenge :
                             _find(props.challenges, {id: challengeId})
 
           if (_isObject(challenge)) {
-            this.setState({browsedChallenge: challenge, isVirtual})
+            this.setState({
+              browsedChallenge: challenge,
+              loadingBrowsedChallenge: false,
+              isVirtual
+            })
 
             if (challenge.id !== _get(this.props, 'clusteredTasks.challengeId') ||
                 isVirtual !== _get(this.props, 'clusteredTasks.isVirtualChallenge')) {
               this.props.fetchClusteredTasks(challenge.id, isVirtual)
             }
           }
+          else if (!isVirtual) {
+            // We don't have the challenge available, so fetch it.
+            this.setState({
+              browsedChallenge: {id: challengeId},
+              loadingBrowsedChallenge: true,
+              isVirtual,
+            })
+
+            props.loadChallenge(challengeId)
+          }
         }
       }
-      else if (_isObject(this.state.browsedChallenge)) {
+      else if (_isObject(this.state.browsedChallenge &&
+               !this.state.loadingBrowsedChallenge)) {
         this.setState({browsedChallenge: null, isVirtual: false})
       }
     }
@@ -128,10 +150,13 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
 
       return (
         <WrappedComponent browsedChallenge = {this.state.browsedChallenge}
+                          loadingBrowsedChallenge = {this.state.loadingBrowsedChallenge}
                           startBrowsingChallenge={this.startBrowsingChallenge}
                           stopBrowsingChallenge={this.stopBrowsingChallenge}
                           clusteredTasks={clusteredTasks}
-                          {..._omit(this.props, ['entities', 'clusteredTasks'])} />
+                          {..._omit(this.props, ['entities',
+                                                 'clusteredTasks',
+                                                 'loadChallenge'])} />
       )
     }
   }
@@ -148,5 +173,17 @@ const mapStateToProps = state => ({
   entities: state.entities,
 })
 
+export const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    loadChallenge: _debounce(
+      challengeId => {
+        return dispatch(fetchChallenge(challengeId))
+      },
+      FRESHNESS_THRESHOLD,
+      {leading: true},
+    ),
+  }
+}
+
 export default WrappedComponent =>
-  connect(mapStateToProps)(WithBrowsedChallenge(WrappedComponent))
+  connect(mapStateToProps, mapDispatchToProps)(WithBrowsedChallenge(WrappedComponent))
