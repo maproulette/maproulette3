@@ -7,9 +7,9 @@ import _isArray from 'lodash/isArray'
 import { latLng } from 'leaflet'
 
 /**
- * AsMappable adds functionality to a Task related to mapping.
+ * AsMappableTask adds functionality to a Task related to mapping.
  */
-export class AsMappable {
+export class AsMappableTask {
   constructor(task) {
     Object.assign(this, task)
   }
@@ -59,4 +59,4 @@ export class AsMappable {
   }
 }
 
-export default task => new AsMappable(task)
+export default task => new AsMappableTask(task)

@@ -8,7 +8,6 @@ import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
-import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
 import { MIN_ZOOM,
          MAX_ZOOM,
           DEFAULT_ZOOM }
@@ -16,7 +15,6 @@ import { MIN_ZOOM,
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.css'
 
-const VisibleLayerToggle = WithVisibleLayer(WithLayerSources(LayerToggle))
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
 
 /**
@@ -88,9 +86,9 @@ export default class TaskMap extends Component {
 
     return (
       <div className={classNames("task-map full-screen-map task")}>
-        <VisibleLayerToggle showTaskFeatures={this.state.showTaskFeatures}
-                            toggleTaskFeatures={this.toggleTaskFeatureVisibility}
-                            {...this.props} />
+        <LayerToggle showTaskFeatures={this.state.showTaskFeatures}
+                     toggleTaskFeatures={this.toggleTaskFeatureVisibility}
+                     {...this.props} />
         <EnhancedMap key={this.props.task.id}
                      center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom}

@@ -2,7 +2,7 @@
 
 .layer-toggle.dropdown {
   position: absolute;
-  z-index: $layer-map-control;
+  z-index: $layer-map-control + $intralayer-bump;
   top: 100px;
   right: 10px;
 

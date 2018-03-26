@@ -1,6 +1,9 @@
 import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
+import _isFinite from 'lodash/isFinite'
 import PropTypes from 'prop-types'
+import { ChallengeBasemap, BasemapLayerSources }
+       from '../Challenge/ChallengeBasemap/ChallengeBasemap'
 import messages from './Messages'
 
 export const layerSourceShape = PropTypes.shape({
@@ -123,4 +126,21 @@ export const createDynamicLayerSource = function(layerId, url) {
     isSelectable: false,
     isDynamic: true,
   }
+}
+
+/**
+ * Returns a layer source for the given basemapSetting, including generating a
+ * dynamic layer source with the given customBasemap and layerId if appropriate.
+ */
+export const basemapLayerSource = function(basemapSetting, customBasemap, layerId) {
+  if (_isFinite(basemapSetting) && basemapSetting !== ChallengeBasemap.none) {
+    if (basemapSetting !== ChallengeBasemap.custom) {
+      return layerSourceWithId(BasemapLayerSources[basemapSetting])
+    }
+    else if (!_isEmpty(customBasemap)) {
+      return createDynamicLayerSource(layerId, customBasemap)
+    }
+  }
+
+  return null
 }

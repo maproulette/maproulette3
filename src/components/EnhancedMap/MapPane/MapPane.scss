@@ -11,7 +11,8 @@
     }
 
     .leaflet-control-container {
-      .leaflet-top.leaflet-right, .leaflet-top.leaflet-left {
+      .leaflet-top.leaflet-right, .leaflet-top.leaflet-left,
+      .leaflet-bottom.leaflet-right, .leaflet-bottom.leaflet-left {
         z-index: $layer-map-control;
 
         .leaflet-control {
@@ -41,6 +42,10 @@
               }
             }
           }
+        }
+
+        .leaflet-control-attribution.leaflet-control {
+          z-index: $layer-map-control;
         }
       }
     }

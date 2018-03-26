@@ -3,7 +3,7 @@ import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import _find from 'lodash/find'
 import RequestStatus from '../Server/RequestStatus'
-import AsMappable from '../Task/AsMappable'
+import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import { toLatLngBounds  } from '../MapBounds/MapBounds'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
@@ -103,7 +103,7 @@ export const constructIdURI = function(task, mapBounds) {
   // If the mapbounds don't match the task, compute our own centerpoint.
   const centerPoint = mapBounds.taskId === task.id ?
                       mapBounds.bounds.getCenter() :
-                      AsMappable(task).calculateCenterPoint()
+                      AsMappableTask(task).calculateCenterPoint()
 
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
@@ -146,7 +146,7 @@ export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
   // If the mapbounds don't match the task, compute our own bounds.
   const bounds = mapBounds.taskId === task.id ?
                  mapBounds.bounds :
-                 toLatLngBounds(AsMappable(task).calculateBBox())
+                 toLatLngBounds(AsMappableTask(task).calculateBBox())
 
   const sw = bounds.getSouthWest()
   const ne = bounds.getNorthEast()
