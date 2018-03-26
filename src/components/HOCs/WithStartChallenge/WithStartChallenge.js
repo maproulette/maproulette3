@@ -29,7 +29,7 @@ export const WithStartChallenge = WrappedComponent =>
  * @private
  */
 export const chooseVisibleTask = (challenge, challengeBounds, clusteredTasks) => {
-  if (challenge.id !== clusteredTasks.challengeId ||
+  if (challenge.id !== _get(clusteredTasks, 'challengeId') ||
       _get(clusteredTasks, 'tasks.length', 0) === 0) {
     return null
   }

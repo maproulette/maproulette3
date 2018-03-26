@@ -76,12 +76,18 @@ export class ChallengeResultItem extends Component {
       return true
     }
 
-    // if the browsedChallenge changed and it either references our challenge now
-    // or used to before.
-    if (_get(nextProps, 'browsedChallenge.id') !== _get(this.props, 'browsedChallenge.id') &&
-        (_get(nextProps, 'browsedChallenge.id') === this.props.challenge.id ||
-         _get(this.props, 'browsedChallenge.id') === this.props.challenge.id)) {
-      return true
+    // if the browsedChallenge or its loading status changed and it either
+    // references our challenge now or used to before.
+    if (_get(nextProps, 'browsedChallenge.id') === this.props.challenge.id ||
+        _get(this.props, 'browsedChallenge.id') === this.props.challenge.id) {
+      if (_get(nextProps, 'browsedChallenge.id') !==
+          _get(this.props, 'browsedChallenge.id')) {
+        return true
+      }
+
+      if (nextProps.loadingBrowsedChallenge !== this.props.loadingBrowsedChallenge) {
+        return true
+      }
     }
 
     return false
