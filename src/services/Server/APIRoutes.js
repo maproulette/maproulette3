@@ -55,6 +55,7 @@ const apiRoutes = factory => {
     'virtualChallenge': {
       'single': factory.get('/virtualchallenge/:id'),
       'create': factory.post('/virtualchallenge'),
+      'edit': factory.put('/virtualchallenge/:id'),
       'randomTask': factory.get('/virtualchallenge/:id/task'),
       'clusteredTasks': factory.get('/virtualchallenge/clustered/:id'),
     },

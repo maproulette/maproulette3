@@ -15,6 +15,13 @@ export const virtualChallengeSchema = function() {
   return new schema.Entity('virtualChallenges')
 }
 
+/*
+ * Time, in hours, until new virtual challenges expire. Defaults to 36 hours if
+ * nothing is specified in the .env file.
+ */
+export const DEFAULT_EXPIRATION_DURATION=
+  parseInt(_get(process.env, 'REACT_APP_VIRTUAL_CHALLENGE_DURATION', 36), 10)
+
 // redux actions
 const RECEIVE_VIRTUAL_CHALLENGES = 'RECEIVE_VIRTUAL_CHALLENGES'
 
@@ -59,37 +66,76 @@ export const fetchVirtualChallenge = function(virtualChallengeId) {
 }
 
 /**
- * Creates a new virtual challenge with the given name and tasks.
+ * Creates a new virtual challenge with the given name and tasks. If an
+ * explicit expiration timestamp is given, it'll be used; otherwise the virtual
+ * challenge will be set to expire after the default configured duration.
  */
 export const createVirtualChallenge = function(name, taskIds, expiration) {
   return function(dispatch) {
     const challengeData = {
       name,
       taskIdList: taskIds,
-      expiry: expiration ? expiration : addHours(new Date(), 36).getTime()
+      expiry: expiration ? expiration :
+              addHours(new Date(), DEFAULT_EXPIRATION_DURATION).getTime()
     }
 
-    return new Endpoint(api.virtualChallenge.create, {
-      schema: virtualChallengeSchema(),
-      json: challengeData,
-    }).execute().then(normalizedResults => {
-      dispatch(receiveVirtualChallenges(normalizedResults.entities))
-      return _get(normalizedResults,
-                  `entities.virtualChallenges.${normalizedResults.result}`)
-    }).catch((serverError) => {
-      if (serverError.response && serverError.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
-      }
-      else {
-        console.log(serverError.response || serverError)
-        dispatch(addServerError(AppErrors.virtualChallenge.createFailure,
-                                serverError))
-      }
-    })
+    return saveVirtualChallenge(
+      dispatch,
+      new Endpoint(api.virtualChallenge.create, {
+        schema: virtualChallengeSchema(),
+        json: challengeData,
+      })
+    )
   }
+}
+
+/**
+ * Renews the expiration time of the virtual challenge, either setting it to
+ * the explicit expiration timestamp given or resetting it to the default
+ * configured duration if no expiration is specified.
+ */
+export const renewVirtualChallenge = function(virtualChallengeId, expiration) {
+  return function(dispatch) {
+    const challengeData = {
+      expiry: expiration ? expiration :
+              addHours(new Date(), DEFAULT_EXPIRATION_DURATION).getTime()
+    }
+
+    return saveVirtualChallenge(
+      dispatch,
+      new Endpoint(api.virtualChallenge.edit, {
+        variables: {id: virtualChallengeId},
+        schema: virtualChallengeSchema(),
+        json: challengeData,
+      })
+    )
+  }
+}
+
+/**
+ * Executes the given endpoint, saving the virtual challenge, and
+ * processes the response.
+ *
+ * @private
+ */
+export const saveVirtualChallenge = function(dispatch, endpoint) {
+  return endpoint.execute().then(normalizedResults => {
+    dispatch(receiveVirtualChallenges(normalizedResults.entities))
+    return _get(normalizedResults,
+                `entities.virtualChallenges.${normalizedResults.result}`)
+  }).catch((serverError) => {
+    if (serverError.response && serverError.response.status === 401) {
+      // If we get an unauthorized, we assume the user is not logged
+      // in (or no longer logged in with the server).
+      dispatch(logoutUser())
+      dispatch(addError(AppErrors.user.unauthorized))
+    }
+    else {
+      console.log(serverError.response || serverError)
+      dispatch(addServerError(AppErrors.virtualChallenge.createFailure,
+                              serverError))
+    }
+  })
 }
 
 // redux reducers
