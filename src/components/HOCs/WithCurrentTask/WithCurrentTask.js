@@ -17,6 +17,8 @@ import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { contactOSMUserURL } from '../../../services/OSMUser/OSMUser'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
+import { renewVirtualChallenge }
+       from '../../../services/VirtualChallenge/VirtualChallenge'
 
 const FRESHNESS_THRESHOLD = 5000 // 5 seconds
 
@@ -107,6 +109,12 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           dispatch(addTaskComment(taskId, comment, taskStatus))
         }
         dispatch(fetchChallengeActions(challengeId))
+
+        // If working on a virtual challenge, renew it (extend its expiration)
+        // since we've seen some activity.
+        if (_isFinite(ownProps.virtualChallengeId)) {
+          dispatch(renewVirtualChallenge(ownProps.virtualChallengeId))
+        }
       })
 
       // Load the next task from the challenge.
