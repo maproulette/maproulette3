@@ -1,6 +1,7 @@
 import { schema } from 'normalizr'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
+import addHours from 'date-fns/add_hours'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -43,13 +44,12 @@ export const fetchVirtualChallenge = function(virtualChallengeId) {
       api.virtualChallenge.single,
       {schema: virtualChallengeSchema(), variables: {id: virtualChallengeId}}
     ).execute().then(normalizedResults => {
-      // Mark that the challenge is virtual.
       if (_isFinite(normalizedResults.result)) {
+        // Mark that the challenge is virtual.
         normalizedResults.entities.virtualChallenges[normalizedResults.result].isVirtual = true
       }
 
       dispatch(receiveVirtualChallenges(normalizedResults.entities))
-
       return normalizedResults
     }).catch((error) => {
       dispatch(addError(AppErrors.virtualChallenge.fetchFailure))
@@ -61,11 +61,12 @@ export const fetchVirtualChallenge = function(virtualChallengeId) {
 /**
  * Creates a new virtual challenge with the given name and tasks.
  */
-export const createVirtualChallenge = function(name, taskIds) {
+export const createVirtualChallenge = function(name, taskIds, expiration) {
   return function(dispatch) {
     const challengeData = {
       name,
       taskIdList: taskIds,
+      expiry: expiration ? expiration : addHours(new Date(), 36).getTime()
     }
 
     return new Endpoint(api.virtualChallenge.create, {
@@ -92,6 +93,27 @@ export const createVirtualChallenge = function(name, taskIds) {
 }
 
 // redux reducers
+//
+/**
+ * reduceVirtualChallengesFurther will be invoked by the genericEntityReducer function to
+ * perform additional reduction on virtualChallenge entities.
+ *
+ * @private
+ */
+const reduceVirtualChallengesFurther = function(mergedState,
+                                                oldState,
+                                                virtualChallengeEntities) {
+  const now = Date.now()
+  virtualChallengeEntities.forEach(entity => {
+    // Ignore deleted and expired virtual challenges
+    if (entity.deleted || entity.expired < now) {
+      delete mergedState[entity.id]
+      return
+    }
+  })
+}
 
 export const virtualChallengeEntities =
-  genericEntityReducer([RECEIVE_VIRTUAL_CHALLENGES], 'virtualChallenges')
+  genericEntityReducer([RECEIVE_VIRTUAL_CHALLENGES],
+                       'virtualChallenges',
+                       reduceVirtualChallengesFurther)

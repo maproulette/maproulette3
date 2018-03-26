@@ -303,6 +303,16 @@ code {
   background-color: $white;
 }
 
+.pane-loading {
+  display: flex;
+  align-items: center;
+  font-size: $size-1;
+  .busy-spinner {
+    @include busy-spinner-color($primary);
+    flex: auto;
+  }
+}
+
 // Add a short-and-wide variant of the rounded Bulma switch
 .switch[type="checkbox"].is-rounded.short-and-wide + label::before {
   width: 60px;

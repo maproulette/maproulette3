@@ -68,6 +68,10 @@ const entities = function(state = {}, action, entityName, reduceFurther) {
   const timestamp = Date.now()
 
   _forOwn(action.entities[entityName], (entity, entityId) => {
+    if (typeof entityId === 'undefined') {
+      return
+    }
+
     // Add a _meta object to each entity where we can store some application
     // meta data about the entity. Right now we just store a timestamp of
     // when the data was fetched so that we can measure the freshness of the

@@ -79,6 +79,10 @@ export default defineMessages({
     id: 'Errors.virtualChallenge.createFailure',
     defaultMessage: "Unable to create a virtual challenge{details}",
   },
+  virtualChallengeExpired: {
+    id: 'Errors.virtualChallenge.expired',
+    defaultMessage: "Virtual challenge has expired.",
+  },
 
   projectSaveFailure: {
     id: 'Errors.project.saveFailure',

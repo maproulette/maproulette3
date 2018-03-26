@@ -60,7 +60,11 @@ export class TaskPane extends Component {
 
   render() {
     if (!_isFinite(_get(this.props, 'task.id'))) {
-      return <BusySpinner />
+      return (
+        <div className="pane-loading full-screen-height">
+          <BusySpinner />
+        </div>
+      )
     }
 
     return (
