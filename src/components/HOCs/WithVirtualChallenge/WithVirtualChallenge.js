@@ -6,6 +6,8 @@ import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
 import { fetchVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
+import { addError } from '../../../services/Error/Error'
+import AppErrors from '../../../services/Error/AppErrors'
 
 const FRESHNESS_THRESHOLD = 5000 // 5 seconds
 
@@ -64,10 +66,17 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      *
      * @private
      */
-    loadVirtualChallenge: _debounce(
-      virtualChallengeId => dispatch(fetchVirtualChallenge(virtualChallengeId)),
-      FRESHNESS_THRESHOLD
-    ),
+    loadVirtualChallenge: _debounce(virtualChallengeId => {
+      return dispatch(
+        fetchVirtualChallenge(virtualChallengeId)
+      ).then(results => {
+        if (!results.result ||
+            results.entities.virtualChallenges[results.result].expiry < Date.now()) {
+          dispatch(addError(AppErrors.virtualChallenge.expired))
+          ownProps.history.push('/')
+        }
+      })
+    }, FRESHNESS_THRESHOLD),
   }
 }
 

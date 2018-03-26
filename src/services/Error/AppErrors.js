@@ -40,6 +40,7 @@ export default {
   virtualChallenge: {
     fetchFailure: messages.virtualChallengeFetchFailure,
     createFailure: messages.virtualChallengeCreateFailure,
+    expired: messages.virtualChallengeExpired,
   },
 
   project: {

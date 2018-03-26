@@ -312,6 +312,7 @@
   "Errors.challenge.rebuildFailure": "Unable to rebuild challenge tasks",
   "Errors.virtualChallenge.fetchFailure": "Unable to retrieve latest virtual challenge data from server.",
   "Errors.virtualChallenge.createFailure": "Unable to create a virtual challenge{details}",
+  "Errors.virtualChallenge.expired": "Virtual challenge has expired.",
   "Errors.project.saveFailure": "Unable to save your changes{details}",
   "Errors.project.fetchFailure": "Unable to retrieve latest project data from server.",
   "Errors.project.searchFailure": "Unable to search projects.",
