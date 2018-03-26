@@ -7,6 +7,32 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.3] - 2018-03-26
+### Added
+- Virtual challenges created from map-bounded tasks now exactly match
+  tasks displayed on the map.
+- Support browsing virtual challenges via direct URL.
+- Visual indicator when working on, or browsing, a virtual challenge.
+- Display reason if creation of virtual challenge fails.
+- Notify user if attempt is made to work on an expired virtual challenge.
+- Renew virtual challenge expiration when there is new activity on it.
+- Allow virtual challenge duration to be configured via .env file.
+- Move extra task controls into new collapsible "More Options" section (#189).
+- Toggling of task-features layer on or off when working on tasks (#202).
+- Challenge progress bars now reflect task-status breakdown (#201).
+- Performance improvements to challenge results-list rendering.
+- More informative message to challenge owner if challenge has no GeoJson.
+- Reason for failure to build tasks now shown to challenge owner (#86).
+- Various minor user interface tweaks and improvements.
+
+### Changed
+- GeoJSON tab in challenge creation/editing is now optional (#200)
+
+### Fixed
+- Challenge status is no longer carried over when cloning a challenge.
+- Challenge data is properly loaded when following a browse link (#224).
+
+
 ## [v3.00-beta.2] - 2018-03-19
 ### Added
 - Back-to-MR2 banner link in navbar (#172).
