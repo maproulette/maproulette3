@@ -120,14 +120,24 @@ export class EditChallenge extends Component {
    */
   additionalValidation = (formData, errors) => {
     if (!_isEmpty(formData.localGeoJSON)) {
-      const lintErrors = geojsonhint.hint(formData.localGeoJSON)
+      let geoJSONObject = null
 
-      _each(lintErrors, lintError =>
-        errors.localGeoJSON.addError(
-          this.props.intl.formatMessage(messages.lineNumber, {line: lintError.line}) +
-          lintError.message
-        )
-      )
+      // json-lint-lines, used by geojsonhint when parsing string data, seems
+      // to struggle with certain geojson files. So we parse the json ourselves
+      // and give an object to geojsonhint, which side-steps the issue. The
+      // downside is that we lose line numbers when reporting errors.
+      try {
+        geoJSONObject = JSON.parse(formData.localGeoJSON)
+      }
+      catch(parseError) {
+        errors.localGeoJSON.addError(`${parseError}`)
+      }
+
+      if (geoJSONObject) {
+        const lintErrors = geojsonhint.hint(geoJSONObject)
+        _each(lintErrors,
+              lintError => errors.localGeoJSON.addError(lintError.message))
+      }
     }
 
     return errors
