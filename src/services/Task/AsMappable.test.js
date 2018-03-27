@@ -12,6 +12,29 @@ beforeEach(() => {
   }
 })
 
+describe("hasGeometries", () => {
+  test("returns false if no geometries object", () => {
+    delete task.geometries
+    const wrappedTask = AsMappable(task)
+
+    expect(wrappedTask.hasGeometries()).toBe(false)
+  })
+
+  test("returns false if the geometry is a FeatureCollection with null features", () => {
+    task.geometries = {"type": "FeatureCollection", features: null}
+    const wrappedTask = AsMappable(task)
+
+    expect(wrappedTask.hasGeometries()).toBe(false)
+  })
+
+  test("returns true if the geometries are valid", () => {
+    task.geometries = {"type": "FeatureCollection", features: []}
+    const wrappedTask = AsMappable(task)
+
+    expect(wrappedTask.hasGeometries()).toBe(true)
+  })
+})
+
 describe("calculateCenterPoint()", () => {
   test("the task's location is returned as (Lat,Lng)", () => {
     task.location = {
