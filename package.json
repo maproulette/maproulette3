@@ -51,7 +51,8 @@
     "redux-thunk": "^2.2.0",
     "remark": "^7.0.1",
     "remark-react": "^4.0.0",
-    "route-matcher": "^0.1.0"
+    "route-matcher": "^0.1.0",
+    "stale-lru-cache": "^5.1.1"
   },
   "devDependencies": {
     "combine-react-intl-messages": "^1.0.6",

@@ -7,6 +7,7 @@
  */
 
 import { normalize } from 'normalizr'
+import { cache, resetCache } from './RequestCache'
 import _isArray from 'lodash/isArray'
 import RouteFactory from './RouteFactory'
 import apiRoutes from './APIRoutes'
@@ -15,6 +16,16 @@ const baseURL = process.env.REACT_APP_MAP_ROULETTE_SERVER_URL
 
 export const serverRouteFactory = new RouteFactory(baseURL)
 export const defaultRoutes = Object.freeze(apiRoutes(serverRouteFactory))
+
+const dataAtUrl = function(url, fetchFunction) {
+  const cachedData = cache.get(url)
+  if (cachedData) {
+    return cachedData
+  }
+  else {
+    return fetchFunction()
+  }
+}
 
 /**
  * fetchContent fetches content from the given url, and return a promise that
@@ -27,25 +38,33 @@ export const defaultRoutes = Object.freeze(apiRoutes(serverRouteFactory))
  * @returns {Promise} Promise that resolves with response data or rejects on
  *          error
  */
-export const fetchContent = function(url, normalizationSchema) {
-  return new Promise((resolve, reject) => {
-    fetch(url, {credentials: 'same-origin'}).then(checkStatus).then(parseJSON).then(jsonData => {
-      if (jsonData && normalizationSchema) {
-        resolve(normalize(jsonData, normalizationSchema))
-      }
-      else {
-        resolve(jsonData)
-      }
-    }).catch(error => {
-      // 404 is used by the scala server to indicate no results. Treat as
-      // successful response with empty data.
-      if (error.response && error.response.status === 404) {
-        resolve(normalize(_isArray(normalizationSchema) ? [] : {}, normalizationSchema))
-      }
-      else {
-        reject(error)
-      }
+export const fetchContent = function(url, normalizationSchema, options={}) {
+  return dataAtUrl(url, () => {
+    const retrieval = new Promise((resolve, reject) => {
+      fetch(url, {credentials: 'same-origin'}).then(checkStatus).then(parseJSON).then(jsonData => {
+        let result = jsonData
+        if (jsonData && normalizationSchema) {
+          result = normalize(jsonData, normalizationSchema)
+        }
+
+        resolve(result)
+      }).catch(error => {
+        // 404 is used by the scala server to indicate no results. Treat as
+        // successful response with empty data.
+        if (error.response && error.response.status === 404) {
+          resolve(normalize(_isArray(normalizationSchema) ? [] : {}, normalizationSchema))
+        }
+        else {
+          reject(error)
+        }
+      })
     })
+
+    if (!options.noCache) {
+      cache.set(url, retrieval)
+    }
+
+    return retrieval
   })
 }
 
@@ -64,6 +83,8 @@ export const fetchContent = function(url, normalizationSchema) {
  */
 export const sendContent = function(method, url, jsonBody, normalizationSchema) {
   return new Promise((resolve, reject) => {
+    resetCache() // Clear the cache on updates to ensure fetches are fresh.
+
     const headers = new Headers()
     if (jsonBody) {
       headers.append('Content-Type', 'text/json')
@@ -95,6 +116,8 @@ export const sendContent = function(method, url, jsonBody, normalizationSchema) 
  */
 export const deleteContent = function(url) {
   return new Promise((resolve, reject) => {
+    resetCache() // Clear the cache on deletes to ensure fetches are fresh.
+
     fetch(url, {method: 'DELETE', credentials: 'same-origin'})
       .then(checkStatus)
       .then(response => resolve(response))

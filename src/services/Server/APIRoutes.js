@@ -40,7 +40,7 @@ const apiRoutes = factory => {
       'single': factory.get('/challenge/:id'),
       'tasks': factory.get('/challenge/:id/tasks'),
       'clusteredTasks': factory.get('/challenge/clustered/:id'),
-      'randomTask': factory.get('/challenge/:id/tasks/randomTasks'),
+      'randomTask': factory.get('/challenge/:id/tasks/randomTasks', {noCache: true}),
       'previousSequentialTask': factory.get('/challenge/:challengeId/previousTask/:taskId'),
       'nextSequentialTask': factory.get('/challenge/:challengeId/nextTask/:taskId'),
       'actions': factory.get('/data/challenge/:id'),
@@ -56,11 +56,11 @@ const apiRoutes = factory => {
       'single': factory.get('/virtualchallenge/:id'),
       'create': factory.post('/virtualchallenge'),
       'edit': factory.put('/virtualchallenge/:id'),
-      'randomTask': factory.get('/virtualchallenge/:id/task'),
+      'randomTask': factory.get('/virtualchallenge/:id/task', {noCache: true}),
       'clusteredTasks': factory.get('/virtualchallenge/clustered/:id'),
     },
     'tasks': {
-      'random': factory.get('/tasks/random'),
+      'random': factory.get('/tasks/random', {noCache: true}),
       'withinBounds': factory.get('/tasks/box/:left/:bottom/:right/:top'),
     },
     'task': {
