@@ -3,6 +3,7 @@ import center from '@turf/center'
 import bbox from '@turf/bbox'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
+import _isArray from 'lodash/isArray'
 import { latLng } from 'leaflet'
 
 /**
@@ -14,7 +15,18 @@ export class AsMappable {
   }
 
   hasGeometries() {
-    return _isObject(this.geometries)
+    if (!_isObject(this.geometries)) {
+      return false
+    }
+
+    // There are some tasks that have a FeatureCollection with null features,
+    // so check for that here.
+    if (this.geometries.type === 'FeatureCollection' &&
+        !_isArray(this.geometries.features)) {
+      return false
+    }
+
+    return true
   }
 
   calculateCenterPoint() {
