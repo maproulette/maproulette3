@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { injectIntl } from 'react-intl'
 import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
 import _omit from 'lodash/omit'
 import { allowedStatusProgressions,
-         TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
+         isFinalStatus }
+       from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from './TaskCommentInput/TaskCommentInput'
 import TaskTrackControls from './TaskTrackControls/TaskTrackControls'
 import TaskRandomnessControl
@@ -99,9 +99,6 @@ export class ActiveTaskControls extends Component {
       const allowedProgressions =
         allowedStatusProgressions(this.props.task.status)
 
-      const hasExistingStatus = _isNumber(this.props.task.status) &&
-                                this.props.task.status !== TaskStatus.created
-
       return (
         <div className={classNames('active-task-controls', this.props.className,
                                   {'is-minimized': this.props.isMinimized})}>
@@ -119,7 +116,7 @@ export class ActiveTaskControls extends Component {
                                 {..._omit(this.props, 'nextTask')} />
           }
 
-          {!isEditingTask && hasExistingStatus &&
+          {(!isEditingTask && isFinalStatus(this.props.task.status)) &&
            <TaskNextControl nextTask={this.next}
                             {..._omit(this.props, 'nextTask')} />
           }

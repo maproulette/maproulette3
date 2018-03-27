@@ -73,6 +73,18 @@ export const allowedStatusProgressions = function(status, includeSelf = false) {
 }
 
 /**
+ * Returns true if the given status represents a final progression.
+ * Technically this returns true for one status that can transition to a
+ * different status as a correction (falsePositive -> fixed), but for most
+ * purposes falsePositive should be treated as final.
+ */
+export const isFinalStatus = function(status) {
+  return status === TaskStatus.fixed ||
+         status === TaskStatus.alreadyFixed ||
+         status === TaskStatus.falsePositive
+}
+
+/**
  * Returns an object mapping status values to raw internationalized
  * messages suitable for use with FormattedMessage or formatMessage.
  */
