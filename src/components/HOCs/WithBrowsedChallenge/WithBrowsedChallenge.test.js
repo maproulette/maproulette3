@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { LatLngBounds } from 'leaflet'
 import _get from 'lodash/get'
 import _find from 'lodash/find'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
 import { WithBrowsedChallenge,
          mapStateToProps, mapDispatchToProps, } from './WithBrowsedChallenge'
 import AsEndUser from '../../../services/User/AsEndUser'
@@ -16,17 +18,21 @@ let WrappedComponent = null
 let history = null
 let match = null
 let fetchTasks = null
+let loadChallenge = null
 
 beforeEach(() => {
   challenges = [
     {
       id: 123,
+      _meta: {fetchedAt: Date.now()},
     },
     {
       id: 456,
+      _meta: {fetchedAt: Date.now()},
     },
     {
       id: 789,
+      _meta: {fetchedAt: Date.now()},
     },
   ]
 
@@ -40,6 +46,9 @@ beforeEach(() => {
         zoom: 3,
       }
     },
+    entities: {
+      challenges: _fromPairs(_map(challenges, challenge => [challenge.id, challenge]))
+    }
   }
 
   match = {
@@ -53,18 +62,18 @@ beforeEach(() => {
   }
 
   fetchTasks = jest.fn()
+  loadChallenge = jest.fn()
 
   WrappedComponent = WithBrowsedChallenge(() => <div className="child" />)
 })
 
 test("the browsed challenge from the route match is passed down", () => {
-  const challenge = {id: 123}
-
   const wrapper = shallow(
     <WrappedComponent match={match}
+                      entities={basicState.entities}
+                      loadChallenge={loadChallenge}
                       fetchClusteredTasks={fetchTasks}
-                      history={history}
-                      challenges={challenges} />
+                      history={history} />
   )
 
   expect(wrapper.props().browsedChallenge).toEqual(challenge)
@@ -73,9 +82,10 @@ test("the browsed challenge from the route match is passed down", () => {
 test("clustered task loading is kicked off for a new browsed challenge", async () => {
   const wrapper = shallow(
     <WrappedComponent match={match}
+                      entities={basicState.entities}
+                      loadChallenge={loadChallenge}
                       fetchClusteredTasks={fetchTasks}
-                      history={history}
-                      challenges={challenges} />
+                      history={history} />
   )
 
   expect(fetchTasks).toHaveBeenCalledWith(challenge.id, false)
@@ -87,10 +97,11 @@ test("virtual challenges get virtual=true when fetching tasks", async () => {
 
   const wrapper = shallow(
     <WrappedComponent match={match}
+                      entities={basicState.entities}
+                      loadChallenge={loadChallenge}
                       fetchClusteredTasks={fetchTasks}
                       history={history}
-                      virtualChallenge={challenge}
-                      challenges={challenges} />
+                      virtualChallenge={challenge} />
   )
 
   expect(fetchTasks).toHaveBeenCalledWith(challenge.id, true)

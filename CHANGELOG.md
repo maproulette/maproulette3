@@ -7,6 +7,12 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.3.1] - 2018-03-28
+### Fixed
+- Infinite loop browsing non-existent or disabled challenge (#246)
+- Collapsing of browsed challenge (#247)
+
+
 ## [v3.00-beta.3] - 2018-03-26
 ### Added
 - Virtual challenges created from map-bounded tasks now exactly match
