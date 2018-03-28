@@ -30,6 +30,7 @@ export class AboutModal extends Component {
   }
 
   render() {
+    const version = `v${process.env.REACT_APP_VERSION_SEMVER}`
     return (
       <Modal className='about-modal'
              isActive={true}
@@ -85,7 +86,13 @@ export class AboutModal extends Component {
           </div>
 
           <div className='about-modal__footer'>
-            <p>MapRoulette v{process.env.REACT_APP_VERSION_SEMVER}</p>
+            <p>
+              MapRoulette <a target="_blank" href={
+                `${process.env.REACT_APP_GIT_REPOSITORY_URL}/releases/tag/${version}`
+              }>
+                {version}
+              </a>
+            </p>
           </div>
         </div>
       </Modal>
