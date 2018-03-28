@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { point, featureCollection } from '@turf/helpers'
-import AsMappable from './AsMappable'
+import AsMappableTask from './AsMappableTask'
 
 const lat = 20
 const lng = 30
@@ -15,21 +15,21 @@ beforeEach(() => {
 describe("hasGeometries", () => {
   test("returns false if no geometries object", () => {
     delete task.geometries
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
 
     expect(wrappedTask.hasGeometries()).toBe(false)
   })
 
   test("returns false if the geometry is a FeatureCollection with null features", () => {
     task.geometries = {"type": "FeatureCollection", features: null}
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
 
     expect(wrappedTask.hasGeometries()).toBe(false)
   })
 
   test("returns true if the geometries are valid", () => {
     task.geometries = {"type": "FeatureCollection", features: []}
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
 
     expect(wrappedTask.hasGeometries()).toBe(true)
   })
@@ -41,7 +41,7 @@ describe("calculateCenterPoint()", () => {
       coordinates: [lng, lat],
     }
 
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
     expect(wrappedTask.calculateCenterPoint()).toEqual({lat, lng})
   })
 
@@ -53,17 +53,17 @@ describe("calculateCenterPoint()", () => {
       point([lng + 10, lat - 10])
     ])
   
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
     expect(wrappedTask.calculateCenterPoint()).toEqual({lat, lng})
   })
 
   test("lacking a location and features, centerpoint defaults to (0, 0)", () => {
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
     expect(wrappedTask.calculateCenterPoint()).toEqual({lat: 0, lng: 0})
   })
 
   test("an undefined task defaults to (0, 0)", () => {
-    const wrappedTask = AsMappable(undefined)
+    const wrappedTask = AsMappableTask(undefined)
     expect(wrappedTask.calculateCenterPoint()).toEqual({lat: 0, lng: 0})
   })
 })
@@ -77,7 +77,7 @@ describe("calculateBBox()", () => {
       point([lng + 10, lat - 10])
     ])
 
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
     expect(
       wrappedTask.calculateBBox()
     ).toEqual([lng - 10, lat - 10, lng + 10, lat + 10])
@@ -88,7 +88,7 @@ describe("calculateBBox()", () => {
       coordinates: [lng, lat],
     }
 
-    const wrappedTask = AsMappable(task)
+    const wrappedTask = AsMappableTask(task)
     expect(
       wrappedTask.calculateBBox()
     ).toEqual([lng, lat, lng, lat])

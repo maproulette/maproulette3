@@ -1,20 +1,20 @@
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isObject from 'lodash/isObject'
-import _isEmpty from 'lodash/isEmpty'
 import { layerSourceWithId,
-         defaultLayerSource,
-         createDynamicLayerSource }
+         defaultLayerSource }
        from '../../../services/VisibleLayer/LayerSources'
-import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
-import { ChallengeBasemap,
-         BasemapLayerSources }
-       from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import { changeVisibleLayer }
+       from '../../../services/VisibleLayer/VisibleLayer'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../WithChallengePreferences/WithChallengePreferences'
+import AsMappableChallenge
+       from '../../../interactions/Challenge/AsMappableChallenge'
+import AsMappingUser
+       from '../../../interactions/User/AsMappingUser'
 
 /**
  * WithVisibleLayer provides the wrapped component with the proper tile layer
@@ -40,35 +40,16 @@ const WithVisibleLayer = WrappedComponent =>
  * will be used.
  */
 export const defaultLayer = ownProps => {
-  const challengeDefaultBasemap = _get(ownProps, 'challenge.defaultBasemap')
-  const userDefaultBasemap = _get(ownProps, 'user.settings.defaultBasemap')
-  let layer = null
+  let layer = AsMappableChallenge(ownProps.challenge).defaultLayerSource() ||
+              AsMappingUser(ownProps.user).defaultLayerSource()
 
-  if (_isNumber(challengeDefaultBasemap) &&
-      challengeDefaultBasemap !== ChallengeBasemap.none) {
-    if (challengeDefaultBasemap !== ChallengeBasemap.custom) {
-      layer = layerSourceWithId(BasemapLayerSources[challengeDefaultBasemap])
+  if (!layer) {
+    if (_isObject(ownProps.defaultLayer)) {
+      layer = ownProps.defaultLayer
     }
-    else if (!_isEmpty(ownProps.challenge.customBasemap)) {
-      layer = createDynamicLayerSource(`challenge_${ownProps.challenge.id}`,
-                                       ownProps.challenge.customBasemap)
+    else if (_isString(ownProps.defaultLayer)) {
+      layer = layerSourceWithId(ownProps.defaultLayer)
     }
-  }
-  else if (_isNumber(userDefaultBasemap) &&
-           userDefaultBasemap !== ChallengeBasemap.none) {
-    if (userDefaultBasemap !== ChallengeBasemap.custom) {
-      layer = layerSourceWithId(BasemapLayerSources[userDefaultBasemap])
-    }
-    else if (!_isEmpty(ownProps.user.settings.customBasemap)) {
-      layer = createDynamicLayerSource(`user_${ownProps.user.id}`,
-                                       ownProps.user.settings.customBasemap)
-    }
-  }
-  else if (_isObject(ownProps.defaultLayer)) {
-    layer = ownProps.defaultLayer
-  }
-  else if (_isString(ownProps.defaultLayer)) {
-    layer = layerSourceWithId(ownProps.defaultLayer)
   }
 
   return layer ? layer : defaultLayerSource()
@@ -78,7 +59,7 @@ export const mapStateToProps = (state, ownProps) => {
   const challengeId = _get(ownProps, 'challenge.id')
   let source = null
 
-  if (_isNumber(challengeId)) {
+  if (_isFinite(challengeId)) {
     if (_isString(ownProps.visibleMapLayer)) {
       source = layerSourceWithId(ownProps.visibleMapLayer)
     }
@@ -88,18 +69,18 @@ export const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    source: source ? source : defaultLayer(ownProps)
+    source: source ? source : defaultLayer(ownProps),
   }
 }
 
 export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     changeLayer: layerId => {
-      const isVirtual = _isNumber(ownProps.virtualChallengeId)
+      const isVirtual = _isFinite(ownProps.virtualChallengeId)
       const challengeId = isVirtual ? ownProps.virtualChallengeId :
                                       _get(ownProps, 'challenge.id')
 
-      if (_isNumber(challengeId) && ownProps.setVisibleMapLayer) {
+      if (_isFinite(challengeId) && ownProps.setVisibleMapLayer) {
         ownProps.setVisibleMapLayer(challengeId, isVirtual, layerId)
       }
       else {

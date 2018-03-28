@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import AsMappable from '../../../services/Task/AsMappable'
+import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 
 export default function(WrappedComponent) {
   class WithTaskCenterPoint extends Component {
     render() {
-      const mappableTask = AsMappable(this.props.task)
+      const mappableTask = AsMappableTask(this.props.task)
       return <WrappedComponent centerPoint={mappableTask.calculateCenterPoint()}
                                {...this.props} />
     }
