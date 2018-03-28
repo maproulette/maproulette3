@@ -42,6 +42,7 @@ export class TaskAnalysisTable extends Component {
       id: 'id',
       Header: this.props.intl.formatMessage(messages.idLabel),
       accessor: 'id',
+      maxWidth: 95,
     }, {
       id: 'name',
       Header: this.props.intl.formatMessage(messages.nameLabel),
@@ -63,6 +64,7 @@ export class TaskAnalysisTable extends Component {
       id: 'priority',
       Header: this.props.intl.formatMessage(messages.priorityLabel),
       accessor: 'priority',
+      maxWidth: 90,
       Cell: ({value}) => (
         <div>
           <FormattedMessage {...messagesByPriority[value]} />
@@ -72,6 +74,7 @@ export class TaskAnalysisTable extends Component {
       id: 'controls',
       Header: this.props.intl.formatMessage(messages.actionsColumnHeader),
       sortable: false,
+      minWidth: 110,
       Cell: ({row}) =>
         <div className="task-row-controls">
           <Link to={`${taskBaseRoute}/${row.id}/review`}>
@@ -79,6 +82,9 @@ export class TaskAnalysisTable extends Component {
           </Link>
           <Link to={`${taskBaseRoute}/${row.id}/edit`}>
             <FormattedMessage {...messages.editTaskLabel} />
+          </Link>
+          <Link to={`/challenge/${this.props.challenge.id}/task/${row.id}`}>
+            <FormattedMessage {...messages.startTaskLabel} />
           </Link>
         </div>
     }]

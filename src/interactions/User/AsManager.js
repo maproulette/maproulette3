@@ -1,15 +1,16 @@
-import { SUPERUSER_GROUP_TYPE } from './User'
+import { SUPERUSER_GROUP_TYPE } from '../../services/User/User'
 import _find from 'lodash/find'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _isObject from 'lodash/isObject'
 import _filter from 'lodash/filter'
-import AsEndUser from './AsEndUser'
+import { AsEndUser } from './AsEndUser'
 
 /**
  * Provides methods specific to project and challenge management
  * with regard to the wrapped user.
  */
-export default class AsManager extends AsEndUser {
+export class AsManager extends AsEndUser {
   /**
    * Determines if the given user has permissions to manage the given
    * project.
@@ -27,10 +28,33 @@ export default class AsManager extends AsEndUser {
     )
   }
 
+  /**
+   * Determines if the given user has permissions to manage the given
+   * challenge.
+   *
+   * > Note that if challenge is not denormalized with a parent object field,
+   * > this method will return false.
+   */
+  canManageChallenge(challenge) {
+    if (!_isObject(challenge.parent)) {
+      return false
+    }
+
+    return this.canManage(challenge.parent)
+  }
+
+  /**
+   * Filters the given array of projects and returns those the user has
+   * permission to manage.
+   */
   manageableProjects(projects) {
     return _filter(projects, project => this.canManage(project))
   }
 
+  /**
+   * Filters the given list of challenges and returns those that the user
+   * has permission to manage.
+   */
   manageableChallenges(projects, challenges) {
     const projectIds = _map(this.manageableProjects(projects), 'id')
 
@@ -40,3 +64,5 @@ export default class AsManager extends AsEndUser {
     )
   }
 }
+
+export default user => new AsManager(user)

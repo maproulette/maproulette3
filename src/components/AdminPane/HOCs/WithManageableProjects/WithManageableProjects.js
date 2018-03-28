@@ -5,7 +5,7 @@ import _values from 'lodash/values'
 import _omit from 'lodash/omit'
 import { fetchManageableProjects } from '../../../../services/Project/Project'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
-import AsManager from '../../../../services/User/AsManager'
+import AsManager from '../../../../interactions/User/AsManager'
 
 /**
  * WithManageableProjects makes available to the WrappedComponent all the
@@ -26,7 +26,7 @@ const WithManageableProjects = function(WrappedComponent) {
     }
 
     render() {
-      const manager = new AsManager(this.props.user)
+      const manager = AsManager(this.props.user)
 
       const manageableProjects =
         manager.manageableProjects(_values(_get(this.props, 'entities.projects')))

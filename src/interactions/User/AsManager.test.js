@@ -1,7 +1,7 @@
 import AsManager from './AsManager'
 import { GUEST_USER_ID,
          SUPERUSER_GROUP_TYPE,
-         ADMIN_GROUP_TYPE } from './User'
+         ADMIN_GROUP_TYPE } from '../../services/User/User'
 
 const superGroup = {id: -1, groupType: SUPERUSER_GROUP_TYPE}
 const group123 = {id: 123, groupType: ADMIN_GROUP_TYPE}
@@ -23,21 +23,21 @@ const challenge789_1 = {id: 7891, parent: 789}
 
 describe('canManage', () => {
   it("always returns true if the user is a superuser", () => {
-    const manager = new AsManager(superUser)
+    const manager = AsManager(superUser)
 
     expect(manager.canManage(project123)).toBe(true)
     expect(manager.canManage(project456)).toBe(true)
   })
 
   it("returns true only if the user contains the project's group", () => {
-    const manager = new AsManager(powerUser)
+    const manager = AsManager(powerUser)
 
     expect(manager.canManage(project123)).toBe(true)
     expect(manager.canManage(project789)).toBe(false)
   })
 
   it("returns false if the user is undefined", () => {
-    const missingUser = new AsManager(undefined)
+    const missingUser = AsManager(undefined)
 
     expect(missingUser.canManage(project123)).toBe(false)
   })
@@ -45,7 +45,7 @@ describe('canManage', () => {
 
 describe('manageableProjects', () => {
   it("returns only those projects the user can manage", () => {
-    const manager = new AsManager(powerUser)
+    const manager = AsManager(powerUser)
 
     const manageable = manager.manageableProjects([project123, project456, project789])
     expect(manageable.length).toBe(2)
@@ -56,7 +56,7 @@ describe('manageableProjects', () => {
 
 describe('manageableChallenges', () => {
   it("returns only those challenges belonging to projects the user can manage", () => {
-    const manager = new AsManager(powerUser)
+    const manager = AsManager(powerUser)
 
     const manageable = manager.manageableChallenges(
       [project123, project456, project789],

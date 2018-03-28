@@ -1,5 +1,5 @@
 import { GUEST_USER_ID,
-         SUPERUSER_GROUP_TYPE } from './User'
+         SUPERUSER_GROUP_TYPE } from '../../services/User/User'
 import _find from 'lodash/find'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
@@ -7,7 +7,7 @@ import _isNumber from 'lodash/isNumber'
 /**
  * Provides basic methods for interacting with users.
  */
-export default class AsEndUser {
+export class AsEndUser {
   constructor(user) {
     this.user = user
   }
@@ -28,3 +28,5 @@ export default class AsEndUser {
            !!_find(this.user.groups, {groupType: SUPERUSER_GROUP_TYPE})
   }
 }
+
+export default user => new AsEndUser(user)

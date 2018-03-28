@@ -6,7 +6,7 @@ import { logoutUser,
          saveTask, unsaveTask,
          updateUserSettings,
          userDenormalizationSchema } from '../../../services/User/User'
-import AsEndUser from '../../../services/User/AsEndUser'
+import AsEndUser from '../../../interactions/User/AsEndUser'
 
 /**
  * WithCurrentUser passes down the current user from the redux store.  If the
@@ -30,7 +30,7 @@ export const mapStateToProps = state => {
       denormalize(userEntity, userDenormalizationSchema(), state.entities)
 
     if (props.user) {
-      const endUser = new AsEndUser(props.user)
+      const endUser = AsEndUser(props.user)
       props.user.isLoggedIn = endUser.isLoggedIn()
       props.user.isSuperUser = endUser.isSuperUser()
     }

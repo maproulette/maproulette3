@@ -1,0 +1,19 @@
+@import 'variables.scss';
+
+.active-task-controls__task-manage-controls {
+  text-align: center;
+
+  h3 {
+    color: $coral;
+    margin-top: 15px;
+    font-weight: $weight-semibold;
+  }
+
+  &__options {
+    a:not(:last-child) {
+      border-right: 2px solid $grey-lightest;
+      padding-right: 8px;
+      margin-right: 8px;
+    }
+  }
+}

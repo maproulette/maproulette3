@@ -48,4 +48,9 @@ export default defineMessages({
     id: "Admin.TaskAnalysisTable.controls.editTask.label",
     defaultMessage: "Edit",
   },
+
+  startTaskLabel: {
+    id: "Admin.TaskAnalysisTable.controls.startTask.label",
+    defaultMessage: "Start",
+  },
 })
