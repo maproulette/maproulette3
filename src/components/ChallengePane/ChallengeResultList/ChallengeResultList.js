@@ -4,6 +4,7 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _findIndex from 'lodash/findIndex'
 import _isObject from 'lodash/isObject'
+import _isFinite from 'lodash/isFinite'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
@@ -34,7 +35,7 @@ export class ChallengeResultList extends Component {
   render() {
     const challengeResults = this.props.challenges
 
-    if (this.props.loadingBrowsedChallenge) {
+    if (_isFinite(this.props.loadingBrowsedChallenge)) {
       return (
         <div className="pane-loading">
           <BusySpinner />

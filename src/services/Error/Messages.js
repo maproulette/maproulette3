@@ -70,6 +70,10 @@ export default defineMessages({
     id: 'Errors.challenge.rebuildFailure',
     defaultMessage: "Unable to rebuild challenge tasks",
   },
+  challengeDoesNotExist: {
+    id: 'Errors.challenge.doesNotExist',
+    defaultMessage: "That challenge does not exist.",
+  },
 
   virtualChallengeFetchFailure: {
     id: 'Errors.virtualChallenge.fetchFailure',

@@ -5,12 +5,13 @@ import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
-import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import { fetchChallenge }
        from '../../../services/Challenge/Challenge'
+import { addError } from '../../../services/Error/Error'
+import AppErrors from '../../../services/Error/AppErrors'
 
-const FRESHNESS_THRESHOLD = 5000 // 5 seconds
+const FRESHNESS_THRESHOLD = 60000 // 1 minute
 
 /**
  * WithBrowsedChallenge provides functions for starting and stopping browsing
@@ -24,7 +25,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
   class _WithBrowsedChallenge extends Component {
     state = {
       browsedChallenge: null,
-      loadingBrowsedChallenge: false,
+      loadingBrowsedChallenge: null,
       isVirtual: false,
     }
 
@@ -74,27 +75,35 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
       if (_isFinite(challengeId)) {
         if (_get(this.state, 'browsedChallenge.id') !== challengeId ||
             this.state.isVirtual !== isVirtual ||
-            this.state.loadingBrowsedChallenge) {
-          const challenge = isVirtual ? this.props.virtualChallenge :
-                            _find(props.challenges, {id: challengeId})
+            _isFinite(this.state.loadingBrowsedChallenge)) {
+          let challenge = isVirtual ? props.virtualChallenge :
+                            _get(props.entities, `challenges.${challengeId}`)
+
+          if (_isObject(challenge)) {
+            // If our challenge data is stale, refresh it.
+            if (Date.now() - challenge._meta.fetchedAt > FRESHNESS_THRESHOLD) {
+              challenge = null
+            }
+          }
 
           if (_isObject(challenge)) {
             this.setState({
               browsedChallenge: challenge,
-              loadingBrowsedChallenge: false,
+              loadingBrowsedChallenge: null,
               isVirtual
             })
 
-            if (challenge.id !== _get(this.props, 'clusteredTasks.challengeId') ||
-                isVirtual !== _get(this.props, 'clusteredTasks.isVirtualChallenge')) {
-              this.props.fetchClusteredTasks(challenge.id, isVirtual)
+            if (challenge.id !== _get(props, 'clusteredTasks.challengeId') ||
+                isVirtual !== _get(props, 'clusteredTasks.isVirtualChallenge')) {
+              props.fetchClusteredTasks(challenge.id, isVirtual)
             }
           }
-          else if (!isVirtual) {
-            // We don't have the challenge available, so fetch it.
+          else if (!isVirtual && !_isFinite(this.state.loadingBrowsedChallenge)) {
+            // We don't have the challenge available (and we're not in the middle
+            // of loading it), so fetch it.
             this.setState({
               browsedChallenge: {id: challengeId},
-              loadingBrowsedChallenge: true,
+              loadingBrowsedChallenge: challengeId,
               isVirtual,
             })
 
@@ -102,9 +111,12 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
           }
         }
       }
-      else if (_isObject(this.state.browsedChallenge &&
-               !this.state.loadingBrowsedChallenge)) {
-        this.setState({browsedChallenge: null, isVirtual: false})
+      else if (_isObject(this.state.browsedChallenge)) {
+        this.setState({
+          browsedChallenge: null,
+          loadingBrowsedChallenge: null,
+          isVirtual: false
+        })
       }
     }
 
@@ -177,9 +189,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loadChallenge: _debounce(
       challengeId => {
-        return dispatch(fetchChallenge(challengeId))
+        return dispatch(
+          fetchChallenge(challengeId)
+        ).then(normalizedResults => {
+          if (!_isFinite(normalizedResults.result)) {
+            dispatch(addError(AppErrors.challenge.doesNotExist))
+            ownProps.history.push('/')
+          }
+        })
       },
-      FRESHNESS_THRESHOLD,
+      5000,
       {leading: true},
     ),
   }

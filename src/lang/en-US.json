@@ -310,6 +310,7 @@
   "Errors.challenge.deleteFailure": "Unable to delete challenge.",
   "Errors.challenge.saveFailure": "Unable to save your changes{details}",
   "Errors.challenge.rebuildFailure": "Unable to rebuild challenge tasks",
+  "Errors.challenge.doesNotExist": "That challenge does not exist.",
   "Errors.virtualChallenge.fetchFailure": "Unable to retrieve latest virtual challenge data from server.",
   "Errors.virtualChallenge.createFailure": "Unable to create a virtual challenge{details}",
   "Errors.virtualChallenge.expired": "Virtual challenge has expired.",
