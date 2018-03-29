@@ -63,7 +63,7 @@
           padding-top: 10px;
 
           .rt-expander {
-            margin: 0 -7px;
+            margin: 0 -5px;
 
             &:after {
               @include arrow($grey);
@@ -154,10 +154,6 @@
 
     a {
       margin-right: 15px;
-
-      &:last-child {
-        margin-right: 0;
-      }
     }
   }
 }

@@ -3,7 +3,7 @@ import { LatLngBounds } from 'leaflet'
 import _get from 'lodash/get'
 import _find from 'lodash/find'
 import { chooseVisibleTask, mapDispatchToProps, } from './WithStartChallenge'
-import AsEndUser from '../../../services/User/AsEndUser'
+import AsEndUser from '../../../interactions/User/AsEndUser'
 import { denormalize } from 'normalizr'
 import { loadRandomTaskFromChallenge,
          fetchClusteredTasks } from '../../../services/Task/Task'

@@ -38,4 +38,9 @@ export default defineMessages({
     id: "Task.fields.featured.label",
     defaultMessage: "Featured",
   },
+
+  manageLabel: {
+    id: "Challenge.management.controls.manage.label",
+    defaultMessage: "Manage",
+  },
 })

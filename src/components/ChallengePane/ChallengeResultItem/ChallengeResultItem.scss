@@ -85,6 +85,15 @@
     font-size: $size-8;
   }
 
+  .challenge-list__item__controls {
+    display: flex;
+    justify-content: space-between;
+
+    &__manage {
+      margin-top: 4px;
+    }
+  }
+
   button.start-challenge {
     @include invert-on-hover($green, $white);
   }

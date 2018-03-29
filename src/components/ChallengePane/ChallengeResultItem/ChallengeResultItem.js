@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
 import _isEqual from 'lodash/isEqual'
@@ -9,6 +10,8 @@ import classNames from 'classnames'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import { messagesByDifficulty }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
+import AsManager
+       from '../../../interactions/User/AsManager'
 import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
@@ -156,6 +159,8 @@ export class ChallengeResultItem extends Component {
     let savedIcon = null
     let unsaveChallengeButton = null
     let saveChallengeButton = null
+    const isManageable =
+      AsManager(this.props.user).canManageChallenge(this.props.challenge)
 
     if (_isObject(this.props.user) && !this.props.challenge.isVirtual) {
       if (_findIndex(this.props.user.savedChallenges,
@@ -243,17 +248,30 @@ export class ChallengeResultItem extends Component {
 
             <ChallengeProgress challenge={this.props.challenge} />
 
-            <div className="field is-grouped">
-              <p className="control">
-                <button className={classNames("button is-outlined start-challenge",
-                                              {"is-loading": this.state.isStarting})}
-                        onClick={this.startChallenge}>
-                  <FormattedMessage {...messages.start} />
-                </button>
-              </p>
+            <div className="challenge-list__item__controls">
+              <div className="field is-grouped">
+                <p className="control">
+                  <button className={classNames("button is-outlined start-challenge",
+                                                {"is-loading": this.state.isStarting})}
+                          onClick={this.startChallenge}>
+                    <FormattedMessage {...messages.start} />
+                  </button>
+                </p>
 
-              {saveChallengeButton}
-              {unsaveChallengeButton}
+                <div>
+                  {saveChallengeButton}
+                  {unsaveChallengeButton}
+                </div>
+              </div>
+              {isManageable &&
+               <div className="challenge-list__item__controls__manage">
+                 <Link to={
+                   `/admin/project/${this.props.challenge.parent.id}/challenge/${this.props.challenge.id}`
+                 }>
+                   <FormattedMessage {...messages.manageLabel} />
+                 </Link>
+               </div>
+              }
             </div>
           </React.Fragment>
           }

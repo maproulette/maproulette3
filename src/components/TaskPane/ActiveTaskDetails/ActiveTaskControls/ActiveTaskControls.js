@@ -13,6 +13,7 @@ import TaskRandomnessControl
        from './TaskRandomnessControl/TaskRandomnessControl'
 import MoreOptionsControl
        from './MoreOptionsControl/MoreOptionsControl'
+import TaskManageControls from './TaskManageControls/TaskManageControls'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 import WithDeactivateOnOutsideClick from
@@ -136,6 +137,8 @@ export class ActiveTaskControls extends Component {
             {!this.props.isMinimized &&
              <KeyboardReferencePopout {..._omit(this.props, ['className'])} />
             }
+
+            <TaskManageControls {...this.props} />
           </MoreOptionsControl>
         </div>
       )

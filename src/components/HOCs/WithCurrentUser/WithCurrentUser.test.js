@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { mapStateToProps, mapDispatchToProps } from './WithCurrentUser'
-import AsEndUser from '../../../services/User/AsEndUser'
+import AsEndUser from '../../../interactions/User/AsEndUser'
 import { denormalize } from 'normalizr'
 import { logoutUser,
          saveChallenge, unsaveChallenge,
@@ -9,7 +9,7 @@ import { logoutUser,
 
 jest.mock('normalizr')
 jest.mock('../../../services/User/User')
-jest.mock('../../../services/User/AsEndUser')
+jest.mock('../../../interactions/User/AsEndUser')
 
 const schema = {foo: "bar"}
 let basicState = null

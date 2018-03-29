@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, withRouter } from 'react-router-dom'
-import AsManager from '../../services/User/AsManager'
+import AsManager from '../../interactions/User/AsManager'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import Manage from './Manage/Manage'
@@ -34,7 +34,7 @@ export class AdminPane extends Component {
 
   render() {
     // The user needs to be logged in.
-    const manager = new AsManager(this.props.user)
+    const manager = AsManager(this.props.user)
     if (!manager.isLoggedIn()) {
       return (
         <div className="admin">

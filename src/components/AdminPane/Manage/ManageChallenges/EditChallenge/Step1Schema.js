@@ -1,7 +1,7 @@
 import _map from 'lodash/map'
 import _keys from 'lodash/keys'
 import _values from 'lodash/values'
-import AsManager from '../../../../../services/User/AsManager'
+import AsManager from '../../../../../interactions/User/AsManager'
 import { ChallengeDifficulty,
          difficultyLabels }
        from '../../../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
@@ -26,7 +26,7 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl, user) => {
-  const manager = new AsManager(user)
+  const manager = AsManager(user)
   const localizedDifficultyLabels = difficultyLabels(intl)
   const localizedKeywordLabels = keywordLabels(intl)
 
