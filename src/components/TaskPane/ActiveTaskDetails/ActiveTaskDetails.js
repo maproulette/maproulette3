@@ -15,6 +15,7 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import TaskStatusIndicator from './TaskStatusIndicator/TaskStatusIndicator'
+import ShareLink from '../../ShareLink/ShareLink'
 import ActiveTaskControls from './ActiveTaskControls/ActiveTaskControls'
 import ReviewTaskControls from './ReviewTaskControls/ReviewTaskControls'
 import TaskLocationMap from './TaskLocationMap/TaskLocationMap'
@@ -140,10 +141,35 @@ export class ActiveTaskDetails extends Component {
       !canBeMinimized ? null :
       <button className="toggle-minimization" onClick={this.toggleIsMinimized} />
 
+    const challengeBrowseRoute =
+      `/browse/challenges/${_get(this.props.task, 'parent.id', '')}`
+
     const challengeNameLink =
-      <Link to={`/browse/challenges/${_get(this.props.task, 'parent.id', '')}`}>
+      <Link to={challengeBrowseRoute}>
         {_get(this.props.task, 'parent.name')}
       </Link>
+
+    let virtualChallengeNameLink = null
+    if (_isFinite(this.props.virtualChallengeId)) {
+      const virtualChallengeBrowseRoute =
+        `/browse/virtual/${this.props.virtualChallengeId}`
+
+      virtualChallengeNameLink = (
+        <div className="active-task-details--virtual-name">
+          <span className="active-task-details__virtual-badge"
+                title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
+            <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
+          </span>
+          <h3>
+            <Link to={virtualChallengeBrowseRoute}>
+              {_get(this.props, 'virtualChallenge.name')}
+            </Link>
+            <ShareLink link={virtualChallengeBrowseRoute} {...this.props}
+                      className="active-task-details--quick-share-link" />
+          </h3>
+        </div>
+      )
+    }
 
     const taskInstructions = !_isEmpty(this.props.task.instruction) ?
                              this.props.task.instruction :
@@ -174,15 +200,7 @@ export class ActiveTaskDetails extends Component {
                              className='active-task-details__info-popout'
                              control={infoPopoutButton}>
           <div className="popout-content__header active-task-details--bordered">
-            {_isFinite(this.props.virtualChallengeId) &&
-             <h4 className="info-popout--virtual-name">
-               <span className="active-task-details__virtual-badge"
-                     title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
-                <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
-               </span>
-               {_get(this.props, 'virtualChallenge.name')}
-             </h4>
-            }
+            {virtualChallengeNameLink}
             <h3 className="info-popout--name">{challengeNameLink}</h3>
 
             <div className="info-popout--project-name">
@@ -246,18 +264,13 @@ export class ActiveTaskDetails extends Component {
               <FormattedMessage {...messages.challengeHeading} />
             </div>
 
-            {_isFinite(this.props.virtualChallengeId) &&
-             <div className="active-task-details--virtual-name">
-               <span className="active-task-details__virtual-badge"
-                     title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
-                <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
-               </span>
-               <h3>
-                 {_get(this.props, 'virtualChallenge.name')}
-               </h3>
-             </div>
-            }
-            <h2 className="active-task-details--name">{challengeNameLink}</h2>
+            {virtualChallengeNameLink}
+
+            <h2 className="active-task-details--name">
+              {challengeNameLink}
+              <ShareLink link={challengeBrowseRoute} {...this.props}
+                         className="active-task-details--quick-share-link" />
+            </h2>
 
             <div className="active-task-details--project-name">
               {_get(this.props.task, 'parent.parent.displayName')}

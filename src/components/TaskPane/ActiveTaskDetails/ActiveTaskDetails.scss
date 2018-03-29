@@ -122,6 +122,14 @@
       color: $coral;
       font-size: $size-6;
       margin-right: 10px;
+
+      a {
+        color: $coral;
+
+        &:hover {
+          color: $grey-darkest;
+        }
+      }
     }
 
     .active-task-details__virtual-badge {
@@ -145,6 +153,10 @@
       fill: $coral;
       margin-bottom: 2px;
     }
+  }
+
+  &--quick-share-link {
+    margin-left: 8px;
   }
 
   &--name {
