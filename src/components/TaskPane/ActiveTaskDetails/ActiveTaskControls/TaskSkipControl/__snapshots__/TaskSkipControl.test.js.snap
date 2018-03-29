@@ -112,7 +112,6 @@ ShallowWrapper {
       "children": Array [
         <span
           className="control-icon"
-          title="Skip Task"
 >
           <SvgSymbol
                     sym="skip-icon"
@@ -131,6 +130,7 @@ ShallowWrapper {
       ],
       "className": "button skip-control large-and-wide",
       "onClick": [Function],
+      "title": "Skip Task",
     },
     "ref": null,
     "rendered": Array [
@@ -144,7 +144,6 @@ ShallowWrapper {
             viewBox="0 0 20 20"
 />,
           "className": "control-icon",
-          "title": "Skip Task",
         },
         "ref": null,
         "rendered": Object {
@@ -201,7 +200,6 @@ ShallowWrapper {
         "children": Array [
           <span
             className="control-icon"
-            title="Skip Task"
 >
             <SvgSymbol
                         sym="skip-icon"
@@ -220,6 +218,7 @@ ShallowWrapper {
         ],
         "className": "button skip-control large-and-wide",
         "onClick": [Function],
+        "title": "Skip Task",
       },
       "ref": null,
       "rendered": Array [
@@ -233,7 +232,6 @@ ShallowWrapper {
               viewBox="0 0 20 20"
 />,
             "className": "control-icon",
-            "title": "Skip Task",
           },
           "ref": null,
           "rendered": Object {

@@ -15,8 +15,7 @@ import './CommentCountBadge.css'
 export default class CommentCountBadge extends Component {
   render() {
     return (
-      <div className={classNames("comment-count-badge", this.props.className)}
-           title={this.props.tooltip}>
+      <div className={classNames("comment-count-badge", this.props.className)}>
         <span className={classNames("badge is-badge-outlined",
                                     {"is-empty": this.props.comments.length === 0})}
               data-badge={this.props.comments.length}>

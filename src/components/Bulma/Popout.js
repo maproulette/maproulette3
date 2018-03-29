@@ -21,7 +21,8 @@ export default class Popout extends Component {
          'is-active': this.props.isActive},
         this.props.className)}
       >
-        <div className='dropdown-trigger popout-trigger' onClick={this.props.toggleActive}>
+        <div className='dropdown-trigger popout-trigger' onClick={this.props.toggleActive}
+             title={this.props.tooltip}>
           {this.props.control}
         </div>
 

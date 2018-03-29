@@ -112,7 +112,6 @@ ShallowWrapper {
       "children": Array [
         <span
           className="control-icon"
-          title="Not an Issue"
 >
           <SvgSymbol
                     sym="check-icon"
@@ -131,6 +130,7 @@ ShallowWrapper {
       ],
       "className": "button false-positive-control large-and-wide",
       "onClick": [Function],
+      "title": "Not an Issue",
     },
     "ref": null,
     "rendered": Array [
@@ -144,7 +144,6 @@ ShallowWrapper {
             viewBox="0 0 20 20"
 />,
           "className": "control-icon",
-          "title": "Not an Issue",
         },
         "ref": null,
         "rendered": Object {
@@ -201,7 +200,6 @@ ShallowWrapper {
         "children": Array [
           <span
             className="control-icon"
-            title="Not an Issue"
 >
             <SvgSymbol
                         sym="check-icon"
@@ -220,6 +218,7 @@ ShallowWrapper {
         ],
         "className": "button false-positive-control large-and-wide",
         "onClick": [Function],
+        "title": "Not an Issue",
       },
       "ref": null,
       "rendered": Array [
@@ -233,7 +232,6 @@ ShallowWrapper {
               viewBox="0 0 20 20"
 />,
             "className": "control-icon",
-            "title": "Not an Issue",
           },
           "ref": null,
           "rendered": Object {

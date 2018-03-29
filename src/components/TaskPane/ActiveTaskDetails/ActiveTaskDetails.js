@@ -187,9 +187,9 @@ export class ActiveTaskDetails extends Component {
     let commentPopout = null
     if (isMinimized) {
       const infoPopoutButton = (
-        <button className="button icon-only active-task-details__info-control">
-          <span className="control-icon"
+        <button className="button icon-only active-task-details__info-control"
                 title={this.props.intl.formatMessage(messages.info)}>
+          <span className="control-icon">
             <SvgSymbol viewBox='0 0 20 20' sym="info-icon" />
           </span>
         </button>
@@ -201,7 +201,11 @@ export class ActiveTaskDetails extends Component {
                              control={infoPopoutButton}>
           <div className="popout-content__header active-task-details--bordered">
             {virtualChallengeNameLink}
-            <h3 className="info-popout--name">{challengeNameLink}</h3>
+            <h3 className="info-popout--name">
+              {challengeNameLink}
+              <ShareLink link={challengeBrowseRoute} {...this.props}
+                         className="active-task-details--quick-share-link" />
+            </h3>
 
             <div className="info-popout--project-name">
               {_get(this.props.task, 'parent.parent.displayName')}
@@ -228,12 +232,12 @@ export class ActiveTaskDetails extends Component {
       const commentBadge =
         <CommentCountBadge
           className="active-task-details--comment-badge active-task-details--bordered"
-          tooltip={this.props.intl.formatMessage(messages.viewComments)}
           comments={_get(this.props, 'task.comments')} />
 
       commentPopout = (
         <DeactivatablePopout direction='right'
                              className='active-task-details__comment-popout'
+                             tooltip={this.props.intl.formatMessage(messages.viewComments)}
                              control={commentBadge}>
 
           <div className="popout-content__header active-task-details--bordered">
