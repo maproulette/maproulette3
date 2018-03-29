@@ -9,6 +9,7 @@ import LocatorMap from '../LocatorMap/LocatorMap'
 import ChallengeMap from '../ChallengeMap/ChallengeMap'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
+import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import WithFilteredChallenges
        from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
 import WithChallengeFilters
@@ -24,7 +25,7 @@ import './ChallengePane.css'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
-const BrowseChallengeMap = WithTaskMarkers(ChallengeMap, 'clusteredTasks')
+const BrowseChallengeMap = WithTaskMarkers(ChallengeMap)
 let DiscoveryMap = null
 
 // If the map-bounded task browsing feature is enabled, set up the LocatorMap
@@ -71,6 +72,7 @@ export class ChallengePane extends Component {
           <MapPane>
             <Map layerSourceId={MAPBOX_STREETS}
                  challenge={this.props.browsedChallenge}
+                 onTaskClick={this.props.startChallengeWithTask}
                  {...this.props} />
           </MapPane>
         </div>
@@ -86,7 +88,9 @@ export default WithMapBounds(
         WithSearchResults(
           WithMapBoundedTasks(
             WithClusteredTasks(
-              WithBrowsedChallenge(ChallengePane)
+              WithStartChallenge(
+                WithBrowsedChallenge(ChallengePane)
+              )
             )
           ),
           'challenges',

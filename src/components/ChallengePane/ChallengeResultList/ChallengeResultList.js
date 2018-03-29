@@ -8,7 +8,6 @@ import _isFinite from 'lodash/isFinite'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
-import WithStartChallenge from '../../HOCs/WithStartChallenge/WithStartChallenge'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
@@ -129,10 +128,4 @@ ChallengeResultList.propTypes = {
   challenges: PropTypes.array.isRequired,
 }
 
-export default WithCurrentUser(
-  WithStartChallenge(
-    WithSortedChallenges(
-      ChallengeResultList,
-    ),
-  )
-)
+export default WithCurrentUser(WithSortedChallenges(ChallengeResultList))

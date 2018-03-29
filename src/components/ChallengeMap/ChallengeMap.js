@@ -86,11 +86,9 @@ export class ChallengeMap extends Component {
    */
   markerClicked = marker => {
     if (this.props.onTaskClick) {
-      this.props.onTaskClick(marker.options.challengeId, marker.options.taskId)
-    }
-    else {
-      this.props.history.push(
-        `/challenge/${marker.options.challengeId}/task/${marker.options.taskId}`)
+      this.props.onTaskClick(marker.options.challengeId,
+                             marker.options.isVirtualChallenge,
+                             marker.options.taskId)
     }
   }
 

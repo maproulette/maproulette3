@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import _get from 'lodash/get'
 import _isArray from 'lodash/isArray'
+import _isObject from 'lodash/isObject'
 import _each from 'lodash/each'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 
@@ -14,21 +15,25 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default function WithTaskMarkers(WrappedComponent,
-                                        tasksProp='tasks') {
+                                        tasksProp='clusteredTasks') {
   return class extends Component {
     render() {
+      const clusteredTasks = this.props[tasksProp]
       const markers = []
-      const tasks = _get(this.props, `${tasksProp}.tasks`, tasksProp)
+      if (!_isObject(clusteredTasks)) {
+        return null
+      }
 
-      if (_isArray(tasks) && tasks.length > 0) {
-        _each(tasks, task => {
+      if (_isArray(clusteredTasks.tasks) && clusteredTasks.tasks.length > 0) {
+        _each(clusteredTasks.tasks, task => {
           // Only create markers for created or skipped tasks
           if (task.point && (task.status === TaskStatus.created ||
                              task.status === TaskStatus.skipped)) {
             markers.push({
               position: [task.point.lat, task.point.lng],
               options: {
-                challengeId: task.parentId,
+                challengeId: clusteredTasks.challengeId,
+                isVirtualChallenge: clusteredTasks.isVirtualChallenge,
                 challengeName: task.parentName,
                 taskId: task.id,
               },
