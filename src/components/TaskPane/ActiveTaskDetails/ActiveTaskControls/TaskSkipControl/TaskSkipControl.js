@@ -43,9 +43,9 @@ export default class TaskSkipControl extends Component {
                                     this.props.className,
                                     {"large-and-wide": !this.props.isMinimized,
                                      "icon-only": this.props.isMinimized})}
+              title={this.props.intl.formatMessage(messages.skipTooltip)}
               onClick={() => this.props.complete(TaskStatus.skipped)}>
-        <span className="control-icon"
-              title={this.props.intl.formatMessage(messages.skipTooltip)}>
+        <span className="control-icon">
           <SvgSymbol viewBox='0 0 20 20' sym="skip-icon" />
         </span>
         <span className="control-label">

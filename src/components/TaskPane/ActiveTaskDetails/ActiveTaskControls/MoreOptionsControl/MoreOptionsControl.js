@@ -21,9 +21,9 @@ export default class MoreOptionsControl extends Component {
     // In minimized mode, show icon-only control with popout.
     if (this.props.isMinimized) {
       const iconControl = (
-        <button className="button icon-only">
-          <span className="control-icon"
+        <button className="button icon-only"
                 title={this.props.intl.formatMessage(messages.moreOptionsLabel)}>
+          <span className="control-icon">
             <SvgSymbol viewBox='0 0 20 20' sym="navigation-more-icon" />
           </span>
         </button>

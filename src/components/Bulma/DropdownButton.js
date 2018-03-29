@@ -32,6 +32,7 @@ export default class DropdownButton extends Component {
       <div className={classNames('DropdownButton', 'dropdown', {'is-active': this.props.isActive},
                                  this.props.className)}>
         <div className={classNames('dropdown-trigger', this.props.triggerClassName)}
+             title={this.props.tooltip}
              onClick={this.props.toggleActive}>
           {this.props.children}
         </div>

@@ -28,20 +28,22 @@ export class ShareLink extends Component {
           <SvgSymbol viewBox='0 0 20 20' sym="link-icon" />
         </div>
 
-        <div className='menu-wrapper'>
-          <div className='dropdown-menu' role='menu'>
-            <div className='dropdown-content'>
-              <span className="share-link__text">{absoluteLink}</span>
+        {this.props.isActive &&
+         <div className='menu-wrapper'>
+           <div className='dropdown-menu' role='menu'>
+             <div className='dropdown-content'>
+               <span className="share-link__text">{absoluteLink}</span>
 
-              <CopyToClipboard text={absoluteLink} onCopy={this.props.deactivate}>
-                <button className="button is-clear has-svg-icon share-link__copy-button">
-                  <SvgSymbol viewBox='0 0 20 20' sym="clipboard-icon" />
-                  <FormattedMessage {...messages.copy} />
-                </button>
-              </CopyToClipboard>
-            </div>
-          </div>
-        </div>
+               <CopyToClipboard text={absoluteLink} onCopy={this.props.deactivate}>
+                 <button className="button is-clear has-svg-icon share-link__copy-button">
+                   <SvgSymbol viewBox='0 0 20 20' sym="clipboard-icon" />
+                   <FormattedMessage {...messages.copy} />
+                 </button>
+               </CopyToClipboard>
+             </div>
+           </div>
+         </div>
+        }
       </div>
     )
   }

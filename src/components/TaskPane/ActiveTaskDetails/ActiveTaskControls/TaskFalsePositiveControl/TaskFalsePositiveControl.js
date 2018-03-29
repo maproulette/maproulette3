@@ -44,9 +44,9 @@ export default class TaskFalsePositiveControl extends Component {
                                     this.props.className,
                                     {"large-and-wide": !this.props.isMinimized,
                                     "icon-only": this.props.isMinimized})}
+              title={this.props.intl.formatMessage(messages.falsePositiveTooltip)}
               onClick={() => this.props.complete(TaskStatus.falsePositive)}>
-        <span className="control-icon"
-              title={this.props.intl.formatMessage(messages.falsePositiveTooltip)}>
+        <span className="control-icon">
           <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
         </span>
         <span className="control-label">

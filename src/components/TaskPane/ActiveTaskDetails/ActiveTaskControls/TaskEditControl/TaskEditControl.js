@@ -63,8 +63,7 @@ export default class TaskEditControl extends Component {
        "icon-only": this.props.isMinimized})
 
     const editControlContent = [
-      <span key="control-icon" className="control-icon"
-            title={this.props.intl.formatMessage(messages.editTooltip)}>
+      <span key="control-icon" className="control-icon">
         <SvgSymbol viewBox='0 0 20 20' sym="edit-icon" />
       </span>,
       <span key="control-label" className="control-label">
@@ -78,6 +77,7 @@ export default class TaskEditControl extends Component {
       // the edit control.
       return (
         <button className={editControlClasses}
+                title={this.props.intl.formatMessage(messages.editTooltip)}
                 onClick={() => this.props.pickEditor({value: defaultEditor})}>
           {editControlContent}
         </button>
@@ -98,6 +98,7 @@ export default class TaskEditControl extends Component {
                                 {'full-width': !this.props.isMinimized,
                                  'popout-right': this.props.isMinimized})}
           triggerClassName={classNames({'full-width': !this.props.isMinimized})}
+          tooltip={this.props.intl.formatMessage(messages.editTooltip)}
           options={editorDropdownOptions} onSelect={this.props.pickEditor}
         >
           <button className={editControlClasses}>
