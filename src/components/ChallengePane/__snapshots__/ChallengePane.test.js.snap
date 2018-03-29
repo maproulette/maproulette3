@@ -56,7 +56,7 @@ ShallowWrapper {
                     className="inline full-screen-height with-shadow challenge-pane__results"
                     isActive={true}
           >
-                    <Connect(Connect(Connect(WithSortedChallenges)))
+                    <Connect(Connect(WithSortedChallenges))
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
@@ -82,6 +82,7 @@ ShallowWrapper {
                                                 }
                               }
                               layerSourceId="Mapbox"
+                              onTaskClick={undefined}
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
                               unsaveChallenge={[Function]}
@@ -128,7 +129,7 @@ ShallowWrapper {
               className="inline full-screen-height with-shadow challenge-pane__results"
               isActive={true}
 >
-              <Connect(Connect(Connect(WithSortedChallenges)))
+              <Connect(Connect(WithSortedChallenges))
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
@@ -154,6 +155,7 @@ ShallowWrapper {
                                                       }
                             }
                             layerSourceId="Mapbox"
+                            onTaskClick={undefined}
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
                             unsaveChallenge={[Function]}
@@ -175,7 +177,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Connect(Connect(Connect(WithSortedChallenges)))
+              "children": <Connect(Connect(WithSortedChallenges))
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
@@ -230,6 +232,7 @@ ShallowWrapper {
                                               }
                 }
                 layerSourceId="Mapbox"
+                onTaskClick={undefined}
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
                 unsaveChallenge={[Function]}
@@ -252,6 +255,7 @@ ShallowWrapper {
                   "formatMessage": [Function],
                 },
                 "layerSourceId": "Mapbox",
+                "onTaskClick": undefined,
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
                 "unsaveChallenge": [Function],
@@ -302,7 +306,7 @@ ShallowWrapper {
                         className="inline full-screen-height with-shadow challenge-pane__results"
                         isActive={true}
             >
-                        <Connect(Connect(Connect(WithSortedChallenges)))
+                        <Connect(Connect(WithSortedChallenges))
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
@@ -328,6 +332,7 @@ ShallowWrapper {
                                                           }
                                     }
                                     layerSourceId="Mapbox"
+                                    onTaskClick={undefined}
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
                                     unsaveChallenge={[Function]}
@@ -374,7 +379,7 @@ ShallowWrapper {
                 className="inline full-screen-height with-shadow challenge-pane__results"
                 isActive={true}
 >
-                <Connect(Connect(Connect(WithSortedChallenges)))
+                <Connect(Connect(WithSortedChallenges))
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
@@ -400,6 +405,7 @@ ShallowWrapper {
                                                               }
                                 }
                                 layerSourceId="Mapbox"
+                                onTaskClick={undefined}
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
                                 unsaveChallenge={[Function]}
@@ -421,7 +427,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Connect(Connect(Connect(WithSortedChallenges)))
+                "children": <Connect(Connect(WithSortedChallenges))
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
@@ -476,6 +482,7 @@ ShallowWrapper {
                                                     }
                   }
                   layerSourceId="Mapbox"
+                  onTaskClick={undefined}
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
                   unsaveChallenge={[Function]}
@@ -498,6 +505,7 @@ ShallowWrapper {
                     "formatMessage": [Function],
                   },
                   "layerSourceId": "Mapbox",
+                  "onTaskClick": undefined,
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
                   "unsaveChallenge": [Function],

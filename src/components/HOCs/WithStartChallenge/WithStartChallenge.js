@@ -108,6 +108,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
         })
       }
     }
+  },
+
+  /** Invoked when user wants to start a challenge with a specific task */
+  startChallengeWithTask: (challengeId, isVirtual, taskId) => {
+    if (isVirtual) {
+      ownProps.history.push(`/virtual/${challengeId}/task/${taskId}`)
+    }
+    else {
+      ownProps.history.push(`/challenge/${challengeId}/task/${taskId}`)
+    }
   }
 })
 
