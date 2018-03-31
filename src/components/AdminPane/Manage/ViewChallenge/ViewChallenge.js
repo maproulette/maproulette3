@@ -37,6 +37,8 @@ export class ViewChallenge extends Component {
       return <BusySpinner />
     }
 
+    const projectId = _get(this.props, 'challenge.parent.id')
+
     const tabs = {
       [this.props.intl.formatMessage(messages.challengeOverviewTabLabel)]:
         <ChallengeOverview challenge={this.props.challenge} />,
@@ -60,7 +62,7 @@ export class ViewChallenge extends Component {
                 </Link>
               </li>
               <li>
-                <Link to={`/admin/project/${_get(this.props, 'challenge.parent.id')}`}>
+                <Link to={`/admin/project/${projectId}`}>
                   {_get(this.props, 'challenge.parent.displayName') ||
                    _get(this.props, 'challenge.parent.name')}
                 </Link>
@@ -76,7 +78,7 @@ export class ViewChallenge extends Component {
 
           <div className="columns admin__manage__controls">
             <div className="column is-narrow admin__manage__controls--control">
-              <Link to={`/admin/project/${this.props.challenge.parent.id}/` +
+              <Link to={`/admin/project/${projectId}/` +
                         `challenge/${this.props.challenge.id}/edit`}>
                 <FormattedMessage {...messages.editChallengeLabel } />
               </Link>
@@ -91,7 +93,7 @@ export class ViewChallenge extends Component {
             }
 
             <div className="column is-narrow admin__manage__controls--control">
-              <Link to={{pathname: `/admin/project/${this.props.challenge.parent.id}/` +
+              <Link to={{pathname: `/admin/project/${projectId}/` +
                                    `challenge/${this.props.challenge.id}/clone`,
                          state: {cloneChallenge: true}}}>
                 <FormattedMessage {...messages.cloneChallengeLabel } />
