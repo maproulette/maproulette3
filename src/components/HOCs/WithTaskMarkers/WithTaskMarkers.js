@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import _get from 'lodash/get'
 import _isArray from 'lodash/isArray'
+import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _each from 'lodash/each'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
@@ -16,30 +17,29 @@ import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
  */
 export default function WithTaskMarkers(WrappedComponent,
                                         tasksProp='clusteredTasks') {
-  return class extends Component {
+  class _WithTaskMarkers extends Component {
     render() {
       const clusteredTasks = this.props[tasksProp]
       const markers = []
-      if (!_isObject(clusteredTasks)) {
-        return null
-      }
-
-      if (_isArray(clusteredTasks.tasks) && clusteredTasks.tasks.length > 0) {
-        _each(clusteredTasks.tasks, task => {
-          // Only create markers for created or skipped tasks
-          if (task.point && (task.status === TaskStatus.created ||
-                             task.status === TaskStatus.skipped)) {
-            markers.push({
-              position: [task.point.lat, task.point.lng],
-              options: {
-                challengeId: clusteredTasks.challengeId,
-                isVirtualChallenge: clusteredTasks.isVirtualChallenge,
-                challengeName: task.parentName,
-                taskId: task.id,
-              },
-            })
-          }
-        })
+      if (_isObject(clusteredTasks)) {
+        if (_isArray(clusteredTasks.tasks) && clusteredTasks.tasks.length > 0) {
+          _each(clusteredTasks.tasks, task => {
+            // Only create markers for created or skipped tasks
+            if (task.point && (task.status === TaskStatus.created ||
+                              task.status === TaskStatus.skipped)) {
+              markers.push({
+                position: [task.point.lat, task.point.lng],
+                options: {
+                  challengeId: _isFinite(clusteredTasks.challengeId) ?
+                               clusteredTasks.challengeId : task.challengeId || task.parentId,
+                  isVirtualChallenge: clusteredTasks.isVirtualChallenge,
+                  challengeName: task.parentName,
+                  taskId: task.id,
+                },
+              })
+            }
+          })
+        }
       }
 
       return <WrappedComponent taskMarkers={markers}
@@ -48,4 +48,10 @@ export default function WithTaskMarkers(WrappedComponent,
                                {...this.props} />
     }
   }
+
+  _WithTaskMarkers.displayName =
+    `WithTaskMarkers(${WrappedComponent.displayName ||
+                       WrappedComponent.name || 'Component'})`
+
+  return _WithTaskMarkers
 }

@@ -119,9 +119,11 @@ export class LocatorMap extends Component {
 
         <div className="marker-popup-content__links">
           <div>
-            <a onClick={() => this.props.history.push(
-              `/challenge/${marker.options.challengeId}/task/${marker.options.taskId}`
-            )}>
+            <a onClick={() => {
+              this.props.onTaskClick(marker.options.challengeId,
+                                     marker.options.isVirtualChallenge,
+                                     marker.options.taskId)
+            }}>
               {this.props.intl.formatMessage(messages.startChallengeLabel)}
             </a>
           </div>
