@@ -20,6 +20,8 @@ import Navbar from './components/Navbar/Navbar'
 import UserProfile from './components/UserProfile/UserProfile'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
+import MobileNotSupported
+       from './components/MobileNotSupported/MobileNotSupported'
 import './App.css'
 
 // Setup child components with necessary HOCs
@@ -54,6 +56,12 @@ export class App extends Component {
   }
 
   render() {
+    // We don't currently support mobile devices. This is a pretty simplistic
+    // check, but it should catch most cases.
+    if (/iPhone|iPad|iPod|BlackBerry|IEMobile|Fennec|Android|Mobile|Tablet/i.test(navigator.userAgent)) {
+      return <MobileNotSupported />
+    }
+
     let firstTimeModal = null
     if (!this.state.firstTimeModalDismissed &&
         (!_isNumber(this.props.initialUserId) ||

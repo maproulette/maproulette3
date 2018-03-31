@@ -189,6 +189,8 @@
   "LayerSource.challengeDefault.label": "Challenge Default",
   "LayerSource.userDefault.label": "Your Default",
   "LocatorMap.controls.startChallenge.label": "Start Challenge",
+  "MobileNotSupported.header": "Please Visit on your Computer",
+  "MobileNotSupported.message": "Sorry, MapRoulette does not currently support mobile devices.",
   "Navbar.links.userProfile": "User Profile",
   "Navbar.links.signout": "Sign out",
   "Navbar.preview.label": "v3 BETA",
