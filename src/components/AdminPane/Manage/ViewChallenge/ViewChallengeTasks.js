@@ -43,7 +43,11 @@ export class ViewChallengeTasks extends Component {
             <h3><FormattedMessage {...messages.tasksBuilding} /></h3>
 
             <div className="since-when">
-              <FormattedMessage {...messages.asOf} /> <FormattedRelative value={new Date(this.props.challenge._meta.fetchedAt)} />
+              <FormattedMessage {...messages.tasksCreatedCount}
+                                values={{count: _get(this.props.challenge,
+                                  'actions.total', 0)}}
+              /> <FormattedMessage {...messages.asOf}
+              /> <FormattedRelative value={new Date(this.props.challenge._meta.fetchedAt)} />
             </div>
 
             <button className={classNames("button is-primary is-outlined has-svg-icon refresh-control",
