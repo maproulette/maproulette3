@@ -54,6 +54,11 @@ export default defineMessages({
     defaultMessage: "No Task GeoJSON",
   },
 
+  tasksCreatedCount: {
+    id: "Admin.Challenge.tasksCreatedCount",
+    defaultMessage: "{count, number} tasks created",
+  },
+
   refreshStatusLabel: {
     id: "Admin.Challenge.controls.refreshStatus.label",
     defaultMessage: "Refresh Status",
