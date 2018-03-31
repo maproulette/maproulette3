@@ -6641,6 +6641,10 @@ react-copy-to-clipboard@^5.0.1:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
+react-csv@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-1.0.14.tgz#7c9e444fc4c3ca1e1cf73a81129b1ec032838a71"
+
 react-delayed@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/react-delayed/-/react-delayed-0.2.0.tgz#687951e07f41a6fe7a2544d14e7be98547ef0bc7"

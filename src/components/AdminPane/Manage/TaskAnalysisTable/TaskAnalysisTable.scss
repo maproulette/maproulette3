@@ -21,6 +21,16 @@
         .rt-th {
           border: none;
         }
+
+        .table-status-bar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .button.csv-export {
+            @include invert-on-hover($white, $primary)
+          }
+        }
       }
 
       .rt-thead.-header {
