@@ -38,5 +38,7 @@ export const statusLayerLabels = intl => _fromPairs(
  * and presentable to users, false if not.
  */
 export const isUsableChallengeStatus = function(status) {
-  return status === CHALLENGE_STATUS_READY || status === CHALLENGE_STATUS_NONE
+  return status === CHALLENGE_STATUS_READY ||
+         status === CHALLENGE_STATUS_PARTIALLY_LOADED ||
+         status === CHALLENGE_STATUS_NONE
 }
