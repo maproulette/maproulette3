@@ -53,4 +53,9 @@ export default defineMessages({
     id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
+
+  exportCSVLabel: {
+    id: "Admin.TaskAnalysisTable.controls.exportCSV.label",
+    defaultMessage: "Export CSV",
+  }
 })

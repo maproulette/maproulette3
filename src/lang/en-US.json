@@ -139,6 +139,7 @@
   "Admin.TaskAnalysisTable.controls.reviewTask.label": "Review",
   "Admin.TaskAnalysisTable.controls.editTask.label": "Edit",
   "Admin.TaskAnalysisTable.controls.startTask.label": "Start",
+  "Admin.TaskAnalysisTable.controls.exportCSV.label": "Export CSV",
   "Admin.Challenge.tabs.overview.label": "Overview",
   "Admin.Challenge.tabs.comments.label": "Comments",
   "Admin.Challenge.tabs.metrics.label": "Metrics",

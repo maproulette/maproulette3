@@ -5,6 +5,9 @@ import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _isFunction from 'lodash/isFunction'
+import _filter from 'lodash/filter'
 import { messagesByStatus,
          keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -13,11 +16,13 @@ import { messagesByPriority }
 import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import AsyncCSVExport from './AsyncCSVExport'
 import messages from './Messages'
 import './TaskAnalysisTable.css'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
+
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -31,6 +36,23 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class TaskAnalysisTable extends Component {
+  toCSV = (data, columns) => {
+    return new Promise(resolve => {
+      const exportableColumns =
+        _filter(columns, column => _isFunction(column.exportable))
+
+      const csvRows = []
+      csvRows.push(_map(exportableColumns, 'Header'))
+
+      for (let i = 0; i < data.length; i++) {
+        csvRows.push(_map(exportableColumns,
+                          column => column.exportable(data[i])))
+      }
+
+      resolve(csvRows)
+    })
+  }
+
   render() {
     const taskBaseRoute = 
       `/admin/project/${this.props.challenge.parent.id}` +
@@ -42,15 +64,18 @@ export class TaskAnalysisTable extends Component {
       id: 'id',
       Header: this.props.intl.formatMessage(messages.idLabel),
       accessor: 'id',
+      exportable: t => t.id,
       maxWidth: 95,
     }, {
       id: 'name',
       Header: this.props.intl.formatMessage(messages.nameLabel),
       accessor: t => t.name || t.title,
+      exportable: t => t.name || t.title,
     }, {
       id: 'status',
       Header: this.props.intl.formatMessage(messages.statusLabel),
       accessor: 'status',
+      exportable: t => this.props.intl.formatMessage(messagesByStatus[t.status]),
       Cell: ({value}) => (
         <div>
           <SvgSymbol sym='circle-icon'
@@ -64,6 +89,7 @@ export class TaskAnalysisTable extends Component {
       id: 'priority',
       Header: this.props.intl.formatMessage(messages.priorityLabel),
       accessor: 'priority',
+      exportable: t => this.props.intl.formatMessage(messagesByPriority[t.priority]),
       maxWidth: 90,
       Cell: ({value}) => (
         <div>
@@ -90,7 +116,7 @@ export class TaskAnalysisTable extends Component {
     }]
 
     // Setup wrapper that displays total tasks available, percentage
-    // currrently included in the table, etc.
+    // currently included in the table, CSV export option, etc.
     const taskCountWrapper = [{
       id: 'taskCount',
       Header: () => {
@@ -104,12 +130,17 @@ export class TaskAnalysisTable extends Component {
         const percentShown =
           Math.round(data.length / this.props.totalTaskCount * 100.0)
 
-        return <FormattedMessage {...messages.taskPercentShownStatus}
-                                 values={{
-                                   percentShown,
-                                   countShown,
-                                   countTotal: this.props.totalTaskCount,
-                                 }} />
+        return (
+          <div className="table-status-bar">
+            <FormattedMessage {...messages.taskPercentShownStatus}
+                                  values={{
+                                    percentShown,
+                                    countShown,
+                                    countTotal: this.props.totalTaskCount,
+                                  }} />
+            <AsyncCSVExport loadAsyncData={() => this.toCSV(data, columns)} />
+          </div>
+        )
       },
       columns: columns,
     }]
