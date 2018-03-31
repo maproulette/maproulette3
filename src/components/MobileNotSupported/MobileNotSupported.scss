@@ -1,0 +1,44 @@
+@import 'variables.scss';
+
+.mobile-not-supported {
+  padding: 30px 10px;
+  max-width: 90%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    margin: 30px;
+
+    svg {
+      width: 80px;
+      height: 80px;
+      fill: $grey-dark;
+      margin-right: 20px;
+    }
+
+    h1.title {
+      margin-bottom: 5px;
+    }
+  }
+
+  @media(max-width: 700px) {
+    .mobile-not-supported__header {
+      margin: 0;
+      padding: 5px;
+
+      svg {
+        width: auto;
+        height: 60px;
+      }
+
+      h1.title {
+        font-size: $size-6;
+        font-weight: $weight-semibold;
+      }
+
+      .mobile-not-supported__message {
+        font-size: $size-8;
+      }
+    }
+  }
+}
