@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
+import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _toPairs from 'lodash/toPairs'
 import _groupBy from 'lodash/groupBy'
@@ -28,7 +29,8 @@ import './ChallengeMetrics.css'
  */
 export class ChallengeMetrics extends Component {
   render() {
-    if (_isEmpty(this.props.taskMetrics) || _isEmpty(this.props.challenges)) {
+    if (_isEmpty(this.props.taskMetrics) || _isEmpty(this.props.challenges) ||
+        _get(this.props.taskMetrics, 'total', 0) === 0) {
       return null
     }
 

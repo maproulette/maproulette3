@@ -51,7 +51,7 @@ export default defineMessages({
 
   tasksNone: {
     id: "Admin.Challenge.tasksNone",
-    defaultMessage: "No Task GeoJSON",
+    defaultMessage: "No Tasks",
   },
 
   tasksCreatedCount: {

@@ -149,7 +149,7 @@
   "Admin.Challenge.controls.clone.label": "Clone",
   "Admin.Challenge.tasksBuilding": "Tasks Building...",
   "Admin.Challenge.tasksFailed": "Tasks Failed to Build",
-  "Admin.Challenge.tasksNone": "No Task GeoJSON",
+  "Admin.Challenge.tasksNone": "No Tasks",
   "Admin.Challenge.tasksCreatedCount": "{count, number} tasks created",
   "Admin.Challenge.controls.refreshStatus.label": "Refresh Status",
   "Admin.ManageTasks.header": "Tasks",

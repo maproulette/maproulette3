@@ -12,9 +12,15 @@ const _LoadRandomChallengeTask = class extends Component {
 
     if (_isFinite(challengeId)) {
       this.props.loadRandomTaskFromChallenge(challengeId)
-        .then(task => this.props.history.replace(
-                `/challenge/${challengeId}/task/${task.id}`)
-        )
+        .then(task => {
+          if (_isFinite(_get(task, 'id'))) {
+            this.props.history.replace(
+                  `/challenge/${challengeId}/task/${task.id}`)
+          }
+          else {
+            this.props.history.push('/')
+          }
+        })
     }
   }
 
