@@ -15,10 +15,10 @@ form.rjsf {
 
     legend, legend:not(:last-child) {
       @extend .title;
-      font-size: $size-4;
+      font-size: $size-5;
       margin-left: 30px;
-      padding: 0 5px;
-      margin-bottom: 40px;
+      padding: 0 10px;
+      margin-bottom: 10px;
       font-weight: $weight-medium;
     }
 
@@ -42,7 +42,7 @@ form.rjsf {
   #root__description {
     // Negative top margin to reduce the top fieldset padding, which we want in
     // the event there isn't a root description.
-    margin: 0px 0 45px 36px; // left-align with fieldset legend
+    margin: 40px 0 45px 36px; // left-align with fieldset legend
     color: $grey;
     background-color: $grey-lightest-more;
     padding: 15px;
@@ -127,7 +127,8 @@ form.rjsf {
       }
 
       .markdown-preview {
-        border: 1px solid $grey-lightest-more;
+        border: 2px solid $grey-lightest-more;
+        border-radius: $radius-medium;
         padding: 10px;
         min-width: 350px;
         width: 350px;
@@ -152,16 +153,40 @@ form.rjsf {
     margin-left: 0.25em;
   }
 
+  .field-label label {
+    color: $green;
+    font-size: $size-5;
+    font-weight: $weight-semibold;
+  }
+
+  .field.is-horizontal {
+    margin: 40px 0px;
+
+    .field.is-horizontal {
+      margin: 0;
+    }
+  }
+
   input.form-control {
     @extend .input;
+    @include basic-form-element-styling();
   }
 
   select.form-control {
     @extend .select;
+    @include basic-form-element-styling();
+  }
+
+  .select:not(.is-multiple)::after {
+    border-color: $grey-light-less;
+    width: 0.7em;
+    height: 0.7em;
+    top: 45%;
   }
 
   textarea.form-control {
     @extend .textarea;
+    @include basic-form-element-styling();
   }
 
   .control .checkbox {
@@ -222,6 +247,7 @@ form.rjsf {
 
   .react-tagsinput {
     @extend .input;
+    @include basic-form-element-styling();
 
     .react-tagsinput-tag {
       font-family: inherit;
@@ -251,6 +277,7 @@ form.rjsf {
 
   .help {
     font-size: $size-8;
+    margin-top: 20px;
   }
 
   .errors {
