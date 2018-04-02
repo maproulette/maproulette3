@@ -26,6 +26,7 @@ export class ChallengeOverview extends Component {
   render() {
     const status = _get(this.props,
                         'challenge.status', ChallengeStatus.none)
+    const hasTasks = _get(this.props, 'challenge.actions.total', 0) > 0
 
     return (
       <div className="challenge-overview">
@@ -65,9 +66,11 @@ export class ChallengeOverview extends Component {
             </div>
           </div>
 
-          <ChallengeProgress challenge={this.props.challenge} />
+          {hasTasks &&
+           <ChallengeProgress challenge={this.props.challenge} />
+          }
 
-          {isUsableChallengeStatus(status) &&
+          {hasTasks && isUsableChallengeStatus(status) &&
            <div className="view-challenge">
              <Link to={`/challenge/${this.props.challenge.id}`}
                    className="button is-outlined is-primary start-challenge-control">

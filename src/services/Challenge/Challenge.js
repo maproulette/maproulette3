@@ -10,7 +10,7 @@ import _clone from 'lodash/clone'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isEmpty from 'lodash/isEmpty'
 import _isString from 'lodash/isString'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import { defaultRoutes as api } from '../Server/Server'
@@ -25,6 +25,7 @@ import { addError, addServerError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
+import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
 import { parseQueryString } from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
 
@@ -58,7 +59,7 @@ export const challengeResultEntity = function(normalizedChallengeResults) {
                       normalizedChallengeResults.result[0] :
                       normalizedChallengeResults.result
 
-  return _isNumber(challengeId) ?
+  return _isFinite(challengeId) ?
          normalizedChallengeResults.entities.challenges[challengeId] :
          null
 }
@@ -217,11 +218,26 @@ export const fetchChallengesWithinBoundingBox = function(bounds, limit=50) {
 export const fetchChallengeActions = function(challengeId = null) {
   return function(dispatch) {
     const challengeActionsEndpoint = new Endpoint(
-      _isNumber(challengeId) ? api.challenge.actions : api.challenges.actions,
+      _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
       {schema: [ challengeSchema() ], variables: {id: challengeId}}
     )
 
     return challengeActionsEndpoint.execute().then(normalizedResults => {
+      // If we requested actions on a specific challenge and got nothing back,
+      // replace the results with a zeroed-out actions object so our app can
+      // know the challenge has no actions.
+      if (_isFinite(challengeId) && _isEmpty(normalizedResults.result)) {
+        normalizedResults.result = [challengeId]
+        normalizedResults.entities = {
+          challenges: {
+            [challengeId]: {
+              id: challengeId,
+              actions: zeroTaskActions(),
+            }
+          }
+        }
+      }
+
       dispatch(receiveChallenges(normalizedResults.entities))
     }).catch((error) => {
       if (error.response && error.response.status === 401) {
@@ -439,7 +455,7 @@ export const saveChallenge = function(originalChallengeData) {
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
       const saveEndpoint = new Endpoint(
-        _isNumber(challengeData.id) ? api.challenge.edit : api.challenge.create,
+        _isFinite(challengeData.id) ? api.challenge.edit : api.challenge.create,
         {
           schema: challengeSchema(),
           variables: {id: challengeData.id},

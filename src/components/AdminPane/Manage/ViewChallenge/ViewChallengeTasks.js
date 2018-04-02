@@ -76,7 +76,7 @@ export class ViewChallengeTasks extends Component {
     }
 
     if (_isUndefined(this.props.challenge.status) ||
-        this.props.challenge.status === ChallengeStatus.none) {
+        _get(this.props, 'challenge.actions.total', 0) === 0) {
       return (
         <div className="challenge-tasks-status title has-centered-children">
           <h3>
