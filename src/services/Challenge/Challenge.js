@@ -27,6 +27,7 @@ import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
 import { parseQueryString } from '../Search/Search'
+import { ChallengeStatus } from './ChallengeStatus/ChallengeStatus'
 import startOfDay from 'date-fns/start_of_day'
 
 // normalizr schema
@@ -588,6 +589,11 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
     if (entity.deleted) {
       delete mergedState[entity.id]
       return
+    }
+
+    // Treat missing status as NONE
+    if (_isEmpty(entity.status)) {
+      mergedState[entity.id].status = ChallengeStatus.none
     }
 
     if (_isArray(entity.tags)) {

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isFunction from 'lodash/isFunction'
+import _isObject from 'lodash/isObject'
 import _filter from 'lodash/filter'
 import { messagesByStatus,
          keysByStatus }
@@ -54,6 +55,11 @@ export class TaskAnalysisTable extends Component {
   }
 
   render() {
+    if (!_isObject(this.props.challenge) ||
+        !_isObject(this.props.challenge.parent)) {
+      return null
+    }
+
     const taskBaseRoute = 
       `/admin/project/${this.props.challenge.parent.id}` +
       `/challenge/${this.props.challenge.id}/task`
