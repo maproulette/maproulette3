@@ -2,12 +2,14 @@ import React from 'react'
 import { UserProfile } from './UserProfile'
 
 let basicProps = null
+let createdDate = Date.UTC(2017, 1, 23)
 
 beforeEach(() => {
   basicProps = {
     user: {
       id: 357,
       isLoggedIn: true,
+      created: createdDate,
       osmProfile: {
         avatarURL: "some/url"
       }

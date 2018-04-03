@@ -27,19 +27,17 @@ export default class SavedTasks extends Component {
 
         return (
           <li key={task.id} className="columns saved-tasks__task">
-            <div className="column is-four-fifths">
-              <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>
-                {task.name} &mdash; {task.parent.name}
-              </Link>
-            </div>
+            <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>
+              <span className="saved-tasks__task__name">{task.name}</span> &mdash; {task.parent.name}
+            </Link>
 
-            <div className="column">
-              <a className='button is-clear'
-                onClick={() => this.props.unsaveTask(this.props.user.id, task.id)}
-                title={this.props.intl.formatMessage(messages.unsave)}>
-                <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
-              </a>
-            </div>
+            <span className="connector" />
+
+            <a className='button is-clear'
+              onClick={() => this.props.unsaveTask(this.props.user.id, task.id)}
+              title={this.props.intl.formatMessage(messages.unsave)}>
+              <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
+            </a>
           </li>
         )
       }

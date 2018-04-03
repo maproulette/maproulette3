@@ -226,89 +226,74 @@ ShallowWrapper {
           <li
                     className="columns saved-challenges__challenge"
           >
-                    <div
-                              className="column is-four-fifths"
+                    <Link
+                              replace={false}
+                              to="/browse/challenges/321"
                     >
-                              <Link
-                                        replace={false}
-                                        to="/browse/challenges/321"
-                              >
-                                        First Challenge
-                              </Link>
-                    </div>
-                    <div
-                              className="column"
+                              First Challenge
+                    </Link>
+                    <span
+                              className="connector"
+                    />
+                    <a
+                              className="button is-clear"
+                              onClick={[Function]}
+                              title={undefined}
                     >
-                              <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                              >
-                                        <SvgSymbol
-                                                  className="icon"
-                                                  sym="trash-icon"
-                                                  viewBox="0 0 20 20"
-                                        />
-                              </a>
-                    </div>
+                              <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    </a>
           </li>
           <li
                     className="columns saved-challenges__challenge"
           >
-                    <div
-                              className="column is-four-fifths"
+                    <Link
+                              replace={false}
+                              to="/browse/challenges/654"
                     >
-                              <Link
-                                        replace={false}
-                                        to="/browse/challenges/654"
-                              >
-                                        Second Challenge
-                              </Link>
-                    </div>
-                    <div
-                              className="column"
+                              Second Challenge
+                    </Link>
+                    <span
+                              className="connector"
+                    />
+                    <a
+                              className="button is-clear"
+                              onClick={[Function]}
+                              title={undefined}
                     >
-                              <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                              >
-                                        <SvgSymbol
-                                                  className="icon"
-                                                  sym="trash-icon"
-                                                  viewBox="0 0 20 20"
-                                        />
-                              </a>
-                    </div>
+                              <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    </a>
           </li>
           <li
                     className="columns saved-challenges__challenge"
           >
-                    <div
-                              className="column is-four-fifths"
+                    <Link
+                              replace={false}
+                              to="/browse/challenges/987"
                     >
-                              <Link
-                                        replace={false}
-                                        to="/browse/challenges/987"
-                              >
-                                        Third Challenge
-                              </Link>
-                    </div>
-                    <div
-                              className="column"
+                              Third Challenge
+                    </Link>
+                    <span
+                              className="connector"
+                    />
+                    <a
+                              className="button is-clear"
+                              onClick={[Function]}
+                              title={undefined}
                     >
-                              <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                              >
-                                        <SvgSymbol
-                                                  className="icon"
-                                                  sym="trash-icon"
-                                                  viewBox="0 0 20 20"
-                                        />
-                              </a>
-                    </div>
+                              <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    </a>
           </li>
 </ul>,
       ],
@@ -353,89 +338,74 @@ ShallowWrapper {
             <li
               className="columns saved-challenges__challenge"
 >
-              <div
-                            className="column is-four-fifths"
+              <Link
+                            replace={false}
+                            to="/browse/challenges/321"
               >
-                            <Link
-                                          replace={false}
-                                          to="/browse/challenges/321"
-                            >
-                                          First Challenge
-                            </Link>
-              </div>
-              <div
-                            className="column"
+                            First Challenge
+              </Link>
+              <span
+                            className="connector"
+              />
+              <a
+                            className="button is-clear"
+                            onClick={[Function]}
+                            title={undefined}
               >
-                            <a
-                                          className="button is-clear"
-                                          onClick={[Function]}
-                                          title={undefined}
-                            >
-                                          <SvgSymbol
-                                                        className="icon"
-                                                        sym="trash-icon"
-                                                        viewBox="0 0 20 20"
-                                          />
-                            </a>
-              </div>
+                            <SvgSymbol
+                                          className="icon"
+                                          sym="trash-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              </a>
 </li>,
             <li
               className="columns saved-challenges__challenge"
 >
-              <div
-                            className="column is-four-fifths"
+              <Link
+                            replace={false}
+                            to="/browse/challenges/654"
               >
-                            <Link
-                                          replace={false}
-                                          to="/browse/challenges/654"
-                            >
-                                          Second Challenge
-                            </Link>
-              </div>
-              <div
-                            className="column"
+                            Second Challenge
+              </Link>
+              <span
+                            className="connector"
+              />
+              <a
+                            className="button is-clear"
+                            onClick={[Function]}
+                            title={undefined}
               >
-                            <a
-                                          className="button is-clear"
-                                          onClick={[Function]}
-                                          title={undefined}
-                            >
-                                          <SvgSymbol
-                                                        className="icon"
-                                                        sym="trash-icon"
-                                                        viewBox="0 0 20 20"
-                                          />
-                            </a>
-              </div>
+                            <SvgSymbol
+                                          className="icon"
+                                          sym="trash-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              </a>
 </li>,
             <li
               className="columns saved-challenges__challenge"
 >
-              <div
-                            className="column is-four-fifths"
+              <Link
+                            replace={false}
+                            to="/browse/challenges/987"
               >
-                            <Link
-                                          replace={false}
-                                          to="/browse/challenges/987"
-                            >
-                                          Third Challenge
-                            </Link>
-              </div>
-              <div
-                            className="column"
+                            Third Challenge
+              </Link>
+              <span
+                            className="connector"
+              />
+              <a
+                            className="button is-clear"
+                            onClick={[Function]}
+                            title={undefined}
               >
-                            <a
-                                          className="button is-clear"
-                                          onClick={[Function]}
-                                          title={undefined}
-                            >
-                                          <SvgSymbol
-                                                        className="icon"
-                                                        sym="trash-icon"
-                                                        viewBox="0 0 20 20"
-                                          />
-                            </a>
-              </div>
+                            <SvgSymbol
+                                          className="icon"
+                                          sym="trash-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              </a>
 </li>,
           ],
         },
@@ -447,31 +417,26 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <div
-                  className="column is-four-fifths"
+                <Link
+                  replace={false}
+                  to="/browse/challenges/321"
 >
-                  <Link
-                                    replace={false}
-                                    to="/browse/challenges/321"
-                  >
-                                    First Challenge
-                  </Link>
-</div>,
-                <div
-                  className="column"
+                  First Challenge
+</Link>,
+                <span
+                  className="connector"
+/>,
+                <a
+                  className="button is-clear"
+                  onClick={[Function]}
+                  title={undefined}
 >
-                  <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                  >
-                                    <SvgSymbol
-                                                      className="icon"
-                                                      sym="trash-icon"
-                                                      viewBox="0 0 20 20"
-                                    />
-                  </a>
-</div>,
+                  <SvgSymbol
+                                    className="icon"
+                                    sym="trash-icon"
+                                    viewBox="0 0 20 20"
+                  />
+</a>,
               ],
               "className": "columns saved-challenges__challenge",
             },
@@ -480,15 +445,40 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": "First Challenge",
+                  "replace": false,
+                  "to": "/browse/challenges/321",
+                },
+                "ref": null,
+                "rendered": "First Challenge",
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <Link
-                    replace={false}
-                    to="/browse/challenges/321"
->
-                    First Challenge
-</Link>,
-                  "className": "column is-four-fifths",
+                  "className": "connector",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  "className": "button is-clear",
+                  "onClick": [Function],
+                  "title": undefined,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -496,66 +486,15 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "children": "First Challenge",
-                    "replace": false,
-                    "to": "/browse/challenges/321",
+                    "className": "icon",
+                    "sym": "trash-icon",
+                    "viewBox": "0 0 20 20",
                   },
                   "ref": null,
-                  "rendered": "First Challenge",
+                  "rendered": null,
                   "type": [Function],
                 },
-                "type": "div",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <a
-                    className="button is-clear"
-                    onClick={[Function]}
-                    title={undefined}
->
-                    <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                    />
-</a>,
-                  "className": "column",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <SvgSymbol
-                      className="icon"
-                      sym="trash-icon"
-                      viewBox="0 0 20 20"
-/>,
-                    "className": "button is-clear",
-                    "onClick": [Function],
-                    "title": undefined,
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "className": "icon",
-                      "sym": "trash-icon",
-                      "viewBox": "0 0 20 20",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "a",
-                },
-                "type": "div",
+                "type": "a",
               },
             ],
             "type": "li",
@@ -566,31 +505,26 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <div
-                  className="column is-four-fifths"
+                <Link
+                  replace={false}
+                  to="/browse/challenges/654"
 >
-                  <Link
-                                    replace={false}
-                                    to="/browse/challenges/654"
-                  >
-                                    Second Challenge
-                  </Link>
-</div>,
-                <div
-                  className="column"
+                  Second Challenge
+</Link>,
+                <span
+                  className="connector"
+/>,
+                <a
+                  className="button is-clear"
+                  onClick={[Function]}
+                  title={undefined}
 >
-                  <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                  >
-                                    <SvgSymbol
-                                                      className="icon"
-                                                      sym="trash-icon"
-                                                      viewBox="0 0 20 20"
-                                    />
-                  </a>
-</div>,
+                  <SvgSymbol
+                                    className="icon"
+                                    sym="trash-icon"
+                                    viewBox="0 0 20 20"
+                  />
+</a>,
               ],
               "className": "columns saved-challenges__challenge",
             },
@@ -599,15 +533,40 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": "Second Challenge",
+                  "replace": false,
+                  "to": "/browse/challenges/654",
+                },
+                "ref": null,
+                "rendered": "Second Challenge",
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <Link
-                    replace={false}
-                    to="/browse/challenges/654"
->
-                    Second Challenge
-</Link>,
-                  "className": "column is-four-fifths",
+                  "className": "connector",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  "className": "button is-clear",
+                  "onClick": [Function],
+                  "title": undefined,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -615,66 +574,15 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "children": "Second Challenge",
-                    "replace": false,
-                    "to": "/browse/challenges/654",
+                    "className": "icon",
+                    "sym": "trash-icon",
+                    "viewBox": "0 0 20 20",
                   },
                   "ref": null,
-                  "rendered": "Second Challenge",
+                  "rendered": null,
                   "type": [Function],
                 },
-                "type": "div",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <a
-                    className="button is-clear"
-                    onClick={[Function]}
-                    title={undefined}
->
-                    <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                    />
-</a>,
-                  "className": "column",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <SvgSymbol
-                      className="icon"
-                      sym="trash-icon"
-                      viewBox="0 0 20 20"
-/>,
-                    "className": "button is-clear",
-                    "onClick": [Function],
-                    "title": undefined,
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "className": "icon",
-                      "sym": "trash-icon",
-                      "viewBox": "0 0 20 20",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "a",
-                },
-                "type": "div",
+                "type": "a",
               },
             ],
             "type": "li",
@@ -685,31 +593,26 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <div
-                  className="column is-four-fifths"
+                <Link
+                  replace={false}
+                  to="/browse/challenges/987"
 >
-                  <Link
-                                    replace={false}
-                                    to="/browse/challenges/987"
-                  >
-                                    Third Challenge
-                  </Link>
-</div>,
-                <div
-                  className="column"
+                  Third Challenge
+</Link>,
+                <span
+                  className="connector"
+/>,
+                <a
+                  className="button is-clear"
+                  onClick={[Function]}
+                  title={undefined}
 >
-                  <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                  >
-                                    <SvgSymbol
-                                                      className="icon"
-                                                      sym="trash-icon"
-                                                      viewBox="0 0 20 20"
-                                    />
-                  </a>
-</div>,
+                  <SvgSymbol
+                                    className="icon"
+                                    sym="trash-icon"
+                                    viewBox="0 0 20 20"
+                  />
+</a>,
               ],
               "className": "columns saved-challenges__challenge",
             },
@@ -718,15 +621,40 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": "Third Challenge",
+                  "replace": false,
+                  "to": "/browse/challenges/987",
+                },
+                "ref": null,
+                "rendered": "Third Challenge",
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <Link
-                    replace={false}
-                    to="/browse/challenges/987"
->
-                    Third Challenge
-</Link>,
-                  "className": "column is-four-fifths",
+                  "className": "connector",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  "className": "button is-clear",
+                  "onClick": [Function],
+                  "title": undefined,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -734,66 +662,15 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "children": "Third Challenge",
-                    "replace": false,
-                    "to": "/browse/challenges/987",
+                    "className": "icon",
+                    "sym": "trash-icon",
+                    "viewBox": "0 0 20 20",
                   },
                   "ref": null,
-                  "rendered": "Third Challenge",
+                  "rendered": null,
                   "type": [Function],
                 },
-                "type": "div",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <a
-                    className="button is-clear"
-                    onClick={[Function]}
-                    title={undefined}
->
-                    <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                    />
-</a>,
-                  "className": "column",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <SvgSymbol
-                      className="icon"
-                      sym="trash-icon"
-                      viewBox="0 0 20 20"
-/>,
-                    "className": "button is-clear",
-                    "onClick": [Function],
-                    "title": undefined,
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "className": "icon",
-                      "sym": "trash-icon",
-                      "viewBox": "0 0 20 20",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "a",
-                },
-                "type": "div",
+                "type": "a",
               },
             ],
             "type": "li",
@@ -824,89 +701,74 @@ ShallowWrapper {
             <li
                         className="columns saved-challenges__challenge"
             >
-                        <div
-                                    className="column is-four-fifths"
+                        <Link
+                                    replace={false}
+                                    to="/browse/challenges/321"
                         >
-                                    <Link
-                                                replace={false}
-                                                to="/browse/challenges/321"
-                                    >
-                                                First Challenge
-                                    </Link>
-                        </div>
-                        <div
-                                    className="column"
+                                    First Challenge
+                        </Link>
+                        <span
+                                    className="connector"
+                        />
+                        <a
+                                    className="button is-clear"
+                                    onClick={[Function]}
+                                    title={undefined}
                         >
-                                    <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                    >
-                                                <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                                />
-                                    </a>
-                        </div>
+                                    <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        </a>
             </li>
             <li
                         className="columns saved-challenges__challenge"
             >
-                        <div
-                                    className="column is-four-fifths"
+                        <Link
+                                    replace={false}
+                                    to="/browse/challenges/654"
                         >
-                                    <Link
-                                                replace={false}
-                                                to="/browse/challenges/654"
-                                    >
-                                                Second Challenge
-                                    </Link>
-                        </div>
-                        <div
-                                    className="column"
+                                    Second Challenge
+                        </Link>
+                        <span
+                                    className="connector"
+                        />
+                        <a
+                                    className="button is-clear"
+                                    onClick={[Function]}
+                                    title={undefined}
                         >
-                                    <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                    >
-                                                <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                                />
-                                    </a>
-                        </div>
+                                    <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        </a>
             </li>
             <li
                         className="columns saved-challenges__challenge"
             >
-                        <div
-                                    className="column is-four-fifths"
+                        <Link
+                                    replace={false}
+                                    to="/browse/challenges/987"
                         >
-                                    <Link
-                                                replace={false}
-                                                to="/browse/challenges/987"
-                                    >
-                                                Third Challenge
-                                    </Link>
-                        </div>
-                        <div
-                                    className="column"
+                                    Third Challenge
+                        </Link>
+                        <span
+                                    className="connector"
+                        />
+                        <a
+                                    className="button is-clear"
+                                    onClick={[Function]}
+                                    title={undefined}
                         >
-                                    <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                    >
-                                                <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                                />
-                                    </a>
-                        </div>
+                                    <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        </a>
             </li>
 </ul>,
         ],
@@ -951,89 +813,74 @@ ShallowWrapper {
               <li
                 className="columns saved-challenges__challenge"
 >
-                <div
-                                className="column is-four-fifths"
+                <Link
+                                replace={false}
+                                to="/browse/challenges/321"
                 >
-                                <Link
-                                                replace={false}
-                                                to="/browse/challenges/321"
-                                >
-                                                First Challenge
-                                </Link>
-                </div>
-                <div
-                                className="column"
+                                First Challenge
+                </Link>
+                <span
+                                className="connector"
+                />
+                <a
+                                className="button is-clear"
+                                onClick={[Function]}
+                                title={undefined}
                 >
-                                <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                >
-                                                <SvgSymbol
-                                                                className="icon"
-                                                                sym="trash-icon"
-                                                                viewBox="0 0 20 20"
-                                                />
-                                </a>
-                </div>
+                                <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                />
+                </a>
 </li>,
               <li
                 className="columns saved-challenges__challenge"
 >
-                <div
-                                className="column is-four-fifths"
+                <Link
+                                replace={false}
+                                to="/browse/challenges/654"
                 >
-                                <Link
-                                                replace={false}
-                                                to="/browse/challenges/654"
-                                >
-                                                Second Challenge
-                                </Link>
-                </div>
-                <div
-                                className="column"
+                                Second Challenge
+                </Link>
+                <span
+                                className="connector"
+                />
+                <a
+                                className="button is-clear"
+                                onClick={[Function]}
+                                title={undefined}
                 >
-                                <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                >
-                                                <SvgSymbol
-                                                                className="icon"
-                                                                sym="trash-icon"
-                                                                viewBox="0 0 20 20"
-                                                />
-                                </a>
-                </div>
+                                <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                />
+                </a>
 </li>,
               <li
                 className="columns saved-challenges__challenge"
 >
-                <div
-                                className="column is-four-fifths"
+                <Link
+                                replace={false}
+                                to="/browse/challenges/987"
                 >
-                                <Link
-                                                replace={false}
-                                                to="/browse/challenges/987"
-                                >
-                                                Third Challenge
-                                </Link>
-                </div>
-                <div
-                                className="column"
+                                Third Challenge
+                </Link>
+                <span
+                                className="connector"
+                />
+                <a
+                                className="button is-clear"
+                                onClick={[Function]}
+                                title={undefined}
                 >
-                                <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                >
-                                                <SvgSymbol
-                                                                className="icon"
-                                                                sym="trash-icon"
-                                                                viewBox="0 0 20 20"
-                                                />
-                                </a>
-                </div>
+                                <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                />
+                </a>
 </li>,
             ],
           },
@@ -1045,31 +892,26 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <div
-                    className="column is-four-fifths"
+                  <Link
+                    replace={false}
+                    to="/browse/challenges/321"
 >
-                    <Link
-                                        replace={false}
-                                        to="/browse/challenges/321"
-                    >
-                                        First Challenge
-                    </Link>
-</div>,
-                  <div
-                    className="column"
+                    First Challenge
+</Link>,
+                  <span
+                    className="connector"
+/>,
+                  <a
+                    className="button is-clear"
+                    onClick={[Function]}
+                    title={undefined}
 >
-                    <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                    >
-                                        <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                        />
-                    </a>
-</div>,
+                    <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                    />
+</a>,
                 ],
                 "className": "columns saved-challenges__challenge",
               },
@@ -1078,15 +920,40 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": "First Challenge",
+                    "replace": false,
+                    "to": "/browse/challenges/321",
+                  },
+                  "ref": null,
+                  "rendered": "First Challenge",
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <Link
-                      replace={false}
-                      to="/browse/challenges/321"
->
-                      First Challenge
-</Link>,
-                    "className": "column is-four-fifths",
+                    "className": "connector",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <SvgSymbol
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
+/>,
+                    "className": "button is-clear",
+                    "onClick": [Function],
+                    "title": undefined,
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1094,66 +961,15 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "class",
                     "props": Object {
-                      "children": "First Challenge",
-                      "replace": false,
-                      "to": "/browse/challenges/321",
+                      "className": "icon",
+                      "sym": "trash-icon",
+                      "viewBox": "0 0 20 20",
                     },
                     "ref": null,
-                    "rendered": "First Challenge",
+                    "rendered": null,
                     "type": [Function],
                   },
-                  "type": "div",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <a
-                      className="button is-clear"
-                      onClick={[Function]}
-                      title={undefined}
->
-                      <SvgSymbol
-                                            className="icon"
-                                            sym="trash-icon"
-                                            viewBox="0 0 20 20"
-                      />
-</a>,
-                    "className": "column",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <SvgSymbol
-                        className="icon"
-                        sym="trash-icon"
-                        viewBox="0 0 20 20"
-/>,
-                      "className": "button is-clear",
-                      "onClick": [Function],
-                      "title": undefined,
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "className": "icon",
-                        "sym": "trash-icon",
-                        "viewBox": "0 0 20 20",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "a",
-                  },
-                  "type": "div",
+                  "type": "a",
                 },
               ],
               "type": "li",
@@ -1164,31 +980,26 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <div
-                    className="column is-four-fifths"
+                  <Link
+                    replace={false}
+                    to="/browse/challenges/654"
 >
-                    <Link
-                                        replace={false}
-                                        to="/browse/challenges/654"
-                    >
-                                        Second Challenge
-                    </Link>
-</div>,
-                  <div
-                    className="column"
+                    Second Challenge
+</Link>,
+                  <span
+                    className="connector"
+/>,
+                  <a
+                    className="button is-clear"
+                    onClick={[Function]}
+                    title={undefined}
 >
-                    <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                    >
-                                        <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                        />
-                    </a>
-</div>,
+                    <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                    />
+</a>,
                 ],
                 "className": "columns saved-challenges__challenge",
               },
@@ -1197,15 +1008,40 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": "Second Challenge",
+                    "replace": false,
+                    "to": "/browse/challenges/654",
+                  },
+                  "ref": null,
+                  "rendered": "Second Challenge",
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <Link
-                      replace={false}
-                      to="/browse/challenges/654"
->
-                      Second Challenge
-</Link>,
-                    "className": "column is-four-fifths",
+                    "className": "connector",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <SvgSymbol
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
+/>,
+                    "className": "button is-clear",
+                    "onClick": [Function],
+                    "title": undefined,
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1213,66 +1049,15 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "class",
                     "props": Object {
-                      "children": "Second Challenge",
-                      "replace": false,
-                      "to": "/browse/challenges/654",
+                      "className": "icon",
+                      "sym": "trash-icon",
+                      "viewBox": "0 0 20 20",
                     },
                     "ref": null,
-                    "rendered": "Second Challenge",
+                    "rendered": null,
                     "type": [Function],
                   },
-                  "type": "div",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <a
-                      className="button is-clear"
-                      onClick={[Function]}
-                      title={undefined}
->
-                      <SvgSymbol
-                                            className="icon"
-                                            sym="trash-icon"
-                                            viewBox="0 0 20 20"
-                      />
-</a>,
-                    "className": "column",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <SvgSymbol
-                        className="icon"
-                        sym="trash-icon"
-                        viewBox="0 0 20 20"
-/>,
-                      "className": "button is-clear",
-                      "onClick": [Function],
-                      "title": undefined,
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "className": "icon",
-                        "sym": "trash-icon",
-                        "viewBox": "0 0 20 20",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "a",
-                  },
-                  "type": "div",
+                  "type": "a",
                 },
               ],
               "type": "li",
@@ -1283,31 +1068,26 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <div
-                    className="column is-four-fifths"
+                  <Link
+                    replace={false}
+                    to="/browse/challenges/987"
 >
-                    <Link
-                                        replace={false}
-                                        to="/browse/challenges/987"
-                    >
-                                        Third Challenge
-                    </Link>
-</div>,
-                  <div
-                    className="column"
+                    Third Challenge
+</Link>,
+                  <span
+                    className="connector"
+/>,
+                  <a
+                    className="button is-clear"
+                    onClick={[Function]}
+                    title={undefined}
 >
-                    <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                    >
-                                        <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                        />
-                    </a>
-</div>,
+                    <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                    />
+</a>,
                 ],
                 "className": "columns saved-challenges__challenge",
               },
@@ -1316,15 +1096,40 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": "Third Challenge",
+                    "replace": false,
+                    "to": "/browse/challenges/987",
+                  },
+                  "ref": null,
+                  "rendered": "Third Challenge",
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <Link
-                      replace={false}
-                      to="/browse/challenges/987"
->
-                      Third Challenge
-</Link>,
-                    "className": "column is-four-fifths",
+                    "className": "connector",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <SvgSymbol
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
+/>,
+                    "className": "button is-clear",
+                    "onClick": [Function],
+                    "title": undefined,
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1332,66 +1137,15 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "class",
                     "props": Object {
-                      "children": "Third Challenge",
-                      "replace": false,
-                      "to": "/browse/challenges/987",
+                      "className": "icon",
+                      "sym": "trash-icon",
+                      "viewBox": "0 0 20 20",
                     },
                     "ref": null,
-                    "rendered": "Third Challenge",
+                    "rendered": null,
                     "type": [Function],
                   },
-                  "type": "div",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <a
-                      className="button is-clear"
-                      onClick={[Function]}
-                      title={undefined}
->
-                      <SvgSymbol
-                                            className="icon"
-                                            sym="trash-icon"
-                                            viewBox="0 0 20 20"
-                      />
-</a>,
-                    "className": "column",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <SvgSymbol
-                        className="icon"
-                        sym="trash-icon"
-                        viewBox="0 0 20 20"
-/>,
-                      "className": "button is-clear",
-                      "onClick": [Function],
-                      "title": undefined,
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "className": "icon",
-                        "sym": "trash-icon",
-                        "viewBox": "0 0 20 20",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "a",
-                  },
-                  "type": "div",
+                  "type": "a",
                 },
               ],
               "type": "li",
