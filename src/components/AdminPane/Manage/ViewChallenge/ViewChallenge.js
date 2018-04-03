@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
+import WithCurrentProject
+       from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithFilteredClusteredTasks
@@ -135,11 +137,13 @@ ViewChallenge.propTypes = {
   deleteChallenge: PropTypes.func.isRequired,
 }
 
-export default WithCurrentChallenge(
-  WithFilteredClusteredTasks(
-    injectIntl(ViewChallenge),
-    'clusteredTasks',
-    'filteredClusteredTasks',
-  ),
-  true
+export default WithCurrentProject(
+  WithCurrentChallenge(
+    WithFilteredClusteredTasks(
+      injectIntl(ViewChallenge),
+      'clusteredTasks',
+      'filteredClusteredTasks',
+    ),
+    true
+  )
 )

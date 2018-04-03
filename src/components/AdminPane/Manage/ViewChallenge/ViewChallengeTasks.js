@@ -6,7 +6,6 @@ import { FormattedMessage,
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
-import _isUndefined from 'lodash/isUndefined'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
@@ -75,8 +74,7 @@ export class ViewChallengeTasks extends Component {
       )
     }
 
-    if (_isUndefined(this.props.challenge.status) ||
-        _get(this.props, 'challenge.actions.total', 0) === 0) {
+    if (_get(this.props, 'challenge.actions.total', 0) === 0) {
       return (
         <div className="challenge-tasks-status title has-centered-children">
           <h3>

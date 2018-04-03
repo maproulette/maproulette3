@@ -1,5 +1,6 @@
 import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
+import _isEmpty from 'lodash/isEmpty'
 import messages from './Messages'
 
 /**
@@ -40,5 +41,6 @@ export const statusLayerLabels = intl => _fromPairs(
 export const isUsableChallengeStatus = function(status) {
   return status === CHALLENGE_STATUS_READY ||
          status === CHALLENGE_STATUS_PARTIALLY_LOADED ||
-         status === CHALLENGE_STATUS_NONE
+         status === CHALLENGE_STATUS_NONE ||
+         _isEmpty(status) // treat empty as NONE
 }
