@@ -7,10 +7,41 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.4] - 2018-04-02
+### Added
+- Reduce duplicate/unnecessary network requests to server.
+- Offer challenge and user custom basemaps on map layer toggle (#218).
+- Link app version number in About modal to release notes (#241).
+- Basic management options for challenge owners when browsing a challenge
+  they manage or working on tasks in challenges they manage (#245)
+- Quick-share control next to challenge name when working on tasks (#231).
+- Show task count to challenge owners as new challenge builds (#235).
+- CSV export of tasks table for challenge owners (#124).
+- Mobile landing page (#263).
+
+### Changed
+- GeoJSON validation failures no longer show line numbers.
+
+### Fixed
+- Safari extremely slow validating uploaded GeoJSON (#222).
+- Tolerate task GeoJSON with missing features.
+- Avoid bouncing between two tasks when skipping (#220).
+- URL used to start a virtual challenge when clicking a task on map (#257).
+- Tooltips in Firefox on minimized sidebar when working on tasks (#255).
+- Show tasks to challenge owner for partially-loaded challenges (#264).
+- Tolerate load of project data when challenge owner viewing challenge.
+- Don't skip rendering of locator map when no clustered tasks.
+- Don't offer Start Challenge control to challenge owners if the challenge
+  has no tasks (#271).
+
+### Removed
+- Next Task option for end users when viewing a task with an existing status if
+  that task can still reasonably be assigned a new status by the user.
+
 ## [v3.00-beta.3.1] - 2018-03-28
 ### Fixed
-- Infinite loop browsing non-existent or disabled challenge (#246)
-- Collapsing of browsed challenge (#247)
+- Infinite loop browsing non-existent or disabled challenge (#246).
+- Collapsing of browsed challenge (#247).
 
 
 ## [v3.00-beta.3] - 2018-03-26
