@@ -1,6 +1,6 @@
 {
   "name": "maproulette3",
-  "version": "3.0.0-beta.4",
+  "version": "3.0.0-beta.4.1",
   "private": true,
   "dependencies": {
     "@mapbox/geojsonhint": "^2.0.1",

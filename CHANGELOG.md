@@ -7,6 +7,11 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.4.1] - 2018-04-03
+### Fixed
+- Treat missing challenge status as N/A (#275)
+
+
 ## [v3.00-beta.4] - 2018-04-02
 ### Added
 - Reduce duplicate/unnecessary network requests to server.
