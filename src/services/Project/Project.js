@@ -102,11 +102,16 @@ export const fetchProject = function(projectId) {
  *
  * @param {string} query - the search string
  */
-export const searchProjects = function(query) {
+export const searchProjects = function(query, onlyEnabled=false, limit=50) {
   return function(dispatch) {
-    return new Endpoint(
-      api.projects.search, {schema: [ projectSchema() ], params: {q: `%${query}%`}}
-    ).execute().then(normalizedResults => {
+    return new Endpoint(api.projects.search, {
+        schema: [ projectSchema() ],
+        params: {
+          q: `%${query}%`,
+          onlyEnabled: onlyEnabled ? 'true' : 'false',
+          limit,
+        }
+    }).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults
     }).catch((error) => {
