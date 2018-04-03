@@ -7,7 +7,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <UserProfile
     user={
         Object {
-            "created": 2017-02-23T08:00:00.000Z,
+            "created": 1487808000000,
             "id": 357,
             "isLoggedIn": false,
             "osmProfile": Object {
@@ -32,7 +32,7 @@ ShallowWrapper {
         className="user-profile--signin"
         user={
                 Object {
-                        "created": 2017-02-23T08:00:00.000Z,
+                        "created": 1487808000000,
                         "id": 357,
                         "isLoggedIn": false,
                         "osmProfile": Object {
@@ -51,7 +51,7 @@ ShallowWrapper {
       "props": Object {
         "className": "user-profile--signin",
         "user": Object {
-          "created": 2017-02-23T08:00:00.000Z,
+          "created": 1487808000000,
           "id": 357,
           "isLoggedIn": false,
           "osmProfile": Object {
@@ -75,7 +75,7 @@ ShallowWrapper {
           className="user-profile--signin"
           user={
                     Object {
-                              "created": 2017-02-23T08:00:00.000Z,
+                              "created": 1487808000000,
                               "id": 357,
                               "isLoggedIn": false,
                               "osmProfile": Object {
@@ -94,7 +94,7 @@ ShallowWrapper {
         "props": Object {
           "className": "user-profile--signin",
           "user": Object {
-            "created": 2017-02-23T08:00:00.000Z,
+            "created": 1487808000000,
             "id": 357,
             "isLoggedIn": false,
             "osmProfile": Object {
@@ -126,7 +126,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <UserProfile
     user={
         Object {
-            "created": 2017-02-23T08:00:00.000Z,
+            "created": 1487808000000,
             "id": 357,
             "isLoggedIn": true,
             "osmProfile": Object {
@@ -179,7 +179,7 @@ ShallowWrapper {
                                         >
                                                 <FormattedDate
                                                         month="long"
-                                                        value={2017-02-23T08:00:00.000Z}
+                                                        value={2017-02-23T00:00:00.000Z}
                                                         year="numeric"
                                                 />
                                         </span>
@@ -203,7 +203,7 @@ ShallowWrapper {
                         <SavedChallenges
                                 user={
                                         Object {
-                                                "created": 2017-02-23T08:00:00.000Z,
+                                                "created": 1487808000000,
                                                 "id": 357,
                                                 "isLoggedIn": true,
                                                 "osmProfile": Object {
@@ -219,7 +219,7 @@ ShallowWrapper {
                         <SavedTasks
                                 user={
                                         Object {
-                                                "created": 2017-02-23T08:00:00.000Z,
+                                                "created": 1487808000000,
                                                 "id": 357,
                                                 "isLoggedIn": true,
                                                 "osmProfile": Object {
@@ -235,7 +235,7 @@ ShallowWrapper {
                         <InjectIntl(UserSettings)
                                 user={
                                         Object {
-                                                "created": 2017-02-23T08:00:00.000Z,
+                                                "created": 1487808000000,
                                                 "id": 357,
                                                 "isLoggedIn": true,
                                                 "osmProfile": Object {
@@ -301,7 +301,7 @@ ShallowWrapper {
                                                 >
                                                             <FormattedDate
                                                                         month="long"
-                                                                        value={2017-02-23T08:00:00.000Z}
+                                                                        value={2017-02-23T00:00:00.000Z}
                                                                         year="numeric"
                                                             />
                                                 </span>
@@ -325,7 +325,7 @@ ShallowWrapper {
                         <SavedChallenges
                                     user={
                                                 Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -341,7 +341,7 @@ ShallowWrapper {
                         <SavedTasks
                                     user={
                                                 Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -357,7 +357,7 @@ ShallowWrapper {
                         <InjectIntl(UserSettings)
                                     user={
                                                 Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -421,7 +421,7 @@ ShallowWrapper {
                                                 >
                                                                 <FormattedDate
                                                                                 month="long"
-                                                                                value={2017-02-23T08:00:00.000Z}
+                                                                                value={2017-02-23T00:00:00.000Z}
                                                                                 year="numeric"
                                                                 />
                                                 </span>
@@ -469,7 +469,7 @@ ShallowWrapper {
                                         >
                                                             <FormattedDate
                                                                                 month="long"
-                                                                                value={2017-02-23T08:00:00.000Z}
+                                                                                value={2017-02-23T00:00:00.000Z}
                                                                                 year="numeric"
                                                             />
                                         </span>
@@ -524,7 +524,7 @@ ShallowWrapper {
                         >
                                                 <FormattedDate
                                                                         month="long"
-                                                                        value={2017-02-23T08:00:00.000Z}
+                                                                        value={2017-02-23T00:00:00.000Z}
                                                                         year="numeric"
                                                 />
                         </span>
@@ -558,7 +558,7 @@ ShallowWrapper {
 >
                             <FormattedDate
                                                         month="long"
-                                                        value={2017-02-23T08:00:00.000Z}
+                                                        value={2017-02-23T00:00:00.000Z}
                                                         year="numeric"
                             />
 </span>,
@@ -575,7 +575,7 @@ ShallowWrapper {
                           "props": Object {
                             "children": <FormattedDate
                               month="long"
-                              value={2017-02-23T08:00:00.000Z}
+                              value={2017-02-23T00:00:00.000Z}
                               year="numeric"
 />,
                             "className": "user-profile__personal__value",
@@ -587,7 +587,7 @@ ShallowWrapper {
                             "nodeType": "class",
                             "props": Object {
                               "month": "long",
-                              "value": 2017-02-23T08:00:00.000Z,
+                              "value": 2017-02-23T00:00:00.000Z,
                               "year": "numeric",
                             },
                             "ref": null,
@@ -644,7 +644,7 @@ ShallowWrapper {
                 <SavedChallenges
                                 user={
                                                 Object {
-                                                                "created": 2017-02-23T08:00:00.000Z,
+                                                                "created": 1487808000000,
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
                                                                 "osmProfile": Object {
@@ -660,7 +660,7 @@ ShallowWrapper {
                 <SavedTasks
                                 user={
                                                 Object {
-                                                                "created": 2017-02-23T08:00:00.000Z,
+                                                                "created": 1487808000000,
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
                                                                 "osmProfile": Object {
@@ -676,7 +676,7 @@ ShallowWrapper {
                 <InjectIntl(UserSettings)
                                 user={
                                                 Object {
-                                                                "created": 2017-02-23T08:00:00.000Z,
+                                                                "created": 1487808000000,
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
                                                                 "osmProfile": Object {
@@ -715,7 +715,7 @@ ShallowWrapper {
                 "children": <SavedChallenges
                   user={
                                     Object {
-                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                      "created": 1487808000000,
                                                       "id": 357,
                                                       "isLoggedIn": true,
                                                       "osmProfile": Object {
@@ -733,7 +733,7 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "user": Object {
-                    "created": 2017-02-23T08:00:00.000Z,
+                    "created": 1487808000000,
                     "id": 357,
                     "isLoggedIn": true,
                     "osmProfile": Object {
@@ -755,7 +755,7 @@ ShallowWrapper {
                 "children": <SavedTasks
                   user={
                                     Object {
-                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                      "created": 1487808000000,
                                                       "id": 357,
                                                       "isLoggedIn": true,
                                                       "osmProfile": Object {
@@ -773,7 +773,7 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "user": Object {
-                    "created": 2017-02-23T08:00:00.000Z,
+                    "created": 1487808000000,
                     "id": 357,
                     "isLoggedIn": true,
                     "osmProfile": Object {
@@ -795,7 +795,7 @@ ShallowWrapper {
                 "children": <InjectIntl(UserSettings)
                   user={
                                     Object {
-                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                      "created": 1487808000000,
                                                       "id": 357,
                                                       "isLoggedIn": true,
                                                       "osmProfile": Object {
@@ -813,7 +813,7 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "user": Object {
-                    "created": 2017-02-23T08:00:00.000Z,
+                    "created": 1487808000000,
                     "id": 357,
                     "isLoggedIn": true,
                     "osmProfile": Object {
@@ -939,7 +939,7 @@ ShallowWrapper {
                                                   >
                                                             <FormattedDate
                                                                       month="long"
-                                                                      value={2017-02-23T08:00:00.000Z}
+                                                                      value={2017-02-23T00:00:00.000Z}
                                                                       year="numeric"
                                                             />
                                                   </span>
@@ -963,7 +963,7 @@ ShallowWrapper {
                               <SavedChallenges
                                         user={
                                                   Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -979,7 +979,7 @@ ShallowWrapper {
                               <SavedTasks
                                         user={
                                                   Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -995,7 +995,7 @@ ShallowWrapper {
                               <InjectIntl(UserSettings)
                                         user={
                                                   Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -1061,7 +1061,7 @@ ShallowWrapper {
                                                         >
                                                                       <FormattedDate
                                                                                     month="long"
-                                                                                    value={2017-02-23T08:00:00.000Z}
+                                                                                    value={2017-02-23T00:00:00.000Z}
                                                                                     year="numeric"
                                                                       />
                                                         </span>
@@ -1085,7 +1085,7 @@ ShallowWrapper {
                             <SavedChallenges
                                           user={
                                                         Object {
-                                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                                      "created": 1487808000000,
                                                                       "id": 357,
                                                                       "isLoggedIn": true,
                                                                       "osmProfile": Object {
@@ -1101,7 +1101,7 @@ ShallowWrapper {
                             <SavedTasks
                                           user={
                                                         Object {
-                                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                                      "created": 1487808000000,
                                                                       "id": 357,
                                                                       "isLoggedIn": true,
                                                                       "osmProfile": Object {
@@ -1117,7 +1117,7 @@ ShallowWrapper {
                             <InjectIntl(UserSettings)
                                           user={
                                                         Object {
-                                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                                      "created": 1487808000000,
                                                                       "id": 357,
                                                                       "isLoggedIn": true,
                                                                       "osmProfile": Object {
@@ -1181,7 +1181,7 @@ ShallowWrapper {
                                                       >
                                                                         <FormattedDate
                                                                                           month="long"
-                                                                                          value={2017-02-23T08:00:00.000Z}
+                                                                                          value={2017-02-23T00:00:00.000Z}
                                                                                           year="numeric"
                                                                         />
                                                       </span>
@@ -1229,7 +1229,7 @@ ShallowWrapper {
                                             >
                                                                   <FormattedDate
                                                                                         month="long"
-                                                                                        value={2017-02-23T08:00:00.000Z}
+                                                                                        value={2017-02-23T00:00:00.000Z}
                                                                                         year="numeric"
                                                                   />
                                             </span>
@@ -1284,7 +1284,7 @@ ShallowWrapper {
                           >
                                                     <FormattedDate
                                                                               month="long"
-                                                                              value={2017-02-23T08:00:00.000Z}
+                                                                              value={2017-02-23T00:00:00.000Z}
                                                                               year="numeric"
                                                     />
                           </span>
@@ -1318,7 +1318,7 @@ ShallowWrapper {
 >
                               <FormattedDate
                                                             month="long"
-                                                            value={2017-02-23T08:00:00.000Z}
+                                                            value={2017-02-23T00:00:00.000Z}
                                                             year="numeric"
                               />
 </span>,
@@ -1335,7 +1335,7 @@ ShallowWrapper {
                             "props": Object {
                               "children": <FormattedDate
                                 month="long"
-                                value={2017-02-23T08:00:00.000Z}
+                                value={2017-02-23T00:00:00.000Z}
                                 year="numeric"
 />,
                               "className": "user-profile__personal__value",
@@ -1347,7 +1347,7 @@ ShallowWrapper {
                               "nodeType": "class",
                               "props": Object {
                                 "month": "long",
-                                "value": 2017-02-23T08:00:00.000Z,
+                                "value": 2017-02-23T00:00:00.000Z,
                                 "year": "numeric",
                               },
                               "ref": null,
@@ -1404,7 +1404,7 @@ ShallowWrapper {
                   <SavedChallenges
                                     user={
                                                       Object {
-                                                                        "created": 2017-02-23T08:00:00.000Z,
+                                                                        "created": 1487808000000,
                                                                         "id": 357,
                                                                         "isLoggedIn": true,
                                                                         "osmProfile": Object {
@@ -1420,7 +1420,7 @@ ShallowWrapper {
                   <SavedTasks
                                     user={
                                                       Object {
-                                                                        "created": 2017-02-23T08:00:00.000Z,
+                                                                        "created": 1487808000000,
                                                                         "id": 357,
                                                                         "isLoggedIn": true,
                                                                         "osmProfile": Object {
@@ -1436,7 +1436,7 @@ ShallowWrapper {
                   <InjectIntl(UserSettings)
                                     user={
                                                       Object {
-                                                                        "created": 2017-02-23T08:00:00.000Z,
+                                                                        "created": 1487808000000,
                                                                         "id": 357,
                                                                         "isLoggedIn": true,
                                                                         "osmProfile": Object {
@@ -1475,7 +1475,7 @@ ShallowWrapper {
                   "children": <SavedChallenges
                     user={
                                         Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -1493,7 +1493,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "user": Object {
-                      "created": 2017-02-23T08:00:00.000Z,
+                      "created": 1487808000000,
                       "id": 357,
                       "isLoggedIn": true,
                       "osmProfile": Object {
@@ -1515,7 +1515,7 @@ ShallowWrapper {
                   "children": <SavedTasks
                     user={
                                         Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -1533,7 +1533,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "user": Object {
-                      "created": 2017-02-23T08:00:00.000Z,
+                      "created": 1487808000000,
                       "id": 357,
                       "isLoggedIn": true,
                       "osmProfile": Object {
@@ -1555,7 +1555,7 @@ ShallowWrapper {
                   "children": <InjectIntl(UserSettings)
                     user={
                                         Object {
-                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "created": 1487808000000,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -1573,7 +1573,7 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "user": Object {
-                      "created": 2017-02-23T08:00:00.000Z,
+                      "created": 1487808000000,
                       "id": 357,
                       "isLoggedIn": true,
                       "osmProfile": Object {

@@ -1,9 +1,8 @@
 import React from 'react'
 import { UserProfile } from './UserProfile'
-import parse from 'date-fns/parse'
 
 let basicProps = null
-let createdDate = parse('2017-02-23')
+let createdDate = Date.UTC(2017, 1, 23)
 
 beforeEach(() => {
   basicProps = {
