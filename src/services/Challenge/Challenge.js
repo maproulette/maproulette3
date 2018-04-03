@@ -155,14 +155,19 @@ export const fetchEnabledChallenges = function(limit) {
  * @param {string} queryString
  * @param {number} limit
  */
-export const searchChallenges = function(queryString, limit=50) {
+export const searchChallenges = function(queryString, onlyEnabled=true, limit=50) {
   return function(dispatch) {
     const queryParts = parseQueryString(queryString)
 
     // setup query parameters desired by server.
+    // ce: limit to enabled challenges
     // cs: query string
     // ct: keywords/tags (comma-separated string)
-    const queryParams = {limit}
+    const queryParams = {
+      limit,
+      ce: onlyEnabled ? 'true' : 'false',
+    }
+
     if (queryParts.query.length > 0) {
       queryParams.cs = queryParts.query
     }

@@ -49,8 +49,8 @@ export const _WithSearchExecution = function(WrappedComponent, searchName, searc
 }
 
 export const mapDispatchToProps = dispatch => ({
-  performSearch: (searchName, query, searchProjects) =>
-    dispatch(performSearch(searchName, query, searchProjects)),
+  performSearch: (searchName, query, searchFunction) =>
+    dispatch(performSearch(searchName, query, searchFunction)),
 })
 
 export default WithSearchExecution
