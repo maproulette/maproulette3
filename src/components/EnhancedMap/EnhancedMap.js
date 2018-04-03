@@ -100,6 +100,9 @@ export default class EnhancedMap extends Map {
   componentDidMount() {
     super.componentDidMount()
 
+    // Don't allow wrapping of the map around the world.
+    this.leafletElement.setMaxBounds([[-90, -180], [90, 180]])
+
     // If there are geojson features, add them to the leaflet map and then
     // fit the map to the bounds of those features.
     if (this.props.features) {
