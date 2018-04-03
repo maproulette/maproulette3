@@ -8,6 +8,8 @@ import _debounce from 'lodash/debounce'
 import _map from 'lodash/map'
 import _noop from 'lodash/noop'
 import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
+import { fetchChallengesWithinBoundingBox }
+       from '../../../services/Challenge/Challenge'
 import { createVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
 import { loadRandomTaskFromVirtualChallenge }
@@ -40,6 +42,8 @@ const doUpdateBoundedTasks =
   _debounce((dispatch, bounds) => {
     if (boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
       dispatch(fetchBoundedTasks(bounds, 1000))
+      // We also need to make sure we have the parent challenges
+      dispatch(fetchChallengesWithinBoundingBox(bounds))
     }
   }, 500) : _noop
 
