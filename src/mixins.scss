@@ -113,3 +113,11 @@
     height: $size;
   }
 }
+
+@mixin basic-form-element-styling() {
+  border-color: $form-element-border-color;
+  border-width: 2px;
+  box-shadow: none;
+  border-radius: $radius-medium;
+  color: $grey;
+}
