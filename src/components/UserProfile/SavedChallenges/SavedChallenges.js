@@ -20,19 +20,17 @@ export default class SavedChallenges extends Component {
 
         return (
           <li key={challenge.id} className="columns saved-challenges__challenge">
-            <div className="column is-four-fifths">
-              <Link to={`/browse/challenges/${challenge.id}`}>
-                {challenge.name}
-              </Link>
-            </div>
+            <Link to={`/browse/challenges/${challenge.id}`}>
+              {challenge.name}
+            </Link>
 
-            <div className="column">
-              <a className='button is-clear'
-                onClick={() => this.props.unsaveChallenge(this.props.user.id, challenge.id)}
-                title={this.props.intl.formatMessage(messages.unsave)}>
-                <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
-              </a>
-            </div>
+            <span className="connector" />
+
+            <a className='button is-clear'
+              onClick={() => this.props.unsaveChallenge(this.props.user.id, challenge.id)}
+              title={this.props.intl.formatMessage(messages.unsave)}>
+              <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
+            </a>
           </li>
         )
       }

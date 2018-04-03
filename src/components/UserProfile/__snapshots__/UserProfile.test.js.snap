@@ -7,6 +7,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <UserProfile
     user={
         Object {
+            "created": 2017-02-23T08:00:00.000Z,
             "id": 357,
             "isLoggedIn": false,
             "osmProfile": Object {
@@ -31,6 +32,7 @@ ShallowWrapper {
         className="user-profile--signin"
         user={
                 Object {
+                        "created": 2017-02-23T08:00:00.000Z,
                         "id": 357,
                         "isLoggedIn": false,
                         "osmProfile": Object {
@@ -49,6 +51,7 @@ ShallowWrapper {
       "props": Object {
         "className": "user-profile--signin",
         "user": Object {
+          "created": 2017-02-23T08:00:00.000Z,
           "id": 357,
           "isLoggedIn": false,
           "osmProfile": Object {
@@ -72,6 +75,7 @@ ShallowWrapper {
           className="user-profile--signin"
           user={
                     Object {
+                              "created": 2017-02-23T08:00:00.000Z,
                               "id": 357,
                               "isLoggedIn": false,
                               "osmProfile": Object {
@@ -90,6 +94,7 @@ ShallowWrapper {
         "props": Object {
           "className": "user-profile--signin",
           "user": Object {
+            "created": 2017-02-23T08:00:00.000Z,
             "id": 357,
             "isLoggedIn": false,
             "osmProfile": Object {
@@ -121,6 +126,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <UserProfile
     user={
         Object {
+            "created": 2017-02-23T08:00:00.000Z,
             "id": 357,
             "isLoggedIn": true,
             "osmProfile": Object {
@@ -141,493 +147,133 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "host",
     "props": Object {
-      "children": Array [
-        <div
-          className="column"
+      "children": <div
+        className="columns"
 >
-          <section
-                    className="user-profile__personal"
-          >
-                    <figure
-                              className="user-profile__personal--avatar image is-128x128"
-                    >
-                              <img
+        <div
+                className="column is-two-fifths left-column"
+        >
+                <section
+                        className="user-profile__personal"
+                >
+                        <figure
+                                className="user-profile__personal--avatar image is-128x128"
+                        >
+                                <img
                                         alt="Avatar"
                                         src="some/url"
-                              />
-                    </figure>
-                    <div
-                              className="user-profile__personal--display-name"
-                    />
-          </section>
-          <section
-                    className="user-profile__activity"
-          >
-                    <InjectIntl(UserActivityTimeline)
-                              activity={undefined}
-                    />
-          </section>
-</div>,
+                                />
+                        </figure>
+                        <div
+                                className="user-profile__personal__about"
+                        >
+                                <div
+                                        className="user-profile__personal__display-name"
+                                />
+                                <div
+                                        className="user-profile__personal__created"
+                                >
+                                        User since: 
+                                        <span
+                                                className="user-profile__personal__value"
+                                        >
+                                                <FormattedDate
+                                                        month="long"
+                                                        value={2017-02-23T08:00:00.000Z}
+                                                        year="numeric"
+                                                />
+                                        </span>
+                                </div>
+                        </div>
+                </section>
+                <section
+                        className="user-profile__activity"
+                >
+                        <InjectIntl(UserActivityTimeline)
+                                activity={undefined}
+                        />
+                </section>
+        </div>
         <div
-          className="column"
->
-          <section
-                    className="user-profile__saved-challenges"
-          >
-                    <SavedChallenges
-                              user={
+                className="column right-column"
+        >
+                <section
+                        className="user-profile__saved-challenges"
+                >
+                        <SavedChallenges
+                                user={
                                         Object {
-                                                  "id": 357,
-                                                  "isLoggedIn": true,
-                                                  "osmProfile": Object {
-                                                    "avatarURL": "some/url",
-                                                  },
-                                                }
-                              }
-                    />
-          </section>
-          <section
-                    className="user-profile__saved-tasks"
-          >
-                    <SavedTasks
-                              user={
+                                                "created": 2017-02-23T08:00:00.000Z,
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "some/url",
+                                                },
+                                              }
+                                }
+                        />
+                </section>
+                <section
+                        className="user-profile__saved-tasks"
+                >
+                        <SavedTasks
+                                user={
                                         Object {
-                                                  "id": 357,
-                                                  "isLoggedIn": true,
-                                                  "osmProfile": Object {
-                                                    "avatarURL": "some/url",
-                                                  },
-                                                }
-                              }
-                    />
-          </section>
-          <section
-                    className="user-profile__user-settings"
-          >
-                    <InjectIntl(UserSettings)
-                              user={
+                                                "created": 2017-02-23T08:00:00.000Z,
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "some/url",
+                                                },
+                                              }
+                                }
+                        />
+                </section>
+                <section
+                        className="user-profile__user-settings"
+                >
+                        <InjectIntl(UserSettings)
+                                user={
                                         Object {
-                                                  "id": 357,
-                                                  "isLoggedIn": true,
-                                                  "osmProfile": Object {
-                                                    "avatarURL": "some/url",
-                                                  },
-                                                }
-                              }
-                    />
-          </section>
-          <section
-                    className="user-profile__api-key"
-          >
-                    <h2
-                              className="subtitle"
-                    >
-                              <FormattedMessage
+                                                "created": 2017-02-23T08:00:00.000Z,
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "some/url",
+                                                },
+                                              }
+                                }
+                        />
+                </section>
+                <section
+                        className="user-profile__api-key"
+                >
+                        <h2
+                                className="subtitle"
+                        >
+                                <FormattedMessage
                                         defaultMessage="API Key"
                                         id="UserProfile.apiKey.header"
                                         values={Object {}}
-                              />
-                    </h2>
-                    <pre
-                              className="user-profile__api-key--current-key"
-                    />
-          </section>
+                                />
+                        </h2>
+                        <pre
+                                className="user-profile__api-key--current-key"
+                        />
+                </section>
+        </div>
 </div>,
-      ],
-      "className": "user-profile columns",
+      "className": "user-profile",
     },
     "ref": null,
-    "rendered": Array [
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            <section
-              className="user-profile__personal"
->
-              <figure
-                            className="user-profile__personal--avatar image is-128x128"
-              >
-                            <img
-                                          alt="Avatar"
-                                          src="some/url"
-                            />
-              </figure>
-              <div
-                            className="user-profile__personal--display-name"
-              />
-</section>,
-            <section
-              className="user-profile__activity"
->
-              <InjectIntl(UserActivityTimeline)
-                            activity={undefined}
-              />
-</section>,
-          ],
-          "className": "column",
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <figure
-                  className="user-profile__personal--avatar image is-128x128"
->
-                  <img
-                                    alt="Avatar"
-                                    src="some/url"
-                  />
-</figure>,
-                <div
-                  className="user-profile__personal--display-name"
-/>,
-              ],
-              "className": "user-profile__personal",
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <img
-                    alt="Avatar"
-                    src="some/url"
-/>,
-                  "className": "user-profile__personal--avatar image is-128x128",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "alt": "Avatar",
-                    "src": "some/url",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": "img",
-                },
-                "type": "figure",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": undefined,
-                  "className": "user-profile__personal--display-name",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": "div",
-              },
-            ],
-            "type": "section",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <InjectIntl(UserActivityTimeline)
-                activity={undefined}
-/>,
-              "className": "user-profile__activity",
-            },
-            "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "activity": undefined,
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            "type": "section",
-          },
-        ],
-        "type": "div",
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            <section
-              className="user-profile__saved-challenges"
->
-              <SavedChallenges
-                            user={
-                                          Object {
-                                                        "id": 357,
-                                                        "isLoggedIn": true,
-                                                        "osmProfile": Object {
-                                                          "avatarURL": "some/url",
-                                                        },
-                                                      }
-                            }
-              />
-</section>,
-            <section
-              className="user-profile__saved-tasks"
->
-              <SavedTasks
-                            user={
-                                          Object {
-                                                        "id": 357,
-                                                        "isLoggedIn": true,
-                                                        "osmProfile": Object {
-                                                          "avatarURL": "some/url",
-                                                        },
-                                                      }
-                            }
-              />
-</section>,
-            <section
-              className="user-profile__user-settings"
->
-              <InjectIntl(UserSettings)
-                            user={
-                                          Object {
-                                                        "id": 357,
-                                                        "isLoggedIn": true,
-                                                        "osmProfile": Object {
-                                                          "avatarURL": "some/url",
-                                                        },
-                                                      }
-                            }
-              />
-</section>,
-            <section
-              className="user-profile__api-key"
->
-              <h2
-                            className="subtitle"
-              >
-                            <FormattedMessage
-                                          defaultMessage="API Key"
-                                          id="UserProfile.apiKey.header"
-                                          values={Object {}}
-                            />
-              </h2>
-              <pre
-                            className="user-profile__api-key--current-key"
-              />
-</section>,
-          ],
-          "className": "column",
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <SavedChallenges
-                user={
-                                Object {
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                                "osmProfile": Object {
-                                                  "avatarURL": "some/url",
-                                                },
-                                              }
-                }
-/>,
-              "className": "user-profile__saved-challenges",
-            },
-            "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "user": Object {
-                  "id": 357,
-                  "isLoggedIn": true,
-                  "osmProfile": Object {
-                    "avatarURL": "some/url",
-                  },
-                },
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            "type": "section",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <SavedTasks
-                user={
-                                Object {
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                                "osmProfile": Object {
-                                                  "avatarURL": "some/url",
-                                                },
-                                              }
-                }
-/>,
-              "className": "user-profile__saved-tasks",
-            },
-            "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "user": Object {
-                  "id": 357,
-                  "isLoggedIn": true,
-                  "osmProfile": Object {
-                    "avatarURL": "some/url",
-                  },
-                },
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            "type": "section",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <InjectIntl(UserSettings)
-                user={
-                                Object {
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                                "osmProfile": Object {
-                                                  "avatarURL": "some/url",
-                                                },
-                                              }
-                }
-/>,
-              "className": "user-profile__user-settings",
-            },
-            "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "user": Object {
-                  "id": 357,
-                  "isLoggedIn": true,
-                  "osmProfile": Object {
-                    "avatarURL": "some/url",
-                  },
-                },
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            "type": "section",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <h2
-                  className="subtitle"
->
-                  <FormattedMessage
-                                    defaultMessage="API Key"
-                                    id="UserProfile.apiKey.header"
-                                    values={Object {}}
-                  />
-</h2>,
-                <pre
-                  className="user-profile__api-key--current-key"
-/>,
-              ],
-              "className": "user-profile__api-key",
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <FormattedMessage
-                    defaultMessage="API Key"
-                    id="UserProfile.apiKey.header"
-                    values={Object {}}
-/>,
-                  "className": "subtitle",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "defaultMessage": "API Key",
-                    "id": "UserProfile.apiKey.header",
-                    "values": Object {},
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                "type": "h2",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": undefined,
-                  "className": "user-profile__api-key--current-key",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": "pre",
-              },
-            ],
-            "type": "section",
-          },
-        ],
-        "type": "div",
-      },
-    ],
-    "type": "div",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
+    "rendered": Object {
       "instance": null,
       "key": undefined,
       "nodeType": "host",
       "props": Object {
         "children": Array [
           <div
-            className="column"
+            className="column is-two-fifths left-column"
 >
             <section
                         className="user-profile__personal"
@@ -641,8 +287,26 @@ ShallowWrapper {
                                     />
                         </figure>
                         <div
-                                    className="user-profile__personal--display-name"
-                        />
+                                    className="user-profile__personal__about"
+                        >
+                                    <div
+                                                className="user-profile__personal__display-name"
+                                    />
+                                    <div
+                                                className="user-profile__personal__created"
+                                    >
+                                                User since: 
+                                                <span
+                                                            className="user-profile__personal__value"
+                                                >
+                                                            <FormattedDate
+                                                                        month="long"
+                                                                        value={2017-02-23T08:00:00.000Z}
+                                                                        year="numeric"
+                                                            />
+                                                </span>
+                                    </div>
+                        </div>
             </section>
             <section
                         className="user-profile__activity"
@@ -653,7 +317,7 @@ ShallowWrapper {
             </section>
 </div>,
           <div
-            className="column"
+            className="column right-column"
 >
             <section
                         className="user-profile__saved-challenges"
@@ -661,6 +325,7 @@ ShallowWrapper {
                         <SavedChallenges
                                     user={
                                                 Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -676,6 +341,7 @@ ShallowWrapper {
                         <SavedTasks
                                     user={
                                                 Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -691,6 +357,7 @@ ShallowWrapper {
                         <InjectIntl(UserSettings)
                                     user={
                                                 Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
                                                             "id": 357,
                                                             "isLoggedIn": true,
                                                             "osmProfile": Object {
@@ -718,7 +385,7 @@ ShallowWrapper {
             </section>
 </div>,
         ],
-        "className": "user-profile columns",
+        "className": "columns",
       },
       "ref": null,
       "rendered": Array [
@@ -740,8 +407,26 @@ ShallowWrapper {
                                 />
                 </figure>
                 <div
-                                className="user-profile__personal--display-name"
-                />
+                                className="user-profile__personal__about"
+                >
+                                <div
+                                                className="user-profile__personal__display-name"
+                                />
+                                <div
+                                                className="user-profile__personal__created"
+                                >
+                                                User since: 
+                                                <span
+                                                                className="user-profile__personal__value"
+                                                >
+                                                                <FormattedDate
+                                                                                month="long"
+                                                                                value={2017-02-23T08:00:00.000Z}
+                                                                                year="numeric"
+                                                                />
+                                                </span>
+                                </div>
+                </div>
 </section>,
               <section
                 className="user-profile__activity"
@@ -751,7 +436,7 @@ ShallowWrapper {
                 />
 </section>,
             ],
-            "className": "column",
+            "className": "column is-two-fifths left-column",
           },
           "ref": null,
           "rendered": Array [
@@ -770,8 +455,26 @@ ShallowWrapper {
                     />
 </figure>,
                   <div
-                    className="user-profile__personal--display-name"
-/>,
+                    className="user-profile__personal__about"
+>
+                    <div
+                                        className="user-profile__personal__display-name"
+                    />
+                    <div
+                                        className="user-profile__personal__created"
+                    >
+                                        User since: 
+                                        <span
+                                                            className="user-profile__personal__value"
+                                        >
+                                                            <FormattedDate
+                                                                                month="long"
+                                                                                value={2017-02-23T08:00:00.000Z}
+                                                                                year="numeric"
+                                                            />
+                                        </span>
+                    </div>
+</div>,
                 ],
                 "className": "user-profile__personal",
               },
@@ -808,11 +511,95 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": undefined,
-                    "className": "user-profile__personal--display-name",
+                    "children": Array [
+                      <div
+                        className="user-profile__personal__display-name"
+/>,
+                      <div
+                        className="user-profile__personal__created"
+>
+                        User since: 
+                        <span
+                                                className="user-profile__personal__value"
+                        >
+                                                <FormattedDate
+                                                                        month="long"
+                                                                        value={2017-02-23T08:00:00.000Z}
+                                                                        year="numeric"
+                                                />
+                        </span>
+</div>,
+                    ],
+                    "className": "user-profile__personal__about",
                   },
                   "ref": null,
-                  "rendered": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": undefined,
+                        "className": "user-profile__personal__display-name",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": Array [
+                          "User since: ",
+                          <span
+                            className="user-profile__personal__value"
+>
+                            <FormattedDate
+                                                        month="long"
+                                                        value={2017-02-23T08:00:00.000Z}
+                                                        year="numeric"
+                            />
+</span>,
+                        ],
+                        "className": "user-profile__personal__created",
+                      },
+                      "ref": null,
+                      "rendered": Array [
+                        "User since: ",
+                        Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "host",
+                          "props": Object {
+                            "children": <FormattedDate
+                              month="long"
+                              value={2017-02-23T08:00:00.000Z}
+                              year="numeric"
+/>,
+                            "className": "user-profile__personal__value",
+                          },
+                          "ref": null,
+                          "rendered": Object {
+                            "instance": null,
+                            "key": undefined,
+                            "nodeType": "class",
+                            "props": Object {
+                              "month": "long",
+                              "value": 2017-02-23T08:00:00.000Z,
+                              "year": "numeric",
+                            },
+                            "ref": null,
+                            "rendered": null,
+                            "type": [Function],
+                          },
+                          "type": "span",
+                        },
+                      ],
+                      "type": "div",
+                    },
+                  ],
                   "type": "div",
                 },
               ],
@@ -857,6 +644,7 @@ ShallowWrapper {
                 <SavedChallenges
                                 user={
                                                 Object {
+                                                                "created": 2017-02-23T08:00:00.000Z,
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
                                                                 "osmProfile": Object {
@@ -872,6 +660,7 @@ ShallowWrapper {
                 <SavedTasks
                                 user={
                                                 Object {
+                                                                "created": 2017-02-23T08:00:00.000Z,
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
                                                                 "osmProfile": Object {
@@ -887,6 +676,7 @@ ShallowWrapper {
                 <InjectIntl(UserSettings)
                                 user={
                                                 Object {
+                                                                "created": 2017-02-23T08:00:00.000Z,
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
                                                                 "osmProfile": Object {
@@ -913,7 +703,7 @@ ShallowWrapper {
                 />
 </section>,
             ],
-            "className": "column",
+            "className": "column right-column",
           },
           "ref": null,
           "rendered": Array [
@@ -925,6 +715,7 @@ ShallowWrapper {
                 "children": <SavedChallenges
                   user={
                                     Object {
+                                                      "created": 2017-02-23T08:00:00.000Z,
                                                       "id": 357,
                                                       "isLoggedIn": true,
                                                       "osmProfile": Object {
@@ -942,6 +733,7 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "user": Object {
+                    "created": 2017-02-23T08:00:00.000Z,
                     "id": 357,
                     "isLoggedIn": true,
                     "osmProfile": Object {
@@ -963,6 +755,7 @@ ShallowWrapper {
                 "children": <SavedTasks
                   user={
                                     Object {
+                                                      "created": 2017-02-23T08:00:00.000Z,
                                                       "id": 357,
                                                       "isLoggedIn": true,
                                                       "osmProfile": Object {
@@ -980,6 +773,7 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "user": Object {
+                    "created": 2017-02-23T08:00:00.000Z,
                     "id": 357,
                     "isLoggedIn": true,
                     "osmProfile": Object {
@@ -1001,6 +795,7 @@ ShallowWrapper {
                 "children": <InjectIntl(UserSettings)
                   user={
                                     Object {
+                                                      "created": 2017-02-23T08:00:00.000Z,
                                                       "id": 357,
                                                       "isLoggedIn": true,
                                                       "osmProfile": Object {
@@ -1018,6 +813,7 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "user": Object {
+                    "created": 2017-02-23T08:00:00.000Z,
                     "id": 357,
                     "isLoggedIn": true,
                     "osmProfile": Object {
@@ -1101,6 +897,768 @@ ShallowWrapper {
           "type": "div",
         },
       ],
+      "type": "div",
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <div
+          className="columns"
+>
+          <div
+                    className="column is-two-fifths left-column"
+          >
+                    <section
+                              className="user-profile__personal"
+                    >
+                              <figure
+                                        className="user-profile__personal--avatar image is-128x128"
+                              >
+                                        <img
+                                                  alt="Avatar"
+                                                  src="some/url"
+                                        />
+                              </figure>
+                              <div
+                                        className="user-profile__personal__about"
+                              >
+                                        <div
+                                                  className="user-profile__personal__display-name"
+                                        />
+                                        <div
+                                                  className="user-profile__personal__created"
+                                        >
+                                                  User since: 
+                                                  <span
+                                                            className="user-profile__personal__value"
+                                                  >
+                                                            <FormattedDate
+                                                                      month="long"
+                                                                      value={2017-02-23T08:00:00.000Z}
+                                                                      year="numeric"
+                                                            />
+                                                  </span>
+                                        </div>
+                              </div>
+                    </section>
+                    <section
+                              className="user-profile__activity"
+                    >
+                              <InjectIntl(UserActivityTimeline)
+                                        activity={undefined}
+                              />
+                    </section>
+          </div>
+          <div
+                    className="column right-column"
+          >
+                    <section
+                              className="user-profile__saved-challenges"
+                    >
+                              <SavedChallenges
+                                        user={
+                                                  Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                    </section>
+                    <section
+                              className="user-profile__saved-tasks"
+                    >
+                              <SavedTasks
+                                        user={
+                                                  Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                    </section>
+                    <section
+                              className="user-profile__user-settings"
+                    >
+                              <InjectIntl(UserSettings)
+                                        user={
+                                                  Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                    </section>
+                    <section
+                              className="user-profile__api-key"
+                    >
+                              <h2
+                                        className="subtitle"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="API Key"
+                                                  id="UserProfile.apiKey.header"
+                                                  values={Object {}}
+                                        />
+                              </h2>
+                              <pre
+                                        className="user-profile__api-key--current-key"
+                              />
+                    </section>
+          </div>
+</div>,
+        "className": "user-profile",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="column is-two-fifths left-column"
+>
+              <section
+                            className="user-profile__personal"
+              >
+                            <figure
+                                          className="user-profile__personal--avatar image is-128x128"
+                            >
+                                          <img
+                                                        alt="Avatar"
+                                                        src="some/url"
+                                          />
+                            </figure>
+                            <div
+                                          className="user-profile__personal__about"
+                            >
+                                          <div
+                                                        className="user-profile__personal__display-name"
+                                          />
+                                          <div
+                                                        className="user-profile__personal__created"
+                                          >
+                                                        User since: 
+                                                        <span
+                                                                      className="user-profile__personal__value"
+                                                        >
+                                                                      <FormattedDate
+                                                                                    month="long"
+                                                                                    value={2017-02-23T08:00:00.000Z}
+                                                                                    year="numeric"
+                                                                      />
+                                                        </span>
+                                          </div>
+                            </div>
+              </section>
+              <section
+                            className="user-profile__activity"
+              >
+                            <InjectIntl(UserActivityTimeline)
+                                          activity={undefined}
+                            />
+              </section>
+</div>,
+            <div
+              className="column right-column"
+>
+              <section
+                            className="user-profile__saved-challenges"
+              >
+                            <SavedChallenges
+                                          user={
+                                                        Object {
+                                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "some/url",
+                                                                      },
+                                                                    }
+                                          }
+                            />
+              </section>
+              <section
+                            className="user-profile__saved-tasks"
+              >
+                            <SavedTasks
+                                          user={
+                                                        Object {
+                                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "some/url",
+                                                                      },
+                                                                    }
+                                          }
+                            />
+              </section>
+              <section
+                            className="user-profile__user-settings"
+              >
+                            <InjectIntl(UserSettings)
+                                          user={
+                                                        Object {
+                                                                      "created": 2017-02-23T08:00:00.000Z,
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "some/url",
+                                                                      },
+                                                                    }
+                                          }
+                            />
+              </section>
+              <section
+                            className="user-profile__api-key"
+              >
+                            <h2
+                                          className="subtitle"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="API Key"
+                                                        id="UserProfile.apiKey.header"
+                                                        values={Object {}}
+                                          />
+                            </h2>
+                            <pre
+                                          className="user-profile__api-key--current-key"
+                            />
+              </section>
+</div>,
+          ],
+          "className": "columns",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <section
+                  className="user-profile__personal"
+>
+                  <figure
+                                    className="user-profile__personal--avatar image is-128x128"
+                  >
+                                    <img
+                                                      alt="Avatar"
+                                                      src="some/url"
+                                    />
+                  </figure>
+                  <div
+                                    className="user-profile__personal__about"
+                  >
+                                    <div
+                                                      className="user-profile__personal__display-name"
+                                    />
+                                    <div
+                                                      className="user-profile__personal__created"
+                                    >
+                                                      User since: 
+                                                      <span
+                                                                        className="user-profile__personal__value"
+                                                      >
+                                                                        <FormattedDate
+                                                                                          month="long"
+                                                                                          value={2017-02-23T08:00:00.000Z}
+                                                                                          year="numeric"
+                                                                        />
+                                                      </span>
+                                    </div>
+                  </div>
+</section>,
+                <section
+                  className="user-profile__activity"
+>
+                  <InjectIntl(UserActivityTimeline)
+                                    activity={undefined}
+                  />
+</section>,
+              ],
+              "className": "column is-two-fifths left-column",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <figure
+                      className="user-profile__personal--avatar image is-128x128"
+>
+                      <img
+                                            alt="Avatar"
+                                            src="some/url"
+                      />
+</figure>,
+                    <div
+                      className="user-profile__personal__about"
+>
+                      <div
+                                            className="user-profile__personal__display-name"
+                      />
+                      <div
+                                            className="user-profile__personal__created"
+                      >
+                                            User since: 
+                                            <span
+                                                                  className="user-profile__personal__value"
+                                            >
+                                                                  <FormattedDate
+                                                                                        month="long"
+                                                                                        value={2017-02-23T08:00:00.000Z}
+                                                                                        year="numeric"
+                                                                  />
+                                            </span>
+                      </div>
+</div>,
+                  ],
+                  "className": "user-profile__personal",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <img
+                        alt="Avatar"
+                        src="some/url"
+/>,
+                      "className": "user-profile__personal--avatar image is-128x128",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "alt": "Avatar",
+                        "src": "some/url",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": "img",
+                    },
+                    "type": "figure",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": Array [
+                        <div
+                          className="user-profile__personal__display-name"
+/>,
+                        <div
+                          className="user-profile__personal__created"
+>
+                          User since: 
+                          <span
+                                                    className="user-profile__personal__value"
+                          >
+                                                    <FormattedDate
+                                                                              month="long"
+                                                                              value={2017-02-23T08:00:00.000Z}
+                                                                              year="numeric"
+                                                    />
+                          </span>
+</div>,
+                      ],
+                      "className": "user-profile__personal__about",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "host",
+                        "props": Object {
+                          "children": undefined,
+                          "className": "user-profile__personal__display-name",
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": "div",
+                      },
+                      Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "host",
+                        "props": Object {
+                          "children": Array [
+                            "User since: ",
+                            <span
+                              className="user-profile__personal__value"
+>
+                              <FormattedDate
+                                                            month="long"
+                                                            value={2017-02-23T08:00:00.000Z}
+                                                            year="numeric"
+                              />
+</span>,
+                          ],
+                          "className": "user-profile__personal__created",
+                        },
+                        "ref": null,
+                        "rendered": Array [
+                          "User since: ",
+                          Object {
+                            "instance": null,
+                            "key": undefined,
+                            "nodeType": "host",
+                            "props": Object {
+                              "children": <FormattedDate
+                                month="long"
+                                value={2017-02-23T08:00:00.000Z}
+                                year="numeric"
+/>,
+                              "className": "user-profile__personal__value",
+                            },
+                            "ref": null,
+                            "rendered": Object {
+                              "instance": null,
+                              "key": undefined,
+                              "nodeType": "class",
+                              "props": Object {
+                                "month": "long",
+                                "value": 2017-02-23T08:00:00.000Z,
+                                "year": "numeric",
+                              },
+                              "ref": null,
+                              "rendered": null,
+                              "type": [Function],
+                            },
+                            "type": "span",
+                          },
+                        ],
+                        "type": "div",
+                      },
+                    ],
+                    "type": "div",
+                  },
+                ],
+                "type": "section",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <InjectIntl(UserActivityTimeline)
+                    activity={undefined}
+/>,
+                  "className": "user-profile__activity",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "activity": undefined,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "section",
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <section
+                  className="user-profile__saved-challenges"
+>
+                  <SavedChallenges
+                                    user={
+                                                      Object {
+                                                                        "created": 2017-02-23T08:00:00.000Z,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+</section>,
+                <section
+                  className="user-profile__saved-tasks"
+>
+                  <SavedTasks
+                                    user={
+                                                      Object {
+                                                                        "created": 2017-02-23T08:00:00.000Z,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+</section>,
+                <section
+                  className="user-profile__user-settings"
+>
+                  <InjectIntl(UserSettings)
+                                    user={
+                                                      Object {
+                                                                        "created": 2017-02-23T08:00:00.000Z,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+</section>,
+                <section
+                  className="user-profile__api-key"
+>
+                  <h2
+                                    className="subtitle"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="API Key"
+                                                      id="UserProfile.apiKey.header"
+                                                      values={Object {}}
+                                    />
+                  </h2>
+                  <pre
+                                    className="user-profile__api-key--current-key"
+                  />
+</section>,
+              ],
+              "className": "column right-column",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SavedChallenges
+                    user={
+                                        Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  "className": "user-profile__saved-challenges",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "user": Object {
+                      "created": 2017-02-23T08:00:00.000Z,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "section",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SavedTasks
+                    user={
+                                        Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  "className": "user-profile__saved-tasks",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "user": Object {
+                      "created": 2017-02-23T08:00:00.000Z,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "section",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <InjectIntl(UserSettings)
+                    user={
+                                        Object {
+                                                            "created": 2017-02-23T08:00:00.000Z,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  "className": "user-profile__user-settings",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "user": Object {
+                      "created": 2017-02-23T08:00:00.000Z,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "section",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <h2
+                      className="subtitle"
+>
+                      <FormattedMessage
+                                            defaultMessage="API Key"
+                                            id="UserProfile.apiKey.header"
+                                            values={Object {}}
+                      />
+</h2>,
+                    <pre
+                      className="user-profile__api-key--current-key"
+/>,
+                  ],
+                  "className": "user-profile__api-key",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="API Key"
+                        id="UserProfile.apiKey.header"
+                        values={Object {}}
+/>,
+                      "className": "subtitle",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "API Key",
+                        "id": "UserProfile.apiKey.header",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "h2",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": undefined,
+                      "className": "user-profile__api-key--current-key",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "pre",
+                  },
+                ],
+                "type": "section",
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
       "type": "div",
     },
   ],

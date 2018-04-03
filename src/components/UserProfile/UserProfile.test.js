@@ -1,13 +1,16 @@
 import React from 'react'
 import { UserProfile } from './UserProfile'
+import parse from 'date-fns/parse'
 
 let basicProps = null
+let createdDate = parse('2017-02-23')
 
 beforeEach(() => {
   basicProps = {
     user: {
       id: 357,
       isLoggedIn: true,
+      created: createdDate,
       osmProfile: {
         avatarURL: "some/url"
       }

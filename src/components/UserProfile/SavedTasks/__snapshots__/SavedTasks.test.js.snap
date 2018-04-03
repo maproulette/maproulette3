@@ -238,95 +238,92 @@ ShallowWrapper {
           <li
                     className="columns saved-tasks__task"
           >
-                    <div
-                              className="column is-four-fifths"
+                    <Link
+                              replace={false}
+                              to="/challenge/321/task/123"
                     >
-                              <Link
-                                        replace={false}
-                                        to="/challenge/321/task/123"
+                              <span
+                                        className="saved-tasks__task__name"
                               >
                                         First Task
-                                         — 
-                                        First Challenge
-                              </Link>
-                    </div>
-                    <div
-                              className="column"
+                              </span>
+                               — 
+                              First Challenge
+                    </Link>
+                    <span
+                              className="connector"
+                    />
+                    <a
+                              className="button is-clear"
+                              onClick={[Function]}
+                              title={undefined}
                     >
-                              <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                              >
-                                        <SvgSymbol
-                                                  className="icon"
-                                                  sym="trash-icon"
-                                                  viewBox="0 0 20 20"
-                                        />
-                              </a>
-                    </div>
+                              <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    </a>
           </li>
           <li
                     className="columns saved-tasks__task"
           >
-                    <div
-                              className="column is-four-fifths"
+                    <Link
+                              replace={false}
+                              to="/challenge/654/task/456"
                     >
-                              <Link
-                                        replace={false}
-                                        to="/challenge/654/task/456"
+                              <span
+                                        className="saved-tasks__task__name"
                               >
                                         Second Task
-                                         — 
-                                        Second Challenge
-                              </Link>
-                    </div>
-                    <div
-                              className="column"
+                              </span>
+                               — 
+                              Second Challenge
+                    </Link>
+                    <span
+                              className="connector"
+                    />
+                    <a
+                              className="button is-clear"
+                              onClick={[Function]}
+                              title={undefined}
                     >
-                              <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                              >
-                                        <SvgSymbol
-                                                  className="icon"
-                                                  sym="trash-icon"
-                                                  viewBox="0 0 20 20"
-                                        />
-                              </a>
-                    </div>
+                              <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    </a>
           </li>
           <li
                     className="columns saved-tasks__task"
           >
-                    <div
-                              className="column is-four-fifths"
+                    <Link
+                              replace={false}
+                              to="/challenge/987/task/789"
                     >
-                              <Link
-                                        replace={false}
-                                        to="/challenge/987/task/789"
+                              <span
+                                        className="saved-tasks__task__name"
                               >
                                         Third Task
-                                         — 
-                                        Third Challenge
-                              </Link>
-                    </div>
-                    <div
-                              className="column"
+                              </span>
+                               — 
+                              Third Challenge
+                    </Link>
+                    <span
+                              className="connector"
+                    />
+                    <a
+                              className="button is-clear"
+                              onClick={[Function]}
+                              title={undefined}
                     >
-                              <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                              >
-                                        <SvgSymbol
-                                                  className="icon"
-                                                  sym="trash-icon"
-                                                  viewBox="0 0 20 20"
-                                        />
-                              </a>
-                    </div>
+                              <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    </a>
           </li>
 </ul>,
       ],
@@ -371,95 +368,92 @@ ShallowWrapper {
             <li
               className="columns saved-tasks__task"
 >
-              <div
-                            className="column is-four-fifths"
+              <Link
+                            replace={false}
+                            to="/challenge/321/task/123"
               >
-                            <Link
-                                          replace={false}
-                                          to="/challenge/321/task/123"
+                            <span
+                                          className="saved-tasks__task__name"
                             >
                                           First Task
-                                           — 
-                                          First Challenge
-                            </Link>
-              </div>
-              <div
-                            className="column"
+                            </span>
+                             — 
+                            First Challenge
+              </Link>
+              <span
+                            className="connector"
+              />
+              <a
+                            className="button is-clear"
+                            onClick={[Function]}
+                            title={undefined}
               >
-                            <a
-                                          className="button is-clear"
-                                          onClick={[Function]}
-                                          title={undefined}
-                            >
-                                          <SvgSymbol
-                                                        className="icon"
-                                                        sym="trash-icon"
-                                                        viewBox="0 0 20 20"
-                                          />
-                            </a>
-              </div>
+                            <SvgSymbol
+                                          className="icon"
+                                          sym="trash-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              </a>
 </li>,
             <li
               className="columns saved-tasks__task"
 >
-              <div
-                            className="column is-four-fifths"
+              <Link
+                            replace={false}
+                            to="/challenge/654/task/456"
               >
-                            <Link
-                                          replace={false}
-                                          to="/challenge/654/task/456"
+                            <span
+                                          className="saved-tasks__task__name"
                             >
                                           Second Task
-                                           — 
-                                          Second Challenge
-                            </Link>
-              </div>
-              <div
-                            className="column"
+                            </span>
+                             — 
+                            Second Challenge
+              </Link>
+              <span
+                            className="connector"
+              />
+              <a
+                            className="button is-clear"
+                            onClick={[Function]}
+                            title={undefined}
               >
-                            <a
-                                          className="button is-clear"
-                                          onClick={[Function]}
-                                          title={undefined}
-                            >
-                                          <SvgSymbol
-                                                        className="icon"
-                                                        sym="trash-icon"
-                                                        viewBox="0 0 20 20"
-                                          />
-                            </a>
-              </div>
+                            <SvgSymbol
+                                          className="icon"
+                                          sym="trash-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              </a>
 </li>,
             <li
               className="columns saved-tasks__task"
 >
-              <div
-                            className="column is-four-fifths"
+              <Link
+                            replace={false}
+                            to="/challenge/987/task/789"
               >
-                            <Link
-                                          replace={false}
-                                          to="/challenge/987/task/789"
+                            <span
+                                          className="saved-tasks__task__name"
                             >
                                           Third Task
-                                           — 
-                                          Third Challenge
-                            </Link>
-              </div>
-              <div
-                            className="column"
+                            </span>
+                             — 
+                            Third Challenge
+              </Link>
+              <span
+                            className="connector"
+              />
+              <a
+                            className="button is-clear"
+                            onClick={[Function]}
+                            title={undefined}
               >
-                            <a
-                                          className="button is-clear"
-                                          onClick={[Function]}
-                                          title={undefined}
-                            >
-                                          <SvgSymbol
-                                                        className="icon"
-                                                        sym="trash-icon"
-                                                        viewBox="0 0 20 20"
-                                          />
-                            </a>
-              </div>
+                            <SvgSymbol
+                                          className="icon"
+                                          sym="trash-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              </a>
 </li>,
           ],
         },
@@ -471,33 +465,32 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <div
-                  className="column is-four-fifths"
+                <Link
+                  replace={false}
+                  to="/challenge/321/task/123"
 >
-                  <Link
-                                    replace={false}
-                                    to="/challenge/321/task/123"
+                  <span
+                                    className="saved-tasks__task__name"
                   >
                                     First Task
-                                     — 
-                                    First Challenge
-                  </Link>
-</div>,
-                <div
-                  className="column"
+                  </span>
+                   — 
+                  First Challenge
+</Link>,
+                <span
+                  className="connector"
+/>,
+                <a
+                  className="button is-clear"
+                  onClick={[Function]}
+                  title={undefined}
 >
-                  <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                  >
-                                    <SvgSymbol
-                                                      className="icon"
-                                                      sym="trash-icon"
-                                                      viewBox="0 0 20 20"
-                                    />
-                  </a>
-</div>,
+                  <SvgSymbol
+                                    className="icon"
+                                    sym="trash-icon"
+                                    viewBox="0 0 20 20"
+                  />
+</a>,
               ],
               "className": "columns saved-tasks__task",
             },
@@ -506,17 +499,63 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="saved-tasks__task__name"
+>
+                      First Task
+</span>,
+                    " — ",
+                    "First Challenge",
+                  ],
+                  "replace": false,
+                  "to": "/challenge/321/task/123",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "First Task",
+                      "className": "saved-tasks__task__name",
+                    },
+                    "ref": null,
+                    "rendered": "First Task",
+                    "type": "span",
+                  },
+                  " — ",
+                  "First Challenge",
+                ],
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <Link
-                    replace={false}
-                    to="/challenge/321/task/123"
->
-                    First Task
-                     — 
-                    First Challenge
-</Link>,
-                  "className": "column is-four-fifths",
+                  "className": "connector",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  "className": "button is-clear",
+                  "onClick": [Function],
+                  "title": undefined,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -524,74 +563,15 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "children": Array [
-                      "First Task",
-                      " — ",
-                      "First Challenge",
-                    ],
-                    "replace": false,
-                    "to": "/challenge/321/task/123",
+                    "className": "icon",
+                    "sym": "trash-icon",
+                    "viewBox": "0 0 20 20",
                   },
                   "ref": null,
-                  "rendered": Array [
-                    "First Task",
-                    " — ",
-                    "First Challenge",
-                  ],
+                  "rendered": null,
                   "type": [Function],
                 },
-                "type": "div",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <a
-                    className="button is-clear"
-                    onClick={[Function]}
-                    title={undefined}
->
-                    <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                    />
-</a>,
-                  "className": "column",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <SvgSymbol
-                      className="icon"
-                      sym="trash-icon"
-                      viewBox="0 0 20 20"
-/>,
-                    "className": "button is-clear",
-                    "onClick": [Function],
-                    "title": undefined,
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "className": "icon",
-                      "sym": "trash-icon",
-                      "viewBox": "0 0 20 20",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "a",
-                },
-                "type": "div",
+                "type": "a",
               },
             ],
             "type": "li",
@@ -602,33 +582,32 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <div
-                  className="column is-four-fifths"
+                <Link
+                  replace={false}
+                  to="/challenge/654/task/456"
 >
-                  <Link
-                                    replace={false}
-                                    to="/challenge/654/task/456"
+                  <span
+                                    className="saved-tasks__task__name"
                   >
                                     Second Task
-                                     — 
-                                    Second Challenge
-                  </Link>
-</div>,
-                <div
-                  className="column"
+                  </span>
+                   — 
+                  Second Challenge
+</Link>,
+                <span
+                  className="connector"
+/>,
+                <a
+                  className="button is-clear"
+                  onClick={[Function]}
+                  title={undefined}
 >
-                  <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                  >
-                                    <SvgSymbol
-                                                      className="icon"
-                                                      sym="trash-icon"
-                                                      viewBox="0 0 20 20"
-                                    />
-                  </a>
-</div>,
+                  <SvgSymbol
+                                    className="icon"
+                                    sym="trash-icon"
+                                    viewBox="0 0 20 20"
+                  />
+</a>,
               ],
               "className": "columns saved-tasks__task",
             },
@@ -637,17 +616,63 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="saved-tasks__task__name"
+>
+                      Second Task
+</span>,
+                    " — ",
+                    "Second Challenge",
+                  ],
+                  "replace": false,
+                  "to": "/challenge/654/task/456",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Second Task",
+                      "className": "saved-tasks__task__name",
+                    },
+                    "ref": null,
+                    "rendered": "Second Task",
+                    "type": "span",
+                  },
+                  " — ",
+                  "Second Challenge",
+                ],
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <Link
-                    replace={false}
-                    to="/challenge/654/task/456"
->
-                    Second Task
-                     — 
-                    Second Challenge
-</Link>,
-                  "className": "column is-four-fifths",
+                  "className": "connector",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  "className": "button is-clear",
+                  "onClick": [Function],
+                  "title": undefined,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -655,74 +680,15 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "children": Array [
-                      "Second Task",
-                      " — ",
-                      "Second Challenge",
-                    ],
-                    "replace": false,
-                    "to": "/challenge/654/task/456",
+                    "className": "icon",
+                    "sym": "trash-icon",
+                    "viewBox": "0 0 20 20",
                   },
                   "ref": null,
-                  "rendered": Array [
-                    "Second Task",
-                    " — ",
-                    "Second Challenge",
-                  ],
+                  "rendered": null,
                   "type": [Function],
                 },
-                "type": "div",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <a
-                    className="button is-clear"
-                    onClick={[Function]}
-                    title={undefined}
->
-                    <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                    />
-</a>,
-                  "className": "column",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <SvgSymbol
-                      className="icon"
-                      sym="trash-icon"
-                      viewBox="0 0 20 20"
-/>,
-                    "className": "button is-clear",
-                    "onClick": [Function],
-                    "title": undefined,
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "className": "icon",
-                      "sym": "trash-icon",
-                      "viewBox": "0 0 20 20",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "a",
-                },
-                "type": "div",
+                "type": "a",
               },
             ],
             "type": "li",
@@ -733,33 +699,32 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <div
-                  className="column is-four-fifths"
+                <Link
+                  replace={false}
+                  to="/challenge/987/task/789"
 >
-                  <Link
-                                    replace={false}
-                                    to="/challenge/987/task/789"
+                  <span
+                                    className="saved-tasks__task__name"
                   >
                                     Third Task
-                                     — 
-                                    Third Challenge
-                  </Link>
-</div>,
-                <div
-                  className="column"
+                  </span>
+                   — 
+                  Third Challenge
+</Link>,
+                <span
+                  className="connector"
+/>,
+                <a
+                  className="button is-clear"
+                  onClick={[Function]}
+                  title={undefined}
 >
-                  <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                  >
-                                    <SvgSymbol
-                                                      className="icon"
-                                                      sym="trash-icon"
-                                                      viewBox="0 0 20 20"
-                                    />
-                  </a>
-</div>,
+                  <SvgSymbol
+                                    className="icon"
+                                    sym="trash-icon"
+                                    viewBox="0 0 20 20"
+                  />
+</a>,
               ],
               "className": "columns saved-tasks__task",
             },
@@ -768,17 +733,63 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="saved-tasks__task__name"
+>
+                      Third Task
+</span>,
+                    " — ",
+                    "Third Challenge",
+                  ],
+                  "replace": false,
+                  "to": "/challenge/987/task/789",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Third Task",
+                      "className": "saved-tasks__task__name",
+                    },
+                    "ref": null,
+                    "rendered": "Third Task",
+                    "type": "span",
+                  },
+                  " — ",
+                  "Third Challenge",
+                ],
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <Link
-                    replace={false}
-                    to="/challenge/987/task/789"
->
-                    Third Task
-                     — 
-                    Third Challenge
-</Link>,
-                  "className": "column is-four-fifths",
+                  "className": "connector",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "span",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+/>,
+                  "className": "button is-clear",
+                  "onClick": [Function],
+                  "title": undefined,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -786,74 +797,15 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "class",
                   "props": Object {
-                    "children": Array [
-                      "Third Task",
-                      " — ",
-                      "Third Challenge",
-                    ],
-                    "replace": false,
-                    "to": "/challenge/987/task/789",
+                    "className": "icon",
+                    "sym": "trash-icon",
+                    "viewBox": "0 0 20 20",
                   },
                   "ref": null,
-                  "rendered": Array [
-                    "Third Task",
-                    " — ",
-                    "Third Challenge",
-                  ],
+                  "rendered": null,
                   "type": [Function],
                 },
-                "type": "div",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <a
-                    className="button is-clear"
-                    onClick={[Function]}
-                    title={undefined}
->
-                    <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                    />
-</a>,
-                  "className": "column",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <SvgSymbol
-                      className="icon"
-                      sym="trash-icon"
-                      viewBox="0 0 20 20"
-/>,
-                    "className": "button is-clear",
-                    "onClick": [Function],
-                    "title": undefined,
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "className": "icon",
-                      "sym": "trash-icon",
-                      "viewBox": "0 0 20 20",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "a",
-                },
-                "type": "div",
+                "type": "a",
               },
             ],
             "type": "li",
@@ -884,95 +836,92 @@ ShallowWrapper {
             <li
                         className="columns saved-tasks__task"
             >
-                        <div
-                                    className="column is-four-fifths"
+                        <Link
+                                    replace={false}
+                                    to="/challenge/321/task/123"
                         >
-                                    <Link
-                                                replace={false}
-                                                to="/challenge/321/task/123"
+                                    <span
+                                                className="saved-tasks__task__name"
                                     >
                                                 First Task
-                                                 — 
-                                                First Challenge
-                                    </Link>
-                        </div>
-                        <div
-                                    className="column"
+                                    </span>
+                                     — 
+                                    First Challenge
+                        </Link>
+                        <span
+                                    className="connector"
+                        />
+                        <a
+                                    className="button is-clear"
+                                    onClick={[Function]}
+                                    title={undefined}
                         >
-                                    <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                    >
-                                                <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                                />
-                                    </a>
-                        </div>
+                                    <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        </a>
             </li>
             <li
                         className="columns saved-tasks__task"
             >
-                        <div
-                                    className="column is-four-fifths"
+                        <Link
+                                    replace={false}
+                                    to="/challenge/654/task/456"
                         >
-                                    <Link
-                                                replace={false}
-                                                to="/challenge/654/task/456"
+                                    <span
+                                                className="saved-tasks__task__name"
                                     >
                                                 Second Task
-                                                 — 
-                                                Second Challenge
-                                    </Link>
-                        </div>
-                        <div
-                                    className="column"
+                                    </span>
+                                     — 
+                                    Second Challenge
+                        </Link>
+                        <span
+                                    className="connector"
+                        />
+                        <a
+                                    className="button is-clear"
+                                    onClick={[Function]}
+                                    title={undefined}
                         >
-                                    <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                    >
-                                                <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                                />
-                                    </a>
-                        </div>
+                                    <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        </a>
             </li>
             <li
                         className="columns saved-tasks__task"
             >
-                        <div
-                                    className="column is-four-fifths"
+                        <Link
+                                    replace={false}
+                                    to="/challenge/987/task/789"
                         >
-                                    <Link
-                                                replace={false}
-                                                to="/challenge/987/task/789"
+                                    <span
+                                                className="saved-tasks__task__name"
                                     >
                                                 Third Task
-                                                 — 
-                                                Third Challenge
-                                    </Link>
-                        </div>
-                        <div
-                                    className="column"
+                                    </span>
+                                     — 
+                                    Third Challenge
+                        </Link>
+                        <span
+                                    className="connector"
+                        />
+                        <a
+                                    className="button is-clear"
+                                    onClick={[Function]}
+                                    title={undefined}
                         >
-                                    <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                    >
-                                                <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                                />
-                                    </a>
-                        </div>
+                                    <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        </a>
             </li>
 </ul>,
         ],
@@ -1017,95 +966,92 @@ ShallowWrapper {
               <li
                 className="columns saved-tasks__task"
 >
-                <div
-                                className="column is-four-fifths"
+                <Link
+                                replace={false}
+                                to="/challenge/321/task/123"
                 >
-                                <Link
-                                                replace={false}
-                                                to="/challenge/321/task/123"
+                                <span
+                                                className="saved-tasks__task__name"
                                 >
                                                 First Task
-                                                 — 
-                                                First Challenge
-                                </Link>
-                </div>
-                <div
-                                className="column"
+                                </span>
+                                 — 
+                                First Challenge
+                </Link>
+                <span
+                                className="connector"
+                />
+                <a
+                                className="button is-clear"
+                                onClick={[Function]}
+                                title={undefined}
                 >
-                                <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                >
-                                                <SvgSymbol
-                                                                className="icon"
-                                                                sym="trash-icon"
-                                                                viewBox="0 0 20 20"
-                                                />
-                                </a>
-                </div>
+                                <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                />
+                </a>
 </li>,
               <li
                 className="columns saved-tasks__task"
 >
-                <div
-                                className="column is-four-fifths"
+                <Link
+                                replace={false}
+                                to="/challenge/654/task/456"
                 >
-                                <Link
-                                                replace={false}
-                                                to="/challenge/654/task/456"
+                                <span
+                                                className="saved-tasks__task__name"
                                 >
                                                 Second Task
-                                                 — 
-                                                Second Challenge
-                                </Link>
-                </div>
-                <div
-                                className="column"
+                                </span>
+                                 — 
+                                Second Challenge
+                </Link>
+                <span
+                                className="connector"
+                />
+                <a
+                                className="button is-clear"
+                                onClick={[Function]}
+                                title={undefined}
                 >
-                                <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                >
-                                                <SvgSymbol
-                                                                className="icon"
-                                                                sym="trash-icon"
-                                                                viewBox="0 0 20 20"
-                                                />
-                                </a>
-                </div>
+                                <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                />
+                </a>
 </li>,
               <li
                 className="columns saved-tasks__task"
 >
-                <div
-                                className="column is-four-fifths"
+                <Link
+                                replace={false}
+                                to="/challenge/987/task/789"
                 >
-                                <Link
-                                                replace={false}
-                                                to="/challenge/987/task/789"
+                                <span
+                                                className="saved-tasks__task__name"
                                 >
                                                 Third Task
-                                                 — 
-                                                Third Challenge
-                                </Link>
-                </div>
-                <div
-                                className="column"
+                                </span>
+                                 — 
+                                Third Challenge
+                </Link>
+                <span
+                                className="connector"
+                />
+                <a
+                                className="button is-clear"
+                                onClick={[Function]}
+                                title={undefined}
                 >
-                                <a
-                                                className="button is-clear"
-                                                onClick={[Function]}
-                                                title={undefined}
-                                >
-                                                <SvgSymbol
-                                                                className="icon"
-                                                                sym="trash-icon"
-                                                                viewBox="0 0 20 20"
-                                                />
-                                </a>
-                </div>
+                                <SvgSymbol
+                                                className="icon"
+                                                sym="trash-icon"
+                                                viewBox="0 0 20 20"
+                                />
+                </a>
 </li>,
             ],
           },
@@ -1117,33 +1063,32 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <div
-                    className="column is-four-fifths"
+                  <Link
+                    replace={false}
+                    to="/challenge/321/task/123"
 >
-                    <Link
-                                        replace={false}
-                                        to="/challenge/321/task/123"
+                    <span
+                                        className="saved-tasks__task__name"
                     >
                                         First Task
-                                         — 
-                                        First Challenge
-                    </Link>
-</div>,
-                  <div
-                    className="column"
+                    </span>
+                     — 
+                    First Challenge
+</Link>,
+                  <span
+                    className="connector"
+/>,
+                  <a
+                    className="button is-clear"
+                    onClick={[Function]}
+                    title={undefined}
 >
-                    <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                    >
-                                        <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                        />
-                    </a>
-</div>,
+                    <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                    />
+</a>,
                 ],
                 "className": "columns saved-tasks__task",
               },
@@ -1152,17 +1097,63 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": Array [
+                      <span
+                        className="saved-tasks__task__name"
+>
+                        First Task
+</span>,
+                      " — ",
+                      "First Challenge",
+                    ],
+                    "replace": false,
+                    "to": "/challenge/321/task/123",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "First Task",
+                        "className": "saved-tasks__task__name",
+                      },
+                      "ref": null,
+                      "rendered": "First Task",
+                      "type": "span",
+                    },
+                    " — ",
+                    "First Challenge",
+                  ],
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <Link
-                      replace={false}
-                      to="/challenge/321/task/123"
->
-                      First Task
-                       — 
-                      First Challenge
-</Link>,
-                    "className": "column is-four-fifths",
+                    "className": "connector",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <SvgSymbol
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
+/>,
+                    "className": "button is-clear",
+                    "onClick": [Function],
+                    "title": undefined,
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1170,74 +1161,15 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "class",
                     "props": Object {
-                      "children": Array [
-                        "First Task",
-                        " — ",
-                        "First Challenge",
-                      ],
-                      "replace": false,
-                      "to": "/challenge/321/task/123",
+                      "className": "icon",
+                      "sym": "trash-icon",
+                      "viewBox": "0 0 20 20",
                     },
                     "ref": null,
-                    "rendered": Array [
-                      "First Task",
-                      " — ",
-                      "First Challenge",
-                    ],
+                    "rendered": null,
                     "type": [Function],
                   },
-                  "type": "div",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <a
-                      className="button is-clear"
-                      onClick={[Function]}
-                      title={undefined}
->
-                      <SvgSymbol
-                                            className="icon"
-                                            sym="trash-icon"
-                                            viewBox="0 0 20 20"
-                      />
-</a>,
-                    "className": "column",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <SvgSymbol
-                        className="icon"
-                        sym="trash-icon"
-                        viewBox="0 0 20 20"
-/>,
-                      "className": "button is-clear",
-                      "onClick": [Function],
-                      "title": undefined,
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "className": "icon",
-                        "sym": "trash-icon",
-                        "viewBox": "0 0 20 20",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "a",
-                  },
-                  "type": "div",
+                  "type": "a",
                 },
               ],
               "type": "li",
@@ -1248,33 +1180,32 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <div
-                    className="column is-four-fifths"
+                  <Link
+                    replace={false}
+                    to="/challenge/654/task/456"
 >
-                    <Link
-                                        replace={false}
-                                        to="/challenge/654/task/456"
+                    <span
+                                        className="saved-tasks__task__name"
                     >
                                         Second Task
-                                         — 
-                                        Second Challenge
-                    </Link>
-</div>,
-                  <div
-                    className="column"
+                    </span>
+                     — 
+                    Second Challenge
+</Link>,
+                  <span
+                    className="connector"
+/>,
+                  <a
+                    className="button is-clear"
+                    onClick={[Function]}
+                    title={undefined}
 >
-                    <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                    >
-                                        <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                        />
-                    </a>
-</div>,
+                    <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                    />
+</a>,
                 ],
                 "className": "columns saved-tasks__task",
               },
@@ -1283,17 +1214,63 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": Array [
+                      <span
+                        className="saved-tasks__task__name"
+>
+                        Second Task
+</span>,
+                      " — ",
+                      "Second Challenge",
+                    ],
+                    "replace": false,
+                    "to": "/challenge/654/task/456",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "Second Task",
+                        "className": "saved-tasks__task__name",
+                      },
+                      "ref": null,
+                      "rendered": "Second Task",
+                      "type": "span",
+                    },
+                    " — ",
+                    "Second Challenge",
+                  ],
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <Link
-                      replace={false}
-                      to="/challenge/654/task/456"
->
-                      Second Task
-                       — 
-                      Second Challenge
-</Link>,
-                    "className": "column is-four-fifths",
+                    "className": "connector",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <SvgSymbol
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
+/>,
+                    "className": "button is-clear",
+                    "onClick": [Function],
+                    "title": undefined,
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1301,74 +1278,15 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "class",
                     "props": Object {
-                      "children": Array [
-                        "Second Task",
-                        " — ",
-                        "Second Challenge",
-                      ],
-                      "replace": false,
-                      "to": "/challenge/654/task/456",
+                      "className": "icon",
+                      "sym": "trash-icon",
+                      "viewBox": "0 0 20 20",
                     },
                     "ref": null,
-                    "rendered": Array [
-                      "Second Task",
-                      " — ",
-                      "Second Challenge",
-                    ],
+                    "rendered": null,
                     "type": [Function],
                   },
-                  "type": "div",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <a
-                      className="button is-clear"
-                      onClick={[Function]}
-                      title={undefined}
->
-                      <SvgSymbol
-                                            className="icon"
-                                            sym="trash-icon"
-                                            viewBox="0 0 20 20"
-                      />
-</a>,
-                    "className": "column",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <SvgSymbol
-                        className="icon"
-                        sym="trash-icon"
-                        viewBox="0 0 20 20"
-/>,
-                      "className": "button is-clear",
-                      "onClick": [Function],
-                      "title": undefined,
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "className": "icon",
-                        "sym": "trash-icon",
-                        "viewBox": "0 0 20 20",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "a",
-                  },
-                  "type": "div",
+                  "type": "a",
                 },
               ],
               "type": "li",
@@ -1379,33 +1297,32 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <div
-                    className="column is-four-fifths"
+                  <Link
+                    replace={false}
+                    to="/challenge/987/task/789"
 >
-                    <Link
-                                        replace={false}
-                                        to="/challenge/987/task/789"
+                    <span
+                                        className="saved-tasks__task__name"
                     >
                                         Third Task
-                                         — 
-                                        Third Challenge
-                    </Link>
-</div>,
-                  <div
-                    className="column"
+                    </span>
+                     — 
+                    Third Challenge
+</Link>,
+                  <span
+                    className="connector"
+/>,
+                  <a
+                    className="button is-clear"
+                    onClick={[Function]}
+                    title={undefined}
 >
-                    <a
-                                        className="button is-clear"
-                                        onClick={[Function]}
-                                        title={undefined}
-                    >
-                                        <SvgSymbol
-                                                            className="icon"
-                                                            sym="trash-icon"
-                                                            viewBox="0 0 20 20"
-                                        />
-                    </a>
-</div>,
+                    <SvgSymbol
+                                        className="icon"
+                                        sym="trash-icon"
+                                        viewBox="0 0 20 20"
+                    />
+</a>,
                 ],
                 "className": "columns saved-tasks__task",
               },
@@ -1414,17 +1331,63 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": Array [
+                      <span
+                        className="saved-tasks__task__name"
+>
+                        Third Task
+</span>,
+                      " — ",
+                      "Third Challenge",
+                    ],
+                    "replace": false,
+                    "to": "/challenge/987/task/789",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "Third Task",
+                        "className": "saved-tasks__task__name",
+                      },
+                      "ref": null,
+                      "rendered": "Third Task",
+                      "type": "span",
+                    },
+                    " — ",
+                    "Third Challenge",
+                  ],
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <Link
-                      replace={false}
-                      to="/challenge/987/task/789"
->
-                      Third Task
-                       — 
-                      Third Challenge
-</Link>,
-                    "className": "column is-four-fifths",
+                    "className": "connector",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <SvgSymbol
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
+/>,
+                    "className": "button is-clear",
+                    "onClick": [Function],
+                    "title": undefined,
                   },
                   "ref": null,
                   "rendered": Object {
@@ -1432,74 +1395,15 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "class",
                     "props": Object {
-                      "children": Array [
-                        "Third Task",
-                        " — ",
-                        "Third Challenge",
-                      ],
-                      "replace": false,
-                      "to": "/challenge/987/task/789",
+                      "className": "icon",
+                      "sym": "trash-icon",
+                      "viewBox": "0 0 20 20",
                     },
                     "ref": null,
-                    "rendered": Array [
-                      "Third Task",
-                      " — ",
-                      "Third Challenge",
-                    ],
+                    "rendered": null,
                     "type": [Function],
                   },
-                  "type": "div",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <a
-                      className="button is-clear"
-                      onClick={[Function]}
-                      title={undefined}
->
-                      <SvgSymbol
-                                            className="icon"
-                                            sym="trash-icon"
-                                            viewBox="0 0 20 20"
-                      />
-</a>,
-                    "className": "column",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <SvgSymbol
-                        className="icon"
-                        sym="trash-icon"
-                        viewBox="0 0 20 20"
-/>,
-                      "className": "button is-clear",
-                      "onClick": [Function],
-                      "title": undefined,
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "className": "icon",
-                        "sym": "trash-icon",
-                        "viewBox": "0 0 20 20",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "a",
-                  },
-                  "type": "div",
+                  "type": "a",
                 },
               ],
               "type": "li",
