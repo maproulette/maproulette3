@@ -9,7 +9,7 @@ export class AsManageable {
   }
 
   isRebuildable() {
-    return !_isEmpty(this.overpassQL) || !_isEmpty(this.remoteGeoJson)
+    return !_isEmpty(this.overpassQL)
   }
 }
 

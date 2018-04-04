@@ -16,13 +16,6 @@ describe("isRebuildable", () => {
     expect(wrappedChallenge.isRebuildable()).toBe(true)
   })
 
-  test("returns true if the challenge has a remote GeoJSON URL", () => {
-    challenge.remoteGeoJson = "https://example.com/challenge.geojson"
-
-    const wrappedChallenge = AsManageable(challenge)
-    expect(wrappedChallenge.isRebuildable()).toBe(true)
-  })
-
   test("returns false if the challenge was not built from refreshable data", () => {
     const wrappedChallenge = AsManageable(challenge)
     expect(wrappedChallenge.isRebuildable()).toBe(false)

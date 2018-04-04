@@ -14,7 +14,7 @@ import { challengeDenormalizationSchema,
          rebuildChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
-import AsManageable from '../../../../services/Challenge/AsManageable'
+import AsManageable from '../../../../interactions/Challenge/AsManageable'
 import { isUsableChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithClusteredTasks
