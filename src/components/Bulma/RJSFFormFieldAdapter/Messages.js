@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Drop GeoJSON file here or click to select file",
   },
 
+  readOnlyFile: {
+    id: "Form.textUpload.readonly",
+    defaultMessage: "Existing file will be used",
+  },
+
   addPriorityRuleLabel: {
     id: "Form.controls.addPriorityRule.label",
     defaultMessage: "Add a Rule",

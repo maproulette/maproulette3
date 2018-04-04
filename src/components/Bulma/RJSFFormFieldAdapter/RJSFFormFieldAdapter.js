@@ -195,25 +195,35 @@ export const CheckboxField = ({id, label, required, rawDescription, children}) =
  * `"ui:widget": DropzoneTextUpload`). The form field should be of type string,
  * and it will be set with the text content of the uploaded file.
  */
-export const DropzoneTextUpload = ({required, onChange}) => (
-  <Dropzone className="dropzone" acceptClassName="active" multiple={false} disablePreview
-            onDrop={files =>
-              extractFileContentAsString(files[0]).then(content => onChange(content))}>
-    {({acceptedFiles}) => {
-      if (acceptedFiles.length > 0) {
-        return <p>{acceptedFiles[0].name}</p>
-      }
-      else {
-        return (
-          <div>
-            <FormattedMessage {...messages.uploadFilePrompt} />
-            <p><SvgSymbol viewBox='0 0 20 20' sym="upload-icon" /></p>
-          </div>
-        )
-      }
-    }}
-  </Dropzone>
-)
+export const DropzoneTextUpload = ({required, onChange, readonly}) => {
+  if (readonly) {
+    return (
+      <div className="readonly-file">
+        <FormattedMessage {...messages.readOnlyFile} />
+      </div>
+    )
+  }
+
+  return (
+    <Dropzone className="dropzone" acceptClassName="active" multiple={false} disablePreview
+              onDrop={files =>
+                extractFileContentAsString(files[0]).then(content => onChange(content))}>
+      {({acceptedFiles}) => {
+        if (acceptedFiles.length > 0) {
+          return <p>{acceptedFiles[0].name}</p>
+        }
+        else {
+          return (
+            <div>
+              <FormattedMessage {...messages.uploadFilePrompt} />
+              <p><SvgSymbol viewBox='0 0 20 20' sym="upload-icon" /></p>
+            </div>
+          )
+        }
+      }}
+    </Dropzone>
+  )
+}
 
 /**
  * Interprets and renders the given field description as Markdown

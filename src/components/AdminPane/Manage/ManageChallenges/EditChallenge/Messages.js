@@ -223,6 +223,11 @@ will not be able to make sense of it.
       "of data and bog the system down."
   },
 
+  overpassQLPlaceholder: {
+    id: 'Admin.EditChallenge.form.overpassQL.placeholder',
+    defaultMessage: "Enter Overpass API query here...",
+  },
+
   localGeoJsonLabel: {
     id: 'Admin.EditChallenge.form.localGeoJson.label',
     defaultMessage: "Upload File",
@@ -241,6 +246,11 @@ will not be able to make sense of it.
   remoteGeoJsonDescription: {
     id: 'Admin.EditChallenge.form.remoteGeoJson.description',
     defaultMessage: "Remote URL location from which to retrieve the GeoJSON",
+  },
+
+  remoteGeoJsonPlaceholder: {
+    id: 'Admin.EditChallenge.form.remoteGeoJson.placeholder',
+    defaultMessage: "http://www.example.com/geojson.json",
   },
 
   step3Label: {
