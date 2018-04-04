@@ -3,6 +3,7 @@ import { persistStore, persistReducer, createMigrate } from 'redux-persist'
 import thunk from 'redux-thunk'
 import localForage from 'localforage'
 import _has from 'lodash/has'
+import _isObject from 'lodash/isObject'
 import { visibleLayer } from './services/VisibleLayer/VisibleLayer'
 import { currentUser, userEntities } from './services/User/User'
 import { projectEntities } from './services/Project/Project'
@@ -25,7 +26,7 @@ import { currentErrors } from './services/Error/Error'
 import { adminContext } from './services/AdminContext/AdminContext'
 import { currentPreferences } from './services/Preferences/Preferences'
 
-const DATA_MODEL_VERSION = 6
+const DATA_MODEL_VERSION = 7
 
 /**
  * initializePersistedStore sets up the redux store in combination with
@@ -86,7 +87,13 @@ export const initializePersistedStore = callback => {
       delete state.currentClusteredTasks
 
       return state
-    }
+    },
+    7: state => {
+      // Reset challenges potentially corrupted by #284
+      if (_isObject(state.entities)) {
+        delete state.entities.challenges
+      }
+    },
   }
 
   // redux-persist config object. For explanation of options, see:
