@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { FormattedMessage,
-         FormattedRelative } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
@@ -24,7 +23,7 @@ import WithBoundedTasks
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
 import ChallengeTaskMap from '../ChallengeTaskMap/ChallengeTaskMap'
 import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import TaskBuildProgress from './TaskBuildProgress'
 import messages from './Messages'
 
 /**
@@ -36,28 +35,7 @@ import messages from './Messages'
 export class ViewChallengeTasks extends Component {
   render() {
     if (this.props.challenge.status === ChallengeStatus.building) {
-      return (
-        <div>
-          <div className="challenge-tasks-status">
-            <h3><FormattedMessage {...messages.tasksBuilding} /></h3>
-
-            <div className="since-when">
-              <FormattedMessage {...messages.tasksCreatedCount}
-                                values={{count: _get(this.props.challenge,
-                                  'actions.total', 0)}}
-              /> <FormattedMessage {...messages.asOf}
-              /> <FormattedRelative value={new Date(this.props.challenge._meta.fetchedAt)} />
-            </div>
-
-            <button className={classNames("button is-primary is-outlined has-svg-icon refresh-control",
-                                          {"is-loading": this.props.loadingChallenge})}
-                    onClick={this.props.refreshChallengeStatus}>
-              <SvgSymbol viewBox='0 0 20 20' sym="refresh-icon" />
-              <FormattedMessage {...messages.refreshStatusLabel} />
-            </button>
-          </div>
-        </div>
-      )
+      return <TaskBuildProgress {...this.props} />
     }
 
     if (this.props.challenge.status === ChallengeStatus.failed) {
