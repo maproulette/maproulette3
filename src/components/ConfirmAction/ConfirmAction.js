@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import Modal from '../Bulma/Modal'
@@ -46,11 +47,11 @@ export default class ConfirmAction extends Component {
         <Modal className="confirm-action__modal" onClose={this.cancel} isActive={this.state.confirming}>
           <article className="message is-danger">
             <div className="message-header">
-              <FormattedMessage {...messages.title} />
+              {this.props.title || <FormattedMessage {...messages.title} />}
             </div>
             <div className="message-body">
               <div className="confirm-action__prompt">
-                <FormattedMessage {...messages.prompt} />
+                {this.props.prompt || <FormattedMessage {...messages.prompt} />}
               </div>
 
               <div className="confirm-action__controls">
@@ -70,4 +71,9 @@ export default class ConfirmAction extends Component {
       </div>
     )
   }
+}
+
+ConfirmAction.propTypes = {
+  title: PropTypes.node,
+  prompt: PropTypes.node,
 }

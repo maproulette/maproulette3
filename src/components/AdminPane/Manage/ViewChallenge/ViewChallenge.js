@@ -34,6 +34,10 @@ export class ViewChallenge extends Component {
                                this.props.challenge.id)
   }
 
+  rebuildChallenge = () => {
+    this.props.rebuildChallenge(this.props.challenge.id)
+  }
+
   render() {
     if (!this.props.challenge) {
       return <BusySpinner />
@@ -88,9 +92,11 @@ export class ViewChallenge extends Component {
 
             {this.props.challenge.isRebuildable() &&
              <div className="column is-narrow admin__manage__controls--control">
-               <a onClick={() => this.props.rebuildChallenge(this.props.challenge.id)}>
-                 <FormattedMessage {...messages.rebuildChallengeLabel } />
-               </a>
+               <ConfirmAction prompt={<FormattedMessage {...messages.rebuildChallengePrompt} />}>
+                 <a onClick={this.rebuildChallenge}>
+                   <FormattedMessage {...messages.rebuildChallengeLabel } />
+                 </a>
+               </ConfirmAction>
              </div>
             }
 
