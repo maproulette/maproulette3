@@ -117,7 +117,7 @@ export const jsSchema = intl => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = {
+export const uiSchema = () => ({
   updateTasks: {
     "ui:widget": "radio",
   },
@@ -136,7 +136,7 @@ export const uiSchema = {
   customBasemap: {
     "ui:emptyValue": "",
   },
-}
+})
 
 export const numericEnvSetting = (settingName, defaultValue) => {
   const setting = _get(process.env, settingName, defaultValue)

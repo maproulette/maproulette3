@@ -117,7 +117,7 @@ export const jsSchema = (intl, user) => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = {
+export const uiSchema = () => ({
   featured: {
     "ui:widget": "radio",
   },
@@ -139,4 +139,4 @@ export const uiSchema = {
   additionalKeywords: {
     "ui:field": "tags",
   },
-}
+})

@@ -1,6 +1,7 @@
 import { DropzoneTextUpload }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
-import _isFinite from 'lodash/isFinite'
+import AsEditableChallenge
+       from '../../../../../interactions/Challenge/AsEditableChallenge'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
 import messages from './Messages'
@@ -21,6 +22,8 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl, user, challengeData) => {
+  const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly()
+
   const schema = {
     "$schema": "http://json-schema.org/draft-06/schema#",
     title: intl.formatMessage(messages.step2Label),
@@ -62,8 +65,7 @@ export const jsSchema = (intl, user, challengeData) => {
     },
   }
 
-  if (!_isFinite(challengeData.id) ||
-      !_isFinite(challengeData.status)) {
+  if (!sourceReadOnly) {
     schema.properties.source= {
       title: intl.formatMessage(messages.sourceLabel),
       type: "string",
@@ -107,18 +109,25 @@ export const jsSchema = (intl, user, challengeData) => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = {
-  source: {
-    "ui:widget": "radio",
-  },
-  overpassQL: {
-    "ui:widget": "textarea",
-    "ui:placeholder": "Enter Overpass API query here...",
-  },
-  localGeoJSON: {
-    "ui:widget": DropzoneTextUpload,
-  },
-  remoteGeoJson: {
-    "ui:placeholder": "http://www.example.com/geojson.json",
-  },
+export const uiSchema = (intl, user, challengeData) => {
+  const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly()
+
+  return {
+    source: {
+      "ui:widget": "radio",
+    },
+    overpassQL: {
+      "ui:widget": "textarea",
+      "ui:placeholder": intl.formatMessage(messages.overpassQLPlaceholder),
+      "ui:readonly": sourceReadOnly,
+    },
+    localGeoJSON: {
+      "ui:widget": DropzoneTextUpload,
+      "ui:readonly": sourceReadOnly,
+    },
+    remoteGeoJson: {
+      "ui:placeholder": intl.formatMessage(messages.remoteGeoJsonPlaceholder),
+      "ui:readonly": sourceReadOnly,
+    },
+  }
 }

@@ -120,4 +120,16 @@
   box-shadow: none;
   border-radius: $radius-medium;
   color: $grey;
+
+  &:hover, &:focus {
+    outline: none;
+    border-color: $grey-light;
+    box-shadow: none;
+  }
+
+  &[readonly], &[readonly]:hover, &[readonly]:focus {
+    outline: none;
+    border-color: $form-element-border-color;
+    box-shadow: none;
+  }
 }

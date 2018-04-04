@@ -30,6 +30,8 @@ import { ChallengeCategoryKeywords,
          categoryMatchingKeywords,
          rawCategoryKeywords }
        from '../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
+import AsEditableChallenge
+       from '../../../../../interactions/Challenge/AsEditableChallenge'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import { preparePriorityRuleGroupForForm,
          preparePriorityRuleGroupForSaving } from './PriorityRuleGroup'
@@ -266,10 +268,10 @@ export class EditChallenge extends Component {
    * server.
    */
   prepareFormDataForSaving = () => {
-    const challengeData = Object.assign(
+    const challengeData = AsEditableChallenge(Object.assign(
       this.prepareChallengeDataForForm(this.props.challenge),
       this.state.formData,
-    )
+    ))
 
     challengeData.highPriorityRule =
       preparePriorityRuleGroupForSaving(challengeData.highPriorityRules.ruleGroup)
@@ -302,6 +304,12 @@ export class EditChallenge extends Component {
     challengeData.removedTags =
       _difference(_get(this.props, 'challenge.tags', []),
                   challengeData.tags)
+
+    // We don't allow task source data to be modified for existing challenges
+    // once it has been provided.
+    if (challengeData.isSourceReadOnly()) {
+      challengeData.clearSources()
+    }
 
     return challengeData
   }
@@ -370,7 +378,7 @@ export class EditChallenge extends Component {
         <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
         <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
               validate={this.additionalValidation}
-              uiSchema={currentStep.uiSchema}
+              uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
               FieldTemplate={CustomFieldTemplate}
               ArrayFieldTemplate={CustomArrayFieldTemplate}
               fields={customFields}

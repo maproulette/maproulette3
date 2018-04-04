@@ -144,7 +144,7 @@ const priorityRuleGroupUISchema = {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = {
+export const uiSchema = () => ({
   defaultPriority: {
     "ui:widget": "select",
   },
@@ -157,4 +157,4 @@ export const uiSchema = {
   lowPriorityRules: {
     ruleGroup: priorityRuleGroupUISchema,
   },
-}
+})
