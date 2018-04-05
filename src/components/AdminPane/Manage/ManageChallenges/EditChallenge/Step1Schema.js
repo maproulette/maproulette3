@@ -8,6 +8,8 @@ import { ChallengeDifficulty,
 import { ChallengeCategoryKeywords,
          keywordLabels }
        from '../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
+import AsEditableChallenge
+       from '../../../../../interactions/Challenge/AsEditableChallenge'
 import messages from './Messages'
 
 /**
@@ -25,8 +27,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user) => {
-  const manager = AsManager(user)
+export const jsSchema = (intl, user, challengeData) => {
   const localizedDifficultyLabels = difficultyLabels(intl)
   const localizedKeywordLabels = keywordLabels(intl)
 
@@ -93,15 +94,29 @@ export const jsSchema = (intl, user) => {
   }
 
   // Only show Featured option to superusers
-  if (manager.isSuperUser()) {
-    schemaFields.properties = Object.assign({
-      featured: {
-        title: intl.formatMessage(messages.featuredLabel),
-        description: intl.formatMessage(messages.featuredDescription),
-        type: "boolean",
-        default: false,
-      },
-    }, schemaFields.properties)
+  if (AsManager(user).isSuperUser()) {
+    schemaFields.properties.featured = {
+      title: intl.formatMessage(messages.featuredLabel),
+      description: intl.formatMessage(messages.featuredDescription),
+      type: "boolean",
+      default: false,
+    }
+  }
+
+  // For new challenges, offer option to toggle #maproulette tag on commit comment.
+  // The hashtag will be injected into the comment when the challenge is created, so
+  // when editing challenges the user would just modify the commit comment if they
+  // wish to add/remove the hashtag.
+  if (AsEditableChallenge(challengeData).isNew()) {
+    schemaFields.properties.includeCheckinHashtag = {
+      title: " ", // blank title
+      description: intl.formatMessage(messages.includeCheckinHashtagDescription),
+      type: "boolean",
+      enum: [true, false],
+      enumNames: [intl.formatMessage(messages.includeCheckinHashtagTrueLabel),
+                  intl.formatMessage(messages.includeCheckinHashtagFalseLabel)],
+      default: true,
+    }
   }
 
   return schemaFields
@@ -117,26 +132,52 @@ export const jsSchema = (intl, user) => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = () => ({
-  featured: {
-    "ui:widget": "radio",
-  },
-  enabled: {
-    "ui:widget": "radio",
-  },
-  description: {
-    "ui:field": "markdown",
-  },
-  instruction: {
-    "ui:field": "markdown",
-  },
-  difficulty: {
-    "ui:widget": "select",
-  },
-  category: {
-    "ui:widget": "select",
-  },
-  additionalKeywords: {
-    "ui:field": "tags",
-  },
-})
+export const uiSchema = (intl, user, challengeData) => {
+  const uiSchemaFields = {
+    "ui:order": [
+      "enabled", "name", "description", "blurb", "instruction",
+      "checkinComment", "difficulty", "category", "additionalKeywords",
+    ],
+    featured: {
+      "ui:widget": "radio",
+    },
+    enabled: {
+      "ui:widget": "radio",
+    },
+    description: {
+      "ui:field": "markdown",
+    },
+    instruction: {
+      "ui:field": "markdown",
+    },
+    difficulty: {
+      "ui:widget": "select",
+    },
+    category: {
+      "ui:widget": "select",
+    },
+    additionalKeywords: {
+      "ui:field": "tags",
+    },
+    includeCheckinHashtag: {
+      "ui:widget": "radio",
+    },
+  }
+
+  // Set ordering of conditional fields
+  if (AsManager(user).isSuperUser()) {
+    // Put featured field at top of form.
+    uiSchemaFields["ui:order"].unshift("featured")
+  }
+
+  if (AsEditableChallenge(challengeData).isNew()) {
+    // Add includeCheckinHashtag field after checkinComment
+    uiSchemaFields["ui:order"].splice(
+      uiSchemaFields["ui:order"].indexOf("checkinComment") + 1,
+      0,
+      "includeCheckinHashtag"
+    )
+  }
+
+  return uiSchemaFields
+}

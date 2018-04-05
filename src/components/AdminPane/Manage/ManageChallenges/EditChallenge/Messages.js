@@ -107,6 +107,22 @@ export default defineMessages({
                     "users in editor",
   },
 
+  includeCheckinHashtagTrueLabel: {
+    id: 'Admin.EditChallenge.form.includeCheckinHashtag.value.true.label',
+    defaultMessage: "Automatically append #maproulette hashtag (highly recommended)",
+  },
+
+  includeCheckinHashtagFalseLabel: {
+    id: 'Admin.EditChallenge.form.includeCheckinHashtag.value.false.label',
+    defaultMessage: "Skip hashtag",
+  },
+
+  includeCheckinHashtagDescription: {
+    id: 'Admin.EditChallenge.form.includeCheckinHashtag.description',
+    defaultMessage: "Allowing the hashtag to be appended to changeset comments " +
+      "is very useful for changeset analysis.",
+  },
+
   difficultyLabel: {
     id: 'Admin.EditChallenge.form.difficulty.label',
     defaultMessage: "Difficulty",
