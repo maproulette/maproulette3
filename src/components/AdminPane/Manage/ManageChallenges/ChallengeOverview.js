@@ -11,6 +11,7 @@ import { ChallengeStatus,
 import ChallengeProgress
        from '../../../ChallengeProgress/ChallengeProgress'
 import ChallengeKeywords from '../ChallengeKeywords/ChallengeKeywords'
+import VisibilitySwitch from '../VisibilitySwitch/VisibilitySwitch'
 import ChallengeActivityTimeline
        from '../../../ActivityTimeline/ChallengeActivityTimeline/ChallengeActivityTimeline'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
@@ -64,6 +65,16 @@ export class ChallengeOverview extends Component {
 
             <div className="column is-narrow status-value">
               <FormattedMessage {...messagesByStatus[status]} />
+            </div>
+          </div>
+
+          <div className="columns">
+            <div className="column is-one-quarter status-label">
+              <FormattedMessage {...messages.visibleLabel} />
+            </div>
+
+            <div className="column is-narrow status-value">
+              <VisibilitySwitch {...this.props} />
             </div>
           </div>
 

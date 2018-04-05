@@ -11,6 +11,7 @@ import { challengeDenormalizationSchema,
          fetchChallengeActivity,
          fetchChallengeActions,
          saveChallenge,
+         setIsEnabled,
          rebuildChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
@@ -131,6 +132,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(deleteChallenge(challengeId)).then(() =>
       ownProps.history.replace(`/admin/project/${projectId}`)
     )
+  },
+  updateEnabled: (challengeId, isEnabled) => {
+    dispatch(setIsEnabled(challengeId, isEnabled))
   },
 })
 

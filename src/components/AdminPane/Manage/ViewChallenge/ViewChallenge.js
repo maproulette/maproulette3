@@ -47,7 +47,7 @@ export class ViewChallenge extends Component {
 
     const tabs = {
       [this.props.intl.formatMessage(messages.challengeOverviewTabLabel)]:
-        <ChallengeOverview challenge={this.props.challenge} />,
+        <ChallengeOverview {...this.props} />,
 
       [this.props.intl.formatMessage(messages.challengeCommentsTabLabel)]:
         <ChallengeComments challenge={this.props.challenge} />,

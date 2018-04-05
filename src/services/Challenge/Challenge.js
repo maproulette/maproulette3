@@ -430,8 +430,11 @@ export const loadCompleteChallenge = function(challengeId) {
  * Saves the given challenge (either creating it or updating it, depending on
  * whether it already has an id) and updates the redux store with the latest
  * version from the server.
+ *
+ * If storeResponse is false, the redux store will not be updated with the
+ * response data upon completion of a successful request.
  */
-export const saveChallenge = function(originalChallengeData) {
+export const saveChallenge = function(originalChallengeData, storeResponse=true) {
   return function(dispatch) {
     // The server wants keywords/tags represented as a comma-separated string.
     let challengeData = _clone(originalChallengeData)
@@ -469,7 +472,10 @@ export const saveChallenge = function(originalChallengeData) {
       )
 
       return saveEndpoint.execute().then(normalizedResults => {
-        dispatch(receiveChallenges(normalizedResults.entities))
+        if (storeResponse) {
+          dispatch(receiveChallenges(normalizedResults.entities))
+        }
+
         return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`)
       }).catch((serverError) => {
         if (serverError.response && serverError.response.status === 401) {
@@ -481,9 +487,31 @@ export const saveChallenge = function(originalChallengeData) {
         else {
           console.log(serverError.response || serverError)
           dispatch(addServerError(AppErrors.challenge.saveFailure, serverError))
+
+          // Reload challenge data to ensure our local store is in sync with the
+          // server in case optimistic changes were made.
+          dispatch(loadCompleteChallenge(challengeData.id))
         }
       })
     })
+  }
+}
+
+export const setIsEnabled = function(challengeId, isEnabled) {
+  return function(dispatch) {
+    // Optimistically assume request will succeed. The store will be updated
+    // with fresh challenge data from the server if the save encounters
+    // an error.
+    dispatch(receiveChallenges({
+      challenges: {
+        [challengeId]: {
+          id: challengeId,
+          enabled: isEnabled,
+        }
+      }
+    }))
+
+    saveChallenge({id: challengeId, enabled: isEnabled}, false)(dispatch)
   }
 }
 
