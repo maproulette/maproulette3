@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Form from "react-jsonschema-form"
-import geojsonhint from '@mapbox/geojsonhint'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
@@ -32,6 +31,10 @@ import { ChallengeCategoryKeywords,
        from '../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import AsEditableChallenge
        from '../../../../../interactions/Challenge/AsEditableChallenge'
+import AsValidatableGeoJSON
+       from '../../../../../interactions/GeoJSON/AsValidatableGeoJSON'
+import AsValidatableOverpass
+       from '../../../../../interactions/Overpass/AsValidatableOverpass'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import { preparePriorityRuleGroupForForm,
          preparePriorityRuleGroupForSaving } from './PriorityRuleGroup'
@@ -117,29 +120,37 @@ export class EditChallenge extends Component {
   }
 
   /**
+   * Validate GeoJSON data
+   */
+  validateGeoJSON(jsonContent, errors) {
+    const geoJSON = AsValidatableGeoJSON(jsonContent)
+    const lintErrors = geoJSON.validate()
+
+    _each(lintErrors,
+          lintError => errors.localGeoJSON.addError(lintError.message))
+  }
+
+  /**
+   * Validate Overpass query
+   */
+  validateOverpass(query, errors) {
+    const lintErrors = AsValidatableOverpass(query).validate()
+    _each(lintErrors, lintError =>
+      errors.overpassQL.addError(this.props.intl.formatMessage(lintError.message))
+    )
+  }
+
+  /**
    * Perform additional validation checks beyond schema validation. Primarily
-   * we lint any GeoJSON to ensure it's valid.
+   * we check Overpass queries and GeoJSON.
    */
   additionalValidation = (formData, errors) => {
+    if (!_isEmpty(formData.overpassQL)) {
+      this.validateOverpass(formData.overpassQL, errors)
+    }
+
     if (!_isEmpty(formData.localGeoJSON)) {
-      let geoJSONObject = null
-
-      // json-lint-lines, used by geojsonhint when parsing string data, seems
-      // to struggle with certain geojson files. So we parse the json ourselves
-      // and give an object to geojsonhint, which side-steps the issue. The
-      // downside is that we lose line numbers when reporting errors.
-      try {
-        geoJSONObject = JSON.parse(formData.localGeoJSON)
-      }
-      catch(parseError) {
-        errors.localGeoJSON.addError(`${parseError}`)
-      }
-
-      if (geoJSONObject) {
-        const lintErrors = geojsonhint.hint(geoJSONObject)
-        _each(lintErrors,
-              lintError => errors.localGeoJSON.addError(lintError.message))
-      }
+      this.validateGeoJSON(formData.localGeoJSON, errors)
     }
 
     return errors
