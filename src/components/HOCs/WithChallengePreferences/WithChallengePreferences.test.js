@@ -1,4 +1,3 @@
-import _each from 'lodash/each'
 import { denormalize } from 'normalizr'
 import { mapStateToProps,
          mapDispatchToProps } from './WithChallengePreferences'

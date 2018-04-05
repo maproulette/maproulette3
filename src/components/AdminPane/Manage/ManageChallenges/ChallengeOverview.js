@@ -10,6 +10,7 @@ import { ChallengeStatus,
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import ChallengeProgress
        from '../../../ChallengeProgress/ChallengeProgress'
+import ChallengeKeywords from '../ChallengeKeywords/ChallengeKeywords'
 import ChallengeActivityTimeline
        from '../../../ActivityTimeline/ChallengeActivityTimeline/ChallengeActivityTimeline'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
@@ -66,9 +67,7 @@ export class ChallengeOverview extends Component {
             </div>
           </div>
 
-          {hasTasks &&
-           <ChallengeProgress challenge={this.props.challenge} />
-          }
+          <ChallengeKeywords challenge={this.props.challenge} />
 
           {hasTasks && isUsableChallengeStatus(status) &&
            <div className="view-challenge">
@@ -77,6 +76,10 @@ export class ChallengeOverview extends Component {
                <FormattedMessage {...messages.startChallengeLabel} />
              </Link>
            </div>
+          }
+
+          {hasTasks &&
+           <ChallengeProgress challenge={this.props.challenge} />
           }
         </section>
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _each from 'lodash/each'
 import { denormalize } from 'normalizr'
 import { mapStateToProps,
          mapDispatchToProps,
