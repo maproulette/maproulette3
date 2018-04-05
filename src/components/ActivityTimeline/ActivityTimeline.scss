@@ -17,6 +17,7 @@
     .timeline-content {
       .heading {
         color: $coral;
+        margin-top: 2px;
       }
 
       .badge {
@@ -34,6 +35,15 @@
           &::after {
             background-color: $white;
           }
+        }
+      }
+
+      .challenge-activity {
+        margin-top: 20px;
+
+        .challenge-name {
+          font-weight: $weight-light;
+          margin-bottom: 5px;
         }
       }
     }
