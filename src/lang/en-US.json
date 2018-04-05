@@ -83,6 +83,7 @@
   "Admin.Challenge.fields.creationDate.label": "Created:",
   "Admin.Challenge.fields.lastModifiedDate.label": "Modified:",
   "Admin.Challenge.fields.status.label": "Status:",
+  "Admin.Challenge.fields.enabled.label": "Visible:",
   "Admin.Challenge.controls.startChallenge.label": "Start Challenge",
   "Admin.Challenge.activity.label": "Recent Activity",
   "Admin.EditProject.unavailable": "Project Unavailable",

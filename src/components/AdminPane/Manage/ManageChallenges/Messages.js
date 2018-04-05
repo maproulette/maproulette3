@@ -46,6 +46,11 @@ export default defineMessages({
     defaultMessage: "Status:",
   },
 
+  visibleLabel: {
+    id: "Admin.Challenge.fields.enabled.label",
+    defaultMessage: "Visible:",
+  },
+
   startChallengeLabel: {
     id: "Admin.Challenge.controls.startChallenge.label",
     defaultMessage: "Start Challenge",
