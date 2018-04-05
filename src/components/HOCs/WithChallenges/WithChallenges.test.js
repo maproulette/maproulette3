@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _each from 'lodash/each'
 import _values from 'lodash/values'
 import _size from 'lodash/size'
 import { mapStateToProps, mapDispatchToProps } from './WithChallenges'

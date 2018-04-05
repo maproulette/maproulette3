@@ -1,0 +1,12 @@
+@import 'variables.scss';
+
+.challenge-keywords {
+  display: flex;
+  flex-wrap: wrap;
+
+  .tag {
+    margin-right: 5px;
+    color: $grey; 
+    background-color: $grey-lightest-less;
+  }
+}
