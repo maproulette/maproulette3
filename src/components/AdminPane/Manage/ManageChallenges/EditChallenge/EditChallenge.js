@@ -284,6 +284,12 @@ export class EditChallenge extends Component {
       this.state.formData,
     ))
 
+    // For new challenges, append the #maproulette hashtag to the changeset comment
+    // if user allows it.
+    if (challengeData.isNew() && challengeData.includeCheckinHashtag) {
+      challengeData.appendHashtagToCheckinComment()
+    }
+
     challengeData.highPriorityRule =
       preparePriorityRuleGroupForSaving(challengeData.highPriorityRules.ruleGroup)
     delete challengeData.highPriorityRules
