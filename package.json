@@ -57,6 +57,7 @@
     "stale-lru-cache": "^5.1.1"
   },
   "devDependencies": {
+    "chimp": "^0.51.1",
     "combine-react-intl-messages": "^1.0.6",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.1",
@@ -73,6 +74,7 @@
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && yarn run build-intl && react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "e2e": "yarn run chimp",
     "eject": "react-scripts eject"
   }
 }

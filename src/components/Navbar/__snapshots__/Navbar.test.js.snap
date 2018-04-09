@@ -35,7 +35,7 @@ ShallowWrapper {
           className="navbar-brand"
 >
           <Link
-                    className="navbar-item"
+                    className="navbar-item top-nav__home-link"
                     replace={false}
                     to="/"
           >
@@ -72,7 +72,7 @@ ShallowWrapper {
                     className="navbar-start"
           >
                     <Link
-                              className="navbar-item"
+                              className="navbar-item top-nav__about-link"
                               replace={false}
                               to="/about"
                     >
@@ -87,7 +87,7 @@ ShallowWrapper {
                               </span>
                     </Link>
                     <Link
-                              className="navbar-item"
+                              className="navbar-item top-nav__browse-link"
                               replace={false}
                               to="/browse/challenges"
                     >
@@ -141,7 +141,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <Link
-            className="navbar-item"
+            className="navbar-item top-nav__home-link"
             replace={false}
             to="/"
 >
@@ -204,7 +204,7 @@ ShallowWrapper {
                 />
 </span>,
             ],
-            "className": "navbar-item",
+            "className": "navbar-item top-nav__home-link",
             "replace": false,
             "to": "/",
           },
@@ -299,7 +299,7 @@ ShallowWrapper {
               className="navbar-start"
 >
               <Link
-                            className="navbar-item"
+                            className="navbar-item top-nav__about-link"
                             replace={false}
                             to="/about"
               >
@@ -314,7 +314,7 @@ ShallowWrapper {
                             </span>
               </Link>
               <Link
-                            className="navbar-item"
+                            className="navbar-item top-nav__browse-link"
                             replace={false}
                             to="/browse/challenges"
               >
@@ -368,7 +368,7 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <Link
-                  className="navbar-item"
+                  className="navbar-item top-nav__about-link"
                   replace={false}
                   to="/about"
 >
@@ -383,7 +383,7 @@ ShallowWrapper {
                   </span>
 </Link>,
                 <Link
-                  className="navbar-item"
+                  className="navbar-item top-nav__browse-link"
                   replace={false}
                   to="/browse/challenges"
 >
@@ -417,7 +417,7 @@ ShallowWrapper {
                                         values={Object {}}
                     />
 </span>,
-                  "className": "navbar-item",
+                  "className": "navbar-item top-nav__about-link",
                   "replace": false,
                   "to": "/about",
                 },
@@ -466,7 +466,7 @@ ShallowWrapper {
                                         values={Object {}}
                     />
 </span>,
-                  "className": "navbar-item",
+                  "className": "navbar-item top-nav__browse-link",
                   "replace": false,
                   "to": "/browse/challenges",
                 },
@@ -606,7 +606,7 @@ ShallowWrapper {
             className="navbar-brand"
 >
             <Link
-                        className="navbar-item"
+                        className="navbar-item top-nav__home-link"
                         replace={false}
                         to="/"
             >
@@ -643,7 +643,7 @@ ShallowWrapper {
                         className="navbar-start"
             >
                         <Link
-                                    className="navbar-item"
+                                    className="navbar-item top-nav__about-link"
                                     replace={false}
                                     to="/about"
                         >
@@ -658,7 +658,7 @@ ShallowWrapper {
                                     </span>
                         </Link>
                         <Link
-                                    className="navbar-item"
+                                    className="navbar-item top-nav__browse-link"
                                     replace={false}
                                     to="/browse/challenges"
                         >
@@ -712,7 +712,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <Link
-              className="navbar-item"
+              className="navbar-item top-nav__home-link"
               replace={false}
               to="/"
 >
@@ -775,7 +775,7 @@ ShallowWrapper {
                   />
 </span>,
               ],
-              "className": "navbar-item",
+              "className": "navbar-item top-nav__home-link",
               "replace": false,
               "to": "/",
             },
@@ -870,7 +870,7 @@ ShallowWrapper {
                 className="navbar-start"
 >
                 <Link
-                                className="navbar-item"
+                                className="navbar-item top-nav__about-link"
                                 replace={false}
                                 to="/about"
                 >
@@ -885,7 +885,7 @@ ShallowWrapper {
                                 </span>
                 </Link>
                 <Link
-                                className="navbar-item"
+                                className="navbar-item top-nav__browse-link"
                                 replace={false}
                                 to="/browse/challenges"
                 >
@@ -939,7 +939,7 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <Link
-                    className="navbar-item"
+                    className="navbar-item top-nav__about-link"
                     replace={false}
                     to="/about"
 >
@@ -954,7 +954,7 @@ ShallowWrapper {
                     </span>
 </Link>,
                   <Link
-                    className="navbar-item"
+                    className="navbar-item top-nav__browse-link"
                     replace={false}
                     to="/browse/challenges"
 >
@@ -988,7 +988,7 @@ ShallowWrapper {
                                             values={Object {}}
                       />
 </span>,
-                    "className": "navbar-item",
+                    "className": "navbar-item top-nav__about-link",
                     "replace": false,
                     "to": "/about",
                   },
@@ -1037,7 +1037,7 @@ ShallowWrapper {
                                             values={Object {}}
                       />
 </span>,
-                    "className": "navbar-item",
+                    "className": "navbar-item top-nav__browse-link",
                     "replace": false,
                     "to": "/browse/challenges",
                   },
@@ -1211,7 +1211,7 @@ ShallowWrapper {
           className="navbar-brand"
 >
           <Link
-                    className="navbar-item"
+                    className="navbar-item top-nav__home-link"
                     replace={false}
                     to="/"
           >
@@ -1248,7 +1248,7 @@ ShallowWrapper {
                     className="navbar-start"
           >
                     <Link
-                              className="navbar-item"
+                              className="navbar-item top-nav__about-link"
                               replace={false}
                               to="/about"
                     >
@@ -1263,7 +1263,7 @@ ShallowWrapper {
                               </span>
                     </Link>
                     <Link
-                              className="navbar-item"
+                              className="navbar-item top-nav__browse-link"
                               replace={false}
                               to="/browse/challenges"
                     >
@@ -1278,7 +1278,7 @@ ShallowWrapper {
                               </span>
                     </Link>
                     <Link
-                              className="navbar-item"
+                              className="navbar-item top-nav__admin-link"
                               replace={false}
                               to="/admin/projects"
                     >
@@ -1332,7 +1332,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <Link
-            className="navbar-item"
+            className="navbar-item top-nav__home-link"
             replace={false}
             to="/"
 >
@@ -1395,7 +1395,7 @@ ShallowWrapper {
                 />
 </span>,
             ],
-            "className": "navbar-item",
+            "className": "navbar-item top-nav__home-link",
             "replace": false,
             "to": "/",
           },
@@ -1490,7 +1490,7 @@ ShallowWrapper {
               className="navbar-start"
 >
               <Link
-                            className="navbar-item"
+                            className="navbar-item top-nav__about-link"
                             replace={false}
                             to="/about"
               >
@@ -1505,7 +1505,7 @@ ShallowWrapper {
                             </span>
               </Link>
               <Link
-                            className="navbar-item"
+                            className="navbar-item top-nav__browse-link"
                             replace={false}
                             to="/browse/challenges"
               >
@@ -1520,7 +1520,7 @@ ShallowWrapper {
                             </span>
               </Link>
               <Link
-                            className="navbar-item"
+                            className="navbar-item top-nav__admin-link"
                             replace={false}
                             to="/admin/projects"
               >
@@ -1574,7 +1574,7 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <Link
-                  className="navbar-item"
+                  className="navbar-item top-nav__about-link"
                   replace={false}
                   to="/about"
 >
@@ -1589,7 +1589,7 @@ ShallowWrapper {
                   </span>
 </Link>,
                 <Link
-                  className="navbar-item"
+                  className="navbar-item top-nav__browse-link"
                   replace={false}
                   to="/browse/challenges"
 >
@@ -1604,7 +1604,7 @@ ShallowWrapper {
                   </span>
 </Link>,
                 <Link
-                  className="navbar-item"
+                  className="navbar-item top-nav__admin-link"
                   replace={false}
                   to="/admin/projects"
 >
@@ -1637,7 +1637,7 @@ ShallowWrapper {
                                         values={Object {}}
                     />
 </span>,
-                  "className": "navbar-item",
+                  "className": "navbar-item top-nav__about-link",
                   "replace": false,
                   "to": "/about",
                 },
@@ -1686,7 +1686,7 @@ ShallowWrapper {
                                         values={Object {}}
                     />
 </span>,
-                  "className": "navbar-item",
+                  "className": "navbar-item top-nav__browse-link",
                   "replace": false,
                   "to": "/browse/challenges",
                 },
@@ -1735,7 +1735,7 @@ ShallowWrapper {
                                         values={Object {}}
                     />
 </span>,
-                  "className": "navbar-item",
+                  "className": "navbar-item top-nav__admin-link",
                   "replace": false,
                   "to": "/admin/projects",
                 },
@@ -1874,7 +1874,7 @@ ShallowWrapper {
             className="navbar-brand"
 >
             <Link
-                        className="navbar-item"
+                        className="navbar-item top-nav__home-link"
                         replace={false}
                         to="/"
             >
@@ -1911,7 +1911,7 @@ ShallowWrapper {
                         className="navbar-start"
             >
                         <Link
-                                    className="navbar-item"
+                                    className="navbar-item top-nav__about-link"
                                     replace={false}
                                     to="/about"
                         >
@@ -1926,7 +1926,7 @@ ShallowWrapper {
                                     </span>
                         </Link>
                         <Link
-                                    className="navbar-item"
+                                    className="navbar-item top-nav__browse-link"
                                     replace={false}
                                     to="/browse/challenges"
                         >
@@ -1941,7 +1941,7 @@ ShallowWrapper {
                                     </span>
                         </Link>
                         <Link
-                                    className="navbar-item"
+                                    className="navbar-item top-nav__admin-link"
                                     replace={false}
                                     to="/admin/projects"
                         >
@@ -1995,7 +1995,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <Link
-              className="navbar-item"
+              className="navbar-item top-nav__home-link"
               replace={false}
               to="/"
 >
@@ -2058,7 +2058,7 @@ ShallowWrapper {
                   />
 </span>,
               ],
-              "className": "navbar-item",
+              "className": "navbar-item top-nav__home-link",
               "replace": false,
               "to": "/",
             },
@@ -2153,7 +2153,7 @@ ShallowWrapper {
                 className="navbar-start"
 >
                 <Link
-                                className="navbar-item"
+                                className="navbar-item top-nav__about-link"
                                 replace={false}
                                 to="/about"
                 >
@@ -2168,7 +2168,7 @@ ShallowWrapper {
                                 </span>
                 </Link>
                 <Link
-                                className="navbar-item"
+                                className="navbar-item top-nav__browse-link"
                                 replace={false}
                                 to="/browse/challenges"
                 >
@@ -2183,7 +2183,7 @@ ShallowWrapper {
                                 </span>
                 </Link>
                 <Link
-                                className="navbar-item"
+                                className="navbar-item top-nav__admin-link"
                                 replace={false}
                                 to="/admin/projects"
                 >
@@ -2237,7 +2237,7 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <Link
-                    className="navbar-item"
+                    className="navbar-item top-nav__about-link"
                     replace={false}
                     to="/about"
 >
@@ -2252,7 +2252,7 @@ ShallowWrapper {
                     </span>
 </Link>,
                   <Link
-                    className="navbar-item"
+                    className="navbar-item top-nav__browse-link"
                     replace={false}
                     to="/browse/challenges"
 >
@@ -2267,7 +2267,7 @@ ShallowWrapper {
                     </span>
 </Link>,
                   <Link
-                    className="navbar-item"
+                    className="navbar-item top-nav__admin-link"
                     replace={false}
                     to="/admin/projects"
 >
@@ -2300,7 +2300,7 @@ ShallowWrapper {
                                             values={Object {}}
                       />
 </span>,
-                    "className": "navbar-item",
+                    "className": "navbar-item top-nav__about-link",
                     "replace": false,
                     "to": "/about",
                   },
@@ -2349,7 +2349,7 @@ ShallowWrapper {
                                             values={Object {}}
                       />
 </span>,
-                    "className": "navbar-item",
+                    "className": "navbar-item top-nav__browse-link",
                     "replace": false,
                     "to": "/browse/challenges",
                   },
@@ -2398,7 +2398,7 @@ ShallowWrapper {
                                             values={Object {}}
                       />
 </span>,
-                    "className": "navbar-item",
+                    "className": "navbar-item top-nav__admin-link",
                     "replace": false,
                     "to": "/admin/projects",
                   },
