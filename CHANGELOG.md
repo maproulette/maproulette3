@@ -7,6 +7,29 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.5] - 2018-04-09
+### Added
+- Require confirmation before rebuilding tasks.
+- Automatic updates of task-build progress.
+- Detect use of Overpass Turbo query shortcuts in Overpass queries (#256).
+- Display of Challenge keywords in admin View Challenge sidebar (#244).
+- Visibility quick-toggle in admin View Challenge sidebar (#183).
+- Option to automatically add #maproulette hashtag to changeset comment (#290).
+- Styling of user profile page (#276).
+- User activity feed grouping by challenge (#28).
+- Styling adjustments to admin forms (edit challenge, edit task, etc).
+- Example PIWIK settings in .env file.
+
+### Changed
+- Only offer task rebuilding to challenges built from Overpass queries.
+- Challenge source now read-only once tasks are built (#236).
+
+### Fixed
+- Include disabled projects in admin project search results.
+- Display map-bounded tasks even if parent challenge previously unseen (#279).
+- Don't allow map to wrap around world (#277).
+
+
 ## [v3.00-beta.4.2] - 2018-04-04
 ### Fixed
 - Some challenges erroneously converted to N/A status (#284).
