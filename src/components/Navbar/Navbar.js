@@ -21,7 +21,7 @@ export default class Navbar extends Component {
     return (
       <nav className="navbar top-nav" aria-label="main navigation">
 				<div className="navbar-brand">
-          <Link to='/' className="navbar-item">
+          <Link to='/' className="navbar-item top-nav__home-link">
             <SvgSymbol viewBox='0 0 20 20' sym="mr-logo" className="navbar__logo"/>
             <span className="is-size-4">
               <span className="has-text-weight-bold">Map</span>Roulette
@@ -34,14 +34,14 @@ export default class Navbar extends Component {
 
 				<div className='navbar-menu'>
           <div className="navbar-start">
-            <Link to='/about' className="navbar-item">
+            <Link to='/about' className="navbar-item top-nav__about-link">
               <span className={classNames('item-text',
                                           {'is-active': this.props.location.pathname === '/about'})}>
                 <FormattedMessage {...messages.about} />
               </span>
             </Link>
 
-            <Link to='/browse/challenges' className="navbar-item">
+            <Link to='/browse/challenges' className="navbar-item top-nav__browse-link">
               <span className={
                 classNames('item-text',
                            {'is-active': /\/browse\/challenges/.test(this.props.location.pathname)})}>
@@ -50,7 +50,7 @@ export default class Navbar extends Component {
             </Link>
 
             {_get(this.props, 'user.isLoggedIn') &&
-            <Link to='/admin/projects' className='navbar-item'>
+            <Link to='/admin/projects' className='navbar-item top-nav__admin-link'>
                <span className={
                  classNames('item-text',
                            {'is-active': _startsWith(this.props.location.pathname, '/admin')})

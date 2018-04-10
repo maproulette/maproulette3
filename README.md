@@ -85,11 +85,27 @@ the latest release.
 
 Release versions follow [Semantic Versioning](https://semver.org/).
 
-## Testing
+## Unit Tests
 
-[Jest](https://facebook.github.io/jest/) +
-[Enzyme](https://github.com/airbnb/enzyme) are being used for tests. `yarn test`
-to run them.
+Unit tests are built with [Jest](https://facebook.github.io/jest/) +
+[Enzyme](https://github.com/airbnb/enzyme).
+
+`yarn test` to run them in watch mode.
+
+## End-to-End Tests
+
+End-to-end tests are built with [Chimp](https://chimp.readme.io/), which
+combines [Webdriver.io](http://webdriver.io/guide.html) for Selenium +
+[Cucumber](https://cucumber.io/docs/reference) and
+[Jasmine](https://jasmine.github.io/api/3.0/global) for tests.
+
+Prior to running tests locally, you'll need to tell Chimp the URL to your
+MR3 app. Copy `chimp.example.js` to `chimp.js`, edit the file and modify the
+`mr3URL` setting. You only need to do this once.
+
+Then:
+`yarn e2e` to run the tests, or `yarn e2e --watch` to enter watch mode and only
+run tests with a `@watch` tag (useful when working on new tests).
 
 ## CSS Styling and Naming
 
