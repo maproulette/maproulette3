@@ -46,11 +46,13 @@ ShallowWrapper {
         options={
                 Array [
                         Object {
+                          "className": "profile",
                           "key": "profile",
                           "text": undefined,
                           "value": "profile",
                         },
                         Object {
+                          "className": "signout",
                           "key": "signout",
                           "text": undefined,
                           "value": "signout",
@@ -77,7 +79,7 @@ ShallowWrapper {
                 className="navbar__account-nav-item__icon"
         />
 </OnClickOutside(WithDeactivateOnOutsideClick)>,
-      "className": "navbar-item navbar__account-nav-item signed-in",
+      "className": "navbar-item navbar__account-nav-item signed-in login-status-known",
     },
     "ref": null,
     "rendered": Object {
@@ -111,11 +113,13 @@ ShallowWrapper {
         "onSelect": [Function],
         "options": Array [
           Object {
+            "className": "profile",
             "key": "profile",
             "text": undefined,
             "value": "profile",
           },
           Object {
+            "className": "signout",
             "key": "signout",
             "text": undefined,
             "value": "signout",
@@ -202,11 +206,13 @@ ShallowWrapper {
           options={
                     Array [
                               Object {
+                                "className": "profile",
                                 "key": "profile",
                                 "text": undefined,
                                 "value": "profile",
                               },
                               Object {
+                                "className": "signout",
                                 "key": "signout",
                                 "text": undefined,
                                 "value": "signout",
@@ -233,7 +239,7 @@ ShallowWrapper {
                     className="navbar__account-nav-item__icon"
           />
 </OnClickOutside(WithDeactivateOnOutsideClick)>,
-        "className": "navbar-item navbar__account-nav-item signed-in",
+        "className": "navbar-item navbar__account-nav-item signed-in login-status-known",
       },
       "ref": null,
       "rendered": Object {
@@ -267,11 +273,13 @@ ShallowWrapper {
           "onSelect": [Function],
           "options": Array [
             Object {
+              "className": "profile",
               "key": "profile",
               "text": undefined,
               "value": "profile",
             },
             Object {
+              "className": "signout",
               "key": "signout",
               "text": undefined,
               "value": "signout",
@@ -401,7 +409,7 @@ ShallowWrapper {
                       }
         }
 />,
-      "className": "navbar-item navbar__account-nav-item",
+      "className": "navbar-item navbar__account-nav-item login-status-known",
     },
     "ref": null,
     "rendered": Object {
@@ -452,7 +460,7 @@ ShallowWrapper {
                             }
           }
 />,
-        "className": "navbar-item navbar__account-nav-item",
+        "className": "navbar-item navbar__account-nav-item login-status-known",
       },
       "ref": null,
       "rendered": Object {

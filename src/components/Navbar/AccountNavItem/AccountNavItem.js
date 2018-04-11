@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import DropdownButton from '../../Bulma/DropdownButton'
@@ -41,9 +42,11 @@ export class AccountNavItem extends Component {
   }
 
   render() {
+    // Note: login-status-known CSS class is to aid e2e tests
     if (!_get(this.props, 'user.isLoggedIn')) {
       return (
-        <div className="navbar-item navbar__account-nav-item">
+        <div className={classNames("navbar-item navbar__account-nav-item",
+                                   {"login-status-known": !this.props.checkingLoginStatus})}>
           <SignInButton className="white-on-green navbar__account-nav-item__signin"
                         {...this.props} />
         </div>
@@ -53,18 +56,20 @@ export class AccountNavItem extends Component {
     const accountOptions = [
       {
         key: PROFILE,
+        className: PROFILE,
         text: this.props.intl.formatMessage(messages.profile),
         value: PROFILE,
       },
       {
         key: SIGNOUT,
+        className: SIGNOUT,
         text: this.props.intl.formatMessage(messages.signout),
         value: SIGNOUT
       }
     ]
 
     return (
-      <div className="navbar-item navbar__account-nav-item signed-in">
+      <div className="navbar-item navbar__account-nav-item signed-in login-status-known">
         <DeactivatableDropdownButton options={accountOptions}
                                      onSelect={this.chooseAccountOption}
                                      className='is-right navbar__account-nav-item__dropdown'>

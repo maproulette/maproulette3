@@ -23,7 +23,9 @@ export default class DropdownButton extends Component {
 
   render() {
     const options = this.props.options.map(option => (
-      <a key={option.key} className='dropdown-item' onClick={(e) => this.selectOption(e, option)}>
+      <a key={option.key}
+         className={classNames('dropdown-item', option.className)}
+         onClick={(e) => this.selectOption(e, option)}>
         {option.text}
       </a>
     ))

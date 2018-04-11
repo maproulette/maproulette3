@@ -7,8 +7,16 @@ export class Page {
     return process.env["chimp.mr3URL"]
   }
 
+  get app() {
+    return browser.element(".App")
+  }
+
+  appIsVisible() {
+    this.app.isExisting()
+  }
+
   waitForApp() {
-    browser.waitForVisible(".App", 10000)
+    this.app.waitForVisible(10000)
   }
 
   open(path) {

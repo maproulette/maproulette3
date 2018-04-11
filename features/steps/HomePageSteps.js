@@ -1,21 +1,25 @@
 import HomePage from '../pages/HomePage'
-import OpenStreetMap from '../pages/OpenStreetMap'
+import AboutModal from '../pages/AboutModal'
 
 export default function() {
-  this.Given(/^(\w+) visits the (site|home page)$/, function(user, pageName) {
+  this.Given(/^(\w+) visits (MapRoulette|the site|the home page)$/, function(username, pageName) {
     HomePage.open()
   })
 
-  this.Given(/^(\w+) clicks the About nav link$/, function(user) {
-    HomePage.aboutNavLink.click()
+  this.Given(/^(\w+) is browsing MapRoulette$/, function(username) {
+    if (!HomePage.appIsVisible()) {
+      HomePage.open()
+    }
+
+    HomePage.waitForKnownLoginStatus()
+
+    if (AboutModal.modal.isExisting()) {
+      AboutModal.getStarted.click()
+    }
   })
 
-  this.Given(/^(\w+) clicks the Sign In nav link$/, function(user) {
-    HomePage.signinNavLink.click()
-  })
-
-  this.Then(/^(\w+) should be logged in to Maproulette$/, function(user) {
-    HomePage.username.waitForVisible(10000)
-    expect(HomePage.username.getText()).toBe(user)
+  this.Given(/^(\w+) opens the Account nav menu$/, function(username) {
+    HomePage.waitForKnownLoginStatus()
+    HomePage.accountNavMenu.click()
   })
 }

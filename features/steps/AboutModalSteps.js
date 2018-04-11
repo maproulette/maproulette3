@@ -6,6 +6,10 @@ export default function() {
     AboutModal.open()
   })
 
+  this.Given(/^(\w+) clicks the About nav link$/, function(user) {
+    HomePage.aboutNavLink.click()
+  })
+
   this.Given(/^(\w+) clicks Get Started on the About modal$/, function(user) {
     AboutModal.getStarted.click()
   })
