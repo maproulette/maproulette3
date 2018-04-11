@@ -58,9 +58,9 @@ export default class CommentList extends Component {
 
           {this.props.includeTaskLinks &&
            <div className="comment-list__comment--task-link">
-            <Link to={`/task/${comment.task_id}`}>
-              <FormattedMessage {...messages.viewTaskLabel} />
-            </Link>
+             <Link to={`/challenge/${comment.challengeId}/task/${comment.taskId}`}>
+               <FormattedMessage {...messages.viewTaskLabel} />
+             </Link>
            </div>
           }
         </li>

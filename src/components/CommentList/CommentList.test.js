@@ -1,9 +1,14 @@
 import React from 'react'
 import CommentList from './CommentList'
 
+let challengeId = null
+let taskId = null
 let basicProps = null
 
 beforeEach(() => {
+  challengeId = 987
+  taskId = 654
+
   basicProps = {
     comments: [
       {
@@ -11,18 +16,24 @@ beforeEach(() => {
         osm_username: "bob",
         comment: "Bob's comment",
         created: 1510357997739,
+        challengeId,
+        taskId,
       },
       {
         id: 456,
         osm_username: "sarah",
         comment: "Sarah's comment",
         created: 1511647443002,
+        challengeId,
+        taskId,
       },
       {
         id: 789,
         osm_username: "joe",
         comment: "Joe's comment",
         created: 1516200787649,
+        challengeId,
+        taskId,
       },
     ]
   }

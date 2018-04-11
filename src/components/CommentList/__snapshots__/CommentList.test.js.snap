@@ -59,22 +59,28 @@ ShallowWrapper {
     comments={
         Array [
             Object {
+              "challengeId": 987,
               "comment": "Bob's comment",
               "created": 1510357997739,
               "id": 123,
               "osm_username": "bob",
+              "taskId": 654,
             },
             Object {
+              "challengeId": 987,
               "comment": "Sarah's comment",
               "created": 1511647443002,
               "id": 456,
               "osm_username": "sarah",
+              "taskId": 654,
             },
             Object {
+              "challengeId": 987,
               "comment": "Joe's comment",
               "created": 1516200787649,
               "id": 789,
               "osm_username": "joe",
+              "taskId": 654,
             },
           ]
     }
@@ -1821,22 +1827,28 @@ ShallowWrapper {
     comments={
         Array [
             Object {
+              "challengeId": 987,
               "comment": "Bob's comment",
               "created": 1510357997739,
               "id": 123,
               "osm_username": "bob",
+              "taskId": 654,
             },
             Object {
+              "challengeId": 987,
               "comment": "Sarah's comment",
               "created": 1511647443002,
               "id": 456,
               "osm_username": "sarah",
+              "taskId": 654,
             },
             Object {
+              "challengeId": 987,
               "comment": "Joe's comment",
               "created": 1516200787649,
               "id": 789,
               "osm_username": "joe",
+              "taskId": 654,
             },
           ]
     }
@@ -1904,7 +1916,7 @@ ShallowWrapper {
           >
                     <Link
                               replace={false}
-                              to="/task/undefined"
+                              to="/challenge/987/task/654"
                     >
                               <FormattedMessage
                                         defaultMessage="View Task"
@@ -1963,7 +1975,7 @@ ShallowWrapper {
           >
                     <Link
                               replace={false}
-                              to="/task/undefined"
+                              to="/challenge/987/task/654"
                     >
                               <FormattedMessage
                                         defaultMessage="View Task"
@@ -2022,7 +2034,7 @@ ShallowWrapper {
           >
                     <Link
                               replace={false}
-                              to="/task/undefined"
+                              to="/challenge/987/task/654"
                     >
                               <FormattedMessage
                                         defaultMessage="View Task"
@@ -2089,7 +2101,7 @@ ShallowWrapper {
 >
               <Link
                             replace={false}
-                            to="/task/undefined"
+                            to="/challenge/987/task/654"
               >
                             <FormattedMessage
                                           defaultMessage="View Task"
@@ -2289,7 +2301,7 @@ ShallowWrapper {
             "props": Object {
               "children": <Link
                 replace={false}
-                to="/task/undefined"
+                to="/challenge/987/task/654"
 >
                 <FormattedMessage
                                 defaultMessage="View Task"
@@ -2311,7 +2323,7 @@ ShallowWrapper {
                   values={Object {}}
 />,
                 "replace": false,
-                "to": "/task/undefined",
+                "to": "/challenge/987/task/654",
               },
               "ref": null,
               "rendered": Object {
@@ -2386,7 +2398,7 @@ ShallowWrapper {
 >
               <Link
                             replace={false}
-                            to="/task/undefined"
+                            to="/challenge/987/task/654"
               >
                             <FormattedMessage
                                           defaultMessage="View Task"
@@ -2586,7 +2598,7 @@ ShallowWrapper {
             "props": Object {
               "children": <Link
                 replace={false}
-                to="/task/undefined"
+                to="/challenge/987/task/654"
 >
                 <FormattedMessage
                                 defaultMessage="View Task"
@@ -2608,7 +2620,7 @@ ShallowWrapper {
                   values={Object {}}
 />,
                 "replace": false,
-                "to": "/task/undefined",
+                "to": "/challenge/987/task/654",
               },
               "ref": null,
               "rendered": Object {
@@ -2683,7 +2695,7 @@ ShallowWrapper {
 >
               <Link
                             replace={false}
-                            to="/task/undefined"
+                            to="/challenge/987/task/654"
               >
                             <FormattedMessage
                                           defaultMessage="View Task"
@@ -2883,7 +2895,7 @@ ShallowWrapper {
             "props": Object {
               "children": <Link
                 replace={false}
-                to="/task/undefined"
+                to="/challenge/987/task/654"
 >
                 <FormattedMessage
                                 defaultMessage="View Task"
@@ -2905,7 +2917,7 @@ ShallowWrapper {
                   values={Object {}}
 />,
                 "replace": false,
-                "to": "/task/undefined",
+                "to": "/challenge/987/task/654",
               },
               "ref": null,
               "rendered": Object {
@@ -2987,7 +2999,7 @@ ShallowWrapper {
             >
                         <Link
                                     replace={false}
-                                    to="/task/undefined"
+                                    to="/challenge/987/task/654"
                         >
                                     <FormattedMessage
                                                 defaultMessage="View Task"
@@ -3046,7 +3058,7 @@ ShallowWrapper {
             >
                         <Link
                                     replace={false}
-                                    to="/task/undefined"
+                                    to="/challenge/987/task/654"
                         >
                                     <FormattedMessage
                                                 defaultMessage="View Task"
@@ -3105,7 +3117,7 @@ ShallowWrapper {
             >
                         <Link
                                     replace={false}
-                                    to="/task/undefined"
+                                    to="/challenge/987/task/654"
                         >
                                     <FormattedMessage
                                                 defaultMessage="View Task"
@@ -3172,7 +3184,7 @@ ShallowWrapper {
 >
                 <Link
                                 replace={false}
-                                to="/task/undefined"
+                                to="/challenge/987/task/654"
                 >
                                 <FormattedMessage
                                                 defaultMessage="View Task"
@@ -3372,7 +3384,7 @@ ShallowWrapper {
               "props": Object {
                 "children": <Link
                   replace={false}
-                  to="/task/undefined"
+                  to="/challenge/987/task/654"
 >
                   <FormattedMessage
                                     defaultMessage="View Task"
@@ -3394,7 +3406,7 @@ ShallowWrapper {
                     values={Object {}}
 />,
                   "replace": false,
-                  "to": "/task/undefined",
+                  "to": "/challenge/987/task/654",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -3469,7 +3481,7 @@ ShallowWrapper {
 >
                 <Link
                                 replace={false}
-                                to="/task/undefined"
+                                to="/challenge/987/task/654"
                 >
                                 <FormattedMessage
                                                 defaultMessage="View Task"
@@ -3669,7 +3681,7 @@ ShallowWrapper {
               "props": Object {
                 "children": <Link
                   replace={false}
-                  to="/task/undefined"
+                  to="/challenge/987/task/654"
 >
                   <FormattedMessage
                                     defaultMessage="View Task"
@@ -3691,7 +3703,7 @@ ShallowWrapper {
                     values={Object {}}
 />,
                   "replace": false,
-                  "to": "/task/undefined",
+                  "to": "/challenge/987/task/654",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -3766,7 +3778,7 @@ ShallowWrapper {
 >
                 <Link
                                 replace={false}
-                                to="/task/undefined"
+                                to="/challenge/987/task/654"
                 >
                                 <FormattedMessage
                                                 defaultMessage="View Task"
@@ -3966,7 +3978,7 @@ ShallowWrapper {
               "props": Object {
                 "children": <Link
                   replace={false}
-                  to="/task/undefined"
+                  to="/challenge/987/task/654"
 >
                   <FormattedMessage
                                     defaultMessage="View Task"
@@ -3988,7 +4000,7 @@ ShallowWrapper {
                     values={Object {}}
 />,
                   "replace": false,
-                  "to": "/task/undefined",
+                  "to": "/challenge/987/task/654",
                 },
                 "ref": null,
                 "rendered": Object {
