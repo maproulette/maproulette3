@@ -152,27 +152,33 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <FormattedMessage
-              defaultMessage="Created"
-              id="Task.status.created"
-              values={Object {}}
+            "children": Array [
+              <FormattedMessage
+                defaultMessage="Created"
+                id="Task.status.created"
+                values={Object {}}
 />,
+              false,
+            ],
             "className": "task-status__label",
           },
           "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "class",
-            "props": Object {
-              "defaultMessage": "Created",
-              "id": "Task.status.created",
-              "values": Object {},
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": "Created",
+                "id": "Task.status.created",
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
             },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
+            false,
+          ],
           "type": "div",
         },
         "type": "div",
@@ -261,27 +267,33 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <FormattedMessage
-                defaultMessage="Created"
-                id="Task.status.created"
-                values={Object {}}
+              "children": Array [
+                <FormattedMessage
+                  defaultMessage="Created"
+                  id="Task.status.created"
+                  values={Object {}}
 />,
+                false,
+              ],
               "className": "task-status__label",
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Created",
-                "id": "Task.status.created",
-                "values": Object {},
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Created",
+                  "id": "Task.status.created",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
               },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
+              false,
+            ],
             "type": "div",
           },
           "type": "div",
@@ -762,27 +774,33 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <FormattedMessage
-              defaultMessage="Skipped"
-              id="Task.status.skipped"
-              values={Object {}}
+            "children": Array [
+              <FormattedMessage
+                defaultMessage="Skipped"
+                id="Task.status.skipped"
+                values={Object {}}
 />,
+              false,
+            ],
             "className": "task-status__label",
           },
           "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "class",
-            "props": Object {
-              "defaultMessage": "Skipped",
-              "id": "Task.status.skipped",
-              "values": Object {},
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": "Skipped",
+                "id": "Task.status.skipped",
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
             },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
+            false,
+          ],
           "type": "div",
         },
         "type": "div",
@@ -871,27 +889,33 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <FormattedMessage
-                defaultMessage="Skipped"
-                id="Task.status.skipped"
-                values={Object {}}
+              "children": Array [
+                <FormattedMessage
+                  defaultMessage="Skipped"
+                  id="Task.status.skipped"
+                  values={Object {}}
 />,
+                false,
+              ],
               "className": "task-status__label",
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "defaultMessage": "Skipped",
-                "id": "Task.status.skipped",
-                "values": Object {},
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "defaultMessage": "Skipped",
+                  "id": "Task.status.skipped",
+                  "values": Object {},
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
               },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
+              false,
+            ],
             "type": "div",
           },
           "type": "div",
