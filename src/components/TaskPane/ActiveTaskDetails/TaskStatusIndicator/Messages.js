@@ -12,5 +12,10 @@ export default defineMessages({
   statusTooltip: {
     id: 'ActiveTask.controls.status.tooltip',
     defaultMessage: "Existing Status",
+  },
+
+  viewChangeset: {
+    id: 'ActiveTask.controls.viewChangset.label',
+    defaultMessage: "View Changeset",
   }
 })

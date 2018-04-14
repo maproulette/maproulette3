@@ -27,12 +27,19 @@
 
   .task-status__label {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
     border: 2px solid rgba($blue, 0.33);
     border-radius: 0 0 $radius-medium $radius-medium;
     border-top: none;
     padding: 10px 15px;
     font-weight: $weight-semibold;
     color: $grey;
+  }
+
+  .task-status__view-changeset-link {
+    font-weight: $weight-normal;
+    font-size: $size-7;
   }
 
   &.icon-only {

@@ -21,6 +21,9 @@ const DeactivatablePopout = WithDeactivateOnOutsideClick(Popout)
  * By default, the indicator only renders for statuses other than created. Set
  * the allStatuses prop to true to render regardless of status.
  *
+ * If an OSM changeset is associated with the task, then a link to view the
+ * changeset will also be displayed alongside the task status.
+ *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskStatusIndicator extends Component {
@@ -70,6 +73,14 @@ export default class TaskStatusIndicator extends Component {
           <div>
             <div className="task-status__label">
               <FormattedMessage {...messagesByStatus[this.props.task.status]} />
+
+              {this.props.task.changesetId > 0 &&
+               <a href={`https://www.openstreetmap.org/changeset/${this.props.task.changesetId}`}
+                 target="_blank"
+                 className="task-status__view-changeset-link">
+                 <FormattedMessage {...messages.viewChangeset} />
+               </a>
+              }
             </div>
           </div>
         </div>
