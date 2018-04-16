@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { FormattedMessage,
          FormattedDate } from 'react-intl'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
+import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import messages from './Messages'
 import './ProjectOverview.css'
 
 /**
- * ProjectOverview displays some basic at-a-glance information about a
- * Challenge intended for the challenge owner, such as its creation date,
- * status, and a timeline of recent activity.
+ * ProjectOverview displays some basic at-a-glance information about a Project
+ * intended for the project owner, such as its creation date and
+ * last-modified date, as well an option to Delete the project.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class ProjectOverview extends Component {
+  deleteProject = () => {
+    this.props.deleteProject(this.props.project.id)
+  }
+
   render() {
     return (
       <div className="project-overview">
@@ -48,8 +54,28 @@ export default class ProjectOverview extends Component {
                              day='2-digit' />
             </div>
           </div>
+
+          {!this.props.managesSingleProject &&
+           <div className="project-overview__controls">
+             <ConfirmAction>
+               <div className="button is-outlined is-danger project-overview__controls__delete-project"
+                    onClick={this.deleteProject}>
+                 <FormattedMessage {...messages.deleteProject} />
+               </div>
+             </ConfirmAction>
+           </div>
+          }
         </div>
       </div>
     )
   }
+}
+
+ProjectOverview.propTypes = {
+  /** The project for which the overview is to be displayed */
+  project: PropTypes.object,
+  /** Set to true if the user manages only a single project */
+  managesSingleProject: PropTypes.bool.isRequired,
+  /** Invoked if the user wishes to delete the project */
+  deleteProject: PropTypes.func.isRequired,
 }

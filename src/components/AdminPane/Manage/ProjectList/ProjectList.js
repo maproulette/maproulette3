@@ -103,7 +103,8 @@ export default class ProjectList extends Component {
         [this.props.intl.formatMessage(messages.challengesTabLabel)]:
           <ChallengeList {...this.props} />,
         [this.props.intl.formatMessage(messages.detailsTabLabel)]:
-          <ProjectOverview {...this.props} />,
+          <ProjectOverview managesSingleProject={this.managesSingleProject(this.props)}
+                           {...this.props} />,
       }
 
       return (

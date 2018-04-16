@@ -11,6 +11,7 @@ import { logoutUser } from '../User/User'
 import _get from 'lodash/get'
 import _isNumber from 'lodash/isNumber'
 import _isArray from 'lodash/isArray'
+import _cloneDeep from 'lodash/cloneDeep'
 import startOfDay from 'date-fns/start_of_day'
 
 /** normalizr schema for projects */
@@ -20,6 +21,7 @@ export const projectSchema = function() {
 
 // redux actions
 const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS'
+const REMOVE_PROJECT = 'REMOVE_PROJECT'
 
 // redux action creators
 
@@ -31,6 +33,17 @@ export const receiveProjects = function(normalizedEntities) {
     type: RECEIVE_PROJECTS,
     status: RequestStatus.success,
     entities: normalizedEntities,
+    receivedAt: Date.now()
+  }
+}
+
+/**
+ * Remove project data from the redux store
+ */
+export const removeProject = function(projectId) {
+  return {
+    type: REMOVE_PROJECT,
+    projectId,
     receivedAt: Date.now()
   }
 }
@@ -198,6 +211,34 @@ export const fetchProjectActivity = function(projectId, startDate, endDate) {
   }
 }
 
+/**
+ * Deletes the given project from the server.
+ */
+export const deleteProject = function(projectId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.project.delete,
+      {variables: {id: projectId}}
+    ).execute().then(() =>
+      dispatch(removeProject(projectId))
+    ).catch((error) => {
+      // Update with the latest project data.
+      fetchProject(projectId)(dispatch)
+
+      if (error.response && error.response.status === 401) {
+        // If we get an unauthorized, we assume the user is not logged
+        // in (or no longer logged in with the server).
+        dispatch(logoutUser())
+        dispatch(addError(AppErrors.user.unauthorized))
+      }
+      else {
+        dispatch(addError(AppErrors.project.deleteFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
 // redux reducers
 
 const reduceProjectsFurther = function(mergedState, oldState, projectEntities) {
@@ -216,9 +257,17 @@ const reduceProjectsFurther = function(mergedState, oldState, projectEntities) {
   })
 }
 
-// Note that projects can also be nested within challenge responses, so we need
-// to process both project and challenge actions.
-export const projectEntities =
-  genericEntityReducer([RECEIVE_PROJECTS, RECEIVE_CHALLENGES],
-                       'projects',
-                       reduceProjectsFurther)
+export const projectEntities = function(state, action) {
+  if (action.type === REMOVE_PROJECT) {
+    const mergedState = _cloneDeep(state)
+    delete mergedState[action.projectId]
+    return mergedState
+  }
+  else {
+    // Note that projects can also be nested within challenge responses, so we
+    // need to process both project and challenge actions.
+    return genericEntityReducer([RECEIVE_PROJECTS, RECEIVE_CHALLENGES],
+                                'projects',
+                                reduceProjectsFurther)(state, action)
+  }
+}

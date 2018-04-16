@@ -27,6 +27,7 @@ const apiRoutes = factory => {
       'create': factory.post('/project'),
       'edit': factory.put('/project/:id'),
       'activity': factory.get('/data/project/activity'),
+      'delete': factory.delete('/project/:id'),
     },
     'challenges': {
       'active': factory.get('/challenges/extendedFind'),

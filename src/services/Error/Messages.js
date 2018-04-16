@@ -100,6 +100,10 @@ export default defineMessages({
     id: 'Errors.project.searchFailure',
     defaultMessage: "Unable to search projects.",
   },
+  projectDeleteFailure: {
+    id: 'Errors.project.deleteFailure',
+    defaultMessage: "Unable to delete project.",
+  },
   projectNotManager: {
     id: 'Errors.project.notManager',
     defaultMessage: "You must be a manager of that project to proceed.",

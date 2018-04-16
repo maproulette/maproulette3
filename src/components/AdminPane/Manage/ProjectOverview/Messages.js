@@ -13,5 +13,10 @@ export default defineMessages({
     id: "Admin.Project.fields.lastModifiedDate.label",
     defaultMessage: "Modified:",
   },
+
+  deleteProject: {
+    id: "Admin.Project.controls.delete.label",
+    defaultMessage: "Delete Project",
+  },
 })
 
