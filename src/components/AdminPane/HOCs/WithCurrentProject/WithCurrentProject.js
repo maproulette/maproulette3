@@ -8,7 +8,8 @@ import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import { fetchProject,
          fetchProjectActivity,
-         saveProject } from '../../../../services/Project/Project'
+         saveProject,
+         deleteProject} from '../../../../services/Project/Project'
 import { fetchProjectChallenges,
          fetchProjectChallengeActions }
        from '../../../../services/Challenge/Challenge'
@@ -154,6 +155,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchProjectChallenges(projectId)),
   fetchProjectChallengeActions: projectId =>
     dispatch(fetchProjectChallengeActions(projectId)),
+  deleteProject: projectId => dispatch(deleteProject(projectId)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),
 })
 

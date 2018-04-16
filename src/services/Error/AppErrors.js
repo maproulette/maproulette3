@@ -48,6 +48,7 @@ export default {
     saveFailure: messages.projectSaveFailure,
     fetchFailure: messages.projectFetchFailure,
     searchFailure: messages.projectSearchFailure,
+    deleteFailure: messages.projectDeleteFailure,
     notManager: messages.projectNotManager,
   },
 

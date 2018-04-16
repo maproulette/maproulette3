@@ -53,6 +53,31 @@ test("does show created task status if allStatuses is set to true", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
+test("includes link to changeset if changeset present", () => {
+  basicProps.task.status = TaskStatus.fixed
+  basicProps.task.changesetId = 123456
+
+  const wrapper = shallow(
+    <TaskStatusIndicator {...basicProps} />
+  )
+
+  expect(wrapper.find('.task-status__view-changeset-link').exists()).toBe(true)
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("does not include link to changeset if changeset not present", () => {
+  basicProps.task.status = TaskStatus.fixed
+
+  const wrapper = shallow(
+    <TaskStatusIndicator {...basicProps} />
+  )
+
+  expect(wrapper.find('.task-status__view-changeset-link').exists()).toBe(false)
+
+  expect(wrapper).toMatchSnapshot()
+})
+
 test("shows popout control when minimized", () => {
   basicProps.isMinimized = true
 
