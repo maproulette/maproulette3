@@ -214,11 +214,13 @@ export const fetchProjectActivity = function(projectId, startDate, endDate) {
 /**
  * Deletes the given project from the server.
  */
-export const deleteProject = function(projectId) {
+export const deleteProject = function(projectId, immediate=false) {
   return function(dispatch) {
     return new Endpoint(
-      api.project.delete,
-      {variables: {id: projectId}}
+      api.project.delete, {
+        variables: {id: projectId},
+        params: immediate ? {immediate: 'true'} : undefined
+      }
     ).execute().then(() =>
       dispatch(removeProject(projectId))
     ).catch((error) => {

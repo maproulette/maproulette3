@@ -47,7 +47,7 @@ export class ManageProjects extends Component {
           }
         </div>
 
-        {this.props.projects.length === 1 &&
+        {this.props.projects.length <= 1 &&
          <div className='admin__intro admin__manage__projects__intro'>
            <FormattedMessage {...messages.help} />
          </div>
@@ -60,11 +60,16 @@ export class ManageProjects extends Component {
                         } />
         }
 
-        <div className="scroll-wrapper">
-          <ProjectList projects={this.props.filteredProjects || this.props.projects}
-                       allManageableProjects={this.props.projects}
-                       {..._omit(this.props, ['projects'])} />
-        </div>
+        {this.props.projects.length === 0 ?
+         <div className="admin__manage__projects__no-projects">
+           <FormattedMessage {...messages.regenerateHomeProject} />
+         </div> :
+         <div className="scroll-wrapper">
+           <ProjectList projects={this.props.filteredProjects || this.props.projects}
+                        allManageableProjects={this.props.projects}
+                        {..._omit(this.props, ['projects'])} />
+         </div>
+        }
       </div>
     )
   }

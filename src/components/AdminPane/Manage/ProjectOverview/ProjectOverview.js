@@ -16,7 +16,9 @@ import './ProjectOverview.css'
  */
 export default class ProjectOverview extends Component {
   deleteProject = () => {
-    this.props.deleteProject(this.props.project.id)
+    this.props.deleteProject(this.props.project.id,
+                             this.props.managesSingleProject)
+    this.props.history.replace("/admin/projects")
   }
 
   render() {
@@ -55,7 +57,6 @@ export default class ProjectOverview extends Component {
             </div>
           </div>
 
-          {!this.props.managesSingleProject &&
            <div className="project-overview__controls">
              <ConfirmAction>
                <div className="button is-outlined is-danger project-overview__controls__delete-project"
@@ -64,7 +65,6 @@ export default class ProjectOverview extends Component {
                </div>
              </ConfirmAction>
            </div>
-          }
         </div>
       </div>
     )

@@ -30,4 +30,10 @@ export default defineMessages({
     id: "Admin.Project.controls.addChallenge.tooltip",
     defaultMessage: "New Challenge",
   },
+
+  regenerateHomeProject: {
+    id: "Admin.ManageProjects.regenerateHomeProject",
+    defaultMessage: "Please sign out and sign back in to regenerate a " +
+                    "fresh home project.",
+  },
 })

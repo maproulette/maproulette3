@@ -155,7 +155,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchProjectChallenges(projectId)),
   fetchProjectChallengeActions: projectId =>
     dispatch(fetchProjectChallengeActions(projectId)),
-  deleteProject: projectId => dispatch(deleteProject(projectId)),
+  deleteProject: (projectId, immediate=false) =>
+    dispatch(deleteProject(projectId, immediate)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),
 })
 
