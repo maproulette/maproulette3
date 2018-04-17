@@ -32,6 +32,16 @@
     margin-bottom: 20px;
   }
 
+  &__no-projects {
+    margin: 40px 15px 15px 15px;
+    padding: 15px;
+    color: $primary;
+    background-color: $white;
+    font-size: $size-5;
+    border-radius: $radius-medium;
+    text-align: center;
+  }
+
   .admin__manage__projects__searchbox.search-box {
     margin: 10px $sidebar-padding 0px $sidebar-padding;
     background-color: $white;

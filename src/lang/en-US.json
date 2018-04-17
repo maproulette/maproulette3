@@ -104,6 +104,7 @@
   "Admin.ManageProjects.help.info": "Projects serve as a means of grouping related challenges together. All challenges must belong to a project.",
   "Admin.ManageProjects.search.placeholder": "Search Project Name",
   "Admin.Project.controls.addChallenge.tooltip": "New Challenge",
+  "Admin.ManageProjects.regenerateHomeProject": "Please sign out and sign back in to regenerate a fresh home project.",
   "Admin.EditTask.edit.header": "Edit Task",
   "Admin.EditTask.new.header": "New Task",
   "Admin.EditTask.form.formTitle": "Task Details",
