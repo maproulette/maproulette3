@@ -7,6 +7,16 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.6] - 2018-04-17
+### Added
+- Ability to delete projects (#243).
+- [internal] End-to-end test setup with some initial tests.
+
+### Fixed
+- Wrapping of long challenge names on User Profile page (#300).
+- Link for challenge owners to view task associated with comment (#299).
+
+
 ## [v3.00-beta.5] - 2018-04-09
 ### Added
 - Require confirmation before rebuilding tasks.
