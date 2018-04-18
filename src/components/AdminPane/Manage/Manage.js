@@ -67,7 +67,12 @@ export class Manage extends Component {
 export default WithManageableProjects(
   WithCurrentProject(
     WithSearchResults(
-      Manage,
+      WithSearchResults(
+        Manage,
+        'adminChallenges',
+        'challenges',
+        'filteredChallenges'
+      ),
       'adminProjects',
       'projects',
       'filteredProjects'
@@ -78,5 +83,5 @@ export default WithManageableProjects(
       defaultToOnlyProject: true,
       restrictToGivenProjects: true,
     }
-  )
+  ), true
 )

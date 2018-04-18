@@ -51,6 +51,7 @@
   .project-list__project-content {
     background-color: $white;
     border-radius: 0px 0px $radius-medium $radius-medium;
+    margin-bottom: 35px;
     
     .tabs ul li {
       a {
@@ -64,6 +65,30 @@
 
     .tab-content {
       padding: 0 20px 20px 20px;
+    }
+  }
+
+  .project-list__project-challenge-preview {
+    margin-left: 10px;
+    background-color: $grey-lightest;
+    padding: 1px 10px;
+    border-radius: $radius-medium;
+    margin-bottom: 32px;
+
+    &__header {
+      font-size: $size-7;
+      color: $grey;
+      text-transform: uppercase;
+      margin: 10px;
+      font-weight: 300;
+    }
+
+    .challenge-list {
+      font-size: $size-6;
+
+      .item-entry:last-child > .challenge-list-item {
+        border-bottom: none;
+      }
     }
   }
 }

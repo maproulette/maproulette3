@@ -33,5 +33,10 @@ export default defineMessages({
     id: "Admin.Project.controls.editProject.label",
     defaultMessage: "Edit",
   },
+
+  challengePreviewHeader: {
+    id: "Admin.Project.headers.challengePreview",
+    defaultMessage: "Challenge Matches",
+  }
 })
 

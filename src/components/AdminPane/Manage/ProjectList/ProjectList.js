@@ -4,8 +4,14 @@ import classNames from 'classnames'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
+import _filter from 'lodash/filter'
+import _find from 'lodash/find'
+import _uniqBy from 'lodash/uniqBy'
+import _omit from 'lodash/omit'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
+import AsManageableProject
+       from '../../../../interactions/Project/AsManageableProject'
 import Tabs from '../../../Bulma/Tabs'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -15,12 +21,14 @@ import messages from './Messages'
 import './ProjectList.css'
 
 /**
- * ProjectList renders the given list of projects. If the user is able to
- * manage more than one project, then the currently selected project (if any)
- * will be highlighted and clicking its name will display the quick-view of
- * that project's challenges. Otherwise, if the user only manages a single
- * project, then the project name is simply shown without being highlighted
- * or clickable.
+ * ProjectList renders the given list of projects. The currently selected project
+ * (automatically the user's home project if they only manage a single project)
+ * will be expanded with a list of the project's challenges.
+ *
+ * If a user manages multiple projects and search results are given, then only
+ * projects matching the query + projects containing challenges that match
+ * the query will be displayed. Projects with matching challenges will show a
+ * quick preview of the matching challenge names.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -61,9 +69,45 @@ export default class ProjectList extends Component {
   }
 
   render() {
-    const projectItems = _map(this.props.projects, project => {
-      // Expand the currently-selected project.
-      const isSelected = project.id === this.selectedProjectId(this.props)
+    const selectedProjectId = this.selectedProjectId(this.props)
+    const hasSearchResults =
+      this.props.filteredChallenges.length < this.props.challenges.length
+
+    let projectsToDisplay = this.props.projects
+    let projectsWithChallengeSearchResults = new Set()
+
+    if (hasSearchResults) {
+      projectsWithChallengeSearchResults =
+        new Set(_map(this.props.filteredChallenges, 'parent'))
+
+      // Display both project results and projects that have challenge results.
+      projectsToDisplay = _uniqBy(
+        this.props.projects.concat(
+          _filter(this.props.allManageableProjects,
+                  project => projectsWithChallengeSearchResults.has(project.id))
+        ), 'id'
+      )
+    }
+
+    // If a project is selected, make sure it's included in the display
+    // regardless of whether it matches search results.
+    if (_isFinite(selectedProjectId)) {
+      if (!_find(projectsToDisplay, {id: selectedProjectId})) {
+        projectsToDisplay.push(
+          _find(this.props.allManageableProjects, {id: selectedProjectId})
+        )
+      }
+    }
+
+    const projectItems = _map(projectsToDisplay, managedProject => {
+      const project = AsManageableProject(managedProject)
+      const isSelected = project.id === selectedProjectId
+
+      // Only show challenge preview if there are no selected projects and this
+      // project has matching challenge results.
+      const showChallengePreview =
+        !_isFinite(selectedProjectId) &&
+        projectsWithChallengeSearchResults.has(project.id)
 
       let projectNameColumn = null
       let collapsibleControl = null
@@ -99,12 +143,35 @@ export default class ProjectList extends Component {
         )
       }
 
-      const tabs = {
-        [this.props.intl.formatMessage(messages.challengesTabLabel)]:
-          <ChallengeList {...this.props} />,
-        [this.props.intl.formatMessage(messages.detailsTabLabel)]:
-          <ProjectOverview managesSingleProject={this.managesSingleProject(this.props)}
-                           {...this.props} />,
+      let projectBody = null
+      if (isSelected) {
+        const tabs = {
+          [this.props.intl.formatMessage(messages.challengesTabLabel)]:
+            <ChallengeList challenges={project.childChallenges(this.props.challenges)}
+                          {..._omit(this.props, 'challenges')} />,
+          [this.props.intl.formatMessage(messages.detailsTabLabel)]:
+            <ProjectOverview managesSingleProject={this.managesSingleProject(this.props)}
+                            {...this.props} />,
+        }
+
+        projectBody = (
+          <div className='project-list__project-content'>
+            <Tabs className='is-centered' tabs={tabs} />
+          </div>
+        )
+      }
+      else if (showChallengePreview) {
+        projectBody = (
+          <div className="project-list__project-challenge-preview">
+            <div className="project-list__project-challenge-preview__header">
+              <FormattedMessage {...messages.challengePreviewHeader} />
+            </div>
+
+            <ChallengeList challenges={project.childChallenges(this.props.filteredChallenges)}
+                           suppressControls
+                           {..._omit(this.props, 'challenges')} />
+          </div>
+        )
       }
 
       return (
@@ -134,11 +201,7 @@ export default class ProjectList extends Component {
             {collapsibleControl}
           </div>
 
-          {isSelected &&
-            <div className='project-list__project-content'>
-              <Tabs className='is-centered' tabs={tabs} />
-            </div>
-          }
+          {projectBody}
         </div>
       )
     })
@@ -152,8 +215,14 @@ export default class ProjectList extends Component {
 }
 
 ProjectList.propTypes = {
-  /** The projects to display */
+  /** The projects to consider for display */
   projects: PropTypes.array,
   /** All projects the current user manages */
   allManageableProjects: PropTypes.array,
+  /** Challenges to consider for display */
+  challenges: PropTypes.array,
+  /** Challenges from search results */
+  filteredChallenges: PropTypes.array,
+  /** True if challenges are still loading */
+  loadingChallenges: PropTypes.bool,
 }
