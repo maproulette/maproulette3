@@ -6,6 +6,7 @@ import _has from 'lodash/has'
 import _isObject from 'lodash/isObject'
 import { visibleLayer } from './services/VisibleLayer/VisibleLayer'
 import { currentUser, userEntities } from './services/User/User'
+import { currentLeaderboard } from './services/Leaderboard/Leaderboard'
 import { projectEntities } from './services/Project/Project'
 import { challengeEntities } from './services/Challenge/Challenge'
 import { virtualChallengeEntities }
@@ -130,6 +131,7 @@ export const initializePersistedStore = callback => {
   const rootReducer = combineReducers({
       visibleLayer,
       currentUser,
+      currentLeaderboard,
       currentFilters,
       currentSearch,
       openEditor,

@@ -1,0 +1,54 @@
+@import 'variables.scss';
+
+$ribbon-color: lighten($primary, 10%);
+
+.ribbon {
+  width: 150px;
+  height: 122px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  content: '';
+  display: block;
+  border: 6px solid darken($ribbon-color, 10%);
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 175px;
+  padding: 2px 0;
+  font-size: $size-5;
+  background-color: $ribbon-color;
+  box-shadow: 0px 2px 4px $box-shadow-color;
+  color: $white;
+  text-align: center;
+  z-index: 1;
+}
+
+/* top left*/
+.ribbon-top-left {
+  top: -6px;
+  left: -8px;
+}
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.ribbon-top-left::before {
+  top: -6px;
+  right: 30px;
+}
+.ribbon-top-left::after {
+  bottom: 49px;
+  left: -1px;
+  border-width: 4px;
+}
+.ribbon-top-left span {
+  right: 24px;
+  top: 12px;
+  transform: rotate(-31deg);
+}

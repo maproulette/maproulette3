@@ -13,6 +13,10 @@ export default {
     updateFailure: messages.userUpdateFailure,
   },
 
+  leaderboard: {
+    fetchFailure: messages.leaderboardFetchFailure,
+  },
+
   task: {
     none: messages.taskNone,
     saveFailure: messages.taskSaveFailure,

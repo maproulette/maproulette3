@@ -82,6 +82,7 @@ $layer-map: $layer-bottom;
 $layer-map-control: $layer-map + $intralayer-bump;
 $layer-sidebar: $layer-middle;
 $layer-subnav: $layer-top;
+$layer-topnav: $layer-top + $intralayer-bump;
 $layer-dropdown: $layer-top;
 $dropdown-content-z: $layer-dropdown;
 $layer-popout: $layer-top;

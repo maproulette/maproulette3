@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Unable to update your user on server."
   },
 
+  leaderboardFetchFailure: {
+    id: "Errors.leaderboard.fetchFailure",
+    defaultMessage: "Unable to fetch leaderboard."
+  },
+
   taskNone: {
     id: 'Errors.task.none',
     defaultMessage: "No tasks remain in this challenge.",

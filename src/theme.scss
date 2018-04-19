@@ -248,6 +248,10 @@ $tablet: 40px;
   width: 100%;
 }
 
+img.is-circular {
+  border-radius: 50%;
+}
+
 // Animations
 .animate-slide-enter {
   transform: translate(100%,0);
@@ -307,6 +311,8 @@ code {
   display: flex;
   align-items: center;
   font-size: $size-1;
+  height: calc(100vh - #{$navbar-height});
+
   .busy-spinner {
     @include busy-spinner-color($primary);
     flex: auto;

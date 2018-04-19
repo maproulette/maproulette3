@@ -49,6 +49,16 @@ export default class Navbar extends Component {
               </span>
             </Link>
 
+            {process.env.REACT_APP_FEATURE_LEADERBOARD === 'enabled' &&
+             <Link to='/leaderboard' className="navbar-item top-nav__browse-link">
+               <span className={
+                 classNames('item-text',
+                            {'is-active': /\/leaderboard/.test(this.props.location.pathname)})}>
+                 <FormattedMessage {...messages.leaderboard} />
+               </span>
+             </Link>
+            }
+
             {_get(this.props, 'user.isLoggedIn') &&
             <Link to='/admin/projects' className='navbar-item top-nav__admin-link'>
                <span className={
