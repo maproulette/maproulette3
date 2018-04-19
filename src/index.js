@@ -63,13 +63,14 @@ const {store} = initializePersistedStore((store) => {
     store.dispatch(
       loadCompleteUser(currentUserId)
     ).then(() => store.dispatch(clearCheckingLoginStatus()))
-
-    // Perform requests requiring an authenticated user.
-    store.dispatch(fetchChallengeActions())
   }
   else {
     store.dispatch(clearCheckingLoginStatus())
   }
+
+  // Fetch all challenge actions, which will include a count of available
+  // tasks so we can tell which challenges are already complete.
+  store.dispatch(fetchChallengeActions())
 
   // Seed our store with some challenges.
   store.dispatch(fetchFeaturedChallenges())
