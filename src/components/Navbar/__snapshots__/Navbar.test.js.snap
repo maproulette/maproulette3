@@ -398,6 +398,7 @@ ShallowWrapper {
                   </span>
 </Link>,
                 false,
+                false,
               ],
               "className": "navbar-start",
             },
@@ -501,6 +502,7 @@ ShallowWrapper {
                 },
                 "type": [Function],
               },
+              false,
               false,
             ],
             "type": "div",
@@ -969,6 +971,7 @@ ShallowWrapper {
                     </span>
 </Link>,
                   false,
+                  false,
                 ],
                 "className": "navbar-start",
               },
@@ -1072,6 +1075,7 @@ ShallowWrapper {
                   },
                   "type": [Function],
                 },
+                false,
                 false,
               ],
               "type": "div",
@@ -1603,6 +1607,7 @@ ShallowWrapper {
                                     />
                   </span>
 </Link>,
+                false,
                 <Link
                   className="navbar-item top-nav__admin-link"
                   replace={false}
@@ -1721,6 +1726,7 @@ ShallowWrapper {
                 },
                 "type": [Function],
               },
+              false,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -2266,6 +2272,7 @@ ShallowWrapper {
                                         />
                     </span>
 </Link>,
+                  false,
                   <Link
                     className="navbar-item top-nav__admin-link"
                     replace={false}
@@ -2384,6 +2391,7 @@ ShallowWrapper {
                   },
                   "type": [Function],
                 },
+                false,
                 Object {
                   "instance": null,
                   "key": undefined,

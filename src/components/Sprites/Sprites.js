@@ -8,6 +8,18 @@ export default function () {
   return (
     <div className="sprites">
       <svg xmlns="http://www.w3.org/2000/svg" hidden>
+        <symbol id="leaderboard-footer-icon" viewBox="0 0 1680 666">
+          <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g transform="translate(0.000000, -811.000000)" fill="#00A592">
+              <g transform="translate(0.000000, 75.000000)">
+                <polygon points="0 1041.6999 840 736.820312 1680 1041.6999 1680 1402 0 1402" />
+              </g>
+            </g>
+          </g>
+        </symbol>
+        <symbol id="trophy-icon" viewBox="0 0 20 20">
+          <path d="M15 9a3 3 0 0 0 3-3h2a5 5 0 0 1-5.1 5 5 5 0 0 1-3.9 3.9V17l5 2v1H4v-1l5-2v-2.1A5 5 0 0 1 5.1 11H5a5 5 0 0 1-5-5h2a3 3 0 0 0 3 3V4H2v2H0V2h5V0h10v2h5v4h-2V4h-3v5z"/>
+        </symbol>
         <symbol id="computer-icon" viewBox="0 0 20 20">
           <path d="M7 17H2a2 2 0 0 1-2-2V2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-5l4 2v1H3v-1l4-2zM2 2v11h16V2H2z"/>
         </symbol>

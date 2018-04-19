@@ -1,0 +1,366 @@
+@import 'theme.scss';
+
+.leaderboard {
+  background-color: $grey-lightest-more;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - #{$navbar-height});
+
+  &__board {
+    position: relative;
+    z-index: 1;
+    background-color: $white;
+    padding: 20px;
+    box-shadow: 0px 2px 4px $box-shadow-color;
+    min-width: 550px;
+    max-width: 1350px;
+    min-height: 475px;
+    height: fit-content;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0px 0px 0;
+      border-bottom: 2px solid $grey-lightest-more;
+      margin-bottom: 25px;
+
+      h1 {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        font-weight: $weight-normal;
+      }
+
+      &__dates-control {
+        .dropdown-trigger {
+          line-height: 24px;
+
+          .button.is-outlined {
+            @include invert-on-hover($grey-light, $white);
+            margin: 2px 80px 0px 1em;
+            font-weight: $weight-normal;
+
+            .dropdown-indicator {
+              @include arrow($grey-light);
+              height: 10px;
+              width: 10px;
+              position: relative;
+              margin-left: 0.5em;
+              bottom: 2px;
+            }
+          }
+        }
+      }
+
+      &__point-breakdown {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 125px;
+        margin-top: -20px;
+
+        svg {
+          height: 40px;
+          width: auto;
+          fill: $grey-lightest-less;
+        }
+
+        .SimpleDropdown {
+          position: absolute;
+
+          .dropdown-trigger {
+            color: $primary;
+            font-weight: $weight-semibold;
+          }
+        }
+
+        &__explanation {
+          @include markdown-content();
+          min-width: 325px;
+
+          h5 {
+            font-weight: $weight-semibold;
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
+
+    &__leader__top-challenges {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &__challenge-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        a, a:visited {
+          color: $grey-light;
+        }
+        
+        a:hover {
+          color: $grey-darkest;
+        }
+      }
+    }
+
+    &__leader {
+      background-color: $grey-lightest-more;
+      margin-bottom: 25px;
+      padding: 15px;
+      position: relative;
+
+      &__rank {
+        color: $coral;
+      }
+
+      &__name {
+        font-size: $size-4;
+        color: $green;
+      }
+
+      &__score {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: $size-5;
+        color: $coral;
+        font-weight: $weight-light;
+
+        &__trophy {
+          fill: $yellow;
+          width: 25px;
+          height: auto;
+          margin-right: 0.5em;
+          display: none;
+        }
+
+        .score-value {
+          font-weight: $weight-semibold;
+          margin-right: 0.5em;
+        }
+      }
+
+      &__top-challenges {
+        color: $grey-light;
+        font-size: $size-7;
+
+        h3 {
+          font-size: $size-6;
+          font-weight: $weight-bold;
+          border-bottom: 2px solid $grey-lightest-less;
+          padding-bottom: 5px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    &__top-leaders {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .leaderboard__board__leader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0px 2px 4px $box-shadow-color;
+        min-width: 265px;
+        max-width: 300px;
+        margin-right: 25px;
+        flex: 1 1 270px;
+
+        // #1 spot gets red ribbon and trophy icon
+        &:first-child {
+          .ribbon {
+            span {
+              background-color: $coral;
+            }
+
+            &:before, &:after {
+              border-color: darken($coral, 10%);
+            }
+          }
+
+          .leaderboard__board__leader__score__trophy {
+            display: block;
+          }
+        }
+
+        &:last-child {
+          margin-right: 15px;
+        }
+
+        &__avatar {
+          width: 110px;
+          height: 110px;
+
+          img {
+            border: 5px solid $white;
+            position: relative;
+
+            &:before {
+              content: " ";
+              width: 115px;
+              height: 40px;
+              background-color: $grey-lightest-more;
+              z-index: 3;
+              display: block;
+              position: absolute;
+              top: -7px;
+              left: -5px;
+            }
+
+            &:after {
+              content: " ";
+              width: 110px;
+              height: 110px;
+              background-color: $white;
+              z-index: 4;
+              display: block;
+              position: absolute;
+              top: -7px;
+              left: -5px;
+              border-radius: 50%;
+            }
+          }
+        }
+
+        &__name-and-score {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+        }
+
+        &__name {
+          margin-top: 15px;
+          line-height: 22px;
+        }
+
+        &__score {
+          margin-top: 15px;
+          background-color: $white;
+          padding: 5px;
+          border-radius: $radius-medium;
+          width: 100%;
+        }
+
+        &__top-challenges {
+          margin-top: 15px;
+
+          &__challenge-name {
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    &__remaining-leaders {
+      display: flex;
+      flex-direction: column;
+      margin-top: 40px;
+
+      .leaderboard__board__leader {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        background-color: $white;
+        padding: 0;
+        border: 2px solid $grey-lightest-less;
+        border-radius: $radius-medium;
+
+        &__rank {
+          min-width: 65px;
+          max-width: 65px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          color: $grey-light;
+          border-right: 2px solid $grey-lightest-less;
+          text-align: center;
+          font-size: $size-5;
+        }
+
+        &__avatar {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          max-height: 75px;
+          min-width: 75px;
+          max-width: 75px;
+          width: 75px;
+          margin: 15px;
+        }
+
+        &__name-and-score {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin: 15px 15px 15px 0px;
+          padding-right: 15px;
+          border-right: 2px solid $grey-lightest-less;
+        }
+
+        &__name {
+          font-size: $size-5;
+          min-width: 200px;
+          max-width: 200px;
+        }
+
+        &__score {
+          justify-content: flex-start;
+        }
+
+        &__top-challenges {
+          justify-content: center;
+          align-items: left;
+
+          h3 {
+            border-bottom: none;
+            padding-bottom: 0;
+          }
+
+          &__challenge-list {
+            flex-direction: row;
+            flex-wrap: wrap;
+          }
+
+          &__challenge-name {
+            padding-right: 10px;
+            margin-right: 10px;
+            border-right: 1px solid $grey-lighter-more;
+
+            &:last-child {
+              padding-right: 0;
+              border-right: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__footer-icon {
+    fill: $green;
+    position: fixed;
+    bottom: 0;
+    height: auto;
+    width: 100%;
+    min-width: 1800px; // keep the tip of the icon behind the board
+  }
+
+  &__obstruct-footer-icon {
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    top: $navbar-height;
+    background-color: $grey-lightest-more;
+    z-index: 1;
+  }
+}

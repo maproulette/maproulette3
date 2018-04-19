@@ -2,6 +2,8 @@
 
 .navbar.top-nav {
   height: $navbar-height;
+  position: relative;
+  z-index: $layer-topnav;
   
   .navbar-brand {
     position: relative;
@@ -73,7 +75,6 @@
 
       img.is-circular {
         max-height: none;
-        border-radius: 50%;
       }
     }
 

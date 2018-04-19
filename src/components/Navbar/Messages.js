@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Challenges",
   },
 
+  leaderboard: {
+    id: 'Navbar.links.leaderboard',
+    defaultMessage: "Leaderboard",
+  },
+
   adminCreate: {
     id: 'Navbar.links.admin',
     defaultMessage: "Create",

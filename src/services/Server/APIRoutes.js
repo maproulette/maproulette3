@@ -77,6 +77,7 @@ const apiRoutes = factory => {
     },
     'users': {
       'single': factory.get('/user/:id'),
+      'leaderboard': factory.get('/data/user/leaderboard'),
     },
     'user': {
       'activity': factory.get('/data/user/activity'),

@@ -1,0 +1,9 @@
+@import 'variables.scss';
+
+.SimpleDropdown {
+  .dropdown-trigger {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
