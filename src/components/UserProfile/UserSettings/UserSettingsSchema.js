@@ -55,6 +55,12 @@ export const jsSchema = intl => {
         enumNames: _map(ChallengeBasemap, (value, key) => localizedBasemapLabels[key]),
         default: ChallengeBasemap.none,
       },
+      leaderboardOptOut: {
+        title: intl.formatMessage(messages.leaderboardOptOutLabel),
+        description: intl.formatMessage(messages.leaderboardOptOutDescription),
+        type: "boolean",
+        default: false,
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -107,5 +113,8 @@ export const uiSchema = {
   },
   locale: {
     "ui:widget": "select",
+  },
+  leaderboardOptOut: {
+    "ui:widget": "radio",
   },
 }

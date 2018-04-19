@@ -48,4 +48,14 @@ export default defineMessages({
     id: "UserSettings.form.locale.description",
     defaultMessage: "User locale to use for MapRoulette UI.",
   },
+
+  leaderboardOptOutLabel: {
+    id: "UserSettings.form.leaderboardOptOut.label",
+    defaultMessage: "Opt out of Leaderboard",
+  },
+
+  leaderboardOptOutDescription: {
+    id: "UserSettings.form.leaderboardOptOut.description",
+    defaultMessage: "If yes, you will **not** appear on the public leaderboard.",
+  },
 })
