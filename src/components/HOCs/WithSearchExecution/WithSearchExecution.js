@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _debounce from 'lodash/debounce'
 import _omit from 'lodash/omit'
+import _isFunction from 'lodash/isFunction'
 import WithSearchQuery from '../../HOCs/WithSearchQuery/WithSearchQuery'
 import { performSearch } from '../../../services/Search/Search'
 
@@ -36,14 +37,19 @@ const WithSearchExecution = (WrappedComponent, searchName, searchFunction) =>
 export const _WithSearchExecution = function(WrappedComponent, searchName, searchFunction) {
   return class extends Component {
     fetchResults = _debounce(query => {
-        this.props.performSearch(searchName, query, searchFunction)
+      // If multiple WithSearchExecution HOCs are chained, pass it up
+      if (_isFunction(this.props.fetchResults)) {
+        this.props.fetchResults(query)
+      }
+
+      this.props.performSearch(searchName, query, searchFunction)
     }, 1000)
 
     render() {
       const queryProps = this.props.searchQueries[searchName]
       return <WrappedComponent fetchResults={this.fetchResults}
                                {...queryProps}
-                               {..._omit(this.props, 'performSearch')} />
+                               {..._omit(this.props, ['performSearch', 'fetchResults'])} />
     }
   }
 }

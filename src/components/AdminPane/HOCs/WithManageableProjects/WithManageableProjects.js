@@ -13,7 +13,7 @@ import AsManager from '../../../../interactions/User/AsManager'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithManageableProjects = function(WrappedComponent) {
+const WithManageableProjects = function(WrappedComponent, includeChallenges=false) {
   return class extends Component {
     state = {
       loadingProjects: true,
@@ -31,7 +31,16 @@ const WithManageableProjects = function(WrappedComponent) {
       const manageableProjects =
         manager.manageableProjects(_values(_get(this.props, 'entities.projects')))
 
+      let manageableChallenges = []
+      if (includeChallenges) {
+        manageableChallenges = manager.manageableChallenges(
+          manageableProjects,
+          _values(_get(this.props, 'entities.challenges'))
+        )
+      }
+
       return <WrappedComponent projects={manageableProjects}
+                               challenges={manageableChallenges}
                                loadingProjects={this.state.loadingProjects}
                                {..._omit(this.props, ['entities',
                                                       'fetchManageableProjects'])} />
@@ -47,7 +56,7 @@ const mapDispatchToProps = dispatch => ({
   fetchManageableProjects: () => dispatch(fetchManageableProjects()),
 })
 
-export default WrappedComponent =>
+export default (WrappedComponent, includeChallenges) =>
   connect(mapStateToProps, mapDispatchToProps)(
-    WithCurrentUser(WithManageableProjects(WrappedComponent))
+    WithCurrentUser(WithManageableProjects(WrappedComponent, includeChallenges))
   )

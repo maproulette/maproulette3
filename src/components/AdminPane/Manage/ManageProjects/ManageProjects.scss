@@ -46,6 +46,10 @@
     margin: 10px $sidebar-padding 0px $sidebar-padding;
     background-color: $white;
     max-width: calc(100% - #{$sidebar-padding * 2});
+
+    .control.is-medium {
+      width: 300px;
+    }
   }
 
   .heading-name {

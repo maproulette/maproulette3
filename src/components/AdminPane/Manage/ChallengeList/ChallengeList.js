@@ -53,13 +53,15 @@ export default class ChallengeList extends Component {
          </div>
         }
 
-        <div className="challenge-list__controls has-centered-children">
-          <button className="button is-green is-outlined new-challenge"
-                  onClick={() => this.props.history.push(
-                    `/admin/project/${this.props.project.id}/challenges/new`)}>
-            <FormattedMessage {...messages.addChallengeLabel} />
-          </button>
-        </div>
+        {!this.props.suppressControls &&
+         <div className="challenge-list__controls has-centered-children">
+           <button className="button is-green is-outlined new-challenge"
+                   onClick={() => this.props.history.push(
+                     `/admin/project/${this.props.project.id}/challenges/new`)}>
+             <FormattedMessage {...messages.addChallengeLabel} />
+           </button>
+         </div>
+        }
       </div>
     )
   }
@@ -67,4 +69,5 @@ export default class ChallengeList extends Component {
 
 ChallengeList.propTypes = {
   challenges: PropTypes.array.isRequired,
+  suppressControls: PropTypes.bool,
 }

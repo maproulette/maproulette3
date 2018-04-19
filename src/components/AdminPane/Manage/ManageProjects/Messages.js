@@ -23,7 +23,7 @@ export default defineMessages({
 
   placeholder: {
     id: "Admin.ManageProjects.search.placeholder",
-    defaultMessage: "Search Project Name",
+    defaultMessage: "Project or Challenge Name",
   },
 
   addChallengeTooltip: {

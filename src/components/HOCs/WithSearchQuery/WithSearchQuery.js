@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
+import _isFunction from 'lodash/isFunction'
 import { setSearch, clearSearch } from '../../../services/Search/Search'
-
 
 /**
  * WithSearchQuery works with the Search service to provide wrapped components
@@ -52,9 +52,23 @@ export const mapStateToProps = state => ({
   currentSearch: _get(state, 'currentSearch')
 })
 
-export const mapDispatchToProps = dispatch => ({
-  setSearch: (query, searchName) => dispatch(setSearch(searchName, query)),
-  clearSearch: (searchName) => dispatch(clearSearch(searchName)),
+export const mapDispatchToProps = (dispatch, ownProps) => ({
+  setSearch: (query, searchName) => {
+    dispatch(setSearch(searchName, query))
+
+    // If multiple WithSearchQuery HOCs are chained, pass it up
+    if (_isFunction(ownProps.setSearch)) {
+      ownProps.setSearch(query, searchName)
+    }
+  },
+  clearSearch: (searchName) => {
+    dispatch(clearSearch(searchName))
+
+    // If multiple WithSearchQuery HOCs are chained, pass it up
+    if (_isFunction(ownProps.clearSearch)) {
+      ownProps.clearSearch(searchName)
+    }
+  },
 })
 
 export default WithSearchQuery

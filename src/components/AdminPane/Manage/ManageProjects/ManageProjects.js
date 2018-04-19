@@ -2,17 +2,22 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _omit from 'lodash/omit'
-import WithSearchExecution from '../../../HOCs/WithSearchExecution/WithSearchExecution'
+import WithComboSearchExecution
+       from '../../HOCs/WithComboSearchExecution/WithComboSearchExecution'
 import SearchBox from '../../../SearchBox/SearchBox'
 import { searchProjects } from '../../../../services/Project/Project'
+import { searchChallenges } from '../../../../services/Challenge/Challenge'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ProjectList from '../ProjectList/ProjectList'
 import messages from './Messages'
 import './ManageProjects.css'
 
 // Setup child components with needed HOCs.
-const ProjectSearch =
-  WithSearchExecution(SearchBox, 'adminProjects', searchProjects)
+const ProjectAndChallengeSearch =
+  WithComboSearchExecution(SearchBox, {
+    'adminProjects': searchProjects,
+    'adminChallenges': searchChallenges,
+  })
 
 /**
  * ManageProjects displays a list of projects, along with some meta info.
@@ -54,10 +59,10 @@ export class ManageProjects extends Component {
         }
 
         {this.props.projects.length > 1 &&
-         <ProjectSearch className="admin__manage__projects__searchbox"
-                        placeholder={
-                          this.props.intl.formatMessage(messages.placeholder)
-                        } />
+         <ProjectAndChallengeSearch className="admin__manage__projects__searchbox"
+                                    placeholder={
+                                      this.props.intl.formatMessage(messages.placeholder)
+                                    } />
         }
 
         {this.props.projects.length === 0 ?

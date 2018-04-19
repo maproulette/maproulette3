@@ -49,11 +49,13 @@ export default class ProjectMetrics extends Component {
           }
         </div>
 
-        <div className="project-metrics__stats">
-          <ChallengeMetrics burndownHeight={400}
-                            activity={_get(this.props, 'project.activity', [])}
-                            {...this.props} />
-        </div>
+        {this.props.project &&
+         <div className="project-metrics__stats">
+           <ChallengeMetrics burndownHeight={400}
+                             activity={_get(this.props, 'project.activity', [])}
+                             {...this.props} />
+         </div>
+        }
       </div>
     )
   }
