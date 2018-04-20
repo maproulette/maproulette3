@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import WithOptionalManagement
+       from '../HOCs/WithOptionalManagement/WithOptionalManagement'
 import SimpleDropdown from './SimpleDropdown'
 
 /**
@@ -16,19 +18,11 @@ import SimpleDropdown from './SimpleDropdown'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class DropdownButton extends Component {
-  state = {
-    isActive: false,
-  }
-
-  toggleActive = () => {
-    this.setState({isActive: !this.state.isActive})
-  }
-
+export class DropdownButton extends Component {
   selectOption = (e, option) => {
     e.preventDefault()
     this.props.onSelect && this.props.onSelect(option)
-    this.toggleActive()
+    this.props.toggleActive()
   }
 
   render() {
@@ -43,8 +37,8 @@ export default class DropdownButton extends Component {
     return (
       <SimpleDropdown {...this.props}
                       label={this.props.children}
-                      isActive={this.state.isActive}
-                      toggleActive={this.toggleActive}>
+                      isActive={this.props.isActive()}
+                      toggleActive={this.props.toggleActive}>
         {options}
       </SimpleDropdown>
     )
@@ -53,7 +47,7 @@ export default class DropdownButton extends Component {
 
 DropdownButton.propTypes = {
   /** Determines whether the dropdown is active/open or inactive/closed */
-  isActive: PropTypes.bool,
+  isActive: PropTypes.func,
   /** Array of menu options, each with at least key and text fields */
   options: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.node.isRequired,
@@ -66,3 +60,5 @@ DropdownButton.propTypes = {
   /** Invoked to deactivate/close the menu */
   deactivate: PropTypes.func,
 }
+
+export default WithOptionalManagement(DropdownButton)

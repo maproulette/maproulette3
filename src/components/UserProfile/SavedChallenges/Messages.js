@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with SavedTasks.
+ * Internationalized messages for use with SavedChallenges.
  */
 export default defineMessages({
   header: {

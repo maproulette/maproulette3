@@ -198,6 +198,22 @@ ShallowWrapper {
                 className="column right-column"
         >
                 <section
+                        className="user-profile__top-challenges"
+                >
+                        <TopChallenges
+                                user={
+                                        Object {
+                                                "created": 1487808000000,
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "some/url",
+                                                },
+                                              }
+                                }
+                        />
+                </section>
+                <section
                         className="user-profile__saved-challenges"
                 >
                         <SavedChallenges
@@ -319,6 +335,22 @@ ShallowWrapper {
           <div
             className="column right-column"
 >
+            <section
+                        className="user-profile__top-challenges"
+            >
+                        <TopChallenges
+                                    user={
+                                                Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                    }
+                        />
+            </section>
             <section
                         className="user-profile__saved-challenges"
             >
@@ -639,6 +671,22 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <section
+                className="user-profile__top-challenges"
+>
+                <TopChallenges
+                                user={
+                                                Object {
+                                                                "created": 1487808000000,
+                                                                "id": 357,
+                                                                "isLoggedIn": true,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "some/url",
+                                                                },
+                                                              }
+                                }
+                />
+</section>,
+              <section
                 className="user-profile__saved-challenges"
 >
                 <SavedChallenges
@@ -707,6 +755,46 @@ ShallowWrapper {
           },
           "ref": null,
           "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <TopChallenges
+                  user={
+                                    Object {
+                                                      "created": 1487808000000,
+                                                      "id": 357,
+                                                      "isLoggedIn": true,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "some/url",
+                                                      },
+                                                    }
+                  }
+/>,
+                "className": "user-profile__top-challenges",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "user": Object {
+                    "created": 1487808000000,
+                    "id": 357,
+                    "isLoggedIn": true,
+                    "osmProfile": Object {
+                      "avatarURL": "some/url",
+                    },
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "section",
+            },
             Object {
               "instance": null,
               "key": undefined,
@@ -958,6 +1046,22 @@ ShallowWrapper {
                     className="column right-column"
           >
                     <section
+                              className="user-profile__top-challenges"
+                    >
+                              <TopChallenges
+                                        user={
+                                                  Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                    </section>
+                    <section
                               className="user-profile__saved-challenges"
                     >
                               <SavedChallenges
@@ -1079,6 +1183,22 @@ ShallowWrapper {
             <div
               className="column right-column"
 >
+              <section
+                            className="user-profile__top-challenges"
+              >
+                            <TopChallenges
+                                          user={
+                                                        Object {
+                                                                      "created": 1487808000000,
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "some/url",
+                                                                      },
+                                                                    }
+                                          }
+                            />
+              </section>
               <section
                             className="user-profile__saved-challenges"
               >
@@ -1399,6 +1519,22 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <section
+                  className="user-profile__top-challenges"
+>
+                  <TopChallenges
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+</section>,
+                <section
                   className="user-profile__saved-challenges"
 >
                   <SavedChallenges
@@ -1467,6 +1603,46 @@ ShallowWrapper {
             },
             "ref": null,
             "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <TopChallenges
+                    user={
+                                        Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  "className": "user-profile__top-challenges",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "user": Object {
+                      "created": 1487808000000,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "section",
+              },
               Object {
                 "instance": null,
                 "key": undefined,

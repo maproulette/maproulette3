@@ -9,7 +9,7 @@ import WithLeaderboard from '../HOCs/WithLeaderboard/WithLeaderboard'
 import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import SimpleDropdown from '../Bulma/SimpleDropdown'
-import DropdownButton from '../Bulma/DropdownButton'
+import PastDurationSelector from '../PastDurationSelector/PastDurationSelector'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -19,7 +19,6 @@ import './Leaderboard.css'
 
 // Setup child components with needed HOCs.
 const DeactivatableDropdown = WithDeactivateOnOutsideClick(SimpleDropdown)
-const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
 const TOP_LEADER_COUNT = 4;
 
@@ -28,31 +27,9 @@ export class Leaderboard extends Component {
     monthsPast: 1,
   }
 
-  selectDateRange = selection => {
-    this.setState({monthsPast: selection.value})
-    this.props.setLeaderboardStartDate(subMonths(new Date(), selection.value))
-  }
-
-  dateSelectionControl = () => {
-    const dropdownOptions = _map([1, 3, 6, 12], months => ({
-      key: months,
-      text: this.props.intl.formatMessage(messages.pastMonthsOption, {months}),
-      value: months,
-    }))
-
-    return (
-      <DeactivatableDropdownButton
-        className="leaderboard__board__header__dates-control"
-        options={dropdownOptions}
-        onSelect={this.selectDateRange}
-      >
-        <div className="button is-rounded is-outlined">
-          <FormattedMessage {...messages.pastMonthsOption}
-                            values={{months: this.state.monthsPast}} />
-          <div className="dropdown-indicator" />
-        </div>
-      </DeactivatableDropdownButton>
-    )
+  selectDateRange = monthsPast => {
+    this.setState({monthsPast})
+    this.props.setLeaderboardStartDate(subMonths(new Date(), monthsPast))
   }
 
   leaderGroup = (leaders, offset, withRibbon=false) => {
@@ -120,7 +97,10 @@ export class Leaderboard extends Component {
           <div className="leaderboard__board__header">
             <h1 className="title">
               <FormattedMessage {...messages.leaderboardTitle} />
-              {this.dateSelectionControl()}
+              <PastDurationSelector className="leaderboard__board__header__dates-control"
+                                    pastMonthsOptions={[1, 3, 6, 12]}
+                                    currentMonthsPast={this.state.monthsPast}
+                                    selectDuration={this.selectDateRange} />
             </h1>
 
             <div className="leaderboard__board__header__point-breakdown">
