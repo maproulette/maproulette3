@@ -197,7 +197,7 @@ file on the internet.
 The Overpass API is a powerful querying interface for OpenStreetMap data. It
 does not work on the live OSM database, but the data you get from Overpass is
 usually just a few minutes old. Using
-[Overpass QL](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guided),
+[Overpass QL](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide),
 the Overpass Query Language, you can define exactly which OSM objects you want
 to load into your Challenge as Tasks.
 [Learn more](https://github.com/maproulette/maproulette2/wiki/Introducing-New-MapRoulette---Part-1.-Creating-and-Maintaining-Challenges#via-overpass).
