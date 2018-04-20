@@ -10,29 +10,16 @@
     margin-left: -5px;
     margin-right: -5px;
 
-
-    .editor-dropdown {
-      margin-left: 5px;
-      margin-right: 5px;  
-      margin-bottom: 10px;
-    }
-
     button {
-      &.false-positive-control, &.skip-control {
-        margin-left: 5px;
-        margin-right: 5px;
+      &.false-positive-control, &.skip-control, &.edit-control {
+        border: 5px solid transparent;
+        background-clip: padding-box;
       }
     }
 
     button.button.large-and-wide {
-      
-      // width: 100%;
-      // margin-bottom: 10px;
-
       &.false-positive-control, &.skip-control {
         flex: 1;
-        // margin-left: 5px;
-        // margin-right: 5px;
       }
 
       .control-icon svg {
