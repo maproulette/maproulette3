@@ -7,6 +7,12 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _pull from 'lodash/pull'
 import _keys from 'lodash/keys'
+import _each from 'lodash/each'
+import _map from 'lodash/map'
+import _toPairs from 'lodash/toPairs'
+import _sortBy from 'lodash/sortBy'
+import _reverse from 'lodash/reverse'
+import subMonths from 'date-fns/sub_months'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -35,6 +41,7 @@ export const userSchema = function() {
 export const userDenormalizationSchema = function() {
   return new schema.Entity('users', {
     savedChallenges: [ challengeSchema() ],
+    topChallenges: [ challengeSchema() ],
     savedTasks: [ taskDenormalizationSchema() ],
   })
 }
@@ -142,6 +149,112 @@ export const fetchUser = function(userId) {
 }
 
 /**
+ * Fetch the saved challenges for the given user.
+ */
+export const fetchSavedChallenges = function(userId, limit=50) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.user.savedChallenges, {
+        schema: [ challengeSchema() ],
+        variables: {userId},
+        params: {limit}
+      }
+    ).execute().then(normalizedChallenges => {
+      const challenges = _get(normalizedChallenges, 'entities.challenges')
+      const user = {id: userId}
+      user.savedChallenges = _isObject(challenges) ?
+                             _keys(challenges).map(key => parseInt(key, 10)) : []
+
+      dispatch(receiveChallenges(normalizedChallenges.entities))
+      dispatch(receiveUsers(simulatedEntities(user)))
+      return normalizedChallenges
+    })
+  }
+}
+
+/**
+ * Fetch the user's top challengs based on recent activity beginning at
+ * the given startDate. If no date is given, then activity over the past
+ * month is used.
+ */
+export const fetchTopChallenges = function(userId, startDate, limit=5) {
+  return function(dispatch) {
+    // If no startDate given, default to past month.
+
+    return new Endpoint(
+      api.user.topChallenges, {
+        schema: [ challengeSchema() ],
+        variables: {userId},
+        params: {
+          start: (startDate ? startDate : subMonths(new Date(), 1)).toISOString(),
+          limit,
+        }
+      }
+    ).execute().then(normalizedChallenges => {
+      const challenges = _get(normalizedChallenges, 'entities.challenges')
+      const user = {id: userId, topChallenges: []}
+
+      // Store the top challenge ids in order, sorted by user activity (descending)
+      if (_isObject(challenges)) {
+        user.topChallenges = _map(
+          _reverse(_sortBy(_toPairs(challenges), idAndChallenge => idAndChallenge[1].activity)),
+          idAndChallenge => parseInt(idAndChallenge[0], 10)
+        )
+      }
+
+      // Remove the user-specific activity score before adding this challenge
+      // to the general redux store.
+      _each(challenges, challenge => {
+        delete challenge.activity
+      })
+
+      dispatch(receiveChallenges(normalizedChallenges.entities))
+      dispatch(receiveUsers(simulatedEntities(user)))
+
+      return normalizedChallenges
+    })
+  }
+}
+
+/**
+ * Fetch the saved tasks for the given user.
+ */
+export const fetchSavedTasks = function(userId, limit=50) {
+  return function(dispatch) {
+    return new Endpoint(api.user.savedTasks, {
+      schema: [ taskSchema() ],
+      variables: {userId},
+      params: {limit}
+    }).execute().then(normalizedTasks => {
+      const tasks = _get(normalizedTasks, 'entities.tasks')
+      const user = {id: userId}
+      user.savedTasks = _isObject(tasks) ?
+                        _keys(tasks).map(key => parseInt(key, 10)) :[]
+
+      dispatch(receiveTasks(normalizedTasks.entities))
+      dispatch(receiveUsers(simulatedEntities(user)))
+      return normalizedTasks
+    })
+  }
+}
+
+/**
+ * Fetch the user's recent activity.
+ */
+export const fetchUserActivity = function(userId, limit=50) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.user.activity
+    ).execute().then(activity => {
+      const user = {id: userId}
+      user.activity = activity
+      dispatch(receiveUsers(simulatedEntities(user)))
+      return activity
+    })
+  }
+}
+
+/**
  * Retrieve the given user data plus their accompanying data, performing
  * multiple API requests as needed.
  */
@@ -151,64 +264,26 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
       return null
     }
 
-    return new Endpoint(
-      api.users.single, {schema: userSchema(), variables: {id: userId}}
-    ).execute().then(normalizedUsers => {
-      const user = normalizedUsers.entities.users[normalizedUsers.result]
-      return new Endpoint(
-        api.user.savedChallenges,
-        {
-          schema: [ challengeSchema() ],
-          variables: {userId},
-          params: {limit: savedChallengesLimit}
-        }
-      ).execute().then(normalizedChallenges => {
-        const challenges = _get(normalizedChallenges, 'entities.challenges')
-        if (_isObject(challenges)) {
-          user.savedChallenges = _keys(challenges).map(key => parseInt(key, 10))
-        }
-        else {
-          user.savedChallenges = []
-        }
-
-        return new Endpoint(
-          api.user.savedTasks,
-          {
-            schema: [ taskSchema() ],
-            variables: {userId},
-            params: {limit: savedTasksLimit}
-          }
-        ).execute().then(normalizedTasks => {
-          const tasks = _get(normalizedTasks, 'entities.tasks')
-          if (_isObject(tasks)) {
-            user.savedTasks = _keys(tasks).map(key => parseInt(key, 10))
-          }
-          else {
-            user.savedTasks = []
-          }
-
-          return new Endpoint(api.user.activity).execute().then(
-            rawActivity => user.activity = rawActivity
-          ).then(() => {
-            dispatch(receiveChallenges(normalizedChallenges.entities))
-            dispatch(receiveTasks(normalizedTasks.entities))
-            dispatch(receiveUsers(normalizedUsers.entities))
-            return normalizedUsers
-          })
-        })
-      })
+    return fetchUser(userId)(dispatch).then(normalizedUsers => {
+      fetchSavedChallenges(userId, savedChallengesLimit)(dispatch)
+      fetchTopChallenges(userId)(dispatch)
+      fetchSavedTasks(userId, savedTasksLimit)(dispatch)
+      fetchUserActivity(userId)(dispatch)
     }).then(() =>
       dispatch(setCurrentUser(userId))
-    )
-    .catch(error => {
+    ).catch(error => {
       // a 401 (unauthorized) indicates that the user is not logged in.
       // Logout the current user to null to reflect that.
       if (error.response && error.response.status === 401) {
         dispatch(logoutUser())
       }
+      else {
+        console.log(error.response || error)
+      }
     })
   }
 }
+
 /**
  * Update the given user's settings with the given settings.
  */
@@ -344,17 +419,23 @@ const updateUser = function(userId, updateFunction, reloadOnSuccess=false) {
  */
 const reduceUsersFurther = function(mergedState, oldState, userEntities) {
   // The generic reduction will merge arrays, creating a union of values. We
-  // don't want that for user groups or savedChallenges: we want to replace the
-  // old arrays with new ones.
-  //
-  // One complication with savedChallenges is that not all user entities will
-  // contain saved challenge data, as that comes from a separate API request.
-  // So we only replace the challenge data if the entity contains some.
+  // don't want that for many of our arrays: we want to replace the old ones
+  // with new ones (if we have new ones).
   for (let entity of userEntities) {
-    mergedState[entity.id].groups = entity.groups
+    if (_isArray(entity.groups)) {
+      mergedState[entity.id].groups = entity.groups
+    }
+
+    if (_isArray(entity.activity)) {
+      mergedState[entity.id].activity = entity.activity
+    }
 
     if (_isArray(entity.savedChallenges)) {
       mergedState[entity.id].savedChallenges = entity.savedChallenges
+    }
+
+    if (_isArray(entity.savedTasks)) {
+      mergedState[entity.id].savedTasks = entity.savedTasks
     }
   }
 }
@@ -409,4 +490,18 @@ export const currentUser = function(state=null, action) {
   }
 
   return state
+}
+
+/**
+ * Builds a simulated normalized entities representation from the given
+ * user.
+ *
+ * @private
+ */
+export const simulatedEntities = function(user) {
+  return {
+    users: {
+      [user.id]: user
+    }
+  }
 }

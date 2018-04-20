@@ -29,11 +29,6 @@ export default defineMessages({
 `
   },
 
-  pastMonthsOption: {
-    id: "Leaderboard.pastMonths.selectOption",
-    defaultMessage: "Past {months, plural, one {Month} =12 {Year} other {# Months}}",
-  },
-
   userPoints: {
     id: "Leaderboard.user.points",
     defaultMessage: "Points",

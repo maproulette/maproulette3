@@ -81,6 +81,7 @@ const apiRoutes = factory => {
     },
     'user': {
       'activity': factory.get('/data/user/activity'),
+      'topChallenges': factory.get('/data/user/:userId/topChallenges'),
       'savedChallenges': factory.get('/user/:userId/saved'),
       'saveChallenge': factory.post('/user/:userId/save/:challengeId'),
       'unsaveChallenge': factory.delete('/user/:userId/unsave/:challengeId'),

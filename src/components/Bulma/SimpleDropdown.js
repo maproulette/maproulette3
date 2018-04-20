@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import _isUndefined from 'lodash/isUndefined'
 import _isArray from 'lodash/isArray'
+import WithOptionalManagement
+       from '../HOCs/WithOptionalManagement/WithOptionalManagement'
 import './SimpleDropdown.css'
 
 /**
@@ -12,33 +13,16 @@ import './SimpleDropdown.css'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class SimpleDropdown extends Component {
-  state = {
-    isActive: false
-  }
-
-  isSelfManaged = () => _isUndefined(this.props.isActive)
-
-  isActive = () =>
-    this.isSelfManaged() ? this.state.isActive : this.props.isActive
-
-  toggleActive = () => {
-    if (this.isSelfManaged()) {
-      this.setState({isActive: !this.state.isActive})
-    }
-    else {
-      this.props.toggleActive()
-    }
-  }
-
+export class SimpleDropdown extends Component {
   render() {
     return (
       <div className={classNames('SimpleDropdown dropdown',
-                                 {'is-active': this.isActive(), 'is-right': this.props.isRight},
+                                  {'is-active': this.props.isActive(),
+                                    'is-right': this.props.isRight},
                                  this.props.className)}>
         <div className={classNames('dropdown-trigger', this.props.triggerClassName)}
              title={this.props.tooltip}
-             onClick={this.toggleActive}>
+             onClick={this.props.toggleActive}>
           {this.props.label}
         </div>
 
@@ -65,7 +49,7 @@ SimpleDropdown.propTypes = {
   /** Set to true to right-align dropdown */
   isRight: PropTypes.bool,
   /** Optional: whether the dropdown is active/open or inactive/closed */
-  isActive: PropTypes.bool,
+  isActive: PropTypes.func,
   /**
    * Invoked to toggle the current active/inactive state of the dropdown. Must
    * be provided if isActive is provided (and will be ignored if isActive is
@@ -73,3 +57,5 @@ SimpleDropdown.propTypes = {
    */
   toggleActive: PropTypes.func,
 }
+
+export default WithOptionalManagement(SimpleDropdown)

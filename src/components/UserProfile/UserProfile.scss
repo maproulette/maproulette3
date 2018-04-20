@@ -83,15 +83,17 @@
     border-radius: $radius-medium;
   }
 
-  .saved-challenges, .saved-tasks, .user-settings {
+  .top-challenges, .saved-challenges, .saved-tasks, .user-settings {
     h2.subtitle {
       @extend .grey-backdrop;
+      display: flex;
+      justify-content: space-between;
       padding: 15px;
       margin-bottom: 40px;
     }
   }
 
-  .saved-challenges__challenge, .saved-tasks__task {
+  .top-challenges__challenge, .saved-challenges__challenge, .saved-tasks__task {
     display: flex;
     align-items: center;
     margin: 0;

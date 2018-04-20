@@ -10,6 +10,7 @@ import SignInButton from '../SignInButton/SignInButton'
 import messages from './Messages'
 import SavedTasks from './SavedTasks/SavedTasks'
 import SavedChallenges from './SavedChallenges/SavedChallenges'
+import TopChallenges from './TopChallenges/TopChallenges'
 import UserSettings from './UserSettings/UserSettings'
 import './UserProfile.css'
 
@@ -51,6 +52,10 @@ export class UserProfile extends Component {
           </div>
 
           <div className="column right-column">
+            <section className="user-profile__top-challenges">
+              <TopChallenges {...this.props} />
+            </section>
+
             <section className="user-profile__saved-challenges">
               <SavedChallenges {...this.props} />
             </section>
