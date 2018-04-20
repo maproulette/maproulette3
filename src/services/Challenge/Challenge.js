@@ -160,11 +160,13 @@ export const searchChallenges = function(queryString, onlyEnabled=true, limit=50
 
     // setup query parameters desired by server.
     // ce: limit to enabled challenges
+    // pe: limit to enabled projects
     // cs: query string
     // ct: keywords/tags (comma-separated string)
     const queryParams = {
       limit,
       ce: onlyEnabled ? 'true' : 'false',
+      pe: onlyEnabled ? 'true' : 'false',
     }
 
     if (queryParts.query.length > 0) {

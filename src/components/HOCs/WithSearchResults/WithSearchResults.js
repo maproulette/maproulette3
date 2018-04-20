@@ -33,8 +33,8 @@ const WithSearchResults = (WrappedComponent, searchName, itemsProp, outputProp) 
 const searchOptions = {
   shouldSort: true, // sort results best to worst
   threshold: 0.4, // score: 0.0 is perfect, 1.0 terrible
-  location: 0,
-  distance: 100,
+  location: 0, // ideal location of query match in string (0 = beginning of string)
+  distance: 500, // allowed distance from "location" (higher = less penalty for matches near end of string)
   maxPatternLength: 64, // max query length
   minMatchCharLength: 3,
   keys: ["name", "displayName", "blurb"], // fields to search

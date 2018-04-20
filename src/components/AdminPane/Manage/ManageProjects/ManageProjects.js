@@ -16,7 +16,7 @@ import './ManageProjects.css'
 const ProjectAndChallengeSearch =
   WithComboSearchExecution(SearchBox, {
     'adminProjects': searchProjects,
-    'adminChallenges': searchChallenges,
+    'adminChallenges': query => searchChallenges(query, false, 1000), // include disabled
   })
 
 /**
