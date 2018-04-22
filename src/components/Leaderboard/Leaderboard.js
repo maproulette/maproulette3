@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedNumber, FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import subMonths from 'date-fns/sub_months'
 import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
+import _isFinite from 'lodash/isFinite'
 import WithLeaderboard from '../HOCs/WithLeaderboard/WithLeaderboard'
 import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
@@ -20,13 +22,17 @@ import './Leaderboard.css'
 // Setup child components with needed HOCs.
 const DeactivatableDropdown = WithDeactivateOnOutsideClick(SimpleDropdown)
 
-const TOP_LEADER_COUNT = 4;
+const DEFAULT_TOP_LEADER_COUNT = 4;
 const INITIAL_MONTHS_PAST = 1;
 
 export class Leaderboard extends Component {
   state = {
     monthsPast: INITIAL_MONTHS_PAST,
   }
+
+  topLeaderCount = () => _isFinite(this.props.topLeaderCount) ?
+                         this.props.topLeaderCount :
+                         DEFAULT_TOP_LEADER_COUNT
 
   selectDateRange = monthsPast => {
     this.setState({monthsPast})
@@ -35,7 +41,7 @@ export class Leaderboard extends Component {
 
   leaderGroup = (leaders, offset, withRibbon=false) => {
     return _map(leaders, (leader, index) => {
-      const topChallenges = _map(leader.topChallenges.slice(0, TOP_LEADER_COUNT), challenge => (
+      const topChallenges = _map(leader.topChallenges.slice(0, this.topLeaderCount()), challenge => (
         <Link to={`/browse/challenges/${challenge.id}`}
               className="leaderboard__board__leader__top-challenges__challenge-name"
               key={challenge.id}
@@ -67,14 +73,16 @@ export class Leaderboard extends Component {
             </div>
           </div>
 
-          <div className="leaderboard__board__leader__top-challenges">
-            <h3>
-              <FormattedMessage {...messages.userTopChallenges} />
-            </h3>
-            <div className="leaderboard__board__leader__top-challenges__challenge-list">
-              {topChallenges}
-            </div>
-          </div>
+          {!this.props.suppressTopChallenges &&
+           <div className="leaderboard__board__leader__top-challenges">
+             <h3>
+               <FormattedMessage {...messages.userTopChallenges} />
+             </h3>
+             <div className="leaderboard__board__leader__top-challenges__challenge-list">
+               {topChallenges}
+             </div>
+           </div>
+          }
         </div>
       )
     })
@@ -85,14 +93,18 @@ export class Leaderboard extends Component {
       return null
     }
     else if (this.props.leaderboardLoading) {
-      return <div className="pane-loading"><BusySpinner /></div>
+      return (
+        <div className={classNames({"pane-loading": !this.props.compactView})}>
+          <BusySpinner />
+        </div>
+      )
     }
     else if (!this.props.leaderboard) {
       return null
     }
 
     return (
-      <div className="leaderboard">
+      <div className={classNames("leaderboard", {"leaderboard--compact-view": this.props.compactView})}>
         <div className="leaderboard__obstruct-footer-icon" />
         <div className="leaderboard__board">
           <div className="leaderboard__board__header">
@@ -114,14 +126,22 @@ export class Leaderboard extends Component {
             </div>
           </div>
 
-          <div className="leaderboard__board__top-leaders">
-            {this.leaderGroup(this.props.leaderboard.slice(0, TOP_LEADER_COUNT), 1, true)}
-          </div>
+          {this.props.leaderboard.length === 0 &&
+           <div className="leaderboard__board__no-leaders">
+             <FormattedMessage {...messages.noLeaders} />
+           </div>
+          }
 
-          {this.props.leaderboard.length > TOP_LEADER_COUNT &&
+          {this.topLeaderCount() > 0 &&
+           <div className="leaderboard__board__top-leaders">
+             {this.leaderGroup(this.props.leaderboard.slice(0, this.topLeaderCount()), 1, true)}
+           </div>
+          }
+
+          {this.props.leaderboard.length > this.topLeaderCount() &&
            <div className="leaderboard__board__remaining-leaders">
-             {this.leaderGroup(this.props.leaderboard.slice(TOP_LEADER_COUNT),
-                               TOP_LEADER_COUNT + 1, false)}
+             {this.leaderGroup(this.props.leaderboard.slice(this.topLeaderCount()),
+                               this.topLeaderCount() + 1, false)}
            </div>
           }
         </div>
@@ -136,6 +156,12 @@ export class Leaderboard extends Component {
 Leaderboard.propTypes = {
   leaderboard: PropTypes.array,
   leaderboardLoading: PropTypes.bool,
+  /** Number of leaders to show as top leaders. Defaults to 4 */
+  topLeaderboardCount: PropTypes.number,
+  /** Set to true to suppress display of users' top challenges */
+  suppressTopChallenges: PropTypes.bool,
+  /** Set to true to render in the compact view */
+  compactView: PropTypes.bool,
 }
 
 export default WithLeaderboard(injectIntl(Leaderboard),

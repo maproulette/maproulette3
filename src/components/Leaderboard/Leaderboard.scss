@@ -289,9 +289,6 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
-          margin: 15px 15px 15px 0px;
-          padding-right: 15px;
-          border-right: 2px solid $grey-lightest-less;
         }
 
         &__name {
@@ -307,6 +304,9 @@
         &__top-challenges {
           justify-content: center;
           align-items: left;
+          border-left: 2px solid $grey-lightest-less;
+          margin: 15px;
+          padding-left: 15px;
 
           h3 {
             border-bottom: none;
@@ -349,5 +349,86 @@
     top: $navbar-height;
     background-color: $grey-lightest-more;
     z-index: 1;
+  }
+
+  &--compact-view {
+    min-height: 0;
+    background-color: transparent;
+    padding: 0;
+
+    .leaderboard__board {
+      min-width: inherit;
+      min-height: 0;
+      width: 100%;
+      padding: 0;
+      box-shadow: none;
+      background-color: transparent;
+
+      &__header {
+        padding: 0;
+        margin-bottom: 5px;
+        border: none;
+
+        h1 {
+          font-size: $size-5;
+          font-weight: $weight-normal;
+          margin-bottom: 5px;
+        }
+
+        &__dates-control {
+          .dropdown-trigger {
+            .button.is-outlined {
+              margin-left: 1em;
+              margin-right: 1em;
+            }
+          }
+        }
+
+        &__point-breakdown {
+          display: none;
+        }
+      }
+
+      &__remaining-leaders {
+        margin-top: 5px;
+        margin-bottom: 15px;
+      }
+
+      &__leader {
+        border: none;
+        margin-bottom: 0;
+        background-color: transparent;
+        margin-bottom: 15px;
+
+        &__rank {
+          min-width: 55px;
+          max-width: 55px;
+          text-align: left;
+        }
+
+        &__avatar {
+          min-width: 40px;
+          width: 40px;
+          height: 40px;
+          margin: 2px 20px;
+
+          img {
+            width: 60px;
+          }
+        }
+
+        &__name-and-score {
+          margin: 0;
+        }
+
+        &__name, &__score {
+          font-size: $size-6;
+        }
+      }
+    }
+
+    .leaderboard__footer-icon, .leaderboard__obstruct-footer-icon {
+      display: none;
+    }
   }
 }

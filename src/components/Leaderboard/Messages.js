@@ -37,6 +37,11 @@ export default defineMessages({
   userTopChallenges: {
     id: "Leaderboard.user.topChallenges",
     defaultMessage: "Top Challenges",
-  }
+  },
+
+  noLeaders: {
+    id: "Leaderboard.users.none",
+    defaultMessage: "No users for time period",
+  },
 })
 

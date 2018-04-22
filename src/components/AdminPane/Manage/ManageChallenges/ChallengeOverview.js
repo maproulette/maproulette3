@@ -10,6 +10,8 @@ import { ChallengeStatus,
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import ChallengeProgress
        from '../../../ChallengeProgress/ChallengeProgress'
+import ChallengeLeaderboard
+       from '../ChallengeLeaderboard/ChallengeLeaderboard'
 import ChallengeKeywords from '../ChallengeKeywords/ChallengeKeywords'
 import VisibilitySwitch from '../VisibilitySwitch/VisibilitySwitch'
 import ChallengeActivityTimeline
@@ -92,6 +94,10 @@ export class ChallengeOverview extends Component {
           {hasTasks &&
            <ChallengeProgress challenge={this.props.challenge} />
           }
+        </section>
+
+        <section className="challenge-overview__leaderboard">
+          <ChallengeLeaderboard {...this.props} />
         </section>
 
         <section className="challenge-overview--activity">

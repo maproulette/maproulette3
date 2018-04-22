@@ -205,6 +205,7 @@
   "Leaderboard.scoringMethod.explanation": "##### Points are awarded per completed task as follows:\n\n| Status        | Points |\n| :------------ | -----: |\n| Fixed         | 5      |\n| Not an Issue  | 3      |\n| Already Fixed | 3      |\n| Too Hard      | 1      |\n| Skipped       | 0      |",
   "Leaderboard.user.points": "Points",
   "Leaderboard.user.topChallenges": "Top Challenges",
+  "Leaderboard.users.none": "No users for time period",
   "LocatorMap.controls.startChallenge.label": "Start Challenge",
   "MobileNotSupported.header": "Please Visit on your Computer",
   "MobileNotSupported.message": "Sorry, MapRoulette does not currently support mobile devices.",
