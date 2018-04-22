@@ -21,10 +21,11 @@ import './Leaderboard.css'
 const DeactivatableDropdown = WithDeactivateOnOutsideClick(SimpleDropdown)
 
 const TOP_LEADER_COUNT = 4;
+const INITIAL_MONTHS_PAST = 1;
 
 export class Leaderboard extends Component {
   state = {
-    monthsPast: 1,
+    monthsPast: INITIAL_MONTHS_PAST,
   }
 
   selectDateRange = monthsPast => {
@@ -137,4 +138,5 @@ Leaderboard.propTypes = {
   leaderboardLoading: PropTypes.bool,
 }
 
-export default WithLeaderboard(injectIntl(Leaderboard))
+export default WithLeaderboard(injectIntl(Leaderboard),
+                               subMonths(new Date(), INITIAL_MONTHS_PAST))

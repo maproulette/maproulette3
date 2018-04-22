@@ -6,7 +6,6 @@ import _has from 'lodash/has'
 import _isObject from 'lodash/isObject'
 import { visibleLayer } from './services/VisibleLayer/VisibleLayer'
 import { currentUser, userEntities } from './services/User/User'
-import { currentLeaderboard } from './services/Leaderboard/Leaderboard'
 import { projectEntities } from './services/Project/Project'
 import { challengeEntities } from './services/Challenge/Challenge'
 import { virtualChallengeEntities }
@@ -27,7 +26,7 @@ import { currentErrors } from './services/Error/Error'
 import { adminContext } from './services/AdminContext/AdminContext'
 import { currentPreferences } from './services/Preferences/Preferences'
 
-const DATA_MODEL_VERSION = 7
+const DATA_MODEL_VERSION = 8
 
 /**
  * initializePersistedStore sets up the redux store in combination with
@@ -95,6 +94,10 @@ export const initializePersistedStore = callback => {
         delete state.entities.challenges
       }
     },
+    8: state => {
+      // Leaderboard no longer kept in redux store
+      delete state.currentLeaderboard
+    }
   }
 
   // redux-persist config object. For explanation of options, see:
@@ -131,7 +134,6 @@ export const initializePersistedStore = callback => {
   const rootReducer = combineReducers({
       visibleLayer,
       currentUser,
-      currentLeaderboard,
       currentFilters,
       currentSearch,
       openEditor,
