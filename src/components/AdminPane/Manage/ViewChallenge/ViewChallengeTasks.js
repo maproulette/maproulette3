@@ -24,6 +24,7 @@ import MapPane from '../../../EnhancedMap/MapPane/MapPane'
 import ChallengeTaskMap from '../ChallengeTaskMap/ChallengeTaskMap'
 import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
 import TaskBuildProgress from './TaskBuildProgress'
+import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
 
 /**
@@ -110,6 +111,8 @@ export class ViewChallengeTasks extends Component {
 
     return (
       <div className='admin__manage-tasks'>
+        <GeographicIndexingNotice challenge={this.props.challenge} />
+
         <MapPane>
           <ChallengeTaskMap taskInfo={this.props.taskInfo}
                             setChallengeOwnerMapBounds={this.props.setChallengeOwnerMapBounds}

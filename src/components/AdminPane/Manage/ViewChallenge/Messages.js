@@ -73,4 +73,13 @@ export default defineMessages({
     id: "Admin.ManageTasks.header",
     defaultMessage: "Tasks",
   },
+
+  geographicIndexingNotice: {
+    id: "Admin.ManageTasks.geographicIndexingNotice",
+    defaultMessage: "Please note that it can take up to {delay} hours " +
+                    "to geographically index new or modified challenges. " +
+                    "Your challenge (and tasks) may not appear as " +
+                    "expected in location-specific browsing or " +
+                    "searches until indexing is complete."
+  },
 })
