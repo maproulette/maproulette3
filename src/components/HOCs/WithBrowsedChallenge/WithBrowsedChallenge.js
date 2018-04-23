@@ -192,7 +192,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         return dispatch(
           fetchChallenge(challengeId)
         ).then(normalizedResults => {
-          if (!_isFinite(normalizedResults.result)) {
+          if (!_isFinite(normalizedResults.result) ||
+              _get(normalizedResults,
+                   `entities.challenges.${normalizedResults.result}.deleted`)) {
             dispatch(addError(AppErrors.challenge.doesNotExist))
             ownProps.history.push('/')
           }
