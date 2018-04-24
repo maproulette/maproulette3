@@ -28,6 +28,20 @@
     }
   }
 
+  .admin__manage__view-challenge__indexing-notice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    svg.icon {
+      min-width: 35px;
+      height: 75px;
+      width: auto;
+      margin-right: 25px;
+      fill: $grey;
+    }
+  }
+
   section {
     margin-bottom: 1em;
   }
