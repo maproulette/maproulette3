@@ -15,6 +15,8 @@ import { challengeDenormalizationSchema,
          rebuildChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
+import { addError } from '../../../../services/Error/Error'
+import AppErrors from '../../../../services/Error/AppErrors'
 import AsManageable from '../../../../interactions/Challenge/AsManageable'
 import { isUsableChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
@@ -116,15 +118,34 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchChallenge: challengeId => dispatch(fetchChallenge(challengeId)),
+  fetchChallenge: challengeId => {
+    return dispatch(
+      fetchChallenge(challengeId)
+    ).then(normalizedResults => {
+      if (!_isFinite(normalizedResults.result) ||
+          _get(normalizedResults,
+                `entities.challenges.${normalizedResults.result}.deleted`)) {
+        dispatch(addError(AppErrors.challenge.doesNotExist))
+        ownProps.history.push('/admin/projects')
+      }
+
+      return normalizedResults
+    })
+  },
+
   fetchChallengeComments: challengeId =>
     dispatch(fetchChallengeComments(challengeId)),
+
   fetchChallengeActivity: (challengeId, startDate, endDate) =>
     dispatch(fetchChallengeActivity(challengeId, startDate, endDate)),
+
   fetchChallengeActions: challengeId =>
     dispatch(fetchChallengeActions(challengeId)),
+
   saveChallenge: challengeData => dispatch(saveChallenge(challengeData)),
+
   rebuildChallenge: challengeId => dispatch(rebuildChallenge(challengeId)),
+
   deleteChallenge: (projectId, challengeId) => {
     // Optimistically remove the challenge.
     dispatch(removeChallenge(challengeId))
@@ -133,6 +154,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       ownProps.history.replace(`/admin/project/${projectId}`)
     )
   },
+
   updateEnabled: (challengeId, isEnabled) => {
     dispatch(setIsEnabled(challengeId, isEnabled))
   },

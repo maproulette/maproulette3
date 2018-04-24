@@ -65,6 +65,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       const projectId = this.currentProjectId(props)
       if (_isFinite(this.routedProjectId(props)) && projectId === null) {
         this.props.notManagerError()
+        props.history.push('/admin/projects')
         return
       }
 
