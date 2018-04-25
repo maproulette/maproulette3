@@ -101,6 +101,21 @@ ShallowWrapper {
                                         />
                               </span>
                     </Link>
+                    <Link
+                              className="navbar-item top-nav__browse-link"
+                              replace={false}
+                              to="/leaderboard"
+                    >
+                              <span
+                                        className="item-text"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="Leaderboard"
+                                                  id="Navbar.links.leaderboard"
+                                                  values={Object {}}
+                                        />
+                              </span>
+                    </Link>
           </div>
           <div
                     className="navbar-end"
@@ -328,6 +343,21 @@ ShallowWrapper {
                                           />
                             </span>
               </Link>
+              <Link
+                            className="navbar-item top-nav__browse-link"
+                            replace={false}
+                            to="/leaderboard"
+              >
+                            <span
+                                          className="item-text"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="Leaderboard"
+                                                        id="Navbar.links.leaderboard"
+                                                        values={Object {}}
+                                          />
+                            </span>
+              </Link>
 </div>,
             <div
               className="navbar-end"
@@ -397,7 +427,21 @@ ShallowWrapper {
                                     />
                   </span>
 </Link>,
-                false,
+                <Link
+                  className="navbar-item top-nav__browse-link"
+                  replace={false}
+                  to="/leaderboard"
+>
+                  <span
+                                    className="item-text"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="Leaderboard"
+                                                      id="Navbar.links.leaderboard"
+                                                      values={Object {}}
+                                    />
+                  </span>
+</Link>,
                 false,
               ],
               "className": "navbar-start",
@@ -502,7 +546,55 @@ ShallowWrapper {
                 },
                 "type": [Function],
               },
-              false,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <span
+                    className="item-text"
+>
+                    <FormattedMessage
+                                        defaultMessage="Leaderboard"
+                                        id="Navbar.links.leaderboard"
+                                        values={Object {}}
+                    />
+</span>,
+                  "className": "navbar-item top-nav__browse-link",
+                  "replace": false,
+                  "to": "/leaderboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Leaderboard"
+                      id="Navbar.links.leaderboard"
+                      values={Object {}}
+/>,
+                    "className": "item-text",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Leaderboard",
+                      "id": "Navbar.links.leaderboard",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": [Function],
+              },
               false,
             ],
             "type": "div",
@@ -670,6 +762,21 @@ ShallowWrapper {
                                                 <FormattedMessage
                                                             defaultMessage="Challenges"
                                                             id="Navbar.links.challengeResults"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+                        <Link
+                                    className="navbar-item top-nav__browse-link"
+                                    replace={false}
+                                    to="/leaderboard"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="Leaderboard"
+                                                            id="Navbar.links.leaderboard"
                                                             values={Object {}}
                                                 />
                                     </span>
@@ -901,6 +1008,21 @@ ShallowWrapper {
                                                 />
                                 </span>
                 </Link>
+                <Link
+                                className="navbar-item top-nav__browse-link"
+                                replace={false}
+                                to="/leaderboard"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="Leaderboard"
+                                                                id="Navbar.links.leaderboard"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
 </div>,
               <div
                 className="navbar-end"
@@ -970,7 +1092,21 @@ ShallowWrapper {
                                         />
                     </span>
 </Link>,
-                  false,
+                  <Link
+                    className="navbar-item top-nav__browse-link"
+                    replace={false}
+                    to="/leaderboard"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="Leaderboard"
+                                                            id="Navbar.links.leaderboard"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
                   false,
                 ],
                 "className": "navbar-start",
@@ -1075,7 +1211,55 @@ ShallowWrapper {
                   },
                   "type": [Function],
                 },
-                false,
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="Leaderboard"
+                                            id="Navbar.links.leaderboard"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item top-nav__browse-link",
+                    "replace": false,
+                    "to": "/leaderboard",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="Leaderboard"
+                        id="Navbar.links.leaderboard"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "Leaderboard",
+                        "id": "Navbar.links.leaderboard",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
                 false,
               ],
               "type": "div",
@@ -1277,6 +1461,21 @@ ShallowWrapper {
                                         <FormattedMessage
                                                   defaultMessage="Challenges"
                                                   id="Navbar.links.challengeResults"
+                                                  values={Object {}}
+                                        />
+                              </span>
+                    </Link>
+                    <Link
+                              className="navbar-item top-nav__browse-link"
+                              replace={false}
+                              to="/leaderboard"
+                    >
+                              <span
+                                        className="item-text"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="Leaderboard"
+                                                  id="Navbar.links.leaderboard"
                                                   values={Object {}}
                                         />
                               </span>
@@ -1524,6 +1723,21 @@ ShallowWrapper {
                             </span>
               </Link>
               <Link
+                            className="navbar-item top-nav__browse-link"
+                            replace={false}
+                            to="/leaderboard"
+              >
+                            <span
+                                          className="item-text"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="Leaderboard"
+                                                        id="Navbar.links.leaderboard"
+                                                        values={Object {}}
+                                          />
+                            </span>
+              </Link>
+              <Link
                             className="navbar-item top-nav__admin-link"
                             replace={false}
                             to="/admin/projects"
@@ -1607,7 +1821,21 @@ ShallowWrapper {
                                     />
                   </span>
 </Link>,
-                false,
+                <Link
+                  className="navbar-item top-nav__browse-link"
+                  replace={false}
+                  to="/leaderboard"
+>
+                  <span
+                                    className="item-text"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="Leaderboard"
+                                                      id="Navbar.links.leaderboard"
+                                                      values={Object {}}
+                                    />
+                  </span>
+</Link>,
                 <Link
                   className="navbar-item top-nav__admin-link"
                   replace={false}
@@ -1726,7 +1954,55 @@ ShallowWrapper {
                 },
                 "type": [Function],
               },
-              false,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <span
+                    className="item-text"
+>
+                    <FormattedMessage
+                                        defaultMessage="Leaderboard"
+                                        id="Navbar.links.leaderboard"
+                                        values={Object {}}
+                    />
+</span>,
+                  "className": "navbar-item top-nav__browse-link",
+                  "replace": false,
+                  "to": "/leaderboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Leaderboard"
+                      id="Navbar.links.leaderboard"
+                      values={Object {}}
+/>,
+                    "className": "item-text",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "Leaderboard",
+                      "id": "Navbar.links.leaderboard",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": [Function],
+              },
               Object {
                 "instance": null,
                 "key": undefined,
@@ -1942,6 +2218,21 @@ ShallowWrapper {
                                                 <FormattedMessage
                                                             defaultMessage="Challenges"
                                                             id="Navbar.links.challengeResults"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+                        <Link
+                                    className="navbar-item top-nav__browse-link"
+                                    replace={false}
+                                    to="/leaderboard"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="Leaderboard"
+                                                            id="Navbar.links.leaderboard"
                                                             values={Object {}}
                                                 />
                                     </span>
@@ -2189,6 +2480,21 @@ ShallowWrapper {
                                 </span>
                 </Link>
                 <Link
+                                className="navbar-item top-nav__browse-link"
+                                replace={false}
+                                to="/leaderboard"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="Leaderboard"
+                                                                id="Navbar.links.leaderboard"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
+                <Link
                                 className="navbar-item top-nav__admin-link"
                                 replace={false}
                                 to="/admin/projects"
@@ -2272,7 +2578,21 @@ ShallowWrapper {
                                         />
                     </span>
 </Link>,
-                  false,
+                  <Link
+                    className="navbar-item top-nav__browse-link"
+                    replace={false}
+                    to="/leaderboard"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="Leaderboard"
+                                                            id="Navbar.links.leaderboard"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
                   <Link
                     className="navbar-item top-nav__admin-link"
                     replace={false}
@@ -2391,7 +2711,55 @@ ShallowWrapper {
                   },
                   "type": [Function],
                 },
-                false,
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="Leaderboard"
+                                            id="Navbar.links.leaderboard"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item top-nav__browse-link",
+                    "replace": false,
+                    "to": "/leaderboard",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="Leaderboard"
+                        id="Navbar.links.leaderboard"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "Leaderboard",
+                        "id": "Navbar.links.leaderboard",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
                 Object {
                   "instance": null,
                   "key": undefined,
