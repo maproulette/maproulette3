@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _omit from 'lodash/omit'
+import WithManageableProjects
+       from '../../HOCs/WithManageableProjects/WithManageableProjects'
+import WithSearchResults
+       from '../../../HOCs/WithSearchResults/WithSearchResults'
 import WithComboSearchExecution
        from '../../HOCs/WithComboSearchExecution/WithComboSearchExecution'
 import SearchBox from '../../../SearchBox/SearchBox'
@@ -93,4 +97,18 @@ ManageProjects.defaultProps = {
   loadingProjects: false,
 }
 
-export default injectIntl(ManageProjects)
+export default
+  WithManageableProjects(
+    WithSearchResults(
+      WithSearchResults(
+        injectIntl(ManageProjects),
+        'adminChallenges',
+        'challenges',
+        'filteredChallenges'
+      ),
+      'adminProjects',
+      'projects',
+      'filteredProjects'
+    ),
+    true
+  )

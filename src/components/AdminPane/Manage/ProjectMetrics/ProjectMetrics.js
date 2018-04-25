@@ -4,11 +4,18 @@ import { FormattedMessage, FormattedNumber } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _sum from 'lodash/sum'
+import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import ChallengeMetrics from '../ChallengeMetrics/ChallengeMetrics'
 import messages from './Messages'
 import './ProjectMetrics.css'
 
-export default class ProjectMetrics extends Component {
+/**
+ * ProjectMetrics displays various high-level metrics about the given projects
+ * and challenges.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
+export class ProjectMetrics extends Component {
   render() {
     const projectCount = _get(this.props, 'projects.length', 0)
     const challengeCount = _get(this.props, 'challenges.length', 0)
@@ -65,3 +72,12 @@ ProjectMetrics.propTypes = {
   projects: PropTypes.array,
   challenges: PropTypes.array,
 }
+
+export default
+  WithCurrentProject(ProjectMetrics, {
+    includeChallenges: true,
+    includeActivity: true,
+    historicalMonths: 2,
+    defaultToOnlyProject: true,
+    restrictToGivenProjects: true,
+  })

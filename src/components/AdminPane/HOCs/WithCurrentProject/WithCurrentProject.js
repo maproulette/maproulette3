@@ -130,15 +130,15 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
         challenges = _filter(allChallenges, {parent: projectId})
       }
 
-      return <WrappedComponent project={project}
+      return <WrappedComponent {..._omit(this.props, ['entities',
+                                                      'notManagerError',
+                                                      'fetchProject',
+                                                      'fetchProjectChallenges'])}
+                               project={project}
                                challenges={challenges}
                                routedProjectId={this.routedProjectId(this.props)}
                                loadingProject={this.state.loadingProject}
-                               loadingChallenges={this.state.loadingChallenges}
-                               {..._omit(this.props, ['entities',
-                                                      'notManagerError',
-                                                      'fetchProject',
-                                                      'fetchProjectChallenges'])} />
+                               loadingChallenges={this.state.loadingChallenges} />
     }
   }
 }
