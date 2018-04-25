@@ -282,6 +282,8 @@
   "UserSettings.form.customBasemap.description": "Insert a custom base map here. Eg. http://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png",
   "UserSettings.form.locale.label": "Locale",
   "UserSettings.form.locale.description": "User locale to use for MapRoulette UI.",
+  "UserSettings.form.leaderboardOptOut.label": "Opt out of Leaderboard",
+  "UserSettings.form.leaderboardOptOut.description": "If yes, you will **not** appear on the public leaderboard.",
   "Admin.EditChallenge.overpass.errors.noTurboShortcuts": "Overpass Turbo shortcuts are not supported. If you wish to use them, please visit Overpass Turbo and test your query, then choose Export -> Query -> Standalone -> Copy and then paste that here.",
   "Activity.action.updated": "Updated",
   "Activity.action.created": "Created",

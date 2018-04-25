@@ -12,13 +12,14 @@ project is still required.
 
 1. Create a `.env.development.local` file and:
  * set `REACT_APP_BASE_PATH='/mr3'`
- * set `REACT_APP_URL='https://maproulette.mydevserver.com/mr3'` (substituting your dev domain, of course)
+ * set `REACT_APP_URL='https://maproulette.mydevserver.com/mr3'`
+   (substituting your dev domain, of course)
  * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://maproulette.mydevserver.com'`
  * if you wish to use Mapbox maps, set the `REACT_APP_MAPBOX_ACCESS_TOKEN` to
    your API token.
  * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
    analytics, set `REACT_APP_MATOMO_URL` and `REACT_APP_MATOMO_SITE_ID` to your
-   tracking url and site id, respectively.
+   tracking url and site id, respectively (see `.env` file for example).
  * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
  * override any other settings from the `.env` file as needed or desired.
 
@@ -33,22 +34,28 @@ project is still required.
    `https://maproulette.mydevserver.com`). Take note of your new app's consumer
    key and secret key, as you'll need them in the next step.
 
-5. Fire up your backend scala server (installed separately from the maproulette2 project),
-   setting the `MR_OAUTH_CONSUMER_KEY` and `MR_OAUTH_CONSUMER_SECRET` environment variables
-   to your OSM app's consumer key and secret key, respectively. The back-end
-   server assumes your front-end dev server is running on port 3000, which is
-   the default; if you've changed the port, you'll also need to set
-   `MR3_JS_ASSET_URI=https://localhost:<port>/static/js/bundle.js` (replacing
-   <port> with the proper port) and
-   `MR3_CSS_ASSET_URI=https://localhost:<port>/static/css/bundle.css`.
+5. In your backend server project, setup a .conf file that overrides properties
+   as needed from `conf/application.conf` (unless you'd prefer to set explicit
+   system properties on the command line when starting up the server). Refer
+   to the `conf/application.conf` file and maproulette2 docs for explanations
+   of the various server configuration settings -- at the very least, you'll
+   want to make sure your JDBC url is correct and your OAuth consumer key and
+   secret are set properly. You'll also need to set the `mr3.host` to the URL
+   of your front-end dev server (e.g. `http://localhost:3000`) and set
+   `mr3.devMode=true` if you're doing development.
 
-6. Point your browser at /mr3 on your server (e.g.
+6. Fire up your backend server, specifying the path to your .conf file with
+   `-Dconfig.resource` or explicitly specifying the various system properties
+   on the command line (e.g. `-Dmr3.host="http://localhost:3000`). See the
+   maproulette2 project for details on starting up the server.
+
+7. Point your browser at /mr3 on your server (e.g.
    `https://maproulette.mydevserver.com/mr3`) to bring up the front-end.
 
 ### Updating to the Latest Code
 
 > Note that the [maproulette2](https://github.com/maproulette/maproulette2)
-> backend (scala) server must be updated separately, if desired.
+> backend (scala) server must be updated separately.
 
 1. Stop your front-end server (ctrl-c) if it's running.
 2. Pull the latest code
@@ -79,9 +86,15 @@ The project was bootstrapped with
 
 Branch management follows
 [GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html) with
-active development of the next release occurring on the `develop` branch. Pull
-requests should target the `develop` branch. The master branch always contains
-the latest release.
+active development occurring on the `develop` branch. Pull requests should
+target the `develop` branch. The master branch always contains the latest
+release, and the `prerelease` branch contains features and fixes promoted from
+`develop` that are candidates for the next release to `master`.
+
+It is okay for pull requests to the `develop` branch to rely on server features
+or fixes that have only been merged into the server's `dev` branch, but they
+will not be promoted to the `prelease` branch until the server-side code makes
+it into the server's `master` branch.
 
 Release versions follow [Semantic Versioning](https://semver.org/).
 

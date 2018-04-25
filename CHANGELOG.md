@@ -7,6 +7,27 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00-beta.7] - 2018-04-25
+### Added
+- Ability to also search by challenge name in admin search (#205).
+- Public leaderboard of top scoring users across various timeframes (#254).
+- Leaderboard opt-out setting in User Profile.
+- Challenge-specific leaderboards for challenge owners in admin area (#316).
+- Display of user's own top challenges (by activity) on user profile page.
+- Notice to challenge owners after creating or updating challenge that
+  it can take up to 2 hours to complete geographic indexing (#234).
+- MIT license for project (#295).
+
+### Fixed
+- Already-complete challenges included in search results (#283).
+- Misaligned task-control buttons for some users (#323).
+- Typo in link to Overpass guide fixed by @naoliv
+- Busy indicator spins forever when attempting to browse a
+  challenge pending deletion (#332).
+- No error shown when admin attempts to navigate to non-existent
+  challenge (#333).
+
+
 ## [v3.00-beta.6] - 2018-04-17
 ### Added
 - Ability to delete projects (#243).
