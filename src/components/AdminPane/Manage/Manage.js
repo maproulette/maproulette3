@@ -5,7 +5,6 @@ import _get from 'lodash/get'
 import Sidebar from '../../Sidebar/Sidebar'
 import WithManageableProjects from '../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject from '../HOCs/WithCurrentProject/WithCurrentProject'
-import WithSearchResults from '../../HOCs/WithSearchResults/WithSearchResults'
 import ManageProjects from './ManageProjects/ManageProjects'
 import ProjectMetrics from './ProjectMetrics/ProjectMetrics'
 import messages from './Messages'
@@ -64,24 +63,10 @@ export class Manage extends Component {
   }
 }
 
-export default WithManageableProjects(
-  WithCurrentProject(
-    WithSearchResults(
-      WithSearchResults(
-        Manage,
-        'adminChallenges',
-        'challenges',
-        'filteredChallenges'
-      ),
-      'adminProjects',
-      'projects',
-      'filteredProjects'
-    ), {
-      includeChallenges: true,
-      includeActivity: true,
-      historicalMonths: 2,
+export default
+  WithManageableProjects(
+    WithCurrentProject(Manage, {
       defaultToOnlyProject: true,
       restrictToGivenProjects: true,
-    }
-  ), true
-)
+    })
+  )

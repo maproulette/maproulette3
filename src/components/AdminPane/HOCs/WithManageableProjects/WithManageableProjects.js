@@ -39,11 +39,11 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
         )
       }
 
-      return <WrappedComponent projects={manageableProjects}
+      return <WrappedComponent {..._omit(this.props, ['entities',
+                                                      'fetchManageableProjects'])}
+                               projects={manageableProjects}
                                challenges={manageableChallenges}
-                               loadingProjects={this.state.loadingProjects}
-                               {..._omit(this.props, ['entities',
-                                                      'fetchManageableProjects'])} />
+                               loadingProjects={this.state.loadingProjects} />
     }
   }
 }
