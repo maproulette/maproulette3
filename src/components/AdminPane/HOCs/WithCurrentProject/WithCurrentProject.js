@@ -63,6 +63,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
 
     updateProject = props => {
       const projectId = this.currentProjectId(props)
+
       if (_isFinite(this.routedProjectId(props)) && projectId === null) {
         this.props.notManagerError()
         props.history.push('/admin/projects')
@@ -111,10 +112,10 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
     }
 
     componentWillReceiveProps(nextProps) {
-      const nextProjectId = this.routedProjectId(nextProps)
+      const nextProjectId = this.currentProjectId(nextProps)
 
       if ( _isFinite(nextProjectId) &&
-           nextProjectId !== this.routedProjectId(this.props)) {
+           nextProjectId !== this.currentProjectId(this.props)) {
         this.updateProject(nextProps)
       }
     }
@@ -123,9 +124,9 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       const projectId = this.currentProjectId(this.props)
       const project = !_isFinite(projectId) ? null :
                       _get(this.props, `entities.projects.${projectId}`)
-      let challenges = []
+      let challenges = this.props.challenges // pass through challenges by default
 
-      if (options.includeChallenges) {
+      if (options.includeChallenges && _isFinite(projectId)) {
         const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
         challenges = _filter(allChallenges, {parent: projectId})
       }
