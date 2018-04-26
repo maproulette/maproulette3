@@ -60,7 +60,8 @@ export class Leaderboard extends Component {
           }
 
           <figure className="leaderboard__board__leader__avatar image">
-            <img className="is-circular" src={leader.avatarURL} alt=" " />
+            <div className="circular-image"
+                 style={{backgroundImage: `url(${leader.avatarURL})`}} />
           </figure>
 
           <div className="leaderboard__board__leader__name-and-score">

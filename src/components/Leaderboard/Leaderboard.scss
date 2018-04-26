@@ -101,6 +101,16 @@
       padding: 15px;
       position: relative;
 
+      &__avatar {
+        width: 110px;
+        height: 110px;
+
+        .circular-image {
+          @include circular-image();
+          border: 5px solid $white;
+        }
+      }
+
       &__rank {
         color: $coral;
       }
@@ -183,41 +193,6 @@
           margin-right: 15px;
         }
 
-        &__avatar {
-          width: 110px;
-          height: 110px;
-
-          img {
-            border: 5px solid $white;
-            position: relative;
-
-            &:before {
-              content: " ";
-              width: 115px;
-              height: 40px;
-              background-color: $grey-lightest-more;
-              z-index: 3;
-              display: block;
-              position: absolute;
-              top: -7px;
-              left: -5px;
-            }
-
-            &:after {
-              content: " ";
-              width: 110px;
-              height: 110px;
-              background-color: $white;
-              z-index: 4;
-              display: block;
-              position: absolute;
-              top: -7px;
-              left: -5px;
-              border-radius: 50%;
-            }
-          }
-        }
-
         &__name-and-score {
           display: flex;
           flex-direction: column;
@@ -278,11 +253,14 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
-          max-height: 75px;
-          min-width: 75px;
-          max-width: 75px;
-          width: 75px;
           margin: 15px;
+          min-width: 75px;
+          height: auto;
+
+          .circular-image {
+            height: 75px;
+            width: 75px;
+          }
         }
 
         &__name-and-score {
@@ -407,13 +385,14 @@
         }
 
         &__avatar {
-          min-width: 40px;
-          width: 40px;
-          height: 40px;
+          min-width: 60px;
+          min-height: 60px;
+          height: auto;
           margin: 2px 20px;
 
-          img {
+          .circular-image {
             width: 60px;
+            height: 60px;
           }
         }
 

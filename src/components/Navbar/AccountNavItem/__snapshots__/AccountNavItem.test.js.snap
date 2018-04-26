@@ -66,10 +66,13 @@ ShallowWrapper {
         <figure
                 className="navbar__account-nav-item__avatar image is-48x48"
         >
-                <img
-                        alt="Avatar"
-                        className="is-circular"
-                        src="some/url"
+                <div
+                        className="circular-image"
+                        style={
+                                Object {
+                                        "backgroundImage": "url(some/url)",
+                                      }
+                        }
                 />
         </figure>
         <span
@@ -91,10 +94,13 @@ ShallowWrapper {
           <figure
             className="navbar__account-nav-item__avatar image is-48x48"
 >
-            <img
-                        alt="Avatar"
-                        className="is-circular"
-                        src="some/url"
+            <div
+                        className="circular-image"
+                        style={
+                                    Object {
+                                                "backgroundImage": "url(some/url)",
+                                              }
+                        }
             />
 </figure>,
           <span
@@ -136,10 +142,13 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <img
-              alt="Avatar"
-              className="is-circular"
-              src="some/url"
+            "children": <div
+              className="circular-image"
+              style={
+                            Object {
+                                          "backgroundImage": "url(some/url)",
+                                        }
+              }
 />,
             "className": "navbar__account-nav-item__avatar image is-48x48",
           },
@@ -149,13 +158,14 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "alt": "Avatar",
-              "className": "is-circular",
-              "src": "some/url",
+              "className": "circular-image",
+              "style": Object {
+                "backgroundImage": "url(some/url)",
+              },
             },
             "ref": null,
             "rendered": null,
-            "type": "img",
+            "type": "div",
           },
           "type": "figure",
         },
@@ -226,10 +236,13 @@ ShallowWrapper {
           <figure
                     className="navbar__account-nav-item__avatar image is-48x48"
           >
-                    <img
-                              alt="Avatar"
-                              className="is-circular"
-                              src="some/url"
+                    <div
+                              className="circular-image"
+                              style={
+                                        Object {
+                                                  "backgroundImage": "url(some/url)",
+                                                }
+                              }
                     />
           </figure>
           <span
@@ -251,10 +264,13 @@ ShallowWrapper {
             <figure
               className="navbar__account-nav-item__avatar image is-48x48"
 >
-              <img
-                            alt="Avatar"
-                            className="is-circular"
-                            src="some/url"
+              <div
+                            className="circular-image"
+                            style={
+                                          Object {
+                                                        "backgroundImage": "url(some/url)",
+                                                      }
+                            }
               />
 </figure>,
             <span
@@ -296,10 +312,13 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <img
-                alt="Avatar"
-                className="is-circular"
-                src="some/url"
+              "children": <div
+                className="circular-image"
+                style={
+                                Object {
+                                                "backgroundImage": "url(some/url)",
+                                              }
+                }
 />,
               "className": "navbar__account-nav-item__avatar image is-48x48",
             },
@@ -309,13 +328,14 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "alt": "Avatar",
-                "className": "is-circular",
-                "src": "some/url",
+                "className": "circular-image",
+                "style": Object {
+                  "backgroundImage": "url(some/url)",
+                },
               },
               "ref": null,
               "rendered": null,
-              "type": "img",
+              "type": "div",
             },
             "type": "figure",
           },

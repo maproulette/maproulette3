@@ -17,6 +17,10 @@
 
   &__avatar {
     margin-right: 10px;
+
+    .circular-image {
+      @include circular-image();
+    }
   }
 
   &__username {
