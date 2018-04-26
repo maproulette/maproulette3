@@ -74,9 +74,8 @@ export class AccountNavItem extends Component {
                                      onSelect={this.chooseAccountOption}
                                      className='is-right navbar__account-nav-item__dropdown'>
           <figure className="navbar__account-nav-item__avatar image is-48x48">
-            <img className="is-circular"
-                  src={this.props.user.osmProfile.avatarURL}
-                  alt="Avatar" />
+            <div className="circular-image"
+                 style={{backgroundImage: `url(${this.props.user.osmProfile.avatarURL})`}} />
           </figure>
 
           <span className="navbar__account-nav-item__username">
