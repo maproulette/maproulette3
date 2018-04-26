@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
+import { ResponsiveBar } from '@nivo/bar'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
@@ -8,7 +9,7 @@ import _each from 'lodash/each'
 import _isEqual from 'lodash/isEqual'
 import { TaskStatus, keysByStatus, statusLabels }
        from '../../services/Task/TaskStatus/TaskStatus'
-import { ResponsiveBar } from '@nivo/bar'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './ChallengeProgress.css'
 
@@ -95,6 +96,10 @@ export class ChallengeProgress extends Component {
                        axisBottom={{format: v => `${v}%`, tickCount: 5}}
                        tooltipFormat={v => `${v}%`}
         />
+        {taskActions.total > 0 && taskActions.available === 0 &&
+          <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
+                     className="challenge-task-progress__completed-indicator" />
+        }
       </div>
     )
   }

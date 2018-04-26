@@ -65,122 +65,8 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "host",
     "props": Object {
-      "children": <ResponsiveBar
-        animate={true}
-        axisBottom={
-                Object {
-                        "format": [Function],
-                        "tickCount": 5,
-                      }
-        }
-        axisLeft={
-                Object {
-                        "tickCount": 0,
-                        "tickValues": Array [],
-                      }
-        }
-        borderColor="inherit:darker(1.6)"
-        colorBy={[Function]}
-        data={
-                Array [
-                        Object {
-                          "label": undefined,
-                          "undefined": NaN,
-                        },
-                      ]
-        }
-        enableAxisLeft={false}
-        enableGridY={false}
-        enableLabel={false}
-        indexBy="label"
-        keys={
-                Array [
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined,
-                      ]
-        }
-        layout="horizontal"
-        margin={
-                Object {
-                        "bottom": 25,
-                        "left": 7,
-                        "right": 15,
-                        "top": 5,
-                      }
-        }
-        maxValue={100}
-        minValue={0}
-        motionDamping={15}
-        motionStiffness={90}
-        tooltipFormat={[Function]}
-/>,
-      "className": "challenge-task-progress",
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "animate": true,
-        "axisBottom": Object {
-          "format": [Function],
-          "tickCount": 5,
-        },
-        "axisLeft": Object {
-          "tickCount": 0,
-          "tickValues": Array [],
-        },
-        "borderColor": "inherit:darker(1.6)",
-        "colorBy": [Function],
-        "data": Array [
-          Object {
-            "label": undefined,
-            "undefined": NaN,
-          },
-        ],
-        "enableAxisLeft": false,
-        "enableGridY": false,
-        "enableLabel": false,
-        "indexBy": "label",
-        "keys": Array [
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-        ],
-        "layout": "horizontal",
-        "margin": Object {
-          "bottom": 25,
-          "left": 7,
-          "right": 15,
-          "top": 5,
-        },
-        "maxValue": 100,
-        "minValue": 0,
-        "motionDamping": 15,
-        "motionStiffness": 90,
-        "tooltipFormat": [Function],
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-    "type": "div",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": <ResponsiveBar
+      "children": Array [
+        <ResponsiveBar
           animate={true}
           axisBottom={
                     Object {
@@ -233,10 +119,13 @@ ShallowWrapper {
           motionStiffness={90}
           tooltipFormat={[Function]}
 />,
-        "className": "challenge-task-progress",
-      },
-      "ref": null,
-      "rendered": Object {
+        false,
+      ],
+      "className": "challenge-task-progress",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
         "instance": null,
         "key": undefined,
         "nodeType": "function",
@@ -287,6 +176,129 @@ ShallowWrapper {
         "rendered": null,
         "type": [Function],
       },
+      false,
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <ResponsiveBar
+            animate={true}
+            axisBottom={
+                        Object {
+                                    "format": [Function],
+                                    "tickCount": 5,
+                                  }
+            }
+            axisLeft={
+                        Object {
+                                    "tickCount": 0,
+                                    "tickValues": Array [],
+                                  }
+            }
+            borderColor="inherit:darker(1.6)"
+            colorBy={[Function]}
+            data={
+                        Array [
+                                    Object {
+                                      "label": undefined,
+                                      "undefined": NaN,
+                                    },
+                                  ]
+            }
+            enableAxisLeft={false}
+            enableGridY={false}
+            enableLabel={false}
+            indexBy="label"
+            keys={
+                        Array [
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                  ]
+            }
+            layout="horizontal"
+            margin={
+                        Object {
+                                    "bottom": 25,
+                                    "left": 7,
+                                    "right": 15,
+                                    "top": 5,
+                                  }
+            }
+            maxValue={100}
+            minValue={0}
+            motionDamping={15}
+            motionStiffness={90}
+            tooltipFormat={[Function]}
+/>,
+          false,
+        ],
+        "className": "challenge-task-progress",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "animate": true,
+            "axisBottom": Object {
+              "format": [Function],
+              "tickCount": 5,
+            },
+            "axisLeft": Object {
+              "tickCount": 0,
+              "tickValues": Array [],
+            },
+            "borderColor": "inherit:darker(1.6)",
+            "colorBy": [Function],
+            "data": Array [
+              Object {
+                "label": undefined,
+                "undefined": NaN,
+              },
+            ],
+            "enableAxisLeft": false,
+            "enableGridY": false,
+            "enableLabel": false,
+            "indexBy": "label",
+            "keys": Array [
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+            ],
+            "layout": "horizontal",
+            "margin": Object {
+              "bottom": 25,
+              "left": 7,
+              "right": 15,
+              "top": 5,
+            },
+            "maxValue": 100,
+            "minValue": 0,
+            "motionDamping": 15,
+            "motionStiffness": 90,
+            "tooltipFormat": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        false,
+      ],
       "type": "div",
     },
   ],

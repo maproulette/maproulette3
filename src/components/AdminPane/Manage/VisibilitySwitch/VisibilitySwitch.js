@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import WithChallengeManagement
+       from '../../HOCs/WithChallengeManagement/WithChallengeManagement'
+
 
 /**
  * VisibilitySwitch renders a simple switch, with optional label, that
@@ -8,7 +11,7 @@ import PropTypes from 'prop-types'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class VisibilitySwitch extends Component {
+export class VisibilitySwitch extends Component {
   toggleVisible = () => {
     this.props.updateEnabled(this.props.challenge.id,
                              !this.props.challenge.enabled)
@@ -35,3 +38,5 @@ VisibilitySwitch.propTypes = {
   updateEnabled: PropTypes.func.isRequired,
   label: PropTypes.node,
 }
+
+export default WithChallengeManagement(VisibilitySwitch)

@@ -13,6 +13,7 @@ import _isString from 'lodash/isString'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
+import _fromPairs from 'lodash/fromPairs'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -25,6 +26,7 @@ import { addError, addServerError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
+import { normalizeDetailedActivity } from './ChallengeActivity'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
 import { parseQueryString } from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
@@ -311,6 +313,60 @@ export const fetchChallengeActivity = function(challengeId, startDate, endDate) 
           challenges: {
             [challengeId]: {id: challengeId, activity: rawActivity},
           }
+        }
+      }
+
+      return dispatch(receiveChallenges(normalizedResults.entities))
+    }).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        // If we get an unauthorized, we assume the user is not logged
+        // in (or no longer logged in with the server). There's nothing to
+        // do for this request except ensure we know the user is logged out.
+        dispatch(logoutUser())
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.fetchFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Fetch activity for all challenges in the given project
+ */
+export const fetchProjectChallengeActivity = function(projectId,
+                                                      startDate, endDate,
+                                                      limit=1000) {
+  return function(dispatch) {
+    const params = {
+      projectIds: projectId,
+      limit,
+    }
+
+    if (startDate) {
+      params.start = startOfDay(startDate).toISOString()
+    }
+
+    if (endDate) {
+      params.end = startOfDay(endDate).toISOString()
+    }
+
+    return new Endpoint(
+      api.challenges.activity, {params}
+    ).execute().then(rawActivity => {
+      // The activity entries from this endpoint are formatted differently, so
+      // we do some conversion here to make them look like traditional activity
+      // entries before adding them into the challenges.
+      const activityByChallenge = normalizeDetailedActivity(rawActivity)
+
+      const normalizedResults = {
+        entities: {
+          challenges: _fromPairs(
+            _map(activityByChallenge, (activity, challengeId) =>
+              [challengeId, {id: challengeId, activity}]
+            )
+          )
         }
       }
 

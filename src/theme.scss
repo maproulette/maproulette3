@@ -295,6 +295,15 @@ img.is-circular {
   }
 }
 
+.basic-dropdown-indicator {
+  @include arrow($grey-light);
+  height: 10px;
+  width: 10px;
+  position: relative;
+  margin-left: 0.5em;
+  top: 2px;
+}
+
 code {
   color: $coral;
   background-color: transparent;

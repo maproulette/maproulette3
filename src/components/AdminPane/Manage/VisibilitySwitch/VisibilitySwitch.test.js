@@ -1,5 +1,5 @@
 import React from 'react'
-import VisibilitySwitch from './VisibilitySwitch'
+import { VisibilitySwitch } from './VisibilitySwitch'
 
 let basicProps = null
 

@@ -6,6 +6,8 @@ import _map from 'lodash/map'
 import _sum from 'lodash/sum'
 import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import ChallengeMetrics from '../ChallengeMetrics/ChallengeMetrics'
+import ChallengeAnalysisTable
+       from '../ChallengeAnalysisTable/ChallengeAnalysisTable'
 import messages from './Messages'
 import './ProjectMetrics.css'
 
@@ -57,11 +59,15 @@ export class ProjectMetrics extends Component {
         </div>
 
         {this.props.project &&
-         <div className="project-metrics__stats">
-           <ChallengeMetrics burndownHeight={400}
-                             activity={_get(this.props, 'project.activity', [])}
-                             {...this.props} />
-         </div>
+         <div>
+           <ChallengeAnalysisTable {...this.props} />
+
+           <div className="project-metrics__stats">
+             <ChallengeMetrics burndownHeight={400}
+                               activity={_get(this.props, 'project.activity', [])}
+                               {...this.props} />
+           </div>
+        </div>
         }
       </div>
     )
