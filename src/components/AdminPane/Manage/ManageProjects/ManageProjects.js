@@ -4,6 +4,8 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import _omit from 'lodash/omit'
 import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
+import WithCurrentProject
+       from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithSearchResults
        from '../../../HOCs/WithSearchResults/WithSearchResults'
 import WithComboSearchExecution
@@ -101,7 +103,15 @@ export default
   WithManageableProjects(
     WithSearchResults(
       WithSearchResults(
-        injectIntl(ManageProjects),
+        WithCurrentProject(  // in case normal user has only 1 project
+          injectIntl(ManageProjects), {
+            includeChallenges: true,
+            includeActivity: true,
+            historicalMonths: 2,
+            defaultToOnlyProject: true,
+            restrictToGivenProjects: true,
+          }
+        ),
         'adminChallenges',
         'challenges',
         'filteredChallenges'
