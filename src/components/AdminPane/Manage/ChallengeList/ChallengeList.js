@@ -47,10 +47,11 @@ export default class ChallengeList extends Component {
 
     return (
       <div className='admin__manage__managed-item-list challenge-list'>
-        {challengeItems.length > 0 ? challengeItems :
+        {!this.props.loadingChallenges && challengeItems.length === 0 ?
          <div className="challenge-list__no-results">
            <FormattedMessage {...messages.noChallenges} />
-         </div>
+         </div> :
+         challengeItems
         }
 
         {!this.props.suppressControls &&
