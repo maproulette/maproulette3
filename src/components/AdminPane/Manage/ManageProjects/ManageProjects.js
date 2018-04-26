@@ -71,7 +71,7 @@ export class ManageProjects extends Component {
                                     } />
         }
 
-        {this.props.projects.length === 0 ?
+        {!this.props.loadingProjects && this.props.projects.length === 0 ?
          <div className="admin__manage__projects__no-projects">
            <FormattedMessage {...messages.regenerateHomeProject} />
          </div> :
