@@ -26,36 +26,38 @@ export class ProjectMetrics extends Component {
     return (
       <div className="project-metrics">
         <div className="project-metrics__header">
-          <FormattedMessage {...messages.header} />
-        </div>
-
-        <div className="project-metrics__counts">
-          {!this.props.project &&
-          <div className="project-metrics__counts__projects-count">
-            <span className="count">
-              <FormattedNumber value={projectCount} />
-            </span> <FormattedMessage {...messages.projects}
-                                      values={{count: projectCount}} />
+          <div className="project-metrics__title">
+            <FormattedMessage {...messages.header} />
           </div>
-          }
 
-          {this.props.project &&
-          <div className="project-metrics__counts__challenges-count">
-            <span className="count">
-              <FormattedNumber value={challengeCount} />
-            </span> <FormattedMessage {...messages.challenges}
-                                      values={{count: challengeCount}} />
-          </div>
-          }
+          <div className="project-metrics__counts">
+            {!this.props.project &&
+            <div className="project-metrics__counts__projects-count">
+              <span className="count">
+                <FormattedNumber value={projectCount} />
+              </span> <FormattedMessage {...messages.projects}
+                                        values={{count: projectCount}} />
+            </div>
+            }
 
-          {this.props.project &&
-          <div className="project-metrics__counts__tasks-count">
-            <span className="count">
-              <FormattedNumber value={taskCount} />
-            </span> <FormattedMessage {...messages.tasks}
-                                      values={{count: taskCount}} />
+            {this.props.project &&
+            <div className="project-metrics__counts__challenges-count">
+              <span className="count">
+                <FormattedNumber value={challengeCount} />
+              </span> <FormattedMessage {...messages.challenges}
+                                        values={{count: challengeCount}} />
+            </div>
+            }
+
+            {this.props.project &&
+            <div className="project-metrics__counts__tasks-count">
+              <span className="count">
+                <FormattedNumber value={taskCount} />
+              </span> <FormattedMessage {...messages.tasks}
+                                        values={{count: taskCount}} />
+            </div>
+            }
           </div>
-          }
         </div>
 
         {this.props.project &&
