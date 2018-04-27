@@ -15,6 +15,8 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import parse from 'date-fns/parse'
 import BurndownChart from '../BurndownChart/BurndownChart'
+import ProjectLeaderboard
+       from '../ProjectLeaderboard/ProjectLeaderboard'
 import CalendarHeatmap from '../CalendarHeatmap/CalendarHeatmap'
 import CompletionRadar from '../CompletionRadar/CompletionRadar'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
@@ -81,12 +83,13 @@ export class ChallengeMetrics extends Component {
                        {...this.props} />
 
         <div className="challenge-metrics__additional-metrics">
+          <ProjectLeaderboard {...this.props} />
+          <CalendarHeatmap dailyMetrics={dailyMetrics}
+                           {...this.props} />
+
           <div className="challenge-metrics__completion">
             <CompletionRadar {...this.props} />
           </div>
-
-          <CalendarHeatmap dailyMetrics={dailyMetrics}
-                           {...this.props} />
         </div>
       </div>
     )
