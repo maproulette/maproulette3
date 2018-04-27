@@ -9,19 +9,17 @@ import { challengeDenormalizationSchema,
          fetchChallenge,
          fetchChallengeComments,
          fetchChallengeActivity,
-         fetchChallengeActions,
-         saveChallenge,
-         setIsEnabled,
-         rebuildChallenge,
-         removeChallenge,
-         deleteChallenge } from '../../../../services/Challenge/Challenge'
+         fetchChallengeActions } from '../../../../services/Challenge/Challenge'
 import { addError } from '../../../../services/Error/Error'
 import AppErrors from '../../../../services/Error/AppErrors'
-import AsManageable from '../../../../interactions/Challenge/AsManageable'
+import AsManageableChallenge
+       from '../../../../interactions/Challenge/AsManageableChallenge'
 import { isUsableChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithClusteredTasks
        from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
+import WithChallengeManagement
+       from '../WithChallengeManagement/WithChallengeManagement'
 
 /**
  * WithCurrentChallenge makes available to the WrappedComponent the current
@@ -85,7 +83,7 @@ const WithCurrentChallenge = function(WrappedComponent,
       let clusteredTasks = null
 
       if (!isNaN(challengeId)) {
-        challenge = AsManageable(
+        challenge = AsManageableChallenge(
           denormalize(_get(this.props, `entities.challenges.${challengeId}`),
                       challengeDenormalizationSchema(),
                       this.props.entities)
@@ -141,28 +139,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   fetchChallengeActions: challengeId =>
     dispatch(fetchChallengeActions(challengeId)),
-
-  saveChallenge: challengeData => dispatch(saveChallenge(challengeData)),
-
-  rebuildChallenge: challengeId => dispatch(rebuildChallenge(challengeId)),
-
-  deleteChallenge: (projectId, challengeId) => {
-    // Optimistically remove the challenge.
-    dispatch(removeChallenge(challengeId))
-
-    dispatch(deleteChallenge(challengeId)).then(() =>
-      ownProps.history.replace(`/admin/project/${projectId}`)
-    )
-  },
-
-  updateEnabled: (challengeId, isEnabled) => {
-    dispatch(setIsEnabled(challengeId, isEnabled))
-  },
 })
 
 export default (WrappedComponent, includeTasks) =>
   connect(mapStateToProps, mapDispatchToProps)(
     WithClusteredTasks(
-      WithCurrentChallenge(WrappedComponent, includeTasks)
+      WithChallengeManagement(
+        WithCurrentChallenge(WrappedComponent, includeTasks)
+      )
     )
   )

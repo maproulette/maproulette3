@@ -1,0 +1,36 @@
+@import 'theme.scss';
+@import 'react-table/react-table';
+
+.challenge-analysis-table {
+  @include styled-react-table()
+  margin-bottom: 40px;
+
+  &__column-controls {
+    font-size: $size-5;
+    margin-bottom: 15px;
+
+    input {
+      font-size: $size-5;
+    }
+  }
+
+  .completed-column {
+    text-align: center;
+
+    .cell-icon {
+      fill: $green;
+    }
+  }
+
+  .challenge-task-progress {
+    margin-bottom: 0;
+  }
+
+  .rt-td.challenge-actions-column {
+    overflow: inherit;
+
+    .challenge-actions-column__action-label {
+      display: flex;
+    }
+  }
+}

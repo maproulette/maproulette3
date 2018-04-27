@@ -1,6 +1,7 @@
 import _map from 'lodash/map'
 import _invert from 'lodash/invert'
 import _fromPairs from 'lodash/fromPairs'
+import _startCase from 'lodash/startCase'
 import messages from './Messages'
 
 // These statuses are defined on the server
@@ -82,6 +83,23 @@ export const isFinalStatus = function(status) {
   return status === TaskStatus.fixed ||
          status === TaskStatus.alreadyFixed ||
          status === TaskStatus.falsePositive
+}
+
+/**
+ * Returns true if the given status represents a completion status (i.e., it
+ * isn't created or deleted)
+ */
+export const isCompletionStatus = function(status) {
+  return status !== TaskStatus.created &&
+         status !== TaskStatus.deleted
+}
+
+/**
+ * Returns a "machine name" for the status, which is start-cased and snake-cased
+ * (e.g., "Already_Fixed" or "Created").
+ */
+export const statusMachineName = function(status) {
+  return _startCase(keysByStatus[status]).replace(/\s+/, '_')
 }
 
 /**

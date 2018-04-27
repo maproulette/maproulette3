@@ -21,7 +21,7 @@ import SimpleDropdown from './SimpleDropdown'
 export class DropdownButton extends Component {
   selectOption = (e, option) => {
     e.preventDefault()
-    this.props.onSelect && this.props.onSelect(option)
+    this.props.onSelect && this.props.onSelect(option, this.props.context)
     this.props.toggleActive()
   }
 

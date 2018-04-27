@@ -36,6 +36,7 @@ const apiRoutes = factory => {
       'search': factory.get('/challenges/extendedFind'),
       'withinBounds': factory.get('/challenges/extendedFind'),
       'actions': factory.get('/data/project/summary'),
+      'activity': factory.get('/data/status/activity'),
     },
     'challenge': {
       'single': factory.get('/challenge/:id'),

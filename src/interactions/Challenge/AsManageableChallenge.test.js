@@ -1,4 +1,4 @@
-import AsManageable from './AsManageable'
+import AsManageableChallenge from './AsManageableChallenge'
 
 let challenge = null
 
@@ -12,12 +12,12 @@ describe("isRebuildable", () => {
   test("returns true if the challenge has an overpass query", () => {
     challenge.overpassQL = "foo"
 
-    const wrappedChallenge = AsManageable(challenge)
+    const wrappedChallenge = AsManageableChallenge(challenge)
     expect(wrappedChallenge.isRebuildable()).toBe(true)
   })
 
   test("returns false if the challenge was not built from refreshable data", () => {
-    const wrappedChallenge = AsManageable(challenge)
+    const wrappedChallenge = AsManageableChallenge(challenge)
     expect(wrappedChallenge.isRebuildable()).toBe(false)
 
     wrappedChallenge.localGeoJSON = '{"foo": "bar"}'

@@ -4,4 +4,15 @@
   margin-bottom: 20px;
   font-size: $size-9;
   height: 55px;
+  position: relative;
+
+  &__completed-indicator {
+    position: absolute;
+    top: 3px;
+    right: 2px;
+    fill: $green;
+    stroke: $white;
+    height: 20px;
+    width: auto;
+  }
 }
