@@ -216,6 +216,10 @@ form.rjsf {
     }
   }
 
+  .control .readonly-file {
+    margin-top: 4px;
+  }
+
   .dropzone {
     background-color: $grey-lightest;
     border: 1px solid $grey-light;
