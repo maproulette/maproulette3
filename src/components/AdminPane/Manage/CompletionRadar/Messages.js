@@ -6,6 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   heading: {
     id: "CompletionRadar.heading",
-    defaultMessage: "Tasks Evaluated: {taskCount, number}",
+    defaultMessage: "Tasks Completed: {taskCount, number}",
   },
 })
