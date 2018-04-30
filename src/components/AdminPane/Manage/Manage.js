@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import Sidebar from '../../Sidebar/Sidebar'
 import WithManageableProjects from '../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject from '../HOCs/WithCurrentProject/WithCurrentProject'
+import WithWideScreenOption from '../HOCs/WithWideScreenOption/WithWideScreenOption'
 import ManageProjects from './ManageProjects/ManageProjects'
 import ProjectMetrics from './ProjectMetrics/ProjectMetrics'
 import messages from './Messages'
@@ -54,7 +56,8 @@ export class Manage extends Component {
             <ManageProjects {...this.props} />
           </Sidebar>
 
-          <div className="admin__manage__primary-content">
+          <div className={classNames("admin__manage__primary-content",
+                                     {wide: this.props.isWideScreen})}>
             <ProjectMetrics {...this.props} />
           </div>
         </div>
@@ -65,7 +68,8 @@ export class Manage extends Component {
 
 export default
   WithManageableProjects(
-    WithCurrentProject(Manage, {
+    WithCurrentProject(
+      WithWideScreenOption(Manage), {
       defaultToOnlyProject: true,
       restrictToGivenProjects: true,
     })

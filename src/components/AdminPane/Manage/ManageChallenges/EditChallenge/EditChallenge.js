@@ -355,64 +355,68 @@ export class EditChallenge extends Component {
 
     return (
       <div className="admin__manage edit-challenge">
-        <div className="admin__manage__header">
-          <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-              <li>
-                <Link to={'/admin/projects'}>
-                  <FormattedMessage {...manageMessages.manageHeader} />
-                </Link>
-              </li>
-              <li>
-                <Link to={`/admin/project/${this.props.project.id}`}>
-                  {this.props.project.displayName ||
-                  this.props.project.name}
-                </Link>
-              </li>
-              {_isObject(this.props.challenge) &&
-                <li>
-                  <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
-                    {this.props.challenge.name}
-                  </Link>
-                </li>
-              }
-              <li className="is-active">
-                <a aria-current="page">
-                  {
-                    this.isCloningChallenge() ?
-                    <FormattedMessage {...messages.cloneChallenge} /> :
-                    (_isObject(this.props.challenge) ?
-                     <FormattedMessage {...messages.editChallenge} /> :
-                     <FormattedMessage {...messages.newChallenge} />)
+        <div className="admin__manage__pane-wrapper">
+          <div className="admin__manage__primary-content">
+            <div className="admin__manage__header">
+              <nav className="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                  <li>
+                    <Link to={'/admin/projects'}>
+                      <FormattedMessage {...manageMessages.manageHeader} />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`/admin/project/${this.props.project.id}`}>
+                      {this.props.project.displayName ||
+                      this.props.project.name}
+                    </Link>
+                  </li>
+                  {_isObject(this.props.challenge) &&
+                    <li>
+                      <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
+                        {this.props.challenge.name}
+                      </Link>
+                    </li>
                   }
-                </a>
-                {this.props.loadingChallenge && <BusySpinner inline />}
-              </li>
-            </ul>
-          </nav>
+                  <li className="is-active">
+                    <a aria-current="page">
+                      {
+                        this.isCloningChallenge() ?
+                        <FormattedMessage {...messages.cloneChallenge} /> :
+                        (_isObject(this.props.challenge) ?
+                        <FormattedMessage {...messages.editChallenge} /> :
+                        <FormattedMessage {...messages.newChallenge} />)
+                      }
+                    </a>
+                    {this.props.loadingChallenge && <BusySpinner inline />}
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
+            <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
+                  validate={this.additionalValidation}
+                  uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
+                  FieldTemplate={CustomFieldTemplate}
+                  ArrayFieldTemplate={CustomArrayFieldTemplate}
+                  fields={customFields}
+                  liveValidate
+                  noHtml5Validate
+                  showErrorList={false}
+                  formData={challengeData}
+                  formContext={this.state.formContext}
+                  onChange={this.changeHandler}
+                  onSubmit={this.nextStep}>
+              <div className="form-controls" />
+            </Form>
+
+            <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
+                            canPrev={this.canPrev} prevStep={this.prevStep}
+                            canNext={this.canNext} nextStep={this.nextStep}
+                            finish={this.finish} cancel={this.cancel} />
+          </div>
         </div>
-
-        <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
-        <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
-              validate={this.additionalValidation}
-              uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
-              FieldTemplate={CustomFieldTemplate}
-              ArrayFieldTemplate={CustomArrayFieldTemplate}
-              fields={customFields}
-              liveValidate
-              noHtml5Validate
-              showErrorList={false}
-              formData={challengeData}
-              formContext={this.state.formContext}
-              onChange={this.changeHandler}
-              onSubmit={this.nextStep}>
-          <div className="form-controls" />
-        </Form>
-
-        <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
-                        canPrev={this.canPrev} prevStep={this.prevStep}
-                        canNext={this.canNext} nextStep={this.nextStep}
-                        finish={this.finish} cancel={this.cancel} />
       </div>
     )
   }

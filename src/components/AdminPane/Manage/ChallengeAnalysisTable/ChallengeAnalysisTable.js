@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _isEmpty from 'lodash/isEmpty'
 import _isObject from 'lodash/isObject'
+import _isString from 'lodash/isString'
 import _isDate from 'lodash/isDate'
 import _map from 'lodash/map'
 import _keys from 'lodash/keys'
@@ -36,7 +37,10 @@ export class ChallengeAnalysisTable extends Component {
   }
 
   toggleStatusColumns = () => {
-    this.setState({showStatusColumns: !this.state.showStatusColumns})
+    const showExtraColumns = !this.state.showStatusColumns
+
+    this.setState({showStatusColumns: showExtraColumns})
+    this.props.setWideScreen(showExtraColumns)
   }
 
   takeAction = (action, challenge) => {
@@ -77,6 +81,13 @@ export class ChallengeAnalysisTable extends Component {
     })
   }
 
+  intlHeader = intlMessage => {
+    const localized = _isString(intlMessage) ?
+                      intlMessage :
+                      this.props.intl.formatMessage(intlMessage)
+    return <span title={localized}>{localized}</span>
+  }
+
   render() {
     if (_get(process.env, 'REACT_APP_FEATURE_CHALLENGE_ANALYSIS_TABLE') !== 'enabled') {
       return null
@@ -106,14 +117,14 @@ export class ChallengeAnalysisTable extends Component {
     const data = this.props.challenges
     const primaryColumns = [{
       id: 'enabled',
-      Header: this.props.intl.formatMessage(messages.enabledLabel),
+      Header: this.intlHeader(messages.enabledLabel),
       accessor: c => c.enabled,
       exportable: c => c.enabled,
       maxWidth: 90,
       Cell: row => <VisibilitySwitch challenge={row.original} {...this.props} />,
     }, {
       id: 'name',
-      Header: this.props.intl.formatMessage(messages.nameLabel),
+      Header: this.intlHeader(messages.nameLabel),
       accessor: c => c.name,
       exportable: c => c.name,
       Cell: row => (
@@ -126,7 +137,7 @@ export class ChallengeAnalysisTable extends Component {
       id: 'progress',
       accessor: c => AsManageableChallenge(c).completionPercentage(),
       exportable: c => AsManageableChallenge(c).completionPercentage(),
-      Header: this.props.intl.formatMessage(messages.progressLabel),
+      Header: this.intlHeader(messages.progressLabel),
       Cell: row => <ChallengeProgress challenge={row.original} />,
       minWidth: 250,
     }]
@@ -135,7 +146,7 @@ export class ChallengeAnalysisTable extends Component {
       id: statusName,
       accessor: c => AsManageableChallenge(c).actionPercentage(statusName),
       exportable: c => AsManageableChallenge(c).actionPercentage(statusName),
-      Header: localizedStatusLabels[statusName],
+      Header: this.intlHeader(localizedStatusLabels[statusName]),
       Cell: row => <span>{row.value}%</span>,
     }))
 
@@ -155,7 +166,8 @@ export class ChallengeAnalysisTable extends Component {
           </div>
         </DeactivatableDropdownButton>
       ),
-      minWidth: 150,
+      minWidth: 105,
+      maxWidth: 125,
     }]
 
     let columnsToDisplay = primaryColumns
