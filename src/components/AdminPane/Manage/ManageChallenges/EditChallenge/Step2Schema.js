@@ -48,7 +48,6 @@ export const jsSchema = (intl, user, challengeData) => {
       source: { enum: ["Local File"] },
       localGeoJSON: {
         title: intl.formatMessage(messages.localGeoJsonLabel),
-        description: intl.formatMessage(messages.localGeoJsonDescription),
         type: "string",
       },
     },
