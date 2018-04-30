@@ -69,57 +69,61 @@ export class EditProject extends Component {
 
     return (
       <div className="admin__manage edit-project">
-        <nav className="breadcrumb" aria-label="breadcrumbs">
-          <ul>
-            <li>
-              <Link to='/admin/projects'>
-                <FormattedMessage {...manageMessages.manageHeader} />
-              </Link>
-            </li>
-            {_isObject(this.props.project) &&
-            <li>
-              <Link to={`/admin/project/${this.props.project.id}`}>
-                {_get(this.props, 'project.displayName', this.props.project.name)}
-              </Link>
-            </li>
-            }
-            <li className="is-active">
-              <a aria-current="page">
-                {
-                  _isObject(this.props.project) ?
-                  <FormattedMessage {...messages.editProject} /> :
-                  <FormattedMessage {...messages.newProject} />
-                }
-              </a>
-              {this.props.loadingProject && <BusySpinner inline />}
-            </li>
-          </ul>
-        </nav>
+        <div className="admin__manage__pane-wrapper">
+          <div className="admin__manage__primary-content">
+          <nav className="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+              <li>
+                <Link to='/admin/projects'>
+                  <FormattedMessage {...manageMessages.manageHeader} />
+                </Link>
+              </li>
+              {_isObject(this.props.project) &&
+              <li>
+                <Link to={`/admin/project/${this.props.project.id}`}>
+                  {_get(this.props, 'project.displayName', this.props.project.name)}
+                </Link>
+              </li>
+              }
+              <li className="is-active">
+                <a aria-current="page">
+                  {
+                    _isObject(this.props.project) ?
+                    <FormattedMessage {...messages.editProject} /> :
+                    <FormattedMessage {...messages.newProject} />
+                  }
+                </a>
+                {this.props.loadingProject && <BusySpinner inline />}
+              </li>
+            </ul>
+          </nav>
 
-        <Form schema={jsSchema(this.props.intl, !_isFinite(projectData.id))}
-              uiSchema={uiSchema}
-              FieldTemplate={CustomFieldTemplate}
-              liveValidate
-              noHtml5Validate
-              showErrorList={false}
-              formData={projectData}
-              onChange={this.changeHandler}
-              onSubmit={this.finish}>
-          <div className="form-controls">
-            <button className="button is-secondary is-outlined"
-                    disabled={this.state.isSaving}
-                    onClick={this.cancel}>
-              <FormattedMessage {...messages.cancel} />
-            </button>
+          <Form schema={jsSchema(this.props.intl, !_isFinite(projectData.id))}
+                uiSchema={uiSchema}
+                FieldTemplate={CustomFieldTemplate}
+                liveValidate
+                noHtml5Validate
+                showErrorList={false}
+                formData={projectData}
+                onChange={this.changeHandler}
+                onSubmit={this.finish}>
+            <div className="form-controls">
+              <button className="button is-secondary is-outlined"
+                      disabled={this.state.isSaving}
+                      onClick={this.cancel}>
+                <FormattedMessage {...messages.cancel} />
+              </button>
 
-            <button className={classNames("button is-primary is-outlined has-svg-icon",
-                                          {"is-loading": this.state.isSaving})}
-                    onClick={this.props.finish}>
-              <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
-              <FormattedMessage {...messages.save} />
-            </button>
+              <button className={classNames("button is-primary is-outlined has-svg-icon",
+                                            {"is-loading": this.state.isSaving})}
+                      onClick={this.props.finish}>
+                <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
+                <FormattedMessage {...messages.save} />
+              </button>
+            </div>
+            </Form>
           </div>
-        </Form>
+        </div>
       </div>
     )
   }

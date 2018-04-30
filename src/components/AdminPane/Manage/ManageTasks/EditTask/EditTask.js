@@ -91,66 +91,70 @@ export class EditTask extends Component {
 
     return (
       <div className="admin__manage edit-task">
-        <div className="admin__manage__header">
-          <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-              <li>
-                <Link to='/admin/projects'>
-                  <FormattedMessage {...manageMessages.manageHeader} />
-                </Link>
-              </li>
-              <li>
-                <Link to={`/admin/project/${this.props.project.id}`}>
-                  {this.props.project.displayName ||
-                  this.props.project.name}
-                </Link>
-              </li>
-              {_isObject(this.props.challenge) &&
-                <li>
-                  <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
-                    {this.props.challenge.name}
-                  </Link>
-                </li>
-              }
-              <li className="is-active">
-                <a aria-current="page">
-                  {
-                    _isObject(this.props.task) ?
-                    <FormattedMessage {...messages.editTask} /> :
-                    <FormattedMessage {...messages.newTask} />
+        <div className="admin__manage__pane-wrapper">
+          <div className="admin__manage__primary-content">
+            <div className="admin__manage__header">
+              <nav className="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                  <li>
+                    <Link to='/admin/projects'>
+                      <FormattedMessage {...manageMessages.manageHeader} />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`/admin/project/${this.props.project.id}`}>
+                      {this.props.project.displayName ||
+                      this.props.project.name}
+                    </Link>
+                  </li>
+                  {_isObject(this.props.challenge) &&
+                    <li>
+                      <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
+                        {this.props.challenge.name}
+                      </Link>
+                    </li>
                   }
-                </a>
-                {this.props.loading && <BusySpinner inline />}
-              </li>
-            </ul>
-          </nav>
-        </div>
+                  <li className="is-active">
+                    <a aria-current="page">
+                      {
+                        _isObject(this.props.task) ?
+                        <FormattedMessage {...messages.editTask} /> :
+                        <FormattedMessage {...messages.newTask} />
+                      }
+                    </a>
+                    {this.props.loading && <BusySpinner inline />}
+                  </li>
+                </ul>
+              </nav>
+            </div>
 
-        <Form schema={jsSchema(this.props.intl, this.props.task)}
-              uiSchema={uiSchema}
-              FieldTemplate={CustomFieldTemplate}
-              fields={customFields}
-              liveValidate
-              noHtml5Validate
-              showErrorList={false}
-              formData={taskData}
-              onChange={this.changeHandler}
-              onSubmit={this.finish}>
-          <div className="form-controls">
-            <button className="button is-secondary is-outlined"
-                    disabled={this.state.isSaving}
-                    onClick={this.cancel}>
-              <FormattedMessage {...messages.cancel} />
-            </button>
+            <Form schema={jsSchema(this.props.intl, this.props.task)}
+                  uiSchema={uiSchema}
+                  FieldTemplate={CustomFieldTemplate}
+                  fields={customFields}
+                  liveValidate
+                  noHtml5Validate
+                  showErrorList={false}
+                  formData={taskData}
+                  onChange={this.changeHandler}
+                  onSubmit={this.finish}>
+              <div className="form-controls">
+                <button className="button is-secondary is-outlined"
+                        disabled={this.state.isSaving}
+                        onClick={this.cancel}>
+                  <FormattedMessage {...messages.cancel} />
+                </button>
 
-            <button className={classNames("button is-primary is-outlined has-svg-icon",
-                                          {"is-loading": this.state.isSaving})}
-                    onClick={this.props.finish}>
-              <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
-              <FormattedMessage {...messages.save} />
-            </button>
+                <button className={classNames("button is-primary is-outlined has-svg-icon",
+                                              {"is-loading": this.state.isSaving})}
+                        onClick={this.props.finish}>
+                  <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
+                  <FormattedMessage {...messages.save} />
+                </button>
+              </div>
+            </Form>
           </div>
-        </Form>
+        </div>
       </div>
     )
   }

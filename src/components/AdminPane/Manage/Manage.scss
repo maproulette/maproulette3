@@ -124,6 +124,7 @@
 
   &__pane-wrapper {
     display: flex;
+    justify-content: center;
   }
 
   &__sidebar.sidebar {
@@ -194,6 +195,11 @@
     flex: 1 2 600px;
     min-width: 350px;
     max-width: 1000px;
+    position: relative;
+
+    &.wide {
+      max-width: inherit;
+    }
   }
 
   &__managed-item-list {
