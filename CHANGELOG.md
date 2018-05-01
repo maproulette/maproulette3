@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [v3.00-beta.8] - 2018-05-01
+### Added
+- Experimental (disabled by default) challenge overview table when viewing
+  a project in admin area (#331).
+
+### Fixed
+- Admin project stats not restricted to currently-open project (#339).
+- Incorrect display of wide or tall profile pics (#340).
+- Admin area sometimes requires page refresh to show all challenges managed
+  by user (#341).
+- Users with slower connections could temporarily see erroneous warning about
+  missing home project in admin area (#342).
+- Confusing instructions around local file uploads when editing an existing
+  challenge (#349).
+
+### Changed
+- Heatmap calendars in admin are now shown horizontally instead of vertically.
+
+
 ## [v3.00-beta.7] - 2018-04-25
 ### Added
 - Ability to also search by challenge name in admin search (#205).
