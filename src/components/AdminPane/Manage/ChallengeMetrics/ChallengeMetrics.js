@@ -82,7 +82,8 @@ export class ChallengeMetrics extends Component {
                        dailyMetrics={dailyMetrics}
                        {...this.props} />
 
-        <CalendarHeatmap vertical={this.props.verticalCalendar}
+        <CalendarHeatmap months={this.props.calendarMonths}
+                         vertical={this.props.verticalCalendar}
                          highContrast={this.props.highContrastCalendar}
                          dailyMetrics={dailyMetrics}
                          {...this.props} />
