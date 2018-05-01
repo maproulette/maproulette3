@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import 'variables.scss';
 
 .challenge-metrics {
   margin-bottom: 30px;
@@ -15,14 +15,6 @@
   .burndown-chart {
     height: 375px;
     margin-bottom: 30px;
-  }
-
-  .calendar-heatmap {
-    margin: 30px 0;
-    height: 765px;
-    min-width: 300px;
-    max-width: 400px;
-    flex: 1 1 400px;
   }
 
   .leaderboard {

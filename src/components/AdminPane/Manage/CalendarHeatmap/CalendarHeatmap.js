@@ -1,12 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
-import { ResponsiveCalendar } from '@nivo/calendar'
+import Calendar from 'react-calendar-heatmap'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _reverse from 'lodash/reverse'
 import format from 'date-fns/format'
+import subYears from 'date-fns/sub_years'
 import messages from './Messages'
+import './CalendarHeatmap.css'
+
+const COLOR_BUCKETS = 6
+const TOP_BUCKET_VALUE = 50 // value that gets into the top color bucket
+const BUCKET_SIZE = TOP_BUCKET_VALUE / COLOR_BUCKETS
 
 /**
  * CalendarHeatmap displays annual calendars with each day colored according to
@@ -20,8 +27,8 @@ export default class CalendarHeatmap extends Component {
       _compact(_map(_reverse(this.props.dailyMetrics), metrics =>
         metrics.value === 0 ? null :
         ({
-          day: format(metrics.day, 'YYYY-MM-DD'),
-          value: metrics.value,
+          date: format(metrics.day, 'YYYY-MM-DD'),
+          count: metrics.value,
         })
     ))
 
@@ -30,46 +37,27 @@ export default class CalendarHeatmap extends Component {
     }
 
     return (
-      <div className="calendar-heatmap">
+      <div className={classNames("calendar-heatmap",
+                                 {vertical: this.props.vertical,
+                                  "high-contrast": this.props.highContrast})}>
         <p className="subheading">
           <FormattedMessage {...messages.heading} />
         </p>
-        <ResponsiveCalendar data={calendarData}
-                            from={calendarData[0].day}
-                            to={calendarData[calendarData.length - 1].day}
-                            emptyColor="#F6F6F6"
-                            domain={[0, 50]}
-                            direction="vertical"
-                            colors={[
-                              "#e0f5f2",
-                              "#61cdbb",
-                              "#e8c1a0",
-                              "#f1e15b",
-                              "#e8a838",
-                              "#f47560"
-                            ]}
-                            margin={{
-                                "top": 40,
-                                "right": 30,
-                                "bottom": 50,
-                                "left": 30
-                            }}
-                            yearSpacing={40}
-                            monthBorderColor="#ffffff"
-                            monthLegendOffset={10}
-                            dayBorderWidth={2}
-                            dayBorderColor="#ffffff"
-                            legends={[
-                                {
-                                    "anchor": "bottom-left",
-                                    "direction": "row",
-                                    "translateY": 50,
-                                    "itemCount": 6,
-                                    "itemWidth": 34,
-                                    "itemHeight": 36,
-                                    "itemDirection": "top-to-bottom"
-                                }
-                            ]}
+        <Calendar horizontal={this.props.vertical ? false : true}
+                  startDate={subYears(new Date(), 1)}
+                  endDate={new Date()}
+                  values={calendarData}
+                  classForValue={(value) => {
+                    if (!value) {
+                      return 'color-empty'
+                    }
+
+                    const colorBucket =
+                      Math.min(Math.floor(value.count / BUCKET_SIZE), COLOR_BUCKETS - 1)
+
+                    return `color-bucket-${colorBucket}`
+                  }}
+                  titleForValue={(value) => value ? `${value.date}: ${value.count}` : ''}
         />
       </div>
     )

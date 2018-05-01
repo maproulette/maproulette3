@@ -6,6 +6,6 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   heading: {
     id: "CalendarHeatmap.heading",
-    defaultMessage: "Daily Heatmap: Task Evaluation",
+    defaultMessage: "Daily Heatmap: Task Completion",
   },
 })

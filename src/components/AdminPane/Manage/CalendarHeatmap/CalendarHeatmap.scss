@@ -1,0 +1,42 @@
+@import 'variables.scss';
+
+.calendar-heatmap {
+  $calendar-bucket-colors: (
+    $chart-blue-light, $chart-green, $chart-brown,
+    $chart-yellow, $chart-orange, $chart-red
+  );
+
+  @for $i from 1 through length($calendar-bucket-colors) {
+    .color-bucket-#{$i - 1} { fill: nth($calendar-bucket-colors, $i); }
+  }
+
+  .color-empty {
+    fill: $grey-lightest-more;
+  }
+
+  .react-calendar-heatmap {
+    margin-top: 10px;
+
+    text {
+      font-size: 10px;
+      fill: #aaa;
+    }
+
+    .react-calendar-heatmap-small-text {
+      font-size: 5px;
+    }
+  }
+
+  &.vertical {
+    .react-calendar-heatmap {
+      width: 140px;
+      height: 800px;
+    }
+  }
+
+  &.high-contrast {
+    .color-empty {
+      fill: $white;
+    }
+  }
+}

@@ -54,6 +54,7 @@ export class ViewChallenge extends Component {
 
       [this.props.intl.formatMessage(messages.challengeMetricsTabLabel)]:
         <ChallengeMetrics challenges={[this.props.challenge]}
+                          highContrastCalendar
                           completionHeight={350} />,
     }
 

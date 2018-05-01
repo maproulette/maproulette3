@@ -5,7 +5,6 @@
   "dependencies": {
     "@mapbox/geojsonhint": "^2.0.1",
     "@nivo/bar": "^0.33.0",
-    "@nivo/calendar": "^0.33.0",
     "@nivo/line": "^0.33.0",
     "@nivo/radar": "^0.33.0",
     "@turf/bbox": "^5.1.5",
@@ -30,6 +29,7 @@
     "prop-types": "^15.6.0",
     "query-string": "^4.3.4",
     "react": "^16.0.0",
+    "react-calendar-heatmap": "^1.6.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-csv": "^1.0.14",
     "react-delayed": "^0.2.0",

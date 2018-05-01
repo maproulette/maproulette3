@@ -82,10 +82,13 @@ export class ChallengeMetrics extends Component {
                        dailyMetrics={dailyMetrics}
                        {...this.props} />
 
+        <CalendarHeatmap vertical={this.props.verticalCalendar}
+                         highContrast={this.props.highContrastCalendar}
+                         dailyMetrics={dailyMetrics}
+                         {...this.props} />
+
         <div className="challenge-metrics__additional-metrics">
           <ProjectLeaderboard {...this.props} />
-          <CalendarHeatmap dailyMetrics={dailyMetrics}
-                           {...this.props} />
 
           <div className="challenge-metrics__completion">
             <CompletionRadar {...this.props} />
