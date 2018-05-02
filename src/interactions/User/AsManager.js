@@ -1,9 +1,10 @@
 import { SUPERUSER_GROUP_TYPE } from '../../services/User/User'
-import _find from 'lodash/find'
+import _some from 'lodash/some'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
 import _filter from 'lodash/filter'
+import _isFinite from 'lodash/isFinite'
 import { AsEndUser } from './AsEndUser'
 
 /**
@@ -22,10 +23,11 @@ export class AsManager extends AsEndUser {
       return false
     }
 
-    return !!_find(this.user.groups, userGroup =>
-      userGroup.groupType === SUPERUSER_GROUP_TYPE ||
-      _find(project.groups, {id: userGroup.id})
-    )
+    const osmId = _get(this.user, 'osmProfile.id')
+    return (_isFinite(osmId) && osmId === project.owner) ||
+           _some(this.user.groups,
+                 userGroup => userGroup.groupType === SUPERUSER_GROUP_TYPE ||
+                              _some(project.groups, {id: userGroup.id}))
   }
 
   /**
