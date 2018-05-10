@@ -7,6 +7,10 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.00] - 2018-05-10
+### Removed
+- Beta badge and beta-specific introductory language.
+
 
 ## [v3.00-beta.8] - 2018-05-01
 ### Added
