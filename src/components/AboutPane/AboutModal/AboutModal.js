@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../Bulma/Modal'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './AboutModal.css'
 
 /**
- * AboutModal displays a modal dialogue with a brief description of the app, version
- * Clicking the button (or off the modal) takes the user to the root of the app.
+ * AboutModal displays a modal dialogue with a brief description of the app,
+ * version Clicking the button (or off the modal) takes the user to the root of
+ * the app.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -36,12 +36,6 @@ export class AboutModal extends Component {
              isActive={true}
              onClose={this.finishModal}>
         <div className='about-modal__content'>
-          <div className='columns'>
-            <div className='column is-centered is-mobile about-modal__feedback-note'>
-              <MarkdownContent markdown={this.props.intl.formatMessage(messages.feedbackInfo)} />
-            </div>
-          </div>
-
           <div className='columns is-centered is-mobile'>
             <div className='column is-narrow'>
               <SvgSymbol viewBox='0 0 20 20' sym="about-icon" className="about-modal__icon"/>
