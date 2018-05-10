@@ -14,11 +14,6 @@ export default defineMessages({
     defaultMessage: "Feedback",
   },
 
-  feedbackInfo: {
-    id: 'AboutModal.feedback.info',
-    defaultMessage: "Welcome to MapRoulette v3 beta! We'd love to hear your feedback. Please record any thoughts or bug reports on our [github issues page](https://github.com/maproulette/maproulette3/issues) or email us at [maproulette@maproulette.org](mailto:maproulette@maproulette.org). Thank you!",
-  },
-
   filterTagIntro: {
     id: 'AboutModal.filterTagIntro',
     defaultMessage: 'Find tasks that address efforts important to you.',

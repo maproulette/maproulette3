@@ -54,7 +54,7 @@ ShallowWrapper {
           className="share-control"
 >
           <CreatedButton
-                    quote="MR3 beta"
+                    quote="MapRoulette"
                     url="http://localhost:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
@@ -80,7 +80,7 @@ ShallowWrapper {
                                         "maproulette",
                                       ]
                     }
-                    title="MR3 beta"
+                    title="MapRoulette"
                     url="http://localhost:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
@@ -104,7 +104,7 @@ ShallowWrapper {
                     body="http://localhost:3000/browse/challenges/123"
                     onClick={[Function]}
                     openWindow={false}
-                    subject="MR3 beta"
+                    subject="MapRoulette"
                     url="http://localhost:3000/browse/challenges/123"
           >
                     <span
@@ -130,7 +130,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <CreatedButton
-            quote="MR3 beta"
+            quote="MapRoulette"
             url="http://localhost:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
@@ -164,7 +164,7 @@ ShallowWrapper {
                             size={26}
               />
 </span>,
-            "quote": "MR3 beta",
+            "quote": "MapRoulette",
             "url": "http://localhost:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
@@ -215,7 +215,7 @@ ShallowWrapper {
                                     "maproulette",
                                   ]
             }
-            title="MR3 beta"
+            title="MapRoulette"
             url="http://localhost:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
@@ -252,7 +252,7 @@ ShallowWrapper {
             "hashtags": Array [
               "maproulette",
             ],
-            "title": "MR3 beta",
+            "title": "MapRoulette",
             "url": "http://localhost:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
@@ -301,7 +301,7 @@ ShallowWrapper {
             body="http://localhost:3000/browse/challenges/123"
             onClick={[Function]}
             openWindow={false}
-            subject="MR3 beta"
+            subject="MapRoulette"
             url="http://localhost:3000/browse/challenges/123"
 >
             <span
@@ -336,7 +336,7 @@ ShallowWrapper {
 </span>,
             "onClick": [Function],
             "openWindow": false,
-            "subject": "MR3 beta",
+            "subject": "MapRoulette",
             "url": "http://localhost:3000/browse/challenges/123",
           },
           "ref": null,
@@ -388,7 +388,7 @@ ShallowWrapper {
             className="share-control"
 >
             <CreatedButton
-                        quote="MR3 beta"
+                        quote="MapRoulette"
                         url="http://localhost:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
@@ -414,7 +414,7 @@ ShallowWrapper {
                                                 "maproulette",
                                               ]
                         }
-                        title="MR3 beta"
+                        title="MapRoulette"
                         url="http://localhost:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
@@ -438,7 +438,7 @@ ShallowWrapper {
                         body="http://localhost:3000/browse/challenges/123"
                         onClick={[Function]}
                         openWindow={false}
-                        subject="MR3 beta"
+                        subject="MapRoulette"
                         url="http://localhost:3000/browse/challenges/123"
             >
                         <span
@@ -464,7 +464,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <CreatedButton
-              quote="MR3 beta"
+              quote="MapRoulette"
               url="http://localhost:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
@@ -498,7 +498,7 @@ ShallowWrapper {
                                 size={26}
                 />
 </span>,
-              "quote": "MR3 beta",
+              "quote": "MapRoulette",
               "url": "http://localhost:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
@@ -549,7 +549,7 @@ ShallowWrapper {
                                           "maproulette",
                                         ]
               }
-              title="MR3 beta"
+              title="MapRoulette"
               url="http://localhost:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
@@ -586,7 +586,7 @@ ShallowWrapper {
               "hashtags": Array [
                 "maproulette",
               ],
-              "title": "MR3 beta",
+              "title": "MapRoulette",
               "url": "http://localhost:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
@@ -635,7 +635,7 @@ ShallowWrapper {
               body="http://localhost:3000/browse/challenges/123"
               onClick={[Function]}
               openWindow={false}
-              subject="MR3 beta"
+              subject="MapRoulette"
               url="http://localhost:3000/browse/challenges/123"
 >
               <span
@@ -670,7 +670,7 @@ ShallowWrapper {
 </span>,
               "onClick": [Function],
               "openWindow": false,
-              "subject": "MR3 beta",
+              "subject": "MapRoulette",
               "url": "http://localhost:3000/browse/challenges/123",
             },
             "ref": null,
@@ -751,7 +751,7 @@ ShallowWrapper {
           className="share-control"
 >
           <CreatedButton
-                    quote="MR3 beta"
+                    quote="MapRoulette"
                     url="http://localhost:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
@@ -777,7 +777,7 @@ ShallowWrapper {
                                         "maproulette",
                                       ]
                     }
-                    title="MR3 beta"
+                    title="MapRoulette"
                     url="http://localhost:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
@@ -801,7 +801,7 @@ ShallowWrapper {
                     body="http://localhost:3000/browse/challenges/123"
                     onClick={[Function]}
                     openWindow={false}
-                    subject="MR3 beta"
+                    subject="MapRoulette"
                     url="http://localhost:3000/browse/challenges/123"
           >
                     <span
@@ -827,7 +827,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <CreatedButton
-            quote="MR3 beta"
+            quote="MapRoulette"
             url="http://localhost:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
@@ -861,7 +861,7 @@ ShallowWrapper {
                             size={26}
               />
 </span>,
-            "quote": "MR3 beta",
+            "quote": "MapRoulette",
             "url": "http://localhost:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
@@ -912,7 +912,7 @@ ShallowWrapper {
                                     "maproulette",
                                   ]
             }
-            title="MR3 beta"
+            title="MapRoulette"
             url="http://localhost:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
@@ -949,7 +949,7 @@ ShallowWrapper {
             "hashtags": Array [
               "maproulette",
             ],
-            "title": "MR3 beta",
+            "title": "MapRoulette",
             "url": "http://localhost:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
@@ -998,7 +998,7 @@ ShallowWrapper {
             body="http://localhost:3000/browse/challenges/123"
             onClick={[Function]}
             openWindow={false}
-            subject="MR3 beta"
+            subject="MapRoulette"
             url="http://localhost:3000/browse/challenges/123"
 >
             <span
@@ -1033,7 +1033,7 @@ ShallowWrapper {
 </span>,
             "onClick": [Function],
             "openWindow": false,
-            "subject": "MR3 beta",
+            "subject": "MapRoulette",
             "url": "http://localhost:3000/browse/challenges/123",
           },
           "ref": null,
@@ -1085,7 +1085,7 @@ ShallowWrapper {
             className="share-control"
 >
             <CreatedButton
-                        quote="MR3 beta"
+                        quote="MapRoulette"
                         url="http://localhost:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
@@ -1111,7 +1111,7 @@ ShallowWrapper {
                                                 "maproulette",
                                               ]
                         }
-                        title="MR3 beta"
+                        title="MapRoulette"
                         url="http://localhost:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
@@ -1135,7 +1135,7 @@ ShallowWrapper {
                         body="http://localhost:3000/browse/challenges/123"
                         onClick={[Function]}
                         openWindow={false}
-                        subject="MR3 beta"
+                        subject="MapRoulette"
                         url="http://localhost:3000/browse/challenges/123"
             >
                         <span
@@ -1161,7 +1161,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <CreatedButton
-              quote="MR3 beta"
+              quote="MapRoulette"
               url="http://localhost:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
@@ -1195,7 +1195,7 @@ ShallowWrapper {
                                 size={26}
                 />
 </span>,
-              "quote": "MR3 beta",
+              "quote": "MapRoulette",
               "url": "http://localhost:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
@@ -1246,7 +1246,7 @@ ShallowWrapper {
                                           "maproulette",
                                         ]
               }
-              title="MR3 beta"
+              title="MapRoulette"
               url="http://localhost:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
@@ -1283,7 +1283,7 @@ ShallowWrapper {
               "hashtags": Array [
                 "maproulette",
               ],
-              "title": "MR3 beta",
+              "title": "MapRoulette",
               "url": "http://localhost:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
@@ -1332,7 +1332,7 @@ ShallowWrapper {
               body="http://localhost:3000/browse/challenges/123"
               onClick={[Function]}
               openWindow={false}
-              subject="MR3 beta"
+              subject="MapRoulette"
               url="http://localhost:3000/browse/challenges/123"
 >
               <span
@@ -1367,7 +1367,7 @@ ShallowWrapper {
 </span>,
               "onClick": [Function],
               "openWindow": false,
-              "subject": "MR3 beta",
+              "subject": "MapRoulette",
               "url": "http://localhost:3000/browse/challenges/123",
             },
             "ref": null,

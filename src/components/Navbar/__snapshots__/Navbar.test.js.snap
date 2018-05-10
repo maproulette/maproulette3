@@ -54,15 +54,6 @@ ShallowWrapper {
                               </span>
                               Roulette
                     </span>
-                    <span
-                              className="beta-badge"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="v3 BETA"
-                                        id="Navbar.preview.label"
-                                        values={Object {}}
-                              />
-                    </span>
           </Link>
 </div>,
         <div
@@ -175,15 +166,6 @@ ShallowWrapper {
                         </span>
                         Roulette
             </span>
-            <span
-                        className="beta-badge"
-            >
-                        <FormattedMessage
-                                    defaultMessage="v3 BETA"
-                                    id="Navbar.preview.label"
-                                    values={Object {}}
-                        />
-            </span>
 </Link>,
           "className": "navbar-brand",
         },
@@ -208,15 +190,6 @@ ShallowWrapper {
                                 Map
                 </span>
                 Roulette
-</span>,
-              <span
-                className="beta-badge"
->
-                <FormattedMessage
-                                defaultMessage="v3 BETA"
-                                id="Navbar.preview.label"
-                                values={Object {}}
-                />
 </span>,
             ],
             "className": "navbar-item top-nav__home-link",
@@ -269,34 +242,6 @@ ShallowWrapper {
                 },
                 "Roulette",
               ],
-              "type": "span",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <FormattedMessage
-                  defaultMessage="v3 BETA"
-                  id="Navbar.preview.label"
-                  values={Object {}}
-/>,
-                "className": "beta-badge",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "defaultMessage": "v3 BETA",
-                  "id": "Navbar.preview.label",
-                  "values": Object {},
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
               "type": "span",
             },
           ],
@@ -719,15 +664,6 @@ ShallowWrapper {
                                     </span>
                                     Roulette
                         </span>
-                        <span
-                                    className="beta-badge"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="v3 BETA"
-                                                id="Navbar.preview.label"
-                                                values={Object {}}
-                                    />
-                        </span>
             </Link>
 </div>,
           <div
@@ -840,15 +776,6 @@ ShallowWrapper {
                             </span>
                             Roulette
               </span>
-              <span
-                            className="beta-badge"
-              >
-                            <FormattedMessage
-                                          defaultMessage="v3 BETA"
-                                          id="Navbar.preview.label"
-                                          values={Object {}}
-                            />
-              </span>
 </Link>,
             "className": "navbar-brand",
           },
@@ -873,15 +800,6 @@ ShallowWrapper {
                                     Map
                   </span>
                   Roulette
-</span>,
-                <span
-                  className="beta-badge"
->
-                  <FormattedMessage
-                                    defaultMessage="v3 BETA"
-                                    id="Navbar.preview.label"
-                                    values={Object {}}
-                  />
 </span>,
               ],
               "className": "navbar-item top-nav__home-link",
@@ -934,34 +852,6 @@ ShallowWrapper {
                   },
                   "Roulette",
                 ],
-                "type": "span",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <FormattedMessage
-                    defaultMessage="v3 BETA"
-                    id="Navbar.preview.label"
-                    values={Object {}}
-/>,
-                  "className": "beta-badge",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "defaultMessage": "v3 BETA",
-                    "id": "Navbar.preview.label",
-                    "values": Object {},
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
                 "type": "span",
               },
             ],
@@ -1418,15 +1308,6 @@ ShallowWrapper {
                               </span>
                               Roulette
                     </span>
-                    <span
-                              className="beta-badge"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="v3 BETA"
-                                        id="Navbar.preview.label"
-                                        values={Object {}}
-                              />
-                    </span>
           </Link>
 </div>,
         <div
@@ -1554,15 +1435,6 @@ ShallowWrapper {
                         </span>
                         Roulette
             </span>
-            <span
-                        className="beta-badge"
-            >
-                        <FormattedMessage
-                                    defaultMessage="v3 BETA"
-                                    id="Navbar.preview.label"
-                                    values={Object {}}
-                        />
-            </span>
 </Link>,
           "className": "navbar-brand",
         },
@@ -1587,15 +1459,6 @@ ShallowWrapper {
                                 Map
                 </span>
                 Roulette
-</span>,
-              <span
-                className="beta-badge"
->
-                <FormattedMessage
-                                defaultMessage="v3 BETA"
-                                id="Navbar.preview.label"
-                                values={Object {}}
-                />
 </span>,
             ],
             "className": "navbar-item top-nav__home-link",
@@ -1648,34 +1511,6 @@ ShallowWrapper {
                 },
                 "Roulette",
               ],
-              "type": "span",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <FormattedMessage
-                  defaultMessage="v3 BETA"
-                  id="Navbar.preview.label"
-                  values={Object {}}
-/>,
-                "className": "beta-badge",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "defaultMessage": "v3 BETA",
-                  "id": "Navbar.preview.label",
-                  "values": Object {},
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
               "type": "span",
             },
           ],
@@ -2175,15 +2010,6 @@ ShallowWrapper {
                                     </span>
                                     Roulette
                         </span>
-                        <span
-                                    className="beta-badge"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="v3 BETA"
-                                                id="Navbar.preview.label"
-                                                values={Object {}}
-                                    />
-                        </span>
             </Link>
 </div>,
           <div
@@ -2311,15 +2137,6 @@ ShallowWrapper {
                             </span>
                             Roulette
               </span>
-              <span
-                            className="beta-badge"
-              >
-                            <FormattedMessage
-                                          defaultMessage="v3 BETA"
-                                          id="Navbar.preview.label"
-                                          values={Object {}}
-                            />
-              </span>
 </Link>,
             "className": "navbar-brand",
           },
@@ -2344,15 +2161,6 @@ ShallowWrapper {
                                     Map
                   </span>
                   Roulette
-</span>,
-                <span
-                  className="beta-badge"
->
-                  <FormattedMessage
-                                    defaultMessage="v3 BETA"
-                                    id="Navbar.preview.label"
-                                    values={Object {}}
-                  />
 </span>,
               ],
               "className": "navbar-item top-nav__home-link",
@@ -2405,34 +2213,6 @@ ShallowWrapper {
                   },
                   "Roulette",
                 ],
-                "type": "span",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <FormattedMessage
-                    defaultMessage="v3 BETA"
-                    id="Navbar.preview.label"
-                    values={Object {}}
-/>,
-                  "className": "beta-badge",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "defaultMessage": "v3 BETA",
-                    "id": "Navbar.preview.label",
-                    "values": Object {},
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
                 "type": "span",
               },
             ],
