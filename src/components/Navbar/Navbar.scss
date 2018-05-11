@@ -79,16 +79,5 @@
         }
       }
     }
-
-    .back-to-old-ui {
-      background-color: rgba($black, 0.1);
-      border-radius: $radius-rounded;
-      margin: 18px 45px;
-      padding: 0 1.5rem;
-      transition: background-color .25s ease-in-out;
-      &:hover {
-        background-color: rgba($black, 0.2);
-      }
-    }
   }
 }
