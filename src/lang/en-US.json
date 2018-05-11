@@ -225,7 +225,6 @@
   "Navbar.links.challengeResults": "Challenges",
   "Navbar.links.leaderboard": "Leaderboard",
   "Navbar.links.admin": "Create",
-  "Navbar.links.oldLayout": "Return to old layout",
   "PastDurationSelector.pastMonths.selectOption": "Past {months, plural, one {Month} =12 {Year} other {# Months}}",
   "ShareLink.controls.copy.label": "Copy",
   "SignIn.control.label": "Sign in",
