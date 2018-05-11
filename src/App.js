@@ -10,6 +10,8 @@ import { GUEST_USER_ID } from './services/User/User'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithCurrentTask from './components/HOCs/WithCurrentTask/WithCurrentTask'
+import WithExternalError
+       from './components/HOCs/WithExternalError/WithExternalError'
 import WithVirtualChallenge
        from './components/HOCs/WithVirtualChallenge/WithVirtualChallenge'
 import LoadRandomChallengeTask
@@ -31,6 +33,7 @@ const CurrentTaskPane = WithCurrentTask(TaskPane)
 const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
 const VirtualChallengePane = WithVirtualChallenge(ChallengePane)
+const ErrorPane = WithExternalError(ChallengePane)
 
 /**
  * App represents the top level component of the application.  It renders a
@@ -89,6 +92,7 @@ export class App extends Component {
           <CachedRoute path='/user/profile' component={UserProfile} />
           <CachedRoute path='/leaderboard' component={Leaderboard} />
           <CachedRoute path='/admin' component={AdminPane} />
+          <CachedRoute path='/error' component={ErrorPane} />
         </Switch>
 
         {firstTimeModal}
