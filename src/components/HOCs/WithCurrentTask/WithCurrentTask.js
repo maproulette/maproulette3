@@ -6,7 +6,6 @@ import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isObject from 'lodash/isObject'
-import _debounce from 'lodash/debounce'
 import { taskDenormalizationSchema,
          loadCompleteTask,
          loadRandomTaskFromChallenge,
@@ -19,8 +18,8 @@ import { contactOSMUserURL } from '../../../services/OSMUser/OSMUser'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 import { renewVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
-
-const FRESHNESS_THRESHOLD = 5000 // 5 seconds
+import { addError } from '../../../services/Error/Error'
+import AppErrors from '../../../services/Error/AppErrors'
 
 /**
  * WithCurrentTask passes down the denormalized task specified in either the
@@ -95,8 +94,20 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      *
      * @private
      */
-    loadTask: _debounce(taskId => dispatch(loadCompleteTask(taskId)),
-                        FRESHNESS_THRESHOLD),
+    loadTask: taskId => {
+      dispatch(
+        loadCompleteTask(taskId)
+      ).then(normalizedResults => {
+        if (!_isFinite(normalizedResults.result) ||
+            _get(normalizedResults,
+                 `entities.tasks.${normalizedResults.result}.deleted`)) {
+          dispatch(addError(AppErrors.task.doesNotExist))
+          ownProps.history.push('/')
+        }
+
+        return normalizedResults
+      })
+    },
 
     /**
      * Invoke to mark as a task as complete with the given status

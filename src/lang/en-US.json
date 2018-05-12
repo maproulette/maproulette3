@@ -349,6 +349,7 @@
   "Errors.task.updateFailure": "Unable to save your changes.",
   "Errors.task.deleteFailure": "Unable to delete task.",
   "Errors.task.fetchFailure": "Unable to fetch a task to work on.",
+  "Errors.task.doesNotExist": "That task does not exist.",
   "Errors.clusteredTask.fetchFailure": "Unable to fetch task clusters",
   "Errors.boundedTask.fetchFailure": "Unable to fetch map-bounded tasks",
   "Errors.challenge.fetchFailure": "Unable to retrieve latest challenge data from server.",

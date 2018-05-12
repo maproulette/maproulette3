@@ -179,9 +179,9 @@ export const loadCompleteTask = function(taskId) {
           normalizedResults.entities.tasks[taskId]
         )(dispatch)
         fetchTaskComments(taskId)(dispatch)
-
-        return normalizedResults
       }
+
+      return normalizedResults
     })
   }
 }
