@@ -44,6 +44,10 @@ export default defineMessages({
     id: 'Errors.task.fetchFailure',
     defaultMessage: "Unable to fetch a task to work on.",
   },
+  taskDoesNotExist: {
+    id: 'Errors.task.doesNotExist',
+    defaultMessage: "That task does not exist.",
+  },
 
   clusteredTaskFetchFailure: {
     id: 'Errors.clusteredTask.fetchFailure',

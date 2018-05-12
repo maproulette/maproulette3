@@ -23,6 +23,7 @@ export default {
     updateFailure: messages.taskUpdateFailure,
     deleteFailure: messages.taskDeleteFailure,
     fetchFailure: messages.taskFetchFailure,
+    doesNotExist: messages.taskDoesNotExist,
   },
 
   clusteredTask: {
