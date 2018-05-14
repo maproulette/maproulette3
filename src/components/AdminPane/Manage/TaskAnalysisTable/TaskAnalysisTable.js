@@ -9,6 +9,7 @@ import _map from 'lodash/map'
 import _isFunction from 'lodash/isFunction'
 import _isObject from 'lodash/isObject'
 import _filter from 'lodash/filter'
+import _snakeCase from 'lodash/snakeCase'
 import { messagesByStatus,
          keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -144,7 +145,8 @@ export class TaskAnalysisTable extends Component {
                                     countShown,
                                     countTotal: this.props.totalTaskCount,
                                   }} />
-            <AsyncCSVExport loadAsyncData={() => this.toCSV(data, columns)} />
+            <AsyncCSVExport filename={`${_snakeCase(this.props.challenge.name)}-tasks.csv`}
+                            loadAsyncData={() => this.toCSV(data, columns)} />
           </div>
         )
       },
