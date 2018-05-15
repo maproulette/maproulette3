@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.0.1] - 2018-05-15
+### Added
+- Additional error page for use by server in some situations.
+
+### Fixed
+- Navigating directly to non-existent task spins forever (#357).
+- Export of challenge tasks CSV for challenge owners not working properly on
+  Windows (#359).
+
+### Removed
+- Nav link to old UI
+
+
 ## [v3.00] - 2018-05-10
 ### Removed
 - Beta badge and beta-specific introductory language.
