@@ -44,7 +44,7 @@ ShallowWrapper {
           No Tasks
 </div>,
       ],
-      "className": "saved-tasks",
+      "className": "user-profile__saved-tasks",
     },
     "ref": null,
     "rendered": Array [
@@ -113,7 +113,7 @@ ShallowWrapper {
             No Tasks
 </div>,
         ],
-        "className": "saved-tasks",
+        "className": "user-profile__saved-tasks",
       },
       "ref": null,
       "rendered": Array [
@@ -236,7 +236,7 @@ ShallowWrapper {
 </h2>,
         <ul>
           <li
-                    className="columns saved-tasks__task"
+                    className="user-profile__saved-tasks__task"
           >
                     <Link
                               replace={false}
@@ -266,7 +266,7 @@ ShallowWrapper {
                     </a>
           </li>
           <li
-                    className="columns saved-tasks__task"
+                    className="user-profile__saved-tasks__task"
           >
                     <Link
                               replace={false}
@@ -296,7 +296,7 @@ ShallowWrapper {
                     </a>
           </li>
           <li
-                    className="columns saved-tasks__task"
+                    className="user-profile__saved-tasks__task"
           >
                     <Link
                               replace={false}
@@ -327,7 +327,7 @@ ShallowWrapper {
           </li>
 </ul>,
       ],
-      "className": "saved-tasks",
+      "className": "user-profile__saved-tasks",
     },
     "ref": null,
     "rendered": Array [
@@ -366,7 +366,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <li
-              className="columns saved-tasks__task"
+              className="user-profile__saved-tasks__task"
 >
               <Link
                             replace={false}
@@ -396,7 +396,7 @@ ShallowWrapper {
               </a>
 </li>,
             <li
-              className="columns saved-tasks__task"
+              className="user-profile__saved-tasks__task"
 >
               <Link
                             replace={false}
@@ -426,7 +426,7 @@ ShallowWrapper {
               </a>
 </li>,
             <li
-              className="columns saved-tasks__task"
+              className="user-profile__saved-tasks__task"
 >
               <Link
                             replace={false}
@@ -492,7 +492,7 @@ ShallowWrapper {
                   />
 </a>,
               ],
-              "className": "columns saved-tasks__task",
+              "className": "user-profile__saved-tasks__task",
             },
             "ref": null,
             "rendered": Array [
@@ -609,7 +609,7 @@ ShallowWrapper {
                   />
 </a>,
               ],
-              "className": "columns saved-tasks__task",
+              "className": "user-profile__saved-tasks__task",
             },
             "ref": null,
             "rendered": Array [
@@ -726,7 +726,7 @@ ShallowWrapper {
                   />
 </a>,
               ],
-              "className": "columns saved-tasks__task",
+              "className": "user-profile__saved-tasks__task",
             },
             "ref": null,
             "rendered": Array [
@@ -834,7 +834,7 @@ ShallowWrapper {
 </h2>,
           <ul>
             <li
-                        className="columns saved-tasks__task"
+                        className="user-profile__saved-tasks__task"
             >
                         <Link
                                     replace={false}
@@ -864,7 +864,7 @@ ShallowWrapper {
                         </a>
             </li>
             <li
-                        className="columns saved-tasks__task"
+                        className="user-profile__saved-tasks__task"
             >
                         <Link
                                     replace={false}
@@ -894,7 +894,7 @@ ShallowWrapper {
                         </a>
             </li>
             <li
-                        className="columns saved-tasks__task"
+                        className="user-profile__saved-tasks__task"
             >
                         <Link
                                     replace={false}
@@ -925,7 +925,7 @@ ShallowWrapper {
             </li>
 </ul>,
         ],
-        "className": "saved-tasks",
+        "className": "user-profile__saved-tasks",
       },
       "ref": null,
       "rendered": Array [
@@ -964,7 +964,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <li
-                className="columns saved-tasks__task"
+                className="user-profile__saved-tasks__task"
 >
                 <Link
                                 replace={false}
@@ -994,7 +994,7 @@ ShallowWrapper {
                 </a>
 </li>,
               <li
-                className="columns saved-tasks__task"
+                className="user-profile__saved-tasks__task"
 >
                 <Link
                                 replace={false}
@@ -1024,7 +1024,7 @@ ShallowWrapper {
                 </a>
 </li>,
               <li
-                className="columns saved-tasks__task"
+                className="user-profile__saved-tasks__task"
 >
                 <Link
                                 replace={false}
@@ -1090,7 +1090,7 @@ ShallowWrapper {
                     />
 </a>,
                 ],
-                "className": "columns saved-tasks__task",
+                "className": "user-profile__saved-tasks__task",
               },
               "ref": null,
               "rendered": Array [
@@ -1207,7 +1207,7 @@ ShallowWrapper {
                     />
 </a>,
                 ],
-                "className": "columns saved-tasks__task",
+                "className": "user-profile__saved-tasks__task",
               },
               "ref": null,
               "rendered": Array [
@@ -1324,7 +1324,7 @@ ShallowWrapper {
                     />
 </a>,
                 ],
-                "className": "columns saved-tasks__task",
+                "className": "user-profile__saved-tasks__task",
               },
               "ref": null,
               "rendered": Array [

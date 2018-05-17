@@ -56,62 +56,116 @@ ShallowWrapper {
                     </span>
           </Link>
 </div>,
-        <div
-          className="navbar-menu"
+        <MediaQuery
+          query="(min-width: 1024px)"
+          values={Object {}}
 >
           <div
-                    className="navbar-start"
+                    className="navbar-menu"
           >
-                    <Link
-                              className="navbar-item top-nav__about-link"
-                              replace={false}
-                              to="/about"
+                    <div
+                              className="navbar-start"
                     >
-                              <span
-                                        className="item-text"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="About"
-                                                  id="Navbar.links.about"
-                                                  values={Object {}}
-                                        />
-                              </span>
-                    </Link>
-                    <Link
-                              className="navbar-item top-nav__browse-link"
-                              replace={false}
-                              to="/browse/challenges"
+                              <NavbarPrimaryLinks
+                                        location={
+                                                  Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                                        }
+                              />
+                    </div>
+                    <div
+                              className="navbar-end"
                     >
-                              <span
-                                        className="item-text"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Challenges"
-                                                  id="Navbar.links.challengeResults"
-                                                  values={Object {}}
-                                        />
-                              </span>
-                    </Link>
-                    <Link
-                              className="navbar-item top-nav__browse-link"
-                              replace={false}
-                              to="/leaderboard"
-                    >
-                              <span
-                                        className="item-text"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Leaderboard"
-                                                  id="Navbar.links.leaderboard"
-                                                  values={Object {}}
-                                        />
-                              </span>
-                    </Link>
+                              <InjectIntl(AccountNavItem)
+                                        location={
+                                                  Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                                        }
+                              />
+                    </div>
           </div>
-          <div
-                    className="navbar-end"
+</MediaQuery>,
+        <MediaQuery
+          query="(max-width: 1023px)"
+          values={Object {}}
+>
+          <Menu
+                    bodyClassName=""
+                    burgerBarClassName=""
+                    burgerButtonClassName=""
+                    className=""
+                    crossButtonClassName=""
+                    crossClassName=""
+                    customBurgerIcon={
+                              <SvgSymbol
+                                        sym="menu-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    }
+                    customCrossIcon={
+                              <SvgSymbol
+                                        sym="cross-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    }
+                    disableCloseOnEsc={false}
+                    id=""
+                    isOpen={false}
+                    itemListClassName=""
+                    menuClassName=""
+                    morphShapeClassName=""
+                    noOverlay={false}
+                    onStateChange={[Function]}
+                    outerContainerId=""
+                    overlayClassName=""
+                    pageWrapId=""
+                    right={true}
+                    styles={
+                              Object {
+                                        "bmCrossButton": Object {
+                                          "right": "16px",
+                                          "top": "20px",
+                                        },
+                                        "bmMenuWrap": Object {
+                                          "width": "275px",
+                                        },
+                                        "bmOverlay": Object {
+                                          "background": "rgb(0,165,146, 0.7)",
+                                        },
+                                      }
+                    }
+                    width={300}
           >
-                    <InjectIntl(AccountNavItem)
+                    <NavbarPrimaryLinks
+                              location={
+                                        Object {
+                                                  "pathname": "/some/path",
+                                                }
+                              }
+                              onLinkClick={[Function]}
+                              user={
+                                        Object {
+                                                  "id": 357,
+                                                  "isLoggedIn": false,
+                                                }
+                              }
+                    />
+                    <Connect(SignInButton)
+                              className="white-on-green top-nav__signin-link"
                               location={
                                         Object {
                                                   "pathname": "/some/path",
@@ -124,8 +178,8 @@ ShallowWrapper {
                                                 }
                               }
                     />
-          </div>
-</div>,
+          </Menu>
+</MediaQuery>,
       ],
       "className": "navbar top-nav",
     },
@@ -242,294 +296,291 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "host",
+        "nodeType": "class",
         "props": Object {
-          "children": Array [
-            <div
-              className="navbar-start"
+          "children": <div
+            className="navbar-menu"
 >
-              <Link
-                            className="navbar-item top-nav__about-link"
-                            replace={false}
-                            to="/about"
-              >
-                            <span
-                                          className="item-text"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="About"
-                                                        id="Navbar.links.about"
-                                                        values={Object {}}
-                                          />
-                            </span>
-              </Link>
-              <Link
-                            className="navbar-item top-nav__browse-link"
-                            replace={false}
-                            to="/browse/challenges"
-              >
-                            <span
-                                          className="item-text"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Challenges"
-                                                        id="Navbar.links.challengeResults"
-                                                        values={Object {}}
-                                          />
-                            </span>
-              </Link>
-              <Link
-                            className="navbar-item top-nav__browse-link"
-                            replace={false}
-                            to="/leaderboard"
-              >
-                            <span
-                                          className="item-text"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Leaderboard"
-                                                        id="Navbar.links.leaderboard"
-                                                        values={Object {}}
-                                          />
-                            </span>
-              </Link>
-</div>,
             <div
-              className="navbar-end"
->
-              <InjectIntl(AccountNavItem)
-                            location={
-                                          Object {
-                                                        "pathname": "/some/path",
-                                                      }
-                            }
-                            user={
-                                          Object {
-                                                        "id": 357,
-                                                        "isLoggedIn": false,
-                                                      }
-                            }
-              />
+                        className="navbar-start"
+            >
+                        <NavbarPrimaryLinks
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                                    }
+                        />
+            </div>
+            <div
+                        className="navbar-end"
+            >
+                        <InjectIntl(AccountNavItem)
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                                    }
+                        />
+            </div>
 </div>,
-          ],
-          "className": "navbar-menu",
+          "query": "(min-width: 1024px)",
+          "values": Object {},
         },
         "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <Link
-                  className="navbar-item top-nav__about-link"
-                  replace={false}
-                  to="/about"
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="navbar-start"
 >
-                  <span
-                                    className="item-text"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="About"
-                                                      id="Navbar.links.about"
-                                                      values={Object {}}
-                                    />
-                  </span>
-</Link>,
-                <Link
-                  className="navbar-item top-nav__browse-link"
-                  replace={false}
-                  to="/browse/challenges"
+                <NavbarPrimaryLinks
+                                location={
+                                                Object {
+                                                                "pathname": "/some/path",
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "id": 357,
+                                                                "isLoggedIn": false,
+                                                              }
+                                }
+                />
+</div>,
+              <div
+                className="navbar-end"
 >
-                  <span
-                                    className="item-text"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="Challenges"
-                                                      id="Navbar.links.challengeResults"
-                                                      values={Object {}}
-                                    />
-                  </span>
-</Link>,
-                <Link
-                  className="navbar-item top-nav__browse-link"
-                  replace={false}
-                  to="/leaderboard"
->
-                  <span
-                                    className="item-text"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="Leaderboard"
-                                                      id="Navbar.links.leaderboard"
-                                                      values={Object {}}
-                                    />
-                  </span>
-</Link>,
-                false,
-              ],
-              "className": "navbar-start",
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <span
-                    className="item-text"
->
-                    <FormattedMessage
-                                        defaultMessage="About"
-                                        id="Navbar.links.about"
-                                        values={Object {}}
-                    />
-</span>,
-                  "className": "navbar-item top-nav__about-link",
-                  "replace": false,
-                  "to": "/about",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="About"
-                      id="Navbar.links.about"
-                      values={Object {}}
-/>,
-                    "className": "item-text",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "About",
-                      "id": "Navbar.links.about",
-                      "values": Object {},
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "span",
-                },
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <span
-                    className="item-text"
->
-                    <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Navbar.links.challengeResults"
-                                        values={Object {}}
-                    />
-</span>,
-                  "className": "navbar-item top-nav__browse-link",
-                  "replace": false,
-                  "to": "/browse/challenges",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="Challenges"
-                      id="Navbar.links.challengeResults"
-                      values={Object {}}
-/>,
-                    "className": "item-text",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "Challenges",
-                      "id": "Navbar.links.challengeResults",
-                      "values": Object {},
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "span",
-                },
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <span
-                    className="item-text"
->
-                    <FormattedMessage
-                                        defaultMessage="Leaderboard"
-                                        id="Navbar.links.leaderboard"
-                                        values={Object {}}
-                    />
-</span>,
-                  "className": "navbar-item top-nav__browse-link",
-                  "replace": false,
-                  "to": "/leaderboard",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="Leaderboard"
-                      id="Navbar.links.leaderboard"
-                      values={Object {}}
-/>,
-                    "className": "item-text",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "Leaderboard",
-                      "id": "Navbar.links.leaderboard",
-                      "values": Object {},
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "span",
-                },
-                "type": [Function],
-              },
-              false,
+                <InjectIntl(AccountNavItem)
+                                location={
+                                                Object {
+                                                                "pathname": "/some/path",
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "id": 357,
+                                                                "isLoggedIn": false,
+                                                              }
+                                }
+                />
+</div>,
             ],
-            "type": "div",
+            "className": "navbar-menu",
           },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <InjectIntl(AccountNavItem)
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <NavbarPrimaryLinks
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": false,
+                                                    }
+                  }
+/>,
+                "className": "navbar-start",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": false,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <InjectIntl(AccountNavItem)
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": false,
+                                                    }
+                  }
+/>,
+                "className": "navbar-end",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": false,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": <Menu
+            bodyClassName=""
+            burgerBarClassName=""
+            burgerButtonClassName=""
+            className=""
+            crossButtonClassName=""
+            crossClassName=""
+            customBurgerIcon={
+                        <SvgSymbol
+                                    sym="menu-icon"
+                                    viewBox="0 0 20 20"
+                        />
+            }
+            customCrossIcon={
+                        <SvgSymbol
+                                    sym="cross-icon"
+                                    viewBox="0 0 20 20"
+                        />
+            }
+            disableCloseOnEsc={false}
+            id=""
+            isOpen={false}
+            itemListClassName=""
+            menuClassName=""
+            morphShapeClassName=""
+            noOverlay={false}
+            onStateChange={[Function]}
+            outerContainerId=""
+            overlayClassName=""
+            pageWrapId=""
+            right={true}
+            styles={
+                        Object {
+                                    "bmCrossButton": Object {
+                                      "right": "16px",
+                                      "top": "20px",
+                                    },
+                                    "bmMenuWrap": Object {
+                                      "width": "275px",
+                                    },
+                                    "bmOverlay": Object {
+                                      "background": "rgb(0,165,146, 0.7)",
+                                    },
+                                  }
+            }
+            width={300}
+>
+            <NavbarPrimaryLinks
+                        location={
+                                    Object {
+                                                "pathname": "/some/path",
+                                              }
+                        }
+                        onLinkClick={[Function]}
+                        user={
+                                    Object {
+                                                "id": 357,
+                                                "isLoggedIn": false,
+                                              }
+                        }
+            />
+            <Connect(SignInButton)
+                        className="white-on-green top-nav__signin-link"
+                        location={
+                                    Object {
+                                                "pathname": "/some/path",
+                                              }
+                        }
+                        user={
+                                    Object {
+                                                "id": 357,
+                                                "isLoggedIn": false,
+                                              }
+                        }
+            />
+</Menu>,
+          "query": "(max-width: 1023px)",
+          "values": Object {},
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "bodyClassName": "",
+            "burgerBarClassName": "",
+            "burgerButtonClassName": "",
+            "children": Array [
+              <NavbarPrimaryLinks
+                location={
+                                Object {
+                                                "pathname": "/some/path",
+                                              }
+                }
+                onLinkClick={[Function]}
+                user={
+                                Object {
+                                                "id": 357,
+                                                "isLoggedIn": false,
+                                              }
+                }
+/>,
+              false,
+              <Connect(SignInButton)
+                className="white-on-green top-nav__signin-link"
                 location={
                                 Object {
                                                 "pathname": "/some/path",
@@ -542,14 +593,71 @@ ShallowWrapper {
                                               }
                 }
 />,
-              "className": "navbar-end",
+            ],
+            "className": "",
+            "crossButtonClassName": "",
+            "crossClassName": "",
+            "customBurgerIcon": <SvgSymbol
+              sym="menu-icon"
+              viewBox="0 0 20 20"
+/>,
+            "customCrossIcon": <SvgSymbol
+              sym="cross-icon"
+              viewBox="0 0 20 20"
+/>,
+            "disableCloseOnEsc": false,
+            "id": "",
+            "isOpen": false,
+            "itemListClassName": "",
+            "menuClassName": "",
+            "morphShapeClassName": "",
+            "noOverlay": false,
+            "onStateChange": [Function],
+            "outerContainerId": "",
+            "overlayClassName": "",
+            "pageWrapId": "",
+            "right": true,
+            "styles": Object {
+              "bmCrossButton": Object {
+                "right": "16px",
+                "top": "20px",
+              },
+              "bmMenuWrap": Object {
+                "width": "275px",
+              },
+              "bmOverlay": Object {
+                "background": "rgb(0,165,146, 0.7)",
+              },
             },
-            "ref": null,
-            "rendered": Object {
+            "width": 300,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "location": Object {
+                  "pathname": "/some/path",
+                },
+                "onLinkClick": [Function],
+                "user": Object {
+                  "id": 357,
+                  "isLoggedIn": false,
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            false,
+            Object {
               "instance": null,
               "key": undefined,
               "nodeType": "class",
               "props": Object {
+                "className": "white-on-green top-nav__signin-link",
                 "location": Object {
                   "pathname": "/some/path",
                 },
@@ -562,10 +670,10 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-            "type": "div",
-          },
-        ],
-        "type": "div",
+          ],
+          "type": [Function],
+        },
+        "type": [Function],
       },
     ],
     "type": "nav",
@@ -603,62 +711,116 @@ ShallowWrapper {
                         </span>
             </Link>
 </div>,
-          <div
-            className="navbar-menu"
+          <MediaQuery
+            query="(min-width: 1024px)"
+            values={Object {}}
 >
             <div
-                        className="navbar-start"
+                        className="navbar-menu"
             >
-                        <Link
-                                    className="navbar-item top-nav__about-link"
-                                    replace={false}
-                                    to="/about"
+                        <div
+                                    className="navbar-start"
                         >
-                                    <span
-                                                className="item-text"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="About"
-                                                            id="Navbar.links.about"
-                                                            values={Object {}}
-                                                />
-                                    </span>
-                        </Link>
-                        <Link
-                                    className="navbar-item top-nav__browse-link"
-                                    replace={false}
-                                    to="/browse/challenges"
+                                    <NavbarPrimaryLinks
+                                                location={
+                                                            Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": false,
+                                                                      }
+                                                }
+                                    />
+                        </div>
+                        <div
+                                    className="navbar-end"
                         >
-                                    <span
-                                                className="item-text"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Challenges"
-                                                            id="Navbar.links.challengeResults"
-                                                            values={Object {}}
-                                                />
-                                    </span>
-                        </Link>
-                        <Link
-                                    className="navbar-item top-nav__browse-link"
-                                    replace={false}
-                                    to="/leaderboard"
-                        >
-                                    <span
-                                                className="item-text"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Leaderboard"
-                                                            id="Navbar.links.leaderboard"
-                                                            values={Object {}}
-                                                />
-                                    </span>
-                        </Link>
+                                    <InjectIntl(AccountNavItem)
+                                                location={
+                                                            Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": false,
+                                                                      }
+                                                }
+                                    />
+                        </div>
             </div>
-            <div
-                        className="navbar-end"
+</MediaQuery>,
+          <MediaQuery
+            query="(max-width: 1023px)"
+            values={Object {}}
+>
+            <Menu
+                        bodyClassName=""
+                        burgerBarClassName=""
+                        burgerButtonClassName=""
+                        className=""
+                        crossButtonClassName=""
+                        crossClassName=""
+                        customBurgerIcon={
+                                    <SvgSymbol
+                                                sym="menu-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        }
+                        customCrossIcon={
+                                    <SvgSymbol
+                                                sym="cross-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        }
+                        disableCloseOnEsc={false}
+                        id=""
+                        isOpen={false}
+                        itemListClassName=""
+                        menuClassName=""
+                        morphShapeClassName=""
+                        noOverlay={false}
+                        onStateChange={[Function]}
+                        outerContainerId=""
+                        overlayClassName=""
+                        pageWrapId=""
+                        right={true}
+                        styles={
+                                    Object {
+                                                "bmCrossButton": Object {
+                                                  "right": "16px",
+                                                  "top": "20px",
+                                                },
+                                                "bmMenuWrap": Object {
+                                                  "width": "275px",
+                                                },
+                                                "bmOverlay": Object {
+                                                  "background": "rgb(0,165,146, 0.7)",
+                                                },
+                                              }
+                        }
+                        width={300}
             >
-                        <InjectIntl(AccountNavItem)
+                        <NavbarPrimaryLinks
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    onLinkClick={[Function]}
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                                    }
+                        />
+                        <Connect(SignInButton)
+                                    className="white-on-green top-nav__signin-link"
                                     location={
                                                 Object {
                                                             "pathname": "/some/path",
@@ -671,8 +833,8 @@ ShallowWrapper {
                                                           }
                                     }
                         />
-            </div>
-</div>,
+            </Menu>
+</MediaQuery>,
         ],
         "className": "navbar top-nav",
       },
@@ -789,294 +951,291 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "host",
+          "nodeType": "class",
           "props": Object {
-            "children": Array [
-              <div
-                className="navbar-start"
+            "children": <div
+              className="navbar-menu"
 >
-                <Link
-                                className="navbar-item top-nav__about-link"
-                                replace={false}
-                                to="/about"
-                >
-                                <span
-                                                className="item-text"
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="About"
-                                                                id="Navbar.links.about"
-                                                                values={Object {}}
-                                                />
-                                </span>
-                </Link>
-                <Link
-                                className="navbar-item top-nav__browse-link"
-                                replace={false}
-                                to="/browse/challenges"
-                >
-                                <span
-                                                className="item-text"
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Challenges"
-                                                                id="Navbar.links.challengeResults"
-                                                                values={Object {}}
-                                                />
-                                </span>
-                </Link>
-                <Link
-                                className="navbar-item top-nav__browse-link"
-                                replace={false}
-                                to="/leaderboard"
-                >
-                                <span
-                                                className="item-text"
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Leaderboard"
-                                                                id="Navbar.links.leaderboard"
-                                                                values={Object {}}
-                                                />
-                                </span>
-                </Link>
-</div>,
               <div
-                className="navbar-end"
->
-                <InjectIntl(AccountNavItem)
-                                location={
-                                                Object {
-                                                                "pathname": "/some/path",
-                                                              }
-                                }
-                                user={
-                                                Object {
-                                                                "id": 357,
-                                                                "isLoggedIn": false,
-                                                              }
-                                }
-                />
+                            className="navbar-start"
+              >
+                            <NavbarPrimaryLinks
+                                          location={
+                                                        Object {
+                                                                      "pathname": "/some/path",
+                                                                    }
+                                          }
+                                          user={
+                                                        Object {
+                                                                      "id": 357,
+                                                                      "isLoggedIn": false,
+                                                                    }
+                                          }
+                            />
+              </div>
+              <div
+                            className="navbar-end"
+              >
+                            <InjectIntl(AccountNavItem)
+                                          location={
+                                                        Object {
+                                                                      "pathname": "/some/path",
+                                                                    }
+                                          }
+                                          user={
+                                                        Object {
+                                                                      "id": 357,
+                                                                      "isLoggedIn": false,
+                                                                    }
+                                          }
+                            />
+              </div>
 </div>,
-            ],
-            "className": "navbar-menu",
+            "query": "(min-width: 1024px)",
+            "values": Object {},
           },
           "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <Link
-                    className="navbar-item top-nav__about-link"
-                    replace={false}
-                    to="/about"
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="navbar-start"
 >
-                    <span
-                                        className="item-text"
-                    >
-                                        <FormattedMessage
-                                                            defaultMessage="About"
-                                                            id="Navbar.links.about"
-                                                            values={Object {}}
-                                        />
-                    </span>
-</Link>,
-                  <Link
-                    className="navbar-item top-nav__browse-link"
-                    replace={false}
-                    to="/browse/challenges"
+                  <NavbarPrimaryLinks
+                                    location={
+                                                      Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": false,
+                                                                      }
+                                    }
+                  />
+</div>,
+                <div
+                  className="navbar-end"
 >
-                    <span
-                                        className="item-text"
-                    >
-                                        <FormattedMessage
-                                                            defaultMessage="Challenges"
-                                                            id="Navbar.links.challengeResults"
-                                                            values={Object {}}
-                                        />
-                    </span>
-</Link>,
-                  <Link
-                    className="navbar-item top-nav__browse-link"
-                    replace={false}
-                    to="/leaderboard"
->
-                    <span
-                                        className="item-text"
-                    >
-                                        <FormattedMessage
-                                                            defaultMessage="Leaderboard"
-                                                            id="Navbar.links.leaderboard"
-                                                            values={Object {}}
-                                        />
-                    </span>
-</Link>,
-                  false,
-                ],
-                "className": "navbar-start",
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "children": <span
-                      className="item-text"
->
-                      <FormattedMessage
-                                            defaultMessage="About"
-                                            id="Navbar.links.about"
-                                            values={Object {}}
-                      />
-</span>,
-                    "className": "navbar-item top-nav__about-link",
-                    "replace": false,
-                    "to": "/about",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="About"
-                        id="Navbar.links.about"
-                        values={Object {}}
-/>,
-                      "className": "item-text",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "About",
-                        "id": "Navbar.links.about",
-                        "values": Object {},
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "span",
-                  },
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "children": <span
-                      className="item-text"
->
-                      <FormattedMessage
-                                            defaultMessage="Challenges"
-                                            id="Navbar.links.challengeResults"
-                                            values={Object {}}
-                      />
-</span>,
-                    "className": "navbar-item top-nav__browse-link",
-                    "replace": false,
-                    "to": "/browse/challenges",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="Challenges"
-                        id="Navbar.links.challengeResults"
-                        values={Object {}}
-/>,
-                      "className": "item-text",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "Challenges",
-                        "id": "Navbar.links.challengeResults",
-                        "values": Object {},
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "span",
-                  },
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "children": <span
-                      className="item-text"
->
-                      <FormattedMessage
-                                            defaultMessage="Leaderboard"
-                                            id="Navbar.links.leaderboard"
-                                            values={Object {}}
-                      />
-</span>,
-                    "className": "navbar-item top-nav__browse-link",
-                    "replace": false,
-                    "to": "/leaderboard",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="Leaderboard"
-                        id="Navbar.links.leaderboard"
-                        values={Object {}}
-/>,
-                      "className": "item-text",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "Leaderboard",
-                        "id": "Navbar.links.leaderboard",
-                        "values": Object {},
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "span",
-                  },
-                  "type": [Function],
-                },
-                false,
+                  <InjectIntl(AccountNavItem)
+                                    location={
+                                                      Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": false,
+                                                                      }
+                                    }
+                  />
+</div>,
               ],
-              "type": "div",
+              "className": "navbar-menu",
             },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <InjectIntl(AccountNavItem)
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <NavbarPrimaryLinks
+                    location={
+                                        Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                    }
+/>,
+                  "className": "navbar-start",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "location": Object {
+                      "pathname": "/some/path",
+                    },
+                    "user": Object {
+                      "id": 357,
+                      "isLoggedIn": false,
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <InjectIntl(AccountNavItem)
+                    location={
+                                        Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                          }
+                    }
+/>,
+                  "className": "navbar-end",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "location": Object {
+                      "pathname": "/some/path",
+                    },
+                    "user": Object {
+                      "id": 357,
+                      "isLoggedIn": false,
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "div",
+              },
+            ],
+            "type": "div",
+          },
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": <Menu
+              bodyClassName=""
+              burgerBarClassName=""
+              burgerButtonClassName=""
+              className=""
+              crossButtonClassName=""
+              crossClassName=""
+              customBurgerIcon={
+                            <SvgSymbol
+                                          sym="menu-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              }
+              customCrossIcon={
+                            <SvgSymbol
+                                          sym="cross-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              }
+              disableCloseOnEsc={false}
+              id=""
+              isOpen={false}
+              itemListClassName=""
+              menuClassName=""
+              morphShapeClassName=""
+              noOverlay={false}
+              onStateChange={[Function]}
+              outerContainerId=""
+              overlayClassName=""
+              pageWrapId=""
+              right={true}
+              styles={
+                            Object {
+                                          "bmCrossButton": Object {
+                                            "right": "16px",
+                                            "top": "20px",
+                                          },
+                                          "bmMenuWrap": Object {
+                                            "width": "275px",
+                                          },
+                                          "bmOverlay": Object {
+                                            "background": "rgb(0,165,146, 0.7)",
+                                          },
+                                        }
+              }
+              width={300}
+>
+              <NavbarPrimaryLinks
+                            location={
+                                          Object {
+                                                        "pathname": "/some/path",
+                                                      }
+                            }
+                            onLinkClick={[Function]}
+                            user={
+                                          Object {
+                                                        "id": 357,
+                                                        "isLoggedIn": false,
+                                                      }
+                            }
+              />
+              <Connect(SignInButton)
+                            className="white-on-green top-nav__signin-link"
+                            location={
+                                          Object {
+                                                        "pathname": "/some/path",
+                                                      }
+                            }
+                            user={
+                                          Object {
+                                                        "id": 357,
+                                                        "isLoggedIn": false,
+                                                      }
+                            }
+              />
+</Menu>,
+            "query": "(max-width: 1023px)",
+            "values": Object {},
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "bodyClassName": "",
+              "burgerBarClassName": "",
+              "burgerButtonClassName": "",
+              "children": Array [
+                <NavbarPrimaryLinks
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  onLinkClick={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": false,
+                                                    }
+                  }
+/>,
+                false,
+                <Connect(SignInButton)
+                  className="white-on-green top-nav__signin-link"
                   location={
                                     Object {
                                                       "pathname": "/some/path",
@@ -1089,14 +1248,71 @@ ShallowWrapper {
                                                     }
                   }
 />,
-                "className": "navbar-end",
+              ],
+              "className": "",
+              "crossButtonClassName": "",
+              "crossClassName": "",
+              "customBurgerIcon": <SvgSymbol
+                sym="menu-icon"
+                viewBox="0 0 20 20"
+/>,
+              "customCrossIcon": <SvgSymbol
+                sym="cross-icon"
+                viewBox="0 0 20 20"
+/>,
+              "disableCloseOnEsc": false,
+              "id": "",
+              "isOpen": false,
+              "itemListClassName": "",
+              "menuClassName": "",
+              "morphShapeClassName": "",
+              "noOverlay": false,
+              "onStateChange": [Function],
+              "outerContainerId": "",
+              "overlayClassName": "",
+              "pageWrapId": "",
+              "right": true,
+              "styles": Object {
+                "bmCrossButton": Object {
+                  "right": "16px",
+                  "top": "20px",
+                },
+                "bmMenuWrap": Object {
+                  "width": "275px",
+                },
+                "bmOverlay": Object {
+                  "background": "rgb(0,165,146, 0.7)",
+                },
               },
-              "ref": null,
-              "rendered": Object {
+              "width": 300,
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "onLinkClick": [Function],
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": false,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              false,
+              Object {
                 "instance": null,
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
+                  "className": "white-on-green top-nav__signin-link",
                   "location": Object {
                     "pathname": "/some/path",
                   },
@@ -1109,10 +1325,10 @@ ShallowWrapper {
                 "rendered": null,
                 "type": [Function],
               },
-              "type": "div",
-            },
-          ],
-          "type": "div",
+            ],
+            "type": [Function],
+          },
+          "type": [Function],
         },
       ],
       "type": "nav",
@@ -1184,82 +1400,107 @@ ShallowWrapper {
                     </span>
           </Link>
 </div>,
-        <div
-          className="navbar-menu"
+        <MediaQuery
+          query="(min-width: 1024px)"
+          values={Object {}}
 >
           <div
-                    className="navbar-start"
+                    className="navbar-menu"
           >
-                    <Link
-                              className="navbar-item top-nav__about-link"
-                              replace={false}
-                              to="/about"
+                    <div
+                              className="navbar-start"
                     >
-                              <span
-                                        className="item-text"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="About"
-                                                  id="Navbar.links.about"
-                                                  values={Object {}}
-                                        />
-                              </span>
-                    </Link>
-                    <Link
-                              className="navbar-item top-nav__browse-link"
-                              replace={false}
-                              to="/browse/challenges"
+                              <NavbarPrimaryLinks
+                                        location={
+                                                  Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                                        }
+                              />
+                    </div>
+                    <div
+                              className="navbar-end"
                     >
-                              <span
-                                        className="item-text"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Challenges"
-                                                  id="Navbar.links.challengeResults"
-                                                  values={Object {}}
-                                        />
-                              </span>
-                    </Link>
-                    <Link
-                              className="navbar-item top-nav__browse-link"
-                              replace={false}
-                              to="/leaderboard"
-                    >
-                              <span
-                                        className="item-text"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Leaderboard"
-                                                  id="Navbar.links.leaderboard"
-                                                  values={Object {}}
-                                        />
-                              </span>
-                    </Link>
-                    <Link
-                              className="navbar-item top-nav__admin-link"
-                              replace={false}
-                              to="/admin/projects"
-                    >
-                              <span
-                                        className="item-text"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Create"
-                                                  id="Navbar.links.admin"
-                                                  values={Object {}}
-                                        />
-                              </span>
-                    </Link>
+                              <InjectIntl(AccountNavItem)
+                                        location={
+                                                  Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                                        }
+                              />
+                    </div>
           </div>
-          <div
-                    className="navbar-end"
+</MediaQuery>,
+        <MediaQuery
+          query="(max-width: 1023px)"
+          values={Object {}}
+>
+          <Menu
+                    bodyClassName=""
+                    burgerBarClassName=""
+                    burgerButtonClassName=""
+                    className=""
+                    crossButtonClassName=""
+                    crossClassName=""
+                    customBurgerIcon={
+                              <SvgSymbol
+                                        sym="menu-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    }
+                    customCrossIcon={
+                              <SvgSymbol
+                                        sym="cross-icon"
+                                        viewBox="0 0 20 20"
+                              />
+                    }
+                    disableCloseOnEsc={false}
+                    id=""
+                    isOpen={false}
+                    itemListClassName=""
+                    menuClassName=""
+                    morphShapeClassName=""
+                    noOverlay={false}
+                    onStateChange={[Function]}
+                    outerContainerId=""
+                    overlayClassName=""
+                    pageWrapId=""
+                    right={true}
+                    styles={
+                              Object {
+                                        "bmCrossButton": Object {
+                                          "right": "16px",
+                                          "top": "20px",
+                                        },
+                                        "bmMenuWrap": Object {
+                                          "width": "275px",
+                                        },
+                                        "bmOverlay": Object {
+                                          "background": "rgb(0,165,146, 0.7)",
+                                        },
+                                      }
+                    }
+                    width={300}
           >
-                    <InjectIntl(AccountNavItem)
+                    <NavbarPrimaryLinks
                               location={
                                         Object {
                                                   "pathname": "/some/path",
                                                 }
                               }
+                              onLinkClick={[Function]}
                               user={
                                         Object {
                                                   "id": 357,
@@ -1267,8 +1508,36 @@ ShallowWrapper {
                                                 }
                               }
                     />
-          </div>
-</div>,
+                    <Unknown>
+                              <Link
+                                        className="navbar-item top-nav__profile-link"
+                                        onClick={[Function]}
+                                        replace={false}
+                                        to="/user/profile"
+                              >
+                                        <span
+                                                  className="item-text"
+                                        >
+                                                  <FormattedMessage
+                                                            defaultMessage="User Profile"
+                                                            id="Navbar.links.mobile.userProfile"
+                                                            values={Object {}}
+                                                  />
+                                        </span>
+                              </Link>
+                              <a
+                                        className="navbar-item top-nav__signout-link"
+                                        onClick={[Function]}
+                              >
+                                        <span
+                                                  className="item-text"
+                                        >
+                                                  Sign Out
+                                        </span>
+                              </a>
+                    </Unknown>
+          </Menu>
+</MediaQuery>,
       ],
       "className": "navbar top-nav",
     },
@@ -1385,376 +1654,295 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "host",
+        "nodeType": "class",
         "props": Object {
-          "children": Array [
-            <div
-              className="navbar-start"
+          "children": <div
+            className="navbar-menu"
 >
-              <Link
-                            className="navbar-item top-nav__about-link"
-                            replace={false}
-                            to="/about"
-              >
-                            <span
-                                          className="item-text"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="About"
-                                                        id="Navbar.links.about"
-                                                        values={Object {}}
-                                          />
-                            </span>
-              </Link>
-              <Link
-                            className="navbar-item top-nav__browse-link"
-                            replace={false}
-                            to="/browse/challenges"
-              >
-                            <span
-                                          className="item-text"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Challenges"
-                                                        id="Navbar.links.challengeResults"
-                                                        values={Object {}}
-                                          />
-                            </span>
-              </Link>
-              <Link
-                            className="navbar-item top-nav__browse-link"
-                            replace={false}
-                            to="/leaderboard"
-              >
-                            <span
-                                          className="item-text"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Leaderboard"
-                                                        id="Navbar.links.leaderboard"
-                                                        values={Object {}}
-                                          />
-                            </span>
-              </Link>
-              <Link
-                            className="navbar-item top-nav__admin-link"
-                            replace={false}
-                            to="/admin/projects"
-              >
-                            <span
-                                          className="item-text"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Create"
-                                                        id="Navbar.links.admin"
-                                                        values={Object {}}
-                                          />
-                            </span>
-              </Link>
-</div>,
             <div
-              className="navbar-end"
->
-              <InjectIntl(AccountNavItem)
-                            location={
-                                          Object {
-                                                        "pathname": "/some/path",
-                                                      }
-                            }
-                            user={
-                                          Object {
-                                                        "id": 357,
-                                                        "isLoggedIn": true,
-                                                      }
-                            }
-              />
+                        className="navbar-start"
+            >
+                        <NavbarPrimaryLinks
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                                    }
+                        />
+            </div>
+            <div
+                        className="navbar-end"
+            >
+                        <InjectIntl(AccountNavItem)
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                                    }
+                        />
+            </div>
 </div>,
-          ],
-          "className": "navbar-menu",
+          "query": "(min-width: 1024px)",
+          "values": Object {},
         },
         "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <Link
-                  className="navbar-item top-nav__about-link"
-                  replace={false}
-                  to="/about"
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="navbar-start"
 >
-                  <span
-                                    className="item-text"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="About"
-                                                      id="Navbar.links.about"
-                                                      values={Object {}}
-                                    />
-                  </span>
-</Link>,
-                <Link
-                  className="navbar-item top-nav__browse-link"
-                  replace={false}
-                  to="/browse/challenges"
+                <NavbarPrimaryLinks
+                                location={
+                                                Object {
+                                                                "pathname": "/some/path",
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "id": 357,
+                                                                "isLoggedIn": true,
+                                                              }
+                                }
+                />
+</div>,
+              <div
+                className="navbar-end"
 >
-                  <span
-                                    className="item-text"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="Challenges"
-                                                      id="Navbar.links.challengeResults"
-                                                      values={Object {}}
-                                    />
-                  </span>
-</Link>,
-                <Link
-                  className="navbar-item top-nav__browse-link"
-                  replace={false}
-                  to="/leaderboard"
->
-                  <span
-                                    className="item-text"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="Leaderboard"
-                                                      id="Navbar.links.leaderboard"
-                                                      values={Object {}}
-                                    />
-                  </span>
-</Link>,
-                <Link
-                  className="navbar-item top-nav__admin-link"
-                  replace={false}
-                  to="/admin/projects"
->
-                  <span
-                                    className="item-text"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="Create"
-                                                      id="Navbar.links.admin"
-                                                      values={Object {}}
-                                    />
-                  </span>
-</Link>,
-              ],
-              "className": "navbar-start",
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <span
-                    className="item-text"
->
-                    <FormattedMessage
-                                        defaultMessage="About"
-                                        id="Navbar.links.about"
-                                        values={Object {}}
-                    />
-</span>,
-                  "className": "navbar-item top-nav__about-link",
-                  "replace": false,
-                  "to": "/about",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="About"
-                      id="Navbar.links.about"
-                      values={Object {}}
-/>,
-                    "className": "item-text",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "About",
-                      "id": "Navbar.links.about",
-                      "values": Object {},
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "span",
-                },
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <span
-                    className="item-text"
->
-                    <FormattedMessage
-                                        defaultMessage="Challenges"
-                                        id="Navbar.links.challengeResults"
-                                        values={Object {}}
-                    />
-</span>,
-                  "className": "navbar-item top-nav__browse-link",
-                  "replace": false,
-                  "to": "/browse/challenges",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="Challenges"
-                      id="Navbar.links.challengeResults"
-                      values={Object {}}
-/>,
-                    "className": "item-text",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "Challenges",
-                      "id": "Navbar.links.challengeResults",
-                      "values": Object {},
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "span",
-                },
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <span
-                    className="item-text"
->
-                    <FormattedMessage
-                                        defaultMessage="Leaderboard"
-                                        id="Navbar.links.leaderboard"
-                                        values={Object {}}
-                    />
-</span>,
-                  "className": "navbar-item top-nav__browse-link",
-                  "replace": false,
-                  "to": "/leaderboard",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="Leaderboard"
-                      id="Navbar.links.leaderboard"
-                      values={Object {}}
-/>,
-                    "className": "item-text",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "Leaderboard",
-                      "id": "Navbar.links.leaderboard",
-                      "values": Object {},
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "span",
-                },
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <span
-                    className="item-text"
->
-                    <FormattedMessage
-                                        defaultMessage="Create"
-                                        id="Navbar.links.admin"
-                                        values={Object {}}
-                    />
-</span>,
-                  "className": "navbar-item top-nav__admin-link",
-                  "replace": false,
-                  "to": "/admin/projects",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="Create"
-                      id="Navbar.links.admin"
-                      values={Object {}}
-/>,
-                    "className": "item-text",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "Create",
-                      "id": "Navbar.links.admin",
-                      "values": Object {},
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "span",
-                },
-                "type": [Function],
-              },
+                <InjectIntl(AccountNavItem)
+                                location={
+                                                Object {
+                                                                "pathname": "/some/path",
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "id": 357,
+                                                                "isLoggedIn": true,
+                                                              }
+                                }
+                />
+</div>,
             ],
-            "type": "div",
+            "className": "navbar-menu",
           },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <InjectIntl(AccountNavItem)
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <NavbarPrimaryLinks
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": true,
+                                                    }
+                  }
+/>,
+                "className": "navbar-start",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": true,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <InjectIntl(AccountNavItem)
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": true,
+                                                    }
+                  }
+/>,
+                "className": "navbar-end",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": true,
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": <Menu
+            bodyClassName=""
+            burgerBarClassName=""
+            burgerButtonClassName=""
+            className=""
+            crossButtonClassName=""
+            crossClassName=""
+            customBurgerIcon={
+                        <SvgSymbol
+                                    sym="menu-icon"
+                                    viewBox="0 0 20 20"
+                        />
+            }
+            customCrossIcon={
+                        <SvgSymbol
+                                    sym="cross-icon"
+                                    viewBox="0 0 20 20"
+                        />
+            }
+            disableCloseOnEsc={false}
+            id=""
+            isOpen={false}
+            itemListClassName=""
+            menuClassName=""
+            morphShapeClassName=""
+            noOverlay={false}
+            onStateChange={[Function]}
+            outerContainerId=""
+            overlayClassName=""
+            pageWrapId=""
+            right={true}
+            styles={
+                        Object {
+                                    "bmCrossButton": Object {
+                                      "right": "16px",
+                                      "top": "20px",
+                                    },
+                                    "bmMenuWrap": Object {
+                                      "width": "275px",
+                                    },
+                                    "bmOverlay": Object {
+                                      "background": "rgb(0,165,146, 0.7)",
+                                    },
+                                  }
+            }
+            width={300}
+>
+            <NavbarPrimaryLinks
+                        location={
+                                    Object {
+                                                "pathname": "/some/path",
+                                              }
+                        }
+                        onLinkClick={[Function]}
+                        user={
+                                    Object {
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                              }
+                        }
+            />
+            <Unknown>
+                        <Link
+                                    className="navbar-item top-nav__profile-link"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/user/profile"
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="User Profile"
+                                                            id="Navbar.links.mobile.userProfile"
+                                                            values={Object {}}
+                                                />
+                                    </span>
+                        </Link>
+                        <a
+                                    className="navbar-item top-nav__signout-link"
+                                    onClick={[Function]}
+                        >
+                                    <span
+                                                className="item-text"
+                                    >
+                                                Sign Out
+                                    </span>
+                        </a>
+            </Unknown>
+</Menu>,
+          "query": "(max-width: 1023px)",
+          "values": Object {},
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "bodyClassName": "",
+            "burgerBarClassName": "",
+            "burgerButtonClassName": "",
+            "children": Array [
+              <NavbarPrimaryLinks
                 location={
                                 Object {
                                                 "pathname": "/some/path",
                                               }
                 }
+                onLinkClick={[Function]}
                 user={
                                 Object {
                                                 "id": 357,
@@ -1762,17 +1950,84 @@ ShallowWrapper {
                                               }
                 }
 />,
-              "className": "navbar-end",
+              <Unknown>
+                <Link
+                                className="navbar-item top-nav__profile-link"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/user/profile"
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="User Profile"
+                                                                id="Navbar.links.mobile.userProfile"
+                                                                values={Object {}}
+                                                />
+                                </span>
+                </Link>
+                <a
+                                className="navbar-item top-nav__signout-link"
+                                onClick={[Function]}
+                >
+                                <span
+                                                className="item-text"
+                                >
+                                                Sign Out
+                                </span>
+                </a>
+</Unknown>,
+              false,
+            ],
+            "className": "",
+            "crossButtonClassName": "",
+            "crossClassName": "",
+            "customBurgerIcon": <SvgSymbol
+              sym="menu-icon"
+              viewBox="0 0 20 20"
+/>,
+            "customCrossIcon": <SvgSymbol
+              sym="cross-icon"
+              viewBox="0 0 20 20"
+/>,
+            "disableCloseOnEsc": false,
+            "id": "",
+            "isOpen": false,
+            "itemListClassName": "",
+            "menuClassName": "",
+            "morphShapeClassName": "",
+            "noOverlay": false,
+            "onStateChange": [Function],
+            "outerContainerId": "",
+            "overlayClassName": "",
+            "pageWrapId": "",
+            "right": true,
+            "styles": Object {
+              "bmCrossButton": Object {
+                "right": "16px",
+                "top": "20px",
+              },
+              "bmMenuWrap": Object {
+                "width": "275px",
+              },
+              "bmOverlay": Object {
+                "background": "rgb(0,165,146, 0.7)",
+              },
             },
-            "ref": null,
-            "rendered": Object {
+            "width": 300,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "class",
+              "nodeType": "function",
               "props": Object {
                 "location": Object {
                   "pathname": "/some/path",
                 },
+                "onLinkClick": [Function],
                 "user": Object {
                   "id": 357,
                   "isLoggedIn": true,
@@ -1782,10 +2037,128 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-            "type": "div",
-          },
-        ],
-        "type": "div",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": Array [
+                  <Link
+                    className="navbar-item top-nav__profile-link"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/user/profile"
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="User Profile"
+                                                            id="Navbar.links.mobile.userProfile"
+                                                            values={Object {}}
+                                        />
+                    </span>
+</Link>,
+                  <a
+                    className="navbar-item top-nav__signout-link"
+                    onClick={[Function]}
+>
+                    <span
+                                        className="item-text"
+                    >
+                                        Sign Out
+                    </span>
+</a>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      <FormattedMessage
+                                            defaultMessage="User Profile"
+                                            id="Navbar.links.mobile.userProfile"
+                                            values={Object {}}
+                      />
+</span>,
+                    "className": "navbar-item top-nav__profile-link",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/user/profile",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="User Profile"
+                        id="Navbar.links.mobile.userProfile"
+                        values={Object {}}
+/>,
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "User Profile",
+                        "id": "Navbar.links.mobile.userProfile",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "span",
+                  },
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <span
+                      className="item-text"
+>
+                      Sign Out
+</span>,
+                    "className": "navbar-item top-nav__signout-link",
+                    "onClick": [Function],
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "Sign Out",
+                      "className": "item-text",
+                    },
+                    "ref": null,
+                    "rendered": "Sign Out",
+                    "type": "span",
+                  },
+                  "type": "a",
+                },
+              ],
+              "type": Symbol(react.fragment),
+            },
+            false,
+          ],
+          "type": [Function],
+        },
+        "type": [Function],
       },
     ],
     "type": "nav",
@@ -1823,82 +2196,107 @@ ShallowWrapper {
                         </span>
             </Link>
 </div>,
-          <div
-            className="navbar-menu"
+          <MediaQuery
+            query="(min-width: 1024px)"
+            values={Object {}}
 >
             <div
-                        className="navbar-start"
+                        className="navbar-menu"
             >
-                        <Link
-                                    className="navbar-item top-nav__about-link"
-                                    replace={false}
-                                    to="/about"
+                        <div
+                                    className="navbar-start"
                         >
-                                    <span
-                                                className="item-text"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="About"
-                                                            id="Navbar.links.about"
-                                                            values={Object {}}
-                                                />
-                                    </span>
-                        </Link>
-                        <Link
-                                    className="navbar-item top-nav__browse-link"
-                                    replace={false}
-                                    to="/browse/challenges"
+                                    <NavbarPrimaryLinks
+                                                location={
+                                                            Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                      }
+                                                }
+                                    />
+                        </div>
+                        <div
+                                    className="navbar-end"
                         >
-                                    <span
-                                                className="item-text"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Challenges"
-                                                            id="Navbar.links.challengeResults"
-                                                            values={Object {}}
-                                                />
-                                    </span>
-                        </Link>
-                        <Link
-                                    className="navbar-item top-nav__browse-link"
-                                    replace={false}
-                                    to="/leaderboard"
-                        >
-                                    <span
-                                                className="item-text"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Leaderboard"
-                                                            id="Navbar.links.leaderboard"
-                                                            values={Object {}}
-                                                />
-                                    </span>
-                        </Link>
-                        <Link
-                                    className="navbar-item top-nav__admin-link"
-                                    replace={false}
-                                    to="/admin/projects"
-                        >
-                                    <span
-                                                className="item-text"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Create"
-                                                            id="Navbar.links.admin"
-                                                            values={Object {}}
-                                                />
-                                    </span>
-                        </Link>
+                                    <InjectIntl(AccountNavItem)
+                                                location={
+                                                            Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                      }
+                                                }
+                                    />
+                        </div>
             </div>
-            <div
-                        className="navbar-end"
+</MediaQuery>,
+          <MediaQuery
+            query="(max-width: 1023px)"
+            values={Object {}}
+>
+            <Menu
+                        bodyClassName=""
+                        burgerBarClassName=""
+                        burgerButtonClassName=""
+                        className=""
+                        crossButtonClassName=""
+                        crossClassName=""
+                        customBurgerIcon={
+                                    <SvgSymbol
+                                                sym="menu-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        }
+                        customCrossIcon={
+                                    <SvgSymbol
+                                                sym="cross-icon"
+                                                viewBox="0 0 20 20"
+                                    />
+                        }
+                        disableCloseOnEsc={false}
+                        id=""
+                        isOpen={false}
+                        itemListClassName=""
+                        menuClassName=""
+                        morphShapeClassName=""
+                        noOverlay={false}
+                        onStateChange={[Function]}
+                        outerContainerId=""
+                        overlayClassName=""
+                        pageWrapId=""
+                        right={true}
+                        styles={
+                                    Object {
+                                                "bmCrossButton": Object {
+                                                  "right": "16px",
+                                                  "top": "20px",
+                                                },
+                                                "bmMenuWrap": Object {
+                                                  "width": "275px",
+                                                },
+                                                "bmOverlay": Object {
+                                                  "background": "rgb(0,165,146, 0.7)",
+                                                },
+                                              }
+                        }
+                        width={300}
             >
-                        <InjectIntl(AccountNavItem)
+                        <NavbarPrimaryLinks
                                     location={
                                                 Object {
                                                             "pathname": "/some/path",
                                                           }
                                     }
+                                    onLinkClick={[Function]}
                                     user={
                                                 Object {
                                                             "id": 357,
@@ -1906,8 +2304,36 @@ ShallowWrapper {
                                                           }
                                     }
                         />
-            </div>
-</div>,
+                        <Unknown>
+                                    <Link
+                                                className="navbar-item top-nav__profile-link"
+                                                onClick={[Function]}
+                                                replace={false}
+                                                to="/user/profile"
+                                    >
+                                                <span
+                                                            className="item-text"
+                                                >
+                                                            <FormattedMessage
+                                                                        defaultMessage="User Profile"
+                                                                        id="Navbar.links.mobile.userProfile"
+                                                                        values={Object {}}
+                                                            />
+                                                </span>
+                                    </Link>
+                                    <a
+                                                className="navbar-item top-nav__signout-link"
+                                                onClick={[Function]}
+                                    >
+                                                <span
+                                                            className="item-text"
+                                                >
+                                                            Sign Out
+                                                </span>
+                                    </a>
+                        </Unknown>
+            </Menu>
+</MediaQuery>,
         ],
         "className": "navbar top-nav",
       },
@@ -2024,376 +2450,295 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "host",
+          "nodeType": "class",
           "props": Object {
-            "children": Array [
-              <div
-                className="navbar-start"
+            "children": <div
+              className="navbar-menu"
 >
-                <Link
-                                className="navbar-item top-nav__about-link"
-                                replace={false}
-                                to="/about"
-                >
-                                <span
-                                                className="item-text"
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="About"
-                                                                id="Navbar.links.about"
-                                                                values={Object {}}
-                                                />
-                                </span>
-                </Link>
-                <Link
-                                className="navbar-item top-nav__browse-link"
-                                replace={false}
-                                to="/browse/challenges"
-                >
-                                <span
-                                                className="item-text"
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Challenges"
-                                                                id="Navbar.links.challengeResults"
-                                                                values={Object {}}
-                                                />
-                                </span>
-                </Link>
-                <Link
-                                className="navbar-item top-nav__browse-link"
-                                replace={false}
-                                to="/leaderboard"
-                >
-                                <span
-                                                className="item-text"
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Leaderboard"
-                                                                id="Navbar.links.leaderboard"
-                                                                values={Object {}}
-                                                />
-                                </span>
-                </Link>
-                <Link
-                                className="navbar-item top-nav__admin-link"
-                                replace={false}
-                                to="/admin/projects"
-                >
-                                <span
-                                                className="item-text"
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Create"
-                                                                id="Navbar.links.admin"
-                                                                values={Object {}}
-                                                />
-                                </span>
-                </Link>
-</div>,
               <div
-                className="navbar-end"
->
-                <InjectIntl(AccountNavItem)
-                                location={
-                                                Object {
-                                                                "pathname": "/some/path",
-                                                              }
-                                }
-                                user={
-                                                Object {
-                                                                "id": 357,
-                                                                "isLoggedIn": true,
-                                                              }
-                                }
-                />
+                            className="navbar-start"
+              >
+                            <NavbarPrimaryLinks
+                                          location={
+                                                        Object {
+                                                                      "pathname": "/some/path",
+                                                                    }
+                                          }
+                                          user={
+                                                        Object {
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                    }
+                                          }
+                            />
+              </div>
+              <div
+                            className="navbar-end"
+              >
+                            <InjectIntl(AccountNavItem)
+                                          location={
+                                                        Object {
+                                                                      "pathname": "/some/path",
+                                                                    }
+                                          }
+                                          user={
+                                                        Object {
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                    }
+                                          }
+                            />
+              </div>
 </div>,
-            ],
-            "className": "navbar-menu",
+            "query": "(min-width: 1024px)",
+            "values": Object {},
           },
           "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <Link
-                    className="navbar-item top-nav__about-link"
-                    replace={false}
-                    to="/about"
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="navbar-start"
 >
-                    <span
-                                        className="item-text"
-                    >
-                                        <FormattedMessage
-                                                            defaultMessage="About"
-                                                            id="Navbar.links.about"
-                                                            values={Object {}}
-                                        />
-                    </span>
-</Link>,
-                  <Link
-                    className="navbar-item top-nav__browse-link"
-                    replace={false}
-                    to="/browse/challenges"
+                  <NavbarPrimaryLinks
+                                    location={
+                                                      Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                      }
+                                    }
+                  />
+</div>,
+                <div
+                  className="navbar-end"
 >
-                    <span
-                                        className="item-text"
-                    >
-                                        <FormattedMessage
-                                                            defaultMessage="Challenges"
-                                                            id="Navbar.links.challengeResults"
-                                                            values={Object {}}
-                                        />
-                    </span>
-</Link>,
-                  <Link
-                    className="navbar-item top-nav__browse-link"
-                    replace={false}
-                    to="/leaderboard"
->
-                    <span
-                                        className="item-text"
-                    >
-                                        <FormattedMessage
-                                                            defaultMessage="Leaderboard"
-                                                            id="Navbar.links.leaderboard"
-                                                            values={Object {}}
-                                        />
-                    </span>
-</Link>,
-                  <Link
-                    className="navbar-item top-nav__admin-link"
-                    replace={false}
-                    to="/admin/projects"
->
-                    <span
-                                        className="item-text"
-                    >
-                                        <FormattedMessage
-                                                            defaultMessage="Create"
-                                                            id="Navbar.links.admin"
-                                                            values={Object {}}
-                                        />
-                    </span>
-</Link>,
-                ],
-                "className": "navbar-start",
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "children": <span
-                      className="item-text"
->
-                      <FormattedMessage
-                                            defaultMessage="About"
-                                            id="Navbar.links.about"
-                                            values={Object {}}
-                      />
-</span>,
-                    "className": "navbar-item top-nav__about-link",
-                    "replace": false,
-                    "to": "/about",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="About"
-                        id="Navbar.links.about"
-                        values={Object {}}
-/>,
-                      "className": "item-text",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "About",
-                        "id": "Navbar.links.about",
-                        "values": Object {},
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "span",
-                  },
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "children": <span
-                      className="item-text"
->
-                      <FormattedMessage
-                                            defaultMessage="Challenges"
-                                            id="Navbar.links.challengeResults"
-                                            values={Object {}}
-                      />
-</span>,
-                    "className": "navbar-item top-nav__browse-link",
-                    "replace": false,
-                    "to": "/browse/challenges",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="Challenges"
-                        id="Navbar.links.challengeResults"
-                        values={Object {}}
-/>,
-                      "className": "item-text",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "Challenges",
-                        "id": "Navbar.links.challengeResults",
-                        "values": Object {},
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "span",
-                  },
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "children": <span
-                      className="item-text"
->
-                      <FormattedMessage
-                                            defaultMessage="Leaderboard"
-                                            id="Navbar.links.leaderboard"
-                                            values={Object {}}
-                      />
-</span>,
-                    "className": "navbar-item top-nav__browse-link",
-                    "replace": false,
-                    "to": "/leaderboard",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="Leaderboard"
-                        id="Navbar.links.leaderboard"
-                        values={Object {}}
-/>,
-                      "className": "item-text",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "Leaderboard",
-                        "id": "Navbar.links.leaderboard",
-                        "values": Object {},
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "span",
-                  },
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "children": <span
-                      className="item-text"
->
-                      <FormattedMessage
-                                            defaultMessage="Create"
-                                            id="Navbar.links.admin"
-                                            values={Object {}}
-                      />
-</span>,
-                    "className": "navbar-item top-nav__admin-link",
-                    "replace": false,
-                    "to": "/admin/projects",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="Create"
-                        id="Navbar.links.admin"
-                        values={Object {}}
-/>,
-                      "className": "item-text",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "Create",
-                        "id": "Navbar.links.admin",
-                        "values": Object {},
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "span",
-                  },
-                  "type": [Function],
-                },
+                  <InjectIntl(AccountNavItem)
+                                    location={
+                                                      Object {
+                                                                        "pathname": "/some/path",
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                      }
+                                    }
+                  />
+</div>,
               ],
-              "type": "div",
+              "className": "navbar-menu",
             },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <InjectIntl(AccountNavItem)
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <NavbarPrimaryLinks
+                    location={
+                                        Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                    }
+/>,
+                  "className": "navbar-start",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "location": Object {
+                      "pathname": "/some/path",
+                    },
+                    "user": Object {
+                      "id": 357,
+                      "isLoggedIn": true,
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <InjectIntl(AccountNavItem)
+                    location={
+                                        Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                          }
+                    }
+/>,
+                  "className": "navbar-end",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "location": Object {
+                      "pathname": "/some/path",
+                    },
+                    "user": Object {
+                      "id": 357,
+                      "isLoggedIn": true,
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "div",
+              },
+            ],
+            "type": "div",
+          },
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": <Menu
+              bodyClassName=""
+              burgerBarClassName=""
+              burgerButtonClassName=""
+              className=""
+              crossButtonClassName=""
+              crossClassName=""
+              customBurgerIcon={
+                            <SvgSymbol
+                                          sym="menu-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              }
+              customCrossIcon={
+                            <SvgSymbol
+                                          sym="cross-icon"
+                                          viewBox="0 0 20 20"
+                            />
+              }
+              disableCloseOnEsc={false}
+              id=""
+              isOpen={false}
+              itemListClassName=""
+              menuClassName=""
+              morphShapeClassName=""
+              noOverlay={false}
+              onStateChange={[Function]}
+              outerContainerId=""
+              overlayClassName=""
+              pageWrapId=""
+              right={true}
+              styles={
+                            Object {
+                                          "bmCrossButton": Object {
+                                            "right": "16px",
+                                            "top": "20px",
+                                          },
+                                          "bmMenuWrap": Object {
+                                            "width": "275px",
+                                          },
+                                          "bmOverlay": Object {
+                                            "background": "rgb(0,165,146, 0.7)",
+                                          },
+                                        }
+              }
+              width={300}
+>
+              <NavbarPrimaryLinks
+                            location={
+                                          Object {
+                                                        "pathname": "/some/path",
+                                                      }
+                            }
+                            onLinkClick={[Function]}
+                            user={
+                                          Object {
+                                                        "id": 357,
+                                                        "isLoggedIn": true,
+                                                      }
+                            }
+              />
+              <Unknown>
+                            <Link
+                                          className="navbar-item top-nav__profile-link"
+                                          onClick={[Function]}
+                                          replace={false}
+                                          to="/user/profile"
+                            >
+                                          <span
+                                                        className="item-text"
+                                          >
+                                                        <FormattedMessage
+                                                                      defaultMessage="User Profile"
+                                                                      id="Navbar.links.mobile.userProfile"
+                                                                      values={Object {}}
+                                                        />
+                                          </span>
+                            </Link>
+                            <a
+                                          className="navbar-item top-nav__signout-link"
+                                          onClick={[Function]}
+                            >
+                                          <span
+                                                        className="item-text"
+                                          >
+                                                        Sign Out
+                                          </span>
+                            </a>
+              </Unknown>
+</Menu>,
+            "query": "(max-width: 1023px)",
+            "values": Object {},
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "bodyClassName": "",
+              "burgerBarClassName": "",
+              "burgerButtonClassName": "",
+              "children": Array [
+                <NavbarPrimaryLinks
                   location={
                                     Object {
                                                       "pathname": "/some/path",
                                                     }
                   }
+                  onLinkClick={[Function]}
                   user={
                                     Object {
                                                       "id": 357,
@@ -2401,17 +2746,84 @@ ShallowWrapper {
                                                     }
                   }
 />,
-                "className": "navbar-end",
+                <Unknown>
+                  <Link
+                                    className="navbar-item top-nav__profile-link"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/user/profile"
+                  >
+                                    <span
+                                                      className="item-text"
+                                    >
+                                                      <FormattedMessage
+                                                                        defaultMessage="User Profile"
+                                                                        id="Navbar.links.mobile.userProfile"
+                                                                        values={Object {}}
+                                                      />
+                                    </span>
+                  </Link>
+                  <a
+                                    className="navbar-item top-nav__signout-link"
+                                    onClick={[Function]}
+                  >
+                                    <span
+                                                      className="item-text"
+                                    >
+                                                      Sign Out
+                                    </span>
+                  </a>
+</Unknown>,
+                false,
+              ],
+              "className": "",
+              "crossButtonClassName": "",
+              "crossClassName": "",
+              "customBurgerIcon": <SvgSymbol
+                sym="menu-icon"
+                viewBox="0 0 20 20"
+/>,
+              "customCrossIcon": <SvgSymbol
+                sym="cross-icon"
+                viewBox="0 0 20 20"
+/>,
+              "disableCloseOnEsc": false,
+              "id": "",
+              "isOpen": false,
+              "itemListClassName": "",
+              "menuClassName": "",
+              "morphShapeClassName": "",
+              "noOverlay": false,
+              "onStateChange": [Function],
+              "outerContainerId": "",
+              "overlayClassName": "",
+              "pageWrapId": "",
+              "right": true,
+              "styles": Object {
+                "bmCrossButton": Object {
+                  "right": "16px",
+                  "top": "20px",
+                },
+                "bmMenuWrap": Object {
+                  "width": "275px",
+                },
+                "bmOverlay": Object {
+                  "background": "rgb(0,165,146, 0.7)",
+                },
               },
-              "ref": null,
-              "rendered": Object {
+              "width": 300,
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "function",
                 "props": Object {
                   "location": Object {
                     "pathname": "/some/path",
                   },
+                  "onLinkClick": [Function],
                   "user": Object {
                     "id": 357,
                     "isLoggedIn": true,
@@ -2421,10 +2833,128 @@ ShallowWrapper {
                 "rendered": null,
                 "type": [Function],
               },
-              "type": "div",
-            },
-          ],
-          "type": "div",
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "children": Array [
+                    <Link
+                      className="navbar-item top-nav__profile-link"
+                      onClick={[Function]}
+                      replace={false}
+                      to="/user/profile"
+>
+                      <span
+                                            className="item-text"
+                      >
+                                            <FormattedMessage
+                                                                  defaultMessage="User Profile"
+                                                                  id="Navbar.links.mobile.userProfile"
+                                                                  values={Object {}}
+                                            />
+                      </span>
+</Link>,
+                    <a
+                      className="navbar-item top-nav__signout-link"
+                      onClick={[Function]}
+>
+                      <span
+                                            className="item-text"
+                      >
+                                            Sign Out
+                      </span>
+</a>,
+                  ],
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <span
+                        className="item-text"
+>
+                        <FormattedMessage
+                                                defaultMessage="User Profile"
+                                                id="Navbar.links.mobile.userProfile"
+                                                values={Object {}}
+                        />
+</span>,
+                      "className": "navbar-item top-nav__profile-link",
+                      "onClick": [Function],
+                      "replace": false,
+                      "to": "/user/profile",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": <FormattedMessage
+                          defaultMessage="User Profile"
+                          id="Navbar.links.mobile.userProfile"
+                          values={Object {}}
+/>,
+                        "className": "item-text",
+                      },
+                      "ref": null,
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "defaultMessage": "User Profile",
+                          "id": "Navbar.links.mobile.userProfile",
+                          "values": Object {},
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
+                      "type": "span",
+                    },
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <span
+                        className="item-text"
+>
+                        Sign Out
+</span>,
+                      "className": "navbar-item top-nav__signout-link",
+                      "onClick": [Function],
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "Sign Out",
+                        "className": "item-text",
+                      },
+                      "ref": null,
+                      "rendered": "Sign Out",
+                      "type": "span",
+                    },
+                    "type": "a",
+                  },
+                ],
+                "type": Symbol(react.fragment),
+              },
+              false,
+            ],
+            "type": [Function],
+          },
+          "type": [Function],
         },
       ],
       "type": "nav",

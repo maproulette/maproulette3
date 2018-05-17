@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _findIndex from 'lodash/findIndex'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 /**

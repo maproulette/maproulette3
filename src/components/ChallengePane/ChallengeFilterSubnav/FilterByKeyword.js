@@ -11,6 +11,7 @@ import { CHALLENGE_CATEGORY_OTHER,
          keywordLabels }
        from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import NavDropdown from '../../Bulma/NavDropdown'
+import MenuList from '../../Bulma/MenuList'
 import OtherKeywordsOption from './OtherKeywordsOption'
 import messages from './Messages'
 
@@ -81,17 +82,18 @@ export class FilterByKeyword extends Component {
       },
       key: 'other',
       text: localizedKeywordLabels.other,
-      value: otherKeyword,
+      value: 'other',
     })
 
+    const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
-      <NavDropdown placeholder={anyOption.text}
-                   label={this.props.intl.formatMessage(messages.keywordLabel)}
-                   options={selectOptions}
-                   value={_isEmpty(this.props.challengeFilter.keywords) ?
-                          null : {text: localizedKeywordLabels[activeCategory]}}
-                   onChange={this.updateFilter}
-      />
+      <Selection placeholder={anyOption.text}
+                 label={this.props.intl.formatMessage(messages.keywordLabel)}
+                 options={selectOptions}
+                 value={_isEmpty(this.props.challengeFilter.keywords) ?
+                        null : activeCategory}
+                 onChange={this.updateFilter}
+    />
     )
   }
 }
@@ -103,10 +105,13 @@ FilterByKeyword.propTypes = {
   removeChallengeFilters: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
   challengeFilter: PropTypes.object,
+  /** Set to true to render a MenuList instead of NavDropdown */
+  asMenuList: PropTypes.bool,
 }
 
 FilterByKeyword.defaultProps = {
   challengeFilter: {},
+  asMenuList: false,
 }
 
 export default injectIntl(FilterByKeyword)

@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, withRouter } from 'react-router-dom'
+import MediaQuery from 'react-responsive'
 import AsManager from '../../interactions/User/AsManager'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
+import MobileNotSupported
+       from '../MobileNotSupported/MobileNotSupported'
 import Manage from './Manage/Manage'
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
 import EditProject from './Manage/ManageProjects/EditProject/EditProject'
@@ -44,31 +47,39 @@ export class AdminPane extends Component {
     }
 
     return (
-      <div className="admin">
-        <div className="admin-pane">
-          <Switch>
-            <Route exact path='/admin/metrics'
-                   render={props => <MetricsSummary allStatuses={true} {...props} />} />
-            <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
-                   component={EditTask} />
-            <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/review'
-                   component={ReviewTask} />
-            <Route exact path='/admin/project/:projectId/challenge/:challengeId'
-                   component={ViewChallenge} />
-            <Route exact path='/admin/project/:projectId/challenges/new'
-                   component={EditChallenge} />
-            <Route exact path='/admin/project/:projectId/challenge/:challengeId/edit'
-                   component={EditChallenge} />
-            <Route exact path='/admin/project/:projectId/challenge/:challengeId/clone'
-                   component={EditChallenge} />
-            <Route exact path='/admin/project/:projectId/edit' component={EditProject} />
-            <Route exact path='/admin/projects' component={Manage} />
-            <Route exact path='/admin/project/:projectId' component={Manage} />
-            <Route exact path='/admin/projects/new' component={EditProject} />
-            <Route component={Manage} />
-          </Switch>
-        </div>
-      </div>
+      <React.Fragment>
+        <MediaQuery query="(max-width: 1023px)">
+          <MobileNotSupported forPage />
+        </MediaQuery>
+
+        <MediaQuery query="(min-width: 1024px)">
+          <div className="admin">
+            <div className="admin-pane">
+              <Switch>
+                <Route exact path='/admin/metrics'
+                      render={props => <MetricsSummary allStatuses={true} {...props} />} />
+                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
+                      component={EditTask} />
+                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/review'
+                      component={ReviewTask} />
+                <Route exact path='/admin/project/:projectId/challenge/:challengeId'
+                      component={ViewChallenge} />
+                <Route exact path='/admin/project/:projectId/challenges/new'
+                      component={EditChallenge} />
+                <Route exact path='/admin/project/:projectId/challenge/:challengeId/edit'
+                      component={EditChallenge} />
+                <Route exact path='/admin/project/:projectId/challenge/:challengeId/clone'
+                      component={EditChallenge} />
+                <Route exact path='/admin/project/:projectId/edit' component={EditProject} />
+                <Route exact path='/admin/projects' component={Manage} />
+                <Route exact path='/admin/project/:projectId' component={Manage} />
+                <Route exact path='/admin/projects/new' component={EditProject} />
+                <Route component={Manage} />
+              </Switch>
+            </div>
+          </div>
+        </MediaQuery>
+      </React.Fragment>
     )
   }
 }

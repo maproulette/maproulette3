@@ -44,7 +44,7 @@ ShallowWrapper {
           No Challenges
 </div>,
       ],
-      "className": "saved-challenges",
+      "className": "user-profile__saved-challenges",
     },
     "ref": null,
     "rendered": Array [
@@ -113,7 +113,7 @@ ShallowWrapper {
             No Challenges
 </div>,
         ],
-        "className": "saved-challenges",
+        "className": "user-profile__saved-challenges",
       },
       "ref": null,
       "rendered": Array [
@@ -224,7 +224,7 @@ ShallowWrapper {
 </h2>,
         <ul>
           <li
-                    className="columns saved-challenges__challenge"
+                    className="user-profile__saved-challenges__challenge"
           >
                     <Link
                               replace={false}
@@ -248,7 +248,7 @@ ShallowWrapper {
                     </a>
           </li>
           <li
-                    className="columns saved-challenges__challenge"
+                    className="user-profile__saved-challenges__challenge"
           >
                     <Link
                               replace={false}
@@ -272,7 +272,7 @@ ShallowWrapper {
                     </a>
           </li>
           <li
-                    className="columns saved-challenges__challenge"
+                    className="user-profile__saved-challenges__challenge"
           >
                     <Link
                               replace={false}
@@ -297,7 +297,7 @@ ShallowWrapper {
           </li>
 </ul>,
       ],
-      "className": "saved-challenges",
+      "className": "user-profile__saved-challenges",
     },
     "ref": null,
     "rendered": Array [
@@ -336,7 +336,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <li
-              className="columns saved-challenges__challenge"
+              className="user-profile__saved-challenges__challenge"
 >
               <Link
                             replace={false}
@@ -360,7 +360,7 @@ ShallowWrapper {
               </a>
 </li>,
             <li
-              className="columns saved-challenges__challenge"
+              className="user-profile__saved-challenges__challenge"
 >
               <Link
                             replace={false}
@@ -384,7 +384,7 @@ ShallowWrapper {
               </a>
 </li>,
             <li
-              className="columns saved-challenges__challenge"
+              className="user-profile__saved-challenges__challenge"
 >
               <Link
                             replace={false}
@@ -438,7 +438,7 @@ ShallowWrapper {
                   />
 </a>,
               ],
-              "className": "columns saved-challenges__challenge",
+              "className": "user-profile__saved-challenges__challenge",
             },
             "ref": null,
             "rendered": Array [
@@ -526,7 +526,7 @@ ShallowWrapper {
                   />
 </a>,
               ],
-              "className": "columns saved-challenges__challenge",
+              "className": "user-profile__saved-challenges__challenge",
             },
             "ref": null,
             "rendered": Array [
@@ -614,7 +614,7 @@ ShallowWrapper {
                   />
 </a>,
               ],
-              "className": "columns saved-challenges__challenge",
+              "className": "user-profile__saved-challenges__challenge",
             },
             "ref": null,
             "rendered": Array [
@@ -699,7 +699,7 @@ ShallowWrapper {
 </h2>,
           <ul>
             <li
-                        className="columns saved-challenges__challenge"
+                        className="user-profile__saved-challenges__challenge"
             >
                         <Link
                                     replace={false}
@@ -723,7 +723,7 @@ ShallowWrapper {
                         </a>
             </li>
             <li
-                        className="columns saved-challenges__challenge"
+                        className="user-profile__saved-challenges__challenge"
             >
                         <Link
                                     replace={false}
@@ -747,7 +747,7 @@ ShallowWrapper {
                         </a>
             </li>
             <li
-                        className="columns saved-challenges__challenge"
+                        className="user-profile__saved-challenges__challenge"
             >
                         <Link
                                     replace={false}
@@ -772,7 +772,7 @@ ShallowWrapper {
             </li>
 </ul>,
         ],
-        "className": "saved-challenges",
+        "className": "user-profile__saved-challenges",
       },
       "ref": null,
       "rendered": Array [
@@ -811,7 +811,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <li
-                className="columns saved-challenges__challenge"
+                className="user-profile__saved-challenges__challenge"
 >
                 <Link
                                 replace={false}
@@ -835,7 +835,7 @@ ShallowWrapper {
                 </a>
 </li>,
               <li
-                className="columns saved-challenges__challenge"
+                className="user-profile__saved-challenges__challenge"
 >
                 <Link
                                 replace={false}
@@ -859,7 +859,7 @@ ShallowWrapper {
                 </a>
 </li>,
               <li
-                className="columns saved-challenges__challenge"
+                className="user-profile__saved-challenges__challenge"
 >
                 <Link
                                 replace={false}
@@ -913,7 +913,7 @@ ShallowWrapper {
                     />
 </a>,
                 ],
-                "className": "columns saved-challenges__challenge",
+                "className": "user-profile__saved-challenges__challenge",
               },
               "ref": null,
               "rendered": Array [
@@ -1001,7 +1001,7 @@ ShallowWrapper {
                     />
 </a>,
                 ],
-                "className": "columns saved-challenges__challenge",
+                "className": "user-profile__saved-challenges__challenge",
               },
               "ref": null,
               "rendered": Array [
@@ -1089,7 +1089,7 @@ ShallowWrapper {
                     />
 </a>,
                 ],
-                "className": "columns saved-challenges__challenge",
+                "className": "user-profile__saved-challenges__challenge",
               },
               "ref": null,
               "rendered": Array [

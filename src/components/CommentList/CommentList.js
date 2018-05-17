@@ -5,11 +5,13 @@ import { FormattedMessage,
          FormattedDate,
          FormattedTime } from 'react-intl'
 import { Link } from 'react-router-dom'
-import MarkdownContent from '../MarkdownContent/MarkdownContent'
+import parse from 'date-fns/parse'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
+import _each from 'lodash/each'
+import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import messages from './Messages'
 import './CommentList.css'
 
@@ -25,8 +27,14 @@ export default class CommentList extends Component {
       return <div className="comment-list none">No Comments</div>
     }
 
+    const commentDates = new Map()
+    _each(this.props.comments,
+          comment => commentDates.set(comment.id, parse(comment.created)))
+
     // Show in descending order, with the most recent comment first.
-    const sortedComments = _reverse(_sortBy(this.props.comments, 'created'))
+    const sortedComments =
+      _reverse(_sortBy(this.props.comments,
+                       comment => commentDates.get(comment.id).getTime()))
 
     const commentItems = _map(sortedComments, comment =>
       !_isObject(comment) ? null : (
@@ -37,16 +45,16 @@ export default class CommentList extends Component {
             </div>
             <div className="comment-list__comment--published-at">
               <span className="time-part">
-                <FormattedTime value={new Date(comment.created)}
-                              hour='2-digit'
-                              minute='2-digit' />,
+                <FormattedTime value={commentDates.get(comment.id)}
+                               hour='2-digit'
+                               minute='2-digit' />,
               </span>
 
               <span className="date-part">
-                <FormattedDate value={new Date(comment.created)}
-                              year='numeric'
-                              month='long'
-                              day='2-digit' />
+                <FormattedDate value={commentDates.get(comment.id)}
+                               year='numeric'
+                               month='long'
+                               day='2-digit' />
               </span>
             </div>
           </div>
@@ -82,7 +90,7 @@ CommentList.propTypes = {
       id: PropTypes.number,
       osm_username: PropTypes.string,
       comment: PropTypes.string,
-      created: PropTypes.number,
+      created: PropTypes.string,
     })
   ),
   /**

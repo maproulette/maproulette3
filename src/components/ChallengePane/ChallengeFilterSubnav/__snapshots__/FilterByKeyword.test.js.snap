@@ -5,6 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FilterByKeyword
+    asMenuList={false}
     challengeFilter={
         Object {
             "difficulty": 1,
@@ -114,16 +115,14 @@ ShallowWrapper {
             "setSearch": [Function],
           },
           "text": undefined,
-          "value": "C",
+          "value": "other",
         },
       ],
       "outsideClickIgnoreClass": "ignore-react-onclickoutside",
       "placeholder": undefined,
       "preventDefault": false,
       "stopPropagation": false,
-      "value": Object {
-        "text": undefined,
-      },
+      "value": "other",
     },
     "ref": null,
     "rendered": null,
@@ -190,16 +189,14 @@ ShallowWrapper {
               "setSearch": [Function],
             },
             "text": undefined,
-            "value": "C",
+            "value": "other",
           },
         ],
         "outsideClickIgnoreClass": "ignore-react-onclickoutside",
         "placeholder": undefined,
         "preventDefault": false,
         "stopPropagation": false,
-        "value": Object {
-          "text": undefined,
-        },
+        "value": "other",
       },
       "ref": null,
       "rendered": null,

@@ -1,0 +1,32 @@
+@import 'variables.scss';
+
+.mobile-filter-menu {
+  padding: 8px 10px;
+
+  .dropdown-trigger {
+    margin-top: 3px;
+  }
+
+  &__label {
+    position: relative;
+    color: $blue;
+    text-transform: uppercase;
+    font-size: $size-8;
+    font-weight: $weight-medium;
+    letter-spacing: $letter-spacing-medium;
+  }
+
+  aside.menu {
+    width: 250px;
+    max-height: 65vh;
+    overflow-y: auto;
+
+    .challenge_filter_subnav__other-keywords {
+      padding: 6px 0.75em 6px 1.25em;
+
+      .search-box button.is-clear {
+        height: 20px;
+      }
+    }
+  }
+}

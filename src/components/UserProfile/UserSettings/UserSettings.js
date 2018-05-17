@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import Form from 'react-jsonschema-form'
 import _debounce from 'lodash/debounce'
 import _merge from 'lodash/merge'
@@ -60,7 +61,7 @@ export class UserSettings extends Component {
     }
 
     return (
-      <div className="user-settings">
+      <div className={classNames("user-profile__user-settings", this.props.className)}>
         <h2 className="subtitle">
           <FormattedMessage {...messages.header} />
           {saveIndicator}

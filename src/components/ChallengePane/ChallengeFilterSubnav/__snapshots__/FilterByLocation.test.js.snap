@@ -5,6 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FilterByLocation
+    asMenuList={false}
     challengeFilter={
         Object {
             "difficulty": 1,
@@ -78,7 +79,7 @@ ShallowWrapper {
         Object {
           "key": "any",
           "text": undefined,
-          "value": null,
+          "value": undefined,
         },
         Object {
           "key": "withinMapBounds",
@@ -118,7 +119,7 @@ ShallowWrapper {
           Object {
             "key": "any",
             "text": undefined,
-            "value": null,
+            "value": undefined,
           },
           Object {
             "key": "withinMapBounds",

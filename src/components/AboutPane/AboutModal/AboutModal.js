@@ -36,7 +36,7 @@ export class AboutModal extends Component {
              isActive={true}
              onClose={this.finishModal}>
         <div className='about-modal__content'>
-          <div className='columns is-centered is-mobile'>
+          <div className='columns is-centered is-mobile icon-columns'>
             <div className='column is-narrow'>
               <SvgSymbol viewBox='0 0 20 20' sym="about-icon" className="about-modal__icon"/>
             </div>

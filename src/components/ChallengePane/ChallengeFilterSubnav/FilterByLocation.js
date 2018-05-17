@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import _map from 'lodash/map'
 import _reject from 'lodash/reject'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import { injectIntl } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
+import MenuList from '../../Bulma/MenuList'
 import { ChallengeLocation,
          locationLabels }
        from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
@@ -24,7 +26,7 @@ export class FilterByLocation extends Component {
    * @private
    */
   updateFilter = ({ value }) => {
-    if (value === null) {
+    if (_isEmpty(value)) {
       this.props.removeChallengeFilters(['location'])
     }
     else {
@@ -58,7 +60,7 @@ export class FilterByLocation extends Component {
     const anyOption = {
       key: 'any',
       text: localizedLocationLabels.any,
-      value: null,
+      value: undefined,
     }
     selectOptions.unshift(anyOption)
 
@@ -67,12 +69,13 @@ export class FilterByLocation extends Component {
       selectOptions = _reject(selectOptions, {value: ChallengeLocation.nearMe})
     }
 
+    const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
-      <NavDropdown placeholder={anyOption.text}
-                   label={this.props.intl.formatMessage(messages.locationLabel)}
-                   options={selectOptions}
-                   value={this.props.challengeFilter.location}
-                   onChange={this.updateFilter}
+      <Selection placeholder={anyOption.text}
+                 label={this.props.intl.formatMessage(messages.locationLabel)}
+                 options={selectOptions}
+                 value={this.props.challengeFilter.location}
+                 onChange={this.updateFilter}
       />
     )
   }
@@ -93,10 +96,13 @@ FilterByLocation.propTypes = {
   challengeFilter: PropTypes.object,
   /** The current logged-in user, if any */
   user: PropTypes.object,
+  /** Set to true to render a MenuList instead of NavDropdown */
+  asMenuList: PropTypes.bool,
 }
 
 FilterByLocation.defaultProps = {
   challengeFilter: {},
+  asMenuList: false,
 }
 
 export default injectIntl(FilterByLocation)

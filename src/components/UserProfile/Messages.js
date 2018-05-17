@@ -8,4 +8,19 @@ export default defineMessages({
     id: "UserProfile.apiKey.header",
     defaultMessage: "API Key",
   },
+
+  overviewTab: {
+    id: "UserProfile.tabs.overview",
+    defaultMessage: "Overview",
+  },
+
+  activityTab: {
+    id: "UserProfile.tabs.activity",
+    defaultMessage: "Activity",
+  },
+
+  settingsTab: {
+    id: "UserProfile.tabs.settings",
+    defaultMessage: "Settings",
+  },
 })

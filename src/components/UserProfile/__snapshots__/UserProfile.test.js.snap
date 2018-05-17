@@ -5,6 +5,11 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <UserProfile
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
     user={
         Object {
             "created": 1487808000000,
@@ -30,6 +35,11 @@ ShallowWrapper {
     "props": Object {
       "children": <Connect(SignInButton)
         className="user-profile--signin"
+        intl={
+                Object {
+                        "formatMessage": [Function],
+                      }
+        }
         user={
                 Object {
                         "created": 1487808000000,
@@ -50,6 +60,9 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "className": "user-profile--signin",
+        "intl": Object {
+          "formatMessage": [Function],
+        },
         "user": Object {
           "created": 1487808000000,
           "id": 357,
@@ -73,6 +86,11 @@ ShallowWrapper {
       "props": Object {
         "children": <Connect(SignInButton)
           className="user-profile--signin"
+          intl={
+                    Object {
+                              "formatMessage": [Function],
+                            }
+          }
           user={
                     Object {
                               "created": 1487808000000,
@@ -93,6 +111,9 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "className": "user-profile--signin",
+          "intl": Object {
+            "formatMessage": [Function],
+          },
           "user": Object {
             "created": 1487808000000,
             "id": 357,
@@ -124,6 +145,11 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <UserProfile
+    intl={
+        Object {
+            "formatMessage": [Function],
+          }
+    }
     user={
         Object {
             "created": 1487808000000,
@@ -147,198 +173,313 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "host",
     "props": Object {
-      "children": <div
-        className="columns"
+      "children": Array [
+        <MediaQuery
+          query="(min-width: 1024px)"
+          values={Object {}}
 >
-        <div
-                className="column is-two-fifths left-column"
-        >
-                <section
-                        className="user-profile__personal"
-                >
-                        <figure
-                                className="user-profile__personal--avatar image is-128x128"
-                        >
-                                <img
-                                        alt="Avatar"
-                                        src="some/url"
-                                />
-                        </figure>
-                        <div
-                                className="user-profile__personal__about"
-                        >
-                                <div
-                                        className="user-profile__personal__display-name"
-                                />
-                                <div
-                                        className="user-profile__personal__created"
-                                >
-                                        User since: 
-                                        <span
-                                                className="user-profile__personal__value"
-                                        >
-                                                <FormattedDate
-                                                        month="long"
-                                                        value={2017-02-23T00:00:00.000Z}
-                                                        year="numeric"
-                                                />
-                                        </span>
-                                </div>
-                        </div>
-                </section>
-                <section
-                        className="user-profile__activity"
-                >
-                        <InjectIntl(UserActivityTimeline)
-                                activity={undefined}
-                        />
-                </section>
-        </div>
-        <div
-                className="column right-column"
-        >
-                <section
-                        className="user-profile__top-challenges"
-                >
-                        <TopChallenges
-                                user={
-                                        Object {
-                                                "created": 1487808000000,
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                                "osmProfile": Object {
-                                                  "avatarURL": "some/url",
-                                                },
-                                              }
-                                }
-                        />
-                </section>
-                <section
-                        className="user-profile__saved-challenges"
-                >
-                        <SavedChallenges
-                                user={
-                                        Object {
-                                                "created": 1487808000000,
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                                "osmProfile": Object {
-                                                  "avatarURL": "some/url",
-                                                },
-                                              }
-                                }
-                        />
-                </section>
-                <section
-                        className="user-profile__saved-tasks"
-                >
-                        <SavedTasks
-                                user={
-                                        Object {
-                                                "created": 1487808000000,
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                                "osmProfile": Object {
-                                                  "avatarURL": "some/url",
-                                                },
-                                              }
-                                }
-                        />
-                </section>
-                <section
-                        className="user-profile__user-settings"
-                >
-                        <InjectIntl(UserSettings)
-                                user={
-                                        Object {
-                                                "created": 1487808000000,
-                                                "id": 357,
-                                                "isLoggedIn": true,
-                                                "osmProfile": Object {
-                                                  "avatarURL": "some/url",
-                                                },
-                                              }
-                                }
-                        />
-                </section>
-                <section
-                        className="user-profile__api-key"
-                >
-                        <h2
-                                className="subtitle"
-                        >
-                                <FormattedMessage
-                                        defaultMessage="API Key"
-                                        id="UserProfile.apiKey.header"
-                                        values={Object {}}
-                                />
-                        </h2>
-                        <pre
-                                className="user-profile__api-key--current-key"
-                        />
-                </section>
-        </div>
-</div>,
+          <div
+                    className="columns"
+          >
+                    <div
+                              className="column is-two-fifths left-column"
+                    >
+                              <PersonalInfo
+                                        className="profile-section"
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                              <InjectIntl(UserActivityTimeline)
+                                        activity={undefined}
+                                        className="user-profile__activity profile-section"
+                              />
+                    </div>
+                    <div
+                              className="column right-column"
+                    >
+                              <TopChallenges
+                                        className="profile-section"
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                              <SavedChallenges
+                                        className="profile-section"
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                              <SavedTasks
+                                        className="profile-section"
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                              <InjectIntl(UserSettings)
+                                        className="profile-section"
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                              <ApiKey
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        user={
+                                                  Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                        }
+                              />
+                    </div>
+          </div>
+</MediaQuery>,
+        <MediaQuery
+          query="(max-width: 1023px)"
+          values={Object {}}
+>
+          <PersonalInfo
+                    className="profile-section"
+                    intl={
+                              Object {
+                                        "formatMessage": [Function],
+                                      }
+                    }
+                    user={
+                              Object {
+                                        "created": 1487808000000,
+                                        "id": 357,
+                                        "isLoggedIn": true,
+                                        "osmProfile": Object {
+                                          "avatarURL": "some/url",
+                                        },
+                                      }
+                    }
+          />
+          <Tabs
+                    className="is-centered"
+                    tabs={
+                              Object {
+                                        "Activity": <div>
+                                          <InjectIntl(UserActivityTimeline)
+                                                      activity={undefined}
+                                                      className="user-profile__activity profile-section"
+                                          />
+                              </div>,
+                                        "Overview": <div>
+                                          <TopChallenges
+                                                      className="profile-section"
+                                                      intl={
+                                                                  Object {
+                                                                              "formatMessage": [Function],
+                                                                            }
+                                                      }
+                                                      user={
+                                                                  Object {
+                                                                              "created": 1487808000000,
+                                                                              "id": 357,
+                                                                              "isLoggedIn": true,
+                                                                              "osmProfile": Object {
+                                                                                "avatarURL": "some/url",
+                                                                              },
+                                                                            }
+                                                      }
+                                          />
+                                          <SavedChallenges
+                                                      className="profile-section"
+                                                      intl={
+                                                                  Object {
+                                                                              "formatMessage": [Function],
+                                                                            }
+                                                      }
+                                                      user={
+                                                                  Object {
+                                                                              "created": 1487808000000,
+                                                                              "id": 357,
+                                                                              "isLoggedIn": true,
+                                                                              "osmProfile": Object {
+                                                                                "avatarURL": "some/url",
+                                                                              },
+                                                                            }
+                                                      }
+                                          />
+                                          <SavedTasks
+                                                      className="profile-section"
+                                                      intl={
+                                                                  Object {
+                                                                              "formatMessage": [Function],
+                                                                            }
+                                                      }
+                                                      user={
+                                                                  Object {
+                                                                              "created": 1487808000000,
+                                                                              "id": 357,
+                                                                              "isLoggedIn": true,
+                                                                              "osmProfile": Object {
+                                                                                "avatarURL": "some/url",
+                                                                              },
+                                                                            }
+                                                      }
+                                          />
+                              </div>,
+                                        "Settings": <div>
+                                          <InjectIntl(UserSettings)
+                                                      className="profile-section"
+                                                      intl={
+                                                                  Object {
+                                                                              "formatMessage": [Function],
+                                                                            }
+                                                      }
+                                                      user={
+                                                                  Object {
+                                                                              "created": 1487808000000,
+                                                                              "id": 357,
+                                                                              "isLoggedIn": true,
+                                                                              "osmProfile": Object {
+                                                                                "avatarURL": "some/url",
+                                                                              },
+                                                                            }
+                                                      }
+                                          />
+                                          <ApiKey
+                                                      intl={
+                                                                  Object {
+                                                                              "formatMessage": [Function],
+                                                                            }
+                                                      }
+                                                      user={
+                                                                  Object {
+                                                                              "created": 1487808000000,
+                                                                              "id": 357,
+                                                                              "isLoggedIn": true,
+                                                                              "osmProfile": Object {
+                                                                                "avatarURL": "some/url",
+                                                                              },
+                                                                            }
+                                                      }
+                                          />
+                              </div>,
+                                      }
+                    }
+          />
+</MediaQuery>,
+      ],
       "className": "user-profile",
     },
     "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          <div
-            className="column is-two-fifths left-column"
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": <div
+            className="columns"
 >
-            <section
-                        className="user-profile__personal"
+            <div
+                        className="column is-two-fifths left-column"
             >
-                        <figure
-                                    className="user-profile__personal--avatar image is-128x128"
-                        >
-                                    <img
-                                                alt="Avatar"
-                                                src="some/url"
-                                    />
-                        </figure>
-                        <div
-                                    className="user-profile__personal__about"
-                        >
-                                    <div
-                                                className="user-profile__personal__display-name"
-                                    />
-                                    <div
-                                                className="user-profile__personal__created"
-                                    >
-                                                User since: 
-                                                <span
-                                                            className="user-profile__personal__value"
-                                                >
-                                                            <FormattedDate
-                                                                        month="long"
-                                                                        value={2017-02-23T00:00:00.000Z}
-                                                                        year="numeric"
-                                                            />
-                                                </span>
-                                    </div>
-                        </div>
-            </section>
-            <section
-                        className="user-profile__activity"
-            >
+                        <PersonalInfo
+                                    className="profile-section"
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                    }
+                        />
                         <InjectIntl(UserActivityTimeline)
                                     activity={undefined}
+                                    className="user-profile__activity profile-section"
                         />
-            </section>
-</div>,
-          <div
-            className="column right-column"
->
-            <section
-                        className="user-profile__top-challenges"
+            </div>
+            <div
+                        className="column right-column"
             >
                         <TopChallenges
+                                    className="profile-section"
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
                                     user={
                                                 Object {
                                                             "created": 1487808000000,
@@ -350,11 +491,13 @@ ShallowWrapper {
                                                           }
                                     }
                         />
-            </section>
-            <section
-                        className="user-profile__saved-challenges"
-            >
                         <SavedChallenges
+                                    className="profile-section"
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
                                     user={
                                                 Object {
                                                             "created": 1487808000000,
@@ -366,11 +509,13 @@ ShallowWrapper {
                                                           }
                                     }
                         />
-            </section>
-            <section
-                        className="user-profile__saved-tasks"
-            >
                         <SavedTasks
+                                    className="profile-section"
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
                                     user={
                                                 Object {
                                                             "created": 1487808000000,
@@ -382,11 +527,13 @@ ShallowWrapper {
                                                           }
                                     }
                         />
-            </section>
-            <section
-                        className="user-profile__user-settings"
-            >
                         <InjectIntl(UserSettings)
+                                    className="profile-section"
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
                                     user={
                                                 Object {
                                                             "created": 1487808000000,
@@ -398,282 +545,71 @@ ShallowWrapper {
                                                           }
                                     }
                         />
-            </section>
-            <section
-                        className="user-profile__api-key"
-            >
-                        <h2
-                                    className="subtitle"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="API Key"
-                                                id="UserProfile.apiKey.header"
-                                                values={Object {}}
-                                    />
-                        </h2>
-                        <pre
-                                    className="user-profile__api-key--current-key"
+                        <ApiKey
+                                    intl={
+                                                Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                    }
+                                    user={
+                                                Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                                    }
                         />
-            </section>
+            </div>
 </div>,
-        ],
-        "className": "columns",
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
+          "query": "(min-width: 1024px)",
+          "values": Object {},
+        },
+        "ref": null,
+        "rendered": Object {
           "instance": null,
           "key": undefined,
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <section
-                className="user-profile__personal"
+              <div
+                className="column is-two-fifths left-column"
 >
-                <figure
-                                className="user-profile__personal--avatar image is-128x128"
-                >
-                                <img
-                                                alt="Avatar"
-                                                src="some/url"
-                                />
-                </figure>
-                <div
-                                className="user-profile__personal__about"
-                >
-                                <div
-                                                className="user-profile__personal__display-name"
-                                />
-                                <div
-                                                className="user-profile__personal__created"
-                                >
-                                                User since: 
-                                                <span
-                                                                className="user-profile__personal__value"
-                                                >
-                                                                <FormattedDate
-                                                                                month="long"
-                                                                                value={2017-02-23T00:00:00.000Z}
-                                                                                year="numeric"
-                                                                />
-                                                </span>
-                                </div>
-                </div>
-</section>,
-              <section
-                className="user-profile__activity"
->
+                <PersonalInfo
+                                className="profile-section"
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "created": 1487808000000,
+                                                                "id": 357,
+                                                                "isLoggedIn": true,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "some/url",
+                                                                },
+                                                              }
+                                }
+                />
                 <InjectIntl(UserActivityTimeline)
                                 activity={undefined}
+                                className="user-profile__activity profile-section"
                 />
-</section>,
-            ],
-            "className": "column is-two-fifths left-column",
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <figure
-                    className="user-profile__personal--avatar image is-128x128"
->
-                    <img
-                                        alt="Avatar"
-                                        src="some/url"
-                    />
-</figure>,
-                  <div
-                    className="user-profile__personal__about"
->
-                    <div
-                                        className="user-profile__personal__display-name"
-                    />
-                    <div
-                                        className="user-profile__personal__created"
-                    >
-                                        User since: 
-                                        <span
-                                                            className="user-profile__personal__value"
-                                        >
-                                                            <FormattedDate
-                                                                                month="long"
-                                                                                value={2017-02-23T00:00:00.000Z}
-                                                                                year="numeric"
-                                                            />
-                                        </span>
-                    </div>
 </div>,
-                ],
-                "className": "user-profile__personal",
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": <img
-                      alt="Avatar"
-                      src="some/url"
-/>,
-                    "className": "user-profile__personal--avatar image is-128x128",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "alt": "Avatar",
-                      "src": "some/url",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": "img",
-                  },
-                  "type": "figure",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": Array [
-                      <div
-                        className="user-profile__personal__display-name"
-/>,
-                      <div
-                        className="user-profile__personal__created"
->
-                        User since: 
-                        <span
-                                                className="user-profile__personal__value"
-                        >
-                                                <FormattedDate
-                                                                        month="long"
-                                                                        value={2017-02-23T00:00:00.000Z}
-                                                                        year="numeric"
-                                                />
-                        </span>
-</div>,
-                    ],
-                    "className": "user-profile__personal__about",
-                  },
-                  "ref": null,
-                  "rendered": Array [
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": undefined,
-                        "className": "user-profile__personal__display-name",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": Array [
-                          "User since: ",
-                          <span
-                            className="user-profile__personal__value"
->
-                            <FormattedDate
-                                                        month="long"
-                                                        value={2017-02-23T00:00:00.000Z}
-                                                        year="numeric"
-                            />
-</span>,
-                        ],
-                        "className": "user-profile__personal__created",
-                      },
-                      "ref": null,
-                      "rendered": Array [
-                        "User since: ",
-                        Object {
-                          "instance": null,
-                          "key": undefined,
-                          "nodeType": "host",
-                          "props": Object {
-                            "children": <FormattedDate
-                              month="long"
-                              value={2017-02-23T00:00:00.000Z}
-                              year="numeric"
-/>,
-                            "className": "user-profile__personal__value",
-                          },
-                          "ref": null,
-                          "rendered": Object {
-                            "instance": null,
-                            "key": undefined,
-                            "nodeType": "class",
-                            "props": Object {
-                              "month": "long",
-                              "value": 2017-02-23T00:00:00.000Z,
-                              "year": "numeric",
-                            },
-                            "ref": null,
-                            "rendered": null,
-                            "type": [Function],
-                          },
-                          "type": "span",
-                        },
-                      ],
-                      "type": "div",
-                    },
-                  ],
-                  "type": "div",
-                },
-              ],
-              "type": "section",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <InjectIntl(UserActivityTimeline)
-                  activity={undefined}
-/>,
-                "className": "user-profile__activity",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "activity": undefined,
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              "type": "section",
-            },
-          ],
-          "type": "div",
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <section
-                className="user-profile__top-challenges"
+              <div
+                className="column right-column"
 >
                 <TopChallenges
+                                className="profile-section"
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
                                 user={
                                                 Object {
                                                                 "created": 1487808000000,
@@ -685,11 +621,13 @@ ShallowWrapper {
                                                               }
                                 }
                 />
-</section>,
-              <section
-                className="user-profile__saved-challenges"
->
                 <SavedChallenges
+                                className="profile-section"
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
                                 user={
                                                 Object {
                                                                 "created": 1487808000000,
@@ -701,11 +639,13 @@ ShallowWrapper {
                                                               }
                                 }
                 />
-</section>,
-              <section
-                className="user-profile__saved-tasks"
->
                 <SavedTasks
+                                className="profile-section"
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
                                 user={
                                                 Object {
                                                                 "created": 1487808000000,
@@ -717,11 +657,13 @@ ShallowWrapper {
                                                               }
                                 }
                 />
-</section>,
-              <section
-                className="user-profile__user-settings"
->
                 <InjectIntl(UserSettings)
+                                className="profile-section"
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
                                 user={
                                                 Object {
                                                                 "created": 1487808000000,
@@ -733,25 +675,26 @@ ShallowWrapper {
                                                               }
                                 }
                 />
-</section>,
-              <section
-                className="user-profile__api-key"
->
-                <h2
-                                className="subtitle"
-                >
-                                <FormattedMessage
-                                                defaultMessage="API Key"
-                                                id="UserProfile.apiKey.header"
-                                                values={Object {}}
-                                />
-                </h2>
-                <pre
-                                className="user-profile__api-key--current-key"
+                <ApiKey
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                user={
+                                                Object {
+                                                                "created": 1487808000000,
+                                                                "id": 357,
+                                                                "isLoggedIn": true,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "some/url",
+                                                                },
+                                                              }
+                                }
                 />
-</section>,
+</div>,
             ],
-            "className": "column right-column",
+            "className": "columns",
           },
           "ref": null,
           "rendered": Array [
@@ -760,233 +703,562 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <TopChallenges
-                  user={
-                                    Object {
-                                                      "created": 1487808000000,
-                                                      "id": 357,
-                                                      "isLoggedIn": true,
-                                                      "osmProfile": Object {
-                                                        "avatarURL": "some/url",
-                                                      },
-                                                    }
-                  }
-/>,
-                "className": "user-profile__top-challenges",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "user": Object {
-                    "created": 1487808000000,
-                    "id": 357,
-                    "isLoggedIn": true,
-                    "osmProfile": Object {
-                      "avatarURL": "some/url",
-                    },
-                  },
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              "type": "section",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <SavedChallenges
-                  user={
-                                    Object {
-                                                      "created": 1487808000000,
-                                                      "id": 357,
-                                                      "isLoggedIn": true,
-                                                      "osmProfile": Object {
-                                                        "avatarURL": "some/url",
-                                                      },
-                                                    }
-                  }
-/>,
-                "className": "user-profile__saved-challenges",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "user": Object {
-                    "created": 1487808000000,
-                    "id": 357,
-                    "isLoggedIn": true,
-                    "osmProfile": Object {
-                      "avatarURL": "some/url",
-                    },
-                  },
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              "type": "section",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <SavedTasks
-                  user={
-                                    Object {
-                                                      "created": 1487808000000,
-                                                      "id": 357,
-                                                      "isLoggedIn": true,
-                                                      "osmProfile": Object {
-                                                        "avatarURL": "some/url",
-                                                      },
-                                                    }
-                  }
-/>,
-                "className": "user-profile__saved-tasks",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "user": Object {
-                    "created": 1487808000000,
-                    "id": 357,
-                    "isLoggedIn": true,
-                    "osmProfile": Object {
-                      "avatarURL": "some/url",
-                    },
-                  },
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              "type": "section",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <InjectIntl(UserSettings)
-                  user={
-                                    Object {
-                                                      "created": 1487808000000,
-                                                      "id": 357,
-                                                      "isLoggedIn": true,
-                                                      "osmProfile": Object {
-                                                        "avatarURL": "some/url",
-                                                      },
-                                                    }
-                  }
-/>,
-                "className": "user-profile__user-settings",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "user": Object {
-                    "created": 1487808000000,
-                    "id": 357,
-                    "isLoggedIn": true,
-                    "osmProfile": Object {
-                      "avatarURL": "some/url",
-                    },
-                  },
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              "type": "section",
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
                 "children": Array [
-                  <h2
-                    className="subtitle"
->
-                    <FormattedMessage
-                                        defaultMessage="API Key"
-                                        id="UserProfile.apiKey.header"
-                                        values={Object {}}
-                    />
-</h2>,
-                  <pre
-                    className="user-profile__api-key--current-key"
+                  <PersonalInfo
+                    className="profile-section"
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  <InjectIntl(UserActivityTimeline)
+                    activity={undefined}
+                    className="user-profile__activity profile-section"
 />,
                 ],
-                "className": "user-profile__api-key",
+                "className": "column is-two-fifths left-column",
               },
               "ref": null,
               "rendered": Array [
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
-                    "children": <FormattedMessage
-                      defaultMessage="API Key"
-                      id="UserProfile.apiKey.header"
-                      values={Object {}}
-/>,
-                    "className": "subtitle",
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "defaultMessage": "API Key",
-                      "id": "UserProfile.apiKey.header",
-                      "values": Object {},
+                    "className": "profile-section",
+                    "intl": Object {
+                      "formatMessage": [Function],
                     },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "type": "h2",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": undefined,
-                    "className": "user-profile__api-key--current-key",
+                    "user": Object {
+                      "created": 1487808000000,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
                   },
                   "ref": null,
                   "rendered": null,
-                  "type": "pre",
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "activity": undefined,
+                    "className": "user-profile__activity profile-section",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
                 },
               ],
-              "type": "section",
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <TopChallenges
+                    className="profile-section"
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  <SavedChallenges
+                    className="profile-section"
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  <SavedTasks
+                    className="profile-section"
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  <InjectIntl(UserSettings)
+                    className="profile-section"
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                  <ApiKey
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    user={
+                                        Object {
+                                                            "created": 1487808000000,
+                                                            "id": 357,
+                                                            "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "some/url",
+                                                            },
+                                                          }
+                    }
+/>,
+                ],
+                "className": "column right-column",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "className": "profile-section",
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "user": Object {
+                      "created": 1487808000000,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "className": "profile-section",
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "user": Object {
+                      "created": 1487808000000,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "className": "profile-section",
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "user": Object {
+                      "created": 1487808000000,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "className": "profile-section",
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "user": Object {
+                      "created": 1487808000000,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "user": Object {
+                      "created": 1487808000000,
+                      "id": 357,
+                      "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "some/url",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "div",
             },
           ],
           "type": "div",
         },
-      ],
-      "type": "div",
-    },
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <PersonalInfo
+              className="profile-section"
+              intl={
+                            Object {
+                                          "formatMessage": [Function],
+                                        }
+              }
+              user={
+                            Object {
+                                          "created": 1487808000000,
+                                          "id": 357,
+                                          "isLoggedIn": true,
+                                          "osmProfile": Object {
+                                            "avatarURL": "some/url",
+                                          },
+                                        }
+              }
+/>,
+            <Tabs
+              className="is-centered"
+              tabs={
+                            Object {
+                                          "Activity": <div>
+                                            <InjectIntl(UserActivityTimeline)
+                                                            activity={undefined}
+                                                            className="user-profile__activity profile-section"
+                                            />
+                            </div>,
+                                          "Overview": <div>
+                                            <TopChallenges
+                                                            className="profile-section"
+                                                            intl={
+                                                                            Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                            }
+                                                            user={
+                                                                            Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                            }
+                                            />
+                                            <SavedChallenges
+                                                            className="profile-section"
+                                                            intl={
+                                                                            Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                            }
+                                                            user={
+                                                                            Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                            }
+                                            />
+                                            <SavedTasks
+                                                            className="profile-section"
+                                                            intl={
+                                                                            Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                            }
+                                                            user={
+                                                                            Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                            }
+                                            />
+                            </div>,
+                                          "Settings": <div>
+                                            <InjectIntl(UserSettings)
+                                                            className="profile-section"
+                                                            intl={
+                                                                            Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                            }
+                                                            user={
+                                                                            Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                            }
+                                            />
+                                            <ApiKey
+                                                            intl={
+                                                                            Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                            }
+                                                            user={
+                                                                            Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                            }
+                                            />
+                            </div>,
+                                        }
+              }
+/>,
+          ],
+          "query": "(max-width: 1023px)",
+          "values": Object {},
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "className": "profile-section",
+              "intl": Object {
+                "formatMessage": [Function],
+              },
+              "user": Object {
+                "created": 1487808000000,
+                "id": 357,
+                "isLoggedIn": true,
+                "osmProfile": Object {
+                  "avatarURL": "some/url",
+                },
+              },
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "className": "is-centered",
+              "tabs": Object {
+                "Activity": <div>
+                  <InjectIntl(UserActivityTimeline)
+                                    activity={undefined}
+                                    className="user-profile__activity profile-section"
+                  />
+</div>,
+                "Overview": <div>
+                  <TopChallenges
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+                  <SavedChallenges
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+                  <SavedTasks
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+</div>,
+                "Settings": <div>
+                  <InjectIntl(UserSettings)
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+                  <ApiKey
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
+</div>,
+              },
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+    ],
     "type": "div",
   },
   Symbol(enzyme.__nodes__): Array [
@@ -995,198 +1267,313 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "host",
       "props": Object {
-        "children": <div
-          className="columns"
+        "children": Array [
+          <MediaQuery
+            query="(min-width: 1024px)"
+            values={Object {}}
 >
-          <div
-                    className="column is-two-fifths left-column"
-          >
-                    <section
-                              className="user-profile__personal"
-                    >
-                              <figure
-                                        className="user-profile__personal--avatar image is-128x128"
-                              >
-                                        <img
-                                                  alt="Avatar"
-                                                  src="some/url"
-                                        />
-                              </figure>
-                              <div
-                                        className="user-profile__personal__about"
-                              >
-                                        <div
-                                                  className="user-profile__personal__display-name"
-                                        />
-                                        <div
-                                                  className="user-profile__personal__created"
-                                        >
-                                                  User since: 
-                                                  <span
-                                                            className="user-profile__personal__value"
-                                                  >
-                                                            <FormattedDate
-                                                                      month="long"
-                                                                      value={2017-02-23T00:00:00.000Z}
-                                                                      year="numeric"
-                                                            />
-                                                  </span>
-                                        </div>
-                              </div>
-                    </section>
-                    <section
-                              className="user-profile__activity"
-                    >
-                              <InjectIntl(UserActivityTimeline)
-                                        activity={undefined}
-                              />
-                    </section>
-          </div>
-          <div
-                    className="column right-column"
-          >
-                    <section
-                              className="user-profile__top-challenges"
-                    >
-                              <TopChallenges
-                                        user={
-                                                  Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                                        }
-                              />
-                    </section>
-                    <section
-                              className="user-profile__saved-challenges"
-                    >
-                              <SavedChallenges
-                                        user={
-                                                  Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                                        }
-                              />
-                    </section>
-                    <section
-                              className="user-profile__saved-tasks"
-                    >
-                              <SavedTasks
-                                        user={
-                                                  Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                                        }
-                              />
-                    </section>
-                    <section
-                              className="user-profile__user-settings"
-                    >
-                              <InjectIntl(UserSettings)
-                                        user={
-                                                  Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                                        }
-                              />
-                    </section>
-                    <section
-                              className="user-profile__api-key"
-                    >
-                              <h2
-                                        className="subtitle"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="API Key"
-                                                  id="UserProfile.apiKey.header"
-                                                  values={Object {}}
-                                        />
-                              </h2>
-                              <pre
-                                        className="user-profile__api-key--current-key"
-                              />
-                    </section>
-          </div>
-</div>,
+            <div
+                        className="columns"
+            >
+                        <div
+                                    className="column is-two-fifths left-column"
+                        >
+                                    <PersonalInfo
+                                                className="profile-section"
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                                }
+                                    />
+                                    <InjectIntl(UserActivityTimeline)
+                                                activity={undefined}
+                                                className="user-profile__activity profile-section"
+                                    />
+                        </div>
+                        <div
+                                    className="column right-column"
+                        >
+                                    <TopChallenges
+                                                className="profile-section"
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                                }
+                                    />
+                                    <SavedChallenges
+                                                className="profile-section"
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                                }
+                                    />
+                                    <SavedTasks
+                                                className="profile-section"
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                                }
+                                    />
+                                    <InjectIntl(UserSettings)
+                                                className="profile-section"
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                                }
+                                    />
+                                    <ApiKey
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                user={
+                                                            Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                                }
+                                    />
+                        </div>
+            </div>
+</MediaQuery>,
+          <MediaQuery
+            query="(max-width: 1023px)"
+            values={Object {}}
+>
+            <PersonalInfo
+                        className="profile-section"
+                        intl={
+                                    Object {
+                                                "formatMessage": [Function],
+                                              }
+                        }
+                        user={
+                                    Object {
+                                                "created": 1487808000000,
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "some/url",
+                                                },
+                                              }
+                        }
+            />
+            <Tabs
+                        className="is-centered"
+                        tabs={
+                                    Object {
+                                                "Activity": <div>
+                                                  <InjectIntl(UserActivityTimeline)
+                                                                activity={undefined}
+                                                                className="user-profile__activity profile-section"
+                                                  />
+                                    </div>,
+                                                "Overview": <div>
+                                                  <TopChallenges
+                                                                className="profile-section"
+                                                                intl={
+                                                                              Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                                }
+                                                                user={
+                                                                              Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                                }
+                                                  />
+                                                  <SavedChallenges
+                                                                className="profile-section"
+                                                                intl={
+                                                                              Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                                }
+                                                                user={
+                                                                              Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                                }
+                                                  />
+                                                  <SavedTasks
+                                                                className="profile-section"
+                                                                intl={
+                                                                              Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                                }
+                                                                user={
+                                                                              Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                                }
+                                                  />
+                                    </div>,
+                                                "Settings": <div>
+                                                  <InjectIntl(UserSettings)
+                                                                className="profile-section"
+                                                                intl={
+                                                                              Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                                }
+                                                                user={
+                                                                              Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                                }
+                                                  />
+                                                  <ApiKey
+                                                                intl={
+                                                                              Object {
+                                                                                            "formatMessage": [Function],
+                                                                                          }
+                                                                }
+                                                                user={
+                                                                              Object {
+                                                                                            "created": 1487808000000,
+                                                                                            "id": 357,
+                                                                                            "isLoggedIn": true,
+                                                                                            "osmProfile": Object {
+                                                                                              "avatarURL": "some/url",
+                                                                                            },
+                                                                                          }
+                                                                }
+                                                  />
+                                    </div>,
+                                              }
+                        }
+            />
+</MediaQuery>,
+        ],
         "className": "user-profile",
       },
       "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            <div
-              className="column is-two-fifths left-column"
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": <div
+              className="columns"
 >
-              <section
-                            className="user-profile__personal"
+              <div
+                            className="column is-two-fifths left-column"
               >
-                            <figure
-                                          className="user-profile__personal--avatar image is-128x128"
-                            >
-                                          <img
-                                                        alt="Avatar"
-                                                        src="some/url"
-                                          />
-                            </figure>
-                            <div
-                                          className="user-profile__personal__about"
-                            >
-                                          <div
-                                                        className="user-profile__personal__display-name"
-                                          />
-                                          <div
-                                                        className="user-profile__personal__created"
-                                          >
-                                                        User since: 
-                                                        <span
-                                                                      className="user-profile__personal__value"
-                                                        >
-                                                                      <FormattedDate
-                                                                                    month="long"
-                                                                                    value={2017-02-23T00:00:00.000Z}
-                                                                                    year="numeric"
-                                                                      />
-                                                        </span>
-                                          </div>
-                            </div>
-              </section>
-              <section
-                            className="user-profile__activity"
-              >
+                            <PersonalInfo
+                                          className="profile-section"
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
+                                          user={
+                                                        Object {
+                                                                      "created": 1487808000000,
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "some/url",
+                                                                      },
+                                                                    }
+                                          }
+                            />
                             <InjectIntl(UserActivityTimeline)
                                           activity={undefined}
+                                          className="user-profile__activity profile-section"
                             />
-              </section>
-</div>,
-            <div
-              className="column right-column"
->
-              <section
-                            className="user-profile__top-challenges"
+              </div>
+              <div
+                            className="column right-column"
               >
                             <TopChallenges
+                                          className="profile-section"
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
                                           user={
                                                         Object {
                                                                       "created": 1487808000000,
@@ -1198,11 +1585,13 @@ ShallowWrapper {
                                                                     }
                                           }
                             />
-              </section>
-              <section
-                            className="user-profile__saved-challenges"
-              >
                             <SavedChallenges
+                                          className="profile-section"
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
                                           user={
                                                         Object {
                                                                       "created": 1487808000000,
@@ -1214,11 +1603,13 @@ ShallowWrapper {
                                                                     }
                                           }
                             />
-              </section>
-              <section
-                            className="user-profile__saved-tasks"
-              >
                             <SavedTasks
+                                          className="profile-section"
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
                                           user={
                                                         Object {
                                                                       "created": 1487808000000,
@@ -1230,11 +1621,13 @@ ShallowWrapper {
                                                                     }
                                           }
                             />
-              </section>
-              <section
-                            className="user-profile__user-settings"
-              >
                             <InjectIntl(UserSettings)
+                                          className="profile-section"
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
                                           user={
                                                         Object {
                                                                       "created": 1487808000000,
@@ -1246,282 +1639,71 @@ ShallowWrapper {
                                                                     }
                                           }
                             />
-              </section>
-              <section
-                            className="user-profile__api-key"
-              >
-                            <h2
-                                          className="subtitle"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="API Key"
-                                                        id="UserProfile.apiKey.header"
-                                                        values={Object {}}
-                                          />
-                            </h2>
-                            <pre
-                                          className="user-profile__api-key--current-key"
+                            <ApiKey
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
+                                          user={
+                                                        Object {
+                                                                      "created": 1487808000000,
+                                                                      "id": 357,
+                                                                      "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "some/url",
+                                                                      },
+                                                                    }
+                                          }
                             />
-              </section>
+              </div>
 </div>,
-          ],
-          "className": "columns",
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
+            "query": "(min-width: 1024px)",
+            "values": Object {},
+          },
+          "ref": null,
+          "rendered": Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <section
-                  className="user-profile__personal"
+                <div
+                  className="column is-two-fifths left-column"
 >
-                  <figure
-                                    className="user-profile__personal--avatar image is-128x128"
-                  >
-                                    <img
-                                                      alt="Avatar"
-                                                      src="some/url"
-                                    />
-                  </figure>
-                  <div
-                                    className="user-profile__personal__about"
-                  >
-                                    <div
-                                                      className="user-profile__personal__display-name"
-                                    />
-                                    <div
-                                                      className="user-profile__personal__created"
-                                    >
-                                                      User since: 
-                                                      <span
-                                                                        className="user-profile__personal__value"
-                                                      >
-                                                                        <FormattedDate
-                                                                                          month="long"
-                                                                                          value={2017-02-23T00:00:00.000Z}
-                                                                                          year="numeric"
-                                                                        />
-                                                      </span>
-                                    </div>
-                  </div>
-</section>,
-                <section
-                  className="user-profile__activity"
->
+                  <PersonalInfo
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
+                  />
                   <InjectIntl(UserActivityTimeline)
                                     activity={undefined}
+                                    className="user-profile__activity profile-section"
                   />
-</section>,
-              ],
-              "className": "column is-two-fifths left-column",
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": Array [
-                    <figure
-                      className="user-profile__personal--avatar image is-128x128"
->
-                      <img
-                                            alt="Avatar"
-                                            src="some/url"
-                      />
-</figure>,
-                    <div
-                      className="user-profile__personal__about"
->
-                      <div
-                                            className="user-profile__personal__display-name"
-                      />
-                      <div
-                                            className="user-profile__personal__created"
-                      >
-                                            User since: 
-                                            <span
-                                                                  className="user-profile__personal__value"
-                                            >
-                                                                  <FormattedDate
-                                                                                        month="long"
-                                                                                        value={2017-02-23T00:00:00.000Z}
-                                                                                        year="numeric"
-                                                                  />
-                                            </span>
-                      </div>
 </div>,
-                  ],
-                  "className": "user-profile__personal",
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": <img
-                        alt="Avatar"
-                        src="some/url"
-/>,
-                      "className": "user-profile__personal--avatar image is-128x128",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "alt": "Avatar",
-                        "src": "some/url",
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": "img",
-                    },
-                    "type": "figure",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": Array [
-                        <div
-                          className="user-profile__personal__display-name"
-/>,
-                        <div
-                          className="user-profile__personal__created"
->
-                          User since: 
-                          <span
-                                                    className="user-profile__personal__value"
-                          >
-                                                    <FormattedDate
-                                                                              month="long"
-                                                                              value={2017-02-23T00:00:00.000Z}
-                                                                              year="numeric"
-                                                    />
-                          </span>
-</div>,
-                      ],
-                      "className": "user-profile__personal__about",
-                    },
-                    "ref": null,
-                    "rendered": Array [
-                      Object {
-                        "instance": null,
-                        "key": undefined,
-                        "nodeType": "host",
-                        "props": Object {
-                          "children": undefined,
-                          "className": "user-profile__personal__display-name",
-                        },
-                        "ref": null,
-                        "rendered": null,
-                        "type": "div",
-                      },
-                      Object {
-                        "instance": null,
-                        "key": undefined,
-                        "nodeType": "host",
-                        "props": Object {
-                          "children": Array [
-                            "User since: ",
-                            <span
-                              className="user-profile__personal__value"
->
-                              <FormattedDate
-                                                            month="long"
-                                                            value={2017-02-23T00:00:00.000Z}
-                                                            year="numeric"
-                              />
-</span>,
-                          ],
-                          "className": "user-profile__personal__created",
-                        },
-                        "ref": null,
-                        "rendered": Array [
-                          "User since: ",
-                          Object {
-                            "instance": null,
-                            "key": undefined,
-                            "nodeType": "host",
-                            "props": Object {
-                              "children": <FormattedDate
-                                month="long"
-                                value={2017-02-23T00:00:00.000Z}
-                                year="numeric"
-/>,
-                              "className": "user-profile__personal__value",
-                            },
-                            "ref": null,
-                            "rendered": Object {
-                              "instance": null,
-                              "key": undefined,
-                              "nodeType": "class",
-                              "props": Object {
-                                "month": "long",
-                                "value": 2017-02-23T00:00:00.000Z,
-                                "year": "numeric",
-                              },
-                              "ref": null,
-                              "rendered": null,
-                              "type": [Function],
-                            },
-                            "type": "span",
-                          },
-                        ],
-                        "type": "div",
-                      },
-                    ],
-                    "type": "div",
-                  },
-                ],
-                "type": "section",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <InjectIntl(UserActivityTimeline)
-                    activity={undefined}
-/>,
-                  "className": "user-profile__activity",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "activity": undefined,
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                "type": "section",
-              },
-            ],
-            "type": "div",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <section
-                  className="user-profile__top-challenges"
+                <div
+                  className="column right-column"
 >
                   <TopChallenges
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
                                     user={
                                                       Object {
                                                                         "created": 1487808000000,
@@ -1533,11 +1715,13 @@ ShallowWrapper {
                                                                       }
                                     }
                   />
-</section>,
-                <section
-                  className="user-profile__saved-challenges"
->
                   <SavedChallenges
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
                                     user={
                                                       Object {
                                                                         "created": 1487808000000,
@@ -1549,11 +1733,13 @@ ShallowWrapper {
                                                                       }
                                     }
                   />
-</section>,
-                <section
-                  className="user-profile__saved-tasks"
->
                   <SavedTasks
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
                                     user={
                                                       Object {
                                                                         "created": 1487808000000,
@@ -1565,11 +1751,13 @@ ShallowWrapper {
                                                                       }
                                     }
                   />
-</section>,
-                <section
-                  className="user-profile__user-settings"
->
                   <InjectIntl(UserSettings)
+                                    className="profile-section"
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
                                     user={
                                                       Object {
                                                                         "created": 1487808000000,
@@ -1581,25 +1769,26 @@ ShallowWrapper {
                                                                       }
                                     }
                   />
-</section>,
-                <section
-                  className="user-profile__api-key"
->
-                  <h2
-                                    className="subtitle"
-                  >
-                                    <FormattedMessage
-                                                      defaultMessage="API Key"
-                                                      id="UserProfile.apiKey.header"
-                                                      values={Object {}}
-                                    />
-                  </h2>
-                  <pre
-                                    className="user-profile__api-key--current-key"
+                  <ApiKey
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    user={
+                                                      Object {
+                                                                        "created": 1487808000000,
+                                                                        "id": 357,
+                                                                        "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "some/url",
+                                                                        },
+                                                                      }
+                                    }
                   />
-</section>,
+</div>,
               ],
-              "className": "column right-column",
+              "className": "columns",
             },
             "ref": null,
             "rendered": Array [
@@ -1608,233 +1797,562 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <TopChallenges
-                    user={
-                                        Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                    }
-/>,
-                  "className": "user-profile__top-challenges",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "user": Object {
-                      "created": 1487808000000,
-                      "id": 357,
-                      "isLoggedIn": true,
-                      "osmProfile": Object {
-                        "avatarURL": "some/url",
-                      },
-                    },
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                "type": "section",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <SavedChallenges
-                    user={
-                                        Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                    }
-/>,
-                  "className": "user-profile__saved-challenges",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "user": Object {
-                      "created": 1487808000000,
-                      "id": 357,
-                      "isLoggedIn": true,
-                      "osmProfile": Object {
-                        "avatarURL": "some/url",
-                      },
-                    },
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                "type": "section",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <SavedTasks
-                    user={
-                                        Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                    }
-/>,
-                  "className": "user-profile__saved-tasks",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "user": Object {
-                      "created": 1487808000000,
-                      "id": 357,
-                      "isLoggedIn": true,
-                      "osmProfile": Object {
-                        "avatarURL": "some/url",
-                      },
-                    },
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                "type": "section",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <InjectIntl(UserSettings)
-                    user={
-                                        Object {
-                                                            "created": 1487808000000,
-                                                            "id": 357,
-                                                            "isLoggedIn": true,
-                                                            "osmProfile": Object {
-                                                              "avatarURL": "some/url",
-                                                            },
-                                                          }
-                    }
-/>,
-                  "className": "user-profile__user-settings",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "user": Object {
-                      "created": 1487808000000,
-                      "id": 357,
-                      "isLoggedIn": true,
-                      "osmProfile": Object {
-                        "avatarURL": "some/url",
-                      },
-                    },
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                "type": "section",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
                   "children": Array [
-                    <h2
-                      className="subtitle"
->
-                      <FormattedMessage
-                                            defaultMessage="API Key"
-                                            id="UserProfile.apiKey.header"
-                                            values={Object {}}
-                      />
-</h2>,
-                    <pre
-                      className="user-profile__api-key--current-key"
+                    <PersonalInfo
+                      className="profile-section"
+                      intl={
+                                            Object {
+                                                                  "formatMessage": [Function],
+                                                                }
+                      }
+                      user={
+                                            Object {
+                                                                  "created": 1487808000000,
+                                                                  "id": 357,
+                                                                  "isLoggedIn": true,
+                                                                  "osmProfile": Object {
+                                                                    "avatarURL": "some/url",
+                                                                  },
+                                                                }
+                      }
+/>,
+                    <InjectIntl(UserActivityTimeline)
+                      activity={undefined}
+                      className="user-profile__activity profile-section"
 />,
                   ],
-                  "className": "user-profile__api-key",
+                  "className": "column is-two-fifths left-column",
                 },
                 "ref": null,
                 "rendered": Array [
                   Object {
                     "instance": null,
                     "key": undefined,
-                    "nodeType": "host",
+                    "nodeType": "class",
                     "props": Object {
-                      "children": <FormattedMessage
-                        defaultMessage="API Key"
-                        id="UserProfile.apiKey.header"
-                        values={Object {}}
-/>,
-                      "className": "subtitle",
-                    },
-                    "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "class",
-                      "props": Object {
-                        "defaultMessage": "API Key",
-                        "id": "UserProfile.apiKey.header",
-                        "values": Object {},
+                      "className": "profile-section",
+                      "intl": Object {
+                        "formatMessage": [Function],
                       },
-                      "ref": null,
-                      "rendered": null,
-                      "type": [Function],
-                    },
-                    "type": "h2",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": undefined,
-                      "className": "user-profile__api-key--current-key",
+                      "user": Object {
+                        "created": 1487808000000,
+                        "id": 357,
+                        "isLoggedIn": true,
+                        "osmProfile": Object {
+                          "avatarURL": "some/url",
+                        },
+                      },
                     },
                     "ref": null,
                     "rendered": null,
-                    "type": "pre",
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "activity": undefined,
+                      "className": "user-profile__activity profile-section",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
                   },
                 ],
-                "type": "section",
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <TopChallenges
+                      className="profile-section"
+                      intl={
+                                            Object {
+                                                                  "formatMessage": [Function],
+                                                                }
+                      }
+                      user={
+                                            Object {
+                                                                  "created": 1487808000000,
+                                                                  "id": 357,
+                                                                  "isLoggedIn": true,
+                                                                  "osmProfile": Object {
+                                                                    "avatarURL": "some/url",
+                                                                  },
+                                                                }
+                      }
+/>,
+                    <SavedChallenges
+                      className="profile-section"
+                      intl={
+                                            Object {
+                                                                  "formatMessage": [Function],
+                                                                }
+                      }
+                      user={
+                                            Object {
+                                                                  "created": 1487808000000,
+                                                                  "id": 357,
+                                                                  "isLoggedIn": true,
+                                                                  "osmProfile": Object {
+                                                                    "avatarURL": "some/url",
+                                                                  },
+                                                                }
+                      }
+/>,
+                    <SavedTasks
+                      className="profile-section"
+                      intl={
+                                            Object {
+                                                                  "formatMessage": [Function],
+                                                                }
+                      }
+                      user={
+                                            Object {
+                                                                  "created": 1487808000000,
+                                                                  "id": 357,
+                                                                  "isLoggedIn": true,
+                                                                  "osmProfile": Object {
+                                                                    "avatarURL": "some/url",
+                                                                  },
+                                                                }
+                      }
+/>,
+                    <InjectIntl(UserSettings)
+                      className="profile-section"
+                      intl={
+                                            Object {
+                                                                  "formatMessage": [Function],
+                                                                }
+                      }
+                      user={
+                                            Object {
+                                                                  "created": 1487808000000,
+                                                                  "id": 357,
+                                                                  "isLoggedIn": true,
+                                                                  "osmProfile": Object {
+                                                                    "avatarURL": "some/url",
+                                                                  },
+                                                                }
+                      }
+/>,
+                    <ApiKey
+                      intl={
+                                            Object {
+                                                                  "formatMessage": [Function],
+                                                                }
+                      }
+                      user={
+                                            Object {
+                                                                  "created": 1487808000000,
+                                                                  "id": 357,
+                                                                  "isLoggedIn": true,
+                                                                  "osmProfile": Object {
+                                                                    "avatarURL": "some/url",
+                                                                  },
+                                                                }
+                      }
+/>,
+                  ],
+                  "className": "column right-column",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "className": "profile-section",
+                      "intl": Object {
+                        "formatMessage": [Function],
+                      },
+                      "user": Object {
+                        "created": 1487808000000,
+                        "id": 357,
+                        "isLoggedIn": true,
+                        "osmProfile": Object {
+                          "avatarURL": "some/url",
+                        },
+                      },
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "className": "profile-section",
+                      "intl": Object {
+                        "formatMessage": [Function],
+                      },
+                      "user": Object {
+                        "created": 1487808000000,
+                        "id": 357,
+                        "isLoggedIn": true,
+                        "osmProfile": Object {
+                          "avatarURL": "some/url",
+                        },
+                      },
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "className": "profile-section",
+                      "intl": Object {
+                        "formatMessage": [Function],
+                      },
+                      "user": Object {
+                        "created": 1487808000000,
+                        "id": 357,
+                        "isLoggedIn": true,
+                        "osmProfile": Object {
+                          "avatarURL": "some/url",
+                        },
+                      },
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "className": "profile-section",
+                      "intl": Object {
+                        "formatMessage": [Function],
+                      },
+                      "user": Object {
+                        "created": 1487808000000,
+                        "id": 357,
+                        "isLoggedIn": true,
+                        "osmProfile": Object {
+                          "avatarURL": "some/url",
+                        },
+                      },
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "intl": Object {
+                        "formatMessage": [Function],
+                      },
+                      "user": Object {
+                        "created": 1487808000000,
+                        "id": 357,
+                        "isLoggedIn": true,
+                        "osmProfile": Object {
+                          "avatarURL": "some/url",
+                        },
+                      },
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "div",
               },
             ],
             "type": "div",
           },
-        ],
-        "type": "div",
-      },
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <PersonalInfo
+                className="profile-section"
+                intl={
+                                Object {
+                                                "formatMessage": [Function],
+                                              }
+                }
+                user={
+                                Object {
+                                                "created": 1487808000000,
+                                                "id": 357,
+                                                "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "some/url",
+                                                },
+                                              }
+                }
+/>,
+              <Tabs
+                className="is-centered"
+                tabs={
+                                Object {
+                                                "Activity": <div>
+                                                  <InjectIntl(UserActivityTimeline)
+                                                                    activity={undefined}
+                                                                    className="user-profile__activity profile-section"
+                                                  />
+                                </div>,
+                                                "Overview": <div>
+                                                  <TopChallenges
+                                                                    className="profile-section"
+                                                                    intl={
+                                                                                      Object {
+                                                                                                        "formatMessage": [Function],
+                                                                                                      }
+                                                                    }
+                                                                    user={
+                                                                                      Object {
+                                                                                                        "created": 1487808000000,
+                                                                                                        "id": 357,
+                                                                                                        "isLoggedIn": true,
+                                                                                                        "osmProfile": Object {
+                                                                                                          "avatarURL": "some/url",
+                                                                                                        },
+                                                                                                      }
+                                                                    }
+                                                  />
+                                                  <SavedChallenges
+                                                                    className="profile-section"
+                                                                    intl={
+                                                                                      Object {
+                                                                                                        "formatMessage": [Function],
+                                                                                                      }
+                                                                    }
+                                                                    user={
+                                                                                      Object {
+                                                                                                        "created": 1487808000000,
+                                                                                                        "id": 357,
+                                                                                                        "isLoggedIn": true,
+                                                                                                        "osmProfile": Object {
+                                                                                                          "avatarURL": "some/url",
+                                                                                                        },
+                                                                                                      }
+                                                                    }
+                                                  />
+                                                  <SavedTasks
+                                                                    className="profile-section"
+                                                                    intl={
+                                                                                      Object {
+                                                                                                        "formatMessage": [Function],
+                                                                                                      }
+                                                                    }
+                                                                    user={
+                                                                                      Object {
+                                                                                                        "created": 1487808000000,
+                                                                                                        "id": 357,
+                                                                                                        "isLoggedIn": true,
+                                                                                                        "osmProfile": Object {
+                                                                                                          "avatarURL": "some/url",
+                                                                                                        },
+                                                                                                      }
+                                                                    }
+                                                  />
+                                </div>,
+                                                "Settings": <div>
+                                                  <InjectIntl(UserSettings)
+                                                                    className="profile-section"
+                                                                    intl={
+                                                                                      Object {
+                                                                                                        "formatMessage": [Function],
+                                                                                                      }
+                                                                    }
+                                                                    user={
+                                                                                      Object {
+                                                                                                        "created": 1487808000000,
+                                                                                                        "id": 357,
+                                                                                                        "isLoggedIn": true,
+                                                                                                        "osmProfile": Object {
+                                                                                                          "avatarURL": "some/url",
+                                                                                                        },
+                                                                                                      }
+                                                                    }
+                                                  />
+                                                  <ApiKey
+                                                                    intl={
+                                                                                      Object {
+                                                                                                        "formatMessage": [Function],
+                                                                                                      }
+                                                                    }
+                                                                    user={
+                                                                                      Object {
+                                                                                                        "created": 1487808000000,
+                                                                                                        "id": 357,
+                                                                                                        "isLoggedIn": true,
+                                                                                                        "osmProfile": Object {
+                                                                                                          "avatarURL": "some/url",
+                                                                                                        },
+                                                                                                      }
+                                                                    }
+                                                  />
+                                </div>,
+                                              }
+                }
+/>,
+            ],
+            "query": "(max-width: 1023px)",
+            "values": Object {},
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "profile-section",
+                "intl": Object {
+                  "formatMessage": [Function],
+                },
+                "user": Object {
+                  "created": 1487808000000,
+                  "id": 357,
+                  "isLoggedIn": true,
+                  "osmProfile": Object {
+                    "avatarURL": "some/url",
+                  },
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "is-centered",
+                "tabs": Object {
+                  "Activity": <div>
+                    <InjectIntl(UserActivityTimeline)
+                                        activity={undefined}
+                                        className="user-profile__activity profile-section"
+                    />
+</div>,
+                  "Overview": <div>
+                    <TopChallenges
+                                        className="profile-section"
+                                        intl={
+                                                            Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                        }
+                                        user={
+                                                            Object {
+                                                                                "created": 1487808000000,
+                                                                                "id": 357,
+                                                                                "isLoggedIn": true,
+                                                                                "osmProfile": Object {
+                                                                                  "avatarURL": "some/url",
+                                                                                },
+                                                                              }
+                                        }
+                    />
+                    <SavedChallenges
+                                        className="profile-section"
+                                        intl={
+                                                            Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                        }
+                                        user={
+                                                            Object {
+                                                                                "created": 1487808000000,
+                                                                                "id": 357,
+                                                                                "isLoggedIn": true,
+                                                                                "osmProfile": Object {
+                                                                                  "avatarURL": "some/url",
+                                                                                },
+                                                                              }
+                                        }
+                    />
+                    <SavedTasks
+                                        className="profile-section"
+                                        intl={
+                                                            Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                        }
+                                        user={
+                                                            Object {
+                                                                                "created": 1487808000000,
+                                                                                "id": 357,
+                                                                                "isLoggedIn": true,
+                                                                                "osmProfile": Object {
+                                                                                  "avatarURL": "some/url",
+                                                                                },
+                                                                              }
+                                        }
+                    />
+</div>,
+                  "Settings": <div>
+                    <InjectIntl(UserSettings)
+                                        className="profile-section"
+                                        intl={
+                                                            Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                        }
+                                        user={
+                                                            Object {
+                                                                                "created": 1487808000000,
+                                                                                "id": 357,
+                                                                                "isLoggedIn": true,
+                                                                                "osmProfile": Object {
+                                                                                  "avatarURL": "some/url",
+                                                                                },
+                                                                              }
+                                        }
+                    />
+                    <ApiKey
+                                        intl={
+                                                            Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                        }
+                                        user={
+                                                            Object {
+                                                                                "created": 1487808000000,
+                                                                                "id": 357,
+                                                                                "isLoggedIn": true,
+                                                                                "osmProfile": Object {
+                                                                                  "avatarURL": "some/url",
+                                                                                },
+                                                                              }
+                                        }
+                    />
+</div>,
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+          ],
+          "type": [Function],
+        },
+      ],
       "type": "div",
     },
   ],

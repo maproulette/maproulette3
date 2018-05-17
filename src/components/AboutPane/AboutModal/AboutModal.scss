@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import 'variables.scss';
 
 .about-modal {
   min-width: 335px;
@@ -11,10 +11,18 @@
     padding: 40px;
     background-color: $white;
 
+    .columns.icon-columns {
+      margin-bottom: 0;
+    }
+
     .about-modal__icon {
       width: 80px;
       height: auto;
       stroke-width: 2px;
+
+      @media (max-height: 350px) {
+        width: 60px;
+      }
     }
 
     h1 {
@@ -58,5 +66,35 @@
     justify-content: center;
     color: $grey;
     font-size: $size-8;
+  }
+
+  @media(max-width: $app-mobile-break), (max-height: 500px) {
+    .modal-content {
+      @media(max-width: 643px) {
+        border-radius: 0;
+      }
+
+      .about-modal__content {
+        padding: 20px 40px;
+
+        h1 {
+          font-size: $size-5;
+        }
+      }
+
+      .about-modal__intro {
+        margin-bottom: 15px;
+
+        ul.about-modal__feature-points {
+          li {
+            font-size: $size-6;
+
+            @media(max-height: 350px) {
+              font-size: $size-7;
+            }
+          }
+        }
+      }
+    }
   }
 }

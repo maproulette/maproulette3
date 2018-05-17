@@ -434,6 +434,10 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
       mergedState[entity.id].savedChallenges = entity.savedChallenges
     }
 
+    if (_isArray(entity.topChallenges)) {
+      mergedState[entity.id].topChallenges = entity.topChallenges
+    }
+
     if (_isArray(entity.savedTasks)) {
       mergedState[entity.id].savedTasks = entity.savedTasks
     }

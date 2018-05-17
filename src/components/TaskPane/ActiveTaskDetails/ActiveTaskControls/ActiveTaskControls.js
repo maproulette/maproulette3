@@ -8,12 +8,12 @@ import { allowedStatusProgressions,
          isFinalStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from './TaskCommentInput/TaskCommentInput'
-import TaskTrackControls from './TaskTrackControls/TaskTrackControls'
+import TaskTrackControls from '../../TaskTrackControls/TaskTrackControls'
 import TaskRandomnessControl
-       from './TaskRandomnessControl/TaskRandomnessControl'
+       from '../../TaskRandomnessControl/TaskRandomnessControl'
 import MoreOptionsControl
        from './MoreOptionsControl/MoreOptionsControl'
-import TaskManageControls from './TaskManageControls/TaskManageControls'
+import TaskManageControls from '../../TaskManageControls/TaskManageControls'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 import WithDeactivateOnOutsideClick from

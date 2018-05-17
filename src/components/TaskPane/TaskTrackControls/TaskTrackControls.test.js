@@ -1,7 +1,7 @@
 import React from 'react'
 import _cloneDeep from 'lodash/cloneDeep'
 import TaskTrackControls from './TaskTrackControls'
-import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 
 let basicProps = null
 

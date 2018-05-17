@@ -1,10 +1,16 @@
 @import '../../../theme.scss';
 
 .challenge-filter-subnav.navbar.sub-nav {
+  $mobile-break: $app-mobile-break;
   z-index: $layer-subnav;
   height: $subnav-height;
   background-color: $white;
   border-bottom: 2px solid $grey-lighter;
+
+  @media(max-width: $mobile-break) {
+    height: $mobile-subnav-height;
+    min-height: $mobile-subnav-height;
+  }
 
   .navbar-brand {
     width: 24px;
@@ -104,5 +110,33 @@
 
   .search-box.navbar-item {
     max-width: 400px;
+
+    @media(max-width: $mobile-break) {
+      max-width: 80vw;
+      padding: 0px 10px;
+      .search-box__search-field {
+        font-size: $size-6;
+
+        svg {
+          height: 18px;
+          width: auto;
+          margin-left: 10px;
+          margin-right: 0;
+        }
+
+        .control-wrapper {
+          min-width: 215px;
+          margin-right: 0;
+
+          .control {
+            flex: 1 1 240px;
+
+            input {
+              font-size: $size-6;
+            }
+          }
+        }
+      }
+    }
   }
 }
