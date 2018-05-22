@@ -272,8 +272,8 @@ img.is-circular {
 }
 
 @import '../node_modules/bulma/bulma.sass';
-@import '../node_modules/bulma-badge/badge.sass';
-@import '../node_modules/bulma-timeline/timeline.sass';
+@import '../node_modules/bulma-badge/dist/bulma-badge.sass';
+@import '../node_modules/bulma-timeline/dist/bulma-timeline.sass';
 @import "../node_modules/bulma-steps-component/bulma-steps.sass";
 @import "../node_modules/bulma-switch/dist/bulma-switch.sass";
 @import "../node_modules/bulma-checkradio/dist/bulma-checkradio.sass";

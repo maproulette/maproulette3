@@ -49,7 +49,7 @@ export class UserActivityTimeline extends Component {
       challengeNames.set(entry.parentId, entry.parentName)
 
       return Object.assign({}, entry, {
-        normalizedISODate: this.props.startOfDay(new Date(entry.created)).toISOString(),
+        normalizedISODate: this.props.startOfDay(parse(entry.created)),
         challengeId: entry.parentId,
         description: `${localizedActionLabels[keysByAction[entry.action]]} ` +
                      localizedTypeLabels[keysByType[entry.typeId]] +
@@ -162,7 +162,7 @@ export class UserActivityTimeline extends Component {
 UserActivityTimeline.propTypes = {
   /** The activity to display on the timeline */
   activity: PropTypes.arrayOf(PropTypes.shape({
-    created: PropTypes.number.isRequired,
+    created: PropTypes.string.isRequired,
     action: PropTypes.number,
     typeId: PropTypes.number,
     status: PropTypes.number,

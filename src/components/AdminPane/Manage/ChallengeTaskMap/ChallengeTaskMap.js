@@ -286,12 +286,11 @@ export class ChallengeTaskMap extends Component {
           <ZoomControl position='topright' />
           <SourcedTileLayer {...this.props} />
           {markers.length > 0 &&
-              <MarkerClusterGroup key={Date.now()} markers={markers}
-                options={{
-                  disableClusteringAtZoom: (canUncluster && !this.state.clusterTasks) ? 1 : 19,
-                  iconCreateFunction: this.props.monochromaticClusters ?
-                                      this.clusterIcon : undefined,
-                }}
+              <MarkerClusterGroup
+                  key={Date.now()} markers={markers}
+                  disableClusteringAtZoom={(canUncluster && !this.state.clusterTasks) ? 1 : 19}
+                  iconCreateFunction={this.props.monochromaticClusters ?
+                                      this.clusterIcon : undefined}
               />
           }
         </EnhancedMap>

@@ -17,7 +17,7 @@ beforeEach(() => {
         action: ACTION_TYPE_UPDATED,
         typeId: ITEM_TYPE_TASK, 
         status: TASK_STATUS_FIXED,
-        created: 1510357997739,
+        created: "2017-02-24T20:42:19-08:00",
         challengeId: 123,
         challengeName: "Challenge 123",
       },
@@ -25,7 +25,7 @@ beforeEach(() => {
         action: ACTION_TYPE_UPDATED,
         typeId: ITEM_TYPE_TASK, 
         status: TASK_STATUS_FIXED,
-        created: 1510357997740,
+        created: "2017-02-24T20:42:20-08:00",
         challengeId: 123,
         challengeName: "Challenge 123",
       },
@@ -33,7 +33,7 @@ beforeEach(() => {
         action: ACTION_TYPE_UPDATED,
         typeId: ITEM_TYPE_TASK, 
         status: TASK_STATUS_SKIPPED,
-        created: 1516200787649,
+        created: "2017-02-25T21:42:20-08:00",
         challengeId: 123,
         challengeName: "Challenge 123",
       },
@@ -55,7 +55,7 @@ const startOfUTCDay = function(date) {
   start.setUTCSeconds(0)
   start.setUTCMilliseconds(0)
 
-  return start
+  return start.toISOString()
 }
 
 
@@ -92,7 +92,7 @@ test("it includes a count of the duplicate activities", () => {
 })
 
 test("it does not consolidate duplicate activities on different days", () => {
-  basicProps.activity[0].created = 0
+  basicProps.activity[0].created = "2017-02-20T20:42:19-08:00"
   const wrapper = shallow(
     <UserActivityTimeline startOfDay={startOfUTCDay} {...basicProps} />
   )

@@ -11,7 +11,7 @@ export default defineMessages({
 
   openStreetMapAttribution: {
     id: "map.attribution.openStreetMap",
-    defaultMessage: "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+    defaultMessage: "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
   },
 
   openCycleMapName: {
@@ -21,7 +21,7 @@ export default defineMessages({
 
   openCycleMapAttribution: {
     id: "map.attribution.openCycleMap",
-    defaultMessage: "&copy; OpenCycleMap, Map data &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+    defaultMessage: "&copy; OpenCycleMap, Map data &copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
   },
 
   bingName: {
@@ -51,7 +51,7 @@ export default defineMessages({
 
   mapboxAttribution: {
     id: "map.attribution.mapbox",
-    defaultMessage: "&copy <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>, &copy <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+    defaultMessage: "&copy <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>, &copy <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
   },
 
   customName: {

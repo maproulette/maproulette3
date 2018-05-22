@@ -20,7 +20,7 @@ ShallowWrapper {
       "layerSources": Array [
         Object {
           "attribution": Object {
-            "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+            "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
             "id": "map.attribution.openStreetMap",
           },
           "layerId": "OpenStreetMap",
@@ -33,7 +33,7 @@ ShallowWrapper {
         Object {
           "accessToken": "",
           "attribution": Object {
-            "defaultMessage": "&copy; OpenCycleMap, Map data &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+            "defaultMessage": "&copy; OpenCycleMap, Map data &copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
             "id": "map.attribution.openCycleMap",
           },
           "layerId": "OpenCycleMap",
@@ -70,7 +70,7 @@ ShallowWrapper {
         "layerSources": Array [
           Object {
             "attribution": Object {
-              "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+              "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
               "id": "map.attribution.openStreetMap",
             },
             "layerId": "OpenStreetMap",
@@ -83,7 +83,7 @@ ShallowWrapper {
           Object {
             "accessToken": "",
             "attribution": Object {
-              "defaultMessage": "&copy; OpenCycleMap, Map data &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+              "defaultMessage": "&copy; OpenCycleMap, Map data &copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
               "id": "map.attribution.openCycleMap",
             },
             "layerId": "OpenCycleMap",
