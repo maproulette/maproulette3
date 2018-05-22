@@ -36,7 +36,7 @@ export default defineMessages({
 
   customBasemapDescription: {
     id: "UserSettings.form.customBasemap.description",
-    defaultMessage: "Insert a custom base map here. Eg. http://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png",
+    defaultMessage: "Insert a custom base map here. Eg. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png`",
   },
 
   localeLabel: {

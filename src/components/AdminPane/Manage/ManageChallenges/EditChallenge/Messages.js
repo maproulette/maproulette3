@@ -266,7 +266,7 @@ will not be able to make sense of it.
 
   remoteGeoJsonPlaceholder: {
     id: 'Admin.EditChallenge.form.remoteGeoJson.placeholder',
-    defaultMessage: "http://www.example.com/geojson.json",
+    defaultMessage: "https://www.example.com/geojson.json",
   },
 
   step3Label: {
@@ -379,6 +379,6 @@ will not be able to make sense of it.
 
   customBasemapDescription: {
     id: "Admin.EditChallenge.form.customBasemap.description",
-    defaultMessage: "Insert a custom base map URL here. Eg. `http://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png`",
+    defaultMessage: "Insert a custom base map URL here. Eg. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png`",
   },
 })

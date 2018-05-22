@@ -4,7 +4,7 @@ import _range from 'lodash/range'
  * Constants related to zoom levels. These are based on
  * OpenStreetMap zoom levels.
  *
- * @see See http://wiki.openstreetmap.org/wiki/Zoom_levels
+ * @see See https://wiki.openstreetmap.org/wiki/Zoom_levels
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */

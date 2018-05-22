@@ -43,7 +43,7 @@ ShallowWrapper {
                 source={
                         Object {
                                 "attribution": Object {
-                                  "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                  "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
                                   "id": "map.attribution.openStreetMap",
                                 },
                                 "layerId": "OpenStreetMap",
@@ -83,7 +83,7 @@ ShallowWrapper {
             source={
                         Object {
                                     "attribution": Object {
-                                      "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                      "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
                                       "id": "map.attribution.openStreetMap",
                                     },
                                     "layerId": "OpenStreetMap",
@@ -119,7 +119,7 @@ ShallowWrapper {
             "skipAttribution": true,
             "source": Object {
               "attribution": Object {
-                "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
                 "id": "map.attribution.openStreetMap",
               },
               "layerId": "OpenStreetMap",
@@ -177,7 +177,7 @@ ShallowWrapper {
                     source={
                               Object {
                                         "attribution": Object {
-                                          "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                          "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
                                           "id": "map.attribution.openStreetMap",
                                         },
                                         "layerId": "OpenStreetMap",
@@ -217,7 +217,7 @@ ShallowWrapper {
               source={
                             Object {
                                           "attribution": Object {
-                                            "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                                            "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
                                             "id": "map.attribution.openStreetMap",
                                           },
                                           "layerId": "OpenStreetMap",
@@ -253,7 +253,7 @@ ShallowWrapper {
               "skipAttribution": true,
               "source": Object {
                 "attribution": Object {
-                  "defaultMessage": "&copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
+                  "defaultMessage": "&copy; <a href='https://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>",
                   "id": "map.attribution.openStreetMap",
                 },
                 "layerId": "OpenStreetMap",

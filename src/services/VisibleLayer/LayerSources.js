@@ -21,7 +21,7 @@ export const layerSourceShape = PropTypes.shape({
    * Set to true to adjust non-retina tiles for retina displays. tileSize may
    * also need to be adjusted.
    *
-   * @see See http://leafletjs.com/reference-1.0.3.html#tilelayer-detectretina
+   * @see See https://leafletjs.com/reference-1.0.3.html#tilelayer-detectretina
    */
   detectRetina: PropTypes.bool,
   /** Access token for substitution in tile server url */
