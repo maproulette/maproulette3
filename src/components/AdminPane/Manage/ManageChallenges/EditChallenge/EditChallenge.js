@@ -4,6 +4,7 @@ import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
 import _isEmpty from 'lodash/isEmpty'
+import _omit from 'lodash/omit'
 import _each from 'lodash/each'
 import _filter from 'lodash/filter'
 import _difference from 'lodash/difference'
@@ -12,7 +13,7 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import Steps from '../../../../Bulma/Steps'
 import StepNavigation
-       from '../../../../Bulma/StepNavigation/StepNavigation'
+       from '../../StepNavigation/StepNavigation'
 import { CustomFieldTemplate,
          CustomArrayFieldTemplate,
          TagsInputField,
@@ -99,7 +100,7 @@ export class EditChallenge extends Component {
   state = {
     activeStep: 0,
     formData: {},
-    formContext: {isValid: true},
+    formContext: {},
     isSaving: false,
   }
 
@@ -115,8 +116,7 @@ export class EditChallenge extends Component {
 
   /** Can the workflow progress to the next step? */
   canNext = () => {
-    return this.state.activeStep < challengeSteps.length &&
-           this.state.formContext.isValid
+    return this.state.activeStep < challengeSteps.length - 1
   }
 
   /**
@@ -161,7 +161,7 @@ export class EditChallenge extends Component {
     if (this.canPrev()) {
       this.setState({
         activeStep: this.state.activeStep - 1,
-        formContext: {isValid: true}
+        formContext: {},
       })
     }
   }
@@ -169,13 +169,11 @@ export class EditChallenge extends Component {
   /** Advance to the next step in the workflow */
   nextStep = () => {
     if (this.canNext()) {
-      if (this.state.formContext.isValid) {
-        this.setState({
-          activeStep: this.state.activeStep + 1,
-          formContext: {isValid: true}
-        })
-        window.scrollTo(0, 0)
-      }
+      this.setState({
+        activeStep: this.state.activeStep + 1,
+        formContext: {},
+      })
+      window.scrollTo(0, 0)
     }
     else {
       this.finish()
@@ -184,18 +182,15 @@ export class EditChallenge extends Component {
 
   /** Complete the workflow, saving the challenge data */
   finish = () => {
-    if (this.state.activeStep === challengeSteps.length - 1 &&
-        this.state.formContext.isValid) {
-      const formData = this.prepareFormDataForSaving()
-      this.setState({isSaving: true})
+    const formData = this.prepareFormDataForSaving()
+    this.setState({isSaving: true})
 
-      this.props.saveChallenge(formData).then(challenge => {
-        if (_isObject(challenge) && _isNumber(challenge.parent)) {
-          this.props.history.push(
-            `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
-        }
-      })
-    }
+    this.props.saveChallenge(formData).then(challenge => {
+      if (_isObject(challenge) && _isNumber(challenge.parent)) {
+        this.props.history.push(
+          `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
+      }
+    })
   }
 
   /** Cancel editing */
@@ -207,11 +202,15 @@ export class EditChallenge extends Component {
   }
 
   /** Receive updates to the form data, along with any validation errors */
-  changeHandler = ({formData, errors}) => {
-    this.setState({
-      formData,
-      formContext: {isValid: errors.length === 0}
-    })
+  changeHandler = ({formData}) => {
+    this.setState({formData})
+  }
+
+  /** Receive errors from form validation */
+  errorHandler = errors => {
+    if (errors.length > 0) {
+      window.scrollTo(0, 100)
+    }
   }
 
   /**
@@ -224,7 +223,7 @@ export class EditChallenge extends Component {
   prepareChallengeDataForForm = () => {
     let challengeData = Object.assign(
       {parent: _get(this.props, 'project.id')},
-      this.props.challenge,
+      _omit(this.props.challenge, ['actions', 'activity', 'comments']),
       this.state.formData
     )
 
@@ -332,8 +331,12 @@ export class EditChallenge extends Component {
   }
 
   render() {
-    if (!this.props.project) {
-      return <BusySpinner />
+    if (!this.props.project || this.state.isSaving) {
+      return (
+        <div className="pane-loading full-screen-height">
+          <BusySpinner />
+        </div>
+      )
     }
 
     const challengeData = this.prepareChallengeDataForForm()
@@ -346,12 +349,6 @@ export class EditChallenge extends Component {
       markdown: MarkdownEditField,
       tags: TagsInputField,
     }
-
-    // Each time we render, start formContext.isValid at true. It'll be set
-    // to false if needed by an RJSFFormFieldAdapter if its value has errors.
-    // This is an ugly workaround -- see above.
-    // eslint-disable-next-line
-    this.state.formContext.isValid = true
 
     return (
       <div className="admin__manage edit-challenge">
@@ -401,20 +398,17 @@ export class EditChallenge extends Component {
                   FieldTemplate={CustomFieldTemplate}
                   ArrayFieldTemplate={CustomArrayFieldTemplate}
                   fields={customFields}
-                  liveValidate
                   noHtml5Validate
                   showErrorList={false}
                   formData={challengeData}
                   formContext={this.state.formContext}
                   onChange={this.changeHandler}
-                  onSubmit={this.nextStep}>
-              <div className="form-controls" />
-            </Form>
+                  onSubmit={this.nextStep}
+                  onError={this.errorHandler}>
 
-            <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
-                            canPrev={this.canPrev} prevStep={this.prevStep}
-                            canNext={this.canNext} nextStep={this.nextStep}
-                            finish={this.finish} cancel={this.cancel} />
+              <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
+                              prevStep={this.prevStep} cancel={this.cancel} />
+            </Form>
           </div>
         </div>
       </div>
