@@ -28,7 +28,7 @@ ShallowWrapper {
             "defaultMessage": "OpenStreetMap",
             "id": "map.name.openStreetMap",
           },
-          "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         },
         Object {
           "accessToken": "",
@@ -41,7 +41,7 @@ ShallowWrapper {
             "defaultMessage": "OpenCycleMap",
             "id": "map.name.openCycleMap",
           },
-          "url": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+          "url": "https://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
         },
         Object {
           "attribution": Object {
@@ -53,7 +53,7 @@ ShallowWrapper {
             "defaultMessage": "Bing",
             "id": "map.name.bing",
           },
-          "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         },
       ],
     },
@@ -78,7 +78,7 @@ ShallowWrapper {
               "defaultMessage": "OpenStreetMap",
               "id": "map.name.openStreetMap",
             },
-            "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           },
           Object {
             "accessToken": "",
@@ -91,7 +91,7 @@ ShallowWrapper {
               "defaultMessage": "OpenCycleMap",
               "id": "map.name.openCycleMap",
             },
-            "url": "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+            "url": "https://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
           },
           Object {
             "attribution": Object {
@@ -103,7 +103,7 @@ ShallowWrapper {
               "defaultMessage": "Bing",
               "id": "map.name.bing",
             },
-            "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
           },
         ],
       },

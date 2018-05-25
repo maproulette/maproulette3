@@ -51,7 +51,7 @@ ShallowWrapper {
                                   "defaultMessage": "OpenStreetMap",
                                   "id": "map.name.openStreetMap",
                                 },
-                                "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                               }
                 }
         />
@@ -91,7 +91,7 @@ ShallowWrapper {
                                       "defaultMessage": "OpenStreetMap",
                                       "id": "map.name.openStreetMap",
                                     },
-                                    "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                    "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                                   }
             }
 />,
@@ -127,7 +127,7 @@ ShallowWrapper {
                 "defaultMessage": "OpenStreetMap",
                 "id": "map.name.openStreetMap",
               },
-              "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             },
           },
           "ref": null,
@@ -185,7 +185,7 @@ ShallowWrapper {
                                           "defaultMessage": "OpenStreetMap",
                                           "id": "map.name.openStreetMap",
                                         },
-                                        "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                        "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                                       }
                     }
           />
@@ -225,7 +225,7 @@ ShallowWrapper {
                                             "defaultMessage": "OpenStreetMap",
                                             "id": "map.name.openStreetMap",
                                           },
-                                          "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                          "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                                         }
               }
 />,
@@ -261,7 +261,7 @@ ShallowWrapper {
                   "defaultMessage": "OpenStreetMap",
                   "id": "map.name.openStreetMap",
                 },
-                "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
               },
             },
             "ref": null,
