@@ -2,6 +2,7 @@ import _uniqueId from 'lodash/uniqueId'
 import _cloneDeep from 'lodash/cloneDeep'
 import _set from 'lodash/set'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 
 // redux actions
 export const SET_SEARCH = 'SET_SEARCH'
@@ -17,6 +18,16 @@ export const RECEIVED_RESULTS = 'RECEIVED_RESULTS'
 export const parseQueryString = function(rawQueryText) {
   const tagTokens = []
   const queryTokens = []
+
+  if (_isEmpty(rawQueryText)) {
+    return {
+      tagTokens,
+      tags: '',
+      queryTokens,
+      query: '',
+      rawQueryText: '',
+    }
+  }
 
   const tokens = rawQueryText.split(/\s+/)
   for (let token of tokens) {

@@ -153,10 +153,15 @@ export const fetchEnabledChallenges = function(limit) {
  * would search for challenges with the "france" keyword that had "museum"
  * in the challenge name (as determined by the server).
  *
+ * Additional difficulty and keyword filters can be provided to further narrow
+ * search results.
+ *
  * @param {string} queryString
+ * @param {object} filters
+ * @param {boolean} onlyEnabled
  * @param {number} limit
  */
-export const searchChallenges = function(queryString, onlyEnabled=true, limit=50) {
+export const searchChallenges = function(queryString, filters={}, onlyEnabled=true, limit=50) {
   return function(dispatch) {
     const queryParts = parseQueryString(queryString)
 
@@ -164,6 +169,7 @@ export const searchChallenges = function(queryString, onlyEnabled=true, limit=50
     // ce: limit to enabled challenges
     // pe: limit to enabled projects
     // cs: query string
+    // cd: challenge difficulty
     // ct: keywords/tags (comma-separated string)
     const queryParams = {
       limit,
@@ -171,12 +177,21 @@ export const searchChallenges = function(queryString, onlyEnabled=true, limit=50
       pe: onlyEnabled ? 'true' : 'false',
     }
 
-    if (queryParts.query.length > 0) {
-      queryParams.cs = queryParts.query
+    if (_isFinite(filters.difficulty)) {
+      queryParams.cd = filters.difficulty
     }
 
-    if (queryParts.tags.length > 0) {
-      queryParams.ct = queryParts.tags
+    // Keywords/tags can come from both the the query and the filter, so we need to
+    // combine them into a single keywords array.
+    const keywords =
+      queryParts.tagTokens.concat(_isArray(filters.keywords) ? filters.keywords : [])
+
+    if (keywords.length > 0) {
+      queryParams.ct = keywords.join(',')
+    }
+
+    if (queryParts.query.length > 0) {
+      queryParams.cs = queryParts.query
     }
 
     return new Endpoint(

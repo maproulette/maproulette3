@@ -11,7 +11,6 @@ import { Router } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import PiwikReactRouter from 'piwik-react-router'
 import _get from 'lodash/get'
-import _keys from 'lodash/keys'
 import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
 import App from './App';
@@ -19,11 +18,8 @@ import BusySpinner from './components/BusySpinner/BusySpinner'
 import { initializePersistedStore } from './PersistedStore'
 import { fetchProjects } from './services/Project/Project'
 import { fetchFeaturedChallenges,
-         fetchChallengesWithKeywords,
          fetchEnabledChallenges,
          fetchChallengeActions } from './services/Challenge/Challenge'
-import { ChallengeCategoryKeywords }
-       from './services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import { loadCompleteUser, GUEST_USER_ID } from './services/User/User'
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus } from './services/Status/Status'
@@ -45,9 +41,6 @@ const ConnectedIntl = WithUserLocale(props => (
 const configFromServer = window.mr3Config
 const {store} = initializePersistedStore((store) => {
   store.dispatch(setCheckingLoginStatus())
-
-  // Fetch initial data to initialize app
-  const categoryKeywords = _keys(ChallengeCategoryKeywords).join(',')
 
   // Load current user. Look first for config from server, but if that's not
   // found then ensure user id from last session (if any) is still logged in.
@@ -74,7 +67,6 @@ const {store} = initializePersistedStore((store) => {
 
   // Seed our store with some challenges.
   store.dispatch(fetchFeaturedChallenges())
-  store.dispatch(fetchChallengesWithKeywords(categoryKeywords))
   store.dispatch(fetchEnabledChallenges(100))
 
   // Seed our store with projects

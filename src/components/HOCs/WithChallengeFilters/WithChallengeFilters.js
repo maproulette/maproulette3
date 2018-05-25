@@ -1,11 +1,15 @@
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _debounce from 'lodash/debounce'
+import _isEqual from 'lodash/isEqual'
+import _omit from 'lodash/omit'
 import { setFilters,
          removeFilters,
          clearFilters } from '../../../services/Filter/Filter'
-import { fetchChallengesWithKeywords } from '../../../services/Challenge/Challenge'
+import { fetchChallengesWithKeywords,
+         searchChallenges } from '../../../services/Challenge/Challenge'
 
 const FILTER_NAME = 'challenge'
 
@@ -16,8 +20,47 @@ const FILTER_NAME = 'challenge'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithChallengeFilters =
-  WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
+export const WithChallengeFilters = function(WrappedComponent, updateResults) {
+  return class extends Component {
+    state = {
+      loadingFilteredResults: null,
+    }
+
+    /**
+     * Fetch challenges from the server matching the current filter set.
+     *
+     * @private
+     */
+    fetchFilteredResults = () => {
+      this.setState({loadingFilteredResults: true})
+
+      this.props.searchFilteredChallenges(this.props.challengeFilter).then(() => {
+        this.setState({loadingFilteredResults: false})
+      })
+    }
+
+    componentDidMount() {
+      if (updateResults) {
+        this.fetchFilteredResults()
+      }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if (updateResults) {
+        if (!_isEqual(this.props.challengeFilter, prevProps.challengeFilter)) {
+          this.fetchFilteredResults()
+        }
+      }
+    }
+
+    render() {
+      return (
+        <WrappedComponent loadingFilteredResults = {this.state.loadingFilteredResults}
+                          {..._omit(this.props, ['searchFilteredChallenges'])} />
+      )
+    }
+  }
+}
 
 export const mapStateToProps = state => {
   const challengeCriteria = _get(state, `currentFilters[${FILTER_NAME}]`, {})
@@ -45,6 +88,8 @@ export const mapDispatchToProps = dispatch => ({
   },
 
   clearChallengeFilters: () => dispatch(clearFilters(FILTER_NAME)),
+
+  searchFilteredChallenges: filters => dispatch(searchChallenges(null, filters)),
 })
 
 const refreshChallengesWithKeywords = _debounce(
@@ -52,4 +97,5 @@ const refreshChallengesWithKeywords = _debounce(
   500, {leading: true} // half second
 )
 
-export default WithChallengeFilters
+export default (WrappedComponent, updateResults=false) =>
+  connect(mapStateToProps, mapDispatchToProps)(WithChallengeFilters(WrappedComponent, updateResults))

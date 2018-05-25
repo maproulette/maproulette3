@@ -34,6 +34,8 @@ export class FilterByLocation extends Component {
       this.props.setChallengeFilters({location: ChallengeLocation.withinMapBounds})
 
       if (value === ChallengeLocation.nearMe) {
+        // Note: repositioning the map will automatically trigger an update of the
+        // bounded challenges, so we don't need to request an update here.
         this.props.locateMapToUser(this.props.user)
       }
       else if (value === ChallengeLocation.withinMapBounds) {

@@ -22,7 +22,7 @@ import './ManageProjects.css'
 const ProjectAndChallengeSearch =
   WithComboSearchExecution(SearchBox, {
     'adminProjects': searchProjects,
-    'adminChallenges': query => searchChallenges(query, false, 1000), // include disabled
+    'adminChallenges': query => searchChallenges(query, {}, false, 1000), // include disabled
   })
 
 /**
