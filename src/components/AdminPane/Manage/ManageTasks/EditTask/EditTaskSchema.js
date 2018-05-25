@@ -23,13 +23,7 @@ import messages from './Messages'
 export const jsSchema = (intl, task) => {
   const localizedPriorityLabels = taskPriorityLabels(intl)
 
-  // If the task exists, its status can limit the statuses allowed to be set
-  // during editing.
-  const allowedStatuses =
-    _isObject(task) ?
-    Array.from(allowedStatusProgressions(task.status, true)) :
-    _values(TaskStatus)
-
+  const allowedStatuses = _values(TaskStatus)
   const allowedStatusLabels = _map(
     allowedStatuses,
     status => intl.formatMessage(messagesByStatus[status])
