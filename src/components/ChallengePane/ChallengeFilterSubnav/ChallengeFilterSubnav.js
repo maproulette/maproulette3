@@ -49,4 +49,4 @@ export class ChallengeFilterSubnav extends Component {
   }
 }
 
-export default WithChallengeFilters(WithMapBounds(injectIntl(ChallengeFilterSubnav)))
+export default WithChallengeFilters(WithMapBounds(injectIntl(ChallengeFilterSubnav)), true)

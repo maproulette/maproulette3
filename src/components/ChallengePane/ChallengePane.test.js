@@ -38,8 +38,8 @@ test("when no browsed challenge, the locator map is rendered", () => {
   )
 
   expect(
-    wrapper.find('Connect(Connect(InjectIntl(LocatorMap)))'
-  ).exists()).toBe(true)
+    wrapper.find('Connect(Component)').exists()
+  ).toBe(true)
 })
 
 test("when browsing a challenge, the challenge map is rendered", () => {

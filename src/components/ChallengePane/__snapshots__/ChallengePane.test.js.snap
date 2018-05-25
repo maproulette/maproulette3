@@ -33,7 +33,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Connect(InjectIntl(ChallengeFilterSubnav)))
+        <Connect(Component)
           intl={
                     Object {
                               "formatMessage": [Function],
@@ -74,7 +74,7 @@ ShallowWrapper {
                     />
           </Sidebar>
           <Connect(MapPane)>
-                    <Connect(Connect(InjectIntl(LocatorMap)))
+                    <Connect(Component)
                               challenge={undefined}
                               intl={
                                         Object {
@@ -147,7 +147,7 @@ ShallowWrapper {
               />
 </Sidebar>,
             <Connect(MapPane)>
-              <Connect(Connect(InjectIntl(LocatorMap)))
+              <Connect(Component)
                             challenge={undefined}
                             intl={
                                           Object {
@@ -224,7 +224,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Connect(Connect(InjectIntl(LocatorMap)))
+              "children": <Connect(Component)
                 challenge={undefined}
                 intl={
                                 Object {
@@ -283,7 +283,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Connect(InjectIntl(ChallengeFilterSubnav)))
+          <Connect(Component)
             intl={
                         Object {
                                     "formatMessage": [Function],
@@ -324,7 +324,7 @@ ShallowWrapper {
                         />
             </Sidebar>
             <Connect(MapPane)>
-                        <Connect(Connect(InjectIntl(LocatorMap)))
+                        <Connect(Component)
                                     challenge={undefined}
                                     intl={
                                                 Object {
@@ -397,7 +397,7 @@ ShallowWrapper {
                 />
 </Sidebar>,
               <Connect(MapPane)>
-                <Connect(Connect(InjectIntl(LocatorMap)))
+                <Connect(Component)
                                 challenge={undefined}
                                 intl={
                                                 Object {
@@ -474,7 +474,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Connect(Connect(InjectIntl(LocatorMap)))
+                "children": <Connect(Component)
                   challenge={undefined}
                   intl={
                                     Object {
@@ -575,7 +575,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Connect(InjectIntl(ChallengeFilterSubnav)))
+        <Connect(Component)
           browsedChallenge={
                     Object {
                               "id": 123,
@@ -883,7 +883,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Connect(InjectIntl(ChallengeFilterSubnav)))
+          <Connect(Component)
             browsedChallenge={
                         Object {
                                     "id": 123,
