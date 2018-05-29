@@ -1,26 +1,18 @@
 # Getting Started
 
-This is a new front-end for MapRoulette built on React. The back-end (scala)
+maproulette3 is a new front-end for MapRoulette built on React. The back-end
 server from the [maproulette2](https://github.com/maproulette/maproulette2)
 project is still required.
 
-> Note: because of the oauth authentication workflow, your dev machine must be
-> publicly accessible to the OpenStreetMap (OSM) servers in order to login to
-> the app. You may wish to setup an open-source tunneling server like
-> [go-http-tunnel](https://github.com/mmatczuk/go-http-tunnel) or use a
-> commercial service like ngrok.
+## Developing Locally
+
+> Note: maproulette3 is currently developed using Node 8 LTS.
 
 1. Create a `.env.development.local` file and:
- * set `REACT_APP_BASE_PATH='/mr3'`
- * set `REACT_APP_URL='https://maproulette.mydevserver.com/mr3'`
-   (substituting your dev domain, of course)
- * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://maproulette.mydevserver.com'`
+ * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
+ * set feature flags to `enabled` or `disabled` as desired.
  * if you wish to use Mapbox maps, set the `REACT_APP_MAPBOX_ACCESS_TOKEN` to
    your API token.
- * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
-   analytics, set `REACT_APP_MATOMO_URL` and `REACT_APP_MATOMO_SITE_ID` to your
-   tracking url and site id, respectively (see `.env` file for example).
- * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
  * override any other settings from the `.env` file as needed or desired.
 
 2. `yarn` to fetch and install NPM modules.
@@ -30,53 +22,61 @@ project is still required.
 4. Visit your [OpenStreetMap account](https://www.openstreetmap.org) and go
    to My Settings -> oauth settings -> Register your application and setup a
    new application for development. For the `Main Application URL` and
-   `Callback URL` settings, put in your dev server URL (e.g.
-   `https://maproulette.mydevserver.com`). Take note of your new app's consumer
-   key and secret key, as you'll need them in the next step.
+   `Callback URL` settings, put in `http://127.0.0.1:9000` (assuming your
+   back-end server is running on the default port 9000). The only app
+   permission needed is to "read their user preferences". Take note of your new
+   app's consumer key and secret key, as you'll need them in the next step.
 
-5. In your backend server project, setup a .conf file that overrides properties
+5. In your back-end server project, setup a .conf file that overrides properties
    as needed from `conf/application.conf` (unless you'd prefer to set explicit
    system properties on the command line when starting up the server). Refer
-   to the `conf/application.conf` file and maproulette2 docs for explanations
-   of the various server configuration settings -- at the very least, you'll
-   want to make sure your JDBC url is correct and your OAuth consumer key and
-   secret are set properly. You'll also need to set the `mr3.host` to the URL
-   of your front-end dev server (e.g. `http://localhost:3000`) and set
-   `mr3.devMode=true` if you're doing development.
+   to the `conf/application.conf` file, `conf/dev.conf` file and maproulette2
+   docs for explanations of the various server configuration settings. At the
+   very least, you'll want to make sure your JDBC url is correct and your OAuth
+   consumer key and secret are set properly. You'll also need to set the
+   `mr3.host` to the URL of your front-end dev server (`http://127.0.0.1:3000`
+   by default) and set `mr3.devMode=true` if you're doing development.
 
-6. Fire up your backend server, specifying the path to your .conf file with
+6. Fire up your back-end server, specifying the path to your .conf file with
    `-Dconfig.resource` or explicitly specifying the various system properties
-   on the command line (e.g. `-Dmr3.host="http://localhost:3000`). See the
-   maproulette2 project for details on starting up the server.
+   on the command line (e.g. `-Dmr3.host="http://127.0.0.1:3000`). See the
+   maproulette2 docs for details on starting up the server.
 
-7. Point your browser at /mr3 on your server (e.g.
-   `https://maproulette.mydevserver.com/mr3`) to bring up the front-end.
+7. Point your browser at the back-end server, http://127.0.0.1:9000 by
+   default.
+
+> While you can also point your browser directly at the front-end server on
+> port 3000, OAuth will not work correctly and you therefore won't be able to
+> sign in. When you first fire up the front-end server, it will automatically
+> to open a browser tab pointing port 3000 -- just close it.
 
 ### Updating to the Latest Code
 
 > Note that the [maproulette2](https://github.com/maproulette/maproulette2)
-> backend (scala) server must be updated separately.
+> back-end server must be updated separately.
 
 1. Stop your front-end server (ctrl-c) if it's running.
 2. Pull the latest code
 3. `yarn` to install new or updated NPM packages
 4. `yarn run start` to restart the front-end server.
 
-### Staging/Production build:
+## Staging/Production build:
 
-* Setup a `.env.production` file with the desired production setting overrides.
-* `yarn run build` to create a minified front-end tarball.
+1. Setup a `.env.production` file with the desired production setting overrides.
+ * set `REACT_APP_BASE_PATH='/mr3'`
+ * set `REACT_APP_URL='https://myserver.com/mr3'`
+   (substituting your dev domain, of course)
+ * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://myserver.com'`
+ * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
+   analytics, set `REACT_APP_MATOMO_URL` and `REACT_APP_MATOMO_SITE_ID` to your
+   tracking url and site id, respectively (see `.env` file for example).
+ * set feature flags to `enabled` or `disabled` as desired.
+ * override any other settings from the `.env` file as needed or desired.
 
-> Note that the minified front-end JS and CSS bundles are given new hashed
-> names with each build, and that the back-end server needs to know these names
-> so it can serve up the files. You'll always need to set the
-> `MR3_JS_ASSET_URI` and `MR3_CSS_ASSET_URI` environment variables in a staging
-> or production environment to point to the correct filenames. For
-> scripting/automation purposes, the filenames can always be found in the
-> `asset-manifest.json` file and can be easily extracted with
-> [jq](https://stedolan.github.io/jq)
-> (e.g. `jq -r '."main.js"' MR3React/asset-manifest.json` and
-> `jq -r '."main.css"' MR3React/asset-manifest.json`)
+2. `yarn` to install and update NPM packages.
+
+3. `yarn run build` to create a minified front-end build in the `build/`
+   directory.
 
 
 # Development Notes
@@ -119,6 +119,9 @@ MR3 app. Copy `chimp.example.js` to `chimp.js`, edit the file and modify the
 Then:
 `yarn e2e` to run the tests, or `yarn e2e --watch` to enter watch mode and only
 run tests with a `@watch` tag (useful when working on new tests).
+
+[Sauce Labs](https://saucelabs.com) has also graciously provided us with free
+access to their cross-browser testing platform.
 
 ## CSS Styling and Naming
 
