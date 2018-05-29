@@ -55,7 +55,7 @@ ShallowWrapper {
 >
           <CreatedButton
                     quote="MapRoulette"
-                    url="http://localhost:3000/browse/challenges/123"
+                    url="http://127.0.0.1:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
           >
@@ -81,7 +81,7 @@ ShallowWrapper {
                                       ]
                     }
                     title="MapRoulette"
-                    url="http://localhost:3000/browse/challenges/123"
+                    url="http://127.0.0.1:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
           >
@@ -101,11 +101,11 @@ ShallowWrapper {
           className="share-control"
 >
           <CreatedButton
-                    body="http://localhost:3000/browse/challenges/123"
+                    body="http://127.0.0.1:3000/browse/challenges/123"
                     onClick={[Function]}
                     openWindow={false}
                     subject="MapRoulette"
-                    url="http://localhost:3000/browse/challenges/123"
+                    url="http://127.0.0.1:3000/browse/challenges/123"
           >
                     <span
                               className="share-icon"
@@ -131,7 +131,7 @@ ShallowWrapper {
         "props": Object {
           "children": <CreatedButton
             quote="MapRoulette"
-            url="http://localhost:3000/browse/challenges/123"
+            url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
 >
@@ -165,7 +165,7 @@ ShallowWrapper {
               />
 </span>,
             "quote": "MapRoulette",
-            "url": "http://localhost:3000/browse/challenges/123",
+            "url": "http://127.0.0.1:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
           },
@@ -216,7 +216,7 @@ ShallowWrapper {
                                   ]
             }
             title="MapRoulette"
-            url="http://localhost:3000/browse/challenges/123"
+            url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
 >
@@ -253,7 +253,7 @@ ShallowWrapper {
               "maproulette",
             ],
             "title": "MapRoulette",
-            "url": "http://localhost:3000/browse/challenges/123",
+            "url": "http://127.0.0.1:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
           },
@@ -298,11 +298,11 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <CreatedButton
-            body="http://localhost:3000/browse/challenges/123"
+            body="http://127.0.0.1:3000/browse/challenges/123"
             onClick={[Function]}
             openWindow={false}
             subject="MapRoulette"
-            url="http://localhost:3000/browse/challenges/123"
+            url="http://127.0.0.1:3000/browse/challenges/123"
 >
             <span
                         className="share-icon"
@@ -323,7 +323,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "body": "http://localhost:3000/browse/challenges/123",
+            "body": "http://127.0.0.1:3000/browse/challenges/123",
             "children": <span
               className="share-icon"
 >
@@ -337,7 +337,7 @@ ShallowWrapper {
             "onClick": [Function],
             "openWindow": false,
             "subject": "MapRoulette",
-            "url": "http://localhost:3000/browse/challenges/123",
+            "url": "http://127.0.0.1:3000/browse/challenges/123",
           },
           "ref": null,
           "rendered": Object {
@@ -389,7 +389,7 @@ ShallowWrapper {
 >
             <CreatedButton
                         quote="MapRoulette"
-                        url="http://localhost:3000/browse/challenges/123"
+                        url="http://127.0.0.1:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
             >
@@ -415,7 +415,7 @@ ShallowWrapper {
                                               ]
                         }
                         title="MapRoulette"
-                        url="http://localhost:3000/browse/challenges/123"
+                        url="http://127.0.0.1:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
             >
@@ -435,11 +435,11 @@ ShallowWrapper {
             className="share-control"
 >
             <CreatedButton
-                        body="http://localhost:3000/browse/challenges/123"
+                        body="http://127.0.0.1:3000/browse/challenges/123"
                         onClick={[Function]}
                         openWindow={false}
                         subject="MapRoulette"
-                        url="http://localhost:3000/browse/challenges/123"
+                        url="http://127.0.0.1:3000/browse/challenges/123"
             >
                         <span
                                     className="share-icon"
@@ -465,7 +465,7 @@ ShallowWrapper {
           "props": Object {
             "children": <CreatedButton
               quote="MapRoulette"
-              url="http://localhost:3000/browse/challenges/123"
+              url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
 >
@@ -499,7 +499,7 @@ ShallowWrapper {
                 />
 </span>,
               "quote": "MapRoulette",
-              "url": "http://localhost:3000/browse/challenges/123",
+              "url": "http://127.0.0.1:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
             },
@@ -550,7 +550,7 @@ ShallowWrapper {
                                         ]
               }
               title="MapRoulette"
-              url="http://localhost:3000/browse/challenges/123"
+              url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
 >
@@ -587,7 +587,7 @@ ShallowWrapper {
                 "maproulette",
               ],
               "title": "MapRoulette",
-              "url": "http://localhost:3000/browse/challenges/123",
+              "url": "http://127.0.0.1:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
             },
@@ -632,11 +632,11 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <CreatedButton
-              body="http://localhost:3000/browse/challenges/123"
+              body="http://127.0.0.1:3000/browse/challenges/123"
               onClick={[Function]}
               openWindow={false}
               subject="MapRoulette"
-              url="http://localhost:3000/browse/challenges/123"
+              url="http://127.0.0.1:3000/browse/challenges/123"
 >
               <span
                             className="share-icon"
@@ -657,7 +657,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "body": "http://localhost:3000/browse/challenges/123",
+              "body": "http://127.0.0.1:3000/browse/challenges/123",
               "children": <span
                 className="share-icon"
 >
@@ -671,7 +671,7 @@ ShallowWrapper {
               "onClick": [Function],
               "openWindow": false,
               "subject": "MapRoulette",
-              "url": "http://localhost:3000/browse/challenges/123",
+              "url": "http://127.0.0.1:3000/browse/challenges/123",
             },
             "ref": null,
             "rendered": Object {
@@ -752,7 +752,7 @@ ShallowWrapper {
 >
           <CreatedButton
                     quote="MapRoulette"
-                    url="http://localhost:3000/browse/challenges/123"
+                    url="http://127.0.0.1:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
           >
@@ -778,7 +778,7 @@ ShallowWrapper {
                                       ]
                     }
                     title="MapRoulette"
-                    url="http://localhost:3000/browse/challenges/123"
+                    url="http://127.0.0.1:3000/browse/challenges/123"
                     windowHeight={400}
                     windowWidth={550}
           >
@@ -798,11 +798,11 @@ ShallowWrapper {
           className="share-control"
 >
           <CreatedButton
-                    body="http://localhost:3000/browse/challenges/123"
+                    body="http://127.0.0.1:3000/browse/challenges/123"
                     onClick={[Function]}
                     openWindow={false}
                     subject="MapRoulette"
-                    url="http://localhost:3000/browse/challenges/123"
+                    url="http://127.0.0.1:3000/browse/challenges/123"
           >
                     <span
                               className="share-icon"
@@ -828,7 +828,7 @@ ShallowWrapper {
         "props": Object {
           "children": <CreatedButton
             quote="MapRoulette"
-            url="http://localhost:3000/browse/challenges/123"
+            url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
 >
@@ -862,7 +862,7 @@ ShallowWrapper {
               />
 </span>,
             "quote": "MapRoulette",
-            "url": "http://localhost:3000/browse/challenges/123",
+            "url": "http://127.0.0.1:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
           },
@@ -913,7 +913,7 @@ ShallowWrapper {
                                   ]
             }
             title="MapRoulette"
-            url="http://localhost:3000/browse/challenges/123"
+            url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
 >
@@ -950,7 +950,7 @@ ShallowWrapper {
               "maproulette",
             ],
             "title": "MapRoulette",
-            "url": "http://localhost:3000/browse/challenges/123",
+            "url": "http://127.0.0.1:3000/browse/challenges/123",
             "windowHeight": 400,
             "windowWidth": 550,
           },
@@ -995,11 +995,11 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <CreatedButton
-            body="http://localhost:3000/browse/challenges/123"
+            body="http://127.0.0.1:3000/browse/challenges/123"
             onClick={[Function]}
             openWindow={false}
             subject="MapRoulette"
-            url="http://localhost:3000/browse/challenges/123"
+            url="http://127.0.0.1:3000/browse/challenges/123"
 >
             <span
                         className="share-icon"
@@ -1020,7 +1020,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "function",
           "props": Object {
-            "body": "http://localhost:3000/browse/challenges/123",
+            "body": "http://127.0.0.1:3000/browse/challenges/123",
             "children": <span
               className="share-icon"
 >
@@ -1034,7 +1034,7 @@ ShallowWrapper {
             "onClick": [Function],
             "openWindow": false,
             "subject": "MapRoulette",
-            "url": "http://localhost:3000/browse/challenges/123",
+            "url": "http://127.0.0.1:3000/browse/challenges/123",
           },
           "ref": null,
           "rendered": Object {
@@ -1086,7 +1086,7 @@ ShallowWrapper {
 >
             <CreatedButton
                         quote="MapRoulette"
-                        url="http://localhost:3000/browse/challenges/123"
+                        url="http://127.0.0.1:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
             >
@@ -1112,7 +1112,7 @@ ShallowWrapper {
                                               ]
                         }
                         title="MapRoulette"
-                        url="http://localhost:3000/browse/challenges/123"
+                        url="http://127.0.0.1:3000/browse/challenges/123"
                         windowHeight={400}
                         windowWidth={550}
             >
@@ -1132,11 +1132,11 @@ ShallowWrapper {
             className="share-control"
 >
             <CreatedButton
-                        body="http://localhost:3000/browse/challenges/123"
+                        body="http://127.0.0.1:3000/browse/challenges/123"
                         onClick={[Function]}
                         openWindow={false}
                         subject="MapRoulette"
-                        url="http://localhost:3000/browse/challenges/123"
+                        url="http://127.0.0.1:3000/browse/challenges/123"
             >
                         <span
                                     className="share-icon"
@@ -1162,7 +1162,7 @@ ShallowWrapper {
           "props": Object {
             "children": <CreatedButton
               quote="MapRoulette"
-              url="http://localhost:3000/browse/challenges/123"
+              url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
 >
@@ -1196,7 +1196,7 @@ ShallowWrapper {
                 />
 </span>,
               "quote": "MapRoulette",
-              "url": "http://localhost:3000/browse/challenges/123",
+              "url": "http://127.0.0.1:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
             },
@@ -1247,7 +1247,7 @@ ShallowWrapper {
                                         ]
               }
               title="MapRoulette"
-              url="http://localhost:3000/browse/challenges/123"
+              url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
 >
@@ -1284,7 +1284,7 @@ ShallowWrapper {
                 "maproulette",
               ],
               "title": "MapRoulette",
-              "url": "http://localhost:3000/browse/challenges/123",
+              "url": "http://127.0.0.1:3000/browse/challenges/123",
               "windowHeight": 400,
               "windowWidth": 550,
             },
@@ -1329,11 +1329,11 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <CreatedButton
-              body="http://localhost:3000/browse/challenges/123"
+              body="http://127.0.0.1:3000/browse/challenges/123"
               onClick={[Function]}
               openWindow={false}
               subject="MapRoulette"
-              url="http://localhost:3000/browse/challenges/123"
+              url="http://127.0.0.1:3000/browse/challenges/123"
 >
               <span
                             className="share-icon"
@@ -1354,7 +1354,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "body": "http://localhost:3000/browse/challenges/123",
+              "body": "http://127.0.0.1:3000/browse/challenges/123",
               "children": <span
                 className="share-icon"
 >
@@ -1368,7 +1368,7 @@ ShallowWrapper {
               "onClick": [Function],
               "openWindow": false,
               "subject": "MapRoulette",
-              "url": "http://localhost:3000/browse/challenges/123",
+              "url": "http://127.0.0.1:3000/browse/challenges/123",
             },
             "ref": null,
             "rendered": Object {
