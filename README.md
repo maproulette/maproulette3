@@ -65,7 +65,7 @@ project is still required.
 1. Setup a `.env.production` file with the desired production setting overrides.
  * set `REACT_APP_BASE_PATH='/mr3'`
  * set `REACT_APP_URL='https://myserver.com/mr3'`
-   (substituting your dev domain, of course)
+   (substituting your domain, of course)
  * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://myserver.com'`
  * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
    analytics, set `REACT_APP_MATOMO_URL` and `REACT_APP_MATOMO_SITE_ID` to your

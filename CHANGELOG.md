@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.0.2] - 2018-05-29
+### Added
+- Refresh results from server after changes to challenge filters.
+- Update README documentation.
+- [internal] Upgrade various package dependencies, including React.
+
+### Fixed
+- Very slow edit-challenge forms for some challenges (#370).
+
+### Changed
+- Default to https for tile-server and other URLs.
+
+
 ## [v3.0.1] - 2018-05-15
 ### Added
 - Additional error page for use by server in some situations.
