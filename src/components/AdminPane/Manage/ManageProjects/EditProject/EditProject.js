@@ -4,6 +4,7 @@ import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
+import _snakeCase from 'lodash/snakeCase'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -43,6 +44,12 @@ export class EditProject extends Component {
   finish = ({formData, errors}) => {
     if (!this.state.isSaving && errors.length === 0) {
       this.setState({isSaving: true})
+
+      // For new projects, generate a project name based on the display name.
+      // It cannot start with "home_".
+      if (!_isFinite(formData.id)) {
+        formData.name = _snakeCase(formData.displayName).replace(/^home_/, 'project_')
+      }
 
       this.props.saveProject(formData).then(project =>
         this.props.history.push(`/admin/project/${project.id}`)
@@ -98,7 +105,7 @@ export class EditProject extends Component {
             </ul>
           </nav>
 
-          <Form schema={jsSchema(this.props.intl, !_isFinite(projectData.id))}
+          <Form schema={jsSchema(this.props.intl)}
                 uiSchema={uiSchema}
                 FieldTemplate={CustomFieldTemplate}
                 liveValidate

@@ -50,12 +50,10 @@ export class ManageProjects extends Component {
             </div>
           </h3>
 
-          {this.props.user.isSuperUser &&
-           <button className="button is-green is-outlined new-project"
-                   onClick={() => this.props.history.push('/admin/projects/new')}>
-             <FormattedMessage {...messages.newProject} />
-           </button>
-          }
+          <button className="button is-green is-outlined new-project"
+                  onClick={() => this.props.history.push('/admin/projects/new')}>
+            <FormattedMessage {...messages.newProject} />
+          </button>
         </div>
 
         {this.props.projects.length <= 1 &&

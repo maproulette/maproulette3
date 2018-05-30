@@ -10,10 +10,12 @@ const group789 = {id: 789, groupType: ADMIN_GROUP_TYPE}
 
 const powerUser = {id: 246, groups: [group123, group456]}
 const superUser = {id: 135, groups: [superGroup]}
+const normalUser = {id: 790, osmProfile: {id: 987654321}, groups: []}
 
 const project123 = {id: 123, groups: [group123]}
 const project456 = {id: 456, groups: [group456]}
 const project789 = {id: 789, groups: [group789]}
+const project101 = {id: 101, groups: [group789], owner: 987654321}
 
 const challenge123_1 = {id: 1231, parent: 123}
 const challenge123_2 = {id: 1232, parent: 123}
@@ -29,10 +31,23 @@ describe('canManage', () => {
     expect(manager.canManage(project456)).toBe(true)
   })
 
-  it("returns true only if the user contains the project's group", () => {
+  it("returns true if the user contains the project's group", () => {
     const manager = AsManager(powerUser)
 
     expect(manager.canManage(project123)).toBe(true)
+    expect(manager.canManage(project789)).toBe(false)
+  })
+
+  it("returns true if the user is the project owner", () => {
+    const manager = AsManager(normalUser)
+
+    expect(manager.canManage(project101)).toBe(true)
+    expect(manager.canManage(project789)).toBe(false)
+  })
+
+  it("returns false if user and project owner ids match but are are undefined", () => {
+    const manager = AsManager(powerUser)
+
     expect(manager.canManage(project789)).toBe(false)
   })
 
