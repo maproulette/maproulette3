@@ -5,11 +5,7 @@ import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
-import _map from 'lodash/map'
-import _isFunction from 'lodash/isFunction'
 import _isObject from 'lodash/isObject'
-import _filter from 'lodash/filter'
-import _snakeCase from 'lodash/snakeCase'
 import { messagesByStatus,
          keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -18,7 +14,6 @@ import { messagesByPriority }
 import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import AsyncCSVExport from './AsyncCSVExport'
 import messages from './Messages'
 import '../../../../../node_modules/react-table/react-table.css'
 import './TaskAnalysisTable.css'
@@ -39,23 +34,6 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class TaskAnalysisTable extends Component {
-  toCSV = (data, columns) => {
-    return new Promise(resolve => {
-      const exportableColumns =
-        _filter(columns, column => _isFunction(column.exportable))
-
-      const csvRows = []
-      csvRows.push(_map(exportableColumns, 'Header'))
-
-      for (let i = 0; i < data.length; i++) {
-        csvRows.push(_map(exportableColumns,
-                          column => column.exportable(data[i])))
-      }
-
-      resolve(csvRows)
-    })
-  }
-
   render() {
     if (!_isObject(this.props.challenge) ||
         !_isObject(this.props.challenge.parent)) {
@@ -146,8 +124,13 @@ export class TaskAnalysisTable extends Component {
                                     countShown,
                                     countTotal: this.props.totalTaskCount,
                                   }} />
-            <AsyncCSVExport filename={`${_snakeCase(this.props.challenge.name)}-tasks.csv`}
-                            loadAsyncData={() => this.toCSV(data, columns)} />
+            <a target="_blank"
+               href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
+               className="button is-outlined has-svg-icon csv-export"
+            >
+              <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
+              <FormattedMessage {...messages.exportCSVLabel} />
+            </a>
           </div>
         )
       },
