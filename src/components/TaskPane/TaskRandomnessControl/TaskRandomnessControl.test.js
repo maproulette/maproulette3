@@ -2,7 +2,7 @@ import React from 'react'
 import _cloneDeep from 'lodash/cloneDeep'
 import TaskRandomnessControl from './TaskRandomnessControl'
 import { TaskLoadMethod }
-       from '../../../../../services/Task/TaskLoadMethod/TaskLoadMethod'
+       from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 
 let challengeId = null
 let basicProps = null

@@ -1,9 +1,19 @@
-@import '../../variables.scss';
+@import 'variables.scss';
 
 .navbar.top-nav {
   height: $navbar-height;
   position: relative;
   z-index: $layer-topnav;
+
+  @media(max-width: $app-mobile-break) {
+    height: $mobile-navbar-height;
+    min-height: $mobile-navbar-height;
+
+    .navbar-brand {
+      height: $mobile-navbar-height;
+      min-height: $mobile-navbar-height;
+    }
+  }
   
   .navbar-brand {
     position: relative;
@@ -18,24 +28,6 @@
         width: auto;
         margin-right: 10px;
         fill: $navbar-item-color;
-      }
-    }
-
-    .navbar-burger {
-      border: 1px solid $navbar-item-color;
-      border-radius: 50%;
-      box-shadow: none;
-      background-color: transparent;
-      color: $navbar-item-color;
-      height: 2rem;
-      width: 2rem;
-      margin-top: 1rem;
-      margin-right: 1rem;
-      transition: color 0.25s, background-color 0.25s;
-
-      &:hover {
-        background-color: $navbar-item-color;
-        color: $primary;
       }
     }
   }
@@ -79,5 +71,65 @@
         }
       }
     }
+  }
+
+  .top-nav__signin-link {
+    margin-left: 16px;
+  }
+
+  /* Position and sizing of burger button */
+  .bm-burger-button {
+    position: absolute;
+    width: 30px;
+    height: 25px;
+    right: 14px;
+    top: 23px;
+
+    svg {
+      fill: $navbar-item-color;
+    }
+
+    @media(max-width: $app-mobile-break) {
+      top: 19px;
+    }
+  }
+
+  /* Position and sizing of clickable cross button */
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+
+    svg {
+      fill: $grey-dark;
+    }
+  }
+
+  /* General sidebar styles */
+  .bm-menu {
+    background-color: $grey-lightest-more;
+    padding: 2.5em 1.5em 0;
+    font-size: 1.15em;
+  }
+
+  /* Morph shape necessary with bubble or elastic */
+  .bm-morph-shape {
+    fill: #373a47;
+  }
+
+  /* Wrapper for item list */
+  .bm-item-list {
+    color: #b8b7ad;
+    padding: 0.8em;
+    padding-top: 0;
+
+    .navbar-item {
+      color: $green;
+    }
+  }
+
+  /* Styling of overlay */
+  .bm-overlay {
+    background: $modal-background-background-color;
+    left: 0;
   }
 }

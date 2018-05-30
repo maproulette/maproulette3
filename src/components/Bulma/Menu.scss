@@ -1,0 +1,26 @@
+@import 'variables.scss';
+
+aside.menu {
+  ul.menu-list {
+    li {
+      position: relative;
+
+      svg.menu-list__active-indicator {
+        fill: $green;
+        width: 0.5em;
+        height: auto;
+        position: absolute;
+        top: 13px;
+        left: 5px;
+      }
+
+      a {
+        padding: 0.5em 0.75em 0.5em 1.25em;
+      }
+
+      label {
+        color: $grey-dark;
+      }
+    }
+  }
+}

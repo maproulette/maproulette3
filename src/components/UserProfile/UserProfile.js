@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
-import { FormattedMessage,
-         FormattedDate,
-         injectIntl } from 'react-intl'
+import { injectIntl } from 'react-intl'
+import MediaQuery from 'react-responsive'
 import _get from 'lodash/get'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import Tabs from '../Bulma/Tabs'
 import UserActivityTimeline
        from '../ActivityTimeline/UserActivityTimeline/UserActivityTimeline'
 import SignInButton from '../SignInButton/SignInButton'
-import messages from './Messages'
+import PersonalInfo from './PersonalInfo'
+import ApiKey from './ApiKey'
 import SavedTasks from './SavedTasks/SavedTasks'
 import SavedChallenges from './SavedChallenges/SavedChallenges'
 import TopChallenges from './TopChallenges/TopChallenges'
 import UserSettings from './UserSettings/UserSettings'
+import messages from './Messages'
 import './UserProfile.css'
 
 export class UserProfile extends Component {
@@ -24,61 +26,51 @@ export class UserProfile extends Component {
       )
     }
 
+    const mobileTabs = {
+      [this.props.intl.formatMessage(messages.overviewTab)]: (
+        <div>
+          <TopChallenges {...this.props} className="profile-section"/>
+          <SavedChallenges {...this.props} className="profile-section" />
+          <SavedTasks {...this.props} className="profile-section" />
+        </div>),
+
+      [this.props.intl.formatMessage(messages.activityTab)]: (
+        <div>
+          <UserActivityTimeline activity={this.props.user.activity}
+                                className="user-profile__activity profile-section"/>
+        </div>),
+
+      [this.props.intl.formatMessage(messages.settingsTab)]: (
+        <div>
+          <UserSettings {...this.props} className="profile-section" />
+          <ApiKey {...this.props} />
+        </div>),
+    }
+
     return (
       <div className="user-profile">
-        <div className="columns">
-          <div className="column is-two-fifths left-column">
-            <section className="user-profile__personal">
-              <figure className="user-profile__personal--avatar image is-128x128">
-                <img src={this.props.user.osmProfile.avatarURL} alt="Avatar" />
-              </figure>
+        <MediaQuery query="(min-width: 1024px)">
+          <div className="columns">
+            <div className="column is-two-fifths left-column">
+              <PersonalInfo {...this.props} className="profile-section" />
+              <UserActivityTimeline activity={this.props.user.activity}
+                                    className="user-profile__activity profile-section"/>
+            </div>
 
-              <div className="user-profile__personal__about">
-                <div className="user-profile__personal__display-name">
-                  {this.props.user.osmProfile.displayName}
-                </div>
-                <div className="user-profile__personal__created">
-                  User since: <span className="user-profile__personal__value">
-                    <FormattedDate month='long' year='numeric'
-                                  value={new Date(this.props.user.created)} />
-                  </span>
-                </div>
-              </div>
-            </section>
-
-            <section className="user-profile__activity">
-              <UserActivityTimeline activity={this.props.user.activity} />
-            </section>
+            <div className="column right-column">
+              <TopChallenges {...this.props} className="profile-section"/>
+              <SavedChallenges {...this.props} className="profile-section" />
+              <SavedTasks {...this.props} className="profile-section" />
+              <UserSettings {...this.props} className="profile-section" />
+              <ApiKey {...this.props} />
+            </div>
           </div>
+        </MediaQuery>
 
-          <div className="column right-column">
-            <section className="user-profile__top-challenges">
-              <TopChallenges {...this.props} />
-            </section>
-
-            <section className="user-profile__saved-challenges">
-              <SavedChallenges {...this.props} />
-            </section>
-
-            <section className="user-profile__saved-tasks">
-              <SavedTasks {...this.props} />
-            </section>
-
-            <section className="user-profile__user-settings">
-              <UserSettings {...this.props} />
-            </section>
-
-            <section className="user-profile__api-key">
-              <h2 className="subtitle">
-                <FormattedMessage {...messages.apiKey} />
-              </h2>
-
-              <pre className="user-profile__api-key--current-key">
-                {this.props.user.apiKey}
-              </pre>
-            </section>
-          </div>
-        </div>
+        <MediaQuery query="(max-width: 1023px)">
+          <PersonalInfo {...this.props} className="profile-section" />
+          <Tabs className='is-centered' tabs={mobileTabs} />
+        </MediaQuery>
       </div>
     )
   }

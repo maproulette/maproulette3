@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import L from 'leaflet'
 import 'leaflet-vectoricon'
-import InsetMap from '../../../InsetMap/InsetMap'
-import WithTaskCenterPoint from '../../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
+import InsetMap from '../../InsetMap/InsetMap'
+import WithTaskCenterPoint from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
 import './TaskLocationMap.css'
 
 const starIconSvg = L.vectorIcon({

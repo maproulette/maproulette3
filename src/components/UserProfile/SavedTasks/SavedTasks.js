@@ -26,7 +26,7 @@ export default class SavedTasks extends Component {
         }
 
         return (
-          <li key={task.id} className="columns saved-tasks__task">
+          <li key={task.id} className="user-profile__saved-tasks__task">
             <Link to={`/challenge/${task.parent.id}/task/${task.id}`}>
               <span className="saved-tasks__task__name">{task.name}</span> &mdash; {task.parent.name}
             </Link>
@@ -48,7 +48,7 @@ export default class SavedTasks extends Component {
                        <div className="none">No Tasks</div>
 
     return (
-      <div className={classNames("saved-tasks", this.props.className)}>
+      <div className={classNames("user-profile__saved-tasks", this.props.className)}>
         <h2 className="subtitle">
           <FormattedMessage {...messages.header} />
         </h2>

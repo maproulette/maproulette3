@@ -23,4 +23,9 @@ export default defineMessages({
     id: 'Navbar.links.admin',
     defaultMessage: "Create",
   },
+
+  profile: {
+    id: 'Navbar.links.mobile.userProfile',
+    defaultMessage: "User Profile",
+  },
 })

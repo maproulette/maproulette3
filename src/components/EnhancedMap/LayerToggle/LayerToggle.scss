@@ -6,6 +6,10 @@
   top: 100px;
   right: 10px;
 
+  @media(max-width: $app-mobile-break) {
+    top: 10px; // swap layer toggle with zoom for mobile
+  }
+
   .dropdown-trigger > button.button:focus {
     border-color: $grey-light;
   }

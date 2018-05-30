@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
@@ -144,7 +145,7 @@ export class UserActivityTimeline extends Component {
     }
 
     return (
-      <div className="timeline activity-timeline">
+      <div className={classNames("timeline activity-timeline", this.props.className)}>
         <header className="timeline-header">
           <span className="tag is-medium">Activity</span>
         </header>

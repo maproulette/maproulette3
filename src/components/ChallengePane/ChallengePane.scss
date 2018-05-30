@@ -1,10 +1,54 @@
-@import '../../variables.scss';
+@import 'variables.scss';
 
 .challenge-pane {
+  $tablet-break: 900px;
+
   position: relative;
   display: flex;
 
   .sidebar {
     background-color: $grey-lightest-more;
+  }
+
+  @media(max-width: $tablet-break) {
+    flex-direction: column-reverse;
+
+    .sidebar {
+      position: fixed;
+      top: 65vh;
+      max-height: 35vh;
+      min-width: 300px;
+      max-width: initial;
+      width: 100%;
+      border-radius: 0;
+      background-color: rgba($grey-lightest-more, 0.85);
+
+      &.is-active {
+        box-shadow: 0px 0px 20px 0px $box-shadow-color;
+      }
+
+      .challenge-result-list--heading {
+        padding: 0 0 10px 20px;
+        margin-bottom: 0;
+
+        .challenge-result-list__clear-filters-control {
+          margin-right: 10px;
+        }
+      }
+
+      .challenge-list__item {
+        &.card.is-active .card-content {
+          overflow-y: hidden;
+        }
+
+        &__name {
+          word-break: break-word;
+        }
+
+        &__controls__manage {
+          display: none;
+        }
+      }
+    }
   }
 }

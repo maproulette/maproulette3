@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import _map from 'lodash/map'
 import { injectIntl } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
+import MenuList from '../../Bulma/MenuList'
 import { ChallengeDifficulty,
          difficultyLabels }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
@@ -43,16 +44,17 @@ export class FilterByDifficulty extends Component {
     const anyOption = {
       key: 'any',
       text: localizedDifficultyLabels.any,
-      value: null,
+      value: undefined,
     }
     selectOptions.unshift(anyOption)
 
+    const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
-      <NavDropdown placeholder={anyOption.text}
-                   label={this.props.intl.formatMessage(messages.difficultyLabel)}
-                   options={selectOptions}
-                   value={this.props.challengeFilter.difficulty}
-                   onChange={this.updateFilter}
+      <Selection placeholder={anyOption.text}
+                 label={this.props.intl.formatMessage(messages.difficultyLabel)}
+                 options={selectOptions}
+                 value={this.props.challengeFilter.difficulty}
+                 onChange={this.updateFilter}
       />
     )
   }
@@ -65,10 +67,13 @@ FilterByDifficulty.propTypes = {
   removeChallengeFilters: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
   challengeFilter: PropTypes.object,
+  /** Set to true to render a MenuList instead of NavDropdown */
+  asMenuList: PropTypes.bool,
 }
 
 FilterByDifficulty.defaultProps = {
   challengeFilter: {},
+  asMenuList: false,
 }
 
 export default injectIntl(FilterByDifficulty)

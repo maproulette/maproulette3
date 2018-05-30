@@ -1,6 +1,9 @@
 @import 'mixins.scss';
 
 .leaderboard {
+  $mobile-break: 650px;
+  $tablet-break: 750px;
+
   background-color: $grey-lightest-more;
   padding: 40px;
   display: flex;
@@ -13,7 +16,6 @@
     background-color: $white;
     padding: 20px;
     box-shadow: 0px 2px 4px $box-shadow-color;
-    min-width: 550px;
     max-width: 1350px;
     min-height: 475px;
     height: fit-content;
@@ -71,6 +73,28 @@
             font-weight: $weight-semibold;
             margin-bottom: 10px;
           }
+        }
+      }
+
+      @media(max-width: $tablet-break) {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        h1 {
+          flex-direction: column;
+        }
+
+        &__dates-control {
+          .dropdown-trigger {
+            .button.is-outlined {
+              margin: 10px 0px;
+            }
+          }
+        }
+
+        &__point-breakdown {
+          display: none;
         }
       }
     }
@@ -221,91 +245,153 @@
           }
         }
       }
+
+      @media(max-width: $mobile-break) {
+        .leaderboard__board__leader {
+          margin-right: 0;
+
+          &:last-child {
+            margin-right: 0px;
+          }
+        }
+      }
     }
 
     &__remaining-leaders {
-      display: flex;
-      flex-direction: column;
-      margin-top: 40px;
-
       .leaderboard__board__leader {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
         background-color: $white;
-        padding: 0;
         border: 2px solid $grey-lightest-less;
         border-radius: $radius-medium;
 
         &__rank {
-          min-width: 65px;
-          max-width: 65px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
           color: $grey-light;
-          border-right: 2px solid $grey-lightest-less;
-          text-align: center;
-          font-size: $size-5;
         }
+      }
 
-        &__avatar {
+      @media(max-width: $mobile-break) {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .leaderboard__board__leader {
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          margin: 15px;
-          min-width: 75px;
-          max-width: 75px;
-          width: 75px;
-          height: auto;
+          align-items: center;
+          min-width: 300px;
+          width: 300px;
+          max-width: 300px;
 
-          .circular-image {
-            height: 75px;
+          &__name-and-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+          }
+
+          &__rank {
+            color: $grey-light;
+            font-size: $size-5;
+            text-align: center;
+          }
+
+          &__top-challenges {
+            margin-top: 15px;
+          }
+        }
+      }
+
+      @media(max-width: $mobile-break) {
+        .leaderboard__board__leader {
+          &__name-and-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+          }
+        }
+      }
+
+      @media(min-width: $mobile-break) {
+        display: flex;
+        flex-direction: column;
+        margin-top: 40px;
+
+        .leaderboard__board__leader {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          padding: 0;
+
+          &__rank {
+            min-width: 65px;
+            max-width: 65px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 2px solid $grey-lightest-less;
+            text-align: center;
+            font-size: $size-5;
+          }
+
+          &__avatar {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 15px;
+            min-width: 75px;
+            max-width: 75px;
             width: 75px;
-          }
-        }
+            height: auto;
 
-        &__name-and-score {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-
-        &__name {
-          font-size: $size-5;
-          min-width: 200px;
-          max-width: 200px;
-        }
-
-        &__score {
-          justify-content: flex-start;
-        }
-
-        &__top-challenges {
-          justify-content: center;
-          align-items: left;
-          border-left: 2px solid $grey-lightest-less;
-          margin: 15px;
-          padding-left: 15px;
-
-          h3 {
-            border-bottom: none;
-            padding-bottom: 0;
+            .circular-image {
+              height: 75px;
+              width: 75px;
+            }
           }
 
-          &__challenge-list {
-            flex-direction: row;
-            flex-wrap: wrap;
+          &__name-and-score {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
           }
 
-          &__challenge-name {
-            padding-right: 10px;
-            margin-right: 10px;
-            border-right: 1px solid $grey-lighter-more;
+          &__name {
+            font-size: $size-5;
+            min-width: 200px;
+            max-width: 200px;
+          }
 
-            &:last-child {
-              padding-right: 0;
-              border-right: none;
+          &__score {
+            justify-content: flex-start;
+          }
+
+          &__top-challenges {
+            justify-content: center;
+            align-items: left;
+            border-left: 2px solid $grey-lightest-less;
+            margin: 15px;
+            padding-left: 15px;
+
+            h3 {
+              border-bottom: none;
+              padding-bottom: 0;
+            }
+
+            &__challenge-list {
+              flex-direction: row;
+              flex-wrap: wrap;
+            }
+
+            &__challenge-name {
+              padding-right: 10px;
+              margin-right: 10px;
+              border-right: 1px solid $grey-lighter-more;
+
+              &:last-child {
+                padding-right: 0;
+                border-right: none;
+              }
             }
           }
         }
@@ -329,6 +415,10 @@
     top: $navbar-height;
     background-color: $grey-lightest-more;
     z-index: 1;
+
+    @media(max-width: $app-mobile-break) {
+      top: $mobile-navbar-height;
+    }
   }
 
   &--compact-view {

@@ -12,6 +12,11 @@
   display: flex;
   justify-content: center;
 
+  @media(max-width: $app-tablet-break) {
+    flex-direction: column;
+    padding: 20px;
+  }
+
   .columns {
     max-width: 1600px;
 
@@ -32,7 +37,7 @@
     margin-bottom: 0.5rem;
   }
 
-  section {
+  .profile-section {
     margin-top: 50px;
 
     &:first-child {
@@ -75,15 +80,58 @@
       margin-bottom: 10px;
       padding-bottom: 10px;
     }
+
+    @media(max-width: $app-mobile-break) {
+      flex-direction: column;
+      background-color: transparent;
+      box-shadow: none;
+      padding-top: 0;
+
+      .user-profile__personal--avatar {
+        margin-right: 0;
+      }
+
+      .user-profile__personal__about {
+        text-align: center;
+
+        .user-profile__personal__display-name {
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 
   &__activity {
     padding: 30px 40px;
     border: 2px solid $grey-lightest-less;
     border-radius: $radius-medium;
+
+    @media(max-width: $app-mobile-break) {
+      padding: 0;
+      border: none;
+
+      &.timeline {
+        .timeline-item {
+          margin-left: 10px;
+
+          .timeline-content {
+            padding-left: 1.5em;
+
+            .timeline-item__activity-entry {
+              font-size: $size-7;
+            }
+          }
+        }
+      }
+    }
   }
 
-  .top-challenges, .saved-challenges, .saved-tasks, .user-settings {
+  &__top-challenges,
+  &__saved-challenges,
+  &__saved-tasks,
+  &__user-settings {
     h2.subtitle {
       @extend .grey-backdrop;
       display: flex;
@@ -93,7 +141,21 @@
     }
   }
 
-  .top-challenges__challenge, .saved-challenges__challenge, .saved-tasks__task {
+  &__user-settings {
+    h2.subtitle {
+      margin-bottom: 0;
+    }
+
+    @media(max-width: $app-mobile-break) {
+      .help p {
+        margin-right: 2em;
+      }
+    }
+  }
+
+  &__top-challenges__challenge,
+  &__saved-challenges__challenge,
+  &__saved-tasks__task {
     display: flex;
     align-items: center;
     margin: 0;

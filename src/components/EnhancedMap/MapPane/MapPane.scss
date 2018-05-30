@@ -18,6 +18,10 @@
         .leaflet-control {
           z-index: $layer-map-control;
 
+          @media(max-width: $app-mobile-break) {
+            top: 56px; // swap zoom with layer toggle for mobile
+          }
+
           &.leaflet-control-zoom {
             border-width: 1px;
             border-radius: 2px;

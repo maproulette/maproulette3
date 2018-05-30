@@ -8,6 +8,25 @@ export default function () {
   return (
     <div className="sprites">
       <svg xmlns="http://www.w3.org/2000/svg" hidden>
+        <symbol id="evaluate-icon" viewBox="0 0 20 20">
+          <g transform="translate(0 10)">
+            <path d="M10,3 h 8 v 2 h -8 Z"/>
+            <polygon points="7.392 1.736 5.128 4 7.392 6.264 6.264 7.392 4 5.128 1.736 7.392 .608 6.264 2.872 4 .608 1.736 1.736 .608 4 2.872 6.264 .608"/>
+          </g>
+          <g transform="translate(0 1)">
+            <path d="M10,3 h 8 v 2 h -8 Z"/>
+            <polygon points="1.36 2.004 3.2 4.025 6.64 .263 7.76 1.505 3.2 6.475 .24 3.237 1.36 1.995"/>
+          </g>
+        </symbol>
+        <symbol id="help-icon" viewBox="0 0 20 20">
+          <path d="M17.16 6.42a8.03 8.03 0 0 0-3.58-3.58l-1.34 2.69a5.02 5.02 0 0 1 2.23 2.23l2.69-1.34zm0 7.16l-2.69-1.34a5.02 5.02 0 0 1-2.23 2.23l1.34 2.69a8.03 8.03 0 0 0 3.58-3.58zM6.42 2.84a8.03 8.03 0 0 0-3.58 3.58l2.69 1.34a5.02 5.02 0 0 1 2.23-2.23L6.42 2.84zM2.84 13.58a8.03 8.03 0 0 0 3.58 3.58l1.34-2.69a5.02 5.02 0 0 1-2.23-2.23l-2.69 1.34zM10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        </symbol>
+        <symbol id="cross-icon" viewBox="0 0 20 20">
+          <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/>
+        </symbol>
+        <symbol id="menu-icon" viewBox="0 0 20 20">
+          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+        </symbol>
         <symbol id="hourglass-icon" viewBox="0 0 20 20">
           <path d="M3 18a7 7 0 0 1 4-6.33V8.33A7 7 0 0 1 3 2H1V0h18v2h-2a7 7 0 0 1-4 6.33v3.34A7 7 0 0 1 17 18h2v2H1v-2h2zM5 2a5 5 0 0 0 4 4.9V10h2V6.9A5 5 0 0 0 15 2H5z"/>
         </symbol>
@@ -75,7 +94,7 @@ export default function () {
           <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z"/>
         </symbol> 
         <symbol id="chat-icon" viewBox="0 0 20 20">
-          <path d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"/>
+          <path d="M10,14 L6,18 L6,14 L2,14 C0.8954305,14 1.3527075e-16,13.1045695 0,12 L0,2 C0,0.9 0.9,0 2,0 L18,0 C19.1045695,0 20,0.8954305 20,2 L20,12 C20,13.1045695 19.1045695,14 18,14 L10,14 Z"/>
         </symbol>
         <symbol id="heart-icon" viewBox="0 0 20 20">
           <path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/>

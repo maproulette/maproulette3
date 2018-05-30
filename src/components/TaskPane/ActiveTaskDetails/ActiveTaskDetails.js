@@ -2,27 +2,27 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import _isEmpty from 'lodash/isEmpty'
-import _isUndefined from 'lodash/isUndefined'
 import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { Link } from 'react-router-dom'
 import Delayed from 'react-delayed'
 import Sidebar from '../../Sidebar/Sidebar'
 import Popout from '../../Bulma/Popout'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
-import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import TaskStatusIndicator from './TaskStatusIndicator/TaskStatusIndicator'
-import ShareLink from '../../ShareLink/ShareLink'
 import ActiveTaskControls from './ActiveTaskControls/ActiveTaskControls'
 import ReviewTaskControls from './ReviewTaskControls/ReviewTaskControls'
-import TaskLocationMap from './TaskLocationMap/TaskLocationMap'
 import CommentList from '../../CommentList/CommentList'
 import CommentCountBadge from '../../CommentList/CommentCountBadge/CommentCountBadge'
 import PlaceDescription from '../PlaceDescription/PlaceDescription'
 import ChallengeShareControls from '../ChallengeShareControls/ChallengeShareControls'
+import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
+import VirtualChallengeNameLink from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
+import OwnerContactLink from '../OwnerContactLink/OwnerContactLink'
+import ChallengeInfoSummary from '../ChallengeInfoSummary/ChallengeInfoSummary'
+import TaskLocationMap from '../TaskLocationMap/TaskLocationMap'
+import TaskInstructions from '../TaskInstructions/TaskInstructions'
 import CollapsibleSection from './CollapsibleSection/CollapsibleSection'
 import WithDeactivateOnOutsideClick from
        '../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
@@ -46,10 +46,6 @@ const DeactivatablePopout = WithDeactivateOnOutsideClick(Popout)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ActiveTaskDetails extends Component {
-  state = {
-    contactOwnerUrl: null,
-  }
-
   /**
    * Invoked to toggle minimization of the sidebar
    */
@@ -96,29 +92,6 @@ export class ActiveTaskDetails extends Component {
     }
   }
 
-  updateContactOwnerUrl = props => {
-    const ownerOSMId = _get(props, 'task.parent.owner')
-    if (_isFinite(ownerOSMId) && ownerOSMId > 0) {
-      props.contactTaskOwnerURL(ownerOSMId).then(url =>
-        this.setState({contactOwnerUrl: url})
-      )
-    }
-    else {
-      this.setState({contactOwnerUrl: null})
-    }
-  }
-
-  componentDidMount() {
-    this.updateContactOwnerUrl(this.props)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (_get(nextProps, 'task.parent.owner') !==
-        _get(this.props, 'task.parent.owner')) {
-      this.updateContactOwnerUrl(nextProps)
-    }
-  }
-
   render() {
     if (!this.props.task) {
       return null
@@ -140,40 +113,6 @@ export class ActiveTaskDetails extends Component {
     const minimizerButton =
       !canBeMinimized ? null :
       <button className="toggle-minimization" onClick={this.toggleIsMinimized} />
-
-    const challengeBrowseRoute =
-      `/browse/challenges/${_get(this.props.task, 'parent.id', '')}`
-
-    const challengeNameLink =
-      <Link to={challengeBrowseRoute}>
-        {_get(this.props.task, 'parent.name')}
-      </Link>
-
-    let virtualChallengeNameLink = null
-    if (_isFinite(this.props.virtualChallengeId)) {
-      const virtualChallengeBrowseRoute =
-        `/browse/virtual/${this.props.virtualChallengeId}`
-
-      virtualChallengeNameLink = (
-        <div className="active-task-details--virtual-name">
-          <span className="active-task-details__virtual-badge"
-                title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
-            <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
-          </span>
-          <h3>
-            <Link to={virtualChallengeBrowseRoute}>
-              {_get(this.props, 'virtualChallenge.name')}
-            </Link>
-            <ShareLink link={virtualChallengeBrowseRoute} {...this.props}
-                      className="active-task-details--quick-share-link" />
-          </h3>
-        </div>
-      )
-    }
-
-    const taskInstructions = !_isEmpty(this.props.task.instruction) ?
-                             this.props.task.instruction :
-                             _get(this.props.task, 'parent.instruction')
 
     const taskControls = this.props.reviewTask ?
       <ReviewTaskControls className="active-task-details__controls active-task-details--bordered"
@@ -200,30 +139,21 @@ export class ActiveTaskDetails extends Component {
                              className='active-task-details__info-popout'
                              control={infoPopoutButton}>
           <div className="popout-content__header active-task-details--bordered">
-            {virtualChallengeNameLink}
+            <VirtualChallengeNameLink {...this.props} />
             <h3 className="info-popout--name">
-              {challengeNameLink}
-              <ShareLink link={challengeBrowseRoute} {...this.props}
-                         className="active-task-details--quick-share-link" />
+              <ChallengeNameLink {...this.props} />
             </h3>
 
             <div className="info-popout--project-name">
               {_get(this.props.task, 'parent.parent.displayName')}
             </div>
 
-            {this.state.contactOwnerUrl &&
-            <a className="active-task-details__contact-owner"
-                href={this.state.contactOwnerUrl}
-                target='_blank'>
-              <SvgSymbol viewBox='0 0 20 20' sym="envelope-icon" />
-              <FormattedMessage {...messages.contactOwnerLabel} />
-            </a>
-            }
+            <OwnerContactLink {...this.props} />
           </div>
 
           <div className="popout-content__body">
             <div className='info-popout--instructions'>
-              <MarkdownContent markdown={taskInstructions} />
+              <TaskInstructions {...this.props} />
             </div>
           </div>
         </DeactivatablePopout>
@@ -268,26 +198,7 @@ export class ActiveTaskDetails extends Component {
               <FormattedMessage {...messages.challengeHeading} />
             </div>
 
-            {virtualChallengeNameLink}
-
-            <h2 className="active-task-details--name">
-              {challengeNameLink}
-              <ShareLink link={challengeBrowseRoute} {...this.props}
-                         className="active-task-details--quick-share-link" />
-            </h2>
-
-            <div className="active-task-details--project-name">
-              {_get(this.props.task, 'parent.parent.displayName')}
-            </div>
-
-            {this.state.contactOwnerUrl &&
-            <a className="active-task-details__contact-owner"
-                href={this.state.contactOwnerUrl}
-                target='_blank'>
-              <SvgSymbol viewBox='0 0 20 20' sym="envelope-icon" />
-              <FormattedMessage {...messages.contactOwnerLabel} />
-            </a>
-            }
+            <ChallengeInfoSummary {...this.props} />
           </div>
 
           <div className="task-content__task-body">
@@ -296,21 +207,18 @@ export class ActiveTaskDetails extends Component {
 
             {!isMinimized &&
               <div>
-                {!_isEmpty(taskInstructions) &&
-                 <CollapsibleSection
-                   className='active-task-details--instructions active-task-details--bordered'
-                   heading={
-                     <div className='active-task-details--sub-heading'>
-                       <FormattedMessage {...messages.instructions} />
-                     </div>
-                   }
-                   isExpanded={!this.props.collapseInstructions}
-                   toggle={this.toggleInstructionsCollapsed}
-                 >
-                   <MarkdownContent markdown={taskInstructions} />
-                 </CollapsibleSection>
-                }
-                {_isUndefined(taskInstructions) && <BusySpinner />}
+                <CollapsibleSection
+                  className='active-task-details--instructions active-task-details--bordered'
+                  heading={
+                    <div className='active-task-details--sub-heading'>
+                      <FormattedMessage {...messages.instructions} />
+                    </div>
+                  }
+                  isExpanded={!this.props.collapseInstructions}
+                  toggle={this.toggleInstructionsCollapsed}
+                >
+                  <TaskInstructions {...this.props} />
+                </CollapsibleSection>
               </div>
             }
 

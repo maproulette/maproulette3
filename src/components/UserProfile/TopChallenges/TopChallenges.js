@@ -31,7 +31,7 @@ export default class TopChallenges extends Component {
         }
 
         return (
-          <li key={challenge.id} className="columns top-challenges__challenge">
+          <li key={challenge.id} className="user-profile__top-challenges__challenge">
             <Link to={`/browse/challenges/${challenge.id}`}>
               {challenge.name}
             </Link>
@@ -45,7 +45,7 @@ export default class TopChallenges extends Component {
                           <div className="none">No Challenges</div>
 
     return (
-      <div className={classNames("top-challenges", this.props.className)}>
+      <div className={classNames("user-profile__top-challenges", this.props.className)}>
         <h2 className="subtitle">
           <FormattedMessage {...messages.header} />
           <PastDurationSelector className="user-profile__top-challenges__dates-control"

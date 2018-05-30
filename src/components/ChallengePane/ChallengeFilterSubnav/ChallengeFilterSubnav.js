@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { injectIntl } from 'react-intl'
+import MediaQuery from 'react-responsive'
 import { searchChallenges } from '../../../services/Challenge/Challenge'
 import WithSearchExecution from '../../HOCs/WithSearchExecution/WithSearchExecution'
 import SearchBox from '../../SearchBox/SearchBox'
+import MobileFilterMenu from '../../MobileFilterMenu/MobileFilterMenu'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeFilters from '../../HOCs/WithChallengeFilters/WithChallengeFilters'
 import WithMapBounds from '../../HOCs/WithMapBounds/WithMapBounds'
@@ -36,9 +38,16 @@ export class ChallengeFilterSubnav extends Component {
            aria-label="challenge filters">
 				<div className="navbar-menu">
           <div className="navbar-start">
-            <FilterByKeyword {...this.props} />
-            <FilterByDifficulty {...this.props} />
-            <LocationFilter {...this.props} />
+            <MediaQuery query="(max-width: 1024px)">
+              <MobileFilterMenu {...this.props} />
+            </MediaQuery>
+
+            <MediaQuery query="(min-width: 1024px)">
+              <FilterByKeyword {...this.props} />
+              <FilterByDifficulty {...this.props} />
+              <LocationFilter {...this.props} />
+            </MediaQuery>
+
             <ChallengeSearch className='navbar-item'
                              placeholder={this.props.intl.formatMessage(messages.searchLabel)}
                              {...this.props} />

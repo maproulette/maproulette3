@@ -19,7 +19,7 @@ export default class SavedChallenges extends Component {
         }
 
         return (
-          <li key={challenge.id} className="columns saved-challenges__challenge">
+          <li key={challenge.id} className="user-profile__saved-challenges__challenge">
             <Link to={`/browse/challenges/${challenge.id}`}>
               {challenge.name}
             </Link>
@@ -41,7 +41,7 @@ export default class SavedChallenges extends Component {
                             <div className="none">No Challenges</div>
 
     return (
-      <div className={classNames("saved-challenges", this.props.className)}>
+      <div className={classNames("user-profile__saved-challenges", this.props.className)}>
         <h2 className="subtitle">
           <FormattedMessage {...messages.header} />
         </h2>

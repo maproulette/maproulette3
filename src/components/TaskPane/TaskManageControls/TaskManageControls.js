@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import AsManager from '../../../../../interactions/User/AsManager'
+import AsManager from '../../../interactions/User/AsManager'
 import messages from './Messages'
 import './TaskManageControls.css'
 

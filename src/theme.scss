@@ -34,12 +34,20 @@ $tablet: 40px;
 
 .full-screen-height {
   height: calc(100vh - #{$navbar-height} - #{$subnav-height});
+
+  @media(max-width: $app-mobile-break) {
+    height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height});
+  }
 }
 
 .task .full-screen-height, .about .full-screen-height {
   // no subnav in task mode or about pane
   .leaflet-container {
     height: calc(100vh - #{$navbar-height});
+
+    @media(max-width: $app-mobile-break) {
+      height: calc(100vh - #{$mobile-navbar-height});
+    }
   }
 }
 
@@ -48,11 +56,19 @@ $tablet: 40px;
 .full-screen-map {
   .leaflet-container {
     height: calc(100vh - #{$navbar-height} - #{$subnav-height});
+
+    @media(max-width: $app-mobile-break) {
+      height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height});
+    }
   }
 
   &.task, &.about { // no subnav in task mode or about pane
     .leaflet-container {
       height: calc(100vh - #{$navbar-height});
+
+      @media(max-width: $app-mobile-break) {
+        height: calc(100vh - #{$mobile-navbar-height});
+      }
     }
   }
 }
@@ -321,6 +337,10 @@ code {
   align-items: center;
   font-size: $size-1;
   height: calc(100vh - #{$navbar-height});
+
+  @media(max-width: $app-mobile-break) {
+    height: calc(100vh - #{$mobile-navbar-height});
+  }
 
   .busy-spinner {
     @include busy-spinner-color($primary);

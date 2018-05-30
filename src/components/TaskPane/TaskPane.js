@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { CSSTransition } from 'react-transition-group'
+import MediaQuery from 'react-responsive'
 import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
@@ -15,10 +16,12 @@ import WithEditor from '../HOCs/WithEditor/WithEditor'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import ActiveTaskDetails from './ActiveTaskDetails/ActiveTaskDetails'
+import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
 import './TaskPane.css'
 
 // Setup child components with necessary HOCs
 const TaskDetailsSidebar = WithCurrentUser(WithEditor(ActiveTaskDetails))
+const MobileTabBar = WithCurrentUser(MobileTaskDetails)
 const DetailMap = WithMapBounds(WithTaskCenterPoint(TaskMap))
 
 /**
@@ -69,9 +72,11 @@ export class TaskPane extends Component {
 
     return (
       <div className='task-pane'>
-        <TaskDetailsSidebar task={this.props.task}
-                            completeTask={this.completeTask}
-                            {..._omit(this.props, 'completeTask')} />
+        <MediaQuery query="(min-width: 1024px)">
+          <TaskDetailsSidebar task={this.props.task}
+                              completeTask={this.completeTask}
+                              {..._omit(this.props, 'completeTask')} />
+        </MediaQuery>
         <MapPane completingTask={this.state.completingTask}>
           <CSSTransition key={this.props.task.id} timeout={{exit: 300, enter: 1500}}
                          classNames="animate-slide"
@@ -82,6 +87,9 @@ export class TaskPane extends Component {
                        {...this.props} />
           </CSSTransition>
         </MapPane>
+        <MediaQuery query="(max-width: 1023px)">
+          <MobileTabBar {...this.props} />
+        </MediaQuery>
       </div>
     )
   }

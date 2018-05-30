@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _isFinite from 'lodash/isFinite'
 import { FormattedMessage } from 'react-intl'
-import { TaskLoadMethod,
-         messagesByLoadMethod }
-       from '../../../../../services/Task/TaskLoadMethod/TaskLoadMethod'
+import { TaskLoadMethod, messagesByLoadMethod }
+       from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import messages from './Messages'
 import './TaskRandomnessControl.css'
 

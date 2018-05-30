@@ -14,6 +14,7 @@ beforeEach(() => {
         avatarURL: "some/url"
       }
     },
+    intl: {formatMessage: jest.fn(m => m.defaultMessage)},
   }
 })
 
@@ -35,7 +36,7 @@ test('it shows user profile data if the user is logged in', () => {
     <UserProfile {...basicProps} />
   )
 
-  expect(wrapper.find('.user-profile__personal').exists()).toBe(true)
+  expect(wrapper.find('PersonalInfo').exists()).toBe(true)
 
   expect(wrapper).toMatchSnapshot()
 })
