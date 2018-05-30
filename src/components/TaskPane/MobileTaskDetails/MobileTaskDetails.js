@@ -18,6 +18,7 @@ import TaskRandomnessControl
        from '../TaskRandomnessControl/TaskRandomnessControl'
 import ChallengeShareControls
        from '../ChallengeShareControls/ChallengeShareControls'
+import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './MobileTaskDetails.css'
@@ -38,6 +39,10 @@ export default class MobileTaskDetails extends Component {
         <ChallengeInfoSummary {...props} />
         <TaskLocationMap key={this.props.task.id} {...this.props} />
         <PlaceDescription place={this.props.task.place} />
+        <div className="mobile-task-details__info__description">
+          <MarkdownContent markdown={this.props.task.parent.description ||
+                                    this.props.task.parent.blurb} />
+        </div>
       </div>
     ),
   }, {

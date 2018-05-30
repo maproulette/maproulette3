@@ -1,4 +1,4 @@
-@import 'variables.scss';
+@import 'mixins.scss';
 
 .mobile-task-details {
   $inactive-icon-color: $grey-darkest;
@@ -12,7 +12,7 @@
 
   &__active-pane {
     padding: 15px;
-    height: calc(100vh - #{2 * $mobile-navbar-height});
+    height: calc(100vh - #{5 * $mobile-navbar-height});
     overflow-y: auto;
     transition: height 0.3s cubic-bezier(0.19, 1, 0.22, 1); // easings.net/#easeOutExpo
 
@@ -68,6 +68,12 @@
     .place-description {
       font-size: $size-8;
       margin-top: 1em;
+    }
+
+    &__description {
+      margin-top: 20px;
+      @include constrained-text-content();
+      @include markdown-content();
     }
   }
 
