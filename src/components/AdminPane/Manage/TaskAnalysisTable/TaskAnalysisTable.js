@@ -20,6 +20,7 @@ import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import AsyncCSVExport from './AsyncCSVExport'
 import messages from './Messages'
+import '../../../../../node_modules/react-table/react-table.css'
 import './TaskAnalysisTable.css'
 
 // Setup child components with necessary HOCs

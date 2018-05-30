@@ -20,6 +20,7 @@ import AsManageableChallenge
        from '../../../../interactions/Challenge/AsManageableChallenge'
 import VisibilitySwitch from '../VisibilitySwitch/VisibilitySwitch'
 import messages from './Messages'
+import '../../../../../node_modules/react-table/react-table.css'
 import './ChallengeAnalysisTable.css'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
