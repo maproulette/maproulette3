@@ -11,7 +11,8 @@ import { fetchProject,
          saveProject,
          deleteProject} from '../../../../services/Project/Project'
 import { fetchProjectChallenges,
-         fetchProjectChallengeActions }
+         fetchProjectChallengeActions,
+         fetchLatestProjectChallengeActivity }
        from '../../../../services/Challenge/Challenge'
 import AppErrors from '../../../../services/Error/AppErrors'
 import { addError } from '../../../../services/Error/Error'
@@ -80,6 +81,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
           const project = normalizedProject.entities.projects[normalizedProject.result]
 
           if (options.includeActivity) {
+            // Used for daily heatmap
             props.fetchProjectActivity(projectId, new Date(project.created)).then(() =>
               this.setState({loadingProject: false})
             )
@@ -94,7 +96,11 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
           retrievals.push(props.fetchProjectChallenges(projectId))
 
           if (options.includeActivity) {
+            // Used to display completion progress for each challenge
             retrievals.push(props.fetchProjectChallengeActions(projectId))
+
+            // Used to display latest activity for each challenge
+            retrievals.push(props.fetchLatestProjectChallengeActivity(projectId))
           }
 
           Promise.all(retrievals).then(() =>
@@ -155,6 +161,8 @@ const mapDispatchToProps = dispatch => ({
   saveProject: projectData => dispatch(saveProject(projectData)),
   fetchProjectChallenges: projectId =>
     dispatch(fetchProjectChallenges(projectId)),
+  fetchLatestProjectChallengeActivity: projectId =>
+    dispatch(fetchLatestProjectChallengeActivity(projectId)),
   fetchProjectChallengeActions: projectId =>
     dispatch(fetchProjectChallengeActions(projectId)),
   deleteProject: (projectId, immediate=false) =>

@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTable from 'react-table'
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _isEmpty from 'lodash/isEmpty'
 import _isObject from 'lodash/isObject'
+import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isDate from 'lodash/isDate'
 import _map from 'lodash/map'
 import _keys from 'lodash/keys'
 import _get from 'lodash/get'
+import parse from 'date-fns/parse'
 import { TaskStatus, statusLabels }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import WithDeactivateOnOutsideClick
@@ -122,15 +124,15 @@ export class ChallengeAnalysisTable extends Component {
       accessor: c => c.enabled,
       exportable: c => c.enabled,
       maxWidth: 90,
-      Cell: row => <VisibilitySwitch challenge={row.original} {...this.props} />,
+      Cell: ({original}) => <VisibilitySwitch challenge={original} {...this.props} />,
     }, {
       id: 'name',
       Header: this.intlHeader(messages.nameLabel),
       accessor: c => c.name,
       exportable: c => c.name,
-      Cell: row => (
-        <Link to={`/admin/project/${this.props.project.id}/challenge/${row.original.id}`}>
-          {row.original.name}
+      Cell: ({original}) => (
+        <Link to={`/admin/project/${this.props.project.id}/challenge/${original.id}`}>
+          {original.name}
         </Link>
       ),
       minWidth: 250,
@@ -139,8 +141,19 @@ export class ChallengeAnalysisTable extends Component {
       accessor: c => AsManageableChallenge(c).completionPercentage(),
       exportable: c => AsManageableChallenge(c).completionPercentage(),
       Header: this.intlHeader(messages.progressLabel),
-      Cell: row => <ChallengeProgress challenge={row.original} />,
+      Cell: ({original}) => <ChallengeProgress challenge={original} />,
       minWidth: 250,
+    }, {
+      id: 'lastActivity',
+      Header: this.intlHeader(messages.lastActivityLabel),
+      accessor: c => {
+        const isoDate = _get(c, 'latestActivity.date')
+        // Convert to timestamp to support column sorting
+        return _isString(isoDate) ? parse(isoDate).getTime() : null
+      },
+      exportable: c => _get(c, 'latestActivity.date'),
+      Cell: ({value}) => _isFinite(value) ? <FormattedDate value={parse(value)} /> : null,
+      minWidth: 125,
     }]
 
     const statusColumns = _map(_keys(TaskStatus), statusName => ({
@@ -156,11 +169,11 @@ export class ChallengeAnalysisTable extends Component {
       className: "challenge-actions-column",
       Header: null,
       sortable: false,
-      Cell: row => (
+      Cell: ({original}) => (
         <DeactivatableDropdownButton isRight
                                       options={challengeActions}
                                       onSelect={this.takeAction}
-                                      context={row.original}>
+                                      context={original}>
           <div className="challenge-actions-column__action-label">
             <FormattedMessage {...messages.actionsColumnHeader}/>
             <div className="basic-dropdown-indicator" />
