@@ -26,7 +26,6 @@ import { addError, addServerError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
-import { normalizeDetailedActivity } from './ChallengeActivity'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
 import { parseQueryString } from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
@@ -348,39 +347,25 @@ export const fetchChallengeActivity = function(challengeId, startDate, endDate) 
 }
 
 /**
- * Fetch activity for all challenges in the given project
+ * Retrieves data about the most recent activity for each challenge in the
+ * given project, regardless of how far back that activity may have occurred,
+ * and updates the latestActivity field on the challenges in the redux store
+ * with that data.
  */
-export const fetchProjectChallengeActivity = function(projectId,
-                                                      startDate, endDate,
-                                                      limit=1000) {
+export const fetchLatestProjectChallengeActivity = function(projectId) {
   return function(dispatch) {
-    const params = {
-      projectIds: projectId,
-      limit,
-    }
-
-    if (startDate) {
-      params.start = startOfDay(startDate).toISOString()
-    }
-
-    if (endDate) {
-      params.end = startOfDay(endDate).toISOString()
-    }
-
     return new Endpoint(
-      api.challenges.activity, {params}
+      api.challenges.latestActivity, {params: {projectIds: projectId}}
     ).execute().then(rawActivity => {
-      // The activity entries from this endpoint are formatted differently, so
-      // we do some conversion here to make them look like traditional activity
-      // entries before adding them into the challenges.
-      const activityByChallenge = normalizeDetailedActivity(rawActivity)
 
       const normalizedResults = {
         entities: {
           challenges: _fromPairs(
-            _map(activityByChallenge, (activity, challengeId) =>
-              [challengeId, {id: challengeId, activity}]
-            )
+            _map(rawActivity, activity => [
+              activity.challengeId,
+              Object.assign({latestActivity: _pick(activity, ['date', 'taskId', 'oldStatus', 'status', 'osmUserId', 'osmUsername'])},
+                            {id: activity.challengeId})
+            ])
           )
         }
       }
