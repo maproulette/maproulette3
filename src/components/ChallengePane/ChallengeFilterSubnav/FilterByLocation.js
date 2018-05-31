@@ -30,17 +30,18 @@ export class FilterByLocation extends Component {
       this.props.removeChallengeFilters(['location'])
     }
     else {
-      // For both nearMe and withinMapBounds options, we actually use the
-      // withinMapBounds filter -- we just also set the map bounds to be near
-      // the user in the nearMe case.
-      this.props.setChallengeFilters({location: ChallengeLocation.withinMapBounds})
+      this.props.setChallengeFilters({location: value})
 
+      // For nearMe, we actually use the withinMapBounds setting -- we just
+      // also set the map bounds to be near the user.
       if (value === ChallengeLocation.nearMe) {
         // Note: repositioning the map will automatically trigger an update of the
         // bounded challenges, so we don't need to request an update here.
+        this.props.setChallengeFilters({location: ChallengeLocation.withinMapBounds})
         this.props.locateMapToUser(this.props.user)
       }
-      else if (value === ChallengeLocation.withinMapBounds) {
+      else {
+        this.props.setChallengeFilters({location: value})
         this.props.updateBoundedChallenges(
           _get(this.props, 'mapBounds.locator.bounds'))
       }

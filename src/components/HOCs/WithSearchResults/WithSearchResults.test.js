@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { _WithSearchResults } from './WithSearchResults'
+import { WithSearchResults } from './WithSearchResults'
 
 let basicProps = null
 let WrappedComponent = null
@@ -28,7 +28,7 @@ beforeEach(() => {
     ]
   }
 
-  WrappedComponent = _WithSearchResults(
+  WrappedComponent = WithSearchResults(
     () => <div className="child" />,
     "mySearchName",
     "myItems"
@@ -59,7 +59,7 @@ test("Search Results with tags are passed first in search results", () => {
 })
 
 test("Search Results are passed back as the 'outputProp' if provided", () => {
-  WrappedComponent = _WithSearchResults(
+  WrappedComponent = WithSearchResults(
     () => <div className="child" />,
     "mySearchName",
     "myItems",

@@ -214,7 +214,7 @@ export const searchChallenges = function(queryString, filters={}, onlyEnabled=tr
  *                 values.
  * @param {number} limit
  */
-export const fetchChallengesWithinBoundingBox = function(bounds, limit=50) {
+export const fetchChallengesWithinBoundingBox = function(bounds, limit=100) {
   const boundsObject = toLatLngBounds(bounds)
 
   return function(dispatch) {
@@ -222,7 +222,7 @@ export const fetchChallengesWithinBoundingBox = function(bounds, limit=50) {
       api.challenges.withinBounds,
       {
         schema: [ challengeSchema() ],
-        params: {tbb: boundsObject.toBBoxString(), limit}
+        params: {bb: boundsObject.toBBoxString(), limit}
       }
     ).execute().then(normalizedResults => {
       dispatch(receiveChallenges(normalizedResults.entities))

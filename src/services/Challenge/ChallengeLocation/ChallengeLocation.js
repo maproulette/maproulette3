@@ -3,14 +3,17 @@ import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
 import _isEmpty from 'lodash/isEmpty'
 import _get from 'lodash/get'
+import { latLng } from 'leaflet'
 import { toLatLngBounds } from '../../MapBounds/MapBounds'
 import messages from './Messages'
 
 export const CHALLENGE_LOCATION_NEAR_USER = 'nearMe'
-export const CHALLENGE_LOCATION_MAPBOUNDS = 'withinMapBounds'
+export const CHALLENGE_LOCATION_WITHIN_MAPBOUNDS = 'withinMapBounds'
+export const CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS = 'intersectingMapBounds'
 
 export const ChallengeLocation = Object.freeze({
-  [CHALLENGE_LOCATION_MAPBOUNDS]: CHALLENGE_LOCATION_MAPBOUNDS,
+  [CHALLENGE_LOCATION_WITHIN_MAPBOUNDS]: CHALLENGE_LOCATION_WITHIN_MAPBOUNDS,
+  [CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS]: CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS,
   [CHALLENGE_LOCATION_NEAR_USER]: CHALLENGE_LOCATION_NEAR_USER,
 })
 
@@ -27,25 +30,44 @@ export const locationLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
 )
 
-export const challengePassesLocationFilter = function(filter, challenge, props) {
-  if (filter.location === CHALLENGE_LOCATION_MAPBOUNDS ||
-      filter.location === CHALLENGE_LOCATION_NEAR_USER ) {
-    if (_isEmpty(_get(props, 'mapBounds.locator.bounds'))) {
-      return true
-    }
-    else if (_isEmpty(challenge.bounding)) {
-      return false
-    }
-
-    const locatorBounds = toLatLngBounds(props.mapBounds.locator.bounds)
-    const challengeBounds = toLatLngBounds(
-      // right now API double-nests bounding, but that will likely change.
-      bbox(_get(challenge, 'bounding.bounding', challenge.bounding))
-    )
-
-    return locatorBounds.overlaps(challengeBounds)
-  }
-  else {
+/**
+ * Returns true if the given challenge passes the location filter in the given
+ * challenge filters.
+ */
+export const challengePassesLocationFilter = function(challengeFilters,
+                                                      challenge,
+                                                      props) {
+  if (challengeFilters.location !== CHALLENGE_LOCATION_WITHIN_MAPBOUNDS &&
+      challengeFilters.location !== CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS &&
+      challengeFilters.location !== CHALLENGE_LOCATION_NEAR_USER ) {
     return true
   }
+
+  if (_isEmpty(_get(props, 'mapBounds.locator.bounds'))) {
+    return true
+  }
+
+  const locatorBounds = toLatLngBounds(props.mapBounds.locator.bounds)
+
+  // if the challenge is located within the bounds, it passes.
+  if (!_isEmpty(challenge.location)) {
+    const challengeLocation = latLng(challenge.location.coordinates[1],
+                                     challenge.location.coordinates[0])
+    if (locatorBounds.contains(challengeLocation)) {
+      return true
+    }
+  }
+
+  // If user wants challenges that simply intersect the bounds, then let those
+  // pass too.
+  if (challengeFilters.location === CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS &&
+      !_isEmpty(challenge.bounding)) {
+    const challengeBounds = toLatLngBounds(bbox(challenge.bounding))
+
+    if (locatorBounds.intersects(challengeBounds)) {
+      return true
+    }
+  }
+
+  return false
 }

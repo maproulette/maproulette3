@@ -18,6 +18,12 @@ import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 import { toLatLngBounds } from '../../../services/MapBounds/MapBounds'
 
+/**
+ * The WithMapBounds HOC passes down to the WrappedComponent the various
+ * bounding box settings of the maps, as well as functions for updating them.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 const WithMapBounds =
   WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
@@ -33,6 +39,9 @@ const convertBounds = (boundsObject) => {
   )
 }
 
+/**
+ * Retrieves challenges with tasks within the given bounding box
+ */
 const updateChallenges = _debounce((dispatch, bounds) => {
   const fetchId = _uniqueId('fetch')
   dispatch(pushFetchChallenges(fetchId))

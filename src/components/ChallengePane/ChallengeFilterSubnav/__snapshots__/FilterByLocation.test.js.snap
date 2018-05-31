@@ -87,6 +87,11 @@ ShallowWrapper {
           "value": "withinMapBounds",
         },
         Object {
+          "key": "intersectingMapBounds",
+          "text": undefined,
+          "value": "intersectingMapBounds",
+        },
+        Object {
           "key": "nearMe",
           "text": undefined,
           "value": "nearMe",
@@ -125,6 +130,11 @@ ShallowWrapper {
             "key": "withinMapBounds",
             "text": undefined,
             "value": "withinMapBounds",
+          },
+          Object {
+            "key": "intersectingMapBounds",
+            "text": undefined,
+            "value": "intersectingMapBounds",
           },
           Object {
             "key": "nearMe",
