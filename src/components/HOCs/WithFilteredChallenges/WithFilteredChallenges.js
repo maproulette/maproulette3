@@ -16,6 +16,14 @@ const allFilters = [
   challengePassesLocationFilter,
 ]
 
+/**
+ * The WithFilteredChallenges HOC applies all of the configured challenge
+ * filters to the given challenges, passing down those that pass the filter to
+ * the WrappedComponent.  The prop containing the challenges, as well as the
+ * output prop for passing them down, can be customized.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
+ */
 export default function WithFilteredChallenges(WrappedComponent,
                                                challengesProp='challenges',
                                                outputProp) {

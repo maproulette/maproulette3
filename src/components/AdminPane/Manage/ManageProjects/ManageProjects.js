@@ -99,9 +99,9 @@ ManageProjects.defaultProps = {
 
 export default
   WithManageableProjects(
-    WithSearchResults(
-      WithSearchResults(
-        WithCurrentProject(  // in case normal user has only 1 project
+    WithSearchResults( // for projects
+      WithSearchResults( // for challenges
+        WithCurrentProject( // in case user has only 1 project, load it up
           injectIntl(ManageProjects), {
             includeChallenges: true,
             includeActivity: true,
@@ -118,5 +118,5 @@ export default
       'projects',
       'filteredProjects'
     ),
-    true
+    true // include challenges
   )

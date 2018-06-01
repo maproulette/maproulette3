@@ -11,6 +11,17 @@ import _omit from 'lodash/omit'
 import WithSearchQuery from '../WithSearchQuery/WithSearchQuery'
 import { parseQueryString } from '../../../services/Search/Search'
 
+// Local fuzzy search configuration. See fusejs.io for details.
+const fuzzySearchOptions = {
+  shouldSort: true, // sort results best to worst
+  threshold: 0.4, // score: 0.0 is perfect, 1.0 terrible
+  location: 0, // ideal location of query match in string (0 = beginning of string)
+  distance: 500, // allowed distance from "location" (higher = less penalty for matches near end of string)
+  maxPatternLength: 64, // max query length
+  minMatchCharLength: 3,
+  keys: ["name", "displayName", "blurb"], // fields to search
+}
+
 /**
  * WithSearchResults acts as a filter that applies the named search query to an
  * array of candidate items, presenting to the wrapped component only those
@@ -23,24 +34,7 @@ import { parseQueryString } from '../../../services/Search/Search'
  *        down the filtered results. By default it will be the same as
  *        itemsProp.
  */
-const WithSearchResults = (WrappedComponent, searchName, itemsProp, outputProp) =>
-  WithSearchQuery(
-    _WithSearchResults(WrappedComponent, searchName, itemsProp, outputProp),
-    searchName
-  )
-
-// Setup local fuzzy search configuration. See fusejs.io for details.
-const searchOptions = {
-  shouldSort: true, // sort results best to worst
-  threshold: 0.4, // score: 0.0 is perfect, 1.0 terrible
-  location: 0, // ideal location of query match in string (0 = beginning of string)
-  distance: 500, // allowed distance from "location" (higher = less penalty for matches near end of string)
-  maxPatternLength: 64, // max query length
-  minMatchCharLength: 3,
-  keys: ["name", "displayName", "blurb"], // fields to search
-}
-
-export const _WithSearchResults = function(WrappedComponent, searchName, itemsProp, outputProp) {
+export const WithSearchResults = function(WrappedComponent, searchName, itemsProp, outputProp) {
   return class extends Component {
     /**
      * @private
@@ -74,7 +68,7 @@ export const _WithSearchResults = function(WrappedComponent, searchName, itemsPr
         }
 
         if (items.length > 0 && queryParts.query.length > 0) {
-          const fuzzySearch = new Fuse(items, searchOptions)
+          const fuzzySearch = new Fuse(items, fuzzySearchOptions)
           searchResults = fuzzySearch.search(queryParts.query)
         }
         else {
@@ -92,4 +86,8 @@ export const _WithSearchResults = function(WrappedComponent, searchName, itemsPr
   }
 }
 
-export default WithSearchResults
+export default (WrappedComponent, searchName, itemsProp, outputProp) =>
+  WithSearchQuery(
+    WithSearchResults(WrappedComponent, searchName, itemsProp, outputProp),
+    searchName
+  )

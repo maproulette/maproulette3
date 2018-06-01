@@ -48,9 +48,9 @@ const doUpdateBoundedTasks =
   }, 500) : _noop
 
 /**
- * WithMapBoundedTasks retrieves map-bounded task clusters
- * (regardless of challenge) within the given mapBounds bounding box when it's
- * of an appropriately small size as determiend by the
+ * WithMapBoundedTasks retrieves map-bounded task clusters (regardless of
+ * challenge) within the given mapBounds bounding box when it's of an
+ * appropriately small size as determiend by the
  * REACT_APP_BOUNDED_TASKS_MAX_DIMENSION .env setting.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
@@ -70,8 +70,8 @@ export const WithMapBoundedTasks = function(WrappedComponent,
       toLatLngBounds(_get(props, `mapBounds.${mapType}.bounds`))
 
     /**
-     * Applies bounds and challenge filters to the map-bounded tasks, as appropriate,
-     * returning only those tasks that pass the filters.
+     * Applies bounds and challenge filters to the map-bounded tasks, as
+     * appropriate, returning only those tasks that pass the filters.
      */
     allowedTasks = () => {
       const bounds = this.normalizedBounds(this.props)
@@ -97,8 +97,8 @@ export const WithMapBoundedTasks = function(WrappedComponent,
     }
 
     /**
-     * Invoked when the user wishes to start work on the mapped tasks,
-     * creating a virtual challenge.
+     * Invoked when the user wishes to start work on the mapped tasks, creating
+     * a virtual challenge.
      */
     startMapBoundedTasks = name => {
       const tasks = _get(this.allowedTasks(), 'tasks')
