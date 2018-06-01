@@ -135,8 +135,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     /**
-     * Move to the next task without setting any completion status,
-     * useful for when a user visits a task that is already complete.
+     * Move to the next task without setting any completion status, useful for
+     * when a user visits a task that is already complete.
      */
     nextTask: (challengeId, taskId, taskLoadBy, comment) => {
       if (_isString(comment) && comment.length > 0) {
@@ -198,8 +198,8 @@ export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
 }
 
 /**
- * Route to the given new task, if valid. Otherwise route back to the home
- * page.
+ * Route to the given new task. If there's no new task, we assume the challenge
+ * is complete and congratulate the user.
  */
 export const visitNewTask = function(props, currentTaskId, newTask) {
   if (_isObject(newTask) && newTask.id !== currentTaskId) {
@@ -214,8 +214,9 @@ export const visitNewTask = function(props, currentTaskId, newTask) {
     }
   }
   else {
-    // Probably no tasks left in this challenge, back to challenges.
-    props.history.push('/')
+    // Assume challenge is complete. Redirect home with note to congratulate
+    // user.
+    props.history.push('/', {congratulate: true})
   }
 }
 

@@ -7,6 +7,7 @@ import MapPane from '../EnhancedMap/MapPane/MapPane'
 import Sidebar from '../Sidebar/Sidebar'
 import LocatorMap from '../LocatorMap/LocatorMap'
 import ChallengeMap from '../ChallengeMap/ChallengeMap'
+import CongratulateModal from '../CongratulateModal/CongratulateModal'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
@@ -61,6 +62,9 @@ export class ChallengePane extends Component {
     const Map = this.props.browsedChallenge ? BrowseChallengeMap : DiscoveryMap
     return (
       <span>
+        {_get(this.props, 'history.location.state.congratulate', false) &&
+         <CongratulateModal />
+        }
         <ChallengeFilterSubnav {...this.props} />
 
         <div className="challenge-pane">
