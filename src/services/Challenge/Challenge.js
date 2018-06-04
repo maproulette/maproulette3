@@ -515,8 +515,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'defaultBasemap', 'defaultPriority', 'defaultZoom', 'description',
         'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
-        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'remoteGeoJson',
-        'status', 'tags', 'updateTasks'])
+        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
+        'remoteGeoJson', 'status', 'tags', 'updateTasks'])
 
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
