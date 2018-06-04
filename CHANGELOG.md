@@ -7,16 +7,24 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.0.2] - 2018-05-29
+## [v3.0.2] - 2018-06-04
 ### Added
-- Refresh results from server after changes to challenge filters.
+- Allow all users to create new projects.
+- New "Intersecting Map Bounds" challenge location filter.
+- Experimental (disabled by default) basic support for mobile devices.
+- Add last-activity date to challenge overview table (#221).
 - Update README documentation.
 - [internal] Upgrade various package dependencies, including React.
 
 ### Fixed
 - Very slow edit-challenge forms for some challenges (#370).
+- Refresh results from server after changes to challenge filters.
 
 ### Changed
+- "Within Map Bounds" challenge location filter now only displays challenges
+  centered within the map bounds. Its prior behavior of including any
+  challenges with intersecting bounding boxes is represented by the new
+  "Intersecting Map Bounds" filter (#88).
 - Default to https for tile-server and other URLs.
 
 
