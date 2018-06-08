@@ -9,11 +9,13 @@ import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
          keysByStatus,
-         messagesByStatus }
+         messagesByStatus,
+         statusLabels }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskPriority,
          keysByPriority,
-         messagesByPriority }
+         messagesByPriority,
+         taskPriorityLabels }
        from '../../../../services/Task/TaskPriority/TaskPriority'
 import { MAPBOX_LIGHT,
          layerSourceWithId }
@@ -21,11 +23,18 @@ import { MAPBOX_LIGHT,
 import WithBoundedTasks
        from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
+import DropdownButton from '../../../Bulma/DropdownButton'
+import TriStateCheckbox from '../../../Bulma/TriStateCheckbox'
+import BusySpinner from '../../../BusySpinner/BusySpinner'
+import WithDeactivateOnOutsideClick
+       from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import ChallengeTaskMap from '../ChallengeTaskMap/ChallengeTaskMap'
 import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
+
+const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
 /**
  * ViewChallengeTasks displays challenge tasks as both a map and a table,
@@ -34,6 +43,40 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ViewChallengeTasks extends Component {
+  state = {
+    bulkUpdating: false,
+  }
+
+  takeTaskSelectionAction = action => {
+    if (action.statusAction) {
+      this.props.selectTasksWithStatus(action.status)
+    }
+    else if (action.priorityAction) {
+      this.props.selectTasksWithPriority(action.priority)
+    }
+  }
+
+  takeBulkTaskAction = action => {
+    switch (action.key) {
+      case 'markCreated':
+        const tasks = _map([...this.props.selectedTasks.values()],
+                           task => Object.assign({}, task, {
+                             id: task.id.toString(), // bulk APIs want string ids
+                             status: TaskStatus.created,
+                             name: task.name || task.title
+                           }))
+
+        this.setState({bulkUpdating: true})
+        this.props.bulkUpdateTasks(tasks, true).then(() => {
+          this.props.refreshChallenge()
+          this.setState({bulkUpdating: false})
+        })
+        break
+      default:
+        throw new Error("Unrecognized action: " + action.key)
+    }
+  }
+
   render() {
     if (this.props.challenge.status === ChallengeStatus.building) {
       return <TaskBuildProgress {...this.props} />
@@ -59,6 +102,14 @@ export class ViewChallengeTasks extends Component {
           <h3>
             <FormattedMessage {...messages.tasksNone} />
           </h3>
+        </div>
+      )
+    }
+
+    if (this.state.bulkUpdating) {
+      return (
+        <div className="pane-loading">
+          <BusySpinner />
         </div>
       )
     }
@@ -109,6 +160,32 @@ export class ViewChallengeTasks extends Component {
       withinBounds: this.props.mapBounds,
     }
 
+
+    const localizedStatusLabels = statusLabels(this.props.intl)
+    const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
+
+    const taskSelectionActions =
+      _map(TaskStatus, status => ({
+        key: `status-${status}`,
+        text: localizedStatusLabels[keysByStatus[status]],
+        status,
+        statusAction: true,
+      })
+    ).concat(
+      _map(TaskPriority, priority => ({
+        key: `priority-${priority}`,
+        text: `${localizedPriorityLabels[keysByPriority[priority]]} ${this.props.intl.formatMessage(messages.priorityLabel)}`,
+        priority,
+        priorityAction: true,
+      }))
+    )
+
+    const bulkTaskActions = [{
+      key: 'markCreated',
+      text: this.props.intl.formatMessage(messages.markCreatedLabel),
+      confirm: true,
+    }]
+
     return (
       <div className='admin__manage-tasks'>
         <GeographicIndexingNotice challenge={this.props.challenge} />
@@ -133,6 +210,31 @@ export class ViewChallengeTasks extends Component {
           {priorityFilters}
         </div>
 
+        {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
+         <div className="admin__manage-tasks__task-controls">
+           <div className="admin__manage-tasks__task-controls__selection">
+             <label className="checkbox">
+               <TriStateCheckbox
+                 checked={this.props.allTasksAreSelected()}
+                 indeterminate={this.props.someTasksAreSelected()}
+                 onClick={() => this.props.toggleAllTasksSelection()}
+               />
+             </label>
+               <DeactivatableDropdownButton options={taskSelectionActions}
+                                            onSelect={this.takeTaskSelectionAction}>
+                 <div className="basic-dropdown-indicator" />
+               </DeactivatableDropdownButton>
+           </div>
+           <DeactivatableDropdownButton options={bulkTaskActions}
+                                        onSelect={this.takeBulkTaskAction}>
+             <button className="button is-rounded is-outlined">
+               <FormattedMessage {...messages.changeStatusLabel} />
+               <div className="basic-dropdown-indicator" />
+             </button>
+           </DeactivatableDropdownButton>
+         </div>
+        }
+
         <TaskAnalysisTable filterOptions={filterOptions}
                            totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
                            {...this.props} />
@@ -152,8 +254,8 @@ ViewChallengeTasks.propTypes = {
   challenge: PropTypes.object,
   /** Set to true if challenge data is loading */
   loadingChallenge: PropTypes.bool,
-  /** Invoked to refresh the status of the challenge */
-  refreshChallengeStatus: PropTypes.func.isRequired,
+  /** Invoked to refresh the challenge and task data */
+  refreshChallenge: PropTypes.func.isRequired,
   /** Object enumerating whether each task status filter is on or off. */
   includeTaskStatuses: PropTypes.object,
   /** Invoked to toggle filtering of a task status on or off */

@@ -4,6 +4,7 @@ import { saveChallenge,
          rebuildChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
+import { bulkUpdateTasks } from '../../../../services/Task/Task'
 
 
 /**
@@ -32,6 +33,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   updateEnabled: (challengeId, isEnabled) => {
     dispatch(setIsEnabled(challengeId, isEnabled))
   },
+
+  bulkUpdateTasks: (tasks, skipConversion=false) => {
+    return dispatch(bulkUpdateTasks(tasks, skipConversion))
+  }
 })
 
 export default WithChallengeManagement

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import WithOptionalManagement
        from '../HOCs/WithOptionalManagement/WithOptionalManagement'
+import ConfirmAction from '../ConfirmAction/ConfirmAction'
 import SimpleDropdown from './SimpleDropdown'
 
 /**
@@ -26,13 +27,19 @@ export class DropdownButton extends Component {
   }
 
   render() {
-    const options = this.props.options.map(option => (
-      <a key={option.key}
-         className={classNames('dropdown-item', option.className)}
-         onClick={(e) => this.selectOption(e, option)}>
-        {option.text}
-      </a>
-    ))
+    const options = this.props.options.map(option => {
+      const link = (
+        <a key={option.key}
+          className={classNames('dropdown-item', option.className)}
+          onClick={(e) => this.selectOption(e, option)}>
+          {option.text}
+        </a>
+      )
+
+      return option.confirm ?
+             <ConfirmAction key={option.key}>{link}</ConfirmAction> :
+             link
+    })
 
     return (
       <SimpleDropdown {...this.props}
@@ -52,6 +59,8 @@ DropdownButton.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.node.isRequired,
     text: PropTypes.node.isRequired,
+    className: PropTypes.string,
+    confirm: PropTypes.bool,
   })),
   /** Invoked when a menu option is selected by the user */
   onSelect: PropTypes.func,

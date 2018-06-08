@@ -82,4 +82,19 @@ export default defineMessages({
                     "expected in location-specific browsing or " +
                     "searches until indexing is complete."
   },
+
+  changeStatusLabel: {
+    id: "Admin.manageTasks.controls.changeStatus.label",
+    defaultMessage: "Change Status",
+  },
+
+  markCreatedLabel: {
+    id: "Admin.manageTasks.controls.markCreated.label",
+    defaultMessage: "Reset to Created",
+  },
+
+  priorityLabel: {
+    id: "Admin.manageTasks.priorityLabel",
+    defaultMessage: "Priority",
+  },
 })
