@@ -15,6 +15,7 @@ beforeEach(() => {
       }
     },
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
+    resetAPIKey: () => null,
   }
 })
 

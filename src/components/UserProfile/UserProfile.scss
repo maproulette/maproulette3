@@ -1,4 +1,4 @@
-@import 'variables.scss';
+@import 'mixins.scss';
 
 .grey-backdrop {
   color: $green;
@@ -254,8 +254,23 @@
     @extend .grey-backdrop;
     padding: 20px 15px;
 
-    h2.subtitle {
+    &__header {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 30px;
+    }
+
+    &__copy-button.button.is-clear {
+      @include invert-on-hover($green, $white)
+      background-color: transparent;
+      margin-left: 10px;
+      font-size: $size-7;
+      padding: 0px 10px 0px 5px;
+
+      svg {
+        width: 15px;
+        margin-bottom: 1px;
+      }
     }
 
     pre {

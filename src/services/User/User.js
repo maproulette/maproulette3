@@ -300,6 +300,28 @@ export const updateUserSettings = function(userId, settings) {
 }
 
 /**
+ * Reset the user's API key
+ */
+export const resetAPIKey = function(userId) {
+  return function(dispatch) {
+    const resetURI = `/auth/generateAPIKey?userId=${userId}`
+
+    fetch(resetURI, {credentials: 'same-origin'}).then(() => {
+      return fetchUser(userId)(dispatch)
+    }).catch(error => {
+      // a 401 (unauthorized) indicates that the user is not logged in.
+      // Logout the current user to reflect that.
+      if (error.response && error.response.status === 401) {
+        dispatch(logoutUser())
+      }
+      else {
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
  * Add the given challenge to the given user's list of saved challenges.
  */
 export const saveChallenge = function(userId, challengeId) {
