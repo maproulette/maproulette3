@@ -9,6 +9,16 @@ export default defineMessages({
     defaultMessage: "API Key",
   },
 
+  apiKeyCopyLabel: {
+    id: "UserProfile.apiKey.controls.copy.label",
+    defaultMessage: "Copy",
+  },
+
+  apiKeyResetLabel: {
+    id: "UserProfile.apiKey.controls.reset.label",
+    defaultMessage: "Reset",
+  },
+
   overviewTab: {
     id: "UserProfile.tabs.overview",
     defaultMessage: "Overview",

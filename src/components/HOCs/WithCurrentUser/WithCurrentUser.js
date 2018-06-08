@@ -6,6 +6,7 @@ import { logoutUser,
          saveTask, unsaveTask,
          updateUserSettings,
          fetchTopChallenges,
+         resetAPIKey,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../interactions/User/AsEndUser'
 
@@ -61,6 +62,9 @@ export const mapDispatchToProps = dispatch => {
 
     fetchUserTopChallenges: (userId, startDate) =>
       dispatch(fetchTopChallenges(userId, startDate)),
+
+    resetAPIKey: userId =>
+      dispatch(resetAPIKey(userId)),
   }
 }
 
