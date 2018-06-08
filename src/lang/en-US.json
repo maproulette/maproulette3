@@ -279,6 +279,8 @@
   "Task.controls.untrack.label": "Stop tracking this Task",
   "ActiveTask.indicators.virtualChallenge.tooltip": "Virtual Challenge",
   "UserProfile.apiKey.header": "API Key",
+  "UserProfile.apiKey.controls.copy.label": "Copy",
+  "UserProfile.apiKey.controls.reset.label": "Reset",
   "UserProfile.tabs.overview": "Overview",
   "UserProfile.tabs.activity": "Activity",
   "UserProfile.tabs.settings": "Settings",

@@ -7,10 +7,16 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.0.4] - 2018-06-08
+### Added
+- Option on user profile page to reset API key
+- Button on user profile page to copy API key to clipboard
+
+
 ## [v3.0.3] - 2018-06-08
 ### Security
 - Prevent non-managers from viewing challenge admin page when following a
-  direct link (#384).
+  direct link (#383).
 
 
 ## [v3.0.2] - 2018-06-04
