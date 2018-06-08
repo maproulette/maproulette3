@@ -16,6 +16,8 @@ import { fetchProjectChallenges,
        from '../../../../services/Challenge/Challenge'
 import AppErrors from '../../../../services/Error/AppErrors'
 import { addError } from '../../../../services/Error/Error'
+import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
+import AsManager from '../../../../interactions/User/AsManager'
 
 /**
  * WithCurrentProject makes available to the WrappedComponent the current
@@ -42,6 +44,9 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
     routedProjectId = props =>
       parseInt(_get(props, 'match.params.projectId'), 10)
 
+    routedChallengeId = props =>
+      parseInt(_get(props, 'match.params.challengeId'), 10)
+
     currentProjectId = props => {
       let projectId = this.routedProjectId(props)
 
@@ -62,7 +67,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       return projectId
     }
 
-    updateProject = props => {
+    loadProject = props => {
       const projectId = this.currentProjectId(props)
 
       if (_isFinite(this.routedProjectId(props)) && projectId === null) {
@@ -79,6 +84,20 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
 
         props.fetchProject(projectId).then(normalizedProject => {
           const project = normalizedProject.entities.projects[normalizedProject.result]
+
+          const manager = AsManager(this.props.user)
+          if (!manager.canManage(project)) {
+            // If we have a challenge id too, route to the browse url for the challenge
+            const challengeId = this.routedChallengeId(this.props)
+            if (_isFinite(challengeId)) {
+              props.history.replace(`/browse/challenges/${challengeId}`)
+            }
+            else {
+              this.props.notManagerError()
+              props.history.push('/admin/projects')
+            }
+            return
+          }
 
           if (options.includeActivity) {
             // Used for daily heatmap
@@ -114,7 +133,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
     }
 
     componentWillMount() {
-      this.updateProject(this.props)
+      this.loadProject(this.props)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -122,7 +141,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
 
       if ( _isFinite(nextProjectId) &&
            nextProjectId !== this.currentProjectId(this.props)) {
-        this.updateProject(nextProps)
+        this.loadProject(nextProps)
       }
     }
 
@@ -172,4 +191,4 @@ const mapDispatchToProps = dispatch => ({
 
 export default (WrappedComponent, options) =>
   connect(mapStateToProps,
-          mapDispatchToProps)(WithCurrentProject(WrappedComponent, options))
+          mapDispatchToProps)(WithCurrentUser(WithCurrentProject(WrappedComponent, options)))
