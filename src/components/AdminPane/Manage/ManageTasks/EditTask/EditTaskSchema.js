@@ -1,12 +1,10 @@
 import { TaskPriority, taskPriorityLabels }
        from '../../../../../services/Task/TaskPriority/TaskPriority'
 import { TaskStatus,
-         messagesByStatus,
-         allowedStatusProgressions }
+         messagesByStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
-import _isObject from 'lodash/isObject'
 import messages from './Messages'
 
 /**
