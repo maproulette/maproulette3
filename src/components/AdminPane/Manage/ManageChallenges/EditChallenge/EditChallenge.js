@@ -283,6 +283,11 @@ export class EditChallenge extends Component {
       this.state.formData,
     ))
 
+    // Parent field should just be id, not object.
+    if (_isObject(challengeData.parent)) {
+      challengeData.parent = challengeData.parent.id
+    }
+
     // For new challenges, append the #maproulette hashtag to the changeset comment
     // if user allows it.
     if (challengeData.isNew() && challengeData.includeCheckinHashtag) {
