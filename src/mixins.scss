@@ -1,7 +1,7 @@
 @import './variables.scss';
 
 // Buttons
-@mixin invert-on-hover($foreground-color, $background-color) {
+@mixin button-color($foreground-color, $background-color) {
   color: $foreground-color;
   border-color: $foreground-color;
   background-color: $background-color;
@@ -9,15 +9,13 @@
   svg {
     fill: $foreground-color;
   }
+}
+
+@mixin invert-on-hover($foreground-color, $background-color) {
+  @include button-color($foreground-color, $background-color);
 
   &:enabled:hover, &:enabled:focus {
-    color: $background-color;
-    border-color: $foreground-color;
-    background-color: $foreground-color;
-
-    svg {
-      fill: $background-color;
-    }
+    @include button-color($background-color, $foreground-color);
   }
 
   &.is-loading {

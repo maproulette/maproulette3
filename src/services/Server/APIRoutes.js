@@ -65,6 +65,7 @@ const apiRoutes = factory => {
     'tasks': {
       'random': factory.get('/tasks/random', {noCache: true}),
       'withinBounds': factory.get('/tasks/box/:left/:bottom/:right/:top'),
+      'bulkUpdate': factory.put('/tasks'),
     },
     'task': {
       'single': factory.get('/task/:id'),

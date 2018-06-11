@@ -99,6 +99,34 @@ export const completeTask = function(taskId, challengeId, taskStatus) {
 }
 
 /**
+ * Bulk update the given tasks. Note that the bulk update APIs require ids to
+ * be represented as strings, and this function will therefore automatically
+ * perform a conversion unless skipConversion is true.
+ */
+export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
+  return function(dispatch) {
+    const taskData =
+      skipConversion ? updatedTasks :
+      _map(updatedTasks, task => Object.assign({}, task, {id: task.id.toString()}))
+
+    return new Endpoint(
+      api.tasks.bulkUpdate, {json: taskData}
+    ).execute().catch(error => {
+      if (error.response && error.response.status === 401) {
+        // If we get an unauthorized, we assume the user is not logged
+        // in (or no longer logged in with the server).
+        dispatch(logoutUser())
+        dispatch(addError(AppErrors.user.unauthorized))
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
  * Add a comment to the given task, associating the given task status if
  * provided.
  */
@@ -275,6 +303,7 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
 
 /**
  * Set the given status on the given task
+ * @private
  */
 const updateTaskStatus = function(dispatch, taskId, newStatus) {
   return new Endpoint(

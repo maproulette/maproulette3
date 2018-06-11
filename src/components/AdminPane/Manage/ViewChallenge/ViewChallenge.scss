@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import 'mixins.scss';
 
 .admin__manage.view-challenge {
   .admin__manage__primary-content {
@@ -201,6 +201,33 @@
     &.high {
       label::after {
         content: '\2588';
+      }
+    }
+  }
+}
+
+.admin__manage-tasks {
+  &__task-controls {
+    &__selection {
+      display: inline-block;
+      padding: 5px 20px 5px 10px;
+      margin-bottom: 10px;
+      background-color: $grey-lightest;
+      border-radius: $radius-medium;
+
+      .dropdown {
+        height: 1.25em;
+        vertical-align: text-top;
+      }
+    }
+
+    .button.is-outlined {
+      @include button-color($grey-light, $white);
+      font-weight: $weight-normal;
+      margin-left: 10px;
+
+      .basic-dropdown-indicator {
+        top: -2px;
       }
     }
   }

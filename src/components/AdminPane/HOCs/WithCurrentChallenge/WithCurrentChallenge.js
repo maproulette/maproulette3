@@ -100,7 +100,7 @@ const WithCurrentChallenge = function(WrappedComponent,
                                clusteredTasks={clusteredTasks}
                                loadingChallenge={this.state.loadingChallenge}
                                loadingTasks={this.state.loadingTasks}
-                               refreshChallengeStatus={this.loadChallenge}
+                               refreshChallenge={this.loadChallenge}
                                {..._omit(this.props, ['entities',
                                                       'fetchChallenge',
                                                       'fetchChallengeComments',

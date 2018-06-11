@@ -28,7 +28,7 @@ export default class TaskBuildProgress extends Component {
   componentDidMount() {
     this.clearTimer()
     this.timerHandle =
-      setInterval(this.props.refreshChallengeStatus, TIMER_INTERVAL)
+      setInterval(this.props.refreshChallenge, TIMER_INTERVAL)
   }
 
   componentWillUnmount() {

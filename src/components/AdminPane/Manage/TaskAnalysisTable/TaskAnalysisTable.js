@@ -47,6 +47,21 @@ export class TaskAnalysisTable extends Component {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'taskInfo.tasks', [])
     const columns = [{
+      id: 'selected',
+      Header: null,
+      accessor: task => this.props.selectedTasks.has(task.id),
+      Cell: ({value, original}) => (
+        <label className="checkbox">
+          <input type="checkbox"
+                 checked={value}
+                 onChange={() => this.props.toggleTaskSelection(original)} />
+        </label>
+      ),
+      maxWidth: 25,
+      sortable: false,
+      resizable: false,
+      className: 'task-analysis-table__selection-option',
+    }, {
       id: 'id',
       Header: this.props.intl.formatMessage(messages.idLabel),
       accessor: 'id',
@@ -161,6 +176,10 @@ TaskAnalysisTable.propTypes = {
   challenge: PropTypes.object,
   /** Total tasks available (we may receive a subset) */
   totalTaskCount: PropTypes.number,
+  /** Map of currently selected tasks */
+  selectedTasks: PropTypes.object.isRequired,
+  /** Invoked to toggle selection of a task */
+  toggleTaskSelection: PropTypes.func.isRequired,
 }
 
 export default injectIntl(TaskAnalysisTable)
