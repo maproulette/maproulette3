@@ -47,6 +47,15 @@ export class ViewChallengeTasks extends Component {
     bulkUpdating: false,
   }
 
+  componentDidUpdate(prevProps) {
+    // When bulk updating, wait until the tasks have been reloaded before turning
+    // off the bulkUpdating flag and refreshing any selected tasks.
+    if (this.state.bulkUpdating && prevProps.loadingTasks && !this.props.loadingTasks) {
+      this.props.refreshSelectedTasks()
+      this.setState({bulkUpdating: false})
+    }
+  }
+
   takeTaskSelectionAction = action => {
     if (action.statusAction) {
       this.props.selectTasksWithStatus(action.status)
@@ -69,7 +78,6 @@ export class ViewChallengeTasks extends Component {
         this.setState({bulkUpdating: true})
         this.props.bulkUpdateTasks(tasks, true).then(() => {
           this.props.refreshChallenge()
-          this.setState({bulkUpdating: false})
         })
         break
       default:

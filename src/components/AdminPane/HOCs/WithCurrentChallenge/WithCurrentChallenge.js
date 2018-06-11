@@ -45,7 +45,7 @@ const WithCurrentChallenge = function(WrappedComponent,
         this.setState({loadingChallenge: true})
 
         // Start by fetching the challenge. Then fetch follow-up data.
-        this.props.fetchChallenge(challengeId).then(normalizedChallengeData => {
+        return this.props.fetchChallenge(challengeId).then(normalizedChallengeData => {
           const challenge = challengeResultEntity(normalizedChallengeData)
 
           Promise.all([
@@ -58,6 +58,7 @@ const WithCurrentChallenge = function(WrappedComponent,
             // Only fetch tasks if the challenge is in a usable status. Otherwise
             // we risk errors if the tasks are still building or failed to build.
             if (isUsableChallengeStatus(challenge.status)) {
+              this.setState({loadingTasks: true})
               this.props.fetchClusteredTasks(challengeId).then(() =>
                 this.setState({loadingTasks: false})
               )

@@ -75,6 +75,10 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       })
     }
 
+    /**
+     * Filters the tasks, returning only those that match both the given
+     * statuses and priorites.
+     */
     filterTasks = (includeStatuses, includePriorities) => {
       let results = null
       if (_isArray(_get(this.props[tasksProp], 'tasks'))) {
@@ -123,6 +127,12 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       return this.state.selectedTasks.size > 0 && !this.allTasksAreSelected()
     }
 
+    /**
+     * Removes from the currently selected tasks any tasks that are no longer
+     * present in the given filtered tasks.
+     *
+     * @private
+     */
     unselectExcludedTasks = filteredTasks => {
       const excludedTasks = _differenceBy([...this.state.selectedTasks.values()],
                                           filteredTasks.tasks,
@@ -133,6 +143,18 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       }
 
       return this.state.selectedTasks
+    }
+
+    /**
+     * Refresh the selected tasks to ensure they don't include tasks that don't
+     * pass the current filters. This is intended for wrapped components to use
+     * if they do something that alters the status of tasks.
+     */
+    refreshSelectedTasks = () => {
+      const filteredTasks = this.filterTasks(this.state.includeStatuses,
+                                             this.state.includePriorities)
+      const selectedTasks = this.unselectExcludedTasks(filteredTasks)
+      this.setState({filteredTasks, selectedTasks})
     }
 
     /**
@@ -218,6 +240,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                                toggleIncludedTaskPriority={this.toggleIncludedPriority}
                                toggleTaskSelection={this.toggleTaskSelection}
                                toggleAllTasksSelection={this.toggleAllTasksSelection}
+                               refreshSelectedTasks={this.refreshSelectedTasks}
                                selectTasksWithStatus={this.selectTasksWithStatus}
                                selectTasksWithPriority={this.selectTasksWithPriority}
                                allTasksAreSelected={this.allTasksAreSelected}
