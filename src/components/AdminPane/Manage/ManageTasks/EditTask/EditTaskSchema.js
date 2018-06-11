@@ -1,12 +1,10 @@
 import { TaskPriority, taskPriorityLabels }
        from '../../../../../services/Task/TaskPriority/TaskPriority'
 import { TaskStatus,
-         messagesByStatus,
-         allowedStatusProgressions }
+         messagesByStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
-import _isObject from 'lodash/isObject'
 import messages from './Messages'
 
 /**
@@ -23,13 +21,7 @@ import messages from './Messages'
 export const jsSchema = (intl, task) => {
   const localizedPriorityLabels = taskPriorityLabels(intl)
 
-  // If the task exists, its status can limit the statuses allowed to be set
-  // during editing.
-  const allowedStatuses =
-    _isObject(task) ?
-    Array.from(allowedStatusProgressions(task.status, true)) :
-    _values(TaskStatus)
-
+  const allowedStatuses = _values(TaskStatus)
   const allowedStatusLabels = _map(
     allowedStatuses,
     status => intl.formatMessage(messagesByStatus[status])
