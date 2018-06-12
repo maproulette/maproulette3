@@ -25,6 +25,8 @@ import WithBoundedTasks
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
 import DropdownButton from '../../../Bulma/DropdownButton'
 import TriStateCheckbox from '../../../Bulma/TriStateCheckbox'
+import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
+import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
@@ -65,24 +67,16 @@ export class ViewChallengeTasks extends Component {
     }
   }
 
-  takeBulkTaskAction = action => {
-    switch (action.key) {
-      case 'markCreated':
-        const tasks = _map([...this.props.selectedTasks.values()],
-                           task => Object.assign({}, task, {
-                             id: task.id.toString(), // bulk APIs want string ids
-                             status: TaskStatus.created,
-                             name: task.name || task.title
-                           }))
-
-        this.setState({bulkUpdating: true})
-        this.props.bulkUpdateTasks(tasks, true).then(() => {
-          this.props.refreshChallenge()
-        })
-        break
-      default:
-        throw new Error("Unrecognized action: " + action.key)
+  markAsCreated = () => {
+    const tasks = [...this.props.selectedTasks.values()]
+    if (tasks.length === 0) {
+      return
     }
+
+    this.setState({bulkUpdating: true}) // will be reset by componentDidUpdate
+    this.props.applyBulkTaskChanges(
+      tasks, {status: TaskStatus.created}
+    ).then(() => this.props.refreshChallenge())
   }
 
   render() {
@@ -188,12 +182,6 @@ export class ViewChallengeTasks extends Component {
       }))
     )
 
-    const bulkTaskActions = [{
-      key: 'markCreated',
-      text: this.props.intl.formatMessage(messages.markCreatedLabel),
-      confirm: true,
-    }]
-
     return (
       <div className='admin__manage-tasks'>
         <GeographicIndexingNotice challenge={this.props.challenge} />
@@ -220,7 +208,8 @@ export class ViewChallengeTasks extends Component {
 
         {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
          <div className="admin__manage-tasks__task-controls">
-           <div className="admin__manage-tasks__task-controls__selection">
+           <div className="admin__manage-tasks__task-controls__selection"
+                title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}>
              <label className="checkbox">
                <TriStateCheckbox
                  checked={this.props.allTasksAreSelected()}
@@ -228,18 +217,26 @@ export class ViewChallengeTasks extends Component {
                  onClick={() => this.props.toggleAllTasksSelection()}
                />
              </label>
-               <DeactivatableDropdownButton options={taskSelectionActions}
+             <DeactivatableDropdownButton options={taskSelectionActions}
                                             onSelect={this.takeTaskSelectionAction}>
-                 <div className="basic-dropdown-indicator" />
-               </DeactivatableDropdownButton>
-           </div>
-           <DeactivatableDropdownButton options={bulkTaskActions}
-                                        onSelect={this.takeBulkTaskAction}>
-             <button className="button is-rounded is-outlined">
-               <FormattedMessage {...messages.changeStatusLabel} />
                <div className="basic-dropdown-indicator" />
-             </button>
-           </DeactivatableDropdownButton>
+             </DeactivatableDropdownButton>
+           </div>
+           <div>
+             <ConfirmAction>
+               <button className="button is-rounded is-outlined"
+                       onClick={this.markAsCreated}>
+                 <FormattedMessage {...messages.markCreatedLabel} />
+               </button>
+             </ConfirmAction>
+             <a target="_blank"
+                 href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
+                 className="button is-outlined has-svg-icon csv-export"
+             >
+               <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
+               <FormattedMessage {...messages.exportCSVLabel} />
+             </a>
+           </div>
          </div>
         }
 

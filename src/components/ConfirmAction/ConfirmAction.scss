@@ -1,7 +1,7 @@
-@import '../../variables.scss';
+@import 'variables.scss';
 
 .confirm-action {
-  display: flex;
+  display: inline-flex;
   justify-content: flex-start;
 
   .message .message-body {

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import _map from 'lodash/map'
 import { saveChallenge,
          setIsEnabled,
          rebuildChallenge,
@@ -34,9 +35,20 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(setIsEnabled(challengeId, isEnabled))
   },
 
-  bulkUpdateTasks: (tasks, skipConversion=false) => {
-    return dispatch(bulkUpdateTasks(tasks, skipConversion))
-  }
+  applyBulkTaskChanges: (tasks, changes) => {
+    const alteredTasks = _map(
+      tasks,
+      task => Object.assign({},
+                            task,
+                            {
+                              id: task.id.toString(), // bulk APIs want string ids
+                              name: task.name || task.title,
+                            },
+                            changes)
+    )
+
+    return dispatch(bulkUpdateTasks(alteredTasks, true))
+  },
 })
 
 export default WithChallengeManagement
