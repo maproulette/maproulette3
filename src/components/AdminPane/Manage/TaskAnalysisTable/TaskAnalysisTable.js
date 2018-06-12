@@ -139,13 +139,6 @@ export class TaskAnalysisTable extends Component {
                                     countShown,
                                     countTotal: this.props.totalTaskCount,
                                   }} />
-            <a target="_blank"
-               href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
-               className="button is-outlined has-svg-icon csv-export"
-            >
-              <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
-              <FormattedMessage {...messages.exportCSVLabel} />
-            </a>
           </div>
         )
       },

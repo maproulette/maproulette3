@@ -83,18 +83,28 @@ export default defineMessages({
                     "searches until indexing is complete."
   },
 
-  changeStatusLabel: {
-    id: "Admin.manageTasks.controls.changeStatus.label",
-    defaultMessage: "Change Status",
+  bulkSelectionTooltip: {
+    id: "Admin.manageTasks.controls.bulkSelection.tooltip",
+    defaultMessage: "Select tasks for bulk operation",
   },
 
   markCreatedLabel: {
     id: "Admin.manageTasks.controls.markCreated.label",
-    defaultMessage: "Reset to Created",
+    defaultMessage: "Reset status to Created",
+  },
+
+  changePriorityLabel: {
+    id: "Admin.manageTasks.controls.changePriority.label",
+    defaultMessage: "Change Priority",
   },
 
   priorityLabel: {
     id: "Admin.manageTasks.priorityLabel",
     defaultMessage: "Priority",
   },
+
+  exportCSVLabel: {
+    id: "Admin.manageTasks.controls.exportCSV.label",
+    defaultMessage: "Export CSV",
+  }
 })

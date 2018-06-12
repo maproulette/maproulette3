@@ -208,10 +208,14 @@
 
 .admin__manage-tasks {
   &__task-controls {
+    display: flex;
+    justify-content: space-between;
+
     &__selection {
       display: inline-block;
       padding: 5px 20px 5px 10px;
       margin-bottom: 10px;
+      margin-right: 10px;
       background-color: $grey-lightest;
       border-radius: $radius-medium;
 
@@ -219,6 +223,10 @@
         height: 1.25em;
         vertical-align: text-top;
       }
+    }
+
+    .confirm-action {
+      vertical-align: top;
     }
 
     .button.is-outlined {
