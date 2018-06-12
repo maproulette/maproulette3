@@ -3,13 +3,20 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _compact from 'lodash/compact'
+import WithManageableProjects
+       from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject
        from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+import WithDeactivateOnOutsideClick
+       from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import Sidebar from '../../../Sidebar/Sidebar'
+import DropdownButton from '../../../Bulma/DropdownButton'
 import ChallengeComments from '../ChallengeComments/ChallengeComments'
 import ChallengeOverview from '../ManageChallenges/ChallengeOverview'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -21,6 +28,8 @@ import ViewChallengeTasks from './ViewChallengeTasks'
 import manageMessages from '../Messages'
 import messages from './Messages'
 import './ViewChallenge.css'
+
+const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
 /**
  * ViewChallenge displays various challenge details and metrics of interest to
@@ -38,12 +47,28 @@ export class ViewChallenge extends Component {
     this.props.rebuildChallenge(this.props.challenge.id)
   }
 
+  moveChallenge = action => {
+    this.props.moveChallenge(this.props.challenge.id, action.projectId)
+  }
+
   render() {
     if (!this.props.challenge) {
       return <BusySpinner />
     }
 
     const projectId = _get(this.props, 'challenge.parent.id')
+
+    const managedProjectOptions = _compact(_map(this.props.projects, project => {
+      if (project.id === projectId) {
+        return null
+      }
+
+      return {
+        key: `project-${project.id}`,
+        text: project.displayName ? project.displayName : project.name,
+        projectId: project.id,
+      }
+    }))
 
     const tabs = {
       [this.props.intl.formatMessage(messages.challengeOverviewTabLabel)]:
@@ -91,6 +116,18 @@ export class ViewChallenge extends Component {
                 <FormattedMessage {...messages.editChallengeLabel } />
               </Link>
             </div>
+
+            {_get(this.props, 'projects.length', 0) > 1 &&
+             <div className="column is-narrow admin__manage__controls--control">
+               <DeactivatableDropdownButton options={managedProjectOptions}
+                                            onSelect={this.moveChallenge}>
+                 <a>
+                   <FormattedMessage {...messages.moveChallengeLabel} />
+                   <div className="basic-dropdown-indicator" />
+                 </a>
+               </DeactivatableDropdownButton>
+             </div>
+            }
 
             {this.props.challenge.isRebuildable() &&
              <div className="column is-narrow admin__manage__controls--control">
@@ -141,17 +178,21 @@ ViewChallenge.propTypes = {
   challenge: PropTypes.object,
   /** Set to true if challenge data is still loading */
   loadingChallenge: PropTypes.bool.isRequired,
-  /** Invoked to signal the user wishes to delete the challenge */
+  /** Invoked when the user wishes to delete the challenge */
   deleteChallenge: PropTypes.func.isRequired,
+  /** Invoked when the user wishes to move the challenge */
+  moveChallenge: PropTypes.func.isRequired,
 }
 
-export default WithCurrentProject(
-  WithCurrentChallenge(
-    WithFilteredClusteredTasks(
-      injectIntl(ViewChallenge),
-      'clusteredTasks',
-      'filteredClusteredTasks',
-    ),
-    true
+export default WithManageableProjects(
+  WithCurrentProject(
+    WithCurrentChallenge(
+      WithFilteredClusteredTasks(
+        injectIntl(ViewChallenge),
+        'clusteredTasks',
+        'filteredClusteredTasks',
+      ),
+      true
+    )
   )
 )

@@ -224,14 +224,14 @@ export class ViewChallengeTasks extends Component {
            </div>
            <div>
              <ConfirmAction>
-               <button className="button is-rounded is-outlined"
+               <button className="button is-rounded is-outlined is-primary"
                        onClick={this.markAsCreated}>
                  <FormattedMessage {...messages.markCreatedLabel} />
                </button>
              </ConfirmAction>
              <a target="_blank"
                  href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
-                 className="button is-outlined has-svg-icon csv-export"
+                 className="button is-outlined is-primary has-svg-icon csv-export"
              >
                <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
                <FormattedMessage {...messages.exportCSVLabel} />

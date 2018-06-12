@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import _map from 'lodash/map'
 import { saveChallenge,
          setIsEnabled,
+         moveChallenge,
          rebuildChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
@@ -19,6 +20,9 @@ const WithChallengeManagement =
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   saveChallenge: challengeData => dispatch(saveChallenge(challengeData)),
+
+  moveChallenge: (challengeId, toProjectId) =>
+    dispatch(moveChallenge(challengeId, toProjectId)),
 
   rebuildChallenge: challengeId => dispatch(rebuildChallenge(challengeId)),
 

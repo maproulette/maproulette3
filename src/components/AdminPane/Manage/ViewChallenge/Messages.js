@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Edit",
   },
 
+  moveChallengeLabel: {
+    id: "Admin.Challenge.controls.move.label",
+    defaultMessage: "Move",
+  },
+
   rebuildChallengeLabel: {
     id: "Admin.Challenge.controls.rebuild.label",
     defaultMessage: "Rebuild",
