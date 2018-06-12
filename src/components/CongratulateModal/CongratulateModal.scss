@@ -1,0 +1,72 @@
+@import 'variables.scss';
+
+.congratulate-modal {
+  .modal-content {
+    background-color: $white;
+    padding: 15px;
+    min-height: 200px;
+    border-radius: $radius-medium;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 350px;
+    height: 300px;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $size-5;
+    color: $green;
+
+    h2 {
+      font-size: $size-3;
+      font-weight: $weight-bold;
+      margin-top: 8px;
+    }
+  }
+
+  &__message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__trophy {
+      fill: $yellow;
+      width: 48px;
+      height: auto;
+    }
+  }
+
+  &__dismiss-control.button.is-outlined {
+    margin-top: 40px;
+    font-size: $size-6;
+    font-weight: $weight-normal;
+    padding: 0px 30px;
+    height: 40px;
+    width: 200px;
+  }
+
+  &__confetti {
+    z-index: 9999;
+  }
+
+  &__close-control.has-svg-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    svg {
+      fill: $grey-light;
+      height: 20px;
+      width: 20px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
