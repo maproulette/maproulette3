@@ -179,7 +179,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchProjectActivity(projectId, startDate)),
   saveProject: projectData => dispatch(saveProject(projectData)),
   fetchProjectChallenges: projectId =>
-    dispatch(fetchProjectChallenges(projectId)),
+    dispatch(fetchProjectChallenges(projectId, -1)),
   fetchLatestProjectChallengeActivity: projectId =>
     dispatch(fetchLatestProjectChallengeActivity(projectId)),
   fetchProjectChallengeActions: projectId =>
