@@ -555,6 +555,9 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
   }
 }
 
+/**
+ * Set whether the given challenge is enabled (publicly visible) or not.
+ */
 export const setIsEnabled = function(challengeId, isEnabled) {
   return function(dispatch) {
     // Optimistically assume request will succeed. The store will be updated
@@ -573,11 +576,39 @@ export const setIsEnabled = function(challengeId, isEnabled) {
   }
 }
 
+/**
+ * Rebuild tasks in the given challenge
+ */
 export const rebuildChallenge = function(challengeId) {
   return function(dispatch) {
     return new Endpoint(
       api.challenge.rebuild,
       {variables: {id: challengeId}}
+    ).execute().then(() =>
+      fetchChallenge(challengeId)(dispatch) // Refresh challenge data
+    ).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        // If we get an unauthorized, we assume the user is not logged
+        // in (or no longer logged in with the server).
+        dispatch(logoutUser())
+        dispatch(addError(AppErrors.user.unauthorized))
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.rebuildFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Move the given challenge to the given project.
+ */
+export const moveChallenge = function(challengeId, toProjectId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenge.move,
+      {variables: {challengeId, projectId: toProjectId}}
     ).execute().then(() =>
       fetchChallenge(challengeId)(dispatch) // Refresh challenge data
     ).catch((error) => {

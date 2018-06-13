@@ -213,7 +213,7 @@
 
     &__selection {
       display: inline-block;
-      padding: 5px 20px 5px 10px;
+      padding: 0px 20px 5px 10px;
       margin-bottom: 10px;
       margin-right: 10px;
       background-color: $grey-lightest;
@@ -221,7 +221,7 @@
 
       .dropdown {
         height: 1.25em;
-        vertical-align: text-top;
+        vertical-align: super;
       }
     }
 
@@ -230,13 +230,8 @@
     }
 
     .button.is-outlined {
-      @include button-color($grey-light, $white);
-      font-weight: $weight-normal;
       margin-left: 10px;
-
-      .basic-dropdown-indicator {
-        top: -2px;
-      }
+      margin-top: 4px;
     }
   }
 }
