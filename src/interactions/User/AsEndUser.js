@@ -1,5 +1,6 @@
-import { GUEST_USER_ID,
-         SUPERUSER_GROUP_TYPE } from '../../services/User/User'
+import { GUEST_USER_ID } from '../../services/User/User'
+import { GROUP_TYPE_SUPERUSER }
+       from '../../services/Project/GroupType/GroupType'
 import _find from 'lodash/find'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
@@ -25,7 +26,7 @@ export class AsEndUser {
    */
   isSuperUser() {
     return this.isLoggedIn() &&
-           !!_find(this.user.groups, {groupType: SUPERUSER_GROUP_TYPE})
+           !!_find(this.user.groups, {groupType: GROUP_TYPE_SUPERUSER})
   }
 }
 

@@ -8,6 +8,10 @@ import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import { fetchProject,
          fetchProjectActivity,
+         fetchProjectManagers,
+         addProjectManager,
+         setProjectManagerPermissions,
+         removeProjectManager,
          saveProject,
          deleteProject} from '../../../../services/Project/Project'
 import { fetchProjectChallenges,
@@ -184,6 +188,14 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchLatestProjectChallengeActivity(projectId)),
   fetchProjectChallengeActions: projectId =>
     dispatch(fetchProjectChallengeActions(projectId)),
+  fetchProjectManagers: projectId =>
+    dispatch(fetchProjectManagers(projectId)),
+  addProjectManager: (projectId, username, groupType) =>
+    dispatch(addProjectManager(projectId, username, groupType)),
+  setProjectManagerGroupType: (projectId, osmUserId, groupType) =>
+    dispatch(setProjectManagerPermissions(projectId, osmUserId, groupType)),
+  removeProjectManager: (projectId, osmUserId) =>
+    dispatch(removeProjectManager(projectId, osmUserId)),
   deleteProject: (projectId, immediate=false) =>
     dispatch(deleteProject(projectId, immediate)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),

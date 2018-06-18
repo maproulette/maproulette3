@@ -142,6 +142,10 @@ $tablet: 40px;
       }
     }
   }
+
+  svg.icon.is-danger {
+    fill: $danger;
+  }
 }
 
 .button.large-and-wide {

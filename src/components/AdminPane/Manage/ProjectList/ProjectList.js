@@ -16,6 +16,7 @@ import Tabs from '../../../Bulma/Tabs'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ProjectOverview from '../ProjectOverview/ProjectOverview'
+import ProjectManagers from '../ProjectManagers/ProjectManagers'
 import ChallengeList from '../ChallengeList/ChallengeList'
 import messages from './Messages'
 import './ProjectList.css'
@@ -152,6 +153,8 @@ export default class ProjectList extends Component {
           [this.props.intl.formatMessage(messages.detailsTabLabel)]:
             <ProjectOverview managesSingleProject={this.managesSingleProject(this.props)}
                             {...this.props} />,
+          [this.props.intl.formatMessage(messages.managersTabLabel)]:
+            <ProjectManagers {...this.props} />,
         }
 
         projectBody = (

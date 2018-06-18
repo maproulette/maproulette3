@@ -1,9 +1,9 @@
 import AsEndUser from './AsEndUser'
-import { GUEST_USER_ID,
-         SUPERUSER_GROUP_TYPE,
-         ADMIN_GROUP_TYPE } from '../../services/User/User'
+import { GUEST_USER_ID } from '../../services/User/User'
+import { GROUP_TYPE_SUPERUSER }
+       from '../../services/Project/GroupType/GroupType'
 
-const superGroup = {id: -1, groupType: SUPERUSER_GROUP_TYPE}
+const superGroup = {id: -1, groupType: GROUP_TYPE_SUPERUSER}
 
 const guestUser = {id: GUEST_USER_ID, groups: []}
 const simpleUser = {id: 357, groups: []}

@@ -1,4 +1,11 @@
 import { schema } from 'normalizr'
+import _get from 'lodash/get'
+import _isNumber from 'lodash/isNumber'
+import _isArray from 'lodash/isArray'
+import _cloneDeep from 'lodash/cloneDeep'
+import _find from 'lodash/find'
+import _isFinite from 'lodash/isFinite'
+import startOfDay from 'date-fns/start_of_day'
 import { defaultRoutes as api } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -7,12 +14,7 @@ import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
 import { addServerError,
          addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import { logoutUser } from '../User/User'
-import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
-import _isArray from 'lodash/isArray'
-import _cloneDeep from 'lodash/cloneDeep'
-import startOfDay from 'date-fns/start_of_day'
+import { findUser, logoutUser } from '../User/User'
 
 /** normalizr schema for projects */
 export const projectSchema = function() {
@@ -212,6 +214,109 @@ export const fetchProjectActivity = function(projectId, startDate, endDate) {
 }
 
 /**
+ * Fetch managers of the given project.
+ */
+export const fetchProjectManagers = function(projectId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.project.managers, {variables: {projectId}}
+    ).execute().then(rawManagers => {
+      const normalizedResults = {
+        entities: {
+          projects: {
+            [projectId]: {id: projectId, managers: rawManagers},
+          }
+        }
+      }
+
+      return dispatch(receiveProjects(normalizedResults.entities))
+    }).catch(error => {
+      if (error.response && error.response.status === 401) {
+        dispatch(addError(AppErrors.project.notManager))
+      }
+      else {
+        dispatch(addError(AppErrors.project.fetchFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Set group type (permissions) for user on project.
+ */
+export const setProjectManagerPermissions = function(projectId, userId, groupType) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.project.setManagerPermission, {variables: {userId, projectId, groupType}}
+    ).execute().then(rawManagers => {
+      const normalizedResults = {
+        entities: {
+          projects: {
+            [projectId]: {id: projectId, managers: rawManagers},
+          }
+        }
+      }
+
+      return dispatch(receiveProjects(normalizedResults.entities))
+    }).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        dispatch(addError(AppErrors.project.notManager))
+      }
+      else {
+        dispatch(addError(AppErrors.project.saveFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Add a user with the given OSM username to the given project with the given
+ * group type (permissions).
+ */
+export const addProjectManager = function(projectId, username, groupType) {
+  return function(dispatch) {
+    return findUser(username).then(matchingUsers => {
+      // We want an exact username match
+      const osmId =
+        _get(_find(matchingUsers, match => match.displayName === username), 'osmId')
+
+      if (_isFinite(osmId)) {
+        return setProjectManagerPermissions(projectId, osmId, groupType)(dispatch)
+      }
+      else {
+        dispatch(addError(AppErrors.user.notFound))
+      }
+    }).catch(error => {
+      dispatch(addError(AppErrors.user.saveFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
+ * Remove project manager from project
+ */
+export const removeProjectManager = function(projectId, userId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.project.removeManager, {variables: {userId, projectId}}
+    ).execute().then(
+      () => fetchProjectManagers(projectId)(dispatch)
+    ).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        dispatch(addError(AppErrors.project.notManager))
+      }
+      else {
+        dispatch(addError(AppErrors.project.saveFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
  * Deletes the given project from the server.
  */
 export const deleteProject = function(projectId, immediate=false) {
@@ -255,6 +360,10 @@ const reduceProjectsFurther = function(mergedState, oldState, projectEntities) {
 
     if (_isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity
+    }
+
+    if (_isArray(entity.managers)) {
+      mergedState[entity.id].managers = entity.managers
     }
   })
 }

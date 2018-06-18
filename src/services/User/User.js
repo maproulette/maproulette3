@@ -26,8 +26,6 @@ import AppErrors from '../Error/AppErrors'
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
-export const SUPERUSER_GROUP_TYPE = -1
-export const ADMIN_GROUP_TYPE = 1
 
 /** normalizr schema for users */
 export const userSchema = function() {
@@ -130,6 +128,15 @@ export const removeSavedTask = function(userId, taskId) {
 
 
 // async action creators
+
+/**
+ * Search for users by OSM username. Resolves with a (possibly empty) list of
+ * results. Note that each result only contains a few public OSM fields such
+ * as OSM id and avatar URL.
+ */
+export const findUser = function(username) {
+  return new Endpoint(api.users.find, {variables: {username}}).execute()
+}
 
 /**
  * Fetch the user data for the given user. Note that this only fetches
