@@ -10,9 +10,13 @@ export default defineMessages({
                     "in your openstreetmap.org settings and then refresh this " +
                     "page to try again.",
   },
+  userUnauthenticated: {
+    id: "Errors.user.unauthenticated",
+    defaultMessage: "Please sign in to continue.",
+  },
   userUnauthorized: {
     id: "Errors.user.unauthorized",
-    defaultMessage: "Please sign in to continue.",
+    defaultMessage: "Sorry, you are not authorized to perform that action.",
   },
   userUpdateFailure: {
     id: "Errors.user.updateFailure",

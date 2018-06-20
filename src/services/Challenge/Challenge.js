@@ -14,13 +14,13 @@ import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _fromPairs from 'lodash/fromPairs'
-import { defaultRoutes as api } from '../Server/Server'
+import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { commentSchema, receiveComments } from '../Comment/Comment'
 import { projectSchema, fetchProject } from '../Project/Project'
-import { logoutUser } from '../User/User'
+import { ensureUserLoggedIn } from '../User/User'
 import { toLatLngBounds } from '../MapBounds/MapBounds'
 import { addError, addServerError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
@@ -262,12 +262,11 @@ export const fetchChallengeActions = function(challengeId = null) {
       }
 
       dispatch(receiveChallenges(normalizedResults.entities))
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server). There's nothing to
-        // do for this request except ensure we know the user is logged out.
-        dispatch(logoutUser())
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.challenge.fetchFailure))
@@ -287,12 +286,11 @@ export const fetchProjectChallengeActions = function(projectId) {
       {schema: [ challengeSchema() ], params: {projectList: projectId}}
     ).execute().then(normalizedResults => {
       dispatch(receiveChallenges(normalizedResults.entities))
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server). There's nothing to
-        // do for this request except ensure we know the user is logged out.
-        dispatch(logoutUser())
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.challenge.fetchFailure))
@@ -331,12 +329,11 @@ export const fetchChallengeActivity = function(challengeId, startDate, endDate) 
       }
 
       return dispatch(receiveChallenges(normalizedResults.entities))
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server). There's nothing to
-        // do for this request except ensure we know the user is logged out.
-        dispatch(logoutUser())
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.challenge.fetchFailure))
@@ -371,12 +368,11 @@ export const fetchLatestProjectChallengeActivity = function(projectId) {
       }
 
       return dispatch(receiveChallenges(normalizedResults.entities))
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server). There's nothing to
-        // do for this request except ensure we know the user is logged out.
-        dispatch(logoutUser())
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.challenge.fetchFailure))
@@ -535,12 +531,11 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         }
 
         return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`)
-      }).catch((serverError) => {
-        if (serverError.response && serverError.response.status === 401) {
-          // If we get an unauthorized, we assume the user is not logged
-          // in (or no longer logged in with the server).
-          dispatch(logoutUser())
-          dispatch(addError(AppErrors.user.unauthorized))
+      }).catch(serverError => {
+        if (isSecurityError(serverError)) {
+          dispatch(ensureUserLoggedIn()).then(() =>
+            dispatch(addError(AppErrors.user.unauthorized))
+          )
         }
         else {
           console.log(serverError.response || serverError)
@@ -586,12 +581,11 @@ export const rebuildChallenge = function(challengeId) {
       {variables: {id: challengeId}}
     ).execute().then(() =>
       fetchChallenge(challengeId)(dispatch) // Refresh challenge data
-    ).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+    ).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.challenge.rebuildFailure))
@@ -611,12 +605,11 @@ export const moveChallenge = function(challengeId, toProjectId) {
       {variables: {challengeId, projectId: toProjectId}}
     ).execute().then(() =>
       fetchChallenge(challengeId)(dispatch) // Refresh challenge data
-    ).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+    ).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.challenge.rebuildFailure))
@@ -640,11 +633,10 @@ export const deleteChallenge = function(challengeId) {
       // Update with the latest challenge data.
       fetchChallenge(challengeId)(dispatch)
 
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.challenge.deleteFailure))

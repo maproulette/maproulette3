@@ -51,9 +51,14 @@ export class EditProject extends Component {
         formData.name = _snakeCase(formData.displayName).replace(/^home_/, 'project_')
       }
 
-      this.props.saveProject(formData).then(project =>
-        this.props.history.push(`/admin/project/${project.id}`)
-      )
+      this.props.saveProject(formData).then(project => {
+        if (project) {
+          this.props.history.push(`/admin/project/${project.id}`)
+        }
+        else {
+          this.setState({isSaving: false})
+        }
+      })
     }
   }
 

@@ -88,6 +88,7 @@ const apiRoutes = factory => {
       'find': factory.get('/users/find/:username'),
     },
     'user': {
+      'whoami': factory.get('/user/whoami'),
       'activity': factory.get('/data/user/activity'),
       'topChallenges': factory.get('/data/user/:userId/topChallenges'),
       'savedChallenges': factory.get('/user/:userId/saved'),

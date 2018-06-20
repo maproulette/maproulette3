@@ -6,7 +6,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
 import _isFinite from 'lodash/isFinite'
 import startOfDay from 'date-fns/start_of_day'
-import { defaultRoutes as api } from '../Server/Server'
+import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
@@ -14,7 +14,7 @@ import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
 import { addServerError,
          addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import { findUser, logoutUser } from '../User/User'
+import { findUser, ensureUserLoggedIn } from '../User/User'
 
 /** normalizr schema for projects */
 export const projectSchema = function() {
@@ -80,12 +80,11 @@ export const fetchManageableProjects = function(limit=50) {
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.project.fetchFailure))
@@ -158,11 +157,10 @@ export const saveProject = function(projectData) {
       dispatch(receiveProjects(normalizedResults.entities))
       return _get(normalizedResults, `entities.projects.${normalizedResults.result}`)
     }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         console.log(error.response || error)
@@ -199,11 +197,10 @@ export const fetchProjectActivity = function(projectId, startDate, endDate) {
 
       return dispatch(receiveProjects(normalizedResults.entities))
     }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server). There's nothing to
-        // do for this request except ensure we know the user is logged out.
-        dispatch(logoutUser())
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.project.fetchFailure))
@@ -332,11 +329,10 @@ export const deleteProject = function(projectId, immediate=false) {
       // Update with the latest project data.
       fetchProject(projectId)(dispatch)
 
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.project.deleteFailure))

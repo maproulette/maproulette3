@@ -190,6 +190,9 @@ export class EditChallenge extends Component {
         this.props.history.push(
           `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
       }
+      else {
+        this.setState({isSaving: false})
+      }
     })
   }
 
