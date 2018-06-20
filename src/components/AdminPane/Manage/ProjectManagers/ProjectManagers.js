@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
+import _filter from 'lodash/filter'
 import _without from 'lodash/without'
 import _isFinite from 'lodash/isFinite'
 import { GroupType,
@@ -99,8 +100,15 @@ export default class ProjectManagers extends Component {
       </option>,
     ]
 
+    const adminManagers =
+      _filter(this.props.project.managers,
+              manager => mostPrivilegedGroupType(manager.groupTypes) === GroupType.admin)
+
     let managers = _map(this.props.project.managers, manager => {
       const managerRole = mostPrivilegedGroupType(manager.groupTypes)
+      const isProjectOwner = manager.osmId === this.props.project.owner
+      const isLastAdmin = managerRole === GroupType.admin && adminManagers.length < 2
+
       return (
         <div key={manager.osmId} className="project-managers__manager">
           <div className="project-managers__manager__about">
@@ -116,9 +124,12 @@ export default class ProjectManagers extends Component {
           <div className="project-managers__manager__controls">
             {this.state.updatingManagers.indexOf(manager.osmId) !== -1 && <BusySpinner />}
 
-            {manager.osmId === this.props.project.owner ?
+            {isLastAdmin || isProjectOwner ?
              <div className="project-managers__manager__role-placeholder">
-               <FormattedMessage {...messages.projectOwner} />
+               {isProjectOwner ?
+                <FormattedMessage {...messages.projectOwner} /> :
+                <FormattedMessage {...messagesByGroupType[managerRole]} />
+               }
              </div> :
              <select value={managerRole}
                      disabled={!user.canAdministrateProject(this.props.project)}
@@ -128,7 +139,8 @@ export default class ProjectManagers extends Component {
              </select>
             }
 
-            {manager.osmId !== this.props.project.owner && user.canAdministrateProject(this.props.project) &&
+            {user.canAdministrateProject(this.props.project) &&
+             !isLastAdmin && !isProjectOwner &&
               <ConfirmAction prompt={this.props.intl.formatMessage(messages.removeManagerConfirmation)}>
                 <a className="button is-clear project-managers__manager__remove-control"
                    onClick={() => this.removeManager(manager.osmId)}
