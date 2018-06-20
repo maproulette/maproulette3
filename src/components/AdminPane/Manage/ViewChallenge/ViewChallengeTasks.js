@@ -20,6 +20,7 @@ import { TaskPriority,
 import { MAPBOX_LIGHT,
          layerSourceWithId }
        from '../../../../services/VisibleLayer/LayerSources'
+import AsManager from '../../../../interactions/User/AsManager'
 import WithBoundedTasks
        from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
@@ -115,6 +116,8 @@ export class ViewChallengeTasks extends Component {
         </div>
       )
     }
+
+    const manager = AsManager(this.props.user)
 
     // Use CSS Modules once supported by create-react-app
     const statusColors = {
@@ -223,12 +226,14 @@ export class ViewChallengeTasks extends Component {
              </DeactivatableDropdownButton>
            </div>
            <div>
-             <ConfirmAction>
-               <button className="button is-rounded is-outlined is-primary"
-                       onClick={this.markAsCreated}>
-                 <FormattedMessage {...messages.markCreatedLabel} />
-               </button>
-             </ConfirmAction>
+             {manager.canWriteProject(this.props.challenge.parent) &&
+              <ConfirmAction>
+                <button className="button is-rounded is-outlined is-primary"
+                        onClick={this.markAsCreated}>
+                  <FormattedMessage {...messages.markCreatedLabel} />
+                </button>
+              </ConfirmAction>
+             }
              <a target="_blank"
                  href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
                  className="button is-outlined is-primary has-svg-icon csv-export"

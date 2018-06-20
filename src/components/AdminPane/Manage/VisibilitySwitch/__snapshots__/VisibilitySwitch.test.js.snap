@@ -29,6 +29,7 @@ ShallowWrapper {
         <input
           checked={false}
           className="switch is-rounded short-and-wide"
+          disabled={undefined}
           onChange={[Function]}
           type="checkbox"
 />,
@@ -46,6 +47,7 @@ ShallowWrapper {
         "props": Object {
           "checked": false,
           "className": "switch is-rounded short-and-wide",
+          "disabled": undefined,
           "onChange": [Function],
           "type": "checkbox",
         },
@@ -77,6 +79,7 @@ ShallowWrapper {
           <input
             checked={false}
             className="switch is-rounded short-and-wide"
+            disabled={undefined}
             onChange={[Function]}
             type="checkbox"
 />,
@@ -94,6 +97,7 @@ ShallowWrapper {
           "props": Object {
             "checked": false,
             "className": "switch is-rounded short-and-wide",
+            "disabled": undefined,
             "onChange": [Function],
             "type": "checkbox",
           },
@@ -155,6 +159,7 @@ ShallowWrapper {
         <input
           checked={false}
           className="switch is-rounded short-and-wide"
+          disabled={undefined}
           onChange={[Function]}
           type="checkbox"
 />,
@@ -172,6 +177,7 @@ ShallowWrapper {
         "props": Object {
           "checked": false,
           "className": "switch is-rounded short-and-wide",
+          "disabled": undefined,
           "onChange": [Function],
           "type": "checkbox",
         },
@@ -203,6 +209,7 @@ ShallowWrapper {
           <input
             checked={false}
             className="switch is-rounded short-and-wide"
+            disabled={undefined}
             onChange={[Function]}
             type="checkbox"
 />,
@@ -220,6 +227,7 @@ ShallowWrapper {
           "props": Object {
             "checked": false,
             "className": "switch is-rounded short-and-wide",
+            "disabled": undefined,
             "onChange": [Function],
             "type": "checkbox",
           },
@@ -281,6 +289,7 @@ ShallowWrapper {
         <input
           checked={true}
           className="switch is-rounded short-and-wide"
+          disabled={undefined}
           onChange={[Function]}
           type="checkbox"
 />,
@@ -298,6 +307,7 @@ ShallowWrapper {
         "props": Object {
           "checked": true,
           "className": "switch is-rounded short-and-wide",
+          "disabled": undefined,
           "onChange": [Function],
           "type": "checkbox",
         },
@@ -329,6 +339,7 @@ ShallowWrapper {
           <input
             checked={true}
             className="switch is-rounded short-and-wide"
+            disabled={undefined}
             onChange={[Function]}
             type="checkbox"
 />,
@@ -346,6 +357,7 @@ ShallowWrapper {
           "props": Object {
             "checked": true,
             "className": "switch is-rounded short-and-wide",
+            "disabled": undefined,
             "onChange": [Function],
             "type": "checkbox",
           },

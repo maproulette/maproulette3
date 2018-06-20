@@ -8,6 +8,7 @@ import { GroupType,
          mostPrivilegedGroupType,
          messagesByGroupType }
        from '../../../../services/Project/GroupType/GroupType'
+import AsManager from '../../../../interactions/User/AsManager'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
@@ -82,6 +83,8 @@ export default class ProjectManagers extends Component {
       return <BusySpinner />
     }
 
+    const user = AsManager(this.props.user)
+
     const groupTypeOptions = [
       <option key={GroupType.read} value={GroupType.read}>
         {this.props.intl.formatMessage(messagesByGroupType[GroupType.read])}
@@ -97,6 +100,7 @@ export default class ProjectManagers extends Component {
     ]
 
     let managers = _map(this.props.project.managers, manager => {
+      const managerRole = mostPrivilegedGroupType(manager.groupTypes)
       return (
         <div key={manager.osmId} className="project-managers__manager">
           <div className="project-managers__manager__about">
@@ -116,21 +120,22 @@ export default class ProjectManagers extends Component {
              <div className="project-managers__manager__role-placeholder">
                <FormattedMessage {...messages.projectOwner} />
              </div> :
-             <select value={mostPrivilegedGroupType(manager.groupTypes)}
+             <select value={managerRole}
+                     disabled={!user.canWriteProject(this.props.project)}
                      onChange={e => this.updateManagerRole(manager.osmId, e.target.value)}
                      className="select project-managers__manager__role">
                {groupTypeOptions}
              </select>
             }
 
-            {manager.osmId !== this.props.project.owner &&
-             <ConfirmAction prompt={this.props.intl.formatMessage(messages.removeManagerConfirmation)}>
-               <a className="button is-clear project-managers__manager__remove-control"
-                  onClick={() => this.removeManager(manager.osmId)}
-                  title={this.props.intl.formatMessage(messages.removeManagerTooltip)}>
-                 <SvgSymbol className='icon is-danger' sym='trash-icon' viewBox='0 0 20 20' />
-               </a>
-             </ConfirmAction>
+            {manager.osmId !== this.props.project.owner && user.canWriteProject(this.props.project) &&
+              <ConfirmAction prompt={this.props.intl.formatMessage(messages.removeManagerConfirmation)}>
+                <a className="button is-clear project-managers__manager__remove-control"
+                   onClick={() => this.removeManager(manager.osmId)}
+                   title={this.props.intl.formatMessage(messages.removeManagerTooltip)}>
+                  <SvgSymbol className='icon is-danger' sym='trash-icon' viewBox='0 0 20 20' />
+                </a>
+              </ConfirmAction>
             }
           </div>
         </div>
@@ -148,31 +153,34 @@ export default class ProjectManagers extends Component {
     return (
       <div className="project-managers">
         {managers}
-        <div className="project-managers__add-manager">
-          <h3><FormattedMessage {...messages.addManager} /></h3>
 
-          <div className="project-managers__add-manager__form">
-            <ChooseOSMUser inputValue={this.state.addManagerUsername}
-                           selectedItem={this.state.addManagerOSMUser}
-                           onInputValueChange={username => this.setState({
-                             addManagerUsername: username
-                           })}
-                           onChange={osmUser => this.setState({
-                             addManagerOSMUser: osmUser
-                           })} />
+        {user.canWriteProject(this.props.project) &&
+          <div className="project-managers__add-manager">
+            <h3><FormattedMessage {...messages.addManager} /></h3>
 
-            {this.state.addingManager && <BusySpinner />}
-            {!this.state.addingManager && this.state.addManagerOSMUser &&
-             <select onChange={e => this.addManager(e.target.value)}
-                     className="select project-managers__add-manager__group-type">
-                     {[<option key='none' value=''>
-                         {this.props.intl.formatMessage(messages.chooseRole)}
-                       </option>
-                      ].concat(groupTypeOptions)}
-             </select>
-            }
+            <div className="project-managers__add-manager__form">
+              <ChooseOSMUser inputValue={this.state.addManagerUsername}
+                             selectedItem={this.state.addManagerOSMUser}
+                             onInputValueChange={username => this.setState({
+                               addManagerUsername: username
+                             })}
+                             onChange={osmUser => this.setState({
+                               addManagerOSMUser: osmUser
+                             })} />
+
+              {this.state.addingManager && <BusySpinner />}
+              {!this.state.addingManager && this.state.addManagerOSMUser &&
+               <select onChange={e => this.addManager(e.target.value)}
+                       className="select project-managers__add-manager__group-type">
+                       {[<option key='none' value=''>
+                           {this.props.intl.formatMessage(messages.chooseRole)}
+                         </option>
+                        ].concat(groupTypeOptions)}
+               </select>
+              }
+            </div>
           </div>
-        </div>
+        }
       </div>
     )
   }

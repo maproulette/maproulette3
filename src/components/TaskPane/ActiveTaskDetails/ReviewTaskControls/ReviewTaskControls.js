@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
 import _omit from 'lodash/omit'
+import AsManager from '../../../../interactions/User/AsManager'
 import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
@@ -67,6 +68,8 @@ export class ReviewTaskControls extends Component {
                                                this.handleKeyboardShortcuts)
   }
   render() {
+    const manager = AsManager(this.props.user)
+
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
         <div className="review-task-controls__control-block">
@@ -95,12 +98,14 @@ export class ReviewTaskControls extends Component {
                            className="active-task-controls__edit-control"
                            {..._omit(this.props, 'className')} />
         </div>
-        <div className="review-task-controls__control-block">
-          <Link to={{pathname: this.modifyTaskRoute(), state: {fromTaskReview: true}}}
-                className="button large-and-wide full-width modify-task-control">
-            <FormattedMessage {...messages.modifyTaskLabel} />
-          </Link>
-        </div>
+        {manager.canWriteProject(this.props.task.parent.parent) &&
+         <div className="review-task-controls__control-block">
+           <Link to={{pathname: this.modifyTaskRoute(), state: {fromTaskReview: true}}}
+                 className="button large-and-wide full-width modify-task-control">
+             <FormattedMessage {...messages.modifyTaskLabel} />
+           </Link>
+         </div>
+        }
       </div>
     )
   }

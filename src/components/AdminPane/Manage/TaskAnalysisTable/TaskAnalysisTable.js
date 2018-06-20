@@ -11,6 +11,7 @@ import { messagesByStatus,
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
+import AsManager from '../../../../interactions/User/AsManager'
 import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
@@ -39,6 +40,8 @@ export class TaskAnalysisTable extends Component {
         !_isObject(this.props.challenge.parent)) {
       return null
     }
+
+    const manager = AsManager(this.props.user)
 
     const taskBaseRoute = 
       `/admin/project/${this.props.challenge.parent.id}` +
@@ -107,9 +110,11 @@ export class TaskAnalysisTable extends Component {
           <Link to={`${taskBaseRoute}/${row.id}/review`}>
             <FormattedMessage {...messages.reviewTaskLabel} />
           </Link>
-          <Link to={`${taskBaseRoute}/${row.id}/edit`}>
-            <FormattedMessage {...messages.editTaskLabel} />
-          </Link>
+          {manager.canWriteProject(this.props.challenge.parent) &&
+           <Link to={`${taskBaseRoute}/${row.id}/edit`}>
+             <FormattedMessage {...messages.editTaskLabel} />
+           </Link>
+          }
           <Link to={`/challenge/${this.props.challenge.id}/task/${row.id}`}>
             <FormattedMessage {...messages.startTaskLabel} />
           </Link>

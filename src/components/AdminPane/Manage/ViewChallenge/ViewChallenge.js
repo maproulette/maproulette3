@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
+import AsManager from '../../../../interactions/User/AsManager'
 import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject
@@ -55,6 +56,8 @@ export class ViewChallenge extends Component {
     if (!this.props.challenge) {
       return <BusySpinner />
     }
+
+    const manager = AsManager(this.props.user)
 
     const projectId = _get(this.props, 'challenge.parent.id')
 
@@ -109,52 +112,54 @@ export class ViewChallenge extends Component {
             </ul>
           </nav>
 
-          <div className="columns admin__manage__controls">
-            <div className="column is-narrow admin__manage__controls--control">
-              <Link to={`/admin/project/${projectId}/` +
-                        `challenge/${this.props.challenge.id}/edit`}>
-                <FormattedMessage {...messages.editChallengeLabel } />
-              </Link>
-            </div>
-
-            {_get(this.props, 'projects.length', 0) > 1 &&
+          {manager.canWriteProject(this.props.challenge.parent) &&
+           <div className="columns admin__manage__controls">
              <div className="column is-narrow admin__manage__controls--control">
-               <DeactivatableDropdownButton options={managedProjectOptions}
-                                            onSelect={this.moveChallenge}>
-                 <a>
-                   <FormattedMessage {...messages.moveChallengeLabel} />
-                   <div className="basic-dropdown-indicator" />
-                 </a>
-               </DeactivatableDropdownButton>
+               <Link to={`/admin/project/${projectId}/` +
+                         `challenge/${this.props.challenge.id}/edit`}>
+                 <FormattedMessage {...messages.editChallengeLabel } />
+               </Link>
              </div>
-            }
 
-            {this.props.challenge.isRebuildable() &&
+             {_get(this.props, 'projects.length', 0) > 1 &&
+              <div className="column is-narrow admin__manage__controls--control">
+                <DeactivatableDropdownButton options={managedProjectOptions}
+                                             onSelect={this.moveChallenge}>
+                  <a>
+                    <FormattedMessage {...messages.moveChallengeLabel} />
+                    <div className="basic-dropdown-indicator" />
+                  </a>
+                </DeactivatableDropdownButton>
+              </div>
+             }
+
+             {this.props.challenge.isRebuildable() &&
+              <div className="column is-narrow admin__manage__controls--control">
+                <ConfirmAction prompt={<FormattedMessage {...messages.rebuildChallengePrompt} />}>
+                  <a onClick={this.rebuildChallenge}>
+                    <FormattedMessage {...messages.rebuildChallengeLabel } />
+                  </a>
+                </ConfirmAction>
+              </div>
+             }
+
              <div className="column is-narrow admin__manage__controls--control">
-               <ConfirmAction prompt={<FormattedMessage {...messages.rebuildChallengePrompt} />}>
-                 <a onClick={this.rebuildChallenge}>
-                   <FormattedMessage {...messages.rebuildChallengeLabel } />
+               <Link to={{pathname: `/admin/project/${projectId}/` +
+                                    `challenge/${this.props.challenge.id}/clone`,
+                          state: {cloneChallenge: true}}}>
+                 <FormattedMessage {...messages.cloneChallengeLabel } />
+               </Link>
+             </div>
+
+             <div className="column is-narrow admin__manage__controls--control">
+               <ConfirmAction>
+                 <a className='button is-clear' onClick={this.deleteChallenge}>
+                   <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
                  </a>
                </ConfirmAction>
              </div>
-            }
-
-            <div className="column is-narrow admin__manage__controls--control">
-              <Link to={{pathname: `/admin/project/${projectId}/` +
-                                   `challenge/${this.props.challenge.id}/clone`,
-                         state: {cloneChallenge: true}}}>
-                <FormattedMessage {...messages.cloneChallengeLabel } />
-              </Link>
-            </div>
-
-            <div className="column is-narrow admin__manage__controls--control">
-              <ConfirmAction>
-                <a className='button is-clear' onClick={this.deleteChallenge}>
-                  <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
-                </a>
-              </ConfirmAction>
-            </div>
-          </div>
+           </div>
+          }
         </div>
 
         <div className="admin__manage__pane-wrapper">

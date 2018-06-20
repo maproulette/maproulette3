@@ -25,8 +25,9 @@ export class VisibilitySwitch extends Component {
     return (
       <div className="field visibility-switch" onClick={this.toggleVisible}>
         <input type="checkbox" className="switch is-rounded short-and-wide"
-                checked={this.props.challenge.enabled}
-                onChange={() => null} />
+               disabled={this.props.disabled}
+               checked={this.props.challenge.enabled}
+               onChange={() => null} />
         <label>{this.props.label}</label>
       </div>
     )

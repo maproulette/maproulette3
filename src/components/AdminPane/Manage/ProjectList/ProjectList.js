@@ -12,6 +12,7 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import AsManageableProject
        from '../../../../interactions/Project/AsManageableProject'
+import AsManager from '../../../../interactions/User/AsManager'
 import Tabs from '../../../Bulma/Tabs'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -70,6 +71,7 @@ export default class ProjectList extends Component {
   }
 
   render() {
+    const manager = AsManager(this.props.user)
     const selectedProjectId = this.selectedProjectId(this.props)
     const hasSearchResults =
       this.props.filteredChallenges.length < this.props.challenges.length
@@ -148,13 +150,15 @@ export default class ProjectList extends Component {
       if (isSelected) {
         const tabs = {
           [this.props.intl.formatMessage(messages.challengesTabLabel)]:
-            <ChallengeList challenges={project.childChallenges(this.props.challenges)}
+           <ChallengeList challenges={project.childChallenges(this.props.challenges)}
+                          suppressControls={!manager.canWriteProject(project)}
                           {..._omit(this.props, 'challenges')} />,
           [this.props.intl.formatMessage(messages.detailsTabLabel)]:
-            <ProjectOverview managesSingleProject={this.managesSingleProject(this.props)}
+           <ProjectOverview managesSingleProject={this.managesSingleProject(this.props)}
+                            suppressControls={!manager.canWriteProject(project)}
                             {...this.props} />,
           [this.props.intl.formatMessage(messages.managersTabLabel)]:
-            <ProjectManagers {...this.props} />,
+           <ProjectManagers {...this.props} />,
         }
 
         projectBody = (
@@ -194,12 +198,14 @@ export default class ProjectList extends Component {
 
             {projectNameColumn}
 
-            <div className='column is-narrow has-text-right controls edit-control'>
-              <Link to={`/admin/project/${project.id}/edit`}
-                    title={this.props.intl.formatMessage(messages.editProjectTooltip)}>
-                <FormattedMessage {...messages.editProjectLabel} />
-              </Link>
-            </div>
+            {manager.canWriteProject(project) &&
+             <div className='column is-narrow has-text-right controls edit-control'>
+               <Link to={`/admin/project/${project.id}/edit`}
+                     title={this.props.intl.formatMessage(messages.editProjectTooltip)}>
+                 <FormattedMessage {...messages.editProjectLabel} />
+               </Link>
+             </div>
+            }
 
             {collapsibleControl}
           </div>
