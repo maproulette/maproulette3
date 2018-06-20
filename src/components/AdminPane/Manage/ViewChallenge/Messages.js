@@ -34,6 +34,11 @@ export default defineMessages({
     defaultMessage: "Move",
   },
 
+  noProjects: {
+    id: "Admin.Challenge.controls.move.none",
+    defaultMessage: "No permitted projects",
+  },
+
   rebuildChallengeLabel: {
     id: "Admin.Challenge.controls.rebuild.label",
     defaultMessage: "Rebuild",
