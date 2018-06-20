@@ -121,14 +121,14 @@ export default class ProjectManagers extends Component {
                <FormattedMessage {...messages.projectOwner} />
              </div> :
              <select value={managerRole}
-                     disabled={!user.canWriteProject(this.props.project)}
+                     disabled={!user.canAdministrateProject(this.props.project)}
                      onChange={e => this.updateManagerRole(manager.osmId, e.target.value)}
                      className="select project-managers__manager__role">
                {groupTypeOptions}
              </select>
             }
 
-            {manager.osmId !== this.props.project.owner && user.canWriteProject(this.props.project) &&
+            {manager.osmId !== this.props.project.owner && user.canAdministrateProject(this.props.project) &&
               <ConfirmAction prompt={this.props.intl.formatMessage(messages.removeManagerConfirmation)}>
                 <a className="button is-clear project-managers__manager__remove-control"
                    onClick={() => this.removeManager(manager.osmId)}
@@ -154,7 +154,7 @@ export default class ProjectManagers extends Component {
       <div className="project-managers">
         {managers}
 
-        {user.canWriteProject(this.props.project) &&
+        {user.canAdministrateProject(this.props.project) &&
           <div className="project-managers__add-manager">
             <h3><FormattedMessage {...messages.addManager} /></h3>
 

@@ -2,11 +2,25 @@
 
 .admin__manage__managed-item-list.challenge-list {
   .challenge-list-item {
-    border-bottom: 2px solid $grey-lightest-less;
-    margin-bottom: 0.25rem;
+    border-top: 2px solid $grey-lightest-less;
+    margin-top: 0px;
 
     .challenge-name {
       word-break: break-word;
+    }
+  }
+
+  .item-entry:not(:last-child) {
+    margin-bottom: 0;
+
+    &:first-child {
+      .challenge-list-item {
+        border-top: none;
+
+        .column {
+          padding-top: 0;
+        }
+      }
     }
   }
 

@@ -155,7 +155,6 @@ export default class ProjectList extends Component {
                           {..._omit(this.props, 'challenges')} />,
           [this.props.intl.formatMessage(messages.detailsTabLabel)]:
            <ProjectOverview managesSingleProject={this.managesSingleProject(this.props)}
-                            suppressControls={!manager.canWriteProject(project)}
                             {...this.props} />,
           [this.props.intl.formatMessage(messages.managersTabLabel)]:
            <ProjectManagers {...this.props} />,

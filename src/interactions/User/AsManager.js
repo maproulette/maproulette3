@@ -105,7 +105,7 @@ export class AsManager extends AsEndUser {
    *
    * @returns true if the user can administrate the project, false otherwise.
    */
-  canAdministrate(project) {
+  canAdministrateProject(project) {
     return this.satisfiesProjectGroupType(project, GroupType.admin)
   }
 

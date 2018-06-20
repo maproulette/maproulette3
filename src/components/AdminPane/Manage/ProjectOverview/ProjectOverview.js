@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage,
          FormattedDate } from 'react-intl'
+import AsManager from '../../../../interactions/User/AsManager'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import messages from './Messages'
@@ -22,6 +23,8 @@ export default class ProjectOverview extends Component {
   }
 
   render() {
+    const manager = AsManager(this.props.user)
+
     return (
       <div className="project-overview">
         <div className="project-overview__status status-section">
@@ -57,7 +60,7 @@ export default class ProjectOverview extends Component {
             </div>
           </div>
 
-          {!this.props.suppressControls &&
+          {manager.canAdministrateProject(this.props.project) &&
            <div className="project-overview__controls">
              <ConfirmAction>
                <div className="button is-outlined is-danger project-overview__controls__delete-project"
@@ -78,8 +81,6 @@ ProjectOverview.propTypes = {
   project: PropTypes.object,
   /** Set to true if the user manages only a single project */
   managesSingleProject: PropTypes.bool.isRequired,
-  /** Set to true to hide project controls */
-  suppressControls: PropTypes.bool,
   /** Invoked if the user wishes to delete the project */
   deleteProject: PropTypes.func.isRequired,
 }

@@ -6,6 +6,7 @@ import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _compact from 'lodash/compact'
 import { Link } from 'react-router-dom'
+import AsManager from '../../../../interactions/User/AsManager'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './ChallengeList.css'
@@ -19,6 +20,8 @@ import './ChallengeList.css'
  */
 export default class ChallengeList extends Component {
   render() {
+    const manager = AsManager(this.props.user)
+
     const challengeItems = _compact(_map(this.props.challenges, challenge => {
       if (challenge.deleted) {
         return null
@@ -54,7 +57,7 @@ export default class ChallengeList extends Component {
          challengeItems
         }
 
-        {!this.props.suppressControls &&
+        {!this.props.suppressControls && manager.canWriteProject(this.props.project) &&
          <div className="challenge-list__controls has-centered-children">
            <button className="button is-green is-outlined new-challenge"
                    onClick={() => this.props.history.push(
