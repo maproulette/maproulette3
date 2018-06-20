@@ -27,6 +27,9 @@ const apiRoutes = factory => {
       'create': factory.post('/project'),
       'edit': factory.put('/project/:id'),
       'activity': factory.get('/data/project/activity'),
+      'managers': factory.get('/user/project/:projectId'),
+      'setManagerPermission': factory.put('/user/:userId/project/:projectId/:groupType'),
+      'removeManager': factory.delete('/user/:userId/project/:projectId/-1'),
       'delete': factory.delete('/project/:id'),
     },
     'challenges': {
@@ -82,6 +85,7 @@ const apiRoutes = factory => {
     'users': {
       'single': factory.get('/user/:id'),
       'leaderboard': factory.get('/data/user/leaderboard'),
+      'find': factory.get('/users/find/:username'),
     },
     'user': {
       'activity': factory.get('/data/user/activity'),

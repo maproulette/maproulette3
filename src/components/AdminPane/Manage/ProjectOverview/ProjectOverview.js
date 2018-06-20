@@ -57,6 +57,7 @@ export default class ProjectOverview extends Component {
             </div>
           </div>
 
+          {!this.props.suppressControls &&
            <div className="project-overview__controls">
              <ConfirmAction>
                <div className="button is-outlined is-danger project-overview__controls__delete-project"
@@ -65,6 +66,7 @@ export default class ProjectOverview extends Component {
                </div>
              </ConfirmAction>
            </div>
+          }
         </div>
       </div>
     )
@@ -76,6 +78,8 @@ ProjectOverview.propTypes = {
   project: PropTypes.object,
   /** Set to true if the user manages only a single project */
   managesSingleProject: PropTypes.bool.isRequired,
+  /** Set to true to hide project controls */
+  suppressControls: PropTypes.bool,
   /** Invoked if the user wishes to delete the project */
   deleteProject: PropTypes.func.isRequired,
 }

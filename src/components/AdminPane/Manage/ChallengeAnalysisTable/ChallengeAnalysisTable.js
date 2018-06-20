@@ -14,6 +14,7 @@ import _get from 'lodash/get'
 import parse from 'date-fns/parse'
 import { TaskStatus, statusLabels }
        from '../../../../services/Task/TaskStatus/TaskStatus'
+import AsManager from '../../../../interactions/User/AsManager'
 import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import DropdownButton from '../../../Bulma/DropdownButton'
@@ -100,19 +101,27 @@ export class ChallengeAnalysisTable extends Component {
       return null
     }
 
+    const manager = AsManager(this.props.user)
+
     const challengeActions = [{
       key: 'start',
       text: this.props.intl.formatMessage(messages.startChallengeLabel),
     }, {
       key: 'manage',
       text: this.props.intl.formatMessage(messages.manageChallengeLabel),
-    }, {
-      key: 'edit',
-      text: this.props.intl.formatMessage(messages.editChallengeLabel),
-    }, {
-      key: 'clone',
-      text: this.props.intl.formatMessage(messages.cloneChallengeLabel),
     }]
+
+    if (manager.canWriteProject(this.props.project)) {
+      challengeActions.push({
+        key: 'edit',
+        text: this.props.intl.formatMessage(messages.editChallengeLabel),
+      })
+
+      challengeActions.push({
+        key: 'clone',
+        text: this.props.intl.formatMessage(messages.cloneChallengeLabel),
+      })
+    }
 
     const localizedStatusLabels = statusLabels(this.props.intl)
 
@@ -124,7 +133,9 @@ export class ChallengeAnalysisTable extends Component {
       accessor: c => c.enabled,
       exportable: c => c.enabled,
       maxWidth: 90,
-      Cell: ({original}) => <VisibilitySwitch challenge={original} {...this.props} />,
+      Cell: ({original}) => <VisibilitySwitch challenge={original}
+                                              disabled={!manager.canWriteProject(this.props.project)}
+                                              {...this.props} />,
     }, {
       id: 'name',
       Header: this.intlHeader(messages.nameLabel),

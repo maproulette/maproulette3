@@ -8,6 +8,7 @@ import { ChallengeStatus,
          isUsableChallengeStatus,
          messagesByStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
+import AsManager from '../../../../interactions/User/AsManager'
 import ChallengeProgress
        from '../../../ChallengeProgress/ChallengeProgress'
 import ChallengeLeaderboard
@@ -28,6 +29,8 @@ import messages from './Messages'
  */
 export class ChallengeOverview extends Component {
   render() {
+    const manager = AsManager(this.props.user)
+
     const status = _get(this.props,
                         'challenge.status', ChallengeStatus.none)
     const hasTasks = _get(this.props, 'challenge.actions.total', 0) > 0
@@ -76,7 +79,8 @@ export class ChallengeOverview extends Component {
             </div>
 
             <div className="column is-narrow status-value">
-              <VisibilitySwitch {...this.props} />
+              <VisibilitySwitch {...this.props}
+                                disabled={!manager.canWriteProject(this.props.challenge.parent)} />
             </div>
           </div>
 

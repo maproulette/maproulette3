@@ -11,6 +11,8 @@ export default {
     missingHomeLocation: messages.userMissingHomeLocation,
     unauthorized: messages.userUnauthorized,
     updateFailure: messages.userUpdateFailure,
+    fetchFailure: messages.userFetchFailure,
+    notFound: messages.userNotFound,
   },
 
   leaderboard: {

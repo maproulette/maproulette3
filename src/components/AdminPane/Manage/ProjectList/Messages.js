@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Details",
   },
 
+  managersTabLabel: {
+    id: "Admin.Project.tabs.managers.label",
+    defaultMessage: "Managers",
+  },
+
   enabledTooltip: {
     id: "Admin.Project.fields.enabled.tooltip",
     defaultMessage: "Enabled",

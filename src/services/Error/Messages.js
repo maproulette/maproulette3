@@ -18,6 +18,14 @@ export default defineMessages({
     id: "Errors.user.updateFailure",
     defaultMessage: "Unable to update your user on server."
   },
+  userFetchFailure: {
+    id: "Errors.user.fetchFailure",
+    defaultMessage: "Unable to fetch user data from server."
+  },
+  userNotFound: {
+    id: "Errors.user.notFound",
+    defaultMessage: "No user found with that username."
+  },
 
   leaderboardFetchFailure: {
     id: "Errors.leaderboard.fetchFailure",
