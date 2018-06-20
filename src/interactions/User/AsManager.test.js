@@ -86,43 +86,43 @@ describe('canManage', () => {
   })
 })
 
-describe('canAdministrate', () => {
+describe('canAdministrateProject', () => {
   it("always returns true if the user is a superuser", () => {
     const manager = AsManager(superUser)
 
-    expect(manager.canAdministrate(project123)).toBe(true)
-    expect(manager.canAdministrate(project456)).toBe(true)
+    expect(manager.canAdministrateProject(project123)).toBe(true)
+    expect(manager.canAdministrateProject(project456)).toBe(true)
   })
 
   it("returns true if the user is the project owner", () => {
     const manager = AsManager(normalUser)
 
-    expect(manager.canAdministrate(project101)).toBe(true)
-    expect(manager.canAdministrate(project789)).toBe(false)
+    expect(manager.canAdministrateProject(project101)).toBe(true)
+    expect(manager.canAdministrateProject(project789)).toBe(false)
   })
 
   it("returns false if user and project owner ids match but are are undefined", () => {
     const manager = AsManager(powerUser)
 
-    expect(manager.canAdministrate(project789)).toBe(false)
+    expect(manager.canAdministrateProject(project789)).toBe(false)
   })
 
   it("returns true if the user possesses the project's admin group", () => {
     const manager = AsManager(powerUser)
 
-    expect(manager.canAdministrate(project123)).toBe(true)
+    expect(manager.canAdministrateProject(project123)).toBe(true)
   })
 
   it("returns false if the user merely contains non-admin project group", () => {
     const manager = AsManager(powerUser)
 
-    expect(manager.canAdministrate(project456)).toBe(false)
+    expect(manager.canAdministrateProject(project456)).toBe(false)
   })
 
   it("returns false if the user is undefined", () => {
     const missingUser = AsManager(undefined)
 
-    expect(missingUser.canAdministrate(project123)).toBe(false)
+    expect(missingUser.canAdministrateProject(project123)).toBe(false)
   })
 })
 
