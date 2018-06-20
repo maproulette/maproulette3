@@ -9,6 +9,7 @@ import messages from './Messages'
 export default {
   user: {
     missingHomeLocation: messages.userMissingHomeLocation,
+    unauthenticated: messages.userUnauthenticated,
     unauthorized: messages.userUnauthorized,
     updateFailure: messages.userUpdateFailure,
     fetchFailure: messages.userFetchFailure,

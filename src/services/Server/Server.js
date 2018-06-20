@@ -125,6 +125,15 @@ export const deleteContent = function(url) {
   })
 }
 
+/**
+ * Returns true for 401 and 403 errors, false for all others.
+ */
+export const isSecurityError = function(serverError) {
+  return serverError.response &&
+         (serverError.response.status === 401 ||
+          serverError.response.status === 403)
+}
+
 
 /**
  * checkStatus evaluates the given response and throws an error for non-2xx

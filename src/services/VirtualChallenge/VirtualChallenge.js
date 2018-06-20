@@ -2,11 +2,11 @@ import { schema } from 'normalizr'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import addHours from 'date-fns/add_hours'
-import { defaultRoutes as api } from '../Server/Server'
+import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
-import { logoutUser } from '../User/User'
+import { ensureUserLoggedIn } from '../User/User'
 import { addError, addServerError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 
@@ -123,12 +123,11 @@ export const saveVirtualChallenge = function(dispatch, endpoint) {
     dispatch(receiveVirtualChallenges(normalizedResults.entities))
     return _get(normalizedResults,
                 `entities.virtualChallenges.${normalizedResults.result}`)
-  }).catch((serverError) => {
-    if (serverError.response && serverError.response.status === 401) {
-      // If we get an unauthorized, we assume the user is not logged
-      // in (or no longer logged in with the server).
-      dispatch(logoutUser())
-      dispatch(addError(AppErrors.user.unauthorized))
+  }).catch(serverError => {
+    if (isSecurityError(serverError)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
     }
     else {
       console.log(serverError.response || serverError)

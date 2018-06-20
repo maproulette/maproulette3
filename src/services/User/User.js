@@ -13,7 +13,7 @@ import _toPairs from 'lodash/toPairs'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
-import { defaultRoutes as api } from '../Server/Server'
+import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
@@ -156,6 +156,32 @@ export const fetchUser = function(userId) {
 }
 
 /**
+ * Pings the server to ensure the current (given) user is logged in with
+ * the server, and automatically signs out the user locally if not.
+ */
+export const ensureUserLoggedIn = function() {
+  return function(dispatch) {
+    return new Endpoint(
+      api.user.whoami, {schema: userSchema()}
+    ).execute().then(normalizedResults => {
+      dispatch(receiveUsers(normalizedResults.entities))
+      dispatch(setCurrentUser(normalizedResults.result))
+      return true
+    }).catch(error => {
+      // a 401 (unauthorized) indicates that the user is not logged in. Logout
+      // the current user locally to reflect that fact and dispatch an error
+      // indicating the user should sign in to continue.
+      if (error.response && error.response.status === 401) {
+        dispatch(logoutUser())
+        dispatch(addError(AppErrors.user.unauthenticated))
+      }
+
+      throw error
+    })
+  }
+}
+
+/**
  * Fetch the saved challenges for the given user.
  */
 export const fetchSavedChallenges = function(userId, limit=50) {
@@ -279,10 +305,10 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
     }).then(() =>
       dispatch(setCurrentUser(userId))
     ).catch(error => {
-      // a 401 (unauthorized) indicates that the user is not logged in.
-      // Logout the current user to null to reflect that.
-      if (error.response && error.response.status === 401) {
-        dispatch(logoutUser())
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         console.log(error.response || error)
@@ -316,12 +342,13 @@ export const resetAPIKey = function(userId) {
     fetch(resetURI, {credentials: 'same-origin'}).then(() => {
       return fetchUser(userId)(dispatch)
     }).catch(error => {
-      // a 401 (unauthorized) indicates that the user is not logged in.
-      // Logout the current user to reflect that.
-      if (error.response && error.response.status === 401) {
-        dispatch(logoutUser())
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
+        dispatch(addError(AppErrors.user.updateFailure))
         console.log(error.response || error)
       }
     })
@@ -419,12 +446,11 @@ const updateUser = function(userId, updateFunction, reloadOnSuccess=false) {
       if (reloadOnSuccess) {
         return dispatch(loadCompleteUser(userId))
       }
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server, anyway).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.user.updateFailure))

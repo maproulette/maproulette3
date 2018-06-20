@@ -1,5 +1,5 @@
 import { schema } from 'normalizr'
-import { defaultRoutes as api } from '../Server/Server'
+import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
@@ -9,7 +9,7 @@ import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
 import { addServerError, addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import { logoutUser } from '../User/User'
+import { ensureUserLoggedIn } from '../User/User'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -112,11 +112,10 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
     return new Endpoint(
       api.tasks.bulkUpdate, {json: taskData}
     ).execute().catch(error => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.task.updateFailure))
@@ -142,12 +141,11 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
     ).execute().then(() => {
       fetchTaskComments(taskId)(dispatch)
       fetchTask(taskId)(dispatch) // Refresh task data
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.task.updateFailure))
@@ -311,12 +309,11 @@ const updateTaskStatus = function(dispatch, taskId, newStatus) {
     {schema: taskSchema(), variables: {id: taskId, status: newStatus}}
   ).execute().then(() =>
     fetchTask(taskId)(dispatch) // Refresh task data
-  ).catch((error) => {
-    if (error.response && error.response.status === 401) {
-      // If we get an unauthorized, we assume the user is not logged
-      // in (or no longer logged in with the server).
-      dispatch(logoutUser())
-      dispatch(addError(AppErrors.user.unauthorized))
+  ).catch(error => {
+    if (isSecurityError(error)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
     }
     else {
       dispatch(addError(AppErrors.task.updateFailure))
@@ -383,12 +380,11 @@ export const saveTask = function(originalTaskData) {
     return saveEndpoint.execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return _get(normalizedResults, `entities.tasks.${normalizedResults.result}`)
-    }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         console.log(error.response || error)
@@ -407,12 +403,11 @@ export const deleteTask = function(taskId) {
       api.task.delete, {variables: {id: taskId}}
     ).execute().then(() =>
       dispatch(removeTask(taskId))
-    ).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        // If we get an unauthorized, we assume the user is not logged
-        // in (or no longer logged in with the server).
-        dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthorized))
+    ).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.task.deleteFailure))
