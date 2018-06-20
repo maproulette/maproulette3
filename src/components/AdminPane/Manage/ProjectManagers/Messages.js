@@ -14,11 +14,6 @@ export default defineMessages({
     defaultMessage: "Add Project Manager"
   },
 
-  osmUsername: {
-    id: "Admin.ProjectManagers.osmUsername.placeholder",
-    defaultMessage: "OpenStreetMap username"
-  },
-
   projectOwner: {
     id: "Admin.ProjectManagers.projectOwner",
     defaultMessage: "Owner"
@@ -36,7 +31,7 @@ export default defineMessages({
 
   chooseRole: {
     id: "Admin.ProjectManagers.controls.selectRole.choose.label",
-    defaultMessage: "Choose"
+    defaultMessage: "Choose Role"
   },
 })
 

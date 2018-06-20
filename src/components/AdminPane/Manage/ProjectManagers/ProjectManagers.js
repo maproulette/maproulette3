@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _without from 'lodash/without'
+import _isFinite from 'lodash/isFinite'
 import { GroupType,
          mostPrivilegedGroupType,
          messagesByGroupType }
@@ -10,6 +11,7 @@ import { GroupType,
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
+import ChooseOSMUser from '../ChooseOSMUser/ChooseOSMUser'
 import messages from './Messages'
 import './ProjectManagers.css'
 
@@ -25,6 +27,7 @@ export default class ProjectManagers extends Component {
     loadingManagers: true,
     updatingManagers: [],
     addManagerUsername: '',
+    addManagerOSMUser: null,
     addingManager: false,
   }
 
@@ -59,12 +62,17 @@ export default class ProjectManagers extends Component {
   }
 
   addManager = groupType => {
+    if (!_isFinite(parseInt(groupType, 10))) {
+      return
+    }
+
     this.setState({addingManager: true})
 
     this.props.addProjectManager(
       this.props.project.id, this.state.addManagerUsername, groupType
     ).then(() => this.setState({
       addManagerUsername: '',
+      addManagerOSMUser: null,
       addingManager: false,
     }))
   }
@@ -144,14 +152,17 @@ export default class ProjectManagers extends Component {
           <h3><FormattedMessage {...messages.addManager} /></h3>
 
           <div className="project-managers__add-manager__form">
-            <input className="input" type="text"
-                   value={this.state.addManagerUsername}
-                   placeholder={this.props.intl.formatMessage(messages.osmUsername)}
-                   onChange={e => this.setState({addManagerUsername: e.target.value})}
-            />
+            <ChooseOSMUser inputValue={this.state.addManagerUsername}
+                           selectedItem={this.state.addManagerOSMUser}
+                           onInputValueChange={username => this.setState({
+                             addManagerUsername: username
+                           })}
+                           onChange={osmUser => this.setState({
+                             addManagerOSMUser: osmUser
+                           })} />
 
             {this.state.addingManager && <BusySpinner />}
-            {!this.state.addingManager && this.state.addManagerUsername.length > 0 &&
+            {!this.state.addingManager && this.state.addManagerOSMUser &&
              <select onChange={e => this.addManager(e.target.value)}
                      className="select project-managers__add-manager__group-type">
                      {[<option key='none' value=''>
@@ -166,6 +177,7 @@ export default class ProjectManagers extends Component {
     )
   }
 }
+
 
 ProjectManagers.propTypes = {
   /** The project being managed */

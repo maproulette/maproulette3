@@ -1,0 +1,26 @@
+@import 'variables.scss';
+
+.choose-osm-user {
+  width: 100%;
+
+  &__input-wrapper {
+    position: relative;
+    width: 100%;
+
+    input {
+      padding-right: 40px;
+    }
+
+    .busy-spinner {
+      position: absolute;
+      top: 8px;
+      right: 5px;
+    }
+  }
+
+  &__no-results {
+    font-size: $size-7;
+    margin: 0 1em;
+    color: $grey-light;
+  }
+}
