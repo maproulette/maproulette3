@@ -46,7 +46,7 @@ export class DropdownButton extends Component {
                       label={this.props.children}
                       isActive={this.props.isActive()}
                       toggleActive={this.props.toggleActive}>
-        {options}
+        {options.length > 0 ? options : this.props.emptyContent}
       </SimpleDropdown>
     )
   }
@@ -62,6 +62,8 @@ DropdownButton.propTypes = {
     className: PropTypes.string,
     confirm: PropTypes.bool,
   })),
+  /** Optional content to display if dropdown is empty (no options) */
+  emptyContent: PropTypes.element,
   /** Invoked when a menu option is selected by the user */
   onSelect: PropTypes.func,
   /** Invoked to toggle the current active/inactive state of the dropdown */

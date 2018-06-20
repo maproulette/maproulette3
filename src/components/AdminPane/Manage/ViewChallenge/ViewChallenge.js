@@ -62,7 +62,7 @@ export class ViewChallenge extends Component {
     const projectId = _get(this.props, 'challenge.parent.id')
 
     const managedProjectOptions = _compact(_map(this.props.projects, project => {
-      if (project.id === projectId) {
+      if (project.id === projectId || !manager.canWriteProject(project)) {
         return null
       }
 
@@ -124,7 +124,8 @@ export class ViewChallenge extends Component {
              {_get(this.props, 'projects.length', 0) > 1 &&
               <div className="column is-narrow admin__manage__controls--control">
                 <DeactivatableDropdownButton options={managedProjectOptions}
-                                             onSelect={this.moveChallenge}>
+                                             onSelect={this.moveChallenge}
+                                             emptyContent={<FormattedMessage {...messages.noProjects} />}>
                   <a>
                     <FormattedMessage {...messages.moveChallengeLabel} />
                     <div className="basic-dropdown-indicator" />
