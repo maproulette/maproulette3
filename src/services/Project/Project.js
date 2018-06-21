@@ -1,6 +1,5 @@
 import { schema } from 'normalizr'
 import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
@@ -11,6 +10,7 @@ import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
+import { GroupType } from './GroupType/GroupType'
 import { addServerError,
          addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
@@ -144,8 +144,10 @@ export const saveProject = function(projectData) {
   return function(dispatch) {
     // Setup the save endpoint to either edit or create the project depending
     // on whether it has an id.
+    const areCreating = !_isFinite(projectData.id)
+
     const saveEndpoint = new Endpoint(
-      _isNumber(projectData.id) ? api.project.edit : api.project.create,
+      areCreating ? api.project.create : api.project.edit,
       {
         schema: projectSchema(),
         variables: {id: projectData.id},
@@ -155,7 +157,17 @@ export const saveProject = function(projectData) {
 
     return saveEndpoint.execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
-      return _get(normalizedResults, `entities.projects.${normalizedResults.result}`)
+      const project = _get(normalizedResults, `entities.projects.${normalizedResults.result}`)
+
+      // If we just created the project, add the owner as an admin.
+      if (areCreating && project) {
+        return setProjectManagerPermissions(
+          project.id, project.owner, GroupType.admin
+        )(dispatch).then(() => project)
+      }
+      else {
+        return project
+      }
     }).catch((error) => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
@@ -228,8 +240,10 @@ export const fetchProjectManagers = function(projectId) {
 
       return dispatch(receiveProjects(normalizedResults.entities))
     }).catch(error => {
-      if (error.response && error.response.status === 401) {
-        dispatch(addError(AppErrors.project.notManager))
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.project.fetchFailure))
@@ -257,8 +271,10 @@ export const setProjectManagerPermissions = function(projectId, userId, groupTyp
 
       return dispatch(receiveProjects(normalizedResults.entities))
     }).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        dispatch(addError(AppErrors.project.notManager))
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.project.saveFailure))
@@ -301,9 +317,11 @@ export const removeProjectManager = function(projectId, userId) {
       api.project.removeManager, {variables: {userId, projectId}}
     ).execute().then(
       () => fetchProjectManagers(projectId)(dispatch)
-    ).catch((error) => {
-      if (error.response && error.response.status === 401) {
-        dispatch(addError(AppErrors.project.notManager))
+    ).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
       }
       else {
         dispatch(addError(AppErrors.project.saveFailure))
