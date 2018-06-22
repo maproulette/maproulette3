@@ -80,7 +80,8 @@ beforeEach(() => {
   })
 
   challenge = {
-    checkinComment: "My checkin comment"
+    checkinComment: "My checkin comment",
+    checkinSource: "My source",
   }
 
   taskGeometries = {
@@ -141,6 +142,12 @@ describe('constructJosmURI', () => {
 
     expect(uri).toEqual(expect.stringContaining("Conforming"))
     expect(uri).not.toEqual(expect.stringContaining("#"))
+  })
+
+  test("uri includes a URI-encoded source from the task challenge", () => {
+    const uri = constructJosmURI(true, task, mapBounds)
+
+    expect(uri).toEqual(expect.stringContaining("My%20source"))
   })
 
   test("uri includes a node selection for Point features with an OSM id", () => {

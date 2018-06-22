@@ -68,6 +68,11 @@ export const jsSchema = (intl, user, challengeData) => {
         description: intl.formatMessage(messages.checkinCommentDescription),
         type: "string",
       },
+      checkinSource: {
+        title: intl.formatMessage(messages.checkinSourceLabel),
+        description: intl.formatMessage(messages.checkinSourceDescription),
+        type: "string",
+      },
       difficulty: {
         title: intl.formatMessage(messages.difficultyLabel),
         description: intl.formatMessage(messages.difficultyDescription),
@@ -136,7 +141,8 @@ export const uiSchema = (intl, user, challengeData) => {
   const uiSchemaFields = {
     "ui:order": [
       "enabled", "name", "description", "blurb", "instruction",
-      "checkinComment", "difficulty", "category", "additionalKeywords",
+      "checkinComment", "checkinSource", "difficulty", "category",
+      "additionalKeywords",
     ],
     featured: {
       "ui:widget": "radio",
