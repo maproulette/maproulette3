@@ -152,7 +152,9 @@ export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
   const ne = bounds.getNorthEast()
   let uri = `http://127.0.0.1:8111/load_and_zoom?left=${sw.lng}&right=${ne.lng}` +
             `&top=${ne.lat}&bottom=${sw.lat}&new_layer=${asNewLayer ? 'true' : 'false'}` +
-            `&changeset_comment=${encodeURIComponent(task.parent.checkinComment)}&select=`
+            `&changeset_comment=${encodeURIComponent(task.parent.checkinComment)}` +
+            `&changeset_source=${encodeURIComponent(task.parent.checkinSource)}` +
+            `&select=`
 
   let selects = []
   if (task.geometries && task.geometries.features) {

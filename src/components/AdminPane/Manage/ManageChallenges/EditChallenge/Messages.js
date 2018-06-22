@@ -107,6 +107,17 @@ export default defineMessages({
                     "users in editor",
   },
 
+  checkinSourceLabel: {
+    id: 'Admin.EditChallenge.form.checkinSource.label',
+    defaultMessage: "Changeset Source",
+  },
+
+  checkinSourceDescription: {
+    id: 'Admin.EditChallenge.form.checkinSource.description',
+    defaultMessage: "Source to be associated with changes made by " +
+                    "users in editor",
+  },
+
   includeCheckinHashtagTrueLabel: {
     id: 'Admin.EditChallenge.form.includeCheckinHashtag.value.true.label',
     defaultMessage: "Automatically append #maproulette hashtag (highly recommended)",
