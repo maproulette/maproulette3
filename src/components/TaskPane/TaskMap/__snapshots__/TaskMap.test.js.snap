@@ -64,6 +64,7 @@ ShallowWrapper {
           toggleTaskFeatures={[Function]}
 />,
         <EnhancedMap
+          animateFeatures={true}
           center={
                     Object {
                               "lat": 0,
@@ -142,9 +143,10 @@ ShallowWrapper {
       },
       Object {
         "instance": null,
-        "key": "2",
+        "key": undefined,
         "nodeType": "class",
         "props": Object {
+          "animateFeatures": true,
           "center": Object {
             "lat": 0,
             "lng": 0,
@@ -265,6 +267,7 @@ ShallowWrapper {
             toggleTaskFeatures={[Function]}
 />,
           <EnhancedMap
+            animateFeatures={true}
             center={
                         Object {
                                     "lat": 0,
@@ -343,9 +346,10 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": "2",
+          "key": undefined,
           "nodeType": "class",
           "props": Object {
+            "animateFeatures": true,
             "center": Object {
               "lat": 0,
               "lng": 0,

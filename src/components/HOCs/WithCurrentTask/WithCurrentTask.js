@@ -129,7 +129,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       })
 
       // Load the next task from the challenge.
-      nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+      return nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
         visitNewTask(ownProps, taskId, newTask)
       )
     },

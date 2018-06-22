@@ -61,6 +61,7 @@ ShallowWrapper {
 />,
         <EnhancedMap
           animate={true}
+          animateFeatures={false}
           center={
                     Object {
                               "lat": 0,
@@ -133,6 +134,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "animate": true,
+          "animateFeatures": false,
           "center": Object {
             "lat": 0,
             "lng": 45,
@@ -226,6 +228,7 @@ ShallowWrapper {
 />,
           <EnhancedMap
             animate={true}
+            animateFeatures={false}
             center={
                         Object {
                                     "lat": 0,
@@ -298,6 +301,7 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "animate": true,
+            "animateFeatures": false,
             "center": Object {
               "lat": 0,
               "lng": 45,

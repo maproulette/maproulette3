@@ -19,6 +19,7 @@ import _map from 'lodash/map'
  */
 export default class EnhancedMap extends Map {
   currentFeatures = null
+  animationHandle = null
 
   /**
    * Invoked after the user is finished altering the map bounds, either by
@@ -41,6 +42,47 @@ export default class EnhancedMap extends Map {
     }
   }
 
+  /**
+   * Schedules animation of SVG paths and markers on map. If animation is
+   * already pending, it is first cancelled prior to scheduling a new one.
+   */
+  scheduleAnimation = () => {
+    if (this.animationHandle) {
+      clearTimeout(this.animationHandle)
+    }
+    this.animationHandle = setTimeout(this.animateFeatures, 250)
+  }
+
+  /**
+   * Performs simple animation of SVG paths and markers to provide a visual cue
+   * to the user that new paths/markers have been rendered on the map, and to
+   * call attention to them.
+   */
+  animateFeatures = () => {
+    // Animate paths
+    const paths = document.querySelectorAll('.leaflet-pane path.leaflet-interactive')
+    if (paths.length > 0) {
+      for (let path of paths) {
+        const pathLength = path.getTotalLength()
+        path.style.strokeDasharray = `${pathLength} ${pathLength}`
+        path.style.strokeDashoffset = pathLength
+        path.getBoundingClientRect()
+        path.style.transition = 'stroke-dashoffset 1s ease-in-out'
+        path.style.strokeDashoffset = '0'
+        path.style.opacity = '1';
+      }
+    }
+
+    // Animate markers
+    const markers = document.querySelectorAll('.leaflet-marker-pane')
+    if (markers) {
+      for (let marker of markers) {
+        marker.classList.remove('animated')
+        setTimeout(() => marker.classList.add('animated'), 100)
+      }
+    }
+  }
+
   updateFeatures = (newFeatures) => {
     const hasExistingFeatures = !_isEmpty(this.currentFeatures)
     if (hasExistingFeatures) {
@@ -51,6 +93,15 @@ export default class EnhancedMap extends Map {
       this.currentFeatures = geoJSON(newFeatures, {
         onEachFeature: (feature, layer) => {
           layer.bindPopup(this.propertyList(feature.properties))
+
+          // Animate features when added to map (if requested)
+          if (this.props.animateFeatures) {
+            const oldOnAdd = layer.onAdd
+            layer.onAdd = map => {
+              oldOnAdd.call(layer, map)
+              this.scheduleAnimation()
+            }
+          }
         },
       })
 
@@ -132,6 +183,9 @@ export default class EnhancedMap extends Map {
     if (this.props.initialBounds && _isEmpty(this.props.features)) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
+    else if (!this.props.center.equals(prevProps.center)) {
+      this.leafletElement.panTo(this.props.center)
+    }
 
     if (this.props.features !== prevProps.features ||
         this.props.justFitFeatures !== prevProps.justFitFeatures) {
@@ -161,6 +215,8 @@ EnhancedMap.propTypes = {
   setInitialBounds: PropTypes.bool,
   /** If true, features will only be used to fit bounds, not rendered */
   justFitFeatures: PropTypes.bool,
+  /** If true, features will be animated when initially added to the map */
+  animateFeatures: PropTypes.bool,
 }
 
 EnhancedMap.defaultProps = {
@@ -168,4 +224,5 @@ EnhancedMap.defaultProps = {
   zoom: 13,
   setInitialBounds: true,
   justFitFeatures: false,
+  animateFeatures: false,
 }
