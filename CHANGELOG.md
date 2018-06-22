@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.0.5] - 2018-06-22
+### Added
+- Congratulate user when a challenge is completed (#112).
+- Challenge owners can set individual tasks to any status (#387).
+- Challenge owners can bulk reset tasks to Created stauts (#326).
+- Challenge owners can move challenges between projects (#328).
+- Administration of project managers.
+- Support for Read, Write, and Admin project manager roles.
+- Improved handling of server authentication and authorization errors.
+- Changeset source field on challenges with JOSM prefill (#361).
+
+### Fixed
+- Ensure latest API key displayed after multiple consecutive resets.
+- Cloning a challenge could fail in some scenarios.
+- Ensure all challenges shown to challenge owner (#396).
+
+### Changed
+- Relocated comments on task-completion sidebar (#296).
+
+
 ## [v3.0.4] - 2018-06-08
 ### Added
 - Option on user profile page to reset API key
