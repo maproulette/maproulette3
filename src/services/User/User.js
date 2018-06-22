@@ -14,6 +14,7 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
+import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
@@ -339,6 +340,9 @@ export const resetAPIKey = function(userId) {
   return function(dispatch) {
     const resetURI = `/auth/generateAPIKey?userId=${userId}`
 
+    // Since we're bypassing Endpoint and manually performing an update, we
+    // need to also manually reset the request cache.
+    resetCache()
     fetch(resetURI, {credentials: 'same-origin'}).then(() => {
       return fetchUser(userId)(dispatch)
     }).catch(error => {
