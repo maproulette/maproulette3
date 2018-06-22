@@ -225,6 +225,19 @@ export class ActiveTaskDetails extends Component {
             <TaskStatusIndicator allStatuses={this.props.reviewTask}
                                  isMinimized={isMinimized}
                                  {...this.props} />
+
+            <CollapsibleSection collapsedByDefault
+              className="active-task-details__task-comments"
+              heading={
+                  <div className="active-task-details--sub-heading">
+                    <FormattedMessage {...messages.comments} />
+                    <CommentCountBadge comments={_get(this.props, 'task.comments')} />
+                  </div>
+              }
+            >
+              <CommentList comments={this.props.task.comments} />
+            </CollapsibleSection>
+
             {taskControls}
 
             {!isMinimized &&
@@ -258,20 +271,10 @@ export class ActiveTaskDetails extends Component {
                 <FormattedMessage {...messages.social} />
               </div>
               <ChallengeShareControls className={classNames('active-task-details__share-controls',
-                                                            {'active-task-details--bordered': !isMinimized,
-                                                            'is-minimized': isMinimized})}
+                                                            {'is-minimized': isMinimized})}
                                       challenge={this.props.task.parent} />
             </div>
             }
-
-            <div className="active-task-details__task-comments">
-              <div className="active-task-details--sub-heading">
-                <FormattedMessage {...messages.comments} />
-                <CommentCountBadge comments={_get(this.props, 'task.comments')} />
-              </div>
-
-              <CommentList comments={this.props.task.comments} />
-            </div>
           </div>
         </div>
       </Sidebar>
