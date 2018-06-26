@@ -54,6 +54,24 @@ export default class EnhancedMap extends Map {
   }
 
   /**
+   * Returns a promise that resolves to the full length of the SVG path once it
+   * has finished rendering.
+   */
+  pathComplete(path, priorLength, subsequentCheck = false) {
+    return new Promise(resolve => {
+      const currentLength = path.getTotalLength()
+      if (subsequentCheck && currentLength === priorLength) {
+        resolve(currentLength)
+        return
+      }
+
+      setTimeout(() => {
+        this.pathComplete(path, currentLength, true).then(length => resolve(length))
+      }, 25)
+    })
+  }
+
+  /**
    * Performs simple animation of SVG paths and markers to provide a visual cue
    * to the user that new paths/markers have been rendered on the map, and to
    * call attention to them.
@@ -63,13 +81,14 @@ export default class EnhancedMap extends Map {
     const paths = document.querySelectorAll('.leaflet-pane path.leaflet-interactive')
     if (paths.length > 0) {
       for (let path of paths) {
-        const pathLength = path.getTotalLength()
-        path.style.strokeDasharray = `${pathLength} ${pathLength}`
-        path.style.strokeDashoffset = pathLength
-        path.getBoundingClientRect()
-        path.style.transition = 'stroke-dashoffset 1s ease-in-out'
-        path.style.strokeDashoffset = '0'
-        path.style.opacity = '1';
+        this.pathComplete(path).then(pathLength => {
+          path.style.strokeDasharray = `${pathLength} ${pathLength}`
+          path.style.strokeDashoffset = pathLength
+          path.getBoundingClientRect()
+          path.style.transition = 'stroke-dashoffset 1s ease-in-out'
+          path.style.strokeDashoffset = '0'
+          path.style.opacity = '1';
+        })
       }
     }
 
