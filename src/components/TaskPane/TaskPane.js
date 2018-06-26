@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { CSSTransition } from 'react-transition-group'
 import MediaQuery from 'react-responsive'
 import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
@@ -78,14 +77,9 @@ export class TaskPane extends Component {
                               {..._omit(this.props, 'completeTask')} />
         </MediaQuery>
         <MapPane completingTask={this.state.completingTask}>
-          <CSSTransition key={this.props.task.id} timeout={{exit: 300, enter: 1500}}
-                         classNames="animate-slide"
-                         in={this.state.completingTask !== this.props.task.id}
-                         onExited={this.clearCompletingTask}>
-            <DetailMap task={this.props.task}
-                       challenge={this.props.task.parent}
-                       {...this.props} />
-          </CSSTransition>
+          <DetailMap task={this.props.task}
+                     challenge={this.props.task.parent}
+                     {...this.props} />
         </MapPane>
         <MediaQuery query="(max-width: 1023px)">
           <MobileTabBar {...this.props} />

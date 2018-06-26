@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { ZoomControl } from 'react-leaflet'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
+import _isEqual from 'lodash/isEqual'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
@@ -56,7 +57,11 @@ export default class TaskMap extends Component {
 
     if (_get(nextProps, 'task.geometries') !==
         _get(this.props, 'task.geometries')) {
-      return true
+      // Do a deep comparison to make sure geometries really changed
+      if (!_isEqual(_get(nextProps, 'task.geometries'),
+                    _get(this.props, 'task.geometries'))) {
+        return true
+      }
     }
 
     return false
@@ -89,12 +94,12 @@ export default class TaskMap extends Component {
         <LayerToggle showTaskFeatures={this.state.showTaskFeatures}
                      toggleTaskFeatures={this.toggleTaskFeatureVisibility}
                      {...this.props} />
-        <EnhancedMap key={this.props.task.id}
-                     center={this.props.centerPoint} zoom={zoom} zoomControl={false}
+        <EnhancedMap center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom}
                      features={_get(this.props.task, 'geometries.features')}
                      justFitFeatures={!this.state.showTaskFeatures}
                      fitFeaturesOnlyOnce
+                     animateFeatures
                      onBoundsChange={this.updateTaskBounds}
         >
           <ZoomControl position='topright' />

@@ -8,6 +8,21 @@
   .leaflet-container {
     .leaflet-pane {
       z-index: $layer-map;
+
+      path.leaflet-interactive {
+        opacity: 0; // hide by default so we can control appearance.
+      }
+
+      &.leaflet-marker-pane.animated {
+        @keyframes marker-bounce {
+          0%   { transform: translate3d(0px, 0px, 0px); }
+          30%  { transform: translate3d(0px, -50px, 0px); }
+          50%  { transform: translate3d(0px, 0px, 0px); }
+          100% { transform: translate3d(0px, 0px, 0px); }
+        }
+
+        animation: marker-bounce 2s cubic-bezier(0.175, 0.885, 0.32, 1.275); // easeOutBack
+      }
     }
 
     .leaflet-control-container {
