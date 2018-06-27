@@ -20,6 +20,7 @@ import { messagesByStatus }
 import { MAPBOX_LIGHT,
          OPEN_STREET_MAP }
        from '../../../../services/VisibleLayer/LayerSources'
+import AsManager from '../../../../interactions/User/AsManager'
 import EnhancedMap from '../../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../../EnhancedMap/LayerToggle/LayerToggle'
@@ -154,6 +155,8 @@ export class ChallengeTaskMap extends Component {
    * Invoked to request popup content when a task marker on the map is clicked
    */
   popupContent = marker => {
+    const manager = AsManager(this.props.user)
+
     const taskBaseRoute =
       `/admin/project/${this.props.challenge.parent.id}` +
       `/challenge/${this.props.challenge.id}/task/${marker.options.taskId}`
@@ -174,11 +177,13 @@ export class ChallengeTaskMap extends Component {
             </a>
           </div>
 
-          <div>
-            <a onClick={() => this.props.history.push(`${taskBaseRoute}/edit`)}>
-              {this.props.intl.formatMessage(messages.editTaskLabel)}
-            </a>
-          </div>
+          {manager.canWriteProject(this.props.challenge.parent) &&
+           <div>
+             <a onClick={() => this.props.history.push(`${taskBaseRoute}/edit`)}>
+               {this.props.intl.formatMessage(messages.editTaskLabel)}
+             </a>
+           </div>
+          }
         </div>
       </div>
     )
