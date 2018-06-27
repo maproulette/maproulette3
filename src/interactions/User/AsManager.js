@@ -26,7 +26,7 @@ export class AsManager extends AsEndUser {
   }
 
   /**
-   * Returns the user's group types (permissions) for the given project.
+   * Returns the user's group types (roles) for the given project.
    */
   projectGroupTypes(project) {
     return _map(
@@ -63,7 +63,7 @@ export class AsManager extends AsEndUser {
    * is considered to have read access if any of the following are true:
    * - They are a superuser
    * - They are the project owner
-   * - They posesss any of the project's group types (read, write, or admin).
+   * - They possess any of the project's group types (read, write, or admin).
    *
    * @returns true if the user has read access, false otherwise.
    */
@@ -101,7 +101,7 @@ export class AsManager extends AsEndUser {
    * a project administrator if any of the following are true:
    * - They are a superuser
    * - They are the project owner
-   * - They posesss the project's admin group
+   * - They possess the project's admin group
    *
    * @returns true if the user can administrate the project, false otherwise.
    */
@@ -110,8 +110,7 @@ export class AsManager extends AsEndUser {
   }
 
   /**
-   * Determines if the given user has permissions to manage the given
-   * challenge.
+   * Determines if the given user has permission to manage the given challenge.
    *
    * > Note that if challenge is not denormalized with a parent object field,
    * > this method will return false.
