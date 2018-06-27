@@ -156,7 +156,8 @@ export const InputField = ({id, label, required, rawDescription, rawErrors, chil
 export const TagsInputField = props => {
   return (
     <div className="tags-field">
-      <TagsInput inputProps={{placeholder: "Add keyword"}}
+      <TagsInput {...props}
+                 inputProps={{placeholder: "Add keyword"}}
                  value={props.formData ? props.formData.split(',') : []}
                  onChange={tags => props.onChange(tags.join(','))}
                  addOnBlur />

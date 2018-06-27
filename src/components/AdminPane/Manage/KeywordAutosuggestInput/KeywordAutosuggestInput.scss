@@ -1,0 +1,34 @@
+@import 'mixins.scss';
+
+.keyword-autosuggest-input {
+  @include basic-form-element-styling();
+
+  > span { // wrapper around react-tagsinput
+    display: flex;
+  }
+
+  .react-tagsinput-tag {
+    @include tag();
+    display: inline-flex;
+  }
+
+  .autosuggest-text-box__input-wrapper {
+    input {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  .dropdown-menu {
+    margin-bottom: 10px;
+
+    .dropdown-content {
+      .new-keyword {
+        padding-bottom: 11px;
+        border-bottom: 2px solid $grey-lightest;
+        margin-bottom: 5px;
+        font-style: italic;
+      }
+    }
+  }
+}

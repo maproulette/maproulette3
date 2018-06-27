@@ -662,6 +662,14 @@ const fetchParentProject = function(dispatch, normalizedChallengeResults) {
 }
 
 /**
+ * Search for keyword by prefix. Resolves with a (possibly empty) list of
+ * results.
+ */
+export const findKeyword = function(keywordPrefix) {
+  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix}}).execute()
+}
+
+/**
  * Removes the given oldKeywords from the given challenge. If no
  * keywords are provided, nothing is done.
  *
