@@ -54,7 +54,7 @@ ShallowWrapper {
           className="challenge-pane"
 >
           <MediaQuery
-                    maxWidth={1024}
+                    maxWidth={900}
                     values={Object {}}
           >
                     <Sidebar
@@ -81,7 +81,7 @@ ShallowWrapper {
                     </Sidebar>
           </MediaQuery>
           <MediaQuery
-                    minWidth={1025}
+                    minWidth={901}
                     values={Object {}}
           >
                     <Sidebar
@@ -160,7 +160,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <MediaQuery
-              maxWidth={1024}
+              maxWidth={900}
               values={Object {}}
 >
               <Sidebar
@@ -187,7 +187,7 @@ ShallowWrapper {
               </Sidebar>
 </MediaQuery>,
             <MediaQuery
-              minWidth={1025}
+              minWidth={901}
               values={Object {}}
 >
               <Sidebar
@@ -265,7 +265,7 @@ ShallowWrapper {
                                 }
                 />
 </Sidebar>,
-              "maxWidth": 1024,
+              "maxWidth": 900,
               "values": Object {},
             },
             "ref": null,
@@ -345,7 +345,7 @@ ShallowWrapper {
                                 }
                 />
 </Sidebar>,
-              "minWidth": 1025,
+              "minWidth": 901,
               "values": Object {},
             },
             "ref": null,
@@ -483,7 +483,7 @@ ShallowWrapper {
             className="challenge-pane"
 >
             <MediaQuery
-                        maxWidth={1024}
+                        maxWidth={900}
                         values={Object {}}
             >
                         <Sidebar
@@ -510,7 +510,7 @@ ShallowWrapper {
                         </Sidebar>
             </MediaQuery>
             <MediaQuery
-                        minWidth={1025}
+                        minWidth={901}
                         values={Object {}}
             >
                         <Sidebar
@@ -589,7 +589,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <MediaQuery
-                maxWidth={1024}
+                maxWidth={900}
                 values={Object {}}
 >
                 <Sidebar
@@ -616,7 +616,7 @@ ShallowWrapper {
                 </Sidebar>
 </MediaQuery>,
               <MediaQuery
-                minWidth={1025}
+                minWidth={901}
                 values={Object {}}
 >
                 <Sidebar
@@ -694,7 +694,7 @@ ShallowWrapper {
                                     }
                   />
 </Sidebar>,
-                "maxWidth": 1024,
+                "maxWidth": 900,
                 "values": Object {},
               },
               "ref": null,
@@ -774,7 +774,7 @@ ShallowWrapper {
                                     }
                   />
 </Sidebar>,
-                "minWidth": 1025,
+                "minWidth": 901,
                 "values": Object {},
               },
               "ref": null,
@@ -959,7 +959,7 @@ ShallowWrapper {
           className="challenge-pane"
 >
           <MediaQuery
-                    maxWidth={1024}
+                    maxWidth={900}
                     values={Object {}}
           >
                     <Sidebar
@@ -991,7 +991,7 @@ ShallowWrapper {
                     </Sidebar>
           </MediaQuery>
           <MediaQuery
-                    minWidth={1025}
+                    minWidth={901}
                     values={Object {}}
           >
                     <Sidebar
@@ -1087,7 +1087,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <MediaQuery
-              maxWidth={1024}
+              maxWidth={900}
               values={Object {}}
 >
               <Sidebar
@@ -1119,7 +1119,7 @@ ShallowWrapper {
               </Sidebar>
 </MediaQuery>,
             <MediaQuery
-              minWidth={1025}
+              minWidth={901}
               values={Object {}}
 >
               <Sidebar
@@ -1216,7 +1216,7 @@ ShallowWrapper {
                                 }
                 />
 </Sidebar>,
-              "maxWidth": 1024,
+              "maxWidth": 900,
               "values": Object {},
             },
             "ref": null,
@@ -1309,7 +1309,7 @@ ShallowWrapper {
                                 }
                 />
 </Sidebar>,
-              "minWidth": 1025,
+              "minWidth": 901,
               "values": Object {},
             },
             "ref": null,
@@ -1474,7 +1474,7 @@ ShallowWrapper {
             className="challenge-pane"
 >
             <MediaQuery
-                        maxWidth={1024}
+                        maxWidth={900}
                         values={Object {}}
             >
                         <Sidebar
@@ -1506,7 +1506,7 @@ ShallowWrapper {
                         </Sidebar>
             </MediaQuery>
             <MediaQuery
-                        minWidth={1025}
+                        minWidth={901}
                         values={Object {}}
             >
                         <Sidebar
@@ -1602,7 +1602,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <MediaQuery
-                maxWidth={1024}
+                maxWidth={900}
                 values={Object {}}
 >
                 <Sidebar
@@ -1634,7 +1634,7 @@ ShallowWrapper {
                 </Sidebar>
 </MediaQuery>,
               <MediaQuery
-                minWidth={1025}
+                minWidth={901}
                 values={Object {}}
 >
                 <Sidebar
@@ -1731,7 +1731,7 @@ ShallowWrapper {
                                     }
                   />
 </Sidebar>,
-                "maxWidth": 1024,
+                "maxWidth": 900,
                 "values": Object {},
               },
               "ref": null,
@@ -1824,7 +1824,7 @@ ShallowWrapper {
                                     }
                   />
 </Sidebar>,
-                "minWidth": 1025,
+                "minWidth": 901,
                 "values": Object {},
               },
               "ref": null,

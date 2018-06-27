@@ -78,7 +78,7 @@ export class ChallengePane extends Component {
         <ChallengeFilterSubnav {...this.props} />
 
         <div className="challenge-pane">
-          <MediaQuery maxWidth={1024}>
+          <MediaQuery maxWidth={900}>
             <Sidebar className={classNames('inline full-screen-height with-shadow challenge-pane__results',
                                           {"is-minimized": this.state.sidebarMinimized})}
                     toggleMinimized={this.toggleSidebarMinimized}
@@ -86,7 +86,7 @@ export class ChallengePane extends Component {
               <ChallengeResults {...this.props} />
             </Sidebar>
           </MediaQuery>
-          <MediaQuery minWidth={1025}>
+          <MediaQuery minWidth={901}>
             <Sidebar className='inline full-screen-height with-shadow challenge-pane__results'
                      isActive={true}>
               <ChallengeResults {...this.props} />
