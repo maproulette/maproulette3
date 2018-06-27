@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
+import MediaQuery from 'react-responsive'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import { MAPBOX_STREETS } from '../../services/VisibleLayer/LayerSources'
@@ -54,6 +56,14 @@ else {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengePane extends Component {
+  state = {
+    sidebarMinimized: true,
+  }
+
+  toggleSidebarMinimized = () => {
+    this.setState({sidebarMinimized: !this.state.sidebarMinimized})
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     return !_isEqual(this.props, nextProps) || !_isEqual(this.state, nextState)
   }
@@ -68,10 +78,20 @@ export class ChallengePane extends Component {
         <ChallengeFilterSubnav {...this.props} />
 
         <div className="challenge-pane">
-          <Sidebar className='inline full-screen-height with-shadow challenge-pane__results'
-                   isActive={true}>
-            <ChallengeResults {...this.props} />
-          </Sidebar>
+          <MediaQuery maxWidth={900}>
+            <Sidebar className={classNames('inline full-screen-height with-shadow challenge-pane__results',
+                                          {"is-minimized": this.state.sidebarMinimized})}
+                    toggleMinimized={this.toggleSidebarMinimized}
+                    isActive={true}>
+              <ChallengeResults {...this.props} />
+            </Sidebar>
+          </MediaQuery>
+          <MediaQuery minWidth={901}>
+            <Sidebar className='inline full-screen-height with-shadow challenge-pane__results'
+                     isActive={true}>
+              <ChallengeResults {...this.props} />
+            </Sidebar>
+          </MediaQuery>
 
           <MapPane>
             <Map layerSourceId={MAPBOX_STREETS}

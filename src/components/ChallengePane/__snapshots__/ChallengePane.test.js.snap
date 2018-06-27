@@ -53,27 +53,59 @@ ShallowWrapper {
         <div
           className="challenge-pane"
 >
-          <Sidebar
-                    className="inline full-screen-height with-shadow challenge-pane__results"
-                    isActive={true}
+          <MediaQuery
+                    maxWidth={900}
+                    values={Object {}}
           >
-                    <Connect(Connect(WithSortedChallenges))
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              saveChallenge={[Function]}
-                              startChallenge={[Function]}
-                              unsaveChallenge={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
-          </Sidebar>
+                    <Sidebar
+                              className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                              isActive={true}
+                              toggleMinimized={[Function]}
+                    >
+                              <Connect(Connect(WithSortedChallenges))
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        saveChallenge={[Function]}
+                                        startChallenge={[Function]}
+                                        unsaveChallenge={[Function]}
+                                        user={
+                                                  Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                                        }
+                              />
+                    </Sidebar>
+          </MediaQuery>
+          <MediaQuery
+                    minWidth={901}
+                    values={Object {}}
+          >
+                    <Sidebar
+                              className="inline full-screen-height with-shadow challenge-pane__results"
+                              isActive={true}
+                    >
+                              <Connect(Connect(WithSortedChallenges))
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        saveChallenge={[Function]}
+                                        startChallenge={[Function]}
+                                        unsaveChallenge={[Function]}
+                                        user={
+                                                  Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                                        }
+                              />
+                    </Sidebar>
+          </MediaQuery>
           <Connect(MapPane)>
                     <Connect(Component)
                               challenge={undefined}
@@ -127,27 +159,59 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": Array [
-            <Sidebar
-              className="inline full-screen-height with-shadow challenge-pane__results"
-              isActive={true}
+            <MediaQuery
+              maxWidth={900}
+              values={Object {}}
 >
-              <Connect(Connect(WithSortedChallenges))
-                            intl={
-                                          Object {
-                                                        "formatMessage": [Function],
-                                                      }
-                            }
-                            saveChallenge={[Function]}
-                            startChallenge={[Function]}
-                            unsaveChallenge={[Function]}
-                            user={
-                                          Object {
-                                                        "id": 11,
-                                                        "savedChallenges": Array [],
-                                                      }
-                            }
-              />
-</Sidebar>,
+              <Sidebar
+                            className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                            isActive={true}
+                            toggleMinimized={[Function]}
+              >
+                            <Connect(Connect(WithSortedChallenges))
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
+                                          saveChallenge={[Function]}
+                                          startChallenge={[Function]}
+                                          unsaveChallenge={[Function]}
+                                          user={
+                                                        Object {
+                                                                      "id": 11,
+                                                                      "savedChallenges": Array [],
+                                                                    }
+                                          }
+                            />
+              </Sidebar>
+</MediaQuery>,
+            <MediaQuery
+              minWidth={901}
+              values={Object {}}
+>
+              <Sidebar
+                            className="inline full-screen-height with-shadow challenge-pane__results"
+                            isActive={true}
+              >
+                            <Connect(Connect(WithSortedChallenges))
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
+                                          saveChallenge={[Function]}
+                                          startChallenge={[Function]}
+                                          unsaveChallenge={[Function]}
+                                          user={
+                                                        Object {
+                                                                      "id": 11,
+                                                                      "savedChallenges": Array [],
+                                                                    }
+                                          }
+                            />
+              </Sidebar>
+</MediaQuery>,
             <Connect(MapPane)>
               <Connect(Component)
                             challenge={undefined}
@@ -179,24 +243,30 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Connect(Connect(WithSortedChallenges))
-                intl={
-                                Object {
-                                                "formatMessage": [Function],
-                                              }
-                }
-                saveChallenge={[Function]}
-                startChallenge={[Function]}
-                unsaveChallenge={[Function]}
-                user={
-                                Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
-                }
-/>,
-              "className": "inline full-screen-height with-shadow challenge-pane__results",
-              "isActive": true,
+              "children": <Sidebar
+                className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                isActive={true}
+                toggleMinimized={[Function]}
+>
+                <Connect(Connect(WithSortedChallenges))
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                saveChallenge={[Function]}
+                                startChallenge={[Function]}
+                                unsaveChallenge={[Function]}
+                                user={
+                                                Object {
+                                                                "id": 11,
+                                                                "savedChallenges": Array [],
+                                                              }
+                                }
+                />
+</Sidebar>,
+              "maxWidth": 900,
+              "values": Object {},
             },
             "ref": null,
             "rendered": Object {
@@ -204,19 +274,126 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "intl": Object {
-                  "formatMessage": [Function],
-                },
-                "saveChallenge": [Function],
-                "startChallenge": [Function],
-                "unsaveChallenge": [Function],
-                "user": Object {
-                  "id": 11,
-                  "savedChallenges": Array [],
-                },
+                "children": <Connect(Connect(WithSortedChallenges))
+                  intl={
+                                    Object {
+                                                      "formatMessage": [Function],
+                                                    }
+                  }
+                  saveChallenge={[Function]}
+                  startChallenge={[Function]}
+                  unsaveChallenge={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 11,
+                                                      "savedChallenges": Array [],
+                                                    }
+                  }
+/>,
+                "className": "inline full-screen-height with-shadow challenge-pane__results is-minimized",
+                "isActive": true,
+                "toggleMinimized": [Function],
               },
               "ref": null,
-              "rendered": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "intl": Object {
+                    "formatMessage": [Function],
+                  },
+                  "saveChallenge": [Function],
+                  "startChallenge": [Function],
+                  "unsaveChallenge": [Function],
+                  "user": Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": <Sidebar
+                className="inline full-screen-height with-shadow challenge-pane__results"
+                isActive={true}
+>
+                <Connect(Connect(WithSortedChallenges))
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                saveChallenge={[Function]}
+                                startChallenge={[Function]}
+                                unsaveChallenge={[Function]}
+                                user={
+                                                Object {
+                                                                "id": 11,
+                                                                "savedChallenges": Array [],
+                                                              }
+                                }
+                />
+</Sidebar>,
+              "minWidth": 901,
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <Connect(Connect(WithSortedChallenges))
+                  intl={
+                                    Object {
+                                                      "formatMessage": [Function],
+                                                    }
+                  }
+                  saveChallenge={[Function]}
+                  startChallenge={[Function]}
+                  unsaveChallenge={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 11,
+                                                      "savedChallenges": Array [],
+                                                    }
+                  }
+/>,
+                "className": "inline full-screen-height with-shadow challenge-pane__results",
+                "isActive": true,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "intl": Object {
+                    "formatMessage": [Function],
+                  },
+                  "saveChallenge": [Function],
+                  "startChallenge": [Function],
+                  "unsaveChallenge": [Function],
+                  "user": Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
               "type": [Function],
             },
             "type": [Function],
@@ -305,27 +482,59 @@ ShallowWrapper {
           <div
             className="challenge-pane"
 >
-            <Sidebar
-                        className="inline full-screen-height with-shadow challenge-pane__results"
-                        isActive={true}
+            <MediaQuery
+                        maxWidth={900}
+                        values={Object {}}
             >
-                        <Connect(Connect(WithSortedChallenges))
-                                    intl={
-                                                Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                    }
-                                    saveChallenge={[Function]}
-                                    startChallenge={[Function]}
-                                    unsaveChallenge={[Function]}
-                                    user={
-                                                Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                    }
-                        />
-            </Sidebar>
+                        <Sidebar
+                                    className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                                    isActive={true}
+                                    toggleMinimized={[Function]}
+                        >
+                                    <Connect(Connect(WithSortedChallenges))
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                            Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                                }
+                                    />
+                        </Sidebar>
+            </MediaQuery>
+            <MediaQuery
+                        minWidth={901}
+                        values={Object {}}
+            >
+                        <Sidebar
+                                    className="inline full-screen-height with-shadow challenge-pane__results"
+                                    isActive={true}
+                        >
+                                    <Connect(Connect(WithSortedChallenges))
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                            Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                                }
+                                    />
+                        </Sidebar>
+            </MediaQuery>
             <Connect(MapPane)>
                         <Connect(Component)
                                     challenge={undefined}
@@ -379,27 +588,59 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <Sidebar
-                className="inline full-screen-height with-shadow challenge-pane__results"
-                isActive={true}
+              <MediaQuery
+                maxWidth={900}
+                values={Object {}}
 >
-                <Connect(Connect(WithSortedChallenges))
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                saveChallenge={[Function]}
-                                startChallenge={[Function]}
-                                unsaveChallenge={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
-                />
-</Sidebar>,
+                <Sidebar
+                                className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                                isActive={true}
+                                toggleMinimized={[Function]}
+                >
+                                <Connect(Connect(WithSortedChallenges))
+                                                intl={
+                                                                Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                                Object {
+                                                                                "id": 11,
+                                                                                "savedChallenges": Array [],
+                                                                              }
+                                                }
+                                />
+                </Sidebar>
+</MediaQuery>,
+              <MediaQuery
+                minWidth={901}
+                values={Object {}}
+>
+                <Sidebar
+                                className="inline full-screen-height with-shadow challenge-pane__results"
+                                isActive={true}
+                >
+                                <Connect(Connect(WithSortedChallenges))
+                                                intl={
+                                                                Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                                Object {
+                                                                                "id": 11,
+                                                                                "savedChallenges": Array [],
+                                                                              }
+                                                }
+                                />
+                </Sidebar>
+</MediaQuery>,
               <Connect(MapPane)>
                 <Connect(Component)
                                 challenge={undefined}
@@ -431,24 +672,30 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Connect(Connect(WithSortedChallenges))
-                  intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
-                  }
-                  saveChallenge={[Function]}
-                  startChallenge={[Function]}
-                  unsaveChallenge={[Function]}
-                  user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
-                  }
-/>,
-                "className": "inline full-screen-height with-shadow challenge-pane__results",
-                "isActive": true,
+                "children": <Sidebar
+                  className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                  isActive={true}
+                  toggleMinimized={[Function]}
+>
+                  <Connect(Connect(WithSortedChallenges))
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    saveChallenge={[Function]}
+                                    startChallenge={[Function]}
+                                    unsaveChallenge={[Function]}
+                                    user={
+                                                      Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                    }
+                  />
+</Sidebar>,
+                "maxWidth": 900,
+                "values": Object {},
               },
               "ref": null,
               "rendered": Object {
@@ -456,19 +703,126 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "intl": Object {
-                    "formatMessage": [Function],
-                  },
-                  "saveChallenge": [Function],
-                  "startChallenge": [Function],
-                  "unsaveChallenge": [Function],
-                  "user": Object {
-                    "id": 11,
-                    "savedChallenges": Array [],
-                  },
+                  "children": <Connect(Connect(WithSortedChallenges))
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    saveChallenge={[Function]}
+                    startChallenge={[Function]}
+                    unsaveChallenge={[Function]}
+                    user={
+                                        Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                    }
+/>,
+                  "className": "inline full-screen-height with-shadow challenge-pane__results is-minimized",
+                  "isActive": true,
+                  "toggleMinimized": [Function],
                 },
                 "ref": null,
-                "rendered": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "saveChallenge": [Function],
+                    "startChallenge": [Function],
+                    "unsaveChallenge": [Function],
+                    "user": Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <Sidebar
+                  className="inline full-screen-height with-shadow challenge-pane__results"
+                  isActive={true}
+>
+                  <Connect(Connect(WithSortedChallenges))
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    saveChallenge={[Function]}
+                                    startChallenge={[Function]}
+                                    unsaveChallenge={[Function]}
+                                    user={
+                                                      Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                    }
+                  />
+</Sidebar>,
+                "minWidth": 901,
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <Connect(Connect(WithSortedChallenges))
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    saveChallenge={[Function]}
+                    startChallenge={[Function]}
+                    unsaveChallenge={[Function]}
+                    user={
+                                        Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                    }
+/>,
+                  "className": "inline full-screen-height with-shadow challenge-pane__results",
+                  "isActive": true,
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "saveChallenge": [Function],
+                    "startChallenge": [Function],
+                    "unsaveChallenge": [Function],
+                    "user": Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
                 "type": [Function],
               },
               "type": [Function],
@@ -604,32 +958,69 @@ ShallowWrapper {
         <div
           className="challenge-pane"
 >
-          <Sidebar
-                    className="inline full-screen-height with-shadow challenge-pane__results"
-                    isActive={true}
+          <MediaQuery
+                    maxWidth={900}
+                    values={Object {}}
           >
-                    <Connect(Connect(WithSortedChallenges))
-                              browsedChallenge={
-                                        Object {
-                                                  "id": 123,
-                                                }
-                              }
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              saveChallenge={[Function]}
-                              startChallenge={[Function]}
-                              unsaveChallenge={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
-          </Sidebar>
+                    <Sidebar
+                              className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                              isActive={true}
+                              toggleMinimized={[Function]}
+                    >
+                              <Connect(Connect(WithSortedChallenges))
+                                        browsedChallenge={
+                                                  Object {
+                                                            "id": 123,
+                                                          }
+                                        }
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        saveChallenge={[Function]}
+                                        startChallenge={[Function]}
+                                        unsaveChallenge={[Function]}
+                                        user={
+                                                  Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                                        }
+                              />
+                    </Sidebar>
+          </MediaQuery>
+          <MediaQuery
+                    minWidth={901}
+                    values={Object {}}
+          >
+                    <Sidebar
+                              className="inline full-screen-height with-shadow challenge-pane__results"
+                              isActive={true}
+                    >
+                              <Connect(Connect(WithSortedChallenges))
+                                        browsedChallenge={
+                                                  Object {
+                                                            "id": 123,
+                                                          }
+                                        }
+                                        intl={
+                                                  Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                                        }
+                                        saveChallenge={[Function]}
+                                        startChallenge={[Function]}
+                                        unsaveChallenge={[Function]}
+                                        user={
+                                                  Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                                        }
+                              />
+                    </Sidebar>
+          </MediaQuery>
           <Connect(MapPane)>
                     <WithTaskMarkers(Connect(Connect(ChallengeMap)))
                               browsedChallenge={
@@ -695,32 +1086,69 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": Array [
-            <Sidebar
-              className="inline full-screen-height with-shadow challenge-pane__results"
-              isActive={true}
+            <MediaQuery
+              maxWidth={900}
+              values={Object {}}
 >
-              <Connect(Connect(WithSortedChallenges))
-                            browsedChallenge={
-                                          Object {
-                                                        "id": 123,
-                                                      }
-                            }
-                            intl={
-                                          Object {
-                                                        "formatMessage": [Function],
-                                                      }
-                            }
-                            saveChallenge={[Function]}
-                            startChallenge={[Function]}
-                            unsaveChallenge={[Function]}
-                            user={
-                                          Object {
-                                                        "id": 11,
-                                                        "savedChallenges": Array [],
-                                                      }
-                            }
-              />
-</Sidebar>,
+              <Sidebar
+                            className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                            isActive={true}
+                            toggleMinimized={[Function]}
+              >
+                            <Connect(Connect(WithSortedChallenges))
+                                          browsedChallenge={
+                                                        Object {
+                                                                      "id": 123,
+                                                                    }
+                                          }
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
+                                          saveChallenge={[Function]}
+                                          startChallenge={[Function]}
+                                          unsaveChallenge={[Function]}
+                                          user={
+                                                        Object {
+                                                                      "id": 11,
+                                                                      "savedChallenges": Array [],
+                                                                    }
+                                          }
+                            />
+              </Sidebar>
+</MediaQuery>,
+            <MediaQuery
+              minWidth={901}
+              values={Object {}}
+>
+              <Sidebar
+                            className="inline full-screen-height with-shadow challenge-pane__results"
+                            isActive={true}
+              >
+                            <Connect(Connect(WithSortedChallenges))
+                                          browsedChallenge={
+                                                        Object {
+                                                                      "id": 123,
+                                                                    }
+                                          }
+                                          intl={
+                                                        Object {
+                                                                      "formatMessage": [Function],
+                                                                    }
+                                          }
+                                          saveChallenge={[Function]}
+                                          startChallenge={[Function]}
+                                          unsaveChallenge={[Function]}
+                                          user={
+                                                        Object {
+                                                                      "id": 11,
+                                                                      "savedChallenges": Array [],
+                                                                    }
+                                          }
+                            />
+              </Sidebar>
+</MediaQuery>,
             <Connect(MapPane)>
               <WithTaskMarkers(Connect(Connect(ChallengeMap)))
                             browsedChallenge={
@@ -761,29 +1189,35 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Connect(Connect(WithSortedChallenges))
-                browsedChallenge={
-                                Object {
-                                                "id": 123,
-                                              }
-                }
-                intl={
-                                Object {
-                                                "formatMessage": [Function],
-                                              }
-                }
-                saveChallenge={[Function]}
-                startChallenge={[Function]}
-                unsaveChallenge={[Function]}
-                user={
-                                Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
-                }
-/>,
-              "className": "inline full-screen-height with-shadow challenge-pane__results",
-              "isActive": true,
+              "children": <Sidebar
+                className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                isActive={true}
+                toggleMinimized={[Function]}
+>
+                <Connect(Connect(WithSortedChallenges))
+                                browsedChallenge={
+                                                Object {
+                                                                "id": 123,
+                                                              }
+                                }
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                saveChallenge={[Function]}
+                                startChallenge={[Function]}
+                                unsaveChallenge={[Function]}
+                                user={
+                                                Object {
+                                                                "id": 11,
+                                                                "savedChallenges": Array [],
+                                                              }
+                                }
+                />
+</Sidebar>,
+              "maxWidth": 900,
+              "values": Object {},
             },
             "ref": null,
             "rendered": Object {
@@ -791,22 +1225,147 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "browsedChallenge": Object {
-                  "id": 123,
-                },
-                "intl": Object {
-                  "formatMessage": [Function],
-                },
-                "saveChallenge": [Function],
-                "startChallenge": [Function],
-                "unsaveChallenge": [Function],
-                "user": Object {
-                  "id": 11,
-                  "savedChallenges": Array [],
-                },
+                "children": <Connect(Connect(WithSortedChallenges))
+                  browsedChallenge={
+                                    Object {
+                                                      "id": 123,
+                                                    }
+                  }
+                  intl={
+                                    Object {
+                                                      "formatMessage": [Function],
+                                                    }
+                  }
+                  saveChallenge={[Function]}
+                  startChallenge={[Function]}
+                  unsaveChallenge={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 11,
+                                                      "savedChallenges": Array [],
+                                                    }
+                  }
+/>,
+                "className": "inline full-screen-height with-shadow challenge-pane__results is-minimized",
+                "isActive": true,
+                "toggleMinimized": [Function],
               },
               "ref": null,
-              "rendered": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "browsedChallenge": Object {
+                    "id": 123,
+                  },
+                  "intl": Object {
+                    "formatMessage": [Function],
+                  },
+                  "saveChallenge": [Function],
+                  "startChallenge": [Function],
+                  "unsaveChallenge": [Function],
+                  "user": Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": <Sidebar
+                className="inline full-screen-height with-shadow challenge-pane__results"
+                isActive={true}
+>
+                <Connect(Connect(WithSortedChallenges))
+                                browsedChallenge={
+                                                Object {
+                                                                "id": 123,
+                                                              }
+                                }
+                                intl={
+                                                Object {
+                                                                "formatMessage": [Function],
+                                                              }
+                                }
+                                saveChallenge={[Function]}
+                                startChallenge={[Function]}
+                                unsaveChallenge={[Function]}
+                                user={
+                                                Object {
+                                                                "id": 11,
+                                                                "savedChallenges": Array [],
+                                                              }
+                                }
+                />
+</Sidebar>,
+              "minWidth": 901,
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <Connect(Connect(WithSortedChallenges))
+                  browsedChallenge={
+                                    Object {
+                                                      "id": 123,
+                                                    }
+                  }
+                  intl={
+                                    Object {
+                                                      "formatMessage": [Function],
+                                                    }
+                  }
+                  saveChallenge={[Function]}
+                  startChallenge={[Function]}
+                  unsaveChallenge={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 11,
+                                                      "savedChallenges": Array [],
+                                                    }
+                  }
+/>,
+                "className": "inline full-screen-height with-shadow challenge-pane__results",
+                "isActive": true,
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "browsedChallenge": Object {
+                    "id": 123,
+                  },
+                  "intl": Object {
+                    "formatMessage": [Function],
+                  },
+                  "saveChallenge": [Function],
+                  "startChallenge": [Function],
+                  "unsaveChallenge": [Function],
+                  "user": Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
               "type": [Function],
             },
             "type": [Function],
@@ -914,32 +1473,69 @@ ShallowWrapper {
           <div
             className="challenge-pane"
 >
-            <Sidebar
-                        className="inline full-screen-height with-shadow challenge-pane__results"
-                        isActive={true}
+            <MediaQuery
+                        maxWidth={900}
+                        values={Object {}}
             >
-                        <Connect(Connect(WithSortedChallenges))
-                                    browsedChallenge={
-                                                Object {
-                                                            "id": 123,
-                                                          }
-                                    }
-                                    intl={
-                                                Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                    }
-                                    saveChallenge={[Function]}
-                                    startChallenge={[Function]}
-                                    unsaveChallenge={[Function]}
-                                    user={
-                                                Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                    }
-                        />
-            </Sidebar>
+                        <Sidebar
+                                    className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                                    isActive={true}
+                                    toggleMinimized={[Function]}
+                        >
+                                    <Connect(Connect(WithSortedChallenges))
+                                                browsedChallenge={
+                                                            Object {
+                                                                        "id": 123,
+                                                                      }
+                                                }
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                            Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                                }
+                                    />
+                        </Sidebar>
+            </MediaQuery>
+            <MediaQuery
+                        minWidth={901}
+                        values={Object {}}
+            >
+                        <Sidebar
+                                    className="inline full-screen-height with-shadow challenge-pane__results"
+                                    isActive={true}
+                        >
+                                    <Connect(Connect(WithSortedChallenges))
+                                                browsedChallenge={
+                                                            Object {
+                                                                        "id": 123,
+                                                                      }
+                                                }
+                                                intl={
+                                                            Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                            Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                                }
+                                    />
+                        </Sidebar>
+            </MediaQuery>
             <Connect(MapPane)>
                         <WithTaskMarkers(Connect(Connect(ChallengeMap)))
                                     browsedChallenge={
@@ -1005,32 +1601,69 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <Sidebar
-                className="inline full-screen-height with-shadow challenge-pane__results"
-                isActive={true}
+              <MediaQuery
+                maxWidth={900}
+                values={Object {}}
 >
-                <Connect(Connect(WithSortedChallenges))
-                                browsedChallenge={
-                                                Object {
-                                                                "id": 123,
-                                                              }
-                                }
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                saveChallenge={[Function]}
-                                startChallenge={[Function]}
-                                unsaveChallenge={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
-                />
-</Sidebar>,
+                <Sidebar
+                                className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                                isActive={true}
+                                toggleMinimized={[Function]}
+                >
+                                <Connect(Connect(WithSortedChallenges))
+                                                browsedChallenge={
+                                                                Object {
+                                                                                "id": 123,
+                                                                              }
+                                                }
+                                                intl={
+                                                                Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                                Object {
+                                                                                "id": 11,
+                                                                                "savedChallenges": Array [],
+                                                                              }
+                                                }
+                                />
+                </Sidebar>
+</MediaQuery>,
+              <MediaQuery
+                minWidth={901}
+                values={Object {}}
+>
+                <Sidebar
+                                className="inline full-screen-height with-shadow challenge-pane__results"
+                                isActive={true}
+                >
+                                <Connect(Connect(WithSortedChallenges))
+                                                browsedChallenge={
+                                                                Object {
+                                                                                "id": 123,
+                                                                              }
+                                                }
+                                                intl={
+                                                                Object {
+                                                                                "formatMessage": [Function],
+                                                                              }
+                                                }
+                                                saveChallenge={[Function]}
+                                                startChallenge={[Function]}
+                                                unsaveChallenge={[Function]}
+                                                user={
+                                                                Object {
+                                                                                "id": 11,
+                                                                                "savedChallenges": Array [],
+                                                                              }
+                                                }
+                                />
+                </Sidebar>
+</MediaQuery>,
               <Connect(MapPane)>
                 <WithTaskMarkers(Connect(Connect(ChallengeMap)))
                                 browsedChallenge={
@@ -1071,29 +1704,35 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Connect(Connect(WithSortedChallenges))
-                  browsedChallenge={
-                                    Object {
-                                                      "id": 123,
-                                                    }
-                  }
-                  intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
-                  }
-                  saveChallenge={[Function]}
-                  startChallenge={[Function]}
-                  unsaveChallenge={[Function]}
-                  user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
-                  }
-/>,
-                "className": "inline full-screen-height with-shadow challenge-pane__results",
-                "isActive": true,
+                "children": <Sidebar
+                  className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                  isActive={true}
+                  toggleMinimized={[Function]}
+>
+                  <Connect(Connect(WithSortedChallenges))
+                                    browsedChallenge={
+                                                      Object {
+                                                                        "id": 123,
+                                                                      }
+                                    }
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    saveChallenge={[Function]}
+                                    startChallenge={[Function]}
+                                    unsaveChallenge={[Function]}
+                                    user={
+                                                      Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                    }
+                  />
+</Sidebar>,
+                "maxWidth": 900,
+                "values": Object {},
               },
               "ref": null,
               "rendered": Object {
@@ -1101,22 +1740,147 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "browsedChallenge": Object {
-                    "id": 123,
-                  },
-                  "intl": Object {
-                    "formatMessage": [Function],
-                  },
-                  "saveChallenge": [Function],
-                  "startChallenge": [Function],
-                  "unsaveChallenge": [Function],
-                  "user": Object {
-                    "id": 11,
-                    "savedChallenges": Array [],
-                  },
+                  "children": <Connect(Connect(WithSortedChallenges))
+                    browsedChallenge={
+                                        Object {
+                                                            "id": 123,
+                                                          }
+                    }
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    saveChallenge={[Function]}
+                    startChallenge={[Function]}
+                    unsaveChallenge={[Function]}
+                    user={
+                                        Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                    }
+/>,
+                  "className": "inline full-screen-height with-shadow challenge-pane__results is-minimized",
+                  "isActive": true,
+                  "toggleMinimized": [Function],
                 },
                 "ref": null,
-                "rendered": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "browsedChallenge": Object {
+                      "id": 123,
+                    },
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "saveChallenge": [Function],
+                    "startChallenge": [Function],
+                    "unsaveChallenge": [Function],
+                    "user": Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <Sidebar
+                  className="inline full-screen-height with-shadow challenge-pane__results"
+                  isActive={true}
+>
+                  <Connect(Connect(WithSortedChallenges))
+                                    browsedChallenge={
+                                                      Object {
+                                                                        "id": 123,
+                                                                      }
+                                    }
+                                    intl={
+                                                      Object {
+                                                                        "formatMessage": [Function],
+                                                                      }
+                                    }
+                                    saveChallenge={[Function]}
+                                    startChallenge={[Function]}
+                                    unsaveChallenge={[Function]}
+                                    user={
+                                                      Object {
+                                                                        "id": 11,
+                                                                        "savedChallenges": Array [],
+                                                                      }
+                                    }
+                  />
+</Sidebar>,
+                "minWidth": 901,
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <Connect(Connect(WithSortedChallenges))
+                    browsedChallenge={
+                                        Object {
+                                                            "id": 123,
+                                                          }
+                    }
+                    intl={
+                                        Object {
+                                                            "formatMessage": [Function],
+                                                          }
+                    }
+                    saveChallenge={[Function]}
+                    startChallenge={[Function]}
+                    unsaveChallenge={[Function]}
+                    user={
+                                        Object {
+                                                            "id": 11,
+                                                            "savedChallenges": Array [],
+                                                          }
+                    }
+/>,
+                  "className": "inline full-screen-height with-shadow challenge-pane__results",
+                  "isActive": true,
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "browsedChallenge": Object {
+                      "id": 123,
+                    },
+                    "intl": Object {
+                      "formatMessage": [Function],
+                    },
+                    "saveChallenge": [Function],
+                    "startChallenge": [Function],
+                    "unsaveChallenge": [Function],
+                    "user": Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
                 "type": [Function],
               },
               "type": [Function],

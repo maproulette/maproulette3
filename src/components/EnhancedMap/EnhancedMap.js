@@ -67,7 +67,7 @@ export default class EnhancedMap extends Map {
 
       setTimeout(() => {
         this.pathComplete(path, currentLength, true).then(length => resolve(length))
-      }, 25)
+      }, 100)
     })
   }
 
