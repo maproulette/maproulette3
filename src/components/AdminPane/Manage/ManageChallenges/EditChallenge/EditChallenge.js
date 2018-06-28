@@ -16,10 +16,11 @@ import StepNavigation
        from '../../StepNavigation/StepNavigation'
 import { CustomFieldTemplate,
          CustomArrayFieldTemplate,
-         TagsInputField,
          MarkdownDescriptionField,
          MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import KeywordAutosuggestInput
+       from '../../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import WithCurrentProject
        from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
@@ -355,7 +356,7 @@ export class EditChallenge extends Component {
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
-      tags: TagsInputField,
+      tags: KeywordAutosuggestInput,
     }
 
     return (

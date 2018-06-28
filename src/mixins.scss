@@ -115,6 +115,7 @@
 @mixin basic-form-element-styling() {
   border-color: $form-element-border-color;
   border-width: 2px;
+  border-style: solid;
   box-shadow: none;
   border-radius: $radius-medium;
   color: $grey;
@@ -129,6 +130,26 @@
     outline: none;
     border-color: $form-element-border-color;
     box-shadow: none;
+  }
+}
+
+@mixin tag() {
+  font-family: inherit;
+  font-size: $size-7;
+  background-color: $grey-lightest;
+  color: $grey;
+  border: none;
+  border-radius: $radius-medium;
+  margin: 5px;
+  padding: 2px 5px 2px 10px;
+
+  .react-tagsinput-remove {
+    font-family: inherit;
+    color: $grey-darkest;
+
+    &:before {
+      margin-left: 5px;
+    }
   }
 }
 

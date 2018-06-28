@@ -79,8 +79,8 @@ const apiRoutes = factory => {
       'create': factory.post('/task'),
       'edit': factory.put('/task/:id'),
     },
-    'tags': {
-      'all': factory.get('/tags'),
+    'keywords': {
+      'find': factory.get('/keywords'),
     },
     'users': {
       'single': factory.get('/user/:id'),

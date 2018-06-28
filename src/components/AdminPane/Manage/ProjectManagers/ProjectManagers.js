@@ -9,13 +9,16 @@ import { GroupType,
          mostPrivilegedGroupType,
          messagesByGroupType }
        from '../../../../services/Project/GroupType/GroupType'
+import WithOSMUserSearch from '../../HOCs/WithOSMUserSearch/WithOSMUserSearch'
 import AsManager from '../../../../interactions/User/AsManager'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
+import AutosuggestTextBox from '../../../AutosuggestTextBox/AutosuggestTextBox'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
-import ChooseOSMUser from '../ChooseOSMUser/ChooseOSMUser'
 import messages from './Messages'
 import './ProjectManagers.css'
+
+const ChooseOSMUser = WithOSMUserSearch(AutosuggestTextBox)
 
 /**
  * ProjectManagers displays a list of the current managers of the given
@@ -178,8 +181,8 @@ export default class ProjectManagers extends Component {
                              })}
                              onChange={osmUser => this.setState({
                                addManagerOSMUser: osmUser
-                             })} />
-
+                             })}
+                             placeholder={this.props.intl.formatMessage(messages.osmUsername)} />
               {this.state.addingManager && <BusySpinner />}
               {!this.state.addingManager && this.state.addManagerOSMUser &&
                <select onChange={e => this.addManager(e.target.value)}

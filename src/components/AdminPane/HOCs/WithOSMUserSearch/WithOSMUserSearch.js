@@ -49,11 +49,17 @@ const WithOSMUserSearch = function(WrappedComponent) {
       this.performSearch(username)
     }
 
+    osmUserKey = osmUser => osmUser.osmId
+
+    osmUserLabel = osmUser => osmUser.displayName
+
     render() {
       return (
-        <WrappedComponent isSearchingOSMUsers={this.state.isSearchingOSMUsers}
-                          osmUserResults={this.state.osmUserResults}
-                          searchOSMUser={this.searchOSMUser}
+        <WrappedComponent isSearching={this.state.isSearchingOSMUsers}
+                          searchResults={this.state.osmUserResults}
+                          search={this.searchOSMUser}
+                          resultKey={this.osmUserKey}
+                          resultLabel={this.osmUserLabel}
                           {...this.props} />
       )
     }
