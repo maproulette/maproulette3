@@ -105,6 +105,8 @@ export class EditChallenge extends Component {
     isSaving: false,
   }
 
+  isFinishing = false
+
   /**
    * Returns true if this challenge's data is being cloned from another
    * challenge.
@@ -192,6 +194,7 @@ export class EditChallenge extends Component {
           `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
       }
       else {
+        this.finishing = false
         this.setState({isSaving: false})
       }
     })
@@ -412,11 +415,13 @@ export class EditChallenge extends Component {
                   formData={challengeData}
                   formContext={this.state.formContext}
                   onChange={this.changeHandler}
-                  onSubmit={this.nextStep}
-                  onError={this.errorHandler}>
-
+                  onSubmit={() => this.isFinishing ? this.finish() : this.nextStep()}
+                  onError={this.errorHandler}
+            >
               <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
-                              prevStep={this.prevStep} cancel={this.cancel} />
+                              prevStep={this.prevStep} cancel={this.cancel}
+                              finish={() => this.isFinishing = true}
+                              canFinishEarly={!AsEditableChallenge(challengeData).isNew()} />
             </Form>
           </div>
         </div>

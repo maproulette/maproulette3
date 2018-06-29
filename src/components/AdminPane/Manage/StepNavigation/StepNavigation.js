@@ -37,9 +37,11 @@ export default class StepNavigation extends Component {
             </button>
           }
 
-          {this.props.activeStep === this.props.steps.length - 1 &&
+          {(this.props.activeStep === this.props.steps.length - 1 ||
+            this.props.canFinishEarly) &&
             <button type="submit"
-                    className="button is-primary is-outlined has-svg-icon">
+                    className="button is-green is-outlined has-svg-icon"
+                    onClick={() => this.props.finish && this.props.finish()}>
               <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
               <FormattedMessage {...messages.finish} />
             </button>
@@ -59,9 +61,14 @@ StepNavigation.propTypes = {
   prevStep: PropTypes.func.isRequired,
   /** Invoked when the user clicks the cancel button */
   cancel: PropTypes.func.isRequired,
+  /** Invoked, if provided, when user finishes workflow */
+  finish: PropTypes.func,
+  /** Set to true to allow users to finish the workflow early */
+  canFinishEarly: PropTypes.bool,
 }
 
 StepNavigation.defaultProps = {
   steps: [],
   activeStep: 0,
+  canFinishEarly: false,
 }
