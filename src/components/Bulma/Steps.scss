@@ -1,0 +1,13 @@
+@import 'variables.scss';
+
+.steps:not(.is-hollow) {
+  .steps-segment {
+    .steps-marker.clickable:not(.is-hollow) {
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0px 2px 6px 0px $box-shadow-color;
+        transition: box-shadow .25s ease-in-out;
+      }
+    } 
+  }
+}
