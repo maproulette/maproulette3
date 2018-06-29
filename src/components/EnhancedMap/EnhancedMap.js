@@ -84,6 +84,13 @@ export default class EnhancedMap extends Map {
         this.pathComplete(path).then(pathLength => {
           path.style.strokeDasharray = `${pathLength} ${pathLength}`
           path.style.strokeDashoffset = pathLength
+
+          // reset to normal after transition completes
+          path.addEventListener("transitionend", () => {
+            path.style.strokeDasharray = 'none';
+          })
+
+          // kick off transition
           path.getBoundingClientRect()
           path.style.transition = 'stroke-dashoffset 1s ease-in-out'
           path.style.strokeDashoffset = '0'
