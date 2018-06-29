@@ -14,6 +14,9 @@ ShallowWrapper {
         Object {
             "id": 357,
             "isLoggedIn": false,
+            "osmProfile": Object {
+              "avatarURL": "http://example.com/profilepic.jpg",
+            },
           }
     }
 />,
@@ -76,6 +79,9 @@ ShallowWrapper {
                                                   Object {
                                                             "id": 357,
                                                             "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                         }
                               />
@@ -93,6 +99,9 @@ ShallowWrapper {
                                                   Object {
                                                             "id": 357,
                                                             "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                         }
                               />
@@ -150,20 +159,6 @@ ShallowWrapper {
                     }
                     width={300}
           >
-                    <NavbarPrimaryLinks
-                              location={
-                                        Object {
-                                                  "pathname": "/some/path",
-                                                }
-                              }
-                              onLinkClick={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 357,
-                                                  "isLoggedIn": false,
-                                                }
-                              }
-                    />
                     <Connect(SignInButton)
                               className="white-on-green top-nav__signin-link"
                               location={
@@ -175,6 +170,26 @@ ShallowWrapper {
                                         Object {
                                                   "id": 357,
                                                   "isLoggedIn": false,
+                                                  "osmProfile": Object {
+                                                    "avatarURL": "http://example.com/profilepic.jpg",
+                                                  },
+                                                }
+                              }
+                    />
+                    <NavbarPrimaryLinks
+                              location={
+                                        Object {
+                                                  "pathname": "/some/path",
+                                                }
+                              }
+                              onLinkClick={[Function]}
+                              user={
+                                        Object {
+                                                  "id": 357,
+                                                  "isLoggedIn": false,
+                                                  "osmProfile": Object {
+                                                    "avatarURL": "http://example.com/profilepic.jpg",
+                                                  },
                                                 }
                               }
                     />
@@ -314,6 +329,9 @@ ShallowWrapper {
                                                 Object {
                                                             "id": 357,
                                                             "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                     }
                         />
@@ -331,6 +349,9 @@ ShallowWrapper {
                                                 Object {
                                                             "id": 357,
                                                             "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                     }
                         />
@@ -359,6 +380,9 @@ ShallowWrapper {
                                                 Object {
                                                                 "id": 357,
                                                                 "isLoggedIn": false,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                                },
                                                               }
                                 }
                 />
@@ -376,6 +400,9 @@ ShallowWrapper {
                                                 Object {
                                                                 "id": 357,
                                                                 "isLoggedIn": false,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                                },
                                                               }
                                 }
                 />
@@ -400,6 +427,9 @@ ShallowWrapper {
                                     Object {
                                                       "id": 357,
                                                       "isLoggedIn": false,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                      },
                                                     }
                   }
 />,
@@ -417,6 +447,9 @@ ShallowWrapper {
                   "user": Object {
                     "id": 357,
                     "isLoggedIn": false,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
                   },
                 },
                 "ref": null,
@@ -440,6 +473,9 @@ ShallowWrapper {
                                     Object {
                                                       "id": 357,
                                                       "isLoggedIn": false,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                      },
                                                     }
                   }
 />,
@@ -457,6 +493,9 @@ ShallowWrapper {
                   "user": Object {
                     "id": 357,
                     "isLoggedIn": false,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
                   },
                 },
                 "ref": null,
@@ -522,20 +561,6 @@ ShallowWrapper {
             }
             width={300}
 >
-            <NavbarPrimaryLinks
-                        location={
-                                    Object {
-                                                "pathname": "/some/path",
-                                              }
-                        }
-                        onLinkClick={[Function]}
-                        user={
-                                    Object {
-                                                "id": 357,
-                                                "isLoggedIn": false,
-                                              }
-                        }
-            />
             <Connect(SignInButton)
                         className="white-on-green top-nav__signin-link"
                         location={
@@ -547,6 +572,26 @@ ShallowWrapper {
                                     Object {
                                                 "id": 357,
                                                 "isLoggedIn": false,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                },
+                                              }
+                        }
+            />
+            <NavbarPrimaryLinks
+                        location={
+                                    Object {
+                                                "pathname": "/some/path",
+                                              }
+                        }
+                        onLinkClick={[Function]}
+                        user={
+                                    Object {
+                                                "id": 357,
+                                                "isLoggedIn": false,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                },
                                               }
                         }
             />
@@ -564,21 +609,6 @@ ShallowWrapper {
             "burgerBarClassName": "",
             "burgerButtonClassName": "",
             "children": Array [
-              <NavbarPrimaryLinks
-                location={
-                                Object {
-                                                "pathname": "/some/path",
-                                              }
-                }
-                onLinkClick={[Function]}
-                user={
-                                Object {
-                                                "id": 357,
-                                                "isLoggedIn": false,
-                                              }
-                }
-/>,
-              false,
               <Connect(SignInButton)
                 className="white-on-green top-nav__signin-link"
                 location={
@@ -590,9 +620,30 @@ ShallowWrapper {
                                 Object {
                                                 "id": 357,
                                                 "isLoggedIn": false,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                },
                                               }
                 }
 />,
+              <NavbarPrimaryLinks
+                location={
+                                Object {
+                                                "pathname": "/some/path",
+                                              }
+                }
+                onLinkClick={[Function]}
+                user={
+                                Object {
+                                                "id": 357,
+                                                "isLoggedIn": false,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                },
+                                              }
+                }
+/>,
+              false,
             ],
             "className": "",
             "crossButtonClassName": "",
@@ -636,25 +687,6 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "function",
-              "props": Object {
-                "location": Object {
-                  "pathname": "/some/path",
-                },
-                "onLinkClick": [Function],
-                "user": Object {
-                  "id": 357,
-                  "isLoggedIn": false,
-                },
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            false,
-            Object {
-              "instance": null,
-              "key": undefined,
               "nodeType": "class",
               "props": Object {
                 "className": "white-on-green top-nav__signin-link",
@@ -664,12 +696,37 @@ ShallowWrapper {
                 "user": Object {
                   "id": 357,
                   "isLoggedIn": false,
+                  "osmProfile": Object {
+                    "avatarURL": "http://example.com/profilepic.jpg",
+                  },
                 },
               },
               "ref": null,
               "rendered": null,
               "type": [Function],
             },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "location": Object {
+                  "pathname": "/some/path",
+                },
+                "onLinkClick": [Function],
+                "user": Object {
+                  "id": 357,
+                  "isLoggedIn": false,
+                  "osmProfile": Object {
+                    "avatarURL": "http://example.com/profilepic.jpg",
+                  },
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            false,
           ],
           "type": [Function],
         },
@@ -731,6 +788,9 @@ ShallowWrapper {
                                                             Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": false,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                                 }
                                     />
@@ -748,6 +808,9 @@ ShallowWrapper {
                                                             Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": false,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                                 }
                                     />
@@ -805,20 +868,6 @@ ShallowWrapper {
                         }
                         width={300}
             >
-                        <NavbarPrimaryLinks
-                                    location={
-                                                Object {
-                                                            "pathname": "/some/path",
-                                                          }
-                                    }
-                                    onLinkClick={[Function]}
-                                    user={
-                                                Object {
-                                                            "id": 357,
-                                                            "isLoggedIn": false,
-                                                          }
-                                    }
-                        />
                         <Connect(SignInButton)
                                     className="white-on-green top-nav__signin-link"
                                     location={
@@ -830,6 +879,26 @@ ShallowWrapper {
                                                 Object {
                                                             "id": 357,
                                                             "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
+                                                          }
+                                    }
+                        />
+                        <NavbarPrimaryLinks
+                                    location={
+                                                Object {
+                                                            "pathname": "/some/path",
+                                                          }
+                                    }
+                                    onLinkClick={[Function]}
+                                    user={
+                                                Object {
+                                                            "id": 357,
+                                                            "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                     }
                         />
@@ -969,6 +1038,9 @@ ShallowWrapper {
                                                         Object {
                                                                       "id": 357,
                                                                       "isLoggedIn": false,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                                      },
                                                                     }
                                           }
                             />
@@ -986,6 +1058,9 @@ ShallowWrapper {
                                                         Object {
                                                                       "id": 357,
                                                                       "isLoggedIn": false,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                                      },
                                                                     }
                                           }
                             />
@@ -1014,6 +1089,9 @@ ShallowWrapper {
                                                       Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": false,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                     }
                   />
@@ -1031,6 +1109,9 @@ ShallowWrapper {
                                                       Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": false,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                     }
                   />
@@ -1055,6 +1136,9 @@ ShallowWrapper {
                                         Object {
                                                             "id": 357,
                                                             "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                     }
 />,
@@ -1072,6 +1156,9 @@ ShallowWrapper {
                     "user": Object {
                       "id": 357,
                       "isLoggedIn": false,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
                     },
                   },
                   "ref": null,
@@ -1095,6 +1182,9 @@ ShallowWrapper {
                                         Object {
                                                             "id": 357,
                                                             "isLoggedIn": false,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                     }
 />,
@@ -1112,6 +1202,9 @@ ShallowWrapper {
                     "user": Object {
                       "id": 357,
                       "isLoggedIn": false,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
                     },
                   },
                   "ref": null,
@@ -1177,20 +1270,6 @@ ShallowWrapper {
               }
               width={300}
 >
-              <NavbarPrimaryLinks
-                            location={
-                                          Object {
-                                                        "pathname": "/some/path",
-                                                      }
-                            }
-                            onLinkClick={[Function]}
-                            user={
-                                          Object {
-                                                        "id": 357,
-                                                        "isLoggedIn": false,
-                                                      }
-                            }
-              />
               <Connect(SignInButton)
                             className="white-on-green top-nav__signin-link"
                             location={
@@ -1202,6 +1281,26 @@ ShallowWrapper {
                                           Object {
                                                         "id": 357,
                                                         "isLoggedIn": false,
+                                                        "osmProfile": Object {
+                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                        },
+                                                      }
+                            }
+              />
+              <NavbarPrimaryLinks
+                            location={
+                                          Object {
+                                                        "pathname": "/some/path",
+                                                      }
+                            }
+                            onLinkClick={[Function]}
+                            user={
+                                          Object {
+                                                        "id": 357,
+                                                        "isLoggedIn": false,
+                                                        "osmProfile": Object {
+                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                        },
                                                       }
                             }
               />
@@ -1219,21 +1318,6 @@ ShallowWrapper {
               "burgerBarClassName": "",
               "burgerButtonClassName": "",
               "children": Array [
-                <NavbarPrimaryLinks
-                  location={
-                                    Object {
-                                                      "pathname": "/some/path",
-                                                    }
-                  }
-                  onLinkClick={[Function]}
-                  user={
-                                    Object {
-                                                      "id": 357,
-                                                      "isLoggedIn": false,
-                                                    }
-                  }
-/>,
-                false,
                 <Connect(SignInButton)
                   className="white-on-green top-nav__signin-link"
                   location={
@@ -1245,9 +1329,30 @@ ShallowWrapper {
                                     Object {
                                                       "id": 357,
                                                       "isLoggedIn": false,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                      },
                                                     }
                   }
 />,
+                <NavbarPrimaryLinks
+                  location={
+                                    Object {
+                                                      "pathname": "/some/path",
+                                                    }
+                  }
+                  onLinkClick={[Function]}
+                  user={
+                                    Object {
+                                                      "id": 357,
+                                                      "isLoggedIn": false,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                      },
+                                                    }
+                  }
+/>,
+                false,
               ],
               "className": "",
               "crossButtonClassName": "",
@@ -1291,25 +1396,6 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "function",
-                "props": Object {
-                  "location": Object {
-                    "pathname": "/some/path",
-                  },
-                  "onLinkClick": [Function],
-                  "user": Object {
-                    "id": 357,
-                    "isLoggedIn": false,
-                  },
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              false,
-              Object {
-                "instance": null,
-                "key": undefined,
                 "nodeType": "class",
                 "props": Object {
                   "className": "white-on-green top-nav__signin-link",
@@ -1319,12 +1405,37 @@ ShallowWrapper {
                   "user": Object {
                     "id": 357,
                     "isLoggedIn": false,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
                   },
                 },
                 "ref": null,
                 "rendered": null,
                 "type": [Function],
               },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "location": Object {
+                    "pathname": "/some/path",
+                  },
+                  "onLinkClick": [Function],
+                  "user": Object {
+                    "id": 357,
+                    "isLoggedIn": false,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
+                  },
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              false,
             ],
             "type": [Function],
           },
@@ -1358,6 +1469,9 @@ ShallowWrapper {
         Object {
             "id": 357,
             "isLoggedIn": true,
+            "osmProfile": Object {
+              "avatarURL": "http://example.com/profilepic.jpg",
+            },
           }
     }
 />,
@@ -1420,6 +1534,9 @@ ShallowWrapper {
                                                   Object {
                                                             "id": 357,
                                                             "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                         }
                               />
@@ -1437,6 +1554,9 @@ ShallowWrapper {
                                                   Object {
                                                             "id": 357,
                                                             "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                         }
                               />
@@ -1494,6 +1614,24 @@ ShallowWrapper {
                     }
                     width={300}
           >
+                    <Link
+                              onClick={[Function]}
+                              replace={false}
+                              to="/user/profile"
+                    >
+                              <figure
+                                        className="navbar__account-nav-item__avatar image is-96x96"
+                              >
+                                        <div
+                                                  className="circular-image"
+                                                  style={
+                                                            Object {
+                                                                      "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                    }
+                                                  }
+                                        />
+                              </figure>
+                    </Link>
                     <NavbarPrimaryLinks
                               location={
                                         Object {
@@ -1505,6 +1643,9 @@ ShallowWrapper {
                                         Object {
                                                   "id": 357,
                                                   "isLoggedIn": true,
+                                                  "osmProfile": Object {
+                                                    "avatarURL": "http://example.com/profilepic.jpg",
+                                                  },
                                                 }
                               }
                     />
@@ -1532,7 +1673,11 @@ ShallowWrapper {
                                         <span
                                                   className="item-text"
                                         >
-                                                  Sign Out
+                                                  <FormattedMessage
+                                                            defaultMessage="Sign out"
+                                                            id="Navbar.mobile.links.signout"
+                                                            values={Object {}}
+                                                  />
                                         </span>
                               </a>
                     </Unknown>
@@ -1672,6 +1817,9 @@ ShallowWrapper {
                                                 Object {
                                                             "id": 357,
                                                             "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                     }
                         />
@@ -1689,6 +1837,9 @@ ShallowWrapper {
                                                 Object {
                                                             "id": 357,
                                                             "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                     }
                         />
@@ -1717,6 +1868,9 @@ ShallowWrapper {
                                                 Object {
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                                },
                                                               }
                                 }
                 />
@@ -1734,6 +1888,9 @@ ShallowWrapper {
                                                 Object {
                                                                 "id": 357,
                                                                 "isLoggedIn": true,
+                                                                "osmProfile": Object {
+                                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                                },
                                                               }
                                 }
                 />
@@ -1758,6 +1915,9 @@ ShallowWrapper {
                                     Object {
                                                       "id": 357,
                                                       "isLoggedIn": true,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                      },
                                                     }
                   }
 />,
@@ -1775,6 +1935,9 @@ ShallowWrapper {
                   "user": Object {
                     "id": 357,
                     "isLoggedIn": true,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
                   },
                 },
                 "ref": null,
@@ -1798,6 +1961,9 @@ ShallowWrapper {
                                     Object {
                                                       "id": 357,
                                                       "isLoggedIn": true,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                      },
                                                     }
                   }
 />,
@@ -1815,6 +1981,9 @@ ShallowWrapper {
                   "user": Object {
                     "id": 357,
                     "isLoggedIn": true,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
                   },
                 },
                 "ref": null,
@@ -1880,6 +2049,24 @@ ShallowWrapper {
             }
             width={300}
 >
+            <Link
+                        onClick={[Function]}
+                        replace={false}
+                        to="/user/profile"
+            >
+                        <figure
+                                    className="navbar__account-nav-item__avatar image is-96x96"
+                        >
+                                    <div
+                                                className="circular-image"
+                                                style={
+                                                            Object {
+                                                                        "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                      }
+                                                }
+                                    />
+                        </figure>
+            </Link>
             <NavbarPrimaryLinks
                         location={
                                     Object {
@@ -1891,6 +2078,9 @@ ShallowWrapper {
                                     Object {
                                                 "id": 357,
                                                 "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                },
                                               }
                         }
             />
@@ -1918,7 +2108,11 @@ ShallowWrapper {
                                     <span
                                                 className="item-text"
                                     >
-                                                Sign Out
+                                                <FormattedMessage
+                                                            defaultMessage="Sign out"
+                                                            id="Navbar.mobile.links.signout"
+                                                            values={Object {}}
+                                                />
                                     </span>
                         </a>
             </Unknown>
@@ -1936,6 +2130,24 @@ ShallowWrapper {
             "burgerBarClassName": "",
             "burgerButtonClassName": "",
             "children": Array [
+              <Link
+                onClick={[Function]}
+                replace={false}
+                to="/user/profile"
+>
+                <figure
+                                className="navbar__account-nav-item__avatar image is-96x96"
+                >
+                                <div
+                                                className="circular-image"
+                                                style={
+                                                                Object {
+                                                                                "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                              }
+                                                }
+                                />
+                </figure>
+</Link>,
               <NavbarPrimaryLinks
                 location={
                                 Object {
@@ -1947,6 +2159,9 @@ ShallowWrapper {
                                 Object {
                                                 "id": 357,
                                                 "isLoggedIn": true,
+                                                "osmProfile": Object {
+                                                  "avatarURL": "http://example.com/profilepic.jpg",
+                                                },
                                               }
                 }
 />,
@@ -1974,11 +2189,14 @@ ShallowWrapper {
                                 <span
                                                 className="item-text"
                                 >
-                                                Sign Out
+                                                <FormattedMessage
+                                                                defaultMessage="Sign out"
+                                                                id="Navbar.mobile.links.signout"
+                                                                values={Object {}}
+                                                />
                                 </span>
                 </a>
 </Unknown>,
-              false,
             ],
             "className": "",
             "crossButtonClassName": "",
@@ -2022,6 +2240,62 @@ ShallowWrapper {
             Object {
               "instance": null,
               "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <figure
+                  className="navbar__account-nav-item__avatar image is-96x96"
+>
+                  <div
+                                    className="circular-image"
+                                    style={
+                                                      Object {
+                                                                        "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                      }
+                                    }
+                  />
+</figure>,
+                "onClick": [Function],
+                "replace": false,
+                "to": "/user/profile",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <div
+                    className="circular-image"
+                    style={
+                                        Object {
+                                                            "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                          }
+                    }
+/>,
+                  "className": "navbar__account-nav-item__avatar image is-96x96",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "className": "circular-image",
+                    "style": Object {
+                      "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "div",
+                },
+                "type": "figure",
+              },
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
               "nodeType": "function",
               "props": Object {
                 "location": Object {
@@ -2031,6 +2305,9 @@ ShallowWrapper {
                 "user": Object {
                   "id": 357,
                   "isLoggedIn": true,
+                  "osmProfile": Object {
+                    "avatarURL": "http://example.com/profilepic.jpg",
+                  },
                 },
               },
               "ref": null,
@@ -2066,7 +2343,11 @@ ShallowWrapper {
                     <span
                                         className="item-text"
                     >
-                                        Sign Out
+                                        <FormattedMessage
+                                                            defaultMessage="Sign out"
+                                                            id="Navbar.mobile.links.signout"
+                                                            values={Object {}}
+                                        />
                     </span>
 </a>,
                 ],
@@ -2131,7 +2412,11 @@ ShallowWrapper {
                     "children": <span
                       className="item-text"
 >
-                      Sign Out
+                      <FormattedMessage
+                                            defaultMessage="Sign out"
+                                            id="Navbar.mobile.links.signout"
+                                            values={Object {}}
+                      />
 </span>,
                     "className": "navbar-item top-nav__signout-link",
                     "onClick": [Function],
@@ -2142,11 +2427,27 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "host",
                     "props": Object {
-                      "children": "Sign Out",
+                      "children": <FormattedMessage
+                        defaultMessage="Sign out"
+                        id="Navbar.mobile.links.signout"
+                        values={Object {}}
+/>,
                       "className": "item-text",
                     },
                     "ref": null,
-                    "rendered": "Sign Out",
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "Sign out",
+                        "id": "Navbar.mobile.links.signout",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
                     "type": "span",
                   },
                   "type": "a",
@@ -2154,7 +2455,6 @@ ShallowWrapper {
               ],
               "type": Symbol(react.fragment),
             },
-            false,
           ],
           "type": [Function],
         },
@@ -2216,6 +2516,9 @@ ShallowWrapper {
                                                             Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                                 }
                                     />
@@ -2233,6 +2536,9 @@ ShallowWrapper {
                                                             Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                                 }
                                     />
@@ -2290,6 +2596,24 @@ ShallowWrapper {
                         }
                         width={300}
             >
+                        <Link
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/user/profile"
+                        >
+                                    <figure
+                                                className="navbar__account-nav-item__avatar image is-96x96"
+                                    >
+                                                <div
+                                                            className="circular-image"
+                                                            style={
+                                                                        Object {
+                                                                                    "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                                  }
+                                                            }
+                                                />
+                                    </figure>
+                        </Link>
                         <NavbarPrimaryLinks
                                     location={
                                                 Object {
@@ -2301,6 +2625,9 @@ ShallowWrapper {
                                                 Object {
                                                             "id": 357,
                                                             "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                                     }
                         />
@@ -2328,7 +2655,11 @@ ShallowWrapper {
                                                 <span
                                                             className="item-text"
                                                 >
-                                                            Sign Out
+                                                            <FormattedMessage
+                                                                        defaultMessage="Sign out"
+                                                                        id="Navbar.mobile.links.signout"
+                                                                        values={Object {}}
+                                                            />
                                                 </span>
                                     </a>
                         </Unknown>
@@ -2468,6 +2799,9 @@ ShallowWrapper {
                                                         Object {
                                                                       "id": 357,
                                                                       "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                                      },
                                                                     }
                                           }
                             />
@@ -2485,6 +2819,9 @@ ShallowWrapper {
                                                         Object {
                                                                       "id": 357,
                                                                       "isLoggedIn": true,
+                                                                      "osmProfile": Object {
+                                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                                      },
                                                                     }
                                           }
                             />
@@ -2513,6 +2850,9 @@ ShallowWrapper {
                                                       Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                     }
                   />
@@ -2530,6 +2870,9 @@ ShallowWrapper {
                                                       Object {
                                                                         "id": 357,
                                                                         "isLoggedIn": true,
+                                                                        "osmProfile": Object {
+                                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                                        },
                                                                       }
                                     }
                   />
@@ -2554,6 +2897,9 @@ ShallowWrapper {
                                         Object {
                                                             "id": 357,
                                                             "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                     }
 />,
@@ -2571,6 +2917,9 @@ ShallowWrapper {
                     "user": Object {
                       "id": 357,
                       "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
                     },
                   },
                   "ref": null,
@@ -2594,6 +2943,9 @@ ShallowWrapper {
                                         Object {
                                                             "id": 357,
                                                             "isLoggedIn": true,
+                                                            "osmProfile": Object {
+                                                              "avatarURL": "http://example.com/profilepic.jpg",
+                                                            },
                                                           }
                     }
 />,
@@ -2611,6 +2963,9 @@ ShallowWrapper {
                     "user": Object {
                       "id": 357,
                       "isLoggedIn": true,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
                     },
                   },
                   "ref": null,
@@ -2676,6 +3031,24 @@ ShallowWrapper {
               }
               width={300}
 >
+              <Link
+                            onClick={[Function]}
+                            replace={false}
+                            to="/user/profile"
+              >
+                            <figure
+                                          className="navbar__account-nav-item__avatar image is-96x96"
+                            >
+                                          <div
+                                                        className="circular-image"
+                                                        style={
+                                                                      Object {
+                                                                                    "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                                  }
+                                                        }
+                                          />
+                            </figure>
+              </Link>
               <NavbarPrimaryLinks
                             location={
                                           Object {
@@ -2687,6 +3060,9 @@ ShallowWrapper {
                                           Object {
                                                         "id": 357,
                                                         "isLoggedIn": true,
+                                                        "osmProfile": Object {
+                                                          "avatarURL": "http://example.com/profilepic.jpg",
+                                                        },
                                                       }
                             }
               />
@@ -2714,7 +3090,11 @@ ShallowWrapper {
                                           <span
                                                         className="item-text"
                                           >
-                                                        Sign Out
+                                                        <FormattedMessage
+                                                                      defaultMessage="Sign out"
+                                                                      id="Navbar.mobile.links.signout"
+                                                                      values={Object {}}
+                                                        />
                                           </span>
                             </a>
               </Unknown>
@@ -2732,6 +3112,24 @@ ShallowWrapper {
               "burgerBarClassName": "",
               "burgerButtonClassName": "",
               "children": Array [
+                <Link
+                  onClick={[Function]}
+                  replace={false}
+                  to="/user/profile"
+>
+                  <figure
+                                    className="navbar__account-nav-item__avatar image is-96x96"
+                  >
+                                    <div
+                                                      className="circular-image"
+                                                      style={
+                                                                        Object {
+                                                                                          "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                                        }
+                                                      }
+                                    />
+                  </figure>
+</Link>,
                 <NavbarPrimaryLinks
                   location={
                                     Object {
@@ -2743,6 +3141,9 @@ ShallowWrapper {
                                     Object {
                                                       "id": 357,
                                                       "isLoggedIn": true,
+                                                      "osmProfile": Object {
+                                                        "avatarURL": "http://example.com/profilepic.jpg",
+                                                      },
                                                     }
                   }
 />,
@@ -2770,11 +3171,14 @@ ShallowWrapper {
                                     <span
                                                       className="item-text"
                                     >
-                                                      Sign Out
+                                                      <FormattedMessage
+                                                                        defaultMessage="Sign out"
+                                                                        id="Navbar.mobile.links.signout"
+                                                                        values={Object {}}
+                                                      />
                                     </span>
                   </a>
 </Unknown>,
-                false,
               ],
               "className": "",
               "crossButtonClassName": "",
@@ -2818,6 +3222,62 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": <figure
+                    className="navbar__account-nav-item__avatar image is-96x96"
+>
+                    <div
+                                        className="circular-image"
+                                        style={
+                                                            Object {
+                                                                                "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                              }
+                                        }
+                    />
+</figure>,
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/user/profile",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <div
+                      className="circular-image"
+                      style={
+                                            Object {
+                                                                  "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                                                                }
+                      }
+/>,
+                    "className": "navbar__account-nav-item__avatar image is-96x96",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "className": "circular-image",
+                      "style": Object {
+                        "backgroundImage": "url(http://example.com/profilepic.jpg)",
+                      },
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  "type": "figure",
+                },
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
                 "nodeType": "function",
                 "props": Object {
                   "location": Object {
@@ -2827,6 +3287,9 @@ ShallowWrapper {
                   "user": Object {
                     "id": 357,
                     "isLoggedIn": true,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
                   },
                 },
                 "ref": null,
@@ -2862,7 +3325,11 @@ ShallowWrapper {
                       <span
                                             className="item-text"
                       >
-                                            Sign Out
+                                            <FormattedMessage
+                                                                  defaultMessage="Sign out"
+                                                                  id="Navbar.mobile.links.signout"
+                                                                  values={Object {}}
+                                            />
                       </span>
 </a>,
                   ],
@@ -2927,7 +3394,11 @@ ShallowWrapper {
                       "children": <span
                         className="item-text"
 >
-                        Sign Out
+                        <FormattedMessage
+                                                defaultMessage="Sign out"
+                                                id="Navbar.mobile.links.signout"
+                                                values={Object {}}
+                        />
 </span>,
                       "className": "navbar-item top-nav__signout-link",
                       "onClick": [Function],
@@ -2938,11 +3409,27 @@ ShallowWrapper {
                       "key": undefined,
                       "nodeType": "host",
                       "props": Object {
-                        "children": "Sign Out",
+                        "children": <FormattedMessage
+                          defaultMessage="Sign out"
+                          id="Navbar.mobile.links.signout"
+                          values={Object {}}
+/>,
                         "className": "item-text",
                       },
                       "ref": null,
-                      "rendered": "Sign Out",
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "class",
+                        "props": Object {
+                          "defaultMessage": "Sign out",
+                          "id": "Navbar.mobile.links.signout",
+                          "values": Object {},
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": [Function],
+                      },
                       "type": "span",
                     },
                     "type": "a",
@@ -2950,7 +3437,6 @@ ShallowWrapper {
                 ],
                 "type": Symbol(react.fragment),
               },
-              false,
             ],
             "type": [Function],
           },

@@ -11,6 +11,9 @@ beforeEach(() => {
     user: {
       id: 357,
       isLoggedIn: true,
+      osmProfile: {
+        avatarURL: "http://example.com/profilepic.jpg",
+      },
     },
   }
 })

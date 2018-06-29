@@ -28,4 +28,9 @@ export default defineMessages({
     id: 'Navbar.links.mobile.userProfile',
     defaultMessage: "User Profile",
   },
+
+  signout: {
+    id: 'Navbar.mobile.links.signout',
+    defaultMessage: "Sign out",
+  },
 })

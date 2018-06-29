@@ -125,6 +125,16 @@
     .navbar-item {
       color: $green;
     }
+
+    .navbar__account-nav-item__avatar {
+      margin: 0 auto;
+      margin-bottom: 40px;
+    }
+
+    .top-nav__signin-link {
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
   }
 
   /* Styling of overlay */

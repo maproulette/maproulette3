@@ -69,7 +69,20 @@ export default class Navbar extends Component {
                       onStateChange={this.setMobileMenuState}
                       styles={{bmOverlay: {background: 'rgb(0,165,146, 0.7)'},
                                bmMenuWrap: {width: '275px'},
-                               bmCrossButton: {top: '20px', right: '16px'}}}>
+                               bmCrossButton: {top: '20px', right: '16px'}}}
+          >
+            {_get(this.props, 'user.isLoggedIn') ?
+              <Link to='/user/profile' onClick={this.closeMobileMenu}>
+                <figure className="navbar__account-nav-item__avatar image is-96x96">
+                  <div className="circular-image"
+                        style={{backgroundImage: `url(${this.props.user.osmProfile.avatarURL})`}} />
+                </figure>
+              </Link>
+            :
+             <SignInButton className="white-on-green top-nav__signin-link"
+                           {...this.props} />
+            }
+
             <NavbarPrimaryLinks onLinkClick={this.closeMobileMenu}
                                 {...this.props } />
 
@@ -83,16 +96,12 @@ export default class Navbar extends Component {
                  </span>
                </Link>
 
-               <a className="navbar-item top-nav__signout-link"
-                  onClick={this.signout}>
-                 <span className="item-text">Sign Out</span>
+               <a className="navbar-item top-nav__signout-link" onClick={this.signout}>
+                 <span className="item-text">
+                   <FormattedMessage {...messages.signout} />
+                 </span>
                </a>
              </React.Fragment>
-            }
-
-            {!_get(this.props, 'user.isLoggedIn') &&
-             <SignInButton className="white-on-green top-nav__signin-link"
-                           {...this.props} />
             }
 
           </MobileMenu>
