@@ -1,8 +1,7 @@
 @import './variables.scss';
 @import './mixins.scss';
 
-// Temporarily disable mobile breakpoints in Bulma until we
-// add in mobile styling.
+// Disable mobile breakpoints in Bulma so we can control styling.
 $desktop: 50px;
 $tablet: 40px;
 
@@ -36,7 +35,7 @@ $tablet: 40px;
   height: calc(100vh - #{$navbar-height} - #{$subnav-height});
 
   @media(max-width: $app-mobile-break) {
-    height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height});
+    height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height} - #{$mobile-address-bar-height});
   }
 }
 
@@ -46,7 +45,7 @@ $tablet: 40px;
     height: calc(100vh - #{$navbar-height});
 
     @media(max-width: $app-mobile-break) {
-      height: calc(100vh - #{$mobile-navbar-height});
+      height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
     }
   }
 }
@@ -58,7 +57,7 @@ $tablet: 40px;
     height: calc(100vh - #{$navbar-height} - #{$subnav-height});
 
     @media(max-width: $app-mobile-break) {
-      height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height});
+      height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height} - #{$mobile-address-bar-height});
     }
   }
 
@@ -67,7 +66,7 @@ $tablet: 40px;
       height: calc(100vh - #{$navbar-height});
 
       @media(max-width: $app-mobile-break) {
-        height: calc(100vh - #{$mobile-navbar-height});
+        height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
       }
     }
   }
@@ -344,7 +343,7 @@ code {
   height: calc(100vh - #{$navbar-height});
 
   @media(max-width: $app-mobile-break) {
-    height: calc(100vh - #{$mobile-navbar-height});
+    height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
   }
 
   .busy-spinner {
@@ -382,4 +381,11 @@ code {
   background-color: $grey-lightest-more;
   color: $green;
   display: inline-block;
+}
+
+html {
+  // In case page doesn't fill screen on some devices
+  @media(max-width: $app-mobile-break) {
+    background-color: $grey-darkest;
+  }
 }

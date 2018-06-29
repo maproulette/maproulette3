@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 body {
   margin: 0;
   padding: 0;
@@ -7,6 +9,17 @@ body {
   display: flex;
   align-items: center;
   height: 100vh;
+  background-color: $green;
+  color: $white;
+
+  svg {
+    fill: $white;
+  }
+
+  h1.title {
+    color: $white;
+  }
+
   &__content {
     flex: auto;
   }
