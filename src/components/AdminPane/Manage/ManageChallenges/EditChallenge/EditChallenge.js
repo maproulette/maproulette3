@@ -183,6 +183,18 @@ export class EditChallenge extends Component {
     }
   }
 
+  /** Jump to the given step number */
+  jumpToStep = stepNumber => {
+    if (stepNumber !== this.state.activeStep &&
+        stepNumber >= 0 && stepNumber < challengeSteps.length) {
+      this.setState({
+        activeStep: stepNumber,
+        formContext: {},
+      })
+      window.scrollTo(0, 0)
+    }
+  }
+
   /** Complete the workflow, saving the challenge data */
   finish = () => {
     const formData = this.prepareFormDataForSaving()
@@ -403,7 +415,9 @@ export class EditChallenge extends Component {
               </nav>
             </div>
 
-            <Steps steps={challengeSteps} activeStep={this.state.activeStep} />
+            <Steps steps={challengeSteps} activeStep={this.state.activeStep}
+                   onStepClick={AsEditableChallenge(challengeData).isNew() ? undefined : this.jumpToStep}
+            />
             <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
                   validate={this.additionalValidation}
                   uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
