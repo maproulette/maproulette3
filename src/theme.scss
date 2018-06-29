@@ -384,6 +384,8 @@ code {
 }
 
 html {
+  background-color: $app-background;
+
   // In case page doesn't fill screen on some devices
   @media(max-width: $app-mobile-break) {
     background-color: $grey-darkest;

@@ -75,4 +75,16 @@
       }
     }
   }
+
+  @media(max-width: $app-mobile-break) {
+    .sidebar {
+      top: 25vh;
+      max-height: calc(75vh - #{$mobile-address-bar-height});
+
+      &.is-minimized {
+        top: 65vh;
+        max-height: calc(35vh - #{$mobile-address-bar-height});
+      }
+    }
+  }
 }

@@ -11,10 +11,15 @@
   padding-top: 40px;
   display: flex;
   justify-content: center;
+  background-color: $app-background;
 
   @media(max-width: $app-tablet-break) {
     flex-direction: column;
     padding: 20px;
+  }
+
+  @media(max-width: $app-mobile-break) {
+    min-height: $mobile-full-screen-pane;
   }
 
   .columns {
@@ -142,6 +147,16 @@
 
     li {
       min-height: 36px;
+    }
+
+    @media(max-width: $app-mobile-break) {
+      li {
+        padding-bottom: 15px;
+
+        &:last-child {
+          padding-bottom: 0;
+        }
+      }
     }
   }
 

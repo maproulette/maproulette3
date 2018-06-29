@@ -37,6 +37,7 @@ $chart-brown: #E8C1A0;
 $primary: $blue;
 $danger: $coral;
 $primary-invert: $white;
+$app-background: $white;
 $progress-value-background-color: $chart-green;
 $switch-background-active: $green;
 $default-icon-color: $grey-dark;
@@ -124,3 +125,4 @@ $menu-background-color: $white;
 $app-tablet-break: 1024px;
 $app-mobile-break: 800px;
 $mobile-address-bar-height: 75px; // cumulative top and bottom bars
+$mobile-full-screen-pane: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
