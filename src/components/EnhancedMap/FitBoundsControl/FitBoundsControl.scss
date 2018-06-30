@@ -1,0 +1,13 @@
+@import 'variables.scss';
+
+.fit-bounds-control {
+  svg {
+    width: 19px;
+    height: auto;
+    fill: $green;
+  }
+
+  &:hover {
+    background-color: $grey-lightest-more;
+  }
+}
