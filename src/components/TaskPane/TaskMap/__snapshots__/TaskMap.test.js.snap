@@ -84,6 +84,7 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
+          <InjectIntl(FitBoundsControl) />
           <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                     centerPoint={
                               Object {
@@ -155,6 +156,7 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
+            <InjectIntl(FitBoundsControl) />,
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
               centerPoint={
                             Object {
@@ -198,6 +200,15 @@ ShallowWrapper {
             "props": Object {
               "position": "topright",
             },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {},
             "ref": null,
             "rendered": null,
             "type": [Function],
@@ -287,6 +298,7 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
+            <InjectIntl(FitBoundsControl) />
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                         centerPoint={
                                     Object {
@@ -358,6 +370,7 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
+              <InjectIntl(FitBoundsControl) />,
               <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                 centerPoint={
                                 Object {
@@ -401,6 +414,15 @@ ShallowWrapper {
               "props": Object {
                 "position": "topright",
               },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {},
               "ref": null,
               "rendered": null,
               "type": [Function],

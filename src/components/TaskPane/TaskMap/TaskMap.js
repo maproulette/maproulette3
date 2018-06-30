@@ -8,6 +8,7 @@ import _isEqual from 'lodash/isEqual'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
+import FitBoundsControl from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import { MIN_ZOOM,
          MAX_ZOOM,
@@ -103,6 +104,7 @@ export default class TaskMap extends Component {
                      onBoundsChange={this.updateTaskBounds}
         >
           <ZoomControl position='topright' />
+          <FitBoundsControl />
           <VisibleTileLayer maxZoom={maxZoom} {...this.props} />
         </EnhancedMap>
       </div>

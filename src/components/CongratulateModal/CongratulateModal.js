@@ -27,7 +27,7 @@ export default class CongratulateModal extends Component {
   render() {
     return (
       <Modal className="congratulate-modal" onClose={this.dismiss} isActive={this.state.active}>
-        <div class="has-svg-icon congratulate-modal__close-control"
+        <div className="has-svg-icon congratulate-modal__close-control"
              aria-label="close"
              onClick={this.dismiss}>
           <SvgSymbol sym="outline-close-icon" viewBox="0 0 20 20" />

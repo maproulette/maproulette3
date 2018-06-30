@@ -30,35 +30,37 @@
       .leaflet-bottom.leaflet-right, .leaflet-bottom.leaflet-left {
         z-index: $layer-map-control;
 
-        .leaflet-control {
+        .leaflet-control, .leaflet-bar  {
           z-index: $layer-map-control;
+          top: 56px; // swap zoom with layer toggle for mobile
+          border-color: $grey-lighter;
+          border-width: 1px;
+          border-radius: $radius-medium-less;
 
-          @media(max-width: $app-mobile-break) {
-            top: 56px; // swap zoom with layer toggle for mobile
-          }
+          a, a.button {
+            width: 34px;
+            height: 34px;
+            font-size: 22px;
+            font-weight: normal;
+            transition: all 0.25s ease-in-out;
 
-          &.leaflet-control-zoom {
-            border-width: 1px;
-            border-radius: 2px;
+            &:not(.leaflet-disabled) {
+              color: $green;
+            }
 
-            a {
-              width: 34px;
-              height: 34px;
-              font-weight: normal;
+            &:first-child {
+              border-top-left-radius: $radius-medium-less;
+              border-top-right-radius: $radius-medium-less;
+            }
 
-              &:not(.leaflet-disabled) {
-                color: $green;
-              }
+            &:last-child {
+              border-bottom-left-radius: $radius-medium-less;
+              border-bottom-right-radius: $radius-medium-less;
+            }
 
-              &:first-child {
-                border-top-left-radius: 2px;
-                border-top-right-radius: 2px;
-              }
-
-              &:last-child {
-                border-bottom-left-radius: 2px;
-                border-bottom-right-radius: 2px;
-              }
+            &:hover {
+              background-color: $grey-lightest-more;
+              border-color: $grey-lighter;
             }
           }
         }

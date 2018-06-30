@@ -1,17 +1,14 @@
-@import '../../../variables.scss';
+@import 'variables.scss';
 
 .layer-toggle.dropdown {
   position: absolute;
   z-index: $layer-map-control + $intralayer-bump;
-  top: 100px;
+  top: 10px;
   right: 10px;
 
-  @media(max-width: $app-mobile-break) {
-    top: 10px; // swap layer toggle with zoom for mobile
-  }
-
-  .dropdown-trigger > button.button:focus {
-    border-color: $grey-light;
+  .dropdown-trigger > button.button:focus, .dropdown-trigger > button.button:hover {
+    border-color: $grey-lighter;
+    background-color: $grey-lightest-more;
   }
 
   .layer-toggle__icon {
