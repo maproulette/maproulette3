@@ -30,12 +30,17 @@
 
       .sidebar--minimizer {
         min-height: 25px;
+        display: flex;
+        justify-content: center;
 
         button.toggle-minimization {
-          padding-top: 5px;
+          padding-top: 0px;
 
           &:after {
             transform: rotate(-45deg);
+            border-width: 2px;
+            width: 0.75em;
+            height: 0.75em;
           }
         }
       }
