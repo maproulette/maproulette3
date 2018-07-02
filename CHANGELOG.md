@@ -7,6 +7,24 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.0.6] - 2018-07-02
+### Added
+- Map control to fit task-completion map to task features.
+- Animate task features on map when new task loads.
+- Auto-suggest for challenge keywords when creating a challenge.
+- Jump to desired workflow step when editing a challenge.
+- Option to save-and-finish early when editing a challenge.
+- Various enhancements to experimental mobile support.
+
+### Fixed
+- Don't offer edit-task link in admin task-map popup to project owners with
+  read-only access.
+- Inconsistent whitespace on user profile page.
+
+### Changed
+- Reuse task-completion map between tasks, preserving settings (#298).
+
+
 ## [v3.0.5] - 2018-06-22
 ### Added
 - Congratulate user when a challenge is completed (#112).
