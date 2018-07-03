@@ -6,6 +6,7 @@ import AboutPane from './components/AboutPane/AboutPane'
 import ChallengePane from './components/ChallengePane/ChallengePane'
 import TaskPane from './components/TaskPane/TaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
+import PageNotFound from './components/PageNotFound/PageNotFound'
 import { GUEST_USER_ID } from './services/User/User'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
@@ -96,6 +97,7 @@ export class App extends Component {
           <CachedRoute path='/leaderboard' component={Leaderboard} />
           <CachedRoute path='/admin' component={AdminPane} />
           <CachedRoute path='/error' component={ErrorPane} />
+          <Route component={PageNotFound} />
         </Switch>
 
         {firstTimeModal}

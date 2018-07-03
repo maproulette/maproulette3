@@ -39,7 +39,7 @@ $tablet: 40px;
   }
 }
 
-.task .full-screen-height, .about .full-screen-height {
+.task .full-screen-height, .about .full-screen-height, .page-not-found.full-screen-height {
   // no subnav in task mode or about pane
   .leaflet-container {
     height: calc(100vh - #{$navbar-height});
