@@ -63,6 +63,7 @@ $weight-normal: 400;
 $weight-semibold: 500;
 $weight-bold: 700;
 
+$size-huge: 10rem;
 $size-6-plus: 18px;
 $size-7: 0.875rem;
 $size-8: 0.75rem;
@@ -127,3 +128,7 @@ $app-tablet-break: 1024px;
 $app-mobile-break: 800px;
 $mobile-address-bar-height: 75px; // cumulative top and bottom bars
 $mobile-full-screen-pane: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
+
+// Screen sizes
+$full-screen: calc(100vh - #{$navbar-height});
+$full-screen-with-subnav: calc(100vh - #{$navbar-height} - #{$subnav-height});
