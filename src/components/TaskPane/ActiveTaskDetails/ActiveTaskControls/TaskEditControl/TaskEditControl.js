@@ -4,7 +4,11 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
-import { Editor, editorLabels } from '../../../../../services/Editor/Editor'
+import _omit from 'lodash/omit'
+import _map from 'lodash/map'
+import _keys from 'lodash/keys'
+import { NONE, Editor, keysByEditor, editorLabels }
+       from '../../../../../services/Editor/Editor'
 import DropdownButton from '../../../../Bulma/DropdownButton'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import WithDeactivateOnOutsideClick
@@ -40,6 +44,9 @@ export default class TaskEditControl extends Component {
         break
       case editShortcuts.editJosmLayer.key:
         this.props.pickEditor({value: Editor.josmLayer})
+        break
+      case editShortcuts.editLevel0.key:
+        this.props.pickEditor({value: Editor.level0})
         break
       default:
     }
@@ -86,11 +93,9 @@ export default class TaskEditControl extends Component {
     else {
       // Show a dropdown of editor choices
       const localizedLabels = editorLabels(this.props.intl)
-      const editorDropdownOptions = [
-        { key: Editor.id, text: localizedLabels.id, value: Editor.id },
-        { key: Editor.josm, text: localizedLabels.josm, value: Editor.josm},
-        { key: Editor.josmLayer, text: localizedLabels.josmLayer, value: Editor.josmLayer },
-      ]
+      const editorDropdownOptions = _map(_keys(_omit(Editor, keysByEditor[NONE])),
+        editor => ({ key: Editor[editor], text: localizedLabels[editor], value: Editor[editor] })
+      )
 
       return (
         <DeactivatableDropdownButton

@@ -17,6 +17,7 @@ export default {
     editId: {key: 'e', label: messages.editId},
     editJosm: {key: 'r', label: messages.editJosm},
     editJosmLayer: {key: 't', label: messages.editJosmLayer},
+    editLevel0: {key: 'l', label: messages.editLevel0},
   },
   taskEditing: {
     cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel}

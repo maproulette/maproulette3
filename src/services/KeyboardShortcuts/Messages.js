@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Edit in new JOSM layer",
   },
 
+  editLevel0: {
+    id: "KeyMapping.openEditor.editLevel0",
+    defaultMessage: "Edit in Level0",
+  },
+
   cancel: {
     id: "KeyMapping.taskEditing.cancel",
     defaultMessage: "Cancel Editing",

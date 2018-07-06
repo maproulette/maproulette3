@@ -36,6 +36,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -158,6 +165,11 @@ ShallowWrapper {
           "key": 2,
           "text": "Edit in new JOSM layer",
           "value": 2,
+        },
+        Object {
+          "key": 3,
+          "text": "Edit in Level0",
+          "value": 3,
         },
       ],
       "outsideClickIgnoreClass": "ignore-react-onclickoutside",
@@ -304,6 +316,11 @@ ShallowWrapper {
             "text": "Edit in new JOSM layer",
             "value": 2,
           },
+          Object {
+            "key": 3,
+            "text": "Edit in Level0",
+            "value": 3,
+          },
         ],
         "outsideClickIgnoreClass": "ignore-react-onclickoutside",
         "preventDefault": false,
@@ -444,6 +461,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -742,6 +766,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
