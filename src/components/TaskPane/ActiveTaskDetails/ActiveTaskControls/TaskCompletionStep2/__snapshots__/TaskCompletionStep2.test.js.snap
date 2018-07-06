@@ -42,6 +42,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -175,6 +182,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -299,6 +313,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -428,6 +449,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -552,6 +580,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in new JOSM layer",
                     "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
                   },
                 },
               },
@@ -686,6 +721,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -819,6 +861,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -943,6 +992,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -1072,6 +1128,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -1196,6 +1259,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in new JOSM layer",
                     "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
                   },
                 },
               },
@@ -1330,6 +1400,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -1463,6 +1540,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -1587,6 +1671,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -1716,6 +1807,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -1840,6 +1938,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in new JOSM layer",
                     "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
                   },
                 },
               },
@@ -1983,6 +2088,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -2122,6 +2234,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -2246,6 +2365,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -2374,6 +2500,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -2498,6 +2631,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -2630,6 +2770,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -2752,6 +2899,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -2874,6 +3028,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -2994,6 +3155,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -3129,6 +3297,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -3253,6 +3428,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -3381,6 +3563,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -3505,6 +3694,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -3637,6 +3833,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -3759,6 +3962,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -3881,6 +4091,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -4001,6 +4218,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in new JOSM layer",
                     "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
                   },
                 },
               },
@@ -4144,6 +4368,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -4283,6 +4514,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -4407,6 +4645,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -4535,6 +4780,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -4659,6 +4911,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -4791,6 +5050,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -4913,6 +5179,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -5035,6 +5308,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -5155,6 +5435,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -5290,6 +5577,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -5414,6 +5708,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -5542,6 +5843,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -5666,6 +5974,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -5798,6 +6113,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -5920,6 +6242,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -6042,6 +6371,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -6162,6 +6498,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in new JOSM layer",
                     "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
                   },
                 },
               },
@@ -6305,6 +6648,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -6444,6 +6794,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -6568,6 +6925,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -6696,6 +7060,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -6820,6 +7191,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -6952,6 +7330,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -7074,6 +7459,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -7196,6 +7588,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -7316,6 +7715,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -7451,6 +7857,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -7575,6 +7988,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -7703,6 +8123,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -7827,6 +8254,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -7959,6 +8393,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -8081,6 +8522,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -8203,6 +8651,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -8323,6 +8778,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in new JOSM layer",
                     "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
                   },
                 },
               },
@@ -8466,6 +8928,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -8605,6 +9074,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -8729,6 +9205,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -8857,6 +9340,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosmLayer",
                                   },
                                 },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
+                                  },
+                                },
                               },
                               "taskCompletion": Object {
                                 "falsePositive": Object {
@@ -8981,6 +9471,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in new JOSM layer",
                                     "id": "KeyMapping.openEditor.editJosmLayer",
+                                  },
+                                },
+                                "editLevel0": Object {
+                                  "key": "l",
+                                  "label": Object {
+                                    "defaultMessage": "Edit in Level0",
+                                    "id": "KeyMapping.openEditor.editLevel0",
                                   },
                                 },
                               },
@@ -9113,6 +9610,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -9235,6 +9739,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -9357,6 +9868,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {
@@ -9477,6 +9995,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in new JOSM layer",
                   "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
                 },
               },
             },
@@ -9612,6 +10137,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -9736,6 +10268,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -9864,6 +10403,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosmLayer",
                                         },
                                       },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
+                                        },
+                                      },
                                     },
                                     "taskCompletion": Object {
                                       "falsePositive": Object {
@@ -9988,6 +10534,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in new JOSM layer",
                                           "id": "KeyMapping.openEditor.editJosmLayer",
+                                        },
+                                      },
+                                      "editLevel0": Object {
+                                        "key": "l",
+                                        "label": Object {
+                                          "defaultMessage": "Edit in Level0",
+                                          "id": "KeyMapping.openEditor.editLevel0",
                                         },
                                       },
                                     },
@@ -10120,6 +10673,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -10242,6 +10802,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -10364,6 +10931,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosmLayer",
                   },
                 },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
               },
               "taskCompletion": Object {
                 "falsePositive": Object {
@@ -10484,6 +11058,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in new JOSM layer",
                     "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
                   },
                 },
               },

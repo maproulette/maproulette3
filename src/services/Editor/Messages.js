@@ -20,4 +20,8 @@ export default defineMessages({
     id: "Editor.josmLayer.label",
     defaultMessage: "Edit in new JOSM layer"
   },
+  level0: {
+    id: "Editor.level0.label",
+    defaultMessage: "Edit in Level0"
+  }
 })

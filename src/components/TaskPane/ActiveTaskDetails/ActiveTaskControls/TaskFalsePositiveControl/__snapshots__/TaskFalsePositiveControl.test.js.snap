@@ -38,6 +38,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosmLayer",
                 },
               },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
             },
             "taskCompletion": Object {
               "falsePositive": Object {

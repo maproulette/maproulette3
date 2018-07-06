@@ -2,6 +2,7 @@ import _compact from 'lodash/compact'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import _find from 'lodash/find'
+import _invert from 'lodash/invert'
 import RequestStatus from '../Server/RequestStatus'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import { toLatLngBounds  } from '../MapBounds/MapBounds'
@@ -14,6 +15,7 @@ export const NONE = -1
 export const ID = 0
 export const JOSM = 1
 export const JOSM_LAYER = 2
+export const LEVEL0 = 3
 
 /**
  * Supported names of properties used to identify an OSM entity associated with
@@ -29,7 +31,11 @@ export const Editor = Object.freeze({
   id: ID,
   josm: JOSM,
   josmLayer: JOSM_LAYER,
+  level0: LEVEL0,
 })
+
+
+export const keysByEditor = Object.freeze(_invert(Editor))
 
 /** Returns object containing localized labels  */
 export const editorLabels = intl => _fromPairs(
@@ -53,14 +59,20 @@ export const editorOpened = function(editor, taskId, status=RequestStatus.succes
 // async action creators
 export const editTask = function(editor, task, mapBounds) {
   return function(dispatch) {
-    if (editor === ID) {
-      // If we've already opened an editor window, close it so that we don't
-      // build up a bunch of open editor tabs, potentially confusing users.
+    if (isWebEditor(editor)) {
+      // For web editors, if we've already opened an editor window, close it so
+      // that we don't build up a bunch of open editor tabs and potentially
+      // confuse users.
       if (editorWindowReference && !editorWindowReference.closed) {
         editorWindowReference.close()
       }
 
-      editorWindowReference = window.open(constructIdURI(task, mapBounds))
+      if (editor === ID) {
+        editorWindowReference = window.open(constructIdURI(task, mapBounds))
+      }
+      else if (editor === LEVEL0) {
+        editorWindowReference = window.open(constructLevel0URI(task, mapBounds))
+      }
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
     }
@@ -71,6 +83,10 @@ export const editTask = function(editor, task, mapBounds) {
                constructJosmURI(editor === JOSM_LAYER, task, mapBounds))
     }
   }
+}
+
+export const isWebEditor = function(editor) {
+  return editor === ID || editor === LEVEL0
 }
 
 export const closeEditor = function() {
@@ -96,19 +112,8 @@ export const openEditor = function(state=null, action) {
   }
 }
 
-export const constructIdURI = function(task, mapBounds) {
-  const baseUriComponent =
-    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
-
-  // If the mapbounds don't match the task, compute our own centerpoint.
-  const centerPoint = mapBounds.taskId === task.id ?
-                      mapBounds.bounds.getCenter() :
-                      AsMappableTask(task).calculateCenterPoint()
-
-  const mapUriComponent =
-    "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
-
-  const featureStrings = _compact(task.geometries.features.map((feature) => {
+export const shortFeatureStrings = function(task) {
+  return _compact(task.geometries.features.map((feature) => {
     const osmId = featureOSMId(feature)
     if (!osmId) {
       return null
@@ -127,13 +132,46 @@ export const constructIdURI = function(task, mapBounds) {
         return null
     }
 	}))
+}
 
-  const idUriComponent = "id=" + featureStrings.join(',')
+export const taskCenterPoint = function(mapBounds, task) {
+  // If the mapbounds don't match the task, compute our own centerpoint.
+  return mapBounds.taskId === task.id ?
+         mapBounds.bounds.getCenter() :
+         AsMappableTask(task).calculateCenterPoint()
+}
+
+export const constructIdURI = function(task, mapBounds) {
+  const baseUriComponent =
+    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
+
+  const centerPoint = taskCenterPoint(mapBounds, task)
+  const mapUriComponent =
+    "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
+
+  const idUriComponent = "id=" + shortFeatureStrings(task).join(',')
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
 
   return baseUriComponent +
          [idUriComponent, mapUriComponent, commentUriComponent].join('&')
+}
+
+export const constructLevel0URI = function(task, mapBounds) {
+  const baseUriComponent =
+    `${process.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`
+
+  const centerPoint = taskCenterPoint(mapBounds, task)
+  const mapCenterComponent =
+    "center=" + [centerPoint.lat, centerPoint.lng].join(',')
+
+  const commentComponent =
+    "comment=" + encodeURIComponent(task.parent.checkinComment)
+
+  const urlComponent = "url=" + shortFeatureStrings(task).join(',')
+
+  return baseUriComponent +
+         [mapCenterComponent, commentComponent, urlComponent].join('&')
 }
 
 /**
