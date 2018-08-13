@@ -21,7 +21,7 @@ export default defineMessages({
 
   createVirtualChallenge: {
     id: "VirtualChallenge.controls.create.label",
-    defaultMessage: "Work on Mapped Tasks",
+    defaultMessage: "Work on {taskCount, number} Mapped Tasks",
   },
 
   virtualChallengeNameLabel: {

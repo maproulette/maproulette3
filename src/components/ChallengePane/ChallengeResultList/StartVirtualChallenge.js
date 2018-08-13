@@ -56,7 +56,8 @@ export class StartVirtualChallenge extends Component {
                   {"is-loading": this.props.creatingVirtualChallenge}
                 )}
                 onClick={this.startEditing}>
-          <FormattedMessage {...messages.createVirtualChallenge} />
+          <FormattedMessage {...messages.createVirtualChallenge}
+                            values={{taskCount: this.props.taskCount}}/>
         </button>
     }
     return (
