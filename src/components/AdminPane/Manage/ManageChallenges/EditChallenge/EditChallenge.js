@@ -148,6 +148,12 @@ export class EditChallenge extends Component {
    * we check Overpass queries and GeoJSON.
    */
   additionalValidation = (formData, errors) => {
+    // Skip additional source data validation if user has indicated they wish
+    // to ignore source errors.
+    if (formData.ignoreSourceErrors) {
+      return errors
+    }
+
     if (!_isEmpty(formData.overpassQL)) {
       this.validateOverpass(formData.overpassQL, errors)
     }
@@ -301,6 +307,9 @@ export class EditChallenge extends Component {
       this.prepareChallengeDataForForm(this.props.challenge),
       this.state.formData,
     ))
+
+    // Remove control fields that do not represent data
+    delete challengeData.ignoreSourceErrors
 
     // Parent field should just be id, not object.
     if (_isObject(challengeData.parent)) {
