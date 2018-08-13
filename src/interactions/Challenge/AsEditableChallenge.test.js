@@ -23,11 +23,6 @@ describe("isNew", () => {
 })
 
 describe("hasZeroTasks", () => {
-  test("returns false if the challenge actions haven't been loaded", () => {
-    const wrappedChallenge = AsEditableChallenge(challenge)
-    expect(wrappedChallenge.hasZeroTasks()).toBe(false)
-  })
-
   test("returns false if the challenge actions total is non-zero", () => {
     challenge.actions = {total: 1}
 
@@ -41,6 +36,11 @@ describe("hasZeroTasks", () => {
     const wrappedChallenge = AsEditableChallenge(challenge)
     expect(wrappedChallenge.hasZeroTasks()).toBe(true)
   })
+
+  test("returns true if there are no actions", () => {
+    const wrappedChallenge = AsEditableChallenge(challenge)
+    expect(wrappedChallenge.hasZeroTasks()).toBe(true)
+  })
 })
 
 describe("isSourceReadOnly", () => {
@@ -51,11 +51,6 @@ describe("isSourceReadOnly", () => {
     expect(wrappedChallenge.isSourceReadOnly()).toBe(false)
   })
 
-  test("returns true for an existing challenge if the actions haven't been loaded", () => {
-    const wrappedChallenge = AsEditableChallenge(challenge)
-    expect(wrappedChallenge.isSourceReadOnly()).toBe(true)
-  })
-
   test("returns true for an existing challenge with actions total of at least 1", () => {
     challenge.actions = {total: 1}
     const wrappedChallenge = AsEditableChallenge(challenge)
@@ -64,6 +59,11 @@ describe("isSourceReadOnly", () => {
 
   test("returns false for an existing challenge with actions total of 0", () => {
     challenge.actions = {total: 0}
+    const wrappedChallenge = AsEditableChallenge(challenge)
+    expect(wrappedChallenge.isSourceReadOnly()).toBe(false)
+  })
+
+  test("returns false if there are no actions", () => {
     const wrappedChallenge = AsEditableChallenge(challenge)
     expect(wrappedChallenge.isSourceReadOnly()).toBe(false)
   })

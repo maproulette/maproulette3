@@ -248,7 +248,7 @@ export class EditChallenge extends Component {
   prepareChallengeDataForForm = () => {
     let challengeData = Object.assign(
       {parent: _get(this.props, 'project.id')},
-      _omit(this.props.challenge, ['actions', 'activity', 'comments']),
+      _omit(this.props.challenge, ['activity', 'comments']),
       this.state.formData
     )
 
@@ -308,7 +308,8 @@ export class EditChallenge extends Component {
       this.state.formData,
     ))
 
-    // Remove control fields that do not represent data
+    // Remove extraneous fields that should not be saved.
+    delete challengeData.actions
     delete challengeData.ignoreSourceErrors
 
     // Parent field should just be id, not object.
