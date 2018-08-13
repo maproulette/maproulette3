@@ -20,19 +20,16 @@ export class AsEditableChallenge {
   }
 
   /**
-   * Returns true if the challenge is determined to have zero tasks. Note that
-   * this will return false if the number of tasks cannot be determined, so
-   * false does not necessarily mean the challenge has tasks.
+   * Returns true if the challenge is determined to have zero tasks.
    */
   hasZeroTasks() {
-    return _get(this, 'actions.total') === 0
+    return _get(this, 'actions.total', 0) === 0
   }
 
   /**
    * Returns true if the source (overpass, local GeoJSON, remote URL) should be
    * treated as read-only. This will return true for existing challenges that
-   * do not have zero tasks. Note that if the number of tasks cannot be
-   * determined, this will return true.
+   * do not have zero tasks.
    */
   isSourceReadOnly() {
     return !this.isNew() && !this.hasZeroTasks()
