@@ -1,7 +1,4 @@
-import { TaskPriority, taskPriorityLabels }
-       from '../../../../../services/Task/TaskPriority/TaskPriority'
-import { TaskStatus,
-         messagesByStatus }
+import { TaskStatus, messagesByStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
@@ -19,8 +16,6 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const jsSchema = (intl, task) => {
-  const localizedPriorityLabels = taskPriorityLabels(intl)
-
   const allowedStatuses = _values(TaskStatus)
   const allowedStatusLabels = _map(
     allowedStatuses,
@@ -47,14 +42,6 @@ export const jsSchema = (intl, task) => {
         title: intl.formatMessage(messages.geometriesLabel),
         description: intl.formatMessage(messages.geometriesDescription),
         type: "string",
-      },
-      priority: {
-        title: intl.formatMessage(messages.priorityLabel),
-        description: intl.formatMessage(messages.priorityDescription),
-        type: "number",
-        enum: _values(TaskPriority),
-        enumNames: _map(TaskPriority, (value, key) => localizedPriorityLabels[key]),
-        default: TaskPriority.high,
       },
       status: {
         title: intl.formatMessage(messages.statusLabel),
