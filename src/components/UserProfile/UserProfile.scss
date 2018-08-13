@@ -146,16 +146,10 @@
     }
 
     li {
-      min-height: 36px;
-    }
+      margin-bottom: 12px;
 
-    @media(max-width: $app-mobile-break) {
-      li {
-        padding-bottom: 15px;
-
-        &:last-child {
-          padding-bottom: 0;
-        }
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }
@@ -176,7 +170,7 @@
   &__saved-challenges__challenge,
   &__saved-tasks__task {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     margin: 0;
 
     a {
@@ -192,11 +186,16 @@
       flex-shrink: 1;
       width: 100%;
       border-bottom: 1px solid $grey-lightest-less;
-      margin: 5px 10px;
+      margin: 0px 10px;
+      position: relative;
+      bottom: 4px;
     }
 
     .button.is-clear {
       flex-shrink: 0;
+      position: relative;
+      top: 2px;
+
       svg.icon {
         fill: $grey-light;
         height: 15px;
@@ -292,19 +291,26 @@
       }
     }
 
-    pre {
+    pre.user-profile__api-key__current-key {
       font-size: $size-8;
       background-color: white;
       padding: 15px;
       border: 2px solid $grey-lighter-more;
       border-radius: $radius-medium;
-    }
-  }
-
-  pre {
-    overflow-x: auto;
-    @media(max-width: 1250px) {
+      overflow-x: auto;
       max-width: 400px;
+
+      @media(min-width: 1200px) {
+        max-width: 500px;
+      }
+
+      @media(min-width: 1350px) {
+        max-width: 650px;
+      }
+
+      @media(min-width: 1600px) {
+        max-width: 800px;
+      }
     }
   }
 }

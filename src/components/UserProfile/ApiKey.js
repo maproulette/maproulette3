@@ -31,7 +31,7 @@ export default class ApiKey extends Component {
           </ConfirmAction>
         </div>
 
-        <pre className="user-profile__api-key--current-key">
+        <pre className="user-profile__api-key__current-key">
           {this.props.user.apiKey}
         </pre>
       </div>
