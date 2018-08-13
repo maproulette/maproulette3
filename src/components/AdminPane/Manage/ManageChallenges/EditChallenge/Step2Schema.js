@@ -65,7 +65,7 @@ export const jsSchema = (intl, user, challengeData) => {
   }
 
   if (!sourceReadOnly) {
-    schema.properties.source= {
+    schema.properties.source = {
       title: intl.formatMessage(messages.sourceLabel),
       type: "string",
       enum: [
@@ -75,6 +75,14 @@ export const jsSchema = (intl, user, challengeData) => {
       ],
       default: "Overpass Query",
     }
+
+    schema.properties.ignoreSourceErrors = {
+      title: intl.formatMessage(messages.ignoreSourceErrorsLabel),
+      description: intl.formatMessage(messages.ignoreSourceErrorsDescription),
+      type: "boolean",
+      default: false,
+    }
+
     schema.dependencies = {
       source: {
         oneOf: [
@@ -128,5 +136,9 @@ export const uiSchema = (intl, user, challengeData) => {
       "ui:placeholder": intl.formatMessage(messages.remoteGeoJsonPlaceholder),
       "ui:readonly": sourceReadOnly,
     },
+    ignoreSourceErrors: {
+      "ui:widget": "radio",
+    },
+    "ui:order": sourceReadOnly ? undefined : [ "*", "ignoreSourceErrors" ],
   }
 }

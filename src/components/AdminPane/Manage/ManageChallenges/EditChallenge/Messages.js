@@ -280,6 +280,18 @@ will not be able to make sense of it.
     defaultMessage: "https://www.example.com/geojson.json",
   },
 
+  ignoreSourceErrorsLabel: {
+    id: 'Admin.EditChallenge.form.ignoreSourceErrors.label',
+    defaultMessage: "Ignore Errors",
+  },
+
+  ignoreSourceErrorsDescription: {
+    id: 'Admin.EditChallenge.form.ignoreSourceErrors.description',
+    defaultMessage: "Proceed despite detected errors in source data. " +
+      "Only expert users who fully understand the implications should " +
+      "attempt this.",
+  },
+
   step3Label: {
     id: 'Admin.EditChallenge.form.step3.label',
     defaultMessage: "Priorities",

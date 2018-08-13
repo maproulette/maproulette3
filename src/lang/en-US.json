@@ -71,6 +71,8 @@
   "Admin.EditChallenge.form.remoteGeoJson.label": "Remote URL",
   "Admin.EditChallenge.form.remoteGeoJson.description": "Remote URL location from which to retrieve the GeoJSON",
   "Admin.EditChallenge.form.remoteGeoJson.placeholder": "https://www.example.com/geojson.json",
+  "Admin.EditChallenge.form.ignoreSourceErrors.label": "Ignore Errors",
+  "Admin.EditChallenge.form.ignoreSourceErrors.description": "Proceed despite detected errors in source data. Only expert users who fully understand the implications should attempt this.",
   "Admin.EditChallenge.form.step3.label": "Priorities",
   "Admin.EditChallenge.form.step3.description": "The priority of tasks can be defined as High, Medium and Low. All high priority tasks will be shown first, then medium and finally low.",
   "Admin.EditChallenge.form.defaultPriority.label": "Default Priority",
