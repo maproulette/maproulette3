@@ -153,6 +153,16 @@ const NavbarPrimaryLinks = function(props) {
           </span>
         </Link>
       }
+
+      <a href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"
+         className="navbar-item top-nav__help-link"
+         target="_blank"
+         rel="noopener noreferrer"
+         onClick={props.onLinkClick}>
+        <span className='item-text'>
+          <FormattedMessage {...messages.help} />
+        </span>
+      </a>
     </React.Fragment>
   )
 }

@@ -250,6 +250,7 @@
   "Navbar.links.challengeResults": "Challenges",
   "Navbar.links.leaderboard": "Leaderboard",
   "Navbar.links.admin": "Create",
+  "Navbar.links.help": "Help",
   "Navbar.links.mobile.userProfile": "User Profile",
   "Navbar.mobile.links.signout": "Sign out",
   "PageNotFound.message": "Sorry, nothing here but open ocean.",
