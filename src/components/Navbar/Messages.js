@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Create",
   },
 
+  help: {
+    id: 'Navbar.links.help',
+    defaultMessage: "Help",
+  },
+
   profile: {
     id: 'Navbar.links.mobile.userProfile',
     defaultMessage: "User Profile",
