@@ -217,7 +217,7 @@
   "Challenge.results.heading": "Challenges",
   "Challenge.controls.clearFilters.label": "Clear Filters",
   "Challenge.results.noResults": "No Results",
-  "VirtualChallenge.controls.create.label": "Work on Mapped Tasks",
+  "VirtualChallenge.controls.create.label": "Work on {taskCount, number} Mapped Tasks",
   "VirtualChallenge.fields.name.label": "Name your \"virtual\" challenge",
   "Task.fauxStatus.available": "Available",
   "ChallengeProgress.tooltip.label": "Tasks",

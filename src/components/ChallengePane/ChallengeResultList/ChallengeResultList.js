@@ -71,6 +71,7 @@ export class ChallengeResultList extends Component {
         !_isObject(this.props.browsedChallenge)) {
       virtualChallengeOption =
         <StartVirtualChallenge
+          taskCount={this.props.mapBoundedTasks.tasks.length}
           createVirtualChallenge={this.props.startMapBoundedTasks}
           creatingVirtualChallenge={this.props.creatingVirtualChallenge} />
     }

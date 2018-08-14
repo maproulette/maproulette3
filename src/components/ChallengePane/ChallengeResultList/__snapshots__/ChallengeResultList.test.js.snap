@@ -10022,6 +10022,7 @@ ShallowWrapper {
         <InjectIntl(StartVirtualChallenge)
           createVirtualChallenge={[Function]}
           creatingVirtualChallenge={undefined}
+          taskCount={1}
 />,
         <ul
           className="challenge-result-list__challenge-list"
@@ -10268,6 +10269,7 @@ ShallowWrapper {
         "props": Object {
           "createVirtualChallenge": [Function],
           "creatingVirtualChallenge": undefined,
+          "taskCount": 1,
         },
         "ref": null,
         "rendered": null,
@@ -10843,6 +10845,7 @@ ShallowWrapper {
           <InjectIntl(StartVirtualChallenge)
             createVirtualChallenge={[Function]}
             creatingVirtualChallenge={undefined}
+            taskCount={1}
 />,
           <ul
             className="challenge-result-list__challenge-list"
@@ -11089,6 +11092,7 @@ ShallowWrapper {
           "props": Object {
             "createVirtualChallenge": [Function],
             "creatingVirtualChallenge": undefined,
+            "taskCount": 1,
           },
           "ref": null,
           "rendered": null,
