@@ -71,7 +71,7 @@ export class BurndownChart extends Component {
                           top: 20,
                           right: 20,
                           bottom: 85,
-                          left: 50
+                          left: 63,
                         }}
                         minY={0}
                         lineWidth={0}
