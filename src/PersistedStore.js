@@ -98,12 +98,14 @@ export const initializePersistedStore = callback => {
       delete state.currentLeaderboard
     },
     9: state => {
-      // currentFilters and currentSort merged under currentSearch
+      // currentFilters, currentSort, and mapBounds merged under currentSearch
       delete state.currentFilters
       delete state.currentSort
-
-      // mapBounds merged into currentSearch
       delete state.mapBounds
+    },
+    10: state => {
+      // Dashboard configurations are now stored with user on server
+      delete state.dashboards
     }
   }
 

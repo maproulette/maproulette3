@@ -19,8 +19,8 @@ export default class TopChallenges extends Component {
 
   selectDateRange = monthsPast => {
     this.setState({monthsPast})
-    this.props.fetchUserTopChallenges(this.props.user.id,
-                                      subMonths(new Date(), monthsPast))
+    this.props.fetchTopChallenges(this.props.user.id,
+                                  subMonths(new Date(), monthsPast))
   }
 
   render() {

@@ -18,11 +18,16 @@ export class ChallengeProgress extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // Only re-render if the challenge or actions changed
+    if (!_isEqual(nextProps.taskMetrics, this.props.taskMetrics)) {
+      return true
+    }
+
     if (_get(nextProps, 'challenge.id') !== _get(this.props, 'challenge.id')) {
       return true
     }
 
-    if (!_isEqual(nextProps.challenge.actions, this.props.challenge.actions)) {
+    if (!_isEqual(_get(nextProps, 'challenge.actions', {}),
+                  _get(this.props, 'challenge.actions', {}))) {
       return true
     }
 
@@ -31,7 +36,10 @@ export class ChallengeProgress extends Component {
 
   render() {
     const localizedStatuses = statusLabels(this.props.intl)
-    const taskActions = _get(this.props, 'challenge.actions')
+    const taskActions = this.props.taskMetrics ?
+                        this.props.taskMetrics :
+                        _get(this.props, 'challenge.actions')
+
     if (!_isObject(taskActions)) {
       return null
     }

@@ -1,0 +1,38 @@
+@import 'variables.scss';
+
+.challenge-overview-block {
+  .grid-block__content {
+    .columns {
+      margin-bottom: 0;
+      margin-left: -0.25em;
+
+      .column {
+        padding: 0.25em;
+      }
+    }
+
+    .status-label {
+      font-weight: $weight-light;
+      color: $grey;
+      font-size: $size-6-plus;
+    }
+
+    .status-value {
+      color: $grey;
+      font-size: $size-6-plus;
+    }
+
+    .challenge-keywords {
+      margin-top: 15px;
+      margin-bottom: 20px;
+
+      .tag {
+        margin-bottom: 5px;
+      }
+    }
+
+    .start-challenge-control {
+      margin-bottom: 20px;
+    }
+  }
+}

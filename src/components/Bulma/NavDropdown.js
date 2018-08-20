@@ -13,6 +13,8 @@ import _find from 'lodash/find'
  * placeholder if no value is active. It also wraps itself in a
  * WithDeactivateOnOutsideClick so that the dropdown will be automatically
  * closed if the user clicks off the dropdown.
+ *
+ * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class NavDropdown extends Component {
   selectOption = (e, option) => {
@@ -81,7 +83,7 @@ export class NavDropdown extends Component {
 
 NavDropdown.propTypes = {
   /** Label displayed above the dropdown */
-  label: PropTypes.string,
+  label: PropTypes.element,
   /** Invoked when the value is changed */
   onChange: PropTypes.func,
   /** Optional placeholder to be displayed when there is no value */

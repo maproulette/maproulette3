@@ -12,6 +12,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    invertBadges={true}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -359,6 +360,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    invertBadges={true}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],

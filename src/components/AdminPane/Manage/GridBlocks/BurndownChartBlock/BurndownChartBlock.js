@@ -1,0 +1,31 @@
+import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
+import { DashboardDataTarget } from '../../../../../services/Dashboard/Dashboard'
+import { registerBlockType } from '../BlockTypes'
+import BurndownChart from '../../BurndownChart/BurndownChart'
+import QuickBlock from '../QuickBlock'
+import messages from './Messages'
+import './BurndownChartBlock.css'
+
+const descriptor = {
+  blockKey: 'BurndownChartBlock',
+  label: "Burndown Chart",
+  targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
+  defaultWidth: 4,
+  defaultHeight: 12,
+}
+
+export class BurndownChartBlock extends Component {
+  render() {
+    return (
+      <QuickBlock {...this.props}
+                  className="burndown-chart-block"
+                  blockTitle={<FormattedMessage {...messages.title}
+                                                values={{taskCount: this.props.tasksAvailable}} />}>
+        <BurndownChart {...this.props} suppressHeading />
+      </QuickBlock>
+    )
+  }
+}
+
+registerBlockType(BurndownChartBlock, descriptor)

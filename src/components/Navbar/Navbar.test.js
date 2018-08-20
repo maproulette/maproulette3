@@ -31,12 +31,12 @@ test("does not show an admin link if user is not signed in", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test("includes an admin link if user is logged in", () => {
+test("includes a link to user profile page if user is logged in", () => {
   const wrapper = shallow(
     <Navbar {...basicProps} />
   )
 
-  expect(wrapper.find('Link[to="admin"]').exists()).toBe(false)
+  expect(wrapper.find('Link[to="/user/profile"]').exists()).toBe(true)
 
   expect(wrapper).toMatchSnapshot()
 })

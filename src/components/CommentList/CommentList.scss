@@ -17,14 +17,14 @@
       margin-bottom: 5px;
     }
 
-    &--author {
+    &__author {
       color: $grey;
       font-size: $size-7;
       font-weight: $weight-semibold;
       margin-right: 1em;
     }
 
-    &--published-at {
+    &__published-at {
       color: $grey-light;
       font-size: $size-8;
       font-weight: $weight-semibold;
@@ -34,7 +34,7 @@
       }
     }
 
-    &--content {
+    &__content {
       font-size: $size-7;
       background-color: $grey-lightest-more;
       border-radius: $radius-medium;
@@ -45,9 +45,11 @@
       }
     }
 
-    &--task-link {
+    &__meta {
       font-size: $size-8;
-      text-align: right;
+      color: $grey;
+      display: flex;
+      justify-content: space-between;
 
       a {
         color: $grey;

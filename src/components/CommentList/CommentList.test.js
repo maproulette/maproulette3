@@ -71,7 +71,7 @@ test("task links are not shown by default", () => {
     <CommentList {...basicProps} />
   )
 
-  expect(wrapper.find('.comment-list__comment--task-link').exists()).not.toBe(true)
+  expect(wrapper.find('.comment-list__comment__task-link').exists()).not.toBe(true)
 })
 
 test("task links are shown if includeTaskLinks prop is set to true", () => {
@@ -80,7 +80,7 @@ test("task links are shown if includeTaskLinks prop is set to true", () => {
   )
 
   expect(wrapper.find(
-    '.comment-list__comment--task-link'
+    '.comment-list__comment__task-link'
   ).length).toBe(basicProps.comments.length)
 
   expect(wrapper).toMatchSnapshot()

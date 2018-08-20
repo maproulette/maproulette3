@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedNumber, FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
-import subMonths from 'date-fns/sub_months'
 import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import _isFinite from 'lodash/isFinite'
@@ -26,18 +25,9 @@ const DEFAULT_TOP_LEADER_COUNT = 4;
 const INITIAL_MONTHS_PAST = 1;
 
 export class Leaderboard extends Component {
-  state = {
-    monthsPast: INITIAL_MONTHS_PAST,
-  }
-
   topLeaderCount = () => _isFinite(this.props.topLeaderCount) ?
                          this.props.topLeaderCount :
                          DEFAULT_TOP_LEADER_COUNT
-
-  selectDateRange = monthsPast => {
-    this.setState({monthsPast})
-    this.props.setLeaderboardStartDate(subMonths(new Date(), monthsPast))
-  }
 
   leaderGroup = (leaders, offset, withRibbon=false) => {
     return _map(leaders, (leader, index) => {
@@ -108,24 +98,26 @@ export class Leaderboard extends Component {
       <div className={classNames("leaderboard", {"leaderboard--compact-view": this.props.compactView})}>
         <div className="leaderboard__obstruct-footer-icon" />
         <div className="leaderboard__board">
-          <div className="leaderboard__board__header">
-            <h1 className="title">
+          {!this.props.suppressHeader &&
+           <div className="leaderboard__board__header">
+             <h1 className="title">
               <FormattedMessage {...messages.leaderboardTitle} />
               <PastDurationSelector className="leaderboard__board__header__dates-control"
                                     pastMonthsOptions={[1, 3, 6, 12]}
-                                    currentMonthsPast={this.state.monthsPast}
-                                    selectDuration={this.selectDateRange} />
-            </h1>
+                                    currentMonthsPast={this.props.monthsPast}
+                                    selectDuration={this.props.setMonthsPast} />
+             </h1>
 
-            <div className="leaderboard__board__header__point-breakdown">
-              <SvgSymbol sym="trophy-icon" viewBox="0 0 20 20" />
-              <DeactivatableDropdown isRight
-                                     label={this.props.intl.formatMessage(messages.scoringMethodLabel)}>
-                <MarkdownContent markdown={this.props.intl.formatMessage(messages.scoringExplanation)}
-                                 className="leaderboard__board__header__point-breakdown__explanation" />
-              </DeactivatableDropdown>
-            </div>
-          </div>
+             <div className="leaderboard__board__header__point-breakdown">
+               <SvgSymbol sym="trophy-icon" viewBox="0 0 20 20" />
+               <DeactivatableDropdown isRight
+                                      label={this.props.intl.formatMessage(messages.scoringMethodLabel)}>
+                 <MarkdownContent markdown={this.props.intl.formatMessage(messages.scoringExplanation)}
+                                  className="leaderboard__board__header__point-breakdown__explanation" />
+               </DeactivatableDropdown>
+             </div>
+           </div>
+          }
 
           {this.props.leaderboard.length === 0 &&
            <div className="leaderboard__board__no-leaders">
@@ -165,5 +157,4 @@ Leaderboard.propTypes = {
   compactView: PropTypes.bool,
 }
 
-export default WithLeaderboard(injectIntl(Leaderboard),
-                               subMonths(new Date(), INITIAL_MONTHS_PAST))
+export default WithLeaderboard(injectIntl(Leaderboard), INITIAL_MONTHS_PAST)

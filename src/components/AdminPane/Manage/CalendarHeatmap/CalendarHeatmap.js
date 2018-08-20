@@ -49,9 +49,11 @@ export default class CalendarHeatmap extends Component {
       <div className={classNames("calendar-heatmap",
                                  {vertical: this.props.vertical,
                                   "high-contrast": this.props.highContrast})}>
-        <p className="subheading">
-          <FormattedMessage {...messages.heading} />
-        </p>
+        {!this.props.suppressHeading &&
+         <p className="subheading">
+           <FormattedMessage {...messages.heading} />
+         </p>
+        }
         <Calendar horizontal={!this.props.vertical}
                   startDate={subMonths(new Date(), this.props.months)}
                   endDate={new Date()}

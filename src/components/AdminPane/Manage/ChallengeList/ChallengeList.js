@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
-import _compact from 'lodash/compact'
-import { Link } from 'react-router-dom'
+import _sortBy from 'lodash/sortBy'
 import AsManager from '../../../../interactions/User/AsManager'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import ChallengeCard from '../ChallengeCard/ChallengeCard'
 import messages from './Messages'
 import './ChallengeList.css'
 
@@ -22,39 +19,24 @@ export default class ChallengeList extends Component {
   render() {
     const manager = AsManager(this.props.user)
 
-    const challengeItems = _compact(_map(this.props.challenges, challenge => {
-      if (challenge.deleted) {
-        return null
-      }
-
-      const projectId = _get(challenge, 'parent.id', challenge.parent)
-
-      return (
-        <div className='item-entry' key={challenge.id}>
-          <div className='columns challenge-list-item'>
-            <div className='column is-narrow item-visibility'>
-              <SvgSymbol className={classNames('icon', {enabled: challenge.enabled})}
-                         viewBox='0 0 20 20'
-                         sym={challenge.enabled ? 'visible-icon' : 'hidden-icon'} />
-            </div>
-
-            <div className='column challenge-name'>
-              <Link to={`/admin/project/${projectId}/challenge/${challenge.id}`}>
-                {challenge.name}
-              </Link>
-            </div>
-          </div>
-        </div>
-      )
-    }))
+    // Show pinned challenges first
+    const challengeCards = _sortBy(
+      _map(this.props.challenges, challenge => (
+        <ChallengeCard {...this.props}
+                       key={challenge.id}
+                       challenge={challenge}
+                       isPinned={this.props.pinnedChallenges.indexOf(challenge.id) !== -1} />
+      )),
+      challengeCard => !challengeCard.props.isPinned
+    )
 
     return (
       <div className='admin__manage__managed-item-list challenge-list'>
-        {!this.props.loadingChallenges && challengeItems.length === 0 ?
+        {!this.props.loadingChallenges && challengeCards.length === 0 ?
          <div className="challenge-list__no-results">
            <FormattedMessage {...messages.noChallenges} />
          </div> :
-         challengeItems
+         challengeCards
         }
 
         {!this.props.suppressControls && manager.canWriteProject(this.props.project) &&

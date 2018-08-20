@@ -1,14 +1,19 @@
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
+import _debounce from 'lodash/debounce'
 import { logoutUser,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,
          updateUserSettings,
+         updateUserAppSetting,
          fetchTopChallenges,
          resetAPIKey,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../interactions/User/AsEndUser'
+
+const APP_ID = "mr3Frontend"
 
 /**
  * WithCurrentUser passes down the current user from the redux store.  If the
@@ -42,30 +47,26 @@ export const mapStateToProps = state => {
 }
 
 export const mapDispatchToProps = dispatch => {
-  return {
-    logoutUser: () => dispatch(logoutUser()),
+  const actions = bindActionCreators({
+    logoutUser,
+    saveChallenge,
+    unsaveChallenge,
+    saveTask,
+    unsaveTask,
+    updateUserSettings,
+    fetchTopChallenges,
+    resetAPIKey,
+  }, dispatch)
 
-    saveChallenge: (userId, challengeId) =>
-      dispatch(saveChallenge(userId, challengeId)),
+  actions.updateUserAppSetting = _debounce((userId, setting) => {
+    return dispatch(updateUserAppSetting(userId, APP_ID, setting))
+  }, 100)
 
-    unsaveChallenge: (userId, challengeId) =>
-      dispatch(unsaveChallenge(userId, challengeId)),
-
-    saveTask: (userId, taskId) =>
-      dispatch(saveTask(userId, taskId)),
-
-    unsaveTask: (userId, taskId) =>
-      dispatch(unsaveTask(userId, taskId)),
-
-    updateUserSettings: (userId, settings) =>
-      dispatch(updateUserSettings(userId, settings)),
-
-    fetchUserTopChallenges: (userId, startDate) =>
-      dispatch(fetchTopChallenges(userId, startDate)),
-
-    resetAPIKey: userId =>
-      dispatch(resetAPIKey(userId)),
+  actions.getUserAppSetting = (user, settingName) => {
+    return _get(user, `properties.${APP_ID}.settings.${settingName}`)
   }
+
+  return actions
 }
 
 export default WithCurrentUser

@@ -161,7 +161,7 @@ export const saveProject = function(projectData) {
 
       // If we just created the project, add the owner as an admin.
       if (areCreating && project) {
-        return setProjectManagerPermissions(
+        return setProjectManagerGroupType(
           project.id, project.owner, GroupType.admin
         )(dispatch).then(() => project)
       }
@@ -256,7 +256,7 @@ export const fetchProjectManagers = function(projectId) {
 /**
  * Set group type (permissions) for user on project.
  */
-export const setProjectManagerPermissions = function(projectId, userId, groupType) {
+export const setProjectManagerGroupType = function(projectId, userId, groupType) {
   return function(dispatch) {
     return new Endpoint(
       api.project.setManagerPermission, {variables: {userId, projectId, groupType}}
@@ -296,7 +296,7 @@ export const addProjectManager = function(projectId, username, groupType) {
         _get(_find(matchingUsers, match => match.displayName === username), 'osmId')
 
       if (_isFinite(osmId)) {
-        return setProjectManagerPermissions(projectId, osmId, groupType)(dispatch)
+        return setProjectManagerGroupType(projectId, osmId, groupType)(dispatch)
       }
       else {
         dispatch(addError(AppErrors.user.notFound))

@@ -8,6 +8,25 @@ export default function () {
   return (
     <div className="sprites">
       <svg xmlns="http://www.w3.org/2000/svg" hidden>
+        <symbol id="cog-icon" viewBox="0 0 20 20">
+          <path d="M3.94 6.5L2.22 3.64l1.42-1.42L6.5 3.94c.52-.3 1.1-.54 1.7-.7L9 0h2l.8 3.24c.6.16 1.18.4 1.7.7l2.86-1.72 1.42 1.42-1.72 2.86c.3.52.54 1.1.7 1.7L20 9v2l-3.24.8c-.16.6-.4 1.18-.7 1.7l1.72 2.86-1.42 1.42-2.86-1.72c-.52.3-1.1.54-1.7.7L11 20H9l-.8-3.24c-.6-.16-1.18-.4-1.7-.7l-2.86 1.72-1.42-1.42 1.72-2.86c-.3-.52-.54-1.1-.7-1.7L0 11V9l3.24-.8c.16-.6.4-1.18.7-1.7zM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        </symbol>
+        <symbol id="error-icon" viewBox="0 0 20 20">
+          <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM9 5v6h2V5H9zm0 8v2h2v-2H9z"/>
+        </symbol>
+        <symbol id="dashboard-add-icon" viewBox="0 0 20 20">
+          <path d="M9 10V8h2v2h2v2h-2v2H9v-2H7v-2h2zM0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2z"/>
+        </symbol>
+        <symbol id="list-icon" viewBox="0 0 20 20">
+          <path d="M0 3h20v2H0V3zm0 4h20v2H0V7zm0 4h20v2H0v-2zm0 4h20v2H0v-2z"/>
+        </symbol>
+        <symbol id="cards-icon" viewBox="0 0 20 20">
+          <path d="M0 0h9v9H0V0zm2 2v5h5V2H2zm-2 9h9v9H0v-9zm2 2v5h5v-5H2zm9-13h9v9h-9V0zm2 2v5h5V2h-5zm-2 9h9v9h-9v-9zm2 2v5h5v-5h-5z"/>
+        </symbol>
+        <symbol id="mixed-icon" viewBox="0 0 20 20">
+          <path d="M0,0 L9,0 L9,9 L0,9 L0,0 Z M2,2 L2,7 L7,7 L7,2 L2,2 Z M11,0 L20,0 L20,9 L11,9 L11,0 Z M13,2 L13,7 L18,7 L18,2 L13,2 Z"/>
+          <path d="M0,0 L20,0 L20,2 L0,2 L0,0 Z M0,4 L20,4 L20,6 L0,6 L0,4 Z" transform="translate(0 14)"/>
+        </symbol>
         <symbol id="target-icon" viewBox="0 0 20 20">
           <path d="M17.94 11H13V9h4.94A8 8 0 0 0 11 2.06V7H9V2.06A8 8 0 0 0 2.06 9H7v2H2.06A8 8 0 0 0 9 17.94V13h2v4.94A8 8 0 0 0 17.94 11zM10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/>
         </symbol>

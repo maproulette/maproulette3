@@ -63,6 +63,7 @@ test("currentPreferences merges preferences to an existing preference set", () =
   const reduced = currentPreferences(state, action)
 
   expect(reduced[CHALLENGES_PREFERENCE_GROUP][challengeId].foo).toEqual("bar")
+  expect(reduced[CHALLENGES_PREFERENCE_GROUP][challengeId].minimize).toBe(true)
 })
 
 test("removePreferences can remove an individual preference setting", () => {

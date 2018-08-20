@@ -3,8 +3,8 @@ import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
-import { fetchLeaderboard }
-       from '../../../services/Leaderboard/Leaderboard'
+import subMonths from 'date-fns/sub_months'
+import { fetchLeaderboard } from '../../../services/Leaderboard/Leaderboard'
 
 /**
  * WithLeaderboard provides leaderboard and leaderboardLoading props containing
@@ -12,10 +12,10 @@ import { fetchLeaderboard }
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithLeaderboard = function(WrappedComponent, initialStartDate) {
+const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
   return class extends Component {
     state = {
-      startDate: initialStartDate,
+      monthsPast: initialMonthsPast,
       leaderboard: null,
       leaderboardLoading: false,
     }
@@ -49,21 +49,33 @@ const WithLeaderboard = function(WrappedComponent, initialStartDate) {
       })
     }
 
-    setLeaderboardStartDate = startDate => {
-      if (startDate !== this.state.startDate) {
-        this.setState({startDate})
-        this.updateLeaderboard(startDate)
+    monthsPastStartDate = monthsPast => subMonths(new Date(), monthsPast)
+
+    setMonthsPast = monthsPast => {
+      if (monthsPast !== this.state.monthsPast) {
+        this.setState({monthsPast})
+        this.updateLeaderboard(this.monthsPastStartDate(monthsPast))
       }
     }
 
     componentDidMount() {
-      this.updateLeaderboard(this.state.startDate)
+      this.updateLeaderboard(this.monthsPastStartDate(this.props.monthsPast ||
+                                                      this.state.monthsPast))
+    }
+
+    componentDidUpdate(prevProps) {
+      // A change to state will also fetch leaderboard data, so we only need to
+      // worry about fetching if we're controlled and props change.
+      if (this.props.monthsPast !== prevProps.monthsPast) {
+        this.updateLeaderboard(this.monthsPastStartDate(this.props.monthsPast))
+      }
     }
 
     render() {
       return <WrappedComponent leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
-                               setLeaderboardStartDate={this.setLeaderboardStartDate}
+                               monthsPast={this.state.monthsPast}
+                               setMonthsPast={this.setMonthsPast}
                                {...this.props} />
     }
   }

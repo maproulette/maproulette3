@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
+import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _each from 'lodash/each'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
-import _omit from 'lodash/omit'
 
 /**
  * WithComputedMetrics computes aggregated metrics for most of the task
@@ -22,9 +22,9 @@ export default function(WrappedComponent) {
       _fromPairs(_map(metrics, (value, label) => [label, 1.0 * value / total]))
 
     render() {
-      const challenges = _isArray(this.props.challenges) ?
+      const challenges = _isArray(this.props.challenges) && this.props.challenges.length > 0 ?
                           this.props.challenges :
-                          [this.props.challenge]
+                          _isObject(this.props.challenge) ? [this.props.challenge] : []
 
       let totalChallenges = 0
       const taskMetrics = {}
@@ -55,9 +55,10 @@ export default function(WrappedComponent) {
           this.computeAverages(taskMetrics.percentages, totalChallenges)
       }
 
-      return <WrappedComponent totalChallenges={totalChallenges}
-                               taskMetrics={taskMetrics}
-                               {..._omit(this.props, ['totalChallenges', 'taskMetrics'])} />
+      return <WrappedComponent {...this.props}
+                               challenges={challenges}
+                               totalChallenges={totalChallenges}
+                               taskMetrics={taskMetrics} />
     }
   }
 

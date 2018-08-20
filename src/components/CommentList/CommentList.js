@@ -40,10 +40,10 @@ export default class CommentList extends Component {
       !_isObject(comment) ? null : (
         <li key={comment.id} className="comment-list__comment">
           <div className="comment-list__comment__header">
-            <div className="comment-list__comment--author">
+            <div className="comment-list__comment__author">
               {comment.osm_username}
             </div>
-            <div className="comment-list__comment--published-at">
+            <div className="comment-list__comment__published-at">
               <span className="time-part">
                 <FormattedTime value={commentDates.get(comment.id)}
                                hour='2-digit'
@@ -60,17 +60,23 @@ export default class CommentList extends Component {
           </div>
 
           <div className="with-triangle-border">
-            <MarkdownContent className="comment-list__comment--content"
+            <MarkdownContent className="comment-list__comment__content"
                              markdown={comment.comment} />
           </div>
 
-          {this.props.includeTaskLinks &&
-           <div className="comment-list__comment--task-link">
-             <Link to={`/challenge/${comment.challengeId}/task/${comment.taskId}`}>
-               <FormattedMessage {...messages.viewTaskLabel} />
-             </Link>
-           </div>
-          }
+          <div className="comment-list__comment__meta">
+            <div className="comment-list__comment__challenge-name">
+              {this.props.includeChallengeNames && comment.challengeName}
+            </div>
+
+            {this.props.includeTaskLinks &&
+             <div className="comment-list__comment__task-link">
+               <Link to={`/challenge/${comment.challengeId}/task/${comment.taskId}`}>
+                 <FormattedMessage {...messages.viewTaskLabel} />
+               </Link>
+             </div>
+            }
+          </div>
         </li>
       )
     )
