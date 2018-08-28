@@ -93,7 +93,10 @@ export default defineMessages({
       "a task is loaded, and is the primary piece of information for the mapper " +
       "about how to solve the task, so think about this field carefully. You can " +
       "include links to the OSM wiki or any other hyperlink if you want, because " +
-      "this field supports Markdown. This field is required.",
+      "this field supports Markdown. You can also reference feature properties " +
+      "from your GeoJSON with simple mustache tags: e.g. `\\{\\{address\\}\\}` would be " +
+      "replaced with the value of the `address` property, allowing for basic " +
+      "customization of instructions for each task. This field is required.",
   },
 
   checkinCommentLabel: {
