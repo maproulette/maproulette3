@@ -35,6 +35,44 @@ describe("hasGeometries", () => {
   })
 })
 
+describe("allFeatureProperties", () => {
+  test("returns empty array if there are no features", () => {
+    task.geometries = {"type": "FeatureCollection", features: null}
+    const wrappedTask = AsMappableTask(task)
+
+    expect(wrappedTask.allFeatureProperties()).toHaveLength(0)
+  })
+
+  test("returns an object containing the task's feature properties", () => {
+    task.geometries = {"type": "FeatureCollection", features: [{
+      properties: {
+        foo: "abc",
+        bar: "def",
+      },
+    }, {
+      properties: {
+        baz: "ghi",
+      }
+    }]}
+
+    const wrappedTask = AsMappableTask(task)
+    expect(wrappedTask.allFeatureProperties()).toEqual({
+      foo: "abc",
+      bar: "def",
+      baz: "ghi",
+    })
+  })
+
+  test("later feature properties overwrite earlier ones with same name", () => {
+    task.geometries = {"type": "FeatureCollection", features: [
+      { properties: { foo: "abc" } }, { properties: { foo: "xyz" } }
+    ]}
+
+    const wrappedTask = AsMappableTask(task)
+    expect(wrappedTask.allFeatureProperties()).toEqual({ foo: "xyz" })
+  })
+})
+
 describe("calculateCenterPoint()", () => {
   test("the task's location is returned as (Lat,Lng)", () => {
     task.location = {
