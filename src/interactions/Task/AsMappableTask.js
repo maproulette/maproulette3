@@ -14,6 +14,10 @@ export class AsMappableTask {
     Object.assign(this, task)
   }
 
+  /**
+   * Determines if this task contains geometries with features and returns
+   * true if so, false if not.
+   */
   hasGeometries() {
     if (!_isObject(this.geometries)) {
       return false
@@ -29,6 +33,32 @@ export class AsMappableTask {
     return true
   }
 
+  /**
+   * Generates a single object containing all feature properties found in the
+   * task's geometries. Later properties will overwrite earlier properties with
+   * the same name.
+   */
+  allFeatureProperties() {
+    if (!this.hasGeometries()) {
+      return []
+    }
+
+    let allProperties = {}
+
+    this.geometries.features.forEach(feature => {
+      if (feature && feature.properties) {
+        allProperties = Object.assign(allProperties, feature.properties)
+      }
+    })
+
+    return allProperties
+  }
+
+  /**
+   * Returns the task centerpoint as a leaflet LatLng object, calculating it if
+   * necessary (and possible). If the centerpoint can't be determined it will
+   * default to (0, 0).
+   */
   calculateCenterPoint() {
     let centerPoint = _get(this, 'location.coordinates')
 
@@ -48,6 +78,9 @@ export class AsMappableTask {
     return latLng(centerPoint[1], centerPoint[0])
   }
 
+  /**
+   * Calculates and returns the bounding box of the task.
+   */
   calculateBBox() {
     if (this.hasGeometries()) {
       return bbox(this.geometries)
