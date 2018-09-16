@@ -16,6 +16,7 @@ import ReviewTaskControls from './ReviewTaskControls/ReviewTaskControls'
 import CommentList from '../../CommentList/CommentList'
 import CommentCountBadge from '../../CommentList/CommentCountBadge/CommentCountBadge'
 import PlaceDescription from '../PlaceDescription/PlaceDescription'
+import TaskLatLon from '../TaskLatLon/TaskLatLon'
 import ChallengeShareControls from '../ChallengeShareControls/ChallengeShareControls'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import VirtualChallengeNameLink from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
@@ -251,7 +252,10 @@ export class ActiveTaskDetails extends Component {
                   </div>
 
                   <PlaceDescription place={this.props.task.place}
-                                    className="active-task-details--place active-task-details--bordered"/>
+                                    className="active-task-details--place"/>
+
+                  <TaskLatLon task={this.props.task}
+                              className="active-task-details__lat-lon active-task-details--bordered" />
                 </div>
               </Delayed>
             }

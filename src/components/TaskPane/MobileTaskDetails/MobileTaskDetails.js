@@ -12,6 +12,7 @@ import ChallengeInfoSummary
        from '../ChallengeInfoSummary/ChallengeInfoSummary'
 import TaskLocationMap from '../TaskLocationMap/TaskLocationMap'
 import PlaceDescription from '../PlaceDescription/PlaceDescription'
+import TaskLatLon from '../TaskLatLon/TaskLatLon'
 import TaskInstructions from '../TaskInstructions/TaskInstructions'
 import TaskTrackControls from '../TaskTrackControls/TaskTrackControls'
 import TaskRandomnessControl
@@ -39,6 +40,7 @@ export default class MobileTaskDetails extends Component {
         <ChallengeInfoSummary {...props} />
         <TaskLocationMap key={this.props.task.id} {...this.props} />
         <PlaceDescription place={this.props.task.place} />
+        <TaskLatLon task={this.props.task} />
         <div className="mobile-task-details__info__description">
           <MarkdownContent markdown={this.props.task.parent.description ||
                                     this.props.task.parent.blurb} />
