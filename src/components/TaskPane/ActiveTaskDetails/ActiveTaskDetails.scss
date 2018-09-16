@@ -230,6 +230,11 @@
     margin-top: 1em;
   }
 
+  &__lat-lon {
+    font-size: $size-8;
+    margin-top: 0.5em;
+  }
+
   &--progress {
     .challenge-task-progress {
       margin-bottom: 0;

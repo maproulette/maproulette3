@@ -1,0 +1,23 @@
+@import 'variables.scss';
+
+.task-lat-lon {
+
+  &__label {
+    margin-right: 0.5em;
+  }
+
+  button.button.task-lat-lon__copy-button {
+    height: 1em;
+    margin-left: 0.5em;
+
+    svg {
+      fill: $green;
+    }
+
+    &:hover {
+      svg {
+        fill: $black;
+      }
+    }
+  }
+}

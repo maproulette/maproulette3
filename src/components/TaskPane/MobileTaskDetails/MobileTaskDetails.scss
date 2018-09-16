@@ -70,6 +70,11 @@
       margin-top: 1em;
     }
 
+    .task-lat-lon {
+      font-size: $size-8;
+      margin-top: 0.5em;
+    }
+
     &__description {
       margin-top: 20px;
       @include constrained-text-content();
