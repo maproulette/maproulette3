@@ -38,7 +38,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Connect(Connect(Component)))
+        <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
           layerSourceId="foo"
           mapBounds={
                     Object {
@@ -205,7 +205,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Connect(Connect(Component)))
+          <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
             layerSourceId="foo"
             mapBounds={
                         Object {

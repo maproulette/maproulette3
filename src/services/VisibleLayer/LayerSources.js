@@ -1,100 +1,105 @@
+import PropTypes from 'prop-types'
+import QueryString from 'query-string'
 import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
+import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
-import PropTypes from 'prop-types'
-import { ChallengeBasemap, BasemapLayerSources }
+import { ChallengeBasemap, basemapLayerSources }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
-import messages from './Messages'
+import defaultLayers from '../../defaultLayers.json'
+import extraLayers from '../../extraLayers.json'
 
 export const layerSourceShape = PropTypes.shape({
   /** Unique id for layer */
-  layerId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  /** The type of layer (tms, wms, bing, etc) */
+  type: PropTypes.oneOf(['tms', 'wms', 'bing']),
   /** Human-readable name of layer formatted as react-intl message */
-  name: PropTypes.object,
-  /** Tile server URL. Supports substitutions: {x}, {y}, {z}, {accessToken} */
+  name: PropTypes.string,
+  /** Description of the layer */
+  description: PropTypes.string,
+  /** Tile server URL */
   url: PropTypes.string.isRequired,
   /** Human-readable attribution of layer formatted as react-intl message */
-  attribution: PropTypes.object,
+  attribution: PropTypes.shape({
+    /** True if attribution is required */
+    required: PropTypes.bool,
+    /** The attribution text to show */
+    text: PropTypes.string,
+    /** The URL to which the attribution text should link */
+    url: PropTypes.string,
+  }),
+  /** The maximum zoom supported by the layer */
+  max_zoom: PropTypes.number,
   /** Width/height of tiles */
   tileSize: PropTypes.number,
-  /**
-   * Set to true to adjust non-retina tiles for retina displays. tileSize may
-   * also need to be adjusted.
-   *
-   * @see See https://leafletjs.com/reference-1.0.3.html#tilelayer-detectretina
-   */
-  detectRetina: PropTypes.bool,
-  /** Access token for substitution in tile server url */
-  accessToken: PropTypes.string,
-  /** Set to true to mark as the default layer */
+  /** Set to true to mark as a default layer */
   default: PropTypes.bool,
-  /** Set to false if layer should not be offered to users for selection */
-  isSelectable: PropTypes.bool,
   /** Set to true for dynamically-created layers, such as custom basemaps */
   isDynamic: PropTypes.bool,
 })
 
-export const OPEN_STREET_MAP = 'OpenStreetMap'
-export const OPEN_CYCLE_MAP = 'OpenCycleMap'
+export const OPEN_STREET_MAP = 'MAPNIK'
+export const OPEN_CYCLE_MAP = 'tf-cycle'
 export const BING = 'Bing'
 export const MAPBOX_STREETS = 'Mapbox'
 export const MAPBOX_LIGHT = 'MapboxLight'
 export const MAPBOX_SATELLITE_STREETS = 'MapboxSatellite'
 
-/** Array of available layer sources */
-export const LayerSources = [{
-    layerId: OPEN_STREET_MAP,
-    name: messages.openStreetMapName,
-    url: process.env.REACT_APP_OPEN_STREET_MAP_TILESERVER_URL,
-    attribution: messages.openStreetMapAttribution,
-  }, {
-    layerId: OPEN_CYCLE_MAP,
-    name: messages.openCycleMapName,
-    url: process.env.REACT_APP_OPEN_CYCLE_MAP_TILESERVER_URL,
-    accessToken: process.env.REACT_APP_THUNDERFOREST_ACCESS_TOKEN,
-    attribution: messages.openCycleMapAttribution,
-  }, {
-    layerId: BING,
-    name: messages.bingName,
-    url: process.env.REACT_APP_BING_MAP_TILESERVER_URL,
-    attribution: messages.bingAttribution,
-  }]
+/**
+ * Array of available layer sources. Start with default layers from the [OSM
+ * Editor Layer Index](https://github.com/osmlab/editor-layer-index) and
+ * add/override based on local .env file settings.
+ */
+export const LayerSources = defaultLayers.concat(extraLayers)
 
-// If a Thunderforest api key has been provided, switch from the old
-// opencyclemap.org url to the new thunderforest.com url so that the
-// "API Key Required" overlay will be removed (and we get retina).
-if (!_isEmpty(process.env.REACT_APP_THUNDERFOREST_ACCESS_TOKEN)) {
-  _find(LayerSources, {layerId: OPEN_CYCLE_MAP}).url =
-    process.env.REACT_APP_THUNDERFOREST_TILESERVER_URL
+// Load any API keys from .env file
+let layerAPIKeys = {}
+if (_get(process.env, 'REACT_APP_MAP_LAYER_API_KEYS', '').length > 0) {
+  try {
+    layerAPIKeys = JSON.parse(process.env.REACT_APP_MAP_LAYER_API_KEYS)
+  }
+  catch(e) {
+    console.log("Failed to parse map layer API keys. Ignoring.")
+    console.log(e)
+  }
 }
 
-// If a Mapbox access/api token has been provided, then add Mapbox layer
-// sources.
-if (!_isEmpty(process.env.REACT_APP_MAPBOX_ACCESS_TOKEN)) {
-  LayerSources.push({
-    layerId: MAPBOX_STREETS,
-    name: messages.mapboxStreetsName,
-    url: process.env.REACT_APP_MAPBOX_STREETS_MAP_TILESERVER_URL,
-    accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-    attribution: messages.mapboxAttribution,
-    default: true,
-  })
+export const normalizeBingLayer = function(layer) {
+  const normalizedLayer = Object.assign({}, layer)
+  normalizedLayer.url = process.env.REACT_APP_BING_MAP_TILESERVER_URL
+  normalizedLayer.maxZoom = normalizedLayer.max_zoom
 
-  LayerSources.push({
-    layerId: MAPBOX_SATELLITE_STREETS,
-    name: messages.mapboxSatelliteName,
-    url: process.env.REACT_APP_MAPBOX_SATELLITE_STREETS_MAP_TILESERVER_URL,
-    accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-    attribution: messages.mapboxAttribution,
-  })
+  return normalizedLayer
+}
 
-  LayerSources.push({
-    layerId: MAPBOX_LIGHT,
-    name: messages.mapboxLightName,
-    url: process.env.REACT_APP_MAPBOX_LIGHT_MAP_TILESERVER_URL,
-    accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
-    attribution: messages.mapboxAttribution,
-  })
+export const normalizeTMSLayer = function(layer) {
+  const normalizedLayer = Object.assign({}, layer)
+  normalizedLayer.subdomains = (normalizedLayer.url.match(/{switch:(.*?)}/) || ['',''])[1].split(',')
+  normalizedLayer.url = normalizedLayer.url.replace(/{switch:(.*?)}/, '{s}')
+  normalizedLayer.url = normalizedLayer.url.replace('{zoom}', '{z}')
+  normalizedLayer.maxZoom = normalizedLayer.max_zoom
+
+  // If an API key has been specified in .env file, add it into layer url
+  const apiKey = layerAPIKeys[normalizedLayer.id]
+  if (apiKey) {
+    const urlComponents = QueryString.parseUrl(normalizedLayer.url)
+    urlComponents.query[apiKey.name] = apiKey.value
+    normalizedLayer.url = urlComponents.url + '?' + QueryString.stringify(urlComponents.query)
+  }
+
+  return normalizedLayer
+}
+
+export const normalizeLayer = function(layer) {
+  switch(layer.type) {
+    case 'bing':
+      return normalizeBingLayer(layer)
+    case 'tms':
+      return normalizeTMSLayer(layer)
+    default:
+      return layer
+  }
 }
 
 /**
@@ -102,7 +107,7 @@ if (!_isEmpty(process.env.REACT_APP_MAPBOX_ACCESS_TOKEN)) {
  * has been specified.
  */
 export const defaultLayerSource = function() {
-  const configuredDefault = _find(LayerSources, {default: true})
+  const configuredDefault = _find(LayerSources, {id: process.env.REACT_APP_DEFAULT_MAP_LAYER_ID})
   return configuredDefault ? configuredDefault : LayerSources[0]
 }
 
@@ -110,8 +115,8 @@ export const defaultLayerSource = function() {
  * Retrieves the (static) layer source with a matching id. Dynamic layer
  * sources are not searched.
  */
-export const layerSourceWithId = function(layerId) {
-  return _find(LayerSources, {layerId})
+export const layerSourceWithId = function(id) {
+  return _find(LayerSources, {id})
 }
 
 /**
@@ -120,10 +125,9 @@ export const layerSourceWithId = function(layerId) {
  */
 export const createDynamicLayerSource = function(layerId, url) {
   return {
-    layerId,
-    name: messages.customName,
+    id: layerId,
+    name: 'Custom',
     url,
-    isSelectable: false,
     isDynamic: true,
   }
 }
@@ -135,7 +139,7 @@ export const createDynamicLayerSource = function(layerId, url) {
 export const basemapLayerSource = function(basemapSetting, customBasemap, layerId) {
   if (_isFinite(basemapSetting) && basemapSetting !== ChallengeBasemap.none) {
     if (basemapSetting !== ChallengeBasemap.custom) {
-      return layerSourceWithId(BasemapLayerSources[basemapSetting])
+      return layerSourceWithId(basemapLayerSources()[basemapSetting])
     }
     else if (!_isEmpty(customBasemap)) {
       return createDynamicLayerSource(layerId, customBasemap)

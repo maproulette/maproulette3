@@ -8,8 +8,7 @@ import { BING,
          basemapLayerSource,
          defaultLayerSource } from '../../../services/VisibleLayer/LayerSources'
 import { changeVisibleLayer } from '../../../services/VisibleLayer/VisibleLayer'
-import { ChallengeBasemap,
-         ChallengeBasemapLayerSources }
+import { ChallengeBasemap }
          from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 
 jest.mock('../../../services/VisibleLayer/LayerSources')
@@ -27,19 +26,19 @@ let barLayer = null
 
 beforeEach(() => {
   defaultLayerInstance = {
-    layerId: "DefaultLayer",
+    id: "DefaultLayer",
   }
 
   fooLayer = {
-    layerId: "FooLayer",
+    id: "FooLayer",
   }
 
   barLayer = {
-    layerId: "BarLayer",
+    id: "BarLayer",
   }
 
   globalLayer = {
-    layerId: "GlobalLayer",
+    id: "GlobalLayer",
   }
 
   challenge = {
@@ -58,7 +57,7 @@ beforeEach(() => {
     visibleLayer: globalLayer,
   }
 
-  layerSourceWithId.mockImplementation(layerId => ({layerId}))
+  layerSourceWithId.mockImplementation(layerId => ({id: layerId}))
   defaultLayerSource.mockImplementation(() => defaultLayerInstance)
 })
 
@@ -70,25 +69,25 @@ describe("mapStateToProps", () => {
   })
 
   test("maps the challenge default basemap if no challenge layer set", () => {
-    basemapLayerSource.mockReturnValueOnce({layerId: BING})
+    basemapLayerSource.mockReturnValueOnce({id: BING})
     const mappedProps = mapStateToProps(basicState, {user, challenge})
-    expect(mappedProps.source).toEqual({layerId: BING})
+    expect(mappedProps.source).toEqual({id: BING})
   })
 
   test("maps the user's default basemap if no challenge layers available", () => {
     delete challenge.defaultBasemap
-    basemapLayerSource.mockReturnValueOnce({layerId: OPEN_STREET_MAP})
+    basemapLayerSource.mockReturnValueOnce({id: OPEN_STREET_MAP})
 
     const mappedProps = mapStateToProps(basicState, {user, challenge, defaultLayer: "BarLayer"})
-    expect(mappedProps.source).toEqual({layerId: OPEN_STREET_MAP})
+    expect(mappedProps.source).toEqual({id: OPEN_STREET_MAP})
   })
 
   test("ignores challenge basemap set to none", () => {
     challenge.defaultBasemap = ChallengeBasemap.none
-    basemapLayerSource.mockReturnValueOnce({layerId: OPEN_STREET_MAP})
+    basemapLayerSource.mockReturnValueOnce({id: OPEN_STREET_MAP})
 
     const mappedProps = mapStateToProps(basicState, {user, challenge, defaultLayer: "BarLayer"})
-    expect(mappedProps.source).toEqual({layerId: OPEN_STREET_MAP})
+    expect(mappedProps.source).toEqual({id: OPEN_STREET_MAP})
   })
 
   test("uses a given defaultLayer if no user or challenge default", () => {
@@ -147,10 +146,10 @@ describe("mapStateToProps", () => {
 
   test("maps the user basemap if no global layer when no challenge given", () => {
     delete basicState.visibleLayer
-    basemapLayerSource.mockReturnValueOnce({layerId: OPEN_STREET_MAP})
+    basemapLayerSource.mockReturnValueOnce({id: OPEN_STREET_MAP})
 
     const mappedProps = mapStateToProps(basicState, {user})
-    expect(mappedProps.source).toEqual({layerId: OPEN_STREET_MAP})
+    expect(mappedProps.source).toEqual({id: OPEN_STREET_MAP})
   })
 
   test("maps the LayerSources default layer if nothing else available", () => {

@@ -19,13 +19,13 @@ import './LayerToggle.css'
  */
 export class LayerToggle extends Component {
   render() {
-    const layerButtons = _map(this.props.layerSources, (layer) => (
+    const layerButtons = _map(this.props.layerSources, layer => (
       <a className={classNames('dropdown-item',
-                               {'is-active': this.props.source.layerId === layer.layerId})}
-         key={layer.layerId}
-         onClick={() => this.props.changeLayer(layer.layerId)}
+                               {'is-active': this.props.source.id === layer.id})}
+         key={layer.id}
+         onClick={() => this.props.changeLayer(layer.id)}
       >
-        <FormattedMessage {...layer.name} />
+        {layer.name}
       </a>
     ))
 

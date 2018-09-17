@@ -55,6 +55,24 @@ export const defaultLayer = ownProps => {
   return layer ? layer : defaultLayerSource()
 }
 
+/**
+ * Attempts to find and return a dynamic layer matching the given layerId.
+ * If no matching dynamic layers are found, null is returned.
+ */
+export const dynamicLayerWithId = (layerId, ownProps) => {
+  const challengeLayer = AsMappableChallenge(ownProps.challenge).defaultLayerSource()
+  if (challengeLayer && challengeLayer.id === layerId) {
+    return challengeLayer
+  }
+
+  const userLayer = AsMappingUser(ownProps.user).defaultLayerSource()
+  if (userLayer && userLayer.id === layerId) {
+    return userLayer
+  }
+
+  return null
+}
+
 export const mapStateToProps = (state, ownProps) => {
   const challengeId = _get(ownProps, 'challenge.id')
   let source = null
@@ -62,10 +80,20 @@ export const mapStateToProps = (state, ownProps) => {
   if (_isFinite(challengeId)) {
     if (_isString(ownProps.visibleMapLayer)) {
       source = layerSourceWithId(ownProps.visibleMapLayer)
+
+      if (!source) {
+        // Try a dynamic layer
+        source = dynamicLayerWithId(ownProps.visibleMapLayer, ownProps)
+      }
     }
   }
   else if (state.visibleLayer) {
-    source = state.visibleLayer
+    source = layerSourceWithId(state.visibleLayer.id)
+
+    if (!source) {
+      // Try a dynamic layer
+      source = dynamicLayerWithId(state.visibleLayer.id, ownProps)
+    }
   }
 
   return {

@@ -154,7 +154,7 @@ ChallengeMap.propTypes = {
   setChallengeMapBounds: PropTypes.func.isRequired,
   /** Invoked when the user clicks on an individual task marker */
   onTaskClick: PropTypes.func,
-  /** layerId of default layer to display */
+  /** id of default layer to display */
   layerSourceId: PropTypes.string,
 }
 

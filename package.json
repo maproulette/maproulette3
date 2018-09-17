@@ -28,7 +28,7 @@
     "normalizr": "^3.2.3",
     "piwik-react-router": "^0.12.1",
     "prop-types": "^15.6.0",
-    "query-string": "^4.3.4",
+    "query-string": "^6.1.0",
     "react": "16.3.2",
     "react-burger-menu": "^2.4.4",
     "react-calendar-heatmap": "^1.6.3",
@@ -67,15 +67,17 @@
     "node-sass-chokidar": "^0.0.3",
     "npm-run-all": "^4.1.1",
     "react-test-renderer": "^16.2.0",
-    "redux-mock-store": "^1.4.0"
+    "redux-mock-store": "^1.4.0",
+    "shelljs": "^0.8.2"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "build-intl": "yarn run combine-messages -i './src/**/*.js' -o './src/lang/en-US.json'",
+    "update-layers": "node update_layers.js",
     "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && yarn run build-intl && react-scripts build",
+    "start": "npm-run-all -p update-layers watch-css start-js",
+    "build": "npm run build-css && yarn run build-intl && yarn run update-layers && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "e2e": "yarn run chimp",
     "eject": "react-scripts eject"

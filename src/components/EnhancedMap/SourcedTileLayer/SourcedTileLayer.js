@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
 import _isEmpty from 'lodash/isEmpty'
-import { layerSourceShape } from '../../../services/VisibleLayer/LayerSources'
+import { layerSourceShape, normalizeLayer }
+       from '../../../services/VisibleLayer/LayerSources'
 
 /**
  * SourcedTileLayer renders a react-leaflet TileLayer from the current
@@ -15,15 +16,22 @@ import { layerSourceShape } from '../../../services/VisibleLayer/LayerSources'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class SourcedTileLayer extends Component {
-  render() {
-    const attribution =
-      this.props.skipAttribution || _isEmpty(this.props.source.attribution) ?
-      null :
-      this.props.intl.formatMessage(this.props.source.attribution)
+  attribution = layer => {
+    if (this.props.skipAttribution || _isEmpty(layer.attribution)) {
+      return null
+    }
 
-    return <TileLayer key={this.props.source.layerId}
-                      {...this.props.source}
-                      attribution={attribution}
+    return layer.attribution.url ?
+           `<a href="${layer.attribution.url}">${layer.attribution.text}</a>` :
+           layer.attribution.text
+  }
+
+  render() {
+    const normalizedLayer = normalizeLayer(this.props.source)
+
+    return <TileLayer key={normalizedLayer.id}
+                      {...normalizedLayer}
+                      attribution={this.attribution(normalizedLayer)}
                       {...this.props} />
   }
 }

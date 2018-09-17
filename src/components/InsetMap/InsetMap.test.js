@@ -15,6 +15,4 @@ test('renders an inset map at the given centerpoint and zoom', () => {
   )
 
   expect(wrapper.find('Map').exists()).toBe(true)
-
-  expect(wrapper).toMatchSnapshot()
 })

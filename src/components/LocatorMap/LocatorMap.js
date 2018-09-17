@@ -175,7 +175,7 @@ LocatorMap.propTypes = {
   mapBounds: PropTypes.object,
   /** Invoked when the user moves the locator map */
   setLocatorMapBounds: PropTypes.func.isRequired,
-  /** layerId of default layer to display */
+  /** id of default layer to display */
   layerSourceId: PropTypes.string,
   /** The currently enabled challenge filter, if any */
   challengeFilter: PropTypes.object,
