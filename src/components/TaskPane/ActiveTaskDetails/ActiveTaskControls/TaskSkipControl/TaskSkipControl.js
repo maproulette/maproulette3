@@ -45,9 +45,11 @@ export default class TaskSkipControl extends Component {
                                      "icon-only": this.props.isMinimized})}
               title={this.props.intl.formatMessage(messages.skipTooltip)}
               onClick={() => this.props.complete(TaskStatus.skipped)}>
-        <span className="control-icon">
-          <SvgSymbol viewBox='0 0 20 20' sym="skip-icon" />
-        </span>
+        {!this.props.suppressIcon &&
+         <span className="control-icon">
+           <SvgSymbol viewBox='0 0 20 20' sym="skip-icon" />
+         </span>
+        }
         <span className="control-label">
           <FormattedMessage {...messages.skipLabel} />
         </span>
@@ -59,6 +61,8 @@ export default class TaskSkipControl extends Component {
 TaskSkipControl.propTypes = {
   /** Set to true to render in a minimized form */
   isMinimized: PropTypes.bool,
+  /** Set to true to suppress display of control icon */
+  suppressIcon: PropTypes.bool,
   /** Invoked to mark the task as already-fixed */
   complete: PropTypes.func.isRequired,
   /** Available keyboard shortcuts */
@@ -71,4 +75,5 @@ TaskSkipControl.propTypes = {
 
 TaskSkipControl.defaultProps = {
   isMinimized: false,
+  suppressIcon: false,
 }
