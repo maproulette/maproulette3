@@ -4,6 +4,7 @@ import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import TaskFixedControl from '../TaskFixedControl/TaskFixedControl'
 import TaskTooHardControl from '../TaskTooHardControl/TaskTooHardControl'
 import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixedControl'
+import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEditingControl'
 import './TaskCompletionStep2.css'
 
@@ -29,6 +30,10 @@ export default class TaskCompletionStep2 extends Component {
 
         {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
           <TaskAlreadyFixedControl {...this.props} />
+        }
+
+        {this.props.allowedProgressions.has(TaskStatus.skipped) &&
+          <TaskSkipControl {...this.props} suppressIcon />
         }
 
         <TaskCancelEditingControl {...this.props} />

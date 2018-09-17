@@ -121,3 +121,27 @@ test("shows cancel editing control", () => {
 
   expect(wrapper).toMatchSnapshot()
 })
+
+test("shows skip control for appropriate status", () => {
+  const wrapper = shallow(
+    <TaskCompletionStep2 {...basicProps} />
+  )
+
+  expect(wrapper.find('TaskSkipControl').exists()).toBe(true)
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("doesn't show the skip control if status not appropriate", () => {
+  basicProps.task.status = TaskStatus.fixed
+  basicProps.allowedProgressions =
+    allowedStatusProgressions(basicProps.task.status)
+
+  const wrapper = shallow(
+    <TaskCompletionStep2 {...basicProps} />
+  )
+
+  expect(wrapper.find('TaskSkipControl').exists()).toBe(false)
+
+  expect(wrapper).toMatchSnapshot()
+})

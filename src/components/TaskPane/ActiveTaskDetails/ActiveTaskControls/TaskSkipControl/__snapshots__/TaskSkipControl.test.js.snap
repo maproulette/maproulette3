@@ -93,6 +93,7 @@ ShallowWrapper {
             },
           }
     }
+    suppressIcon={false}
     task={
         Object {
             "id": 123,

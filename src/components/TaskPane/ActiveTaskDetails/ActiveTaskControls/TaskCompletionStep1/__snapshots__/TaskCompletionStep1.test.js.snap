@@ -1096,6 +1096,7 @@ ShallowWrapper {
                             }
           }
           pickEditor={[Function]}
+          suppressIcon={false}
           task={
                     Object {
                               "id": 123,
@@ -1493,6 +1494,7 @@ ShallowWrapper {
             },
           },
           "pickEditor": [Function],
+          "suppressIcon": false,
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -1907,6 +1909,7 @@ ShallowWrapper {
                                   }
             }
             pickEditor={[Function]}
+            suppressIcon={false}
             task={
                         Object {
                                     "id": 123,
@@ -2304,6 +2307,7 @@ ShallowWrapper {
               },
             },
             "pickEditor": [Function],
+            "suppressIcon": false,
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -2872,6 +2876,7 @@ ShallowWrapper {
                             }
           }
           pickEditor={[Function]}
+          suppressIcon={false}
           task={
                     Object {
                               "id": 123,
@@ -3269,6 +3274,7 @@ ShallowWrapper {
             },
           },
           "pickEditor": [Function],
+          "suppressIcon": false,
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -3683,6 +3689,7 @@ ShallowWrapper {
                                   }
             }
             pickEditor={[Function]}
+            suppressIcon={false}
             task={
                         Object {
                                     "id": 123,
@@ -4080,6 +4087,7 @@ ShallowWrapper {
               },
             },
             "pickEditor": [Function],
+            "suppressIcon": false,
             "task": Object {
               "id": 123,
               "parent": Object {
@@ -4648,6 +4656,7 @@ ShallowWrapper {
                             }
           }
           pickEditor={[Function]}
+          suppressIcon={false}
           task={
                     Object {
                               "id": 123,
@@ -5045,6 +5054,7 @@ ShallowWrapper {
             },
           },
           "pickEditor": [Function],
+          "suppressIcon": false,
           "task": Object {
             "id": 123,
             "parent": Object {
@@ -5459,6 +5469,7 @@ ShallowWrapper {
                                   }
             }
             pickEditor={[Function]}
+            suppressIcon={false}
             task={
                         Object {
                                     "id": 123,
@@ -5856,6 +5867,7 @@ ShallowWrapper {
               },
             },
             "pickEditor": [Function],
+            "suppressIcon": false,
             "task": Object {
               "id": 123,
               "parent": Object {
