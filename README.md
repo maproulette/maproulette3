@@ -18,7 +18,6 @@ project is still required.
 1. Create a `.env.development.local` file and:
  * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
  * set feature flags to `enabled` or `disabled` as desired.
-   your API token.
  * override any other settings from the `.env` file as needed or desired.
 
 2. `yarn` to fetch and install NPM modules.
