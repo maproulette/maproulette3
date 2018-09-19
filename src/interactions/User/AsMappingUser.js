@@ -17,6 +17,7 @@ export class AsMappingUser {
     }
 
     return basemapLayerSource(this.settings.defaultBasemap,
+                              this.settings.defaultBasemapId,
                               this.settings.customBasemap,
                               `user_${this.id}`)
   }

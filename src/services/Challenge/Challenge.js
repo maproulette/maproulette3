@@ -576,8 +576,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
       challengeData = _pick(challengeData, // fields in alphabetical order
         ['blurb', 'challengeType', 'checkinComment', 'checkinSource', 'customBasemap',
-        'defaultBasemap', 'defaultPriority', 'defaultZoom', 'description',
-        'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
+        'defaultBasemap', 'defaultBasemapId', 'defaultPriority', 'defaultZoom',
+        'description', 'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks'])
