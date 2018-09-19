@@ -24,11 +24,13 @@ export const ChallengeBasemap = Object.freeze({
 })
 
 /** Map basemap constants to layer source constants */
-export const BasemapLayerSources = Object.freeze({
-  [CHALLENGE_BASEMAP_OPEN_STREET_MAP]: OPEN_STREET_MAP,
-  [CHALLENGE_BASEMAP_OPEN_CYCLE_MAP]: OPEN_CYCLE_MAP,
-  [CHALLENGE_BASEMAP_BING]: BING,
-})
+export const basemapLayerSources = function() {
+  return {
+    [CHALLENGE_BASEMAP_OPEN_STREET_MAP]: OPEN_STREET_MAP,
+    [CHALLENGE_BASEMAP_OPEN_CYCLE_MAP]: OPEN_CYCLE_MAP,
+    [CHALLENGE_BASEMAP_BING]: BING,
+  }
+}
 
 /**
  * Returns an object mapping basemap layer values to raw internationalized

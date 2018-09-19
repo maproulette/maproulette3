@@ -38,7 +38,7 @@ InsetMap.propTypes = {
   centerPoint: PropTypes.object.isRequired,
   /** Desired zoom of the map */
   fixedZoom: PropTypes.number,
-  /** layerId of default layer to display */
+  /** id of default layer to display */
   layerSourceId: PropTypes.string,
 }
 

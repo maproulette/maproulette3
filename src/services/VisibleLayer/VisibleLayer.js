@@ -1,6 +1,3 @@
-import _find from 'lodash/find'
-import { LayerSources } from './LayerSources'
-
 // redux actions
 const CHANGE_VISIBLE_LAYER = 'ChangeVisibleLayer'
 
@@ -25,7 +22,7 @@ export const changeVisibleLayer = function(layerId) {
 // redux reducers
 export const visibleLayer = function(state=null, action) {
   if (action.type === CHANGE_VISIBLE_LAYER) {
-    return _find(LayerSources, {layerId: action.layerId})
+    return {id: action.layerId}
   }
   else {
     return state

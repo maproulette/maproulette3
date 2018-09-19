@@ -39,7 +39,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <Connect(Connect(Connect(Component)))
+        <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
           centerPoint={
                     Object {
                               "lat": 0,
@@ -253,7 +253,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <Connect(Connect(Connect(Component)))
+          <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
             centerPoint={
                         Object {
                                     "lat": 0,

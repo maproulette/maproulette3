@@ -66,7 +66,16 @@
         }
 
         .leaflet-control-attribution.leaflet-control {
+          top: 0;
           z-index: $layer-map-control;
+          font-size: $size-8;
+          color: $grey;
+          background-color: transparent;
+
+          a {
+            font-size: $size-8;
+            color: $grey;
+          }
         }
       }
     }

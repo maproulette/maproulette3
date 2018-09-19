@@ -6,13 +6,18 @@ project is still required.
 
 ## Developing Locally
 
-> Note: maproulette3 is currently developed using Node 8 LTS.
+### Basic Dependencies:
+
+* [Node 8 LTS](https://nodejs.org/)
+* [yarn](https://yarnpkg.com/)
+* [jq](https://stedolan.github.io/jq/)
+* [curl](https://curl.haxx.se/)
+
+### Initial Setup
 
 1. Create a `.env.development.local` file and:
  * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
  * set feature flags to `enabled` or `disabled` as desired.
- * if you wish to use Mapbox maps, set the `REACT_APP_MAPBOX_ACCESS_TOKEN` to
-   your API token.
  * override any other settings from the `.env` file as needed or desired.
 
 2. `yarn` to fetch and install NPM modules.
@@ -78,6 +83,24 @@ project is still required.
 3. `yarn run build` to create a minified front-end build in the `build/`
    directory.
 
+## Adding Custom Map Layers
+
+Default map layers are determined by pulling in data from the [OSM Editor Layer
+Index](https://github.com/osmlab/editor-layer-index) at build time, and
+extracting (non-overlay) layers marked as default layers with global coverage.
+For backward compatibility, the OpenCycleMap layer is also included. These are
+stored in the `src/defaultLayers.json` file. Modifying this file is not
+recommended as it will be overwritten automatically by the build process.
+
+Extra, custom layers can be added to `src/extraLayers.json` following the
+same structure as the default layers.
+
+### Setting API Keys for Map Layers
+
+API keys for any layers -- default or extra -- can be set through the
+`REACT_APP_MAP_LAYER_API_KEYS` .env file configuration variable (see the .env
+file for documentation). For custom/extra layers, an API key can also simply be
+included in the specified layer url if that is simpler.
 
 # Development Notes
 
