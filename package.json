@@ -28,7 +28,7 @@
     "normalizr": "^3.2.3",
     "piwik-react-router": "^0.12.1",
     "prop-types": "^15.6.0",
-    "query-string": "^6.1.0",
+    "query-string": "^5.1.0",
     "react": "16.3.2",
     "react-burger-menu": "^2.4.4",
     "react-calendar-heatmap": "^1.6.3",
