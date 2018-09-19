@@ -9,6 +9,7 @@ import { Editor,
 import { ChallengeBasemap,
          basemapLayerLabels }
        from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import { LayerSources } from '../../../services/VisibleLayer/LayerSources'
 import messages from './Messages'
 
 /**
@@ -26,6 +27,12 @@ export const jsSchema = intl => {
   const localizedLocaleLabels = localeLabels(intl)
   const localizedEditorLabels = editorLabels(intl)
   const localizedBasemapLabels = basemapLayerLabels(intl)
+
+  const defaultBasemapChoices = [
+    { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none }
+  ].concat(_map(LayerSources, source => ({id: source.id, name: source.name}))).concat([
+    { id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }
+  ])
 
   return {
     "$schema": "http://json-schema.org/draft-06/schema#",
@@ -50,9 +57,9 @@ export const jsSchema = intl => {
       defaultBasemap: {
         title: intl.formatMessage(messages.defaultBasemapLabel),
         description: intl.formatMessage(messages.defaultBasemapDescription),
-        type: "number",
-        enum: _values(ChallengeBasemap),
-        enumNames: _map(ChallengeBasemap, (value, key) => localizedBasemapLabels[key]),
+        type: "string",
+        enum: _map(defaultBasemapChoices, 'id'),
+        enumNames: _map(defaultBasemapChoices, 'name'),
         default: ChallengeBasemap.none,
       },
       leaderboardOptOut: {
@@ -68,14 +75,14 @@ export const jsSchema = intl => {
           {
             properties: {
               defaultBasemap: {
-                enum: _without(_values(ChallengeBasemap), ChallengeBasemap.custom),
+                enum: _without(_map(defaultBasemapChoices, 'id'), ChallengeBasemap.custom.toString()),
               }
             }
           },
           {
             properties: {
               defaultBasemap: {
-                enum: [ChallengeBasemap.custom],
+                enum: [ChallengeBasemap.custom.toString()],
               },
               customBasemap: {
                 title: intl.formatMessage(messages.customBasemapLabel),

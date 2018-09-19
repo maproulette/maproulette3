@@ -14,6 +14,7 @@ export const CHALLENGE_BASEMAP_OPEN_STREET_MAP = 0
 export const CHALLENGE_BASEMAP_OPEN_CYCLE_MAP = 1
 export const CHALLENGE_BASEMAP_BING = 2
 export const CHALLENGE_BASEMAP_CUSTOM = 3
+export const CHALLENGE_BASEMAP_IDENTIFIED = 4
 
 export const ChallengeBasemap = Object.freeze({
   none: CHALLENGE_BASEMAP_NONE,
@@ -21,6 +22,7 @@ export const ChallengeBasemap = Object.freeze({
   openCycleMap: CHALLENGE_BASEMAP_OPEN_CYCLE_MAP,
   bing: CHALLENGE_BASEMAP_BING,
   custom: CHALLENGE_BASEMAP_CUSTOM,
+  identified: CHALLENGE_BASEMAP_IDENTIFIED,
 })
 
 /** Map basemap constants to layer source constants */

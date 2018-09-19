@@ -16,6 +16,7 @@ export class AsMappableChallenge {
     }
 
     return basemapLayerSource(this.defaultBasemap,
+                              this.defaultBasemapId,
                               this.customBasemap,
                               `challenge_${this.id}`)
   }

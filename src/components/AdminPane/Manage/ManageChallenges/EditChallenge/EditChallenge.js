@@ -4,6 +4,8 @@ import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
 import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
+import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
 import _each from 'lodash/each'
 import _filter from 'lodash/filter'
@@ -262,6 +264,19 @@ export class EditChallenge extends Component {
       }
     }
 
+    // Copy basemap layer id to defaultBasemap so the proper layer will be
+    // selected in the form even if it isn't represented by one one of the
+    // ChallengeBasemap constants
+    if (_isUndefined(this.state.formData.defaultBasemap)) {
+      if (!_isEmpty(challengeData.defaultBasemapId)) {
+        challengeData.defaultBasemap = challengeData.defaultBasemapId
+      }
+      else if (_isFinite(challengeData.defaultBasemap)) {
+        // Use string for form
+        challengeData.defaultBasemap = challengeData.defaultBasemap.toString()
+      }
+    }
+
     if (!this.state.formData.highPriorityRules) {
       challengeData.highPriorityRules =
         preparePriorityRuleGroupForForm(challengeData.highPriorityRule)
@@ -322,6 +337,8 @@ export class EditChallenge extends Component {
     if (challengeData.isNew() && challengeData.includeCheckinHashtag) {
       challengeData.appendHashtagToCheckinComment()
     }
+
+    challengeData.normalizeDefaultBasemap()
 
     challengeData.highPriorityRule =
       preparePriorityRuleGroupForSaving(challengeData.highPriorityRules.ruleGroup)

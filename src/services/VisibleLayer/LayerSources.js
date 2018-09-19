@@ -3,7 +3,6 @@ import QueryString from 'query-string'
 import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _get from 'lodash/get'
-import _isFinite from 'lodash/isFinite'
 import _sortBy from 'lodash/sortBy'
 import { ChallengeBasemap, basemapLayerSources }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
@@ -134,17 +133,22 @@ export const createDynamicLayerSource = function(layerId, url) {
 }
 
 /**
- * Returns a layer source for the given basemapSetting, including generating a
- * dynamic layer source with the given customBasemap and layerId if appropriate.
+ * Returns a layer source for the given defaultBasemap, defaultBasemapId, and
+ * customBasemap settings, including generating a dynamic layer source with the
+ * given customBasemap and customLayerId if appropriate.
  */
-export const basemapLayerSource = function(basemapSetting, customBasemap, layerId) {
-  if (_isFinite(basemapSetting) && basemapSetting !== ChallengeBasemap.none) {
-    if (basemapSetting !== ChallengeBasemap.custom) {
-      return layerSourceWithId(basemapLayerSources()[basemapSetting])
-    }
-    else if (!_isEmpty(customBasemap)) {
-      return createDynamicLayerSource(layerId, customBasemap)
-    }
+export const basemapLayerSource = function(defaultBasemap, defaultBasemapId, customBasemap, customLayerId) {
+  if (defaultBasemap === ChallengeBasemap.none) {
+    return null
+  }
+  else if (defaultBasemap === ChallengeBasemap.identified) {
+    return layerSourceWithId(defaultBasemapId)
+  }
+  else if (defaultBasemap !== ChallengeBasemap.custom) {
+    return layerSourceWithId(basemapLayerSources()[defaultBasemap])
+  }
+  else if (!_isEmpty(customBasemap)) {
+    return createDynamicLayerSource(customLayerId, customBasemap)
   }
 
   return null
