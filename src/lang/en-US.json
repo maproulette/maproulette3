@@ -216,6 +216,7 @@
   "Task.fields.saved.label": "Saved",
   "Task.fields.featured.label": "Featured",
   "Challenge.management.controls.manage.label": "Manage",
+  "Challenge.fields.lastTaskRefresh.label": "Tasks From",
   "Challenge.results.heading": "Challenges",
   "Challenge.controls.clearFilters.label": "Clear Filters",
   "Challenge.results.noResults": "No Results",

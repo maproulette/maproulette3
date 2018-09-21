@@ -233,6 +233,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -299,6 +300,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -945,6 +947,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -1011,6 +1014,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -1676,6 +1680,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -1742,6 +1747,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -1937,6 +1943,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -2003,6 +2010,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -2252,6 +2260,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -2318,6 +2327,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -2513,6 +2523,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -2579,6 +2590,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -2844,6 +2856,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -2929,6 +2942,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -3139,6 +3153,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -3224,6 +3239,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -3437,6 +3453,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -3503,6 +3520,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -3663,6 +3681,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -3729,6 +3748,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -3942,6 +3962,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -4008,6 +4029,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -4168,6 +4190,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -4234,6 +4257,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -4542,6 +4566,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -4608,6 +4633,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -5380,6 +5406,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -5446,6 +5473,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -6187,6 +6215,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -6253,6 +6282,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -6413,6 +6443,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -6479,6 +6510,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -6692,6 +6724,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -6758,6 +6791,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -6918,6 +6952,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -6984,6 +7019,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -7292,6 +7328,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -7358,6 +7395,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -8130,6 +8168,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -8196,6 +8235,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -9032,6 +9072,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -9098,6 +9139,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -9870,6 +9912,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -9936,6 +9979,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },
@@ -10791,6 +10835,7 @@ ShallowWrapper {
 >
                   foo
 </div>,
+                undefined,
               ],
             },
             "ref": null,
@@ -10876,6 +10921,7 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
+              undefined,
             ],
             "type": "div",
           },
@@ -11663,6 +11709,7 @@ ShallowWrapper {
 >
                     foo
 </div>,
+                  undefined,
                 ],
               },
               "ref": null,
@@ -11748,6 +11795,7 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
+                undefined,
               ],
               "type": "div",
             },

@@ -43,4 +43,9 @@ export default defineMessages({
     id: "Challenge.management.controls.manage.label",
     defaultMessage: "Manage",
   },
+
+  lastTaskRefreshLabel: {
+    id: "Challenge.fields.lastTaskRefresh.label",
+    defaultMessage: "Tasks From",
+  }
 })
