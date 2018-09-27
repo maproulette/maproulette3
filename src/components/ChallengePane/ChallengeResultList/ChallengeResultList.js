@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
+import SortChallengesSelector from './SortChallengesSelector'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import StartVirtualChallenge from './StartVirtualChallenge'
@@ -103,12 +104,17 @@ export class ChallengeResultList extends Component {
 
     return (
       <div className={classNames("challenge-result-list", this.props.className)}>
-        <div className="level challenge-result-list--heading">
+        <div className="level challenge-result-list__heading">
           <h2 className="title is-4">
             <FormattedMessage {...messages.heading} />
           </h2>
 
-          {clearFiltersControl}
+          <div className="challenge-result-list__heading__result-controls">
+            {this.props.challenges.length > 1 &&
+             <SortChallengesSelector {...this.props} />}
+
+            {clearFiltersControl}
+          </div>
         </div>
 
         {virtualChallengeOption}

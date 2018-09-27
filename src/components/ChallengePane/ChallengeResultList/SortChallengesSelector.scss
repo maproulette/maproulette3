@@ -1,0 +1,29 @@
+@import 'theme.scss';
+
+.sort-challenges-selector {
+  .dropdown-trigger {
+    line-height: 24px;
+
+    .button {
+      min-width: 110px;
+    }
+
+    .button.is-outlined {
+      @include invert-on-hover($grey-light, $white);
+      font-weight: $weight-normal;
+
+      .dropdown-indicator {
+        @include arrow($grey-light);
+        height: 10px;
+        width: 10px;
+        position: relative;
+        margin-left: 0.5em;
+        bottom: 2px;
+      }
+    }
+  }
+
+  .dropdown-item {
+    font-weight: $weight-normal;
+  }
+}
