@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import MediaQuery from 'react-responsive'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
-import { MAPBOX_STREETS } from '../../services/VisibleLayer/LayerSources'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import Sidebar from '../Sidebar/Sidebar'
@@ -94,8 +93,7 @@ export class ChallengePane extends Component {
           </MediaQuery>
 
           <MapPane>
-            <Map layerSourceId={MAPBOX_STREETS}
-                 challenge={this.props.browsedChallenge}
+            <Map challenge={this.props.browsedChallenge}
                  onTaskClick={this.props.startChallengeWithTask}
                  {...this.props} />
           </MapPane>

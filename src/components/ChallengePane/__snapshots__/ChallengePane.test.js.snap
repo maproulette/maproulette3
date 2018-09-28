@@ -114,7 +114,6 @@ ShallowWrapper {
                                                   "formatMessage": [Function],
                                                 }
                               }
-                              layerSourceId="Mapbox"
                               onTaskClick={undefined}
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
@@ -220,7 +219,6 @@ ShallowWrapper {
                                                         "formatMessage": [Function],
                                                       }
                             }
-                            layerSourceId="Mapbox"
                             onTaskClick={undefined}
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
@@ -410,7 +408,6 @@ ShallowWrapper {
                                                 "formatMessage": [Function],
                                               }
                 }
-                layerSourceId="Mapbox"
                 onTaskClick={undefined}
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
@@ -433,7 +430,6 @@ ShallowWrapper {
                 "intl": Object {
                   "formatMessage": [Function],
                 },
-                "layerSourceId": "Mapbox",
                 "onTaskClick": undefined,
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
@@ -543,7 +539,6 @@ ShallowWrapper {
                                                             "formatMessage": [Function],
                                                           }
                                     }
-                                    layerSourceId="Mapbox"
                                     onTaskClick={undefined}
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
@@ -649,7 +644,6 @@ ShallowWrapper {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
-                                layerSourceId="Mapbox"
                                 onTaskClick={undefined}
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
@@ -839,7 +833,6 @@ ShallowWrapper {
                                                       "formatMessage": [Function],
                                                     }
                   }
-                  layerSourceId="Mapbox"
                   onTaskClick={undefined}
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
@@ -862,7 +855,6 @@ ShallowWrapper {
                   "intl": Object {
                     "formatMessage": [Function],
                   },
-                  "layerSourceId": "Mapbox",
                   "onTaskClick": undefined,
                   "saveChallenge": [Function],
                   "startChallenge": [Function],
@@ -1038,7 +1030,6 @@ ShallowWrapper {
                                                   "formatMessage": [Function],
                                                 }
                               }
-                              layerSourceId="Mapbox"
                               onTaskClick={undefined}
                               saveChallenge={[Function]}
                               startChallenge={[Function]}
@@ -1166,7 +1157,6 @@ ShallowWrapper {
                                                         "formatMessage": [Function],
                                                       }
                             }
-                            layerSourceId="Mapbox"
                             onTaskClick={undefined}
                             saveChallenge={[Function]}
                             startChallenge={[Function]}
@@ -1391,7 +1381,6 @@ ShallowWrapper {
                                                 "formatMessage": [Function],
                                               }
                 }
-                layerSourceId="Mapbox"
                 onTaskClick={undefined}
                 saveChallenge={[Function]}
                 startChallenge={[Function]}
@@ -1419,7 +1408,6 @@ ShallowWrapper {
                 "intl": Object {
                   "formatMessage": [Function],
                 },
-                "layerSourceId": "Mapbox",
                 "onTaskClick": undefined,
                 "saveChallenge": [Function],
                 "startChallenge": [Function],
@@ -1553,7 +1541,6 @@ ShallowWrapper {
                                                             "formatMessage": [Function],
                                                           }
                                     }
-                                    layerSourceId="Mapbox"
                                     onTaskClick={undefined}
                                     saveChallenge={[Function]}
                                     startChallenge={[Function]}
@@ -1681,7 +1668,6 @@ ShallowWrapper {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
-                                layerSourceId="Mapbox"
                                 onTaskClick={undefined}
                                 saveChallenge={[Function]}
                                 startChallenge={[Function]}
@@ -1906,7 +1892,6 @@ ShallowWrapper {
                                                       "formatMessage": [Function],
                                                     }
                   }
-                  layerSourceId="Mapbox"
                   onTaskClick={undefined}
                   saveChallenge={[Function]}
                   startChallenge={[Function]}
@@ -1934,7 +1919,6 @@ ShallowWrapper {
                   "intl": Object {
                     "formatMessage": [Function],
                   },
-                  "layerSourceId": "Mapbox",
                   "onTaskClick": undefined,
                   "saveChallenge": [Function],
                   "startChallenge": [Function],

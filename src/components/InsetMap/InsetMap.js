@@ -3,18 +3,15 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Map, Marker } from 'react-leaflet'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
-import { MAPBOX_LIGHT,
-         layerSourceWithId,
+import { layerSourceWithId,
          defaultLayerSource } from '../../services/VisibleLayer/LayerSources'
 import './InsetMap.css'
 
 export default class InsetMap extends Component {
   render() {
-    // Use requested layer source, otherwise Mapbox Light if it's available,
-    // otherwise the default source.
+    // Use requested layer source, otherwise the default source
     const layerSource =
-      layerSourceWithId(this.props.layerSourceId || MAPBOX_LIGHT) ||
-      defaultLayerSource()
+      layerSourceWithId(this.props.layerSourceId) || defaultLayerSource()
 
     return (
       <div className={classNames("inset-map", this.props.className)}>

@@ -17,9 +17,6 @@ import { TaskPriority,
          messagesByPriority,
          taskPriorityLabels }
        from '../../../../services/Task/TaskPriority/TaskPriority'
-import { MAPBOX_LIGHT,
-         layerSourceWithId }
-       from '../../../../services/VisibleLayer/LayerSources'
 import AsManager from '../../../../interactions/User/AsManager'
 import WithBoundedTasks
        from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
@@ -197,7 +194,6 @@ export class ViewChallengeTasks extends Component {
                             statusColors={statusColors}
                             filterOptions={filterOptions}
                             monochromaticClusters
-                            defaultLayer={layerSourceWithId(MAPBOX_LIGHT)}
                             {...this.props} />
         </MapPane>
 
