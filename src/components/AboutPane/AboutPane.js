@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { MAPBOX_STREETS } from '../../services/VisibleLayer/LayerSources'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import LocatorMap from '../LocatorMap/LocatorMap'
 import AboutModal from './AboutModal/AboutModal'
@@ -15,7 +14,7 @@ export default class AboutPane extends Component {
     return (
       <div className="about-pane">
         <MapPane>
-          <LocatorMap layerSourceId={MAPBOX_STREETS} className="about" {...this.props} />
+          <LocatorMap className="about" {...this.props} />
         </MapPane>
 
         <AboutModal {...this.props} />
