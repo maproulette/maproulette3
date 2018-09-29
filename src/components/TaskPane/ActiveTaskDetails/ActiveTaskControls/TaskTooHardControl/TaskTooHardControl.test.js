@@ -1,5 +1,6 @@
 import React from 'react'
 import TaskTooHardControl from './TaskTooHardControl'
+import keyMappings from '../../../../../services/KeyboardShortcuts/KeyMappings'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 
 let basicProps = null
@@ -13,8 +14,13 @@ beforeEach(() => {
       },
       status: TaskStatus.created,
     },
+    keyboardShortcutGroups: keyMappings,
     complete: jest.fn(),
+    quickKeyHandler: jest.fn(),
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
+    activateKeyboardShortcut: jest.fn(),
+    deactivateKeyboardShortcut: jest.fn(),
+    textInputActive: jest.fn(e => false),
   }
 })
 

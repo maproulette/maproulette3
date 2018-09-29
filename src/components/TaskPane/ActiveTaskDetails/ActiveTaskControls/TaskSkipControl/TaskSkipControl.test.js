@@ -15,6 +15,7 @@ beforeEach(() => {
       status: TaskStatus.created,
     },
     keyboardShortcutGroups: keyMappings,
+    quickKeyHandler: jest.fn((event, handler) => handler),
     complete: jest.fn(),
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
     activateKeyboardShortcut: jest.fn(),
@@ -57,21 +58,4 @@ test("using the shortcut key signals task completion with skipped status", () =>
 
   wrapper.instance().handleKeyboardShortcuts(event)
   expect(basicProps.complete).toBeCalledWith(TaskStatus.skipped)
-})
-
-test("shortcut key is ignored when typing in a text input", () => {
-  const event = {
-    target: {
-      nodeName: "div"
-    },
-    key: keyMappings.taskCompletion.skip.key,
-  }
-  basicProps.textInputActive = jest.fn(e => true)
-
-  const wrapper = shallow(
-    <TaskSkipControl {...basicProps} />
-  )
-
-  wrapper.instance().handleKeyboardShortcuts(event)
-  expect(basicProps.complete).not.toBeCalled()
 })

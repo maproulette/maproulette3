@@ -1,5 +1,6 @@
 import React from 'react'
 import TaskAlreadyFixedControl from './TaskAlreadyFixedControl'
+import keyMappings from '../../../../../services/KeyboardShortcuts/KeyMappings'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 
 let basicProps = null
@@ -14,7 +15,12 @@ beforeEach(() => {
       status: TaskStatus.created,
     },
     complete: jest.fn(),
+    quickKeyHandler: jest.fn((event, handler) => handler),
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
+    keyboardShortcutGroups: keyMappings,
+    activateKeyboardShortcut: jest.fn(),
+    deactivateKeyboardShortcut: jest.fn(),
+    textInputActive: jest.fn(e => false),
   }
 })
 
