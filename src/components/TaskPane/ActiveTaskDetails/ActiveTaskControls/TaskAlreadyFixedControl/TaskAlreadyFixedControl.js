@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
+import _pick from 'lodash/pick'
 import { TaskStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
 import messages from './Messages'
@@ -13,6 +14,23 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskAlreadyFixedControl extends Component {
+  handleKeyboardShortcuts = this.props.quickKeyHandler(
+    this.props.keyboardShortcutGroups.taskCompletion.alreadyFixed.key,
+    () => this.props.complete(TaskStatus.alreadyFixed)
+  )
+
+  componentDidMount() {
+    this.props.activateKeyboardShortcut(
+      'taskCompletion',
+      _pick(this.props.keyboardShortcutGroups.taskCompletion, 'alreadyFixed'),
+      this.handleKeyboardShortcuts)
+  }
+
+  componentWillUnmount() {
+    this.props.deactivateKeyboardShortcut('taskCompletion', 'alreadyFixed',
+                                          this.handleKeyboardShortcuts)
+  }
+
   render() {
     return (
       <button className={classNames("button large-and-wide full-width label-only already-fixed-control",

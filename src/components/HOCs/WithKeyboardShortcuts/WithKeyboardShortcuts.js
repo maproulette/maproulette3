@@ -13,6 +13,10 @@ const mapStateToProps = state => {
     activeKeyboardShortcuts: _get(state, 'currentKeyboardShortcuts.groups', {}),
   }
 }
+const textInputActive = function(event) {
+  return event.target.nodeName.toLowerCase() === 'input' &&
+         event.target.getAttribute('type').toLowerCase() === 'text'
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -32,10 +36,16 @@ const mapDispatchToProps = dispatch => {
       document.removeEventListener("keydown", handler)
       dispatch(removeKeyboardShortcut(groupName, shortcutName))
     },
-    textInputActive: event => (
-      event.target.nodeName.toLowerCase() === 'input' &&
-      event.target.getAttribute('type').toLowerCase() === 'text'
-    ),
+    textInputActive: textInputActive,
+    quickKeyHandler: (key, handler) => (event => {
+      if (textInputActive(event)) {
+        return // ignore typing in inputs
+      }
+
+      if (event.key === key) {
+        handler()
+      }
+    }),
   }
 }
 

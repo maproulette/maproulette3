@@ -16,6 +16,7 @@ beforeEach(() => {
     },
     keyboardShortcutGroups: keyMappings,
     complete: jest.fn(),
+    quickKeyHandler: jest.fn((event, handler) => handler),
     intl: {formatMessage: jest.fn(m => m.defaultMessage)},
     activateKeyboardShortcut: jest.fn(),
     deactivateKeyboardShortcut: jest.fn(),
@@ -57,21 +58,4 @@ test("using the shortcut key signals task completion with falsePositive status",
 
   wrapper.instance().handleKeyboardShortcuts(event)
   expect(basicProps.complete).toBeCalledWith(TaskStatus.falsePositive)
-})
-
-test("shortcut key is ignored when typing in a text input", () => {
-  const event = {
-    target: {
-      nodeName: "div"
-    },
-    key: keyMappings.taskCompletion.falsePositive.key,
-  }
-  basicProps.textInputActive = jest.fn(e => true)
-
-  const wrapper = shallow(
-    <TaskFalsePositiveControl {...basicProps} />
-  )
-
-  wrapper.instance().handleKeyboardShortcuts(event)
-  expect(basicProps.complete).not.toBeCalled()
 })

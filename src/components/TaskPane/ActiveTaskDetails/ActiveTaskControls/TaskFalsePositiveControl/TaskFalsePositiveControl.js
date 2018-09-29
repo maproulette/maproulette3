@@ -15,16 +15,10 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskFalsePositiveControl extends Component {
-  handleKeyboardShortcuts = (event) => {
-    if (this.props.textInputActive(event)) { // ignore typing in inputs
-      return
-    }
-
-    const shortcuts = this.props.keyboardShortcutGroups.taskCompletion
-    if (event.key === shortcuts.falsePositive.key) {
-      this.props.complete(TaskStatus.falsePositive)
-    }
-  }
+  handleKeyboardShortcuts = this.props.quickKeyHandler(
+    this.props.keyboardShortcutGroups.taskCompletion.falsePositive.key,
+    () => this.props.complete(TaskStatus.falsePositive)
+  )
 
   componentDidMount() {
     this.props.activateKeyboardShortcut(

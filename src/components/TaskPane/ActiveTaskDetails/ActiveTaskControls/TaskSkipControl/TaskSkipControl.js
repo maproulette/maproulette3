@@ -14,16 +14,10 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskSkipControl extends Component {
-  handleKeyboardShortcuts = (event) => {
-    if (this.props.textInputActive(event)) { // ignore typing in inputs
-      return
-    }
-
-    const shortcuts = this.props.keyboardShortcutGroups.taskCompletion
-    if (event.key === shortcuts.skip.key) {
-      this.props.complete(TaskStatus.skipped)
-    }
-  }
+  handleKeyboardShortcuts = this.props.quickKeyHandler(
+    this.props.keyboardShortcutGroups.taskCompletion.skip.key,
+    () => this.props.complete(TaskStatus.skipped)
+  )
 
   componentDidMount() {
     this.props.activateKeyboardShortcut(

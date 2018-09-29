@@ -44,6 +44,21 @@ export default defineMessages({
     defaultMessage: "Not an Issue",
   },
 
+  fixed: {
+    id: "KeyMapping.taskCompletion.fixed",
+    defaultMessage: "I fixed it!",
+  },
+
+  tooHard: {
+    id: "KeyMapping.taskCompletion.tooHard",
+    defaultMessage: "Too difficult / Couldn't see",
+  },
+
+  alreadyFixed: {
+    id: "KeyMapping.taskCompletion.alreadyFixed",
+    defaultMessage: "Already fixed",
+  },
+
   nextTask: {
     id: "KeyMapping.taskReview.nextTask",
     defaultMessage: "Next Task",

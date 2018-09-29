@@ -46,6 +46,13 @@ ShallowWrapper {
               },
             },
             "taskCompletion": Object {
+              "alreadyFixed": Object {
+                "key": "x",
+                "label": Object {
+                  "defaultMessage": "Already fixed",
+                  "id": "KeyMapping.taskCompletion.alreadyFixed",
+                },
+              },
               "falsePositive": Object {
                 "key": "q",
                 "label": Object {
@@ -53,11 +60,25 @@ ShallowWrapper {
                   "id": "KeyMapping.taskCompletion.falsePositive",
                 },
               },
+              "fixed": Object {
+                "key": "f",
+                "label": Object {
+                  "defaultMessage": "I fixed it!",
+                  "id": "KeyMapping.taskCompletion.fixed",
+                },
+              },
               "skip": Object {
                 "key": "w",
                 "label": Object {
                   "defaultMessage": "Skip",
                   "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+              "tooHard": Object {
+                "key": "d",
+                "label": Object {
+                  "defaultMessage": "Too difficult / Couldn't see",
+                  "id": "KeyMapping.taskCompletion.tooHard",
                 },
               },
             },

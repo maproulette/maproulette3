@@ -25,6 +25,9 @@ export default {
   taskCompletion: {
     skip: {key: 'w', label: messages.skip},
     falsePositive: {key: 'q', label: messages.falsePositive},
+    fixed: {key: 'f', label: messages.fixed},
+    tooHard: {key: 'd', label: messages.tooHard},
+    alreadyFixed: {key: 'x', label: messages.alreadyFixed},
   },
   taskReview: {
     nextTask: {key: 'l', label: messages.nextTask},
