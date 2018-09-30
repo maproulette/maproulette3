@@ -72,7 +72,7 @@ ShallowWrapper {
                             }
           }
           features={null}
-          fitFeaturesOnlyOnce={true}
+          fitFeaturesOnlyAsNecessary={true}
           justFitFeatures={false}
           maxZoom={0}
           minZoom={1}
@@ -182,7 +182,7 @@ ShallowWrapper {
 />,
           ],
           "features": null,
-          "fitFeaturesOnlyOnce": true,
+          "fitFeaturesOnlyAsNecessary": true,
           "justFitFeatures": false,
           "maxZoom": 0,
           "minZoom": 1,
@@ -286,7 +286,7 @@ ShallowWrapper {
                                   }
             }
             features={null}
-            fitFeaturesOnlyOnce={true}
+            fitFeaturesOnlyAsNecessary={true}
             justFitFeatures={false}
             maxZoom={0}
             minZoom={1}
@@ -396,7 +396,7 @@ ShallowWrapper {
 />,
             ],
             "features": null,
-            "fitFeaturesOnlyOnce": true,
+            "fitFeaturesOnlyAsNecessary": true,
             "justFitFeatures": false,
             "maxZoom": 0,
             "minZoom": 1,
