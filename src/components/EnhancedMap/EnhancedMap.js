@@ -135,9 +135,13 @@ export default class EnhancedMap extends Map {
         this.currentFeatures.addTo(this.leafletElement)
       }
 
-      // If we're only supposed to fit the features once, don't do it
-      // if we already had features.
-      if (!this.props.fitFeaturesOnlyOnce || !hasExistingFeatures) {
+      // By default, we always fit the map bounds to the task features.
+      // However, if we're only supposed to fit the features as necessary, then
+      // we do it for initial task (no existing features) or if the new task
+      // features wouldn't all be displayed at the present zoom level.
+      if (!this.props.fitFeaturesOnlyAsNecessary ||
+          !hasExistingFeatures ||
+          !this.leafletElement.getBounds().contains(this.currentFeatures.getBounds())) {
         this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
       }
     }

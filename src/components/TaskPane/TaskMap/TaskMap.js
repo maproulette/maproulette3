@@ -99,7 +99,7 @@ export default class TaskMap extends Component {
                      minZoom={minZoom} maxZoom={maxZoom}
                      features={_get(this.props.task, 'geometries.features')}
                      justFitFeatures={!this.state.showTaskFeatures}
-                     fitFeaturesOnlyOnce
+                     fitFeaturesOnlyAsNecessary
                      animateFeatures
                      onBoundsChange={this.updateTaskBounds}
         >
