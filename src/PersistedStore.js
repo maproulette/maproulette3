@@ -16,6 +16,7 @@ import { currentBoundedTasks } from './services/Task/BoundedTask'
 import { commentEntities } from './services/Comment/Comment'
 import { placeEntities } from './services/Place/Place'
 import { currentFilters } from './services/Filter/Filter'
+import { currentSort } from './services/Sort/Sort'
 import { currentSearch } from './services/Search/Search'
 import { openEditor } from './services/Editor/Editor'
 import { currentMapBounds } from './services/MapBounds/MapBounds'
@@ -135,6 +136,7 @@ export const initializePersistedStore = callback => {
       visibleLayer,
       currentUser,
       currentFilters,
+      currentSort,
       currentSearch,
       openEditor,
       currentMapBounds,

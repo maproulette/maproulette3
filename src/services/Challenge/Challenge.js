@@ -14,6 +14,7 @@ import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _fromPairs from 'lodash/fromPairs'
+import _isUndefined from 'lodash/isUndefined'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -134,6 +135,73 @@ export const fetchChallengesWithKeywords = function(keywords, limit=50) {
       return normalizedResults
     }).catch((error) => {
       dispatch(addError(AppErrors.challenge.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
+ * Fetches challenges that contain any of the given criteria
+ * (including: keywords/tags, column to sort results by, filters),
+ * up to the given limit.
+ *
+ * @param {object} criteria - criteria to include in search. Can include keys:
+ *                            'searchQuery', 'filters', 'onlyEnabled',
+ *                            'sortCriteria.sortBy', 'sortCrtiera.direction'
+ * @param {number} limit
+ */
+export const extendedFind = function(criteria, limit=50) {
+  const queryString = criteria['searchQuery']
+  const filters = criteria['filters'] || {}
+  const onlyEnabled = _isUndefined(criteria['onlyEnabled']) ?
+                          true : criteria['onlyEnabled']
+
+  const sortBy = _get(criteria, 'sortCriteria.sortBy')
+  const direction = _get(criteria, 'sortCriteria.direction')
+  const sort = sortBy ? `${sortBy} ${direction}` : null
+
+  return function(dispatch) {
+    const queryParts = parseQueryString(queryString)
+
+    // setup query parameters desired by server.
+    // ce: limit to enabled challenges
+    // pe: limit to enabled projects
+    // cs: query string
+    // cd: challenge difficulty
+    // ct: keywords/tags (comma-separated string)
+    const queryParams = {
+      limit,
+      ce: onlyEnabled ? 'true' : 'false',
+      pe: onlyEnabled ? 'true' : 'false',
+    }
+
+    if (_isFinite(filters.difficulty)) {
+      queryParams.cd = filters.difficulty
+    }
+
+    // Keywords/tags can come from both the the query and the filter, so we need to
+    // combine them into a single keywords array.
+    const keywords =
+      queryParts.tagTokens.concat(_isArray(filters.keywords) ? filters.keywords : [])
+
+    if (keywords.length > 0) {
+      queryParams.ct = keywords.join(',')
+    }
+
+    if (queryParts.query.length > 0) {
+      queryParams.cs = queryParts.query
+    }
+
+    queryParams.sort = sort
+
+    return new Endpoint(
+      api.challenges.search,
+      {schema: [ challengeSchema() ], params: queryParams}
+    ).execute().then(normalizedResults => {
+      dispatch(receiveChallenges(normalizedResults.entities))
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(AppErrors.challenge.searchFailure))
       console.log(error.response || error)
     })
   }
