@@ -8,6 +8,8 @@
  *
  * Requires curl and jq to both be installed.
  */
+require('dotenv').config()
+const _get = require('lodash/get')
 const shell = require('shelljs')
 shell.config.silent = true
 
@@ -29,6 +31,11 @@ if (shell.ls('./src').length === 0) {
   shell.exit(1)
 }
 
+// Additional layers (from the Layer Index) to include in addition to the
+// default layers.
+const additionalIndexLayers =
+  _get(process.env, 'REACT_APP_ADDITIONAL_INDEX_LAYERS', '').split(/,\s*/)
+
 // Download latest layer data and save to `src/imagery.json`
 shell.echo("Fetching latest layer data")
 if (shell.exec("curl -s https://osmlab.github.io/editor-layer-index/imagery.geojson -o ./src/imagery.json").code !== 0) {
@@ -38,11 +45,10 @@ if (shell.exec("curl -s https://osmlab.github.io/editor-layer-index/imagery.geoj
 
 // Extract properties from layers marked as default layers, that are not
 // overlays, and that have global coverage (geometry is null) and save them to
-// `src/defaultLayers.json`
-//
-// > Note, for backward compatibility we also include OpenCycleMap
+// `src/defaultLayers.json`. We also include any "additional" layers requested
 shell.echo("Extracting default layers")
-if (shell.exec("jq '[.features[].properties | select((.default == true and .overlay != true and .geometry == null) or .id == \"tf-cycle\")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
+const jqLayerConditionals = additionalIndexLayers.map(layerId => ` or .id == "${layerId}"`).join(' ')
+if (shell.exec("jq '[.features[].properties | select((.default == true and .overlay != true and .geometry == null)" + jqLayerConditionals + ")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
   shell.echo("Extracting default layers failed")
   shell.exit(1)
 }
