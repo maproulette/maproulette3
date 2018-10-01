@@ -8,7 +8,7 @@ import _sortBy from 'lodash/sortBy'
 import { ChallengeBasemap, basemapLayerSources }
        from '../Challenge/ChallengeBasemap/ChallengeBasemap'
 import defaultLayers from '../../defaultLayers.json'
-import extraLayers from '../../extraLayers.json'
+import customLayers from '../../customLayers.json'
 
 export const layerSourceShape = PropTypes.shape({
   /** Unique id for layer */
@@ -52,7 +52,7 @@ export const MAPBOX_SATELLITE_STREETS = 'MapboxSatellite'
  * Editor Layer Index](https://github.com/osmlab/editor-layer-index) and
  * add/override based on local .env file settings.
  */
-export const LayerSources = _sortBy(defaultLayers.concat(extraLayers), 'name')
+export const LayerSources = _sortBy(defaultLayers.concat(customLayers), 'name')
 
 // Load any API keys from .env file
 let layerAPIKeys = {}

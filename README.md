@@ -83,24 +83,31 @@ project is still required.
 3. `yarn run build` to create a minified front-end build in the `build/`
    directory.
 
-## Adding Custom Map Layers
+## Adding Additional and Custom Map Layers
 
 Default map layers are determined by pulling in data from the [OSM Editor Layer
-Index](https://github.com/osmlab/editor-layer-index) at build time, and
+Index](https://github.com/osmlab/editor-layer-index) at build time and
 extracting (non-overlay) layers marked as default layers with global coverage.
-For backward compatibility, the OpenCycleMap layer is also included. These are
-stored in the `src/defaultLayers.json` file. Modifying this file is not
-recommended as it will be overwritten automatically by the build process.
+These are stored in the `src/defaultLayers.json` file. Modifying this file is
+not recommended as it will be overwritten automatically by the build process.
 
-Extra, custom layers can be added to `src/extraLayers.json` following the
-same structure as the default layers.
+Layer ids of additional desired layers from the Layer Index can be specified in
+the `REACT_APP_ADDITIONAL_INDEX_LAYERS` .env config variable (see the .env file
+for documentation), and these will also be included in the `defaultLayers.json`
+file. The default .env file includes the OpenCycleMap layer this way.
+
+Custom and 3rd-party layers that aren't included in the Layer Index can be
+manually added to `src/customLayers.json` following the same structure as the
+default layers. The build process does not modify this file other than creating
+a stub if it doesn't exist.
 
 ### Setting API Keys for Map Layers
 
-API keys for any layers -- default or extra -- can be set through the
+API keys for any layers -- default or custom -- can be set through the
 `REACT_APP_MAP_LAYER_API_KEYS` .env file configuration variable (see the .env
-file for documentation). For custom/extra layers, an API key can also simply be
-included in the specified layer url if that is simpler.
+file for documentation). For custom layers, an API key can also simply be
+included in the specified layer url in `src/customLayers.json` if that is
+simpler.
 
 # Development Notes
 
