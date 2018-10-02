@@ -7,7 +7,7 @@
 # Imagery
 src/imagery.json
 src/defaultLayers.json
-src/extraLayers.json
+src/customLayers.json
 
 # testing
 /coverage

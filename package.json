@@ -74,7 +74,7 @@
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "build-intl": "yarn run combine-messages -i './src/**/*.js' -o './src/lang/en-US.json'",
-    "update-layers": "node update_layers.js",
+    "update-layers": "node scripts/update_layers.js",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p update-layers watch-css start-js",
     "build": "npm run build-css && yarn run build-intl && yarn run update-layers && react-scripts build",
