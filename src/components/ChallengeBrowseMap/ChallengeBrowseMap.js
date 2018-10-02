@@ -15,7 +15,7 @@ import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
+import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
@@ -25,7 +25,7 @@ import BusySpinner from '../BusySpinner/BusySpinner'
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
 
 /**
- * ChallengeMap allows a user to browse a challenge and its tasks
+ * ChallengeBrowseMap allows a user to browse a challenge and its tasks
  * geographically. Tasks are shown in clusters when appropriate, and
  * a bounding box is displayed while the tasks load.
  *
@@ -36,7 +36,7 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export class ChallengeMap extends Component {
+export class ChallengeBrowseMap extends Component {
   currentBounds = null
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -59,7 +59,7 @@ export class ChallengeMap extends Component {
     }
 
     // the browsed challenge has changed, or
-    if (_get(nextProps, 'browsedChallenge.id') !== 
+    if (_get(nextProps, 'browsedChallenge.id') !==
         _get(this.props, 'browsedChallenge.id')) {
       return true
     }
@@ -91,8 +91,8 @@ export class ChallengeMap extends Component {
     }
 
     this.currentBounds = bounds
-    this.props.setChallengeMapBounds(this.props.browsedChallenge.id,
-                                     bounds, zoom)
+    this.props.setChallengeBrowseMapBounds(this.props.browsedChallenge.id,
+                                           bounds, zoom)
   }
 
   /**
@@ -162,7 +162,7 @@ export class ChallengeMap extends Component {
   }
 }
 
-ChallengeMap.propTypes = {
+ChallengeBrowseMap.propTypes = {
   /** The current challenge being browsed */
   browsedChallenge: PropTypes.object.isRequired,
   /** Map markers for the tasks to display */
@@ -170,15 +170,16 @@ ChallengeMap.propTypes = {
   /** Set to true if tasks are still loading */
   tasksLoading: PropTypes.bool,
   /** Invoked when the user moves the map */
-  setChallengeMapBounds: PropTypes.func.isRequired,
+  setChallengeBrowseMapBounds: PropTypes.func.isRequired,
   /** Invoked when the user clicks on an individual task marker */
   onTaskClick: PropTypes.func,
 }
 
-export default WithMapBounds(
+export default WithSearch(
   WithStatus(
     WithVisibleLayer(
-      WithIntersectingOverlays(ChallengeMap, 'challenge')
+      WithIntersectingOverlays(ChallengeBrowseMap, 'challengeBrowse')
     )
-  )
+  ),
+  'challengeBrowse'
 )

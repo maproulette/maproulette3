@@ -3,7 +3,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { ChallengeLocation }
        from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
-import { ChallengeMap } from './ChallengeMap'
+import { ChallengeBrowseMap } from './ChallengeBrowseMap'
 
 let basicProps = null
 let challenge = null
@@ -14,7 +14,7 @@ beforeEach(() => {
   basicProps = {
     browsedChallenge: challenge,
     mapBounds: {
-      challenge: {
+      challengeBrowse: {
         challengeId: challenge.id,
         bounds: toLatLngBounds([0, 0, 0, 0]),
       }
@@ -22,14 +22,13 @@ beforeEach(() => {
     source: {id: 'foo'},
     visibleOverlays: [],
     taskMarkers: [],
-    setChallengeMapBounds: jest.fn(),
-    updateBoundedChallenges: jest.fn(),
+    setChallengeBrowseMapBounds: jest.fn(),
   }
 })
 
 test("it renders a full screen map", () => {
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   expect(wrapper.find('.full-screen-map').exists()).toBe(true)
@@ -39,18 +38,18 @@ test("it renders a full screen map", () => {
 
 test("doesn't rerender simply because the map bounds change", () => {
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   const newProps = _cloneDeep(basicProps)
-  newProps.mapBounds.challenge.bounds = toLatLngBounds([-20, -20, 20, 20])
+  newProps.mapBounds.bounds = toLatLngBounds([-20, -20, 20, 20])
 
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(false)
 })
 
 test("rerenders if the default layer id changes", () => {
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   const newProps = _cloneDeep(basicProps)
@@ -61,7 +60,7 @@ test("rerenders if the default layer id changes", () => {
 
 test("rerenders if the challenge being browsed changes", () => {
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   const newProps = _cloneDeep(basicProps)
@@ -73,7 +72,7 @@ test("rerenders if the challenge being browsed changes", () => {
 test("rerenders if the challenge's tasks have loaded", () => {
   basicProps.tasksLoading = true
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   const newProps = _cloneDeep(basicProps)
@@ -87,12 +86,12 @@ test("moving the map signals that the challenge bounds are to be updated", () =>
   const zoom = 3
 
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   wrapper.instance().updateBounds(bounds, zoom, false)
   expect(
-    basicProps.setChallengeMapBounds
+    basicProps.setChallengeBrowseMapBounds
   ).toBeCalledWith(basicProps.browsedChallenge.id, bounds, zoom)
 })
 
@@ -100,7 +99,7 @@ test("a busy indicator is displayed if tasks are loading", () => {
   basicProps.tasksLoading = true
 
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   expect(wrapper.find('BusySpinner').exists()).toBe(true)
@@ -112,7 +111,7 @@ test("the busy indicator is removed once tasks are done loading", () => {
   basicProps.tasksLoading = false
 
   const wrapper = shallow(
-    <ChallengeMap {...basicProps} />
+    <ChallengeBrowseMap {...basicProps} />
   )
 
   expect(wrapper.find('BusySpinner').exists()).toBe(false)

@@ -15,7 +15,7 @@ import FitBoundsControl
        from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import WithTaskCenterPoint
        from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
-import WithMapBounds from '../../HOCs/WithMapBounds/WithMapBounds'
+import WithSearch from '../../HOCs/WithSearch/WithSearch'
 import WithIntersectingOverlays
        from '../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
@@ -146,10 +146,11 @@ TaskMap.propTypes = {
   centerPoint: PropTypes.object.isRequired,
 }
 
-export default WithMapBounds(
+export default WithSearch(
   WithTaskCenterPoint(
     WithVisibleLayer(
       WithIntersectingOverlays(TaskMap, 'task')
     )
-  )
+  ),
+  'task'
 )

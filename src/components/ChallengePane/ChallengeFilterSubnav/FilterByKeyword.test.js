@@ -27,7 +27,7 @@ const propsFixture = {
       }
     }
   ],
-  challengeFilter: {
+  searchFilters: {
     difficulty: 1,
     keywords: 'Challenge'
   }
@@ -38,7 +38,7 @@ let basicProps = null
 beforeEach(() => {
   basicProps = _cloneDeep(propsFixture)
   basicProps.setKeywordFilter = jest.fn()
-  basicProps.removeChallengeFilters = jest.fn()
+  basicProps.removeSearchFilters = jest.fn()
   basicProps.intl = {formatMessage: jest.fn()}
 })
 
@@ -59,11 +59,11 @@ test("it calls setKeywordFilter if an onChange occurs with a value", () => {
   expect(basicProps.setKeywordFilter).toBeCalledWith(["natural", "water"])
 })
 
-test("it calls removeChallengeFilters if an onChange occurs with a null value", () => {
+test("it calls removeSearchFilters if an onChange occurs with a null value", () => {
   const wrapper = mount(
     <FilterByKeyword {...basicProps} />
   )
 
   wrapper.instance().updateFilter({value: null})
-  expect(basicProps.removeChallengeFilters).toBeCalledWith(['keywords'])
+  expect(basicProps.removeSearchFilters).toBeCalledWith(['keywords'])
 })

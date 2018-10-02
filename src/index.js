@@ -18,7 +18,7 @@ import BusySpinner from './components/BusySpinner/BusySpinner'
 import { initializePersistedStore } from './PersistedStore'
 import { fetchProjects } from './services/Project/Project'
 import { fetchFeaturedChallenges,
-         fetchEnabledChallenges,
+         extendedFind,
          fetchChallengeActions } from './services/Challenge/Challenge'
 import { loadCompleteUser, GUEST_USER_ID } from './services/User/User'
 import { setCheckingLoginStatus,
@@ -67,7 +67,7 @@ const {store} = initializePersistedStore((store) => {
 
   // Seed our store with some challenges.
   store.dispatch(fetchFeaturedChallenges())
-  store.dispatch(fetchEnabledChallenges(100))
+  store.dispatch(extendedFind({}, 100))
 
   // Seed our store with projects
   store.dispatch(fetchProjects())

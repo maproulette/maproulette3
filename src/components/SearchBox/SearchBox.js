@@ -35,16 +35,6 @@ export default class SearchBox extends Component {
    */
   queryChanged = (e) => {
     this.props.setSearch(e.target.value)
-    this.fetchResults(e.target.value)
-  }
-
-  /**
-   * @private
-   */
-  fetchResults = (query) => {
-    if (query && _isFunction(this.props.fetchResults)) {
-      this.props.fetchResults(query)
-    }
   }
 
   render() {
@@ -72,7 +62,7 @@ export default class SearchBox extends Component {
              <SvgSymbol viewBox='0 0 20 20' sym="search-icon" className="search-box__icon"/>
             }
             <div className={classNames('control', 'is-medium',
-              {'is-loading': this.props.searchQuery.fetchingResults})}
+              {'is-loading': _get(this.props, 'searchQuery.meta.fetchingResults')})}
             >
               <input type="text"
                      className="input is-medium search-box__input"
@@ -96,8 +86,6 @@ SearchBox.propTypes = {
   setSearch: PropTypes.func.isRequired,
   /** Invoked when the user clears the search text */
   clearSearch: PropTypes.func.isRequired,
-  /** Invoked periodically to fetch fresh search results, if given */
-  fetchResults: PropTypes.func,
   /** Invoked if user explicitly signals completion of search */
   deactivate: PropTypes.func,
   /** The current raw query string plus meta info */

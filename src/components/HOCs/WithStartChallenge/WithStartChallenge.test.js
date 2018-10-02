@@ -27,11 +27,9 @@ beforeEach(() => {
 
   basicState = {
     mapBounds: {
-      challenge: {
-        challengeId: challenge.id,
-        bounds: new LatLngBounds({lng: -10, lat: 10}, {lng: 10, lat: -10}),
-        zoom: 3,
-      }
+      challengeId: challenge.id,
+      bounds: new LatLngBounds({lng: -10, lat: 10}, {lng: 10, lat: -10}),
+      zoom: 3,
     },
   }
 
@@ -70,7 +68,7 @@ beforeEach(() => {
 test("chooseVisibleTask opts for a created task within the challenge bounds", () => {
   expect(
     chooseVisibleTask(challenge,
-                      basicState.mapBounds.challenge,
+                      basicState.mapBounds,
                       clusteredTasks)
 ).toEqual(taskInBoundsCreated)
 })
@@ -80,7 +78,7 @@ test("chooseVisibleTask will choose a skipped status if no created are available
 
   expect(
     chooseVisibleTask(challenge,
-                      basicState.mapBounds.challenge,
+                      basicState.mapBounds,
                       clusteredTasks)
   ).toEqual(taskInBoundsSkipped)
 })
@@ -91,7 +89,7 @@ test("chooseVisibleTask skips tasks not in a created or skipped status", () => {
 
   expect(
    chooseVisibleTask(challenge,
-                     basicState.mapBounds.challenge,
+                     basicState.mapBounds,
                      clusteredTasks)
   ).toBeFalsy()
 })

@@ -26,7 +26,9 @@ const propsFixture = {
         displayName: "bar",
       }
     }
-  ]
+  ],
+  setSearch: jest.fn(),
+  clearSearch: jest.fn(),
 }
 
 let basicProps = null

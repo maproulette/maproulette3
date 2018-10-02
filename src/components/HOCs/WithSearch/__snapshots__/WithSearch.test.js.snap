@@ -1,0 +1,374 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapDispatchToProps maps function performSearch 1`] = `
+Object {
+  "clearSearch": [Function],
+  "clearSearchFilters": [Function],
+  "clearSearchSort": [Function],
+  "locateMapToUser": [Function],
+  "performSearch": [Function],
+  "removeSearchFilters": [Function],
+  "removeSearchSort": [Function],
+  "setChallengeBrowseMapBounds": [Function],
+  "setChallengeOwnerMapBounds": [Function],
+  "setChallengeSearchMapBounds": [Function],
+  "setKeywordFilter": [Function],
+  "setSearch": [Function],
+  "setSearchFilters": [Function],
+  "setSearchSort": [Function],
+  "setTaskMapBounds": [Function],
+}
+`;
+
+exports[`mapDispatchToProps maps function setSearch 1`] = `
+Object {
+  "clearSearch": [Function],
+  "clearSearchFilters": [Function],
+  "clearSearchSort": [Function],
+  "locateMapToUser": [Function],
+  "performSearch": [Function],
+  "removeSearchFilters": [Function],
+  "removeSearchSort": [Function],
+  "setChallengeBrowseMapBounds": [Function],
+  "setChallengeOwnerMapBounds": [Function],
+  "setChallengeSearchMapBounds": [Function],
+  "setKeywordFilter": [Function],
+  "setSearch": [Function],
+  "setSearchFilters": [Function],
+  "setSearchSort": [Function],
+  "setTaskMapBounds": [Function],
+}
+`;
+
+exports[`mapStateToProps maps currentSearch 1`] = `
+Object {
+  "currentSearch": Object {
+    "challenges": Object {
+      "filters": Object {
+        "difficulty": "hard",
+        "featured": true,
+        "keywords": "testing",
+        "location": "USA",
+      },
+      "mapBounds": Object {
+        "bounds": Array [
+          1,
+          2,
+          3,
+          4,
+        ],
+      },
+      "sort": Object {
+        "direction": "asc",
+        "sortBy": "created",
+      },
+    },
+    "searchQueryTest": "searchQueryValue",
+  },
+  "mapBounds": Object {
+    "bounds": Object {
+      "_northEast": Object {
+        "lat": 22.51255695405145,
+        "lng": 96.15234375,
+      },
+      "_southWest": Object {
+        "lat": -22.512556954051437,
+        "lng": -6.152343750000001,
+      },
+    },
+  },
+  "searchCriteria": undefined,
+  "searchFilters": Object {},
+  "searchSort": Object {},
+}
+`;
+
+exports[`searchQueries are passed through to the wrapped component 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Component
+    currentSearch={
+        Object {
+            "challenges": Object {
+              "filters": Object {
+                "difficulty": "hard",
+                "featured": true,
+                "keywords": "testing",
+                "location": "USA",
+              },
+              "mapBounds": Object {
+                "bounds": Array [
+                  1,
+                  2,
+                  3,
+                  4,
+                ],
+              },
+              "sort": Object {
+                "direction": "asc",
+                "sortBy": "created",
+              },
+            },
+            "searchQueryTest": "searchQueryValue",
+          }
+    }
+    performSearch={[Function]}
+    searchGroup="challenges"
+    setChallengeSearchMapBounds={[Function]}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "clearSearch": [Function],
+      "currentSearch": Object {
+        "challenges": Object {
+          "filters": Object {
+            "difficulty": "hard",
+            "featured": true,
+            "keywords": "testing",
+            "location": "USA",
+          },
+          "mapBounds": Object {
+            "bounds": Array [
+              1,
+              2,
+              3,
+              4,
+            ],
+          },
+          "sort": Object {
+            "direction": "asc",
+            "sortBy": "created",
+          },
+        },
+        "searchQueryTest": "searchQueryValue",
+      },
+      "searchFunction": [Function],
+      "searchGroup": "challenges",
+      "searchQueries": Object {
+        "searchQueryTest": Object {
+          "clearSearch": [Function],
+          "searchQuery": "searchQueryValue",
+          "setSearch": [Function],
+        },
+      },
+      "searchQuery": "searchQueryValue",
+      "setChallengeSearchMapBounds": [Function],
+      "setSearch": [Function],
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "clearSearch": [Function],
+        "currentSearch": Object {
+          "challenges": Object {
+            "filters": Object {
+              "difficulty": "hard",
+              "featured": true,
+              "keywords": "testing",
+              "location": "USA",
+            },
+            "mapBounds": Object {
+              "bounds": Array [
+                1,
+                2,
+                3,
+                4,
+              ],
+            },
+            "sort": Object {
+              "direction": "asc",
+              "sortBy": "created",
+            },
+          },
+          "searchQueryTest": "searchQueryValue",
+        },
+        "searchFunction": [Function],
+        "searchGroup": "challenges",
+        "searchQueries": Object {
+          "searchQueryTest": Object {
+            "clearSearch": [Function],
+            "searchQuery": "searchQueryValue",
+            "setSearch": [Function],
+          },
+        },
+        "searchQuery": "searchQueryValue",
+        "setChallengeSearchMapBounds": [Function],
+        "setSearch": [Function],
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`searchQueries.searchGroup is passed through to the wrapped component 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Component
+    currentSearch={
+        Object {
+            "challenges": Object {
+              "filters": Object {
+                "difficulty": "hard",
+                "featured": true,
+                "keywords": "testing",
+                "location": "USA",
+              },
+              "mapBounds": Object {
+                "bounds": Array [
+                  1,
+                  2,
+                  3,
+                  4,
+                ],
+              },
+              "sort": Object {
+                "direction": "asc",
+                "sortBy": "created",
+              },
+            },
+            "searchQueryTest": "searchQueryValue",
+          }
+    }
+    performSearch={[Function]}
+    searchGroup="challenges"
+    setChallengeSearchMapBounds={[Function]}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "clearSearch": [Function],
+      "currentSearch": Object {
+        "challenges": Object {
+          "filters": Object {
+            "difficulty": "hard",
+            "featured": true,
+            "keywords": "testing",
+            "location": "USA",
+          },
+          "mapBounds": Object {
+            "bounds": Array [
+              1,
+              2,
+              3,
+              4,
+            ],
+          },
+          "sort": Object {
+            "direction": "asc",
+            "sortBy": "created",
+          },
+        },
+        "searchQueryTest": "searchQueryValue",
+      },
+      "searchFunction": [Function],
+      "searchGroup": "challenges",
+      "searchQueries": Object {
+        "searchQueryTest": Object {
+          "clearSearch": [Function],
+          "searchQuery": "searchQueryValue",
+          "setSearch": [Function],
+        },
+      },
+      "searchQuery": "searchQueryValue",
+      "setChallengeSearchMapBounds": [Function],
+      "setSearch": [Function],
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "clearSearch": [Function],
+        "currentSearch": Object {
+          "challenges": Object {
+            "filters": Object {
+              "difficulty": "hard",
+              "featured": true,
+              "keywords": "testing",
+              "location": "USA",
+            },
+            "mapBounds": Object {
+              "bounds": Array [
+                1,
+                2,
+                3,
+                4,
+              ],
+            },
+            "sort": Object {
+              "direction": "asc",
+              "sortBy": "created",
+            },
+          },
+          "searchQueryTest": "searchQueryValue",
+        },
+        "searchFunction": [Function],
+        "searchGroup": "challenges",
+        "searchQueries": Object {
+          "searchQueryTest": Object {
+            "clearSearch": [Function],
+            "searchQuery": "searchQueryValue",
+            "setSearch": [Function],
+          },
+        },
+        "searchQuery": "searchQueryValue",
+        "setChallengeSearchMapBounds": [Function],
+        "setSearch": [Function],
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

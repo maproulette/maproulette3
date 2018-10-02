@@ -32,7 +32,7 @@ export class FilterByKeyword extends Component {
    */
   updateFilter = ({ value }) => {
     if (value === null) {
-      this.props.removeChallengeFilters(['keywords'])
+      this.props.removeSearchFilters(['keywords'])
     }
     else {
       this.props.setKeywordFilter(combinedCategoryKeywords[value])
@@ -51,7 +51,7 @@ export class FilterByKeyword extends Component {
     const localizedKeywordLabels = keywordLabels(this.props.intl, true)
 
     const categories = _without(_keys(combinedCategoryKeywords), 'other')
-    const activeCategory = categoryMatchingKeywords(this.props.challengeFilter.keywords, true)
+    const activeCategory = categoryMatchingKeywords(this.props.searchFilters.keywords, true)
     const selectOptions = categories.map(keyword => ({
       key: keyword,
       text: localizedKeywordLabels[keyword],
@@ -69,7 +69,7 @@ export class FilterByKeyword extends Component {
     // If the active category doesn't match a known category, then it's a
     // manually entered ("other") keyword
     const otherKeyword = activeCategory === CHALLENGE_CATEGORY_OTHER ?
-                         _first(this.props.challengeFilter.keywords) : null
+                         _first(this.props.searchFilters.keywords) : null
 
     // Add 'other' box for manually entering other keywords not included in menu.
     selectOptions.push({
@@ -90,7 +90,7 @@ export class FilterByKeyword extends Component {
       <Selection placeholder={anyOption.text}
                  label={this.props.intl.formatMessage(messages.keywordLabel)}
                  options={selectOptions}
-                 value={_isEmpty(this.props.challengeFilter.keywords) ?
+                 value={_isEmpty(this.props.searchFilters.keywords) ?
                         null : activeCategory}
                  onChange={this.updateFilter}
     />
@@ -102,15 +102,15 @@ FilterByKeyword.propTypes = {
   /** Invoked to update the challenge keyword filter */
   setKeywordFilter: PropTypes.func.isRequired,
   /** Invoked to clear the challenge keyword filter */
-  removeChallengeFilters: PropTypes.func.isRequired,
+  removeSearchFilters: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
-  challengeFilter: PropTypes.object,
+  searchFilter: PropTypes.object,
   /** Set to true to render a MenuList instead of NavDropdown */
   asMenuList: PropTypes.bool,
 }
 
 FilterByKeyword.defaultProps = {
-  challengeFilter: {},
+  searchFilters: {},
   asMenuList: false,
 }
 

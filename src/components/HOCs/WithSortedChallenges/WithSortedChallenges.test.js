@@ -84,7 +84,7 @@ test("by default saved and featured challenges come ahead of everything else", (
 })
 
 test("challenges can be sorted by name", () => {
-  basicProps.challengeSort = {sortBy: 'name'}
+  basicProps.searchSort = {sortBy: 'name'}
   const sortedChallenges = sortChallenges(basicProps)
 
   expect(

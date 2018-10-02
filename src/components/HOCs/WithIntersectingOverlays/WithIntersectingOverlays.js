@@ -5,16 +5,16 @@ import _isEmpty from 'lodash/isEmpty'
 import { getGeom } from '@turf/invariant'
 import bboxPolygon from '@turf/bbox-polygon'
 import booleanDisjoint from '@turf/boolean-disjoint'
-import WithMapBounds from '../WithMapBounds/WithMapBounds'
+import WithSearch from '../WithSearch/WithSearch'
 import WithLayerSources from '../WithLayerSources/WithLayerSources'
 
-export const WithIntersectingOverlays = function(WrappedComponent, mapBoundsField) {
+export const WithIntersectingOverlays = function(WrappedComponent) {
   return class extends Component {
     render() {
       // Include all overlays by default. Narrow it down to intersecting ones
       // if we get valid map bounds.
       let includedOverlays = _filter(this.props.layerSources, {overlay: true})
-      const mapBounds = _get(this.props.mapBounds, `${mapBoundsField}.bounds`)
+      const mapBounds = _get(this.props, "mapBounds.bounds")
 
       if (mapBounds) {
         const boundsPoly = bboxPolygon([mapBounds.getWest(), mapBounds.getSouth(),
@@ -34,5 +34,7 @@ export const WithIntersectingOverlays = function(WrappedComponent, mapBoundsFiel
   }
 }
 
-export default (WrappedComponent, mapBoundsField) =>
-  WithMapBounds(WithLayerSources(WithIntersectingOverlays(WrappedComponent, mapBoundsField)))
+export default (WrappedComponent, mapBoundsField, searchName) => WithSearch(
+    WithLayerSources(WithIntersectingOverlays(WrappedComponent)),
+    mapBoundsField
+  )

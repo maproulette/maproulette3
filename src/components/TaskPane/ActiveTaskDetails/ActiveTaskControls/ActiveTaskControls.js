@@ -15,7 +15,7 @@ import MoreOptionsControl
        from './MoreOptionsControl/MoreOptionsControl'
 import TaskManageControls from '../../TaskManageControls/TaskManageControls'
 import SignInButton from '../../../SignInButton/SignInButton'
-import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
+import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithDeactivateOnOutsideClick from
        '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import WithKeyboardShortcuts
@@ -48,7 +48,7 @@ export class ActiveTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, this.props.mapBounds.task)
+    this.props.editTask(value, this.props.task, this.props.mapBounds)
   }
 
   /** Indicate the editor has been closed without completing the task */
@@ -159,8 +159,9 @@ ActiveTaskControls.defaultProps = {
   editor: {},
 }
 
-export default WithMapBounds(
+export default WithSearch(
   WithKeyboardShortcuts(
     injectIntl(ActiveTaskControls)
-  )
+  ),
+  'task'
 )

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _map from 'lodash/map'
 import _reject from 'lodash/reject'
-import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import { injectIntl } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
@@ -27,23 +26,21 @@ export class FilterByLocation extends Component {
    */
   updateFilter = ({ value }) => {
     if (_isEmpty(value)) {
-      this.props.removeChallengeFilters(['location'])
+      this.props.removeSearchFilters(['location'])
     }
     else {
-      this.props.setChallengeFilters({location: value})
+      this.props.setSearchFilters({location: value})
 
       // For nearMe, we actually use the withinMapBounds setting -- we just
       // also set the map bounds to be near the user.
       if (value === ChallengeLocation.nearMe) {
         // Note: repositioning the map will automatically trigger an update of the
         // bounded challenges, so we don't need to request an update here.
-        this.props.setChallengeFilters({location: ChallengeLocation.withinMapBounds})
+        this.props.setSearchFilters({location: ChallengeLocation.withinMapBounds})
         this.props.locateMapToUser(this.props.user)
       }
       else {
-        this.props.setChallengeFilters({location: value})
-        this.props.updateBoundedChallenges(
-          _get(this.props, 'mapBounds.locator.bounds'))
+        this.props.setSearchFilters({location: value})
       }
     }
   }
@@ -75,7 +72,7 @@ export class FilterByLocation extends Component {
       <Selection placeholder={anyOption.text}
                  label={this.props.intl.formatMessage(messages.locationLabel)}
                  options={selectOptions}
-                 value={this.props.challengeFilter.location}
+                 value={this.props.searchFilters.location}
                  onChange={this.updateFilter}
       />
     )
@@ -86,15 +83,13 @@ FilterByLocation.propTypes = {
   /** The current map bounds */
   mapBounds: PropTypes.object,
   /** Invoked to update the challenge location filter */
-  setChallengeFilters: PropTypes.func.isRequired,
+  setSearchFilters: PropTypes.func.isRequired,
   /** Invoked to clear the challenge location filter */
-  removeChallengeFilters: PropTypes.func.isRequired,
+  removeSearchFilters: PropTypes.func.isRequired,
   /** Invoked when the user chooses the 'near me' option */
   locateMapToUser: PropTypes.func.isRequired,
-  /** Invoked when the user chooses 'within map bounds' option */
-  updateBoundedChallenges: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
-  challengeFilter: PropTypes.object,
+  searchFilters: PropTypes.object,
   /** The current logged-in user, if any */
   user: PropTypes.object,
   /** Set to true to render a MenuList instead of NavDropdown */
@@ -102,7 +97,7 @@ FilterByLocation.propTypes = {
 }
 
 FilterByLocation.defaultProps = {
-  challengeFilter: {},
+  searchFilters: {},
   asMenuList: false,
 }
 

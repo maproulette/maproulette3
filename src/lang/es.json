@@ -158,7 +158,7 @@
     "ConfirmAction.cancel": "Cancelar",
     "ConfirmAction.proceed": "Proceed",
     "HelpPopout.control.label": "Help",
-    "LocatorMap.controls.startChallenge.label": "Inicio",
+    "ChallengeSearchMap.controls.startChallenge.label": "Inicio",
     "Navbar.links.userProfile": "Perfil de Usuario",
     "Navbar.links.signout": "Desconectar",
     "Navbar.links.about": "About",

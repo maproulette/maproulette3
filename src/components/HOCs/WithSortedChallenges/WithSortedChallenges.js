@@ -5,15 +5,15 @@ import _findIndex from 'lodash/findIndex'
 import _sortBy from 'lodash/sortBy'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
-import WithChallengeSort from '../WithChallengeSort/WithChallengeSort'
+import WithChallengeSearch from '../WithSearch/WithChallengeSearch'
 import { SORT_NAME, SORT_CREATED, ALL_SORT_OPTIONS }
-       from '../../../services/Sort/Sort'
+       from '../../../services/Search/Search'
 
 const FEATURED_POINTS = -1
 const SAVED_POINTS = -2
 
 export const sortChallenges = function(props, challengesProp='challenges') {
-  const sortCriteria = _get(props, 'challengeSort.sortBy')
+  const sortCriteria = _get(props, 'searchSort.sortBy')
 
   let sortedChallenges = props[challengesProp]
 
@@ -63,5 +63,5 @@ export default function(WrappedComponent,
     challenges: PropTypes.array,
   }
 
-  return WithChallengeSort(WithSortedChallenges)
+  return WithChallengeSearch(WithSortedChallenges)
 }

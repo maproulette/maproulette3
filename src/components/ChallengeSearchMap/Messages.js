@@ -1,11 +1,11 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with LocatorMap
+ * Internationalized messages for use with ChallengeSearchMap
  */
 export default defineMessages({
   startChallengeLabel: {
-    id: "LocatorMap.controls.startChallenge.label",
+    id: "ChallengeSearchMap.controls.startChallenge.label",
     defaultMessage: "Start Challenge"
   },
 })

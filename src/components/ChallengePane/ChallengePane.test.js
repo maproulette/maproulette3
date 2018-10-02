@@ -32,7 +32,7 @@ test("renders with props as expected", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test("when no browsed challenge, the locator map is rendered", () => {
+test("when no browsed challenge, the challenge search map is rendered", () => {
   const wrapper = shallow(
     <ChallengePane {...basicProps} />
   )
@@ -40,6 +40,7 @@ test("when no browsed challenge, the locator map is rendered", () => {
   expect(
     wrapper.find('Connect(Component)').exists()
   ).toBe(true)
+  expect(wrapper).toMatchSnapshot()
 })
 
 test("when browsing a challenge, the challenge map is rendered", () => {
@@ -50,7 +51,7 @@ test("when browsing a challenge, the challenge map is rendered", () => {
   )
 
   expect(
-    wrapper.find('Connect(Connect(Connect(Connect(Component))))').exists()
+    wrapper.find('Connect(Connect(Connect(Component)))').exists()
   ).toBe(true)
 
   expect(wrapper).toMatchSnapshot()

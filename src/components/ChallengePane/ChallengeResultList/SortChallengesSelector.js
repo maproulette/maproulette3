@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { injectIntl } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
-import { sortLabels, SORT_DEFAULT } from '../../../services/Sort/Sort'
+import { sortLabels, SORT_DEFAULT } from '../../../services/Search/Search'
 import WithDeactivateOnOutsideClick
        from '../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import DropdownButton from '../../Bulma/DropdownButton'
@@ -20,7 +20,7 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
  */
 export class SortChallengesSelector extends Component {
   onSelect = selection => {
-    this.props.setChallengeSort({sortBy: selection.value})
+    this.props.setSearchSort({sortBy: selection.value})
   }
 
   render() {
@@ -32,7 +32,7 @@ export class SortChallengesSelector extends Component {
       value: sortBy,
     }))
 
-    const currentSortCriteria = _get(this.props, 'challengeSort.sortBy')
+    const currentSortCriteria = _get(this.props, 'searchSort.sortBy')
     const activeLabel = currentSortCriteria ? localizedLabels[currentSortCriteria] :
                         localizedLabels[SORT_DEFAULT]
 
@@ -52,7 +52,7 @@ export class SortChallengesSelector extends Component {
 
 SortChallengesSelector.propTypes = {
   /** Invoked to sort the challenges when a value is selected */
-  setChallengeSort: PropTypes.func.isRequired,
+  setSearchSort: PropTypes.func.isRequired,
 }
 
 export default injectIntl(SortChallengesSelector)

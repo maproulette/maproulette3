@@ -4,30 +4,27 @@ exports[`it renders a full screen map 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <LocatorMap
+  Symbol(enzyme.__unrendered__): <ChallengeSearchMap
     mapBounds={
         Object {
-            "locator": Object {
-              "bounds": Object {
-                "_northEast": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-                "_southWest": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
+            "bounds": Object {
+              "_northEast": Object {
+                "lat": 0,
+                "lng": 0,
+              },
+              "_southWest": Object {
+                "lat": 0,
+                "lng": 0,
               },
             },
           }
     }
-    setLocatorMapBounds={[Function]}
+    setChallengeSearchMapBounds={[Function]}
     source={
         Object {
             "id": "foo",
           }
     }
-    updateBoundedChallenges={[Function]}
     visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -39,34 +36,31 @@ ShallowWrapper {
   },
   Symbol(enzyme.__node__): Object {
     "instance": null,
-    "key": "locator",
+    "key": "ChallengeSearchMap",
     "nodeType": "host",
     "props": Object {
       "children": Array [
         <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
           mapBounds={
                     Object {
-                              "locator": Object {
-                                "bounds": Object {
-                                  "_northEast": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
-                                  "_southWest": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
+                              "bounds": Object {
+                                "_northEast": Object {
+                                  "lat": 0,
+                                  "lng": 0,
+                                },
+                                "_southWest": Object {
+                                  "lat": 0,
+                                  "lng": 0,
                                 },
                               },
                             }
           }
-          setLocatorMapBounds={[Function]}
+          setChallengeSearchMapBounds={[Function]}
           source={
                     Object {
                               "id": "foo",
                             }
           }
-          updateBoundedChallenges={[Function]}
           visibleOverlays={Array []}
 />,
         <EnhancedMap
@@ -104,27 +98,24 @@ ShallowWrapper {
           <InjectIntl(SourcedTileLayer)
                     mapBounds={
                               Object {
-                                        "locator": Object {
-                                          "bounds": Object {
-                                            "_northEast": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
-                                            "_southWest": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
+                                        "bounds": Object {
+                                          "_northEast": Object {
+                                            "lat": 0,
+                                            "lng": 0,
+                                          },
+                                          "_southWest": Object {
+                                            "lat": 0,
+                                            "lng": 0,
                                           },
                                         },
                                       }
                     }
-                    setLocatorMapBounds={[Function]}
+                    setChallengeSearchMapBounds={[Function]}
                     source={
                               Object {
                                         "id": "foo",
                                       }
                     }
-                    updateBoundedChallenges={[Function]}
                     visibleOverlays={Array []}
                     zIndex={1}
           />
@@ -141,24 +132,21 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "mapBounds": Object {
-            "locator": Object {
-              "bounds": Object {
-                "_northEast": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-                "_southWest": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
+            "bounds": Object {
+              "_northEast": Object {
+                "lat": 0,
+                "lng": 0,
+              },
+              "_southWest": Object {
+                "lat": 0,
+                "lng": 0,
               },
             },
           },
-          "setLocatorMapBounds": [Function],
+          "setChallengeSearchMapBounds": [Function],
           "source": Object {
             "id": "foo",
           },
-          "updateBoundedChallenges": [Function],
           "visibleOverlays": Array [],
         },
         "ref": null,
@@ -183,27 +171,24 @@ ShallowWrapper {
             <InjectIntl(SourcedTileLayer)
               mapBounds={
                             Object {
-                                          "locator": Object {
-                                            "bounds": Object {
-                                              "_northEast": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
-                                              "_southWest": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
+                                          "bounds": Object {
+                                            "_northEast": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                            "_southWest": Object {
+                                              "lat": 0,
+                                              "lng": 0,
                                             },
                                           },
                                         }
               }
-              setLocatorMapBounds={[Function]}
+              setChallengeSearchMapBounds={[Function]}
               source={
                             Object {
                                           "id": "foo",
                                         }
               }
-              updateBoundedChallenges={[Function]}
               visibleOverlays={Array []}
               zIndex={1}
 />,
@@ -247,24 +232,21 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "mapBounds": Object {
-                "locator": Object {
-                  "bounds": Object {
-                    "_northEast": Object {
-                      "lat": 0,
-                      "lng": 0,
-                    },
-                    "_southWest": Object {
-                      "lat": 0,
-                      "lng": 0,
-                    },
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
                   },
                 },
               },
-              "setLocatorMapBounds": [Function],
+              "setChallengeSearchMapBounds": [Function],
               "source": Object {
                 "id": "foo",
               },
-              "updateBoundedChallenges": [Function],
               "visibleOverlays": Array [],
               "zIndex": 1,
             },
@@ -283,34 +265,31 @@ ShallowWrapper {
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
-      "key": "locator",
+      "key": "ChallengeSearchMap",
       "nodeType": "host",
       "props": Object {
         "children": Array [
           <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
             mapBounds={
                         Object {
-                                    "locator": Object {
-                                      "bounds": Object {
-                                        "_northEast": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
-                                        "_southWest": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
+                                    "bounds": Object {
+                                      "_northEast": Object {
+                                        "lat": 0,
+                                        "lng": 0,
+                                      },
+                                      "_southWest": Object {
+                                        "lat": 0,
+                                        "lng": 0,
                                       },
                                     },
                                   }
             }
-            setLocatorMapBounds={[Function]}
+            setChallengeSearchMapBounds={[Function]}
             source={
                         Object {
                                     "id": "foo",
                                   }
             }
-            updateBoundedChallenges={[Function]}
             visibleOverlays={Array []}
 />,
           <EnhancedMap
@@ -348,27 +327,24 @@ ShallowWrapper {
             <InjectIntl(SourcedTileLayer)
                         mapBounds={
                                     Object {
-                                                "locator": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
+                                                "bounds": Object {
+                                                  "_northEast": Object {
+                                                    "lat": 0,
+                                                    "lng": 0,
+                                                  },
+                                                  "_southWest": Object {
+                                                    "lat": 0,
+                                                    "lng": 0,
                                                   },
                                                 },
                                               }
                         }
-                        setLocatorMapBounds={[Function]}
+                        setChallengeSearchMapBounds={[Function]}
                         source={
                                     Object {
                                                 "id": "foo",
                                               }
                         }
-                        updateBoundedChallenges={[Function]}
                         visibleOverlays={Array []}
                         zIndex={1}
             />
@@ -385,24 +361,21 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "mapBounds": Object {
-              "locator": Object {
-                "bounds": Object {
-                  "_northEast": Object {
-                    "lat": 0,
-                    "lng": 0,
-                  },
-                  "_southWest": Object {
-                    "lat": 0,
-                    "lng": 0,
-                  },
+              "bounds": Object {
+                "_northEast": Object {
+                  "lat": 0,
+                  "lng": 0,
+                },
+                "_southWest": Object {
+                  "lat": 0,
+                  "lng": 0,
                 },
               },
             },
-            "setLocatorMapBounds": [Function],
+            "setChallengeSearchMapBounds": [Function],
             "source": Object {
               "id": "foo",
             },
-            "updateBoundedChallenges": [Function],
             "visibleOverlays": Array [],
           },
           "ref": null,
@@ -427,27 +400,24 @@ ShallowWrapper {
               <InjectIntl(SourcedTileLayer)
                 mapBounds={
                                 Object {
-                                                "locator": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
+                                                "bounds": Object {
+                                                  "_northEast": Object {
+                                                    "lat": 0,
+                                                    "lng": 0,
+                                                  },
+                                                  "_southWest": Object {
+                                                    "lat": 0,
+                                                    "lng": 0,
                                                   },
                                                 },
                                               }
                 }
-                setLocatorMapBounds={[Function]}
+                setChallengeSearchMapBounds={[Function]}
                 source={
                                 Object {
                                                 "id": "foo",
                                               }
                 }
-                updateBoundedChallenges={[Function]}
                 visibleOverlays={Array []}
                 zIndex={1}
 />,
@@ -491,24 +461,21 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "mapBounds": Object {
-                  "locator": Object {
-                    "bounds": Object {
-                      "_northEast": Object {
-                        "lat": 0,
-                        "lng": 0,
-                      },
-                      "_southWest": Object {
-                        "lat": 0,
-                        "lng": 0,
-                      },
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
                     },
                   },
                 },
-                "setLocatorMapBounds": [Function],
+                "setChallengeSearchMapBounds": [Function],
                 "source": Object {
                   "id": "foo",
                 },
-                "updateBoundedChallenges": [Function],
                 "visibleOverlays": Array [],
                 "zIndex": 1,
               },

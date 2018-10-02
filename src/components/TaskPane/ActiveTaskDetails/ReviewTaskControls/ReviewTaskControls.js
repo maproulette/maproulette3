@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
 import _omit from 'lodash/omit'
 import AsManager from '../../../../interactions/User/AsManager'
-import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
+import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import TaskEditControl from '../ActiveTaskControls/TaskEditControl/TaskEditControl'
@@ -48,7 +48,7 @@ export class ReviewTaskControls extends Component {
 
   /** Open the task in an editor */
   pickEditor = ({ value }) => {
-    this.props.editTask(value, this.props.task, this.props.mapBounds.task)
+    this.props.editTask(value, this.props.task, this.props.mapBounds)
   }
 
   modifyTaskRoute = () => {
@@ -120,4 +120,4 @@ ReviewTaskControls.propTypes = {
   nextSequentialTask: PropTypes.func.isRequired,
 }
 
-export default WithMapBounds(WithKeyboardShortcuts(ReviewTaskControls))
+export default WithSearch(WithKeyboardShortcuts(ReviewTaskControls), 'task')

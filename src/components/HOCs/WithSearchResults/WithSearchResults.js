@@ -8,7 +8,7 @@ import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _startsWith from 'lodash/startsWith'
 import _omit from 'lodash/omit'
-import WithSearchQuery from '../WithSearchQuery/WithSearchQuery'
+import WithSearch from '../WithSearch/WithSearch'
 import { parseQueryString } from '../../../services/Search/Search'
 
 // Local fuzzy search configuration. See fusejs.io for details.
@@ -54,7 +54,7 @@ export const WithSearchResults = function(WrappedComponent, searchName, itemsPro
     }
 
     render() {
-      const query = _get(this.props, `searchQueries.${searchName}.searchQuery.query`, '')
+      const query = _get(this.props, `searchCriteria.query`, '')
       let items = this.props[itemsProp]
       let searchResults = this.props[itemsProp]
 
@@ -87,7 +87,7 @@ export const WithSearchResults = function(WrappedComponent, searchName, itemsPro
 }
 
 export default (WrappedComponent, searchName, itemsProp, outputProp) =>
-  WithSearchQuery(
+  WithSearch(
     WithSearchResults(WrappedComponent, searchName, itemsProp, outputProp),
     searchName
   )

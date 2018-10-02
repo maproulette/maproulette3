@@ -6,12 +6,8 @@ let WrappedComponent = null
 
 beforeEach(() => {
   basicProps = {
-    searchQueries: {
-      mySearchName: {
-        searchQuery: {
-          query: ""
-        }
-      }
+    searchCriteria: {
+      query: ""
     },
     myItems: [
       {
@@ -35,19 +31,19 @@ beforeEach(() => {
   )
 })
 
-test("Search query is passed using given 'searchName' to wrapped component", () => {
+test("Search query is passed to wrapped component", () => {
   const wrapper = shallow(
     <WrappedComponent {...basicProps} />
   )
 
-  expect(wrapper.props().searchQueries.mySearchName.searchQuery.query).toBe("")
+  expect(wrapper.props().searchCriteria.query).toBe("")
   expect(wrapper.props().myItems.length).toBe(basicProps.myItems.length)
 
   expect(wrapper).toMatchSnapshot()
 })
 
 test("Search Results with tags are passed first in search results", () => {
-  basicProps.searchQueries.mySearchName.searchQuery.query = "#bar"
+  basicProps.searchCriteria.query = "#bar"
 
   const wrapper = shallow(
     <WrappedComponent {...basicProps} />
