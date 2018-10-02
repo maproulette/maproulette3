@@ -7,9 +7,6 @@ import _omit from 'lodash/omit'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import BusySpinner from '../BusySpinner/BusySpinner'
-import WithTaskCenterPoint
-       from '../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
-import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithEditor from '../HOCs/WithEditor/WithEditor'
 import WithChallengePreferences
@@ -21,7 +18,6 @@ import './TaskPane.css'
 // Setup child components with necessary HOCs
 const TaskDetailsSidebar = WithCurrentUser(WithEditor(ActiveTaskDetails))
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
-const DetailMap = WithMapBounds(WithTaskCenterPoint(TaskMap))
 
 /**
  * TaskPane presents the current task being actively worked upon. It contains
@@ -77,9 +73,9 @@ export class TaskPane extends Component {
                               {..._omit(this.props, 'completeTask')} />
         </MediaQuery>
         <MapPane completingTask={this.state.completingTask}>
-          <DetailMap task={this.props.task}
-                     challenge={this.props.task.parent}
-                     {...this.props} />
+          <TaskMap task={this.props.task}
+                   challenge={this.props.task.parent}
+                   {...this.props} />
         </MapPane>
         <MediaQuery query="(max-width: 1023px)">
           <MobileTabBar {...this.props} />

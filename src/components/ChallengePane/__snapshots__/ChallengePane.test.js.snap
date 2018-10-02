@@ -1014,7 +1014,7 @@ ShallowWrapper {
                     </Sidebar>
           </MediaQuery>
           <Connect(MapPane)>
-                    <WithTaskMarkers(Connect(Connect(ChallengeMap)))
+                    <WithTaskMarkers(Connect(Connect(Connect(Connect(Connect(Connect(InjectIntl(_WithLayerSources))))))))
                               browsedChallenge={
                                         Object {
                                                   "id": 123,
@@ -1141,7 +1141,7 @@ ShallowWrapper {
               </Sidebar>
 </MediaQuery>,
             <Connect(MapPane)>
-              <WithTaskMarkers(Connect(Connect(ChallengeMap)))
+              <WithTaskMarkers(Connect(Connect(Connect(Connect(Connect(Connect(InjectIntl(_WithLayerSources))))))))
                             browsedChallenge={
                                           Object {
                                                         "id": 123,
@@ -1365,7 +1365,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <WithTaskMarkers(Connect(Connect(ChallengeMap)))
+              "children": <WithTaskMarkers(Connect(Connect(Connect(Connect(Connect(Connect(InjectIntl(_WithLayerSources))))))))
                 browsedChallenge={
                                 Object {
                                                 "id": 123,
@@ -1525,7 +1525,7 @@ ShallowWrapper {
                         </Sidebar>
             </MediaQuery>
             <Connect(MapPane)>
-                        <WithTaskMarkers(Connect(Connect(ChallengeMap)))
+                        <WithTaskMarkers(Connect(Connect(Connect(Connect(Connect(Connect(InjectIntl(_WithLayerSources))))))))
                                     browsedChallenge={
                                                 Object {
                                                             "id": 123,
@@ -1652,7 +1652,7 @@ ShallowWrapper {
                 </Sidebar>
 </MediaQuery>,
               <Connect(MapPane)>
-                <WithTaskMarkers(Connect(Connect(ChallengeMap)))
+                <WithTaskMarkers(Connect(Connect(Connect(Connect(Connect(Connect(InjectIntl(_WithLayerSources))))))))
                                 browsedChallenge={
                                                 Object {
                                                                 "id": 123,
@@ -1876,7 +1876,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <WithTaskMarkers(Connect(Connect(ChallengeMap)))
+                "children": <WithTaskMarkers(Connect(Connect(Connect(Connect(Connect(Connect(InjectIntl(_WithLayerSources))))))))
                   browsedChallenge={
                                     Object {
                                                       "id": 123,

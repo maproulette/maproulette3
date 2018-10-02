@@ -8,12 +8,16 @@ import bbox from '@turf/bbox'
 import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _isEqual from 'lodash/isEqual'
 import { latLng } from 'leaflet'
+import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
+import WithIntersectingOverlays
+       from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import BusySpinner from '../BusySpinner/BusySpinner'
 
@@ -39,9 +43,19 @@ export class ChallengeMap extends Component {
     // We want to be careful about not constantly re-rendering, so we only
     // re-render if something meaningful changes:
 
-    // the layer has been changed, or
-    if (nextProps.layerSourceId !== this.props.layerSourceId) {
+    // the base layer has changed, or
+    if (_get(nextProps, 'source.id') !== _get(this.props, 'source.id')) {
       return true
+    }
+
+    // the available overlays have changed, or
+    if (!_isEqual(nextProps.intersectingOverlays, this.props.intersectingOverlays)) {
+      return true
+    }
+
+    // the visible overlays have changed, or
+    if (nextProps.visibleOverlays.length !== this.props.visibleOverlays.length) {
+       return true
     }
 
     // the browsed challenge has changed, or
@@ -118,6 +132,10 @@ export class ChallengeMap extends Component {
       )
     }
 
+    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
+      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    )
+
     return (
       <div key={this.props.browsedChallenge.id}
            className={classNames('full-screen-map', this.props.className)}>
@@ -130,7 +148,8 @@ export class ChallengeMap extends Component {
                      justFitFeatures={hasTaskMarkers}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
-          <VisibleTileLayer defaultLayer={this.props.layerSourceId} {...this.props} />
+          <VisibleTileLayer {...this.props} zIndex={1} />
+          {overlayLayers}
           {hasTaskMarkers &&
             <MarkerClusterGroup markers={this.props.taskMarkers}
                                 onMarkerClick={this.markerClicked} />
@@ -154,8 +173,12 @@ ChallengeMap.propTypes = {
   setChallengeMapBounds: PropTypes.func.isRequired,
   /** Invoked when the user clicks on an individual task marker */
   onTaskClick: PropTypes.func,
-  /** id of default layer to display */
-  layerSourceId: PropTypes.string,
 }
 
-export default WithMapBounds(WithStatus(ChallengeMap))
+export default WithMapBounds(
+  WithStatus(
+    WithVisibleLayer(
+      WithIntersectingOverlays(ChallengeMap, 'challenge')
+    )
+  )
+)

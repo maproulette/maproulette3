@@ -5,6 +5,7 @@ import localForage from 'localforage'
 import _has from 'lodash/has'
 import _isObject from 'lodash/isObject'
 import { visibleLayer } from './services/VisibleLayer/VisibleLayer'
+import { visibleOverlays } from './services/VisibleLayer/VisibleOverlays'
 import { currentUser, userEntities } from './services/User/User'
 import { projectEntities } from './services/Project/Project'
 import { challengeEntities } from './services/Challenge/Challenge'
@@ -134,6 +135,7 @@ export const initializePersistedStore = callback => {
   // redux root reducer defining the top-level reducers in the store
   const rootReducer = combineReducers({
       visibleLayer,
+      visibleOverlays,
       currentUser,
       currentFilters,
       currentSort,

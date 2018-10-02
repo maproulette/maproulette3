@@ -50,8 +50,8 @@ test("when browsing a challenge, the challenge map is rendered", () => {
   )
 
   expect(
-    wrapper.find('WithTaskMarkers(Connect(Connect(ChallengeMap)))'
-  ).exists()).toBe(true)
+    wrapper.find('Connect(Connect(Connect(Connect(Component))))').exists()
+  ).toBe(true)
 
   expect(wrapper).toMatchSnapshot()
 })

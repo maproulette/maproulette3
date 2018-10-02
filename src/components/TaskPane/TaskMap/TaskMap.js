@@ -5,19 +5,24 @@ import { ZoomControl } from 'react-leaflet'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
+import _map from 'lodash/map'
+import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
-import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
+import SourcedTileLayer
+       from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
-import FitBoundsControl from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
+import FitBoundsControl
+       from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
+import WithTaskCenterPoint
+       from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
+import WithMapBounds from '../../HOCs/WithMapBounds/WithMapBounds'
+import WithIntersectingOverlays
+       from '../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
-import { MIN_ZOOM,
-         MAX_ZOOM,
-          DEFAULT_ZOOM }
+import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.css'
-
-const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
 
 /**
  * TaskMap renders a map (and controls) appropriate for the given task,
@@ -26,7 +31,7 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class TaskMap extends Component {
+export class TaskMap extends Component {
   state = {
     showTaskFeatures: true,
   }
@@ -48,6 +53,18 @@ export default class TaskMap extends Component {
     }
 
     if(_get(nextProps, 'task.id') !== _get(this.props, 'task.id')) {
+      return true
+    }
+
+    if (_get(nextProps, 'source.id') !== _get(this.props, 'source.id')) {
+      return true
+    }
+
+    if (!_isEqual(nextProps.intersectingOverlays, this.props.intersectingOverlays)) {
+      return true
+    }
+
+    if (nextProps.visibleOverlays.length !== this.props.visibleOverlays.length) {
       return true
     }
 
@@ -82,6 +99,10 @@ export default class TaskMap extends Component {
       return <BusySpinner />
     }
 
+    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
+      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    )
+
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
     const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
@@ -105,7 +126,8 @@ export default class TaskMap extends Component {
         >
           <ZoomControl position='topright' />
           <FitBoundsControl />
-          <VisibleTileLayer maxZoom={maxZoom} {...this.props} />
+          <SourcedTileLayer maxZoom={maxZoom} {...this.props} zIndex={1} />
+          {overlayLayers}
         </EnhancedMap>
       </div>
     )
@@ -123,3 +145,11 @@ TaskMap.propTypes = {
    */
   centerPoint: PropTypes.object.isRequired,
 }
+
+export default WithMapBounds(
+  WithTaskCenterPoint(
+    WithVisibleLayer(
+      WithIntersectingOverlays(TaskMap, 'task')
+    )
+  )
+)

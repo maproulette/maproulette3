@@ -7,20 +7,22 @@ import { ZoomControl } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import _get from 'lodash/get'
 import _each from 'lodash/each'
+import _map from 'lodash/map'
+import _isEqual from 'lodash/isEqual'
 import { latLng } from 'leaflet'
 import { ChallengeLocation }
        from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
+import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import WithChallengeFilters from '../HOCs/WithChallengeFilters/WithChallengeFilters'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
+import WithIntersectingOverlays
+       from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
-
-// Setup child components with necessary HOCs
-const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
 
 /**
  * LocatorMap presents a specially configured EnhancedMap that can be used to
@@ -50,8 +52,18 @@ export class LocatorMap extends Component {
     // We want to be careful about not constantly re-rendering, so we only
     // re-render if something meaningful changes:
 
-    // the layer has been changed, or
-    if (nextProps.layerSourceId !== this.props.layerSourceId) {
+    // the base layer has changed, or
+    if (_get(nextProps, 'source.id') !== _get(this.props, 'source.id')) {
+      return true
+    }
+
+    // the available overlays have changed, or
+    if (!_isEqual(nextProps.intersectingOverlays, this.props.intersectingOverlays)) {
+      return true
+    }
+
+    // the visible overlays have changed, or
+    if (nextProps.visibleOverlays.length !== this.props.visibleOverlays.length) {
       return true
     }
 
@@ -144,6 +156,10 @@ export class LocatorMap extends Component {
       _each(this.props.taskMarkers, marker => marker.popup = this.popupContent)
     }
 
+    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
+      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    )
+
     return (
       <div key='locator'
            className={classNames('full-screen-map', this.props.className)}>
@@ -154,7 +170,8 @@ export class LocatorMap extends Component {
                      zoomControl={false} animate={true}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
-          <VisibleTileLayer defaultLayer={this.props.layerSourceId} />
+          <SourcedTileLayer {...this.props} zIndex={1} />
+          {overlayLayers}
           {hasMarkers &&
            <MarkerClusterGroup markers={this.props.taskMarkers} />
           }
@@ -175,12 +192,19 @@ LocatorMap.propTypes = {
   mapBounds: PropTypes.object,
   /** Invoked when the user moves the locator map */
   setLocatorMapBounds: PropTypes.func.isRequired,
-  /** id of default layer to display */
-  layerSourceId: PropTypes.string,
   /** The currently enabled challenge filter, if any */
   challengeFilter: PropTypes.object,
   /** Task markers to display */
   taskMarkers: PropTypes.array,
 }
 
-export default WithChallengeFilters(WithMapBounds(injectIntl(LocatorMap)))
+export default WithChallengeFilters(
+  WithMapBounds(
+    WithVisibleLayer(
+      WithIntersectingOverlays(
+        injectIntl(LocatorMap),
+        'locator'
+      )
+    )
+  )
+)

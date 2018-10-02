@@ -19,7 +19,8 @@ beforeEach(() => {
         bounds: toLatLngBounds([0, 0, 0, 0]),
       }
     },
-    layerSourceId: "foo",
+    source: {id: 'foo'},
+    visibleOverlays: [],
     taskMarkers: [],
     setChallengeMapBounds: jest.fn(),
     updateBoundedChallenges: jest.fn(),
@@ -53,7 +54,7 @@ test("rerenders if the default layer id changes", () => {
   )
 
   const newProps = _cloneDeep(basicProps)
-  newProps.layerSourceId = 'bar'
+  newProps.source = {id: 'bar'}
 
   expect(wrapper.instance().shouldComponentUpdate(newProps)).toBe(true)
 })

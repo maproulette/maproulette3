@@ -87,9 +87,9 @@ project is still required.
 
 Default map layers are determined by pulling in data from the [OSM Editor Layer
 Index](https://github.com/osmlab/editor-layer-index) at build time and
-extracting (non-overlay) layers marked as default layers with global coverage.
-These are stored in the `src/defaultLayers.json` file. Modifying this file is
-not recommended as it will be overwritten automatically by the build process.
+extracting layers marked as default layers with global coverage. These are
+stored in the `src/defaultLayers.json` file. Modifying this file is not
+recommended as it will be overwritten automatically by the build process.
 
 Layer ids of additional desired layers from the Layer Index can be specified in
 the `REACT_APP_ADDITIONAL_INDEX_LAYERS` .env config variable (see the .env file

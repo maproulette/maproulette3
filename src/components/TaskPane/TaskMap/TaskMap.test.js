@@ -1,5 +1,5 @@
 import React from 'react'
-import TaskMap from './TaskMap'
+import { TaskMap } from './TaskMap'
 import { latLng } from 'leaflet'
 import _cloneDeep from 'lodash/cloneDeep'
 

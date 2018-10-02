@@ -15,6 +15,8 @@ import _fromPairs from 'lodash/fromPairs'
 import _isEqual from 'lodash/isEqual'
 import L, { latLng } from 'leaflet'
 import 'leaflet-vectoricon'
+import { layerSourceWithId }
+       from '../../../../services/VisibleLayer/LayerSources'
 import { messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { MAPBOX_LIGHT,
@@ -25,6 +27,8 @@ import EnhancedMap from '../../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../../EnhancedMap/LayerToggle/LayerToggle'
 import WithVisibleLayer from '../../../HOCs/WithVisibleLayer/WithVisibleLayer'
+import WithIntersectingOverlays
+       from '../../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithStatus from '../../../HOCs/WithStatus/WithStatus'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import messages from './Messages'
@@ -58,8 +62,18 @@ export class ChallengeTaskMap extends Component {
       return true
     }
 
-    // the layer has been changed, or
-    if (_get(nextProps, 'source.name') !== _get(this.props, 'source.name')) {
+    // the base layer has changed, or
+    if (_get(nextProps, 'source.id') !== _get(this.props, 'source.id')) {
+      return true
+    }
+
+    // the available overlays have changed, or
+    if (!_isEqual(nextProps.intersectingOverlays, this.props.intersectingOverlays)) {
+      return true
+    }
+
+    // the visible overlays have changed, or
+    if (nextProps.visibleOverlays.length !== this.props.visibleOverlays.length) {
       return true
     }
 
@@ -69,8 +83,7 @@ export class ChallengeTaskMap extends Component {
     }
 
     // the challenge has changed, or
-    if (_get(nextProps, 'challenge.id') !== 
-        _get(this.props, 'challenge.id')) {
+    if (_get(nextProps, 'challenge.id') !== _get(this.props, 'challenge.id')) {
       return true
     }
 
@@ -262,6 +275,10 @@ export class ChallengeTaskMap extends Component {
       )
     }
 
+    const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
+      <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
+    )
+
     // Note: would like to enable chunkedLoading, but enabling runs into
     // https://github.com/Leaflet/Leaflet.markercluster/issues/743 on
     // challenges with a large number of tasks. So disable for now.
@@ -289,7 +306,8 @@ export class ChallengeTaskMap extends Component {
                      justFitFeatures={markers.length > 0}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
-          <SourcedTileLayer {...this.props} />
+          <SourcedTileLayer {...this.props} zIndex={1} />
+          {overlayLayers}
           {markers.length > 0 &&
               <MarkerClusterGroup
                   key={Date.now()} markers={markers}
@@ -332,4 +350,11 @@ ChallengeTaskMap.defaultProps = {
   greyscaleClusters: false,
 }
 
-export default WithStatus(WithVisibleLayer(injectIntl(ChallengeTaskMap)))
+export default WithStatus(
+  WithVisibleLayer(
+    WithIntersectingOverlays(
+      injectIntl(ChallengeTaskMap),
+      'challengeOwner'
+    )
+  )
+)

@@ -8,6 +8,8 @@ import { layerSourceWithId,
        from '../../../services/VisibleLayer/LayerSources'
 import { changeVisibleLayer }
        from '../../../services/VisibleLayer/VisibleLayer'
+import { addVisibleOverlay, removeVisibleOverlay }
+       from '../../../services/VisibleLayer/VisibleOverlays'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../WithChallengePreferences/WithChallengePreferences'
@@ -98,6 +100,7 @@ export const mapStateToProps = (state, ownProps) => {
 
   return {
     source: source ? source : defaultLayer(ownProps),
+    visibleOverlays: state.visibleOverlays,
   }
 }
 
@@ -115,6 +118,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(changeVisibleLayer(layerId))
       }
     },
+
+    addVisibleOverlay: layerId => dispatch(addVisibleOverlay(layerId)),
+    removeVisibleOverlay: layerId => dispatch(removeVisibleOverlay(layerId)),
   }
 }
 

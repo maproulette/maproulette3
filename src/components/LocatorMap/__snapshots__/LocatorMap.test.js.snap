@@ -5,7 +5,6 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <LocatorMap
-    layerSourceId="foo"
     mapBounds={
         Object {
             "locator": Object {
@@ -23,7 +22,13 @@ ShallowWrapper {
           }
     }
     setLocatorMapBounds={[Function]}
+    source={
+        Object {
+            "id": "foo",
+          }
+    }
     updateBoundedChallenges={[Function]}
+    visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -39,7 +44,6 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
-          layerSourceId="foo"
           mapBounds={
                     Object {
                               "locator": Object {
@@ -57,7 +61,13 @@ ShallowWrapper {
                             }
           }
           setLocatorMapBounds={[Function]}
+          source={
+                    Object {
+                              "id": "foo",
+                            }
+          }
           updateBoundedChallenges={[Function]}
+          visibleOverlays={Array []}
 />,
         <EnhancedMap
           animate={true}
@@ -91,8 +101,32 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
-          <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                    defaultLayer="foo"
+          <InjectIntl(SourcedTileLayer)
+                    mapBounds={
+                              Object {
+                                        "locator": Object {
+                                          "bounds": Object {
+                                            "_northEast": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                            "_southWest": Object {
+                                              "lat": 0,
+                                              "lng": 0,
+                                            },
+                                          },
+                                        },
+                                      }
+                    }
+                    setLocatorMapBounds={[Function]}
+                    source={
+                              Object {
+                                        "id": "foo",
+                                      }
+                    }
+                    updateBoundedChallenges={[Function]}
+                    visibleOverlays={Array []}
+                    zIndex={1}
           />
 </EnhancedMap>,
         false,
@@ -106,7 +140,6 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "layerSourceId": "foo",
           "mapBounds": Object {
             "locator": Object {
               "bounds": Object {
@@ -122,7 +155,11 @@ ShallowWrapper {
             },
           },
           "setLocatorMapBounds": [Function],
+          "source": Object {
+            "id": "foo",
+          },
           "updateBoundedChallenges": [Function],
+          "visibleOverlays": Array [],
         },
         "ref": null,
         "rendered": null,
@@ -143,9 +180,34 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
-            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-              defaultLayer="foo"
+            <InjectIntl(SourcedTileLayer)
+              mapBounds={
+                            Object {
+                                          "locator": Object {
+                                            "bounds": Object {
+                                              "_northEast": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                              "_southWest": Object {
+                                                "lat": 0,
+                                                "lng": 0,
+                                              },
+                                            },
+                                          },
+                                        }
+              }
+              setLocatorMapBounds={[Function]}
+              source={
+                            Object {
+                                          "id": "foo",
+                                        }
+              }
+              updateBoundedChallenges={[Function]}
+              visibleOverlays={Array []}
+              zIndex={1}
 />,
+            Array [],
             false,
           ],
           "initialBounds": Object {
@@ -184,7 +246,27 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "defaultLayer": "foo",
+              "mapBounds": Object {
+                "locator": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                },
+              },
+              "setLocatorMapBounds": [Function],
+              "source": Object {
+                "id": "foo",
+              },
+              "updateBoundedChallenges": [Function],
+              "visibleOverlays": Array [],
+              "zIndex": 1,
             },
             "ref": null,
             "rendered": null,
@@ -206,7 +288,6 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
-            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "locator": Object {
@@ -224,7 +305,13 @@ ShallowWrapper {
                                   }
             }
             setLocatorMapBounds={[Function]}
+            source={
+                        Object {
+                                    "id": "foo",
+                                  }
+            }
             updateBoundedChallenges={[Function]}
+            visibleOverlays={Array []}
 />,
           <EnhancedMap
             animate={true}
@@ -258,8 +345,32 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
-            <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                        defaultLayer="foo"
+            <InjectIntl(SourcedTileLayer)
+                        mapBounds={
+                                    Object {
+                                                "locator": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                },
+                                              }
+                        }
+                        setLocatorMapBounds={[Function]}
+                        source={
+                                    Object {
+                                                "id": "foo",
+                                              }
+                        }
+                        updateBoundedChallenges={[Function]}
+                        visibleOverlays={Array []}
+                        zIndex={1}
             />
 </EnhancedMap>,
           false,
@@ -273,7 +384,6 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "layerSourceId": "foo",
             "mapBounds": Object {
               "locator": Object {
                 "bounds": Object {
@@ -289,7 +399,11 @@ ShallowWrapper {
               },
             },
             "setLocatorMapBounds": [Function],
+            "source": Object {
+              "id": "foo",
+            },
             "updateBoundedChallenges": [Function],
+            "visibleOverlays": Array [],
           },
           "ref": null,
           "rendered": null,
@@ -310,9 +424,34 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
-              <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                defaultLayer="foo"
+              <InjectIntl(SourcedTileLayer)
+                mapBounds={
+                                Object {
+                                                "locator": Object {
+                                                  "bounds": Object {
+                                                    "_northEast": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                    "_southWest": Object {
+                                                      "lat": 0,
+                                                      "lng": 0,
+                                                    },
+                                                  },
+                                                },
+                                              }
+                }
+                setLocatorMapBounds={[Function]}
+                source={
+                                Object {
+                                                "id": "foo",
+                                              }
+                }
+                updateBoundedChallenges={[Function]}
+                visibleOverlays={Array []}
+                zIndex={1}
 />,
+              Array [],
               false,
             ],
             "initialBounds": Object {
@@ -351,7 +490,27 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "defaultLayer": "foo",
+                "mapBounds": Object {
+                  "locator": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                  },
+                },
+                "setLocatorMapBounds": [Function],
+                "source": Object {
+                  "id": "foo",
+                },
+                "updateBoundedChallenges": [Function],
+                "visibleOverlays": Array [],
+                "zIndex": 1,
               },
               "ref": null,
               "rendered": null,

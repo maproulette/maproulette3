@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
 import _noop from 'lodash/noop'
+import _filter from 'lodash/filter'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
@@ -18,8 +19,17 @@ import './LayerToggle.css'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class LayerToggle extends Component {
+  overlayVisible = layerId => this.props.visibleOverlays.indexOf(layerId) !== -1
+
+  toggleOverlay = layerId => {
+    this.overlayVisible(layerId) ? this.props.removeVisibleOverlay(layerId) :
+                                   this.props.addVisibleOverlay(layerId)
+  }
+
   render() {
-    const layerButtons = _map(this.props.layerSources, layer => (
+    const baseSources = _filter(this.props.layerSources, source => !source.overlay)
+
+    const layerButtons = _map(baseSources, layer => (
       <a className={classNames('dropdown-item',
                                {'is-active': this.props.source.id === layer.id})}
          key={layer.id}
@@ -27,6 +37,20 @@ export class LayerToggle extends Component {
       >
         {layer.name}
       </a>
+    ))
+
+    const overlayToggles = _map(this.props.intersectingOverlays, layer => (
+      <div key={layer.id} className="layer-toggle__option-controls">
+        <label className="checkbox"
+          onClick={e => {
+            e.preventDefault()
+            this.toggleOverlay(layer.id)
+          }}>
+          <input type="checkbox"
+                 checked={this.overlayVisible(layer.id)}
+                 onChange={_noop} /> {layer.name}
+        </label>
+      </div>
     ))
 
     return (
@@ -46,9 +70,11 @@ export class LayerToggle extends Component {
         <div className='dropdown-menu' role='menu'>
           <div className='dropdown-content'>
             {layerButtons}
-            {this.props.toggleTaskFeatures &&
-             <React.Fragment>
+            {(overlayToggles.length > 0 || this.props.toggleTaskFeatures) &&
               <hr className="dropdown-divider" />
+            }
+            {overlayToggles}
+            {this.props.toggleTaskFeatures &&
               <div className="layer-toggle__option-controls">
                 <label className="checkbox"
                   onClick={e => {
@@ -61,7 +87,6 @@ export class LayerToggle extends Component {
                   /> <FormattedMessage {...messages.showTaskFeaturesLabel} />
                 </label>
               </div>
-             </React.Fragment>
             }
           </div>
         </div>
@@ -77,6 +102,12 @@ LayerToggle.propTypes = {
   source: PropTypes.object,
   /** Invoked when the user chooses a new layer source */
   changeLayer: PropTypes.func.isRequired,
+  /** Array of overlay layers currently visible */
+  visibleOverlays: PropTypes.array.isRequired,
+  /** Invoked to add an overlay layer to the visible overlays */
+  addVisibleOverlay: PropTypes.func.isRequired,
+  /** Invoked to remove an overlay layer from the visible overlays */
+  removeVisibleOverlay: PropTypes.func.isRequired,
   /** Set to true if task features are shown on the map */
   showTaskFeatures: PropTypes.bool,
   /** Invoked when the user toggles visibility of task features */
