@@ -10,7 +10,6 @@ ShallowWrapper {
             "id": 123,
           }
     }
-    layerSourceId="foo"
     mapBounds={
         Object {
             "challenge": Object {
@@ -29,9 +28,15 @@ ShallowWrapper {
           }
     }
     setChallengeMapBounds={[Function]}
+    source={
+        Object {
+            "id": "foo",
+          }
+    }
     taskMarkers={Array []}
     tasksLoading={true}
     updateBoundedChallenges={[Function]}
+    visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -52,7 +57,6 @@ ShallowWrapper {
                               "id": 123,
                             }
           }
-          layerSourceId="foo"
           mapBounds={
                     Object {
                               "challenge": Object {
@@ -71,9 +75,15 @@ ShallowWrapper {
                             }
           }
           setChallengeMapBounds={[Function]}
+          source={
+                    Object {
+                              "id": "foo",
+                            }
+          }
           taskMarkers={Array []}
           tasksLoading={true}
           updateBoundedChallenges={[Function]}
+          visibleOverlays={Array []}
 />,
         <EnhancedMap
           animate={true}
@@ -103,8 +113,6 @@ ShallowWrapper {
                                         "id": 123,
                                       }
                     }
-                    defaultLayer="foo"
-                    layerSourceId="foo"
                     mapBounds={
                               Object {
                                         "challenge": Object {
@@ -123,9 +131,16 @@ ShallowWrapper {
                                       }
                     }
                     setChallengeMapBounds={[Function]}
+                    source={
+                              Object {
+                                        "id": "foo",
+                                      }
+                    }
                     taskMarkers={Array []}
                     tasksLoading={true}
                     updateBoundedChallenges={[Function]}
+                    visibleOverlays={Array []}
+                    zIndex={1}
           />
 </EnhancedMap>,
         <BusySpinner />,
@@ -142,7 +157,6 @@ ShallowWrapper {
           "browsedChallenge": Object {
             "id": 123,
           },
-          "layerSourceId": "foo",
           "mapBounds": Object {
             "challenge": Object {
               "bounds": Object {
@@ -159,9 +173,13 @@ ShallowWrapper {
             },
           },
           "setChallengeMapBounds": [Function],
+          "source": Object {
+            "id": "foo",
+          },
           "taskMarkers": Array [],
           "tasksLoading": true,
           "updateBoundedChallenges": [Function],
+          "visibleOverlays": Array [],
         },
         "ref": null,
         "rendered": null,
@@ -188,8 +206,6 @@ ShallowWrapper {
                                           "id": 123,
                                         }
               }
-              defaultLayer="foo"
-              layerSourceId="foo"
               mapBounds={
                             Object {
                                           "challenge": Object {
@@ -208,10 +224,18 @@ ShallowWrapper {
                                         }
               }
               setChallengeMapBounds={[Function]}
+              source={
+                            Object {
+                                          "id": "foo",
+                                        }
+              }
               taskMarkers={Array []}
               tasksLoading={true}
               updateBoundedChallenges={[Function]}
+              visibleOverlays={Array []}
+              zIndex={1}
 />,
+            Array [],
             false,
           ],
           "features": undefined,
@@ -245,8 +269,6 @@ ShallowWrapper {
               "browsedChallenge": Object {
                 "id": 123,
               },
-              "defaultLayer": "foo",
-              "layerSourceId": "foo",
               "mapBounds": Object {
                 "challenge": Object {
                   "bounds": Object {
@@ -263,9 +285,14 @@ ShallowWrapper {
                 },
               },
               "setChallengeMapBounds": [Function],
+              "source": Object {
+                "id": "foo",
+              },
               "taskMarkers": Array [],
               "tasksLoading": true,
               "updateBoundedChallenges": [Function],
+              "visibleOverlays": Array [],
+              "zIndex": 1,
             },
             "ref": null,
             "rendered": null,
@@ -300,7 +327,6 @@ ShallowWrapper {
                                     "id": 123,
                                   }
             }
-            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "challenge": Object {
@@ -319,9 +345,15 @@ ShallowWrapper {
                                   }
             }
             setChallengeMapBounds={[Function]}
+            source={
+                        Object {
+                                    "id": "foo",
+                                  }
+            }
             taskMarkers={Array []}
             tasksLoading={true}
             updateBoundedChallenges={[Function]}
+            visibleOverlays={Array []}
 />,
           <EnhancedMap
             animate={true}
@@ -351,8 +383,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                         }
-                        defaultLayer="foo"
-                        layerSourceId="foo"
                         mapBounds={
                                     Object {
                                                 "challenge": Object {
@@ -371,9 +401,16 @@ ShallowWrapper {
                                               }
                         }
                         setChallengeMapBounds={[Function]}
+                        source={
+                                    Object {
+                                                "id": "foo",
+                                              }
+                        }
                         taskMarkers={Array []}
                         tasksLoading={true}
                         updateBoundedChallenges={[Function]}
+                        visibleOverlays={Array []}
+                        zIndex={1}
             />
 </EnhancedMap>,
           <BusySpinner />,
@@ -390,7 +427,6 @@ ShallowWrapper {
             "browsedChallenge": Object {
               "id": 123,
             },
-            "layerSourceId": "foo",
             "mapBounds": Object {
               "challenge": Object {
                 "bounds": Object {
@@ -407,9 +443,13 @@ ShallowWrapper {
               },
             },
             "setChallengeMapBounds": [Function],
+            "source": Object {
+              "id": "foo",
+            },
             "taskMarkers": Array [],
             "tasksLoading": true,
             "updateBoundedChallenges": [Function],
+            "visibleOverlays": Array [],
           },
           "ref": null,
           "rendered": null,
@@ -436,8 +476,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                 }
-                defaultLayer="foo"
-                layerSourceId="foo"
                 mapBounds={
                                 Object {
                                                 "challenge": Object {
@@ -456,10 +494,18 @@ ShallowWrapper {
                                               }
                 }
                 setChallengeMapBounds={[Function]}
+                source={
+                                Object {
+                                                "id": "foo",
+                                              }
+                }
                 taskMarkers={Array []}
                 tasksLoading={true}
                 updateBoundedChallenges={[Function]}
+                visibleOverlays={Array []}
+                zIndex={1}
 />,
+              Array [],
               false,
             ],
             "features": undefined,
@@ -493,8 +539,6 @@ ShallowWrapper {
                 "browsedChallenge": Object {
                   "id": 123,
                 },
-                "defaultLayer": "foo",
-                "layerSourceId": "foo",
                 "mapBounds": Object {
                   "challenge": Object {
                     "bounds": Object {
@@ -511,9 +555,14 @@ ShallowWrapper {
                   },
                 },
                 "setChallengeMapBounds": [Function],
+                "source": Object {
+                  "id": "foo",
+                },
                 "taskMarkers": Array [],
                 "tasksLoading": true,
                 "updateBoundedChallenges": [Function],
+                "visibleOverlays": Array [],
+                "zIndex": 1,
               },
               "ref": null,
               "rendered": null,
@@ -556,7 +605,6 @@ ShallowWrapper {
             "id": 123,
           }
     }
-    layerSourceId="foo"
     mapBounds={
         Object {
             "challenge": Object {
@@ -575,8 +623,14 @@ ShallowWrapper {
           }
     }
     setChallengeMapBounds={[Function]}
+    source={
+        Object {
+            "id": "foo",
+          }
+    }
     taskMarkers={Array []}
     updateBoundedChallenges={[Function]}
+    visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -597,7 +651,6 @@ ShallowWrapper {
                               "id": 123,
                             }
           }
-          layerSourceId="foo"
           mapBounds={
                     Object {
                               "challenge": Object {
@@ -616,8 +669,14 @@ ShallowWrapper {
                             }
           }
           setChallengeMapBounds={[Function]}
+          source={
+                    Object {
+                              "id": "foo",
+                            }
+          }
           taskMarkers={Array []}
           updateBoundedChallenges={[Function]}
+          visibleOverlays={Array []}
 />,
         <EnhancedMap
           animate={true}
@@ -647,8 +706,6 @@ ShallowWrapper {
                                         "id": 123,
                                       }
                     }
-                    defaultLayer="foo"
-                    layerSourceId="foo"
                     mapBounds={
                               Object {
                                         "challenge": Object {
@@ -667,8 +724,15 @@ ShallowWrapper {
                                       }
                     }
                     setChallengeMapBounds={[Function]}
+                    source={
+                              Object {
+                                        "id": "foo",
+                                      }
+                    }
                     taskMarkers={Array []}
                     updateBoundedChallenges={[Function]}
+                    visibleOverlays={Array []}
+                    zIndex={1}
           />
 </EnhancedMap>,
         false,
@@ -685,7 +749,6 @@ ShallowWrapper {
           "browsedChallenge": Object {
             "id": 123,
           },
-          "layerSourceId": "foo",
           "mapBounds": Object {
             "challenge": Object {
               "bounds": Object {
@@ -702,8 +765,12 @@ ShallowWrapper {
             },
           },
           "setChallengeMapBounds": [Function],
+          "source": Object {
+            "id": "foo",
+          },
           "taskMarkers": Array [],
           "updateBoundedChallenges": [Function],
+          "visibleOverlays": Array [],
         },
         "ref": null,
         "rendered": null,
@@ -730,8 +797,6 @@ ShallowWrapper {
                                           "id": 123,
                                         }
               }
-              defaultLayer="foo"
-              layerSourceId="foo"
               mapBounds={
                             Object {
                                           "challenge": Object {
@@ -750,9 +815,17 @@ ShallowWrapper {
                                         }
               }
               setChallengeMapBounds={[Function]}
+              source={
+                            Object {
+                                          "id": "foo",
+                                        }
+              }
               taskMarkers={Array []}
               updateBoundedChallenges={[Function]}
+              visibleOverlays={Array []}
+              zIndex={1}
 />,
+            Array [],
             false,
           ],
           "features": undefined,
@@ -786,8 +859,6 @@ ShallowWrapper {
               "browsedChallenge": Object {
                 "id": 123,
               },
-              "defaultLayer": "foo",
-              "layerSourceId": "foo",
               "mapBounds": Object {
                 "challenge": Object {
                   "bounds": Object {
@@ -804,8 +875,13 @@ ShallowWrapper {
                 },
               },
               "setChallengeMapBounds": [Function],
+              "source": Object {
+                "id": "foo",
+              },
               "taskMarkers": Array [],
               "updateBoundedChallenges": [Function],
+              "visibleOverlays": Array [],
+              "zIndex": 1,
             },
             "ref": null,
             "rendered": null,
@@ -832,7 +908,6 @@ ShallowWrapper {
                                     "id": 123,
                                   }
             }
-            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "challenge": Object {
@@ -851,8 +926,14 @@ ShallowWrapper {
                                   }
             }
             setChallengeMapBounds={[Function]}
+            source={
+                        Object {
+                                    "id": "foo",
+                                  }
+            }
             taskMarkers={Array []}
             updateBoundedChallenges={[Function]}
+            visibleOverlays={Array []}
 />,
           <EnhancedMap
             animate={true}
@@ -882,8 +963,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                         }
-                        defaultLayer="foo"
-                        layerSourceId="foo"
                         mapBounds={
                                     Object {
                                                 "challenge": Object {
@@ -902,8 +981,15 @@ ShallowWrapper {
                                               }
                         }
                         setChallengeMapBounds={[Function]}
+                        source={
+                                    Object {
+                                                "id": "foo",
+                                              }
+                        }
                         taskMarkers={Array []}
                         updateBoundedChallenges={[Function]}
+                        visibleOverlays={Array []}
+                        zIndex={1}
             />
 </EnhancedMap>,
           false,
@@ -920,7 +1006,6 @@ ShallowWrapper {
             "browsedChallenge": Object {
               "id": 123,
             },
-            "layerSourceId": "foo",
             "mapBounds": Object {
               "challenge": Object {
                 "bounds": Object {
@@ -937,8 +1022,12 @@ ShallowWrapper {
               },
             },
             "setChallengeMapBounds": [Function],
+            "source": Object {
+              "id": "foo",
+            },
             "taskMarkers": Array [],
             "updateBoundedChallenges": [Function],
+            "visibleOverlays": Array [],
           },
           "ref": null,
           "rendered": null,
@@ -965,8 +1054,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                 }
-                defaultLayer="foo"
-                layerSourceId="foo"
                 mapBounds={
                                 Object {
                                                 "challenge": Object {
@@ -985,9 +1072,17 @@ ShallowWrapper {
                                               }
                 }
                 setChallengeMapBounds={[Function]}
+                source={
+                                Object {
+                                                "id": "foo",
+                                              }
+                }
                 taskMarkers={Array []}
                 updateBoundedChallenges={[Function]}
+                visibleOverlays={Array []}
+                zIndex={1}
 />,
+              Array [],
               false,
             ],
             "features": undefined,
@@ -1021,8 +1116,6 @@ ShallowWrapper {
                 "browsedChallenge": Object {
                   "id": 123,
                 },
-                "defaultLayer": "foo",
-                "layerSourceId": "foo",
                 "mapBounds": Object {
                   "challenge": Object {
                     "bounds": Object {
@@ -1039,8 +1132,13 @@ ShallowWrapper {
                   },
                 },
                 "setChallengeMapBounds": [Function],
+                "source": Object {
+                  "id": "foo",
+                },
                 "taskMarkers": Array [],
                 "updateBoundedChallenges": [Function],
+                "visibleOverlays": Array [],
+                "zIndex": 1,
               },
               "ref": null,
               "rendered": null,
@@ -1075,7 +1173,6 @@ ShallowWrapper {
             "id": 123,
           }
     }
-    layerSourceId="foo"
     mapBounds={
         Object {
             "challenge": Object {
@@ -1094,9 +1191,15 @@ ShallowWrapper {
           }
     }
     setChallengeMapBounds={[Function]}
+    source={
+        Object {
+            "id": "foo",
+          }
+    }
     taskMarkers={Array []}
     tasksLoading={false}
     updateBoundedChallenges={[Function]}
+    visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -1117,7 +1220,6 @@ ShallowWrapper {
                               "id": 123,
                             }
           }
-          layerSourceId="foo"
           mapBounds={
                     Object {
                               "challenge": Object {
@@ -1136,9 +1238,15 @@ ShallowWrapper {
                             }
           }
           setChallengeMapBounds={[Function]}
+          source={
+                    Object {
+                              "id": "foo",
+                            }
+          }
           taskMarkers={Array []}
           tasksLoading={false}
           updateBoundedChallenges={[Function]}
+          visibleOverlays={Array []}
 />,
         <EnhancedMap
           animate={true}
@@ -1168,8 +1276,6 @@ ShallowWrapper {
                                         "id": 123,
                                       }
                     }
-                    defaultLayer="foo"
-                    layerSourceId="foo"
                     mapBounds={
                               Object {
                                         "challenge": Object {
@@ -1188,9 +1294,16 @@ ShallowWrapper {
                                       }
                     }
                     setChallengeMapBounds={[Function]}
+                    source={
+                              Object {
+                                        "id": "foo",
+                                      }
+                    }
                     taskMarkers={Array []}
                     tasksLoading={false}
                     updateBoundedChallenges={[Function]}
+                    visibleOverlays={Array []}
+                    zIndex={1}
           />
 </EnhancedMap>,
         false,
@@ -1207,7 +1320,6 @@ ShallowWrapper {
           "browsedChallenge": Object {
             "id": 123,
           },
-          "layerSourceId": "foo",
           "mapBounds": Object {
             "challenge": Object {
               "bounds": Object {
@@ -1224,9 +1336,13 @@ ShallowWrapper {
             },
           },
           "setChallengeMapBounds": [Function],
+          "source": Object {
+            "id": "foo",
+          },
           "taskMarkers": Array [],
           "tasksLoading": false,
           "updateBoundedChallenges": [Function],
+          "visibleOverlays": Array [],
         },
         "ref": null,
         "rendered": null,
@@ -1253,8 +1369,6 @@ ShallowWrapper {
                                           "id": 123,
                                         }
               }
-              defaultLayer="foo"
-              layerSourceId="foo"
               mapBounds={
                             Object {
                                           "challenge": Object {
@@ -1273,10 +1387,18 @@ ShallowWrapper {
                                         }
               }
               setChallengeMapBounds={[Function]}
+              source={
+                            Object {
+                                          "id": "foo",
+                                        }
+              }
               taskMarkers={Array []}
               tasksLoading={false}
               updateBoundedChallenges={[Function]}
+              visibleOverlays={Array []}
+              zIndex={1}
 />,
+            Array [],
             false,
           ],
           "features": undefined,
@@ -1310,8 +1432,6 @@ ShallowWrapper {
               "browsedChallenge": Object {
                 "id": 123,
               },
-              "defaultLayer": "foo",
-              "layerSourceId": "foo",
               "mapBounds": Object {
                 "challenge": Object {
                   "bounds": Object {
@@ -1328,9 +1448,14 @@ ShallowWrapper {
                 },
               },
               "setChallengeMapBounds": [Function],
+              "source": Object {
+                "id": "foo",
+              },
               "taskMarkers": Array [],
               "tasksLoading": false,
               "updateBoundedChallenges": [Function],
+              "visibleOverlays": Array [],
+              "zIndex": 1,
             },
             "ref": null,
             "rendered": null,
@@ -1357,7 +1482,6 @@ ShallowWrapper {
                                     "id": 123,
                                   }
             }
-            layerSourceId="foo"
             mapBounds={
                         Object {
                                     "challenge": Object {
@@ -1376,9 +1500,15 @@ ShallowWrapper {
                                   }
             }
             setChallengeMapBounds={[Function]}
+            source={
+                        Object {
+                                    "id": "foo",
+                                  }
+            }
             taskMarkers={Array []}
             tasksLoading={false}
             updateBoundedChallenges={[Function]}
+            visibleOverlays={Array []}
 />,
           <EnhancedMap
             animate={true}
@@ -1408,8 +1538,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                         }
-                        defaultLayer="foo"
-                        layerSourceId="foo"
                         mapBounds={
                                     Object {
                                                 "challenge": Object {
@@ -1428,9 +1556,16 @@ ShallowWrapper {
                                               }
                         }
                         setChallengeMapBounds={[Function]}
+                        source={
+                                    Object {
+                                                "id": "foo",
+                                              }
+                        }
                         taskMarkers={Array []}
                         tasksLoading={false}
                         updateBoundedChallenges={[Function]}
+                        visibleOverlays={Array []}
+                        zIndex={1}
             />
 </EnhancedMap>,
           false,
@@ -1447,7 +1582,6 @@ ShallowWrapper {
             "browsedChallenge": Object {
               "id": 123,
             },
-            "layerSourceId": "foo",
             "mapBounds": Object {
               "challenge": Object {
                 "bounds": Object {
@@ -1464,9 +1598,13 @@ ShallowWrapper {
               },
             },
             "setChallengeMapBounds": [Function],
+            "source": Object {
+              "id": "foo",
+            },
             "taskMarkers": Array [],
             "tasksLoading": false,
             "updateBoundedChallenges": [Function],
+            "visibleOverlays": Array [],
           },
           "ref": null,
           "rendered": null,
@@ -1493,8 +1631,6 @@ ShallowWrapper {
                                                 "id": 123,
                                               }
                 }
-                defaultLayer="foo"
-                layerSourceId="foo"
                 mapBounds={
                                 Object {
                                                 "challenge": Object {
@@ -1513,10 +1649,18 @@ ShallowWrapper {
                                               }
                 }
                 setChallengeMapBounds={[Function]}
+                source={
+                                Object {
+                                                "id": "foo",
+                                              }
+                }
                 taskMarkers={Array []}
                 tasksLoading={false}
                 updateBoundedChallenges={[Function]}
+                visibleOverlays={Array []}
+                zIndex={1}
 />,
+              Array [],
               false,
             ],
             "features": undefined,
@@ -1550,8 +1694,6 @@ ShallowWrapper {
                 "browsedChallenge": Object {
                   "id": 123,
                 },
-                "defaultLayer": "foo",
-                "layerSourceId": "foo",
                 "mapBounds": Object {
                   "challenge": Object {
                     "bounds": Object {
@@ -1568,9 +1710,14 @@ ShallowWrapper {
                   },
                 },
                 "setChallengeMapBounds": [Function],
+                "source": Object {
+                  "id": "foo",
+                },
                 "taskMarkers": Array [],
                 "tasksLoading": false,
                 "updateBoundedChallenges": [Function],
+                "visibleOverlays": Array [],
+                "zIndex": 1,
               },
               "ref": null,
               "rendered": null,

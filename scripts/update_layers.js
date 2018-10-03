@@ -43,12 +43,12 @@ if (shell.exec("curl -s https://osmlab.github.io/editor-layer-index/imagery.geoj
   shell.exit(1)
 }
 
-// Extract properties from layers marked as default layers, that are not
-// overlays, and that have global coverage (geometry is null) and save them to
-// `src/defaultLayers.json`. We also include any "additional" layers requested
+// Extract properties from layers marked as default layers that have global
+// coverage (geometry is null) and save them to `src/defaultLayers.json`. We
+// also include any "additional" layers requested
 shell.echo("Extracting default layers")
-const jqLayerConditionals = additionalIndexLayers.map(layerId => ` or .id == "${layerId}"`).join(' ')
-if (shell.exec("jq '[.features[].properties | select((.default == true and .overlay != true and .geometry == null)" + jqLayerConditionals + ")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
+const jqLayerConditionals = additionalIndexLayers.map(layerId => ` or .properties.id == "${layerId}"`).join(' ')
+if (shell.exec("jq '[.features[] | select((.properties.default == true and .properties.geometry == null)" + jqLayerConditionals + ")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
   shell.echo("Extracting default layers failed")
   shell.exit(1)
 }
