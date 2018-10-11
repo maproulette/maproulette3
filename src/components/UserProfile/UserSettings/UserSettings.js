@@ -4,9 +4,13 @@ import classNames from 'classnames'
 import Form from 'react-jsonschema-form'
 import _debounce from 'lodash/debounce'
 import _merge from 'lodash/merge'
+import _isEmpty from 'lodash/isEmpty'
+import _isUndefined from 'lodash/isUndefined'
+import _isFinite from 'lodash/isFinite'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { CustomFieldTemplate } from '../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import { jsSchema, uiSchema } from './UserSettingsSchema'
+import AsEditableUser from '../../../interactions/User/AsEditableUser'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
@@ -38,7 +42,11 @@ export class UserSettings extends Component {
    */
   saveLatestSettings = _debounce(settings => {
     this.setState({isSaving: true, saveComplete: false})
-    this.props.updateUserSettings(this.props.user.id, settings).then(() =>
+
+    const editableUser = AsEditableUser(settings)
+    editableUser.normalizeDefaultBasemap()
+
+    this.props.updateUserSettings(this.props.user.id, editableUser).then(() =>
       this.setState({isSaving: false, saveComplete: true})
     )
   }, 750, {leading: true})
@@ -51,6 +59,18 @@ export class UserSettings extends Component {
 
   render() {
     const userSettings = _merge({}, this.props.user.settings, this.state.formData)
+
+    // Prepare defaultBasemap for hybrid field in form if needed, which combines the
+    // ChallengeBasemap constants (as strings) with layer ids from identified layers.
+    if (_isUndefined(this.state.formData.defaultBasemap)) {
+      if (!_isEmpty(userSettings.defaultBasemapId)) {
+        userSettings.defaultBasemap = userSettings.defaultBasemapId
+      }
+      else if (_isFinite(userSettings.defaultBasemap)) {
+        // Use string for form
+        userSettings.defaultBasemap = userSettings.defaultBasemap.toString()
+      }
+    }
 
     let saveIndicator = null
     if (this.state.isSaving) {

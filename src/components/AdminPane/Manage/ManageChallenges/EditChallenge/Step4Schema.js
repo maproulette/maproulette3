@@ -6,8 +6,8 @@ import { ZOOM_LEVELS,
 import { ChallengeBasemap,
          challengeOwnerBasemapLayerLabels }
        from '../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import { LayerSources } from '../../../../../services/VisibleLayer/LayerSources'
 import _get from 'lodash/get'
-import _values from 'lodash/values'
 import _without from 'lodash/without'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
@@ -30,6 +30,12 @@ import messages from './Messages'
  */
 export const jsSchema = intl => {
   const localizedBasemapLabels = challengeOwnerBasemapLayerLabels(intl)
+
+  const defaultBasemapChoices = [
+    { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none }
+  ].concat(_map(LayerSources, source => ({id: source.id, name: source.name}))).concat([
+    { id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }
+  ])
 
   return {
     "$schema": "http://json-schema.org/draft-06/schema#",
@@ -72,9 +78,9 @@ export const jsSchema = intl => {
       defaultBasemap: {
         title: intl.formatMessage(messages.defaultBasemapLabel),
         description: intl.formatMessage(messages.defaultBasemapDescription),
-        type: "number",
-        enum: _values(ChallengeBasemap),
-        enumNames: _map(ChallengeBasemap, (value, key) => localizedBasemapLabels[key]),
+        type: "string",
+        enum: _map(defaultBasemapChoices, 'id'),
+        enumNames: _map(defaultBasemapChoices, 'name'),
         default: ChallengeBasemap.none,
       },
     },
@@ -84,14 +90,14 @@ export const jsSchema = intl => {
           {
             properties: {
               defaultBasemap: {
-                enum: _without(_values(ChallengeBasemap), ChallengeBasemap.custom),
+                enum: _without(_map(defaultBasemapChoices, 'id'), ChallengeBasemap.custom.toString()),
               }
             }
           },
           {
             properties: {
               defaultBasemap: {
-                enum: [ChallengeBasemap.custom],
+                enum: [ChallengeBasemap.custom.toString()],
               },
               customBasemap: {
                 title: intl.formatMessage(messages.customBasemapLabel),
