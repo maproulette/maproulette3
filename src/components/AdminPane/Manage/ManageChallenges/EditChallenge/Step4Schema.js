@@ -33,7 +33,7 @@ export const jsSchema = intl => {
 
   const defaultBasemapChoices = [
     { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none }
-  ].concat(_map(LayerSources, source => ({id: source.id, name: source.name}))).concat([
+  ].concat(_map(LayerSources, source => ({id: source.id.toString(), name: source.name}))).concat([
     { id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }
   ])
 
@@ -81,7 +81,7 @@ export const jsSchema = intl => {
         type: "string",
         enum: _map(defaultBasemapChoices, 'id'),
         enumNames: _map(defaultBasemapChoices, 'name'),
-        default: ChallengeBasemap.none,
+        default: ChallengeBasemap.none.toString(),
       },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
