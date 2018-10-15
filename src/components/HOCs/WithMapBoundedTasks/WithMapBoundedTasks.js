@@ -8,8 +8,7 @@ import _debounce from 'lodash/debounce'
 import _map from 'lodash/map'
 import _noop from 'lodash/noop'
 import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
-import { fetchChallengesWithinBoundingBox }
-       from '../../../services/Challenge/Challenge'
+import { extendedFind } from '../../../services/Challenge/Challenge'
 import { createVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
 import { loadRandomTaskFromVirtualChallenge }
@@ -43,7 +42,8 @@ const doUpdateBoundedTasks =
     if (boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
       dispatch(fetchBoundedTasks(bounds, 1000))
       // We also need to make sure we have the parent challenges
-      dispatch(fetchChallengesWithinBoundingBox(bounds))
+      // TODO only fetch parents of retrieved tasks
+      dispatch(extendedFind({bounds}))
     }
   }, 500) : _noop
 
@@ -56,7 +56,7 @@ const doUpdateBoundedTasks =
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export const WithMapBoundedTasks = function(WrappedComponent,
-                                            mapType='locator',
+                                            mapType='challenges',
                                             matchChallenges=true) {
   return class extends Component {
     state = {
@@ -67,7 +67,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
      * Ensure bounds are represented as LatLngBounds object.
      */
     normalizedBounds = props =>
-      toLatLngBounds(_get(props, `mapBounds.${mapType}.bounds`))
+      toLatLngBounds(_get(props, `mapBounds.bounds`))
 
     /**
      * Applies bounds and challenge filters to the map-bounded tasks, as

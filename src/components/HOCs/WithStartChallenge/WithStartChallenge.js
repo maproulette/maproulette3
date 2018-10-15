@@ -97,7 +97,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
     }
     else {
       const visibleTask = chooseVisibleTask(challenge,
-                                            _get(ownProps, 'mapBounds.challenge'),
+                                            _get(ownProps, 'mapBounds'),
                                             ownProps.clusteredTasks)
       if (visibleTask) {
         openTask(dispatch, challenge, visibleTask, ownProps.history)

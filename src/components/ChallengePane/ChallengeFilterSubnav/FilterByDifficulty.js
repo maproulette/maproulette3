@@ -24,10 +24,10 @@ export class FilterByDifficulty extends Component {
    */
   updateFilter = ({ value }) => {
     if (value === null) {
-      this.props.removeChallengeFilters(['difficulty'])
+      this.props.removeSearchFilters(['difficulty'])
     }
     else {
-      this.props.setChallengeFilters({difficulty: value})
+      this.props.setSearchFilters({difficulty: value})
     }
   }
 
@@ -53,7 +53,7 @@ export class FilterByDifficulty extends Component {
       <Selection placeholder={anyOption.text}
                  label={this.props.intl.formatMessage(messages.difficultyLabel)}
                  options={selectOptions}
-                 value={this.props.challengeFilter.difficulty}
+                 value={this.props.searchFilters.difficulty}
                  onChange={this.updateFilter}
       />
     )
@@ -62,17 +62,17 @@ export class FilterByDifficulty extends Component {
 
 FilterByDifficulty.propTypes = {
   /** Invoked to update the challenge difficulty filter */
-  setChallengeFilters: PropTypes.func.isRequired,
+  setSearchFilters: PropTypes.func.isRequired,
   /** Invoked to clear the challenge difficulty filter */
-  removeChallengeFilters: PropTypes.func.isRequired,
+  removeSearchFilters: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
-  challengeFilter: PropTypes.object,
+  searchFilters: PropTypes.object,
   /** Set to true to render a MenuList instead of NavDropdown */
   asMenuList: PropTypes.bool,
 }
 
 FilterByDifficulty.defaultProps = {
-  challengeFilter: {},
+  searchFilters: {},
   asMenuList: false,
 }
 

@@ -8,11 +8,11 @@ import WithCurrentProject
        from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithSearchResults
        from '../../../HOCs/WithSearchResults/WithSearchResults'
-import WithComboSearchExecution
-       from '../../HOCs/WithComboSearchExecution/WithComboSearchExecution'
+import WithComboSearch
+       from '../../HOCs/WithComboSearch/WithComboSearch'
 import SearchBox from '../../../SearchBox/SearchBox'
 import { searchProjects } from '../../../../services/Project/Project'
-import { searchChallenges } from '../../../../services/Challenge/Challenge'
+import { extendedFind } from '../../../../services/Challenge/Challenge'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ProjectList from '../ProjectList/ProjectList'
 import messages from './Messages'
@@ -20,9 +20,10 @@ import './ManageProjects.css'
 
 // Setup child components with needed HOCs.
 const ProjectAndChallengeSearch =
-  WithComboSearchExecution(SearchBox, {
+  WithComboSearch(SearchBox, {
     'adminProjects': searchProjects,
-    'adminChallenges': query => searchChallenges(query, {}, false, 1000), // include disabled
+    'adminChallenges': queryCriteria => extendedFind(
+      {searchQuery: queryCriteria.query, onlyEnabled: false}, 1000), // include disabled
   })
 
 /**

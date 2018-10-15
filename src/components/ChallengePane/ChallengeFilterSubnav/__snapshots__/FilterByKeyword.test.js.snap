@@ -6,12 +6,6 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FilterByKeyword
     asMenuList={false}
-    challengeFilter={
-        Object {
-            "difficulty": 1,
-            "keywords": "Challenge",
-          }
-    }
     challenges={
         Array [
             Object {
@@ -39,7 +33,13 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
-    removeChallengeFilters={[Function]}
+    removeSearchFilters={[Function]}
+    searchFilters={
+        Object {
+            "difficulty": 1,
+            "keywords": "Challenge",
+          }
+    }
     setKeywordFilter={[Function]}
     user={
         Object {

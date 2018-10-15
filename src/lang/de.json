@@ -159,7 +159,7 @@
     "ConfirmAction.cancel": "Abbrechen",
     "ConfirmAction.proceed": "Proceed",
     "HelpPopout.control.label": "Help",
-    "LocatorMap.controls.startChallenge.label": "Starten",
+    "ChallengeSearchMap.controls.startChallenge.label": "Starten",
     "Navbar.links.userProfile": "Benutzerprofil",
     "Navbar.links.signout": "Abmelden",
     "Navbar.links.about": "About",

@@ -36,24 +36,24 @@ export const locationLabels = intl => _fromPairs(
  */
 export const challengePassesLocationFilter = function(challengeFilters,
                                                       challenge,
-                                                      props) {
+                                                      searchCriteria) {
   if (challengeFilters.location !== CHALLENGE_LOCATION_WITHIN_MAPBOUNDS &&
       challengeFilters.location !== CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS &&
       challengeFilters.location !== CHALLENGE_LOCATION_NEAR_USER ) {
     return true
   }
 
-  if (_isEmpty(_get(props, 'mapBounds.locator.bounds'))) {
+  if (_isEmpty(_get(searchCriteria, 'mapBounds.bounds'))) {
     return true
   }
 
-  const locatorBounds = toLatLngBounds(props.mapBounds.locator.bounds)
+  const challengeSearchMapBounds = toLatLngBounds(searchCriteria.mapBounds.bounds)
 
   // if the challenge is located within the bounds, it passes.
   if (!_isEmpty(challenge.location)) {
     const challengeLocation = latLng(challenge.location.coordinates[1],
                                      challenge.location.coordinates[0])
-    if (locatorBounds.contains(challengeLocation)) {
+    if (challengeSearchMapBounds.contains(challengeLocation)) {
       return true
     }
   }
@@ -64,7 +64,7 @@ export const challengePassesLocationFilter = function(challengeFilters,
       !_isEmpty(challenge.bounding)) {
     const challengeBounds = toLatLngBounds(bbox(challenge.bounding))
 
-    if (locatorBounds.intersects(challengeBounds)) {
+    if (challengeSearchMapBounds.intersects(challengeBounds)) {
       return true
     }
   }

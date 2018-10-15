@@ -27,7 +27,7 @@ const propsFixture = {
       }
     }
   ],
-  challengeFilter: {
+  searchFilters: {
     difficulty: 1
   }
 }
@@ -36,8 +36,8 @@ let basicProps = null
 
 beforeEach(() => {
   basicProps = _cloneDeep(propsFixture)
-  basicProps.setChallengeFilters = jest.fn()
-  basicProps.removeChallengeFilters = jest.fn()
+  basicProps.setSearchFilters = jest.fn()
+  basicProps.removeSearchFilters = jest.fn()
   basicProps.intl = {formatMessage: jest.fn()}
 })
 
@@ -49,20 +49,20 @@ test("it renders with props as expected", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test("it calls setChallengeFilters if an onChange occurs with a value", () => {
+test("it calls setSearchFilters if an onChange occurs with a value", () => {
   const wrapper = mount(
     <FilterByDifficulty {...basicProps} />
   )
 
   wrapper.instance().updateFilter({value: 'hard'})
-  expect(basicProps.setChallengeFilters).toBeCalledWith({"difficulty": "hard"})
+  expect(basicProps.setSearchFilters).toBeCalledWith({"difficulty": "hard"})
 })
 
-test("it calls removeChallengeFilters if an onChange occurs with a null value", () => {
+test("it calls removeSearchFilters if an onChange occurs with a null value", () => {
   const wrapper = mount(
     <FilterByDifficulty {...basicProps} />
   )
 
   wrapper.instance().updateFilter({value: null})
-  expect(basicProps.removeChallengeFilters).toBeCalledWith(['difficulty'])
+  expect(basicProps.removeSearchFilters).toBeCalledWith(['difficulty'])
 })

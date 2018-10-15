@@ -10,28 +10,25 @@ import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import { latLng } from 'leaflet'
-import { ChallengeLocation }
-       from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
-import WithChallengeFilters from '../HOCs/WithChallengeFilters/WithChallengeFilters'
+import WithChallengeSearch from '../HOCs/WithSearch/WithChallengeSearch'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
-import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 
 /**
- * LocatorMap presents a specially configured EnhancedMap that can be used to
+ * ChallengeSearchMap presents a specially configured EnhancedMap that can be used to
  * search for challenges geographically (i.e., challenges with tasks within the
  * map bounds). It also can be used to visually represent geographic boundaries
  * while deciding on a challenge, such as when the user applies the "Near Me"
  * challenge filter.
  *
- * Initial map bounds can be provided, and the LocatorMap will also update the
+ * Initial map bounds can be provided, and the ChallengeSearchMap will also update the
  * current bounds in the redux store as the map is moved so that other components
  * (like challenge results) can apply the bounds appropriately.
  *
@@ -45,7 +42,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export class LocatorMap extends Component {
+export class ChallengeSearchMap extends Component {
   currentBounds = null
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -79,13 +76,19 @@ export class LocatorMap extends Component {
     }
 
     // it's the first time we've been given specific map bounds, or
-    if (this.props.mapBounds.locator === null && nextProps.mapBounds.locator !== null) {
+    if (this.props.mapBounds === null && nextProps.mapBounds !== null) {
       return true
+    }
+
+    // if mapbounds change we need to also update map
+    if ((!this.props.mapBounds.bounds && nextProps.mapBounds.bounds) ||
+        (nextProps.mapBounds.bounds && !this.props.mapBounds.bounds.equals(nextProps.mapBounds.bounds))) {
+        return true
     }
 
     // a change in map bounds was initiated by a user action, as opposed
     // to simply navigating around in the map.
-    if (_get(nextProps, 'mapBounds.locator.fromUserAction')) {
+    if (_get(nextProps, 'mapBounds.fromUserAction')) {
       return true
     }
 
@@ -93,26 +96,20 @@ export class LocatorMap extends Component {
   }
 
   /**
-   * Signal a change to the current locator map bounds in response to a change
-   * to the map (panning or zooming). If searching within map bounds is also
-   * active, then signal that the map-bounded challenges also need to be
-   * refreshed.
+   * Signal a change to the current challenge search map bounds in response to a
+   * change to the map (panning or zooming). 
    *
    * @private
    */
   updateBounds = (bounds, zoom, fromUserAction=false) => {
+
     // If the new bounds are the same as the old, do nothing.
     if (this.currentBounds && this.currentBounds.equals(bounds)) {
       return
     }
 
     this.currentBounds = bounds
-    this.props.setLocatorMapBounds(bounds, zoom, fromUserAction)
-
-    if (_get(this.props, 'challengeFilter.location') ===
-        ChallengeLocation.withinMapBounds) {
-      this.props.updateBoundedChallenges(bounds)
-    }
+    this.props.setChallengeSearchMapBounds(bounds, zoom, fromUserAction)
   }
 
   /**
@@ -161,12 +158,12 @@ export class LocatorMap extends Component {
     )
 
     return (
-      <div key='locator'
+      <div key='ChallengeSearchMap'
            className={classNames('full-screen-map', this.props.className)}>
         <LayerToggle {...this.props} />
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}
-                     initialBounds = {_get(this.props, 'mapBounds.locator.bounds')}
+                     initialBounds = {_get(this.props, 'mapBounds.bounds')}
                      zoomControl={false} animate={true}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
@@ -183,28 +180,26 @@ export class LocatorMap extends Component {
   }
 }
 
-LocatorMap.propTypes = {
+ChallengeSearchMap.propTypes = {
   /**
    * Initial bounds at which to render the map. To avoid an infinite loop, this
    * will only be honored once, unless the fromUserAction flag is set to true
    * on updated mapBounds values.
    */
   mapBounds: PropTypes.object,
-  /** Invoked when the user moves the locator map */
-  setLocatorMapBounds: PropTypes.func.isRequired,
+  /** Invoked when the user moves the challenge Search map */
+  setChallengeSearchMapBounds: PropTypes.func.isRequired,
   /** The currently enabled challenge filter, if any */
-  challengeFilter: PropTypes.object,
+  searchFilters: PropTypes.object,
   /** Task markers to display */
   taskMarkers: PropTypes.array,
 }
 
-export default WithChallengeFilters(
-  WithMapBounds(
+export default WithChallengeSearch(
     WithVisibleLayer(
       WithIntersectingOverlays(
-        injectIntl(LocatorMap),
-        'locator'
+        injectIntl(ChallengeSearchMap),
+        'challenges'
       )
     )
   )
-)

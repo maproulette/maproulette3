@@ -6,11 +6,6 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FilterByLocation
     asMenuList={false}
-    challengeFilter={
-        Object {
-            "difficulty": 1,
-          }
-    }
     challenges={
         Array [
             Object {
@@ -41,14 +36,18 @@ ShallowWrapper {
     locateMapToUser={[Function]}
     mapBounds={
         Object {
-            "locator": Object {
+            "challenges": Object {
               "bounds": 1,
             },
           }
     }
-    removeChallengeFilters={[Function]}
-    setChallengeFilters={[Function]}
-    updateBoundedChallenges={[Function]}
+    removeSearchFilters={[Function]}
+    searchFilters={
+        Object {
+            "difficulty": 1,
+          }
+    }
+    setSearchFilters={[Function]}
     user={
         Object {
             "id": 11,

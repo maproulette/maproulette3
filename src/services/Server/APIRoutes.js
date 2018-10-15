@@ -33,11 +33,8 @@ const apiRoutes = factory => {
       'delete': factory.delete('/project/:id'),
     },
     'challenges': {
-      'active': factory.get('/challenges/extendedFind'),
       'featured': factory.get('/challenges/featured'),
-      'withKeywords': factory.get('/challenges/extendedFind'),
       'search': factory.get('/challenges/extendedFind'),
-      'withinBounds': factory.get('/challenges/extendedFind'),
       'actions': factory.get('/data/project/summary'),
       'activity': factory.get('/data/status/activity'),
       'latestActivity': factory.get('/data/status/latestActivity'),

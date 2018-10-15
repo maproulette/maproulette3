@@ -27,11 +27,13 @@ ShallowWrapper {
             },
           ]
     }
+    clearSearch={[Function]}
     intl={
         Object {
             "formatMessage": [Function],
           }
     }
+    setSearch={[Function]}
     user={
         Object {
             "id": 11,
@@ -85,6 +87,7 @@ ShallowWrapper {
                                                 },
                                               ]
                                 }
+                                clearSearch={[Function]}
                                 eventTypes={
                                         Array [
                                                 "mousedown",
@@ -99,6 +102,7 @@ ShallowWrapper {
                                 }
                                 outsideClickIgnoreClass="ignore-react-onclickoutside"
                                 preventDefault={false}
+                                setSearch={[Function]}
                                 stopPropagation={false}
                                 user={
                                         Object {
@@ -135,11 +139,13 @@ ShallowWrapper {
                                                 },
                                               ]
                                 }
+                                clearSearch={[Function]}
                                 intl={
                                         Object {
                                                 "formatMessage": [Function],
                                               }
                                 }
+                                setSearch={[Function]}
                                 user={
                                         Object {
                                                 "id": 11,
@@ -170,11 +176,13 @@ ShallowWrapper {
                                                 },
                                               ]
                                 }
+                                clearSearch={[Function]}
                                 intl={
                                         Object {
                                                 "formatMessage": [Function],
                                               }
                                 }
+                                setSearch={[Function]}
                                 user={
                                         Object {
                                                 "id": 11,
@@ -205,11 +213,13 @@ ShallowWrapper {
                                                 },
                                               ]
                                 }
+                                clearSearch={[Function]}
                                 intl={
                                         Object {
                                                 "formatMessage": [Function],
                                               }
                                 }
+                                setSearch={[Function]}
                                 user={
                                         Object {
                                                 "id": 11,
@@ -218,7 +228,7 @@ ShallowWrapper {
                                 }
                         />
                 </MediaQuery>
-                <Connect(Connect(Component))
+                <SearchBox
                         challenges={
                                 Array [
                                         Object {
@@ -242,12 +252,15 @@ ShallowWrapper {
                                       ]
                         }
                         className="navbar-item"
+                        clearSearch={[Function]}
                         intl={
                                 Object {
                                         "formatMessage": [Function],
                                       }
                         }
                         placeholder={undefined}
+                        searchQuery={Object {}}
+                        setSearch={[Function]}
                         user={
                                 Object {
                                         "id": 11,
@@ -295,6 +308,7 @@ ShallowWrapper {
                                                   },
                                                 ]
                               }
+                              clearSearch={[Function]}
                               eventTypes={
                                         Array [
                                                   "mousedown",
@@ -309,6 +323,7 @@ ShallowWrapper {
                               }
                               outsideClickIgnoreClass="ignore-react-onclickoutside"
                               preventDefault={false}
+                              setSearch={[Function]}
                               stopPropagation={false}
                               user={
                                         Object {
@@ -345,11 +360,13 @@ ShallowWrapper {
                                                   },
                                                 ]
                               }
+                              clearSearch={[Function]}
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
                                                 }
                               }
+                              setSearch={[Function]}
                               user={
                                         Object {
                                                   "id": 11,
@@ -380,11 +397,13 @@ ShallowWrapper {
                                                   },
                                                 ]
                               }
+                              clearSearch={[Function]}
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
                                                 }
                               }
+                              setSearch={[Function]}
                               user={
                                         Object {
                                                   "id": 11,
@@ -415,11 +434,13 @@ ShallowWrapper {
                                                   },
                                                 ]
                               }
+                              clearSearch={[Function]}
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
                                                 }
                               }
+                              setSearch={[Function]}
                               user={
                                         Object {
                                                   "id": 11,
@@ -428,7 +449,7 @@ ShallowWrapper {
                               }
                     />
           </MediaQuery>
-          <Connect(Connect(Component))
+          <SearchBox
                     challenges={
                               Array [
                                         Object {
@@ -452,12 +473,15 @@ ShallowWrapper {
                                       ]
                     }
                     className="navbar-item"
+                    clearSearch={[Function]}
                     intl={
                               Object {
                                         "formatMessage": [Function],
                                       }
                     }
                     placeholder={undefined}
+                    searchQuery={Object {}}
+                    setSearch={[Function]}
                     user={
                               Object {
                                         "id": 11,
@@ -502,6 +526,7 @@ ShallowWrapper {
                                                         },
                                                       ]
                             }
+                            clearSearch={[Function]}
                             eventTypes={
                                           Array [
                                                         "mousedown",
@@ -516,6 +541,7 @@ ShallowWrapper {
                             }
                             outsideClickIgnoreClass="ignore-react-onclickoutside"
                             preventDefault={false}
+                            setSearch={[Function]}
                             stopPropagation={false}
                             user={
                                           Object {
@@ -552,11 +578,13 @@ ShallowWrapper {
                                                         },
                                                       ]
                             }
+                            clearSearch={[Function]}
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
                                                       }
                             }
+                            setSearch={[Function]}
                             user={
                                           Object {
                                                         "id": 11,
@@ -587,11 +615,13 @@ ShallowWrapper {
                                                         },
                                                       ]
                             }
+                            clearSearch={[Function]}
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
                                                       }
                             }
+                            setSearch={[Function]}
                             user={
                                           Object {
                                                         "id": 11,
@@ -622,11 +652,13 @@ ShallowWrapper {
                                                         },
                                                       ]
                             }
+                            clearSearch={[Function]}
                             intl={
                                           Object {
                                                         "formatMessage": [Function],
                                                       }
                             }
+                            setSearch={[Function]}
                             user={
                                           Object {
                                                         "id": 11,
@@ -635,7 +667,7 @@ ShallowWrapper {
                             }
               />
 </MediaQuery>,
-            <Connect(Connect(Component))
+            <SearchBox
               challenges={
                             Array [
                                           Object {
@@ -659,12 +691,15 @@ ShallowWrapper {
                                         ]
               }
               className="navbar-item"
+              clearSearch={[Function]}
               intl={
                             Object {
                                           "formatMessage": [Function],
                                         }
               }
               placeholder={undefined}
+              searchQuery={Object {}}
+              setSearch={[Function]}
               user={
                             Object {
                                           "id": 11,
@@ -705,6 +740,7 @@ ShallowWrapper {
                                                 },
                                               ]
                 }
+                clearSearch={[Function]}
                 eventTypes={
                                 Array [
                                                 "mousedown",
@@ -719,6 +755,7 @@ ShallowWrapper {
                 }
                 outsideClickIgnoreClass="ignore-react-onclickoutside"
                 preventDefault={false}
+                setSearch={[Function]}
                 stopPropagation={false}
                 user={
                                 Object {
@@ -756,6 +793,7 @@ ShallowWrapper {
                     },
                   },
                 ],
+                "clearSearch": [Function],
                 "eventTypes": Array [
                   "mousedown",
                   "touchstart",
@@ -766,6 +804,7 @@ ShallowWrapper {
                 },
                 "outsideClickIgnoreClass": "ignore-react-onclickoutside",
                 "preventDefault": false,
+                "setSearch": [Function],
                 "stopPropagation": false,
                 "user": Object {
                   "id": 11,
@@ -807,11 +846,13 @@ ShallowWrapper {
                                                       },
                                                     ]
                   }
+                  clearSearch={[Function]}
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
                                                     }
                   }
+                  setSearch={[Function]}
                   user={
                                     Object {
                                                       "id": 11,
@@ -842,11 +883,13 @@ ShallowWrapper {
                                                       },
                                                     ]
                   }
+                  clearSearch={[Function]}
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
                                                     }
                   }
+                  setSearch={[Function]}
                   user={
                                     Object {
                                                       "id": 11,
@@ -877,11 +920,13 @@ ShallowWrapper {
                                                       },
                                                     ]
                   }
+                  clearSearch={[Function]}
                   intl={
                                     Object {
                                                       "formatMessage": [Function],
                                                     }
                   }
+                  setSearch={[Function]}
                   user={
                                     Object {
                                                       "id": 11,
@@ -920,9 +965,11 @@ ShallowWrapper {
                       },
                     },
                   ],
+                  "clearSearch": [Function],
                   "intl": Object {
                     "formatMessage": [Function],
                   },
+                  "setSearch": [Function],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -957,9 +1004,11 @@ ShallowWrapper {
                       },
                     },
                   ],
+                  "clearSearch": [Function],
                   "intl": Object {
                     "formatMessage": [Function],
                   },
+                  "setSearch": [Function],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -994,9 +1043,11 @@ ShallowWrapper {
                       },
                     },
                   ],
+                  "clearSearch": [Function],
                   "intl": Object {
                     "formatMessage": [Function],
                   },
+                  "setSearch": [Function],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -1035,10 +1086,13 @@ ShallowWrapper {
                 },
               ],
               "className": "navbar-item",
+              "clearSearch": [Function],
               "intl": Object {
                 "formatMessage": [Function],
               },
               "placeholder": undefined,
+              "searchQuery": Object {},
+              "setSearch": [Function],
               "user": Object {
                 "id": 11,
                 "savedChallenges": Array [],
@@ -1095,6 +1149,7 @@ ShallowWrapper {
                                                             },
                                                           ]
                                         }
+                                        clearSearch={[Function]}
                                         eventTypes={
                                                   Array [
                                                             "mousedown",
@@ -1109,6 +1164,7 @@ ShallowWrapper {
                                         }
                                         outsideClickIgnoreClass="ignore-react-onclickoutside"
                                         preventDefault={false}
+                                        setSearch={[Function]}
                                         stopPropagation={false}
                                         user={
                                                   Object {
@@ -1145,11 +1201,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                                         }
+                                        clearSearch={[Function]}
                                         intl={
                                                   Object {
                                                             "formatMessage": [Function],
                                                           }
                                         }
+                                        setSearch={[Function]}
                                         user={
                                                   Object {
                                                             "id": 11,
@@ -1180,11 +1238,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                                         }
+                                        clearSearch={[Function]}
                                         intl={
                                                   Object {
                                                             "formatMessage": [Function],
                                                           }
                                         }
+                                        setSearch={[Function]}
                                         user={
                                                   Object {
                                                             "id": 11,
@@ -1215,11 +1275,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                                         }
+                                        clearSearch={[Function]}
                                         intl={
                                                   Object {
                                                             "formatMessage": [Function],
                                                           }
                                         }
+                                        setSearch={[Function]}
                                         user={
                                                   Object {
                                                             "id": 11,
@@ -1228,7 +1290,7 @@ ShallowWrapper {
                                         }
                               />
                     </MediaQuery>
-                    <Connect(Connect(Component))
+                    <SearchBox
                               challenges={
                                         Array [
                                                   Object {
@@ -1252,12 +1314,15 @@ ShallowWrapper {
                                                 ]
                               }
                               className="navbar-item"
+                              clearSearch={[Function]}
                               intl={
                                         Object {
                                                   "formatMessage": [Function],
                                                 }
                               }
                               placeholder={undefined}
+                              searchQuery={Object {}}
+                              setSearch={[Function]}
                               user={
                                         Object {
                                                   "id": 11,
@@ -1305,6 +1370,7 @@ ShallowWrapper {
                                                             },
                                                           ]
                                     }
+                                    clearSearch={[Function]}
                                     eventTypes={
                                                 Array [
                                                             "mousedown",
@@ -1319,6 +1385,7 @@ ShallowWrapper {
                                     }
                                     outsideClickIgnoreClass="ignore-react-onclickoutside"
                                     preventDefault={false}
+                                    setSearch={[Function]}
                                     stopPropagation={false}
                                     user={
                                                 Object {
@@ -1355,11 +1422,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                                     }
+                                    clearSearch={[Function]}
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
                                                           }
                                     }
+                                    setSearch={[Function]}
                                     user={
                                                 Object {
                                                             "id": 11,
@@ -1390,11 +1459,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                                     }
+                                    clearSearch={[Function]}
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
                                                           }
                                     }
+                                    setSearch={[Function]}
                                     user={
                                                 Object {
                                                             "id": 11,
@@ -1425,11 +1496,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                                     }
+                                    clearSearch={[Function]}
                                     intl={
                                                 Object {
                                                             "formatMessage": [Function],
                                                           }
                                     }
+                                    setSearch={[Function]}
                                     user={
                                                 Object {
                                                             "id": 11,
@@ -1438,7 +1511,7 @@ ShallowWrapper {
                                     }
                         />
             </MediaQuery>
-            <Connect(Connect(Component))
+            <SearchBox
                         challenges={
                                     Array [
                                                 Object {
@@ -1462,12 +1535,15 @@ ShallowWrapper {
                                               ]
                         }
                         className="navbar-item"
+                        clearSearch={[Function]}
                         intl={
                                     Object {
                                                 "formatMessage": [Function],
                                               }
                         }
                         placeholder={undefined}
+                        searchQuery={Object {}}
+                        setSearch={[Function]}
                         user={
                                     Object {
                                                 "id": 11,
@@ -1512,6 +1588,7 @@ ShallowWrapper {
                                                                 },
                                                               ]
                                 }
+                                clearSearch={[Function]}
                                 eventTypes={
                                                 Array [
                                                                 "mousedown",
@@ -1526,6 +1603,7 @@ ShallowWrapper {
                                 }
                                 outsideClickIgnoreClass="ignore-react-onclickoutside"
                                 preventDefault={false}
+                                setSearch={[Function]}
                                 stopPropagation={false}
                                 user={
                                                 Object {
@@ -1562,11 +1640,13 @@ ShallowWrapper {
                                                                 },
                                                               ]
                                 }
+                                clearSearch={[Function]}
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
+                                setSearch={[Function]}
                                 user={
                                                 Object {
                                                                 "id": 11,
@@ -1597,11 +1677,13 @@ ShallowWrapper {
                                                                 },
                                                               ]
                                 }
+                                clearSearch={[Function]}
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
+                                setSearch={[Function]}
                                 user={
                                                 Object {
                                                                 "id": 11,
@@ -1632,11 +1714,13 @@ ShallowWrapper {
                                                                 },
                                                               ]
                                 }
+                                clearSearch={[Function]}
                                 intl={
                                                 Object {
                                                                 "formatMessage": [Function],
                                                               }
                                 }
+                                setSearch={[Function]}
                                 user={
                                                 Object {
                                                                 "id": 11,
@@ -1645,7 +1729,7 @@ ShallowWrapper {
                                 }
                 />
 </MediaQuery>,
-              <Connect(Connect(Component))
+              <SearchBox
                 challenges={
                                 Array [
                                                 Object {
@@ -1669,12 +1753,15 @@ ShallowWrapper {
                                               ]
                 }
                 className="navbar-item"
+                clearSearch={[Function]}
                 intl={
                                 Object {
                                                 "formatMessage": [Function],
                                               }
                 }
                 placeholder={undefined}
+                searchQuery={Object {}}
+                setSearch={[Function]}
                 user={
                                 Object {
                                                 "id": 11,
@@ -1715,6 +1802,7 @@ ShallowWrapper {
                                                       },
                                                     ]
                   }
+                  clearSearch={[Function]}
                   eventTypes={
                                     Array [
                                                       "mousedown",
@@ -1729,6 +1817,7 @@ ShallowWrapper {
                   }
                   outsideClickIgnoreClass="ignore-react-onclickoutside"
                   preventDefault={false}
+                  setSearch={[Function]}
                   stopPropagation={false}
                   user={
                                     Object {
@@ -1766,6 +1855,7 @@ ShallowWrapper {
                       },
                     },
                   ],
+                  "clearSearch": [Function],
                   "eventTypes": Array [
                     "mousedown",
                     "touchstart",
@@ -1776,6 +1866,7 @@ ShallowWrapper {
                   },
                   "outsideClickIgnoreClass": "ignore-react-onclickoutside",
                   "preventDefault": false,
+                  "setSearch": [Function],
                   "stopPropagation": false,
                   "user": Object {
                     "id": 11,
@@ -1817,11 +1908,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                     }
+                    clearSearch={[Function]}
                     intl={
                                         Object {
                                                             "formatMessage": [Function],
                                                           }
                     }
+                    setSearch={[Function]}
                     user={
                                         Object {
                                                             "id": 11,
@@ -1852,11 +1945,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                     }
+                    clearSearch={[Function]}
                     intl={
                                         Object {
                                                             "formatMessage": [Function],
                                                           }
                     }
+                    setSearch={[Function]}
                     user={
                                         Object {
                                                             "id": 11,
@@ -1887,11 +1982,13 @@ ShallowWrapper {
                                                             },
                                                           ]
                     }
+                    clearSearch={[Function]}
                     intl={
                                         Object {
                                                             "formatMessage": [Function],
                                                           }
                     }
+                    setSearch={[Function]}
                     user={
                                         Object {
                                                             "id": 11,
@@ -1930,9 +2027,11 @@ ShallowWrapper {
                         },
                       },
                     ],
+                    "clearSearch": [Function],
                     "intl": Object {
                       "formatMessage": [Function],
                     },
+                    "setSearch": [Function],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -1967,9 +2066,11 @@ ShallowWrapper {
                         },
                       },
                     ],
+                    "clearSearch": [Function],
                     "intl": Object {
                       "formatMessage": [Function],
                     },
+                    "setSearch": [Function],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -2004,9 +2105,11 @@ ShallowWrapper {
                         },
                       },
                     ],
+                    "clearSearch": [Function],
                     "intl": Object {
                       "formatMessage": [Function],
                     },
+                    "setSearch": [Function],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -2045,10 +2148,13 @@ ShallowWrapper {
                   },
                 ],
                 "className": "navbar-item",
+                "clearSearch": [Function],
                 "intl": Object {
                   "formatMessage": [Function],
                 },
                 "placeholder": undefined,
+                "searchQuery": Object {},
+                "setSearch": [Function],
                 "user": Object {
                   "id": 11,
                   "savedChallenges": Array [],

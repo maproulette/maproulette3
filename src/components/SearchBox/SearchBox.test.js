@@ -101,7 +101,8 @@ test("is-loading class not present normally", () => {
 
 test("is-loading class added when searchQuery.fetchingResults", () => {
   basicProps.searchQuery.query = 'test me'
-  basicProps.searchQuery.fetchingResults = 'myFetchId'
+  basicProps.searchQuery.meta = {fetchingResults: 'myFetchId'}
+
   const wrapper = shallow(
     <SearchBox {...basicProps} />
   )
@@ -126,16 +127,6 @@ test("setSearch called when the query in box is changed", () => {
 
   wrapper.find('.search-box__input').simulate('change', { target: { value: 'Hello' } })
   expect(basicProps.setSearch.mock.calls.length).toBe(1)
-  expect(wrapper).toMatchSnapshot()
-})
-
-test("fetchResults called when the query in box is changed", () => {
-  const wrapper = shallow(
-    <SearchBox {...basicProps} />
-  )
-
-  wrapper.find('.search-box__input').simulate('change', { target: { value: 'Hello' } })
-  expect(basicProps.fetchResults.mock.calls.length).toBe(1)
   expect(wrapper).toMatchSnapshot()
 })
 

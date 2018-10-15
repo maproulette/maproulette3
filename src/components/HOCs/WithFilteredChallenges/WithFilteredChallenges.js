@@ -30,7 +30,7 @@ export default function WithFilteredChallenges(WrappedComponent,
   return class extends Component {
     challengePassesAllFilters(challenge) {
       return _every(allFilters,
-                    passes => passes(this.props.challengeFilter, challenge, this.props))
+                    passes => passes(this.props.searchFilters, challenge, this.props))
     }
 
     render() {

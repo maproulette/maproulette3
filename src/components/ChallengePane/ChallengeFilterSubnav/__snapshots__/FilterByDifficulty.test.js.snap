@@ -6,11 +6,6 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FilterByDifficulty
     asMenuList={false}
-    challengeFilter={
-        Object {
-            "difficulty": 1,
-          }
-    }
     challenges={
         Array [
             Object {
@@ -38,8 +33,13 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
-    removeChallengeFilters={[Function]}
-    setChallengeFilters={[Function]}
+    removeSearchFilters={[Function]}
+    searchFilters={
+        Object {
+            "difficulty": 1,
+          }
+    }
+    setSearchFilters={[Function]}
     user={
         Object {
             "id": 11,

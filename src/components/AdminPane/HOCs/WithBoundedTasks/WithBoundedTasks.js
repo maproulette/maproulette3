@@ -5,7 +5,7 @@ import _filter from 'lodash/filter'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
-import WithMapBounds from '../../../HOCs/WithMapBounds/WithMapBounds'
+import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 
 export const WithBoundedTasks = function(WrappedComponent,
                                          tasksProp='clusteredTasks',
@@ -18,7 +18,7 @@ export const WithBoundedTasks = function(WrappedComponent,
 
       // Only use challenge-owner map bounds and zoom if they match this
       // this challenge.
-      const challengeOwnerBounds = _get(this.props.mapBounds, 'challengeOwner')
+      const challengeOwnerBounds = this.props.mapBounds
       if (challengeOwnerBounds &&
           challengeOwnerBounds.challengeId === this.props.challenge.id) {
         mapBounds = challengeOwnerBounds.bounds
@@ -47,4 +47,4 @@ export const WithBoundedTasks = function(WrappedComponent,
 }
 
 export default (WrappedComponent, tasksProp='clusteredTasks', outputProp) =>
-  WithMapBounds(WithBoundedTasks(WrappedComponent, tasksProp, outputProp))
+  WithSearch(WithBoundedTasks(WrappedComponent, tasksProp, outputProp), 'challengeOwner')

@@ -25,13 +25,9 @@ ShallowWrapper {
             },
           ]
     }
-    searchQueries={
+    searchCriteria={
         Object {
-            "mySearchName": Object {
-              "searchQuery": Object {
-                "query": "",
-              },
-            },
+            "query": "",
           }
     }
 />,
@@ -83,12 +79,8 @@ ShallowWrapper {
           ],
         },
       ],
-      "searchQueries": Object {
-        "mySearchName": Object {
-          "searchQuery": Object {
-            "query": "",
-          },
-        },
+      "searchCriteria": Object {
+        "query": "",
       },
     },
     "ref": null,
@@ -137,12 +129,8 @@ ShallowWrapper {
             ],
           },
         ],
-        "searchQueries": Object {
-          "mySearchName": Object {
-            "searchQuery": Object {
-              "query": "",
-            },
-          },
+        "searchCriteria": Object {
+          "query": "",
         },
       },
       "ref": null,
@@ -185,13 +173,9 @@ ShallowWrapper {
             },
           ]
     }
-    searchQueries={
+    searchCriteria={
         Object {
-            "mySearchName": Object {
-              "searchQuery": Object {
-                "query": "#bar",
-              },
-            },
+            "query": "#bar",
           }
     }
 />,
@@ -216,12 +200,8 @@ ShallowWrapper {
           ],
         },
       ],
-      "searchQueries": Object {
-        "mySearchName": Object {
-          "searchQuery": Object {
-            "query": "#bar",
-          },
-        },
+      "searchCriteria": Object {
+        "query": "#bar",
       },
     },
     "ref": null,
@@ -243,12 +223,8 @@ ShallowWrapper {
             ],
           },
         ],
-        "searchQueries": Object {
-          "mySearchName": Object {
-            "searchQuery": Object {
-              "query": "#bar",
-            },
-          },
+        "searchCriteria": Object {
+          "query": "#bar",
         },
       },
       "ref": null,
@@ -266,7 +242,7 @@ ShallowWrapper {
 }
 `;
 
-exports[`Search query is passed using given 'searchName' to wrapped component 1`] = `
+exports[`Search query is passed to wrapped component 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
@@ -291,13 +267,9 @@ ShallowWrapper {
             },
           ]
     }
-    searchQueries={
+    searchCriteria={
         Object {
-            "mySearchName": Object {
-              "searchQuery": Object {
-                "query": "",
-              },
-            },
+            "query": "",
           }
     }
 />,
@@ -331,12 +303,8 @@ ShallowWrapper {
           ],
         },
       ],
-      "searchQueries": Object {
-        "mySearchName": Object {
-          "searchQuery": Object {
-            "query": "",
-          },
-        },
+      "searchCriteria": Object {
+        "query": "",
       },
     },
     "ref": null,
@@ -367,12 +335,8 @@ ShallowWrapper {
             ],
           },
         ],
-        "searchQueries": Object {
-          "mySearchName": Object {
-            "searchQuery": Object {
-              "query": "",
-            },
-          },
+        "searchCriteria": Object {
+          "query": "",
         },
       },
       "ref": null,

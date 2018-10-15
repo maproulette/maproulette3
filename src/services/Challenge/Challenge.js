@@ -117,36 +117,12 @@ export const fetchFeaturedChallenges = function(limit = 50) {
 }
 
 /**
- * Fetches challenges that contain any of the given keywords/tags,
- * up to the given limit.
- *
- * @param {string} tags - comma-separated keywords/tags to include in search.
- * @param {number} limit
- */
-export const fetchChallengesWithKeywords = function(keywords, limit=50) {
-  return function(dispatch) {
-    const keywordString = _isArray(keywords) ? keywords.join(',') : keywords
-
-    return new Endpoint(
-      api.challenges.withKeywords,
-      {schema: [ challengeSchema() ], params: {ce: 'true', ct: keywordString, limit}}
-    ).execute().then(normalizedResults => {
-      dispatch(receiveChallenges(normalizedResults.entities))
-      return normalizedResults
-    }).catch((error) => {
-      dispatch(addError(AppErrors.challenge.fetchFailure))
-      console.log(error.response || error)
-    })
-  }
-}
-
-/**
  * Fetches challenges that contain any of the given criteria
  * (including: keywords/tags, column to sort results by, filters),
  * up to the given limit.
  *
  * @param {object} criteria - criteria to include in search. Can include keys:
- *                            'searchQuery', 'filters', 'onlyEnabled',
+ *                            'searchQuery', 'filters', 'onlyEnabled', 'bounds'
  *                            'sortCriteria.sortBy', 'sortCrtiera.direction'
  * @param {number} limit
  */
@@ -156,6 +132,7 @@ export const extendedFind = function(criteria, limit=50) {
   const onlyEnabled = _isUndefined(criteria['onlyEnabled']) ?
                           true : criteria['onlyEnabled']
 
+  const bounds = criteria['bounds']
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const direction = _get(criteria, 'sortCriteria.direction')
   const sort = sortBy ? `${sortBy} ${direction}` : null
@@ -194,104 +171,15 @@ export const extendedFind = function(criteria, limit=50) {
 
     queryParams.sort = sort
 
-    return new Endpoint(
-      api.challenges.search,
-      {schema: [ challengeSchema() ], params: queryParams}
-    ).execute().then(normalizedResults => {
-      dispatch(receiveChallenges(normalizedResults.entities))
-      return normalizedResults
-    }).catch((error) => {
-      dispatch(addError(AppErrors.challenge.searchFailure))
-      console.log(error.response || error)
-    })
-  }
-}
-
-/**
- * Fetches a batch of enabled challenges, up to the given limit.
- */
-export const fetchEnabledChallenges = function(limit) {
-  return fetchChallengesWithKeywords('', limit)
-}
-
-/**
- * Search challenges by name using the given query string, which may also
- * contain hashtags for narrowing by keyword/tag. e.g. "#france museum"
- * would search for challenges with the "france" keyword that had "museum"
- * in the challenge name (as determined by the server).
- *
- * Additional difficulty and keyword filters can be provided to further narrow
- * search results.
- *
- * @param {string} queryString
- * @param {object} filters
- * @param {boolean} onlyEnabled
- * @param {number} limit
- */
-export const searchChallenges = function(queryString, filters={}, onlyEnabled=true, limit=50) {
-  return function(dispatch) {
-    const queryParts = parseQueryString(queryString)
-
-    // setup query parameters desired by server.
-    // ce: limit to enabled challenges
-    // pe: limit to enabled projects
-    // cs: query string
-    // cd: challenge difficulty
-    // ct: keywords/tags (comma-separated string)
-    const queryParams = {
-      limit,
-      ce: onlyEnabled ? 'true' : 'false',
-      pe: onlyEnabled ? 'true' : 'false',
-    }
-
-    if (_isFinite(filters.difficulty)) {
-      queryParams.cd = filters.difficulty
-    }
-
-    // Keywords/tags can come from both the the query and the filter, so we need to
-    // combine them into a single keywords array.
-    const keywords =
-      queryParts.tagTokens.concat(_isArray(filters.keywords) ? filters.keywords : [])
-
-    if (keywords.length > 0) {
-      queryParams.ct = keywords.join(',')
-    }
-
-    if (queryParts.query.length > 0) {
-      queryParams.cs = queryParts.query
+    if (bounds) {
+      const boundsObject = toLatLngBounds(bounds)
+      queryParams.bb = boundsObject.toBBoxString()
     }
 
     return new Endpoint(
       api.challenges.search,
-      {schema: [ challengeSchema() ], params: queryParams}
-    ).execute().then(normalizedResults => {
-      dispatch(receiveChallenges(normalizedResults.entities))
-      return normalizedResults
-    }).catch((error) => {
-      dispatch(addError(AppErrors.challenge.searchFailure))
-      console.log(error.response || error)
-    })
-  }
-}
-
-/**
- * Fetch challenges that have one or more tasks located within the given
- * bounding box.
- *
- * @param bounds - a LatLngBounds instance or an array of [west, south, east, north]
- *                 values.
- * @param {number} limit
- */
-export const fetchChallengesWithinBoundingBox = function(bounds, limit=100) {
-  const boundsObject = toLatLngBounds(bounds)
-
-  return function(dispatch) {
-    return new Endpoint(
-      api.challenges.withinBounds,
-      {
-        schema: [ challengeSchema() ],
-        params: {bb: boundsObject.toBBoxString(), limit}
-      }
+      {schema: [ challengeSchema() ],
+        params: queryParams}
     ).execute().then(normalizedResults => {
       dispatch(receiveChallenges(normalizedResults.entities))
       return normalizedResults

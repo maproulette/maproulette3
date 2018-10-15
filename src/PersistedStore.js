@@ -16,11 +16,8 @@ import { currentClusteredTasks } from './services/Task/ClusteredTask'
 import { currentBoundedTasks } from './services/Task/BoundedTask'
 import { commentEntities } from './services/Comment/Comment'
 import { placeEntities } from './services/Place/Place'
-import { currentFilters } from './services/Filter/Filter'
-import { currentSort } from './services/Sort/Sort'
 import { currentSearch } from './services/Search/Search'
 import { openEditor } from './services/Editor/Editor'
-import { currentMapBounds } from './services/MapBounds/MapBounds'
 import { currentKeyboardShortcuts }
        from './services/KeyboardShortcuts/KeyboardShortcuts'
 import { currentStatus } from './services/Status/Status'
@@ -28,7 +25,7 @@ import { currentErrors } from './services/Error/Error'
 import { adminContext } from './services/AdminContext/AdminContext'
 import { currentPreferences } from './services/Preferences/Preferences'
 
-const DATA_MODEL_VERSION = 8
+const DATA_MODEL_VERSION = 9
 
 /**
  * initializePersistedStore sets up the redux store in combination with
@@ -99,6 +96,14 @@ export const initializePersistedStore = callback => {
     8: state => {
       // Leaderboard no longer kept in redux store
       delete state.currentLeaderboard
+    },
+    9: state => {
+      // currentFilters and currentSort merged under currentSearch
+      delete state.currentFilters
+      delete state.currentSort
+
+      // mapBounds merged into currentSearch
+      delete state.mapBounds
     }
   }
 
@@ -137,11 +142,8 @@ export const initializePersistedStore = callback => {
       visibleLayer,
       visibleOverlays,
       currentUser,
-      currentFilters,
-      currentSort,
       currentSearch,
       openEditor,
-      currentMapBounds,
       currentKeyboardShortcuts,
       currentStatus,
       currentErrors,

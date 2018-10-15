@@ -6,19 +6,17 @@ import _get from 'lodash/get'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import Sidebar from '../Sidebar/Sidebar'
-import LocatorMap from '../LocatorMap/LocatorMap'
-import ChallengeMap from '../ChallengeMap/ChallengeMap'
+import ChallengeSearchMap from '../ChallengeSearchMap/ChallengeSearchMap'
+import ChallengeBrowseMap from '../ChallengeBrowseMap/ChallengeBrowseMap'
 import CongratulateModal from '../CongratulateModal/CongratulateModal'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import WithFilteredChallenges
        from '../HOCs/WithFilteredChallenges/WithFilteredChallenges'
-import WithChallengeFilters
-       from '../HOCs/WithChallengeFilters/WithChallengeFilters'
+import WithChallengeSearch from '../HOCs/WithSearch/WithChallengeSearch'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
-import WithMapBounds from '../HOCs/WithMapBounds/WithMapBounds'
 import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithMapBoundedTasks from '../HOCs/WithMapBoundedTasks/WithMapBoundedTasks'
@@ -27,17 +25,17 @@ import './ChallengePane.css'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
-const BrowseChallengeMap = WithTaskMarkers(ChallengeMap)
-let DiscoveryMap = null
+const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
+let SearchMap = null
 
-// If the map-bounded task browsing feature is enabled, set up the LocatorMap
+// If the map-bounded task browsing feature is enabled, set up the ChallengeSearchMap
 // to use it.
 if (_get(process.env,
          'REACT_APP_FEATURE_BOUNDED_TASK_BROWSING') === 'enabled') {
-  DiscoveryMap = WithTaskMarkers(LocatorMap, 'mapBoundedTasks')
+  SearchMap = WithTaskMarkers(ChallengeSearchMap, 'mapBoundedTasks')
 }
 else {
-  DiscoveryMap = LocatorMap
+  SearchMap = ChallengeSearchMap
 }
 
 /**
@@ -45,12 +43,12 @@ else {
  * searching, and choosing a challenge to start working on. It includes
  * a ChallengeFilterSubnav that presents a subnav with filter and search
  * options, a ChallengeResultList (wrapped in a Sidebar) for presenting challenges
- * that match the current search and set of filters, and a LocatorMap for
+ * that match the current search and set of filters, and a ChallengeSearchMap for
  * finding challenges geographically.
  *
  * @see See [ChallengeFilterSubnav](#challengefiltersubnav)
  * @see See [ChallengeResultList](#challengeresultlist)
- * @see See [LocatorMap](#locatormap)
+ * @see See [ChallengeSearchMap](#ChallengeSearchMap)
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -68,7 +66,7 @@ export class ChallengePane extends Component {
   }
 
   render() {
-    const Map = this.props.browsedChallenge ? BrowseChallengeMap : DiscoveryMap
+    const Map = this.props.browsedChallenge ? BrowseMap : SearchMap
     return (
       <span>
         {_get(this.props, 'history.location.state.congratulate', false) &&
@@ -103,9 +101,9 @@ export class ChallengePane extends Component {
   }
 }
 
-export default WithMapBounds(
+export default
   WithChallenges(
-    WithChallengeFilters(
+    WithChallengeSearch(
       WithFilteredChallenges(
         WithSearchResults(
           WithMapBoundedTasks(
@@ -121,4 +119,3 @@ export default WithMapBounds(
       )
     )
   )
-)

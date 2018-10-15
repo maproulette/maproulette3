@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
-import { searchChallenges } from '../../../services/Challenge/Challenge'
-import WithSearchExecution from '../../HOCs/WithSearchExecution/WithSearchExecution'
 import SearchBox from '../../SearchBox/SearchBox'
 import MobileFilterMenu from '../../MobileFilterMenu/MobileFilterMenu'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
-import WithChallengeFilters from '../../HOCs/WithChallengeFilters/WithChallengeFilters'
-import WithMapBounds from '../../HOCs/WithMapBounds/WithMapBounds'
+import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
 import FilterByLocation from './FilterByLocation'
@@ -16,8 +13,6 @@ import messages from './Messages'
 
 // Setup child components with necessary HOCs
 const LocationFilter = WithCurrentUser(FilterByLocation)
-const ChallengeSearch =
-  WithSearchExecution(SearchBox, 'challenges', searchChallenges)
 
 /**
  * ChallengeFilterSubnav presents a navigation bar that contains options
@@ -48,7 +43,7 @@ export class ChallengeFilterSubnav extends Component {
               <LocationFilter {...this.props} />
             </MediaQuery>
 
-            <ChallengeSearch className='navbar-item'
+            <SearchBox className='navbar-item'
                              placeholder={this.props.intl.formatMessage(messages.searchLabel)}
                              {...this.props} />
           </div>
@@ -58,4 +53,4 @@ export class ChallengeFilterSubnav extends Component {
   }
 }
 
-export default WithChallengeFilters(WithMapBounds(injectIntl(ChallengeFilterSubnav)), true)
+export default WithChallengeSearch(injectIntl(ChallengeFilterSubnav))

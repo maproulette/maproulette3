@@ -28,8 +28,8 @@ import './ChallengeResultList.css'
  */
 export class ChallengeResultList extends Component {
   clearFilters = () => {
-    this.props.clearChallengeFilters()
-    this.props.searchQueries.challenges.clearSearch()
+    this.props.clearSearchFilters()
+    this.props.clearSearch('challenges')
   }
 
   render() {

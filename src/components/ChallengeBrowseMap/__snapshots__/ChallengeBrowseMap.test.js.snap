@@ -4,7 +4,7 @@ exports[`a busy indicator is displayed if tasks are loading 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <ChallengeMap
+  Symbol(enzyme.__unrendered__): <ChallengeBrowseMap
     browsedChallenge={
         Object {
             "id": 123,
@@ -12,7 +12,7 @@ ShallowWrapper {
     }
     mapBounds={
         Object {
-            "challenge": Object {
+            "challengeBrowse": Object {
               "bounds": Object {
                 "_northEast": Object {
                   "lat": 0,
@@ -27,7 +27,7 @@ ShallowWrapper {
             },
           }
     }
-    setChallengeMapBounds={[Function]}
+    setChallengeBrowseMapBounds={[Function]}
     source={
         Object {
             "id": "foo",
@@ -35,7 +35,6 @@ ShallowWrapper {
     }
     taskMarkers={Array []}
     tasksLoading={true}
-    updateBoundedChallenges={[Function]}
     visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -59,7 +58,7 @@ ShallowWrapper {
           }
           mapBounds={
                     Object {
-                              "challenge": Object {
+                              "challengeBrowse": Object {
                                 "bounds": Object {
                                   "_northEast": Object {
                                     "lat": 0,
@@ -74,7 +73,7 @@ ShallowWrapper {
                               },
                             }
           }
-          setChallengeMapBounds={[Function]}
+          setChallengeBrowseMapBounds={[Function]}
           source={
                     Object {
                               "id": "foo",
@@ -82,7 +81,6 @@ ShallowWrapper {
           }
           taskMarkers={Array []}
           tasksLoading={true}
-          updateBoundedChallenges={[Function]}
           visibleOverlays={Array []}
 />,
         <EnhancedMap
@@ -115,7 +113,7 @@ ShallowWrapper {
                     }
                     mapBounds={
                               Object {
-                                        "challenge": Object {
+                                        "challengeBrowse": Object {
                                           "bounds": Object {
                                             "_northEast": Object {
                                               "lat": 0,
@@ -130,7 +128,7 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    setChallengeMapBounds={[Function]}
+                    setChallengeBrowseMapBounds={[Function]}
                     source={
                               Object {
                                         "id": "foo",
@@ -138,7 +136,6 @@ ShallowWrapper {
                     }
                     taskMarkers={Array []}
                     tasksLoading={true}
-                    updateBoundedChallenges={[Function]}
                     visibleOverlays={Array []}
                     zIndex={1}
           />
@@ -158,7 +155,7 @@ ShallowWrapper {
             "id": 123,
           },
           "mapBounds": Object {
-            "challenge": Object {
+            "challengeBrowse": Object {
               "bounds": Object {
                 "_northEast": Object {
                   "lat": 0,
@@ -172,13 +169,12 @@ ShallowWrapper {
               "challengeId": 123,
             },
           },
-          "setChallengeMapBounds": [Function],
+          "setChallengeBrowseMapBounds": [Function],
           "source": Object {
             "id": "foo",
           },
           "taskMarkers": Array [],
           "tasksLoading": true,
-          "updateBoundedChallenges": [Function],
           "visibleOverlays": Array [],
         },
         "ref": null,
@@ -208,7 +204,7 @@ ShallowWrapper {
               }
               mapBounds={
                             Object {
-                                          "challenge": Object {
+                                          "challengeBrowse": Object {
                                             "bounds": Object {
                                               "_northEast": Object {
                                                 "lat": 0,
@@ -223,7 +219,7 @@ ShallowWrapper {
                                           },
                                         }
               }
-              setChallengeMapBounds={[Function]}
+              setChallengeBrowseMapBounds={[Function]}
               source={
                             Object {
                                           "id": "foo",
@@ -231,7 +227,6 @@ ShallowWrapper {
               }
               taskMarkers={Array []}
               tasksLoading={true}
-              updateBoundedChallenges={[Function]}
               visibleOverlays={Array []}
               zIndex={1}
 />,
@@ -270,7 +265,7 @@ ShallowWrapper {
                 "id": 123,
               },
               "mapBounds": Object {
-                "challenge": Object {
+                "challengeBrowse": Object {
                   "bounds": Object {
                     "_northEast": Object {
                       "lat": 0,
@@ -284,13 +279,12 @@ ShallowWrapper {
                   "challengeId": 123,
                 },
               },
-              "setChallengeMapBounds": [Function],
+              "setChallengeBrowseMapBounds": [Function],
               "source": Object {
                 "id": "foo",
               },
               "taskMarkers": Array [],
               "tasksLoading": true,
-              "updateBoundedChallenges": [Function],
               "visibleOverlays": Array [],
               "zIndex": 1,
             },
@@ -329,7 +323,7 @@ ShallowWrapper {
             }
             mapBounds={
                         Object {
-                                    "challenge": Object {
+                                    "challengeBrowse": Object {
                                       "bounds": Object {
                                         "_northEast": Object {
                                           "lat": 0,
@@ -344,7 +338,7 @@ ShallowWrapper {
                                     },
                                   }
             }
-            setChallengeMapBounds={[Function]}
+            setChallengeBrowseMapBounds={[Function]}
             source={
                         Object {
                                     "id": "foo",
@@ -352,7 +346,6 @@ ShallowWrapper {
             }
             taskMarkers={Array []}
             tasksLoading={true}
-            updateBoundedChallenges={[Function]}
             visibleOverlays={Array []}
 />,
           <EnhancedMap
@@ -385,7 +378,7 @@ ShallowWrapper {
                         }
                         mapBounds={
                                     Object {
-                                                "challenge": Object {
+                                                "challengeBrowse": Object {
                                                   "bounds": Object {
                                                     "_northEast": Object {
                                                       "lat": 0,
@@ -400,7 +393,7 @@ ShallowWrapper {
                                                 },
                                               }
                         }
-                        setChallengeMapBounds={[Function]}
+                        setChallengeBrowseMapBounds={[Function]}
                         source={
                                     Object {
                                                 "id": "foo",
@@ -408,7 +401,6 @@ ShallowWrapper {
                         }
                         taskMarkers={Array []}
                         tasksLoading={true}
-                        updateBoundedChallenges={[Function]}
                         visibleOverlays={Array []}
                         zIndex={1}
             />
@@ -428,7 +420,7 @@ ShallowWrapper {
               "id": 123,
             },
             "mapBounds": Object {
-              "challenge": Object {
+              "challengeBrowse": Object {
                 "bounds": Object {
                   "_northEast": Object {
                     "lat": 0,
@@ -442,13 +434,12 @@ ShallowWrapper {
                 "challengeId": 123,
               },
             },
-            "setChallengeMapBounds": [Function],
+            "setChallengeBrowseMapBounds": [Function],
             "source": Object {
               "id": "foo",
             },
             "taskMarkers": Array [],
             "tasksLoading": true,
-            "updateBoundedChallenges": [Function],
             "visibleOverlays": Array [],
           },
           "ref": null,
@@ -478,7 +469,7 @@ ShallowWrapper {
                 }
                 mapBounds={
                                 Object {
-                                                "challenge": Object {
+                                                "challengeBrowse": Object {
                                                   "bounds": Object {
                                                     "_northEast": Object {
                                                       "lat": 0,
@@ -493,7 +484,7 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                setChallengeMapBounds={[Function]}
+                setChallengeBrowseMapBounds={[Function]}
                 source={
                                 Object {
                                                 "id": "foo",
@@ -501,7 +492,6 @@ ShallowWrapper {
                 }
                 taskMarkers={Array []}
                 tasksLoading={true}
-                updateBoundedChallenges={[Function]}
                 visibleOverlays={Array []}
                 zIndex={1}
 />,
@@ -540,7 +530,7 @@ ShallowWrapper {
                   "id": 123,
                 },
                 "mapBounds": Object {
-                  "challenge": Object {
+                  "challengeBrowse": Object {
                     "bounds": Object {
                       "_northEast": Object {
                         "lat": 0,
@@ -554,13 +544,12 @@ ShallowWrapper {
                     "challengeId": 123,
                   },
                 },
-                "setChallengeMapBounds": [Function],
+                "setChallengeBrowseMapBounds": [Function],
                 "source": Object {
                   "id": "foo",
                 },
                 "taskMarkers": Array [],
                 "tasksLoading": true,
-                "updateBoundedChallenges": [Function],
                 "visibleOverlays": Array [],
                 "zIndex": 1,
               },
@@ -599,7 +588,7 @@ exports[`it renders a full screen map 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <ChallengeMap
+  Symbol(enzyme.__unrendered__): <ChallengeBrowseMap
     browsedChallenge={
         Object {
             "id": 123,
@@ -607,7 +596,7 @@ ShallowWrapper {
     }
     mapBounds={
         Object {
-            "challenge": Object {
+            "challengeBrowse": Object {
               "bounds": Object {
                 "_northEast": Object {
                   "lat": 0,
@@ -622,14 +611,13 @@ ShallowWrapper {
             },
           }
     }
-    setChallengeMapBounds={[Function]}
+    setChallengeBrowseMapBounds={[Function]}
     source={
         Object {
             "id": "foo",
           }
     }
     taskMarkers={Array []}
-    updateBoundedChallenges={[Function]}
     visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -653,7 +641,7 @@ ShallowWrapper {
           }
           mapBounds={
                     Object {
-                              "challenge": Object {
+                              "challengeBrowse": Object {
                                 "bounds": Object {
                                   "_northEast": Object {
                                     "lat": 0,
@@ -668,14 +656,13 @@ ShallowWrapper {
                               },
                             }
           }
-          setChallengeMapBounds={[Function]}
+          setChallengeBrowseMapBounds={[Function]}
           source={
                     Object {
                               "id": "foo",
                             }
           }
           taskMarkers={Array []}
-          updateBoundedChallenges={[Function]}
           visibleOverlays={Array []}
 />,
         <EnhancedMap
@@ -708,7 +695,7 @@ ShallowWrapper {
                     }
                     mapBounds={
                               Object {
-                                        "challenge": Object {
+                                        "challengeBrowse": Object {
                                           "bounds": Object {
                                             "_northEast": Object {
                                               "lat": 0,
@@ -723,14 +710,13 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    setChallengeMapBounds={[Function]}
+                    setChallengeBrowseMapBounds={[Function]}
                     source={
                               Object {
                                         "id": "foo",
                                       }
                     }
                     taskMarkers={Array []}
-                    updateBoundedChallenges={[Function]}
                     visibleOverlays={Array []}
                     zIndex={1}
           />
@@ -750,7 +736,7 @@ ShallowWrapper {
             "id": 123,
           },
           "mapBounds": Object {
-            "challenge": Object {
+            "challengeBrowse": Object {
               "bounds": Object {
                 "_northEast": Object {
                   "lat": 0,
@@ -764,12 +750,11 @@ ShallowWrapper {
               "challengeId": 123,
             },
           },
-          "setChallengeMapBounds": [Function],
+          "setChallengeBrowseMapBounds": [Function],
           "source": Object {
             "id": "foo",
           },
           "taskMarkers": Array [],
-          "updateBoundedChallenges": [Function],
           "visibleOverlays": Array [],
         },
         "ref": null,
@@ -799,7 +784,7 @@ ShallowWrapper {
               }
               mapBounds={
                             Object {
-                                          "challenge": Object {
+                                          "challengeBrowse": Object {
                                             "bounds": Object {
                                               "_northEast": Object {
                                                 "lat": 0,
@@ -814,14 +799,13 @@ ShallowWrapper {
                                           },
                                         }
               }
-              setChallengeMapBounds={[Function]}
+              setChallengeBrowseMapBounds={[Function]}
               source={
                             Object {
                                           "id": "foo",
                                         }
               }
               taskMarkers={Array []}
-              updateBoundedChallenges={[Function]}
               visibleOverlays={Array []}
               zIndex={1}
 />,
@@ -860,7 +844,7 @@ ShallowWrapper {
                 "id": 123,
               },
               "mapBounds": Object {
-                "challenge": Object {
+                "challengeBrowse": Object {
                   "bounds": Object {
                     "_northEast": Object {
                       "lat": 0,
@@ -874,12 +858,11 @@ ShallowWrapper {
                   "challengeId": 123,
                 },
               },
-              "setChallengeMapBounds": [Function],
+              "setChallengeBrowseMapBounds": [Function],
               "source": Object {
                 "id": "foo",
               },
               "taskMarkers": Array [],
-              "updateBoundedChallenges": [Function],
               "visibleOverlays": Array [],
               "zIndex": 1,
             },
@@ -910,7 +893,7 @@ ShallowWrapper {
             }
             mapBounds={
                         Object {
-                                    "challenge": Object {
+                                    "challengeBrowse": Object {
                                       "bounds": Object {
                                         "_northEast": Object {
                                           "lat": 0,
@@ -925,14 +908,13 @@ ShallowWrapper {
                                     },
                                   }
             }
-            setChallengeMapBounds={[Function]}
+            setChallengeBrowseMapBounds={[Function]}
             source={
                         Object {
                                     "id": "foo",
                                   }
             }
             taskMarkers={Array []}
-            updateBoundedChallenges={[Function]}
             visibleOverlays={Array []}
 />,
           <EnhancedMap
@@ -965,7 +947,7 @@ ShallowWrapper {
                         }
                         mapBounds={
                                     Object {
-                                                "challenge": Object {
+                                                "challengeBrowse": Object {
                                                   "bounds": Object {
                                                     "_northEast": Object {
                                                       "lat": 0,
@@ -980,14 +962,13 @@ ShallowWrapper {
                                                 },
                                               }
                         }
-                        setChallengeMapBounds={[Function]}
+                        setChallengeBrowseMapBounds={[Function]}
                         source={
                                     Object {
                                                 "id": "foo",
                                               }
                         }
                         taskMarkers={Array []}
-                        updateBoundedChallenges={[Function]}
                         visibleOverlays={Array []}
                         zIndex={1}
             />
@@ -1007,7 +988,7 @@ ShallowWrapper {
               "id": 123,
             },
             "mapBounds": Object {
-              "challenge": Object {
+              "challengeBrowse": Object {
                 "bounds": Object {
                   "_northEast": Object {
                     "lat": 0,
@@ -1021,12 +1002,11 @@ ShallowWrapper {
                 "challengeId": 123,
               },
             },
-            "setChallengeMapBounds": [Function],
+            "setChallengeBrowseMapBounds": [Function],
             "source": Object {
               "id": "foo",
             },
             "taskMarkers": Array [],
-            "updateBoundedChallenges": [Function],
             "visibleOverlays": Array [],
           },
           "ref": null,
@@ -1056,7 +1036,7 @@ ShallowWrapper {
                 }
                 mapBounds={
                                 Object {
-                                                "challenge": Object {
+                                                "challengeBrowse": Object {
                                                   "bounds": Object {
                                                     "_northEast": Object {
                                                       "lat": 0,
@@ -1071,14 +1051,13 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                setChallengeMapBounds={[Function]}
+                setChallengeBrowseMapBounds={[Function]}
                 source={
                                 Object {
                                                 "id": "foo",
                                               }
                 }
                 taskMarkers={Array []}
-                updateBoundedChallenges={[Function]}
                 visibleOverlays={Array []}
                 zIndex={1}
 />,
@@ -1117,7 +1096,7 @@ ShallowWrapper {
                   "id": 123,
                 },
                 "mapBounds": Object {
-                  "challenge": Object {
+                  "challengeBrowse": Object {
                     "bounds": Object {
                       "_northEast": Object {
                         "lat": 0,
@@ -1131,12 +1110,11 @@ ShallowWrapper {
                     "challengeId": 123,
                   },
                 },
-                "setChallengeMapBounds": [Function],
+                "setChallengeBrowseMapBounds": [Function],
                 "source": Object {
                   "id": "foo",
                 },
                 "taskMarkers": Array [],
-                "updateBoundedChallenges": [Function],
                 "visibleOverlays": Array [],
                 "zIndex": 1,
               },
@@ -1167,7 +1145,7 @@ exports[`the busy indicator is removed once tasks are done loading 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <ChallengeMap
+  Symbol(enzyme.__unrendered__): <ChallengeBrowseMap
     browsedChallenge={
         Object {
             "id": 123,
@@ -1175,7 +1153,7 @@ ShallowWrapper {
     }
     mapBounds={
         Object {
-            "challenge": Object {
+            "challengeBrowse": Object {
               "bounds": Object {
                 "_northEast": Object {
                   "lat": 0,
@@ -1190,7 +1168,7 @@ ShallowWrapper {
             },
           }
     }
-    setChallengeMapBounds={[Function]}
+    setChallengeBrowseMapBounds={[Function]}
     source={
         Object {
             "id": "foo",
@@ -1198,7 +1176,6 @@ ShallowWrapper {
     }
     taskMarkers={Array []}
     tasksLoading={false}
-    updateBoundedChallenges={[Function]}
     visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -1222,7 +1199,7 @@ ShallowWrapper {
           }
           mapBounds={
                     Object {
-                              "challenge": Object {
+                              "challengeBrowse": Object {
                                 "bounds": Object {
                                   "_northEast": Object {
                                     "lat": 0,
@@ -1237,7 +1214,7 @@ ShallowWrapper {
                               },
                             }
           }
-          setChallengeMapBounds={[Function]}
+          setChallengeBrowseMapBounds={[Function]}
           source={
                     Object {
                               "id": "foo",
@@ -1245,7 +1222,6 @@ ShallowWrapper {
           }
           taskMarkers={Array []}
           tasksLoading={false}
-          updateBoundedChallenges={[Function]}
           visibleOverlays={Array []}
 />,
         <EnhancedMap
@@ -1278,7 +1254,7 @@ ShallowWrapper {
                     }
                     mapBounds={
                               Object {
-                                        "challenge": Object {
+                                        "challengeBrowse": Object {
                                           "bounds": Object {
                                             "_northEast": Object {
                                               "lat": 0,
@@ -1293,7 +1269,7 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    setChallengeMapBounds={[Function]}
+                    setChallengeBrowseMapBounds={[Function]}
                     source={
                               Object {
                                         "id": "foo",
@@ -1301,7 +1277,6 @@ ShallowWrapper {
                     }
                     taskMarkers={Array []}
                     tasksLoading={false}
-                    updateBoundedChallenges={[Function]}
                     visibleOverlays={Array []}
                     zIndex={1}
           />
@@ -1321,7 +1296,7 @@ ShallowWrapper {
             "id": 123,
           },
           "mapBounds": Object {
-            "challenge": Object {
+            "challengeBrowse": Object {
               "bounds": Object {
                 "_northEast": Object {
                   "lat": 0,
@@ -1335,13 +1310,12 @@ ShallowWrapper {
               "challengeId": 123,
             },
           },
-          "setChallengeMapBounds": [Function],
+          "setChallengeBrowseMapBounds": [Function],
           "source": Object {
             "id": "foo",
           },
           "taskMarkers": Array [],
           "tasksLoading": false,
-          "updateBoundedChallenges": [Function],
           "visibleOverlays": Array [],
         },
         "ref": null,
@@ -1371,7 +1345,7 @@ ShallowWrapper {
               }
               mapBounds={
                             Object {
-                                          "challenge": Object {
+                                          "challengeBrowse": Object {
                                             "bounds": Object {
                                               "_northEast": Object {
                                                 "lat": 0,
@@ -1386,7 +1360,7 @@ ShallowWrapper {
                                           },
                                         }
               }
-              setChallengeMapBounds={[Function]}
+              setChallengeBrowseMapBounds={[Function]}
               source={
                             Object {
                                           "id": "foo",
@@ -1394,7 +1368,6 @@ ShallowWrapper {
               }
               taskMarkers={Array []}
               tasksLoading={false}
-              updateBoundedChallenges={[Function]}
               visibleOverlays={Array []}
               zIndex={1}
 />,
@@ -1433,7 +1406,7 @@ ShallowWrapper {
                 "id": 123,
               },
               "mapBounds": Object {
-                "challenge": Object {
+                "challengeBrowse": Object {
                   "bounds": Object {
                     "_northEast": Object {
                       "lat": 0,
@@ -1447,13 +1420,12 @@ ShallowWrapper {
                   "challengeId": 123,
                 },
               },
-              "setChallengeMapBounds": [Function],
+              "setChallengeBrowseMapBounds": [Function],
               "source": Object {
                 "id": "foo",
               },
               "taskMarkers": Array [],
               "tasksLoading": false,
-              "updateBoundedChallenges": [Function],
               "visibleOverlays": Array [],
               "zIndex": 1,
             },
@@ -1484,7 +1456,7 @@ ShallowWrapper {
             }
             mapBounds={
                         Object {
-                                    "challenge": Object {
+                                    "challengeBrowse": Object {
                                       "bounds": Object {
                                         "_northEast": Object {
                                           "lat": 0,
@@ -1499,7 +1471,7 @@ ShallowWrapper {
                                     },
                                   }
             }
-            setChallengeMapBounds={[Function]}
+            setChallengeBrowseMapBounds={[Function]}
             source={
                         Object {
                                     "id": "foo",
@@ -1507,7 +1479,6 @@ ShallowWrapper {
             }
             taskMarkers={Array []}
             tasksLoading={false}
-            updateBoundedChallenges={[Function]}
             visibleOverlays={Array []}
 />,
           <EnhancedMap
@@ -1540,7 +1511,7 @@ ShallowWrapper {
                         }
                         mapBounds={
                                     Object {
-                                                "challenge": Object {
+                                                "challengeBrowse": Object {
                                                   "bounds": Object {
                                                     "_northEast": Object {
                                                       "lat": 0,
@@ -1555,7 +1526,7 @@ ShallowWrapper {
                                                 },
                                               }
                         }
-                        setChallengeMapBounds={[Function]}
+                        setChallengeBrowseMapBounds={[Function]}
                         source={
                                     Object {
                                                 "id": "foo",
@@ -1563,7 +1534,6 @@ ShallowWrapper {
                         }
                         taskMarkers={Array []}
                         tasksLoading={false}
-                        updateBoundedChallenges={[Function]}
                         visibleOverlays={Array []}
                         zIndex={1}
             />
@@ -1583,7 +1553,7 @@ ShallowWrapper {
               "id": 123,
             },
             "mapBounds": Object {
-              "challenge": Object {
+              "challengeBrowse": Object {
                 "bounds": Object {
                   "_northEast": Object {
                     "lat": 0,
@@ -1597,13 +1567,12 @@ ShallowWrapper {
                 "challengeId": 123,
               },
             },
-            "setChallengeMapBounds": [Function],
+            "setChallengeBrowseMapBounds": [Function],
             "source": Object {
               "id": "foo",
             },
             "taskMarkers": Array [],
             "tasksLoading": false,
-            "updateBoundedChallenges": [Function],
             "visibleOverlays": Array [],
           },
           "ref": null,
@@ -1633,7 +1602,7 @@ ShallowWrapper {
                 }
                 mapBounds={
                                 Object {
-                                                "challenge": Object {
+                                                "challengeBrowse": Object {
                                                   "bounds": Object {
                                                     "_northEast": Object {
                                                       "lat": 0,
@@ -1648,7 +1617,7 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                setChallengeMapBounds={[Function]}
+                setChallengeBrowseMapBounds={[Function]}
                 source={
                                 Object {
                                                 "id": "foo",
@@ -1656,7 +1625,6 @@ ShallowWrapper {
                 }
                 taskMarkers={Array []}
                 tasksLoading={false}
-                updateBoundedChallenges={[Function]}
                 visibleOverlays={Array []}
                 zIndex={1}
 />,
@@ -1695,7 +1663,7 @@ ShallowWrapper {
                   "id": 123,
                 },
                 "mapBounds": Object {
-                  "challenge": Object {
+                  "challengeBrowse": Object {
                     "bounds": Object {
                       "_northEast": Object {
                         "lat": 0,
@@ -1709,13 +1677,12 @@ ShallowWrapper {
                     "challengeId": 123,
                   },
                 },
-                "setChallengeMapBounds": [Function],
+                "setChallengeBrowseMapBounds": [Function],
                 "source": Object {
                   "id": "foo",
                 },
                 "taskMarkers": Array [],
                 "tasksLoading": false,
-                "updateBoundedChallenges": [Function],
                 "visibleOverlays": Array [],
                 "zIndex": 1,
               },
