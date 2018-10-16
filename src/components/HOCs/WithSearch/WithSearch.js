@@ -6,22 +6,20 @@ import _omit from 'lodash/omit'
 import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
-import { setSort, removeSort, clearSort,
+import { SORT_NAME, SORT_CREATED,
+         setSort, removeSort, clearSort,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
          setChallengeSearchMapBounds, setChallengeBrowseMapBounds,
          setTaskMapBounds, setChallengeOwnerMapBounds,
-         performSearch } from '../../../services/Search/Search'
-import { SORT_NAME, SORT_CREATED } from '../../../services/Search/Search'
-
-import { userLocation } from '../../../services/User/User'
+         performSearch }
+       from '../../../services/Search/Search'
 import { addError } from '../../../services/Error/Error'
-import AppErrors from '../../../services/Error/AppErrors'
 import { toLatLngBounds, DEFAULT_MAP_BOUNDS }
        from '../../../services/MapBounds/MapBounds'
 import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
   from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
-
+import WithUserLocation from '../WithUserLocation/WithUserLocation'
 
 /**
  * WithSearch passes down search criteria from the redux
@@ -42,11 +40,12 @@ import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
  * @param {function} searchFunction - which function to call when performing a search
  */
 const WithSearch = (WrappedComponent, searchGroup, searchFunction) =>
-  connect(
-    (state) => mapStateToProps(state, searchGroup),
-    (state, ownProps) => mapDispatchToProps(state, ownProps, searchGroup)
-  )(_WithSearch(WrappedComponent, searchGroup, searchFunction), searchGroup)
-
+  WithUserLocation(
+    connect(
+      (state) => mapStateToProps(state, searchGroup),
+      (state, ownProps) => mapDispatchToProps(state, ownProps, searchGroup)
+    )(_WithSearch(WrappedComponent, searchGroup, searchFunction), searchGroup)
+  )
 
 export const _WithSearch = function(WrappedComponent, searchGroup, searchFunction) {
    return class extends Component {
@@ -193,24 +192,11 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   },
 
   locateMapToUser: user => {
-    const userCenterpoint = userLocation(user)
-
-    if (!_isEmpty(userCenterpoint)) {
-      const nearbyLongitude = parseFloat(process.env.REACT_APP_NEARBY_LONGITUDE_LENGTH)
-      const nearbyLatitude = parseFloat(process.env.REACT_APP_NEARBY_LATITUDE_LENGTH)
-
-      const userBounds = [
-        userCenterpoint.longitude - (nearbyLongitude / 2.0),
-        userCenterpoint.latitude - (nearbyLatitude / 2.0),
-        userCenterpoint.longitude + (nearbyLongitude / 2.0),
-        userCenterpoint.latitude + (nearbyLatitude / 2.0)
-      ]
-
+    ownProps.getUserBounds(user).then(userBounds => {
       dispatch(setChallengeSearchMapBounds(searchGroup, userBounds, true))
-    }
-    else {
-      dispatch(addError(AppErrors.user.missingHomeLocation))
-    }
+    }).catch(locationError => {
+      dispatch(addError(locationError))
+    })
   },
 })
 

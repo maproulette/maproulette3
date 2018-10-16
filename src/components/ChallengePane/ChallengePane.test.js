@@ -31,28 +31,3 @@ test("renders with props as expected", () => {
   expect(wrapper.find('.challenge-pane').exists()).toBe(true)
   expect(wrapper).toMatchSnapshot()
 })
-
-test("when no browsed challenge, the challenge search map is rendered", () => {
-  const wrapper = shallow(
-    <ChallengePane {...basicProps} />
-  )
-
-  expect(
-    wrapper.find('Connect(Component)').exists()
-  ).toBe(true)
-  expect(wrapper).toMatchSnapshot()
-})
-
-test("when browsing a challenge, the challenge map is rendered", () => {
-  basicProps.browsedChallenge = challenge
-
-  const wrapper = shallow(
-    <ChallengePane {...basicProps} />
-  )
-
-  expect(
-    wrapper.find('Connect(Connect(Connect(Component)))').exists()
-  ).toBe(true)
-
-  expect(wrapper).toMatchSnapshot()
-})

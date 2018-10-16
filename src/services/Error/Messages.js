@@ -6,9 +6,11 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   userMissingHomeLocation: {
     id: "Errors.user.missingHomeLocation",
-    defaultMessage: "No home location found. Please set your home location " +
-                    "in your openstreetmap.org settings and then refresh this " +
-                    "page to try again.",
+    defaultMessage: "No home location found. Please either allow permission " +
+                    "from your browser or set your home location in your " +
+                    "openstreetmap.org settings (you may to sign out and sign " +
+                    "back in to MapRoulette afterwards to pick up fresh changes to " +
+                    "your OpenStreetMap settings).",
   },
   userUnauthenticated: {
     id: "Errors.user.unauthenticated",
