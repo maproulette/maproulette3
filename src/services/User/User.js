@@ -45,11 +45,6 @@ export const userDenormalizationSchema = function() {
   })
 }
 
-/**
- * Retrieve the OSM location from the given user entity
- */
-export const userLocation = user => _get(user, 'osmProfile.homeLocation')
-
 // redux actions
 const RECEIVE_USERS = 'RECEIVE_USERS'
 const SET_CURRENT_USER = 'SET_CURRENT_USER'
