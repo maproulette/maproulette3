@@ -98,6 +98,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -306,6 +313,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -512,6 +526,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Cancel Editing",
                   "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
                 },
               },
             },
@@ -731,6 +752,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -899,6 +927,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.taskEditing.cancel",
                                   },
                                 },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
+                                  },
+                                },
                               },
                               "taskReview": Object {
                                 "nextTask": Object {
@@ -1055,6 +1090,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.taskEditing.cancel",
                                   },
                                 },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
+                                  },
+                                },
                               },
                               "taskReview": Object {
                                 "nextTask": Object {
@@ -1209,6 +1251,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Cancel Editing",
                                     "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
                                   },
                                 },
                               },
@@ -1371,6 +1420,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -1523,6 +1579,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -1673,6 +1736,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Cancel Editing",
                   "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
                 },
               },
             },
@@ -1838,6 +1908,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.taskEditing.cancel",
                                         },
                                       },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
+                                        },
+                                      },
                                     },
                                     "taskReview": Object {
                                       "nextTask": Object {
@@ -1994,6 +2071,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.taskEditing.cancel",
                                         },
                                       },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
+                                        },
+                                      },
                                     },
                                     "taskReview": Object {
                                       "nextTask": Object {
@@ -2148,6 +2232,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Cancel Editing",
                                           "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
                                         },
                                       },
                                     },
@@ -2310,6 +2401,13 @@ ShallowWrapper {
                     "id": "KeyMapping.taskEditing.cancel",
                   },
                 },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
               },
               "taskReview": Object {
                 "nextTask": Object {
@@ -2462,6 +2560,13 @@ ShallowWrapper {
                     "id": "KeyMapping.taskEditing.cancel",
                   },
                 },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
               },
               "taskReview": Object {
                 "nextTask": Object {
@@ -2612,6 +2717,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Cancel Editing",
                     "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
                   },
                 },
               },
@@ -2784,6 +2896,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -2952,6 +3071,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.taskEditing.cancel",
                                   },
                                 },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
+                                  },
+                                },
                               },
                               "taskReview": Object {
                                 "nextTask": Object {
@@ -3108,6 +3234,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.taskEditing.cancel",
                                   },
                                 },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
+                                  },
+                                },
                               },
                               "taskReview": Object {
                                 "nextTask": Object {
@@ -3262,6 +3395,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Cancel Editing",
                                     "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
                                   },
                                 },
                               },
@@ -3424,6 +3564,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -3576,6 +3723,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -3726,6 +3880,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Cancel Editing",
                   "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
                 },
               },
             },
@@ -3891,6 +4052,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.taskEditing.cancel",
                                         },
                                       },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
+                                        },
+                                      },
                                     },
                                     "taskReview": Object {
                                       "nextTask": Object {
@@ -4047,6 +4215,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.taskEditing.cancel",
                                         },
                                       },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
+                                        },
+                                      },
                                     },
                                     "taskReview": Object {
                                       "nextTask": Object {
@@ -4201,6 +4376,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Cancel Editing",
                                           "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
                                         },
                                       },
                                     },
@@ -4363,6 +4545,13 @@ ShallowWrapper {
                     "id": "KeyMapping.taskEditing.cancel",
                   },
                 },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
               },
               "taskReview": Object {
                 "nextTask": Object {
@@ -4515,6 +4704,13 @@ ShallowWrapper {
                     "id": "KeyMapping.taskEditing.cancel",
                   },
                 },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
               },
               "taskReview": Object {
                 "nextTask": Object {
@@ -4665,6 +4861,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Cancel Editing",
                     "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
                   },
                 },
               },
@@ -4837,6 +5040,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -5005,6 +5215,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.taskEditing.cancel",
                                   },
                                 },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
+                                  },
+                                },
                               },
                               "taskReview": Object {
                                 "nextTask": Object {
@@ -5161,6 +5378,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.taskEditing.cancel",
                                   },
                                 },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
+                                  },
+                                },
                               },
                               "taskReview": Object {
                                 "nextTask": Object {
@@ -5315,6 +5539,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Cancel Editing",
                                     "id": "KeyMapping.taskEditing.cancel",
+                                  },
+                                },
+                                "fitBounds": Object {
+                                  "key": "0",
+                                  "label": Object {
+                                    "defaultMessage": "Fit Map to Task Features",
+                                    "id": "KeyMapping.taskEditing.fitBounds",
                                   },
                                 },
                               },
@@ -5477,6 +5708,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -5629,6 +5867,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {
@@ -5779,6 +6024,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Cancel Editing",
                   "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
                 },
               },
             },
@@ -5944,6 +6196,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.taskEditing.cancel",
                                         },
                                       },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
+                                        },
+                                      },
                                     },
                                     "taskReview": Object {
                                       "nextTask": Object {
@@ -6100,6 +6359,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.taskEditing.cancel",
                                         },
                                       },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
+                                        },
+                                      },
                                     },
                                     "taskReview": Object {
                                       "nextTask": Object {
@@ -6254,6 +6520,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Cancel Editing",
                                           "id": "KeyMapping.taskEditing.cancel",
+                                        },
+                                      },
+                                      "fitBounds": Object {
+                                        "key": "0",
+                                        "label": Object {
+                                          "defaultMessage": "Fit Map to Task Features",
+                                          "id": "KeyMapping.taskEditing.fitBounds",
                                         },
                                       },
                                     },
@@ -6416,6 +6689,13 @@ ShallowWrapper {
                     "id": "KeyMapping.taskEditing.cancel",
                   },
                 },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
               },
               "taskReview": Object {
                 "nextTask": Object {
@@ -6568,6 +6848,13 @@ ShallowWrapper {
                     "id": "KeyMapping.taskEditing.cancel",
                   },
                 },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
               },
               "taskReview": Object {
                 "nextTask": Object {
@@ -6718,6 +7005,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Cancel Editing",
                     "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
                   },
                 },
               },

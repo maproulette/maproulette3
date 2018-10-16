@@ -20,7 +20,8 @@ export default {
     editLevel0: {key: 'l', label: messages.editLevel0},
   },
   taskEditing: {
-    cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel}
+    cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},
+    fitBounds: {key: '0', label: messages.fitBounds},
   },
   taskCompletion: {
     skip: {key: 'w', label: messages.skip},

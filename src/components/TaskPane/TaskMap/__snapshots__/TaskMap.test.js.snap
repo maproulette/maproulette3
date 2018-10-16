@@ -84,7 +84,7 @@ ShallowWrapper {
           <ZoomControl
                     position="topright"
           />
-          <InjectIntl(FitBoundsControl) />
+          <Connect(InjectIntl(FitBoundsControl)) />
           <InjectIntl(SourcedTileLayer)
                     centerPoint={
                               Object {
@@ -157,7 +157,7 @@ ShallowWrapper {
             <ZoomControl
               position="topright"
 />,
-            <InjectIntl(FitBoundsControl) />,
+            <Connect(InjectIntl(FitBoundsControl)) />,
             <InjectIntl(SourcedTileLayer)
               centerPoint={
                             Object {
@@ -302,7 +302,7 @@ ShallowWrapper {
             <ZoomControl
                         position="topright"
             />
-            <InjectIntl(FitBoundsControl) />
+            <Connect(InjectIntl(FitBoundsControl)) />
             <InjectIntl(SourcedTileLayer)
                         centerPoint={
                                     Object {
@@ -375,7 +375,7 @@ ShallowWrapper {
               <ZoomControl
                 position="topright"
 />,
-              <InjectIntl(FitBoundsControl) />,
+              <Connect(InjectIntl(FitBoundsControl)) />,
               <InjectIntl(SourcedTileLayer)
                 centerPoint={
                                 Object {

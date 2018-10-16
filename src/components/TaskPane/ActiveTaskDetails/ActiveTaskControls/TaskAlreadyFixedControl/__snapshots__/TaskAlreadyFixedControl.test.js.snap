@@ -94,6 +94,13 @@ ShallowWrapper {
                   "id": "KeyMapping.taskEditing.cancel",
                 },
               },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
             },
             "taskReview": Object {
               "nextTask": Object {

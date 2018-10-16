@@ -36,6 +36,12 @@ const mapDispatchToProps = dispatch => {
       document.removeEventListener("keydown", handler)
       dispatch(removeKeyboardShortcut(groupName, shortcutName))
     },
+    addExternalKeyboardShortcut: (groupName, shortcut) => {
+      dispatch(addKeyboardShortcut(groupName, shortcut))
+    },
+    removeExternalKeyboardShortcut: (groupName, shortcutName) => {
+      dispatch(removeKeyboardShortcut(groupName, shortcutName))
+    },
     textInputActive: textInputActive,
     quickKeyHandler: (key, handler) => (event => {
       if (textInputActive(event)) {
