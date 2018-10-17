@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Cancel Editing",
   },
 
+  fitBounds: {
+    id: "KeyMapping.taskEditing.fitBounds",
+    defaultMessage: "Fit Map to Task Features",
+  },
+
   escapeLabel: {
     id: "KeyMapping.taskEditing.escapeLabel",
     defaultMessage: "ESC",

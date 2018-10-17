@@ -415,6 +415,7 @@
   "KeyMapping.openEditor.editJosmLayer": "Edit in new JOSM layer",
   "KeyMapping.openEditor.editLevel0": "Edit in Level0",
   "KeyMapping.taskEditing.cancel": "Cancel Editing",
+  "KeyMapping.taskEditing.fitBounds": "Fit Map to Task Features",
   "KeyMapping.taskEditing.escapeLabel": "ESC",
   "KeyMapping.taskCompletion.skip": "Skip",
   "KeyMapping.taskCompletion.falsePositive": "Not an Issue",
