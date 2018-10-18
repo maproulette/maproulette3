@@ -10,8 +10,9 @@ import messages from './Messages'
 export const CHALLENGE_STATUS_NONE = 0 // called NA on the server
 export const CHALLENGE_STATUS_BUILDING = 1
 export const CHALLENGE_STATUS_FAILED = 2
-export const CHALLENGE_STATUS_READY = 3 // called COMPLETE on the server
+export const CHALLENGE_STATUS_READY = 3
 export const CHALLENGE_STATUS_PARTIALLY_LOADED = 4
+export const CHALLENGE_STATUS_FINISHED = 5
 
 export const ChallengeStatus = Object.freeze({
   none: CHALLENGE_STATUS_NONE,
@@ -19,6 +20,7 @@ export const ChallengeStatus = Object.freeze({
   failed: CHALLENGE_STATUS_FAILED,
   ready: CHALLENGE_STATUS_READY,
   partiallyLoaded: CHALLENGE_STATUS_PARTIALLY_LOADED,
+  finished: CHALLENGE_STATUS_FINISHED,
 })
 
 /**

@@ -24,4 +24,8 @@ export default defineMessages({
     id: "Challenge.status.partiallyLoaded",
     defaultMessage: "Partially Loaded"
   },
+  finished: {
+    id: "Challenge.status.finished",
+    defaultMessage: "Finished"
+  },
 })
