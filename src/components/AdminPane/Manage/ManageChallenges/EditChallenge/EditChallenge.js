@@ -377,6 +377,15 @@ export class EditChallenge extends Component {
     if (challengeData.isSourceReadOnly()) {
       challengeData.clearSources()
     }
+    else {
+      // Line-by-line geojson needs to be submitted separately as it cannot be
+      // embedded as valid JSON. Move it to a different field for later
+      // processing.
+      if (challengeData.isLineByLineGeoJSON()) {
+        challengeData.lineByLineGeoJSON = challengeData.localGeoJSON
+        delete challengeData.localGeoJSON
+      }
+    }
 
     return challengeData
   }

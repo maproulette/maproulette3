@@ -507,6 +507,31 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
 }
 
 /**
+ * Send challenge GeoJSON to the server. This is primarily intended for
+ * line-by-line GeoJSON, which must be submitted separately from the challenge,
+ * but standard geoJSON files can also be accommodated (set lineByLine to false
+ * in that case).
+ */
+export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=true) {
+  return function(dispatch) {
+    // Server expects the file in a form part named "json"
+    const formData = new FormData()
+    formData.append(
+      'json',
+      new File([geoJSON], `challenge_${challengeId}_tasks_${Date.now()}.geojson`)
+    )
+
+    return new Endpoint(
+      api.challenge.uploadGeoJSON, {
+        variables: {id: challengeId},
+        params: {lineByLine},
+        formData,
+      }
+    ).execute()
+  }
+}
+
+/**
  * Set whether the given challenge is enabled (publicly visible) or not.
  */
 export const setIsEnabled = function(challengeId, isEnabled) {

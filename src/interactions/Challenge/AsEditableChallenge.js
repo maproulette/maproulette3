@@ -4,6 +4,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _isString from 'lodash/isString'
 import { ChallengeBasemap }
        from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import AsValidatableGeoJSON from '../GeoJSON/AsValidatableGeoJSON'
 
 const maprouletteHashtag = '#maproulette'
 
@@ -36,6 +37,15 @@ export class AsEditableChallenge {
    */
   isSourceReadOnly() {
     return !this.isNew() && !this.hasZeroTasks()
+  }
+
+  /**
+   * Returns true if the source is local GeoJSON using a line-by-line
+   * representation
+   */
+  isLineByLineGeoJSON() {
+    return !_isEmpty(this.localGeoJSON) &&
+           AsValidatableGeoJSON(this.localGeoJSON).isLineByLine()
   }
 
   /**
