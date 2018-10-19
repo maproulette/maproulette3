@@ -76,12 +76,13 @@ export const fetchContent = function(url, normalizationSchema, options={}) {
  * @param {string} method - 'POST' or 'PUT'
  * @param {string} url
  * @param {Object} [jsonBody] - optional JSON data to include with request
+ * @param {FormData} [formData] - form data to include with request (alternative to jsonBody)
  * @param [normalizationSchema] - optional schema for normalizing json response
  *
  * @returns {Promise} Promise that resolves with response data or rejects on
  *          error
  */
-export const sendContent = function(method, url, jsonBody, normalizationSchema) {
+export const sendContent = function(method, url, jsonBody, formData, normalizationSchema) {
   return new Promise((resolve, reject) => {
     resetCache() // Clear the cache on updates to ensure fetches are fresh.
 
@@ -89,12 +90,14 @@ export const sendContent = function(method, url, jsonBody, normalizationSchema) 
     if (jsonBody) {
       headers.append('Content-Type', 'text/json')
     }
+    // Note: do not set multipart/form-data Content-Type header for formData --
+    // fetch will set that automatically (with the correct boundary included)
 
     fetch(url, {
       method,
       credentials: 'same-origin',
       headers,
-      body: jsonBody ? JSON.stringify(jsonBody) : undefined,
+      body: jsonBody ? JSON.stringify(jsonBody) : formData,
     }).then(checkStatus).then(parseJSON).then(jsonData => {
       if (jsonData && normalizationSchema) {
         resolve(normalize(jsonData, normalizationSchema))

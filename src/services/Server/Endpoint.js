@@ -19,6 +19,8 @@ export default class Endpoint {
    * {object|array} schema - normalization schema to be used to normalize
    *                response data
    * {object} json - JSON body to be sent with the request
+   * {FormData} formData - form data to be sent with the request (alternative
+   *            to json)
    *
    * @param route - the desired route for this endpoint
    * @param {object} [options] - optional options object: see above.
@@ -29,6 +31,7 @@ export default class Endpoint {
     this.variables = options.variables
     this.params = options.params
     this.jsonBody = options.json
+    this.formData = options.formData
   }
 
   /**
@@ -44,6 +47,7 @@ export default class Endpoint {
         return sendContent(this.route.method,
                            this.url(),
                            this.jsonBody,
+                           this.formData,
                            this.normalizationSchema)
       case 'DELETE':
         return deleteContent(this.url())

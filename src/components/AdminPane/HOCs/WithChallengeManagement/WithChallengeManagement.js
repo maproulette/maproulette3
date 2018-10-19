@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
 import _map from 'lodash/map'
+import _isObject from 'lodash/isObject'
 import { saveChallenge,
+         uploadChallengeGeoJSON,
          setIsEnabled,
          moveChallenge,
          rebuildChallenge,
@@ -19,7 +21,19 @@ const WithChallengeManagement =
   WrappedComponent => connect(null, mapDispatchToProps)(WrappedComponent)
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  saveChallenge: challengeData => dispatch(saveChallenge(challengeData)),
+  saveChallenge: challengeData => {
+    return dispatch(saveChallenge(challengeData)).then(challenge => {
+      // If we have line-by-line GeoJSON, we need to submit that separately
+      if (_isObject(challenge) && challengeData.lineByLineGeoJSON) {
+        return dispatch(
+          uploadChallengeGeoJSON(challenge.id, challengeData.lineByLineGeoJSON)
+        ).then(() => challenge)
+      }
+      else {
+        return Promise.resolve(challenge)
+      }
+    }).catch(error => null)
+  },
 
   moveChallenge: (challengeId, toProjectId) =>
     dispatch(moveChallenge(challengeId, toProjectId)),
