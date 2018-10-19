@@ -20,7 +20,8 @@ import { fetchProjects } from './services/Project/Project'
 import { fetchFeaturedChallenges,
          extendedFind,
          fetchChallengeActions } from './services/Challenge/Challenge'
-import { loadCompleteUser, GUEST_USER_ID } from './services/User/User'
+import { ensureUserLoggedIn, loadCompleteUser, GUEST_USER_ID }
+       from './services/User/User'
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus } from './services/Status/Status'
 import WithUserLocale from './components/HOCs/WithUserLocale/WithUserLocale'
@@ -46,16 +47,18 @@ const {store} = initializePersistedStore((store) => {
   // found then ensure user id from last session (if any) is still logged in.
   let currentUserId = parseInt(_get(configFromServer, 'userId'), 10)
   if (!_isFinite(currentUserId) || currentUserId === GUEST_USER_ID) {
-    // If there's a current user from the last session, let's refresh their
-    // user data and preferences (which will also ensure they're still logged
-    // in with the server).
+    // If there's a current user from the last session, try it.
     currentUserId = _get(store.getState(), 'currentUser.userId')
   }
 
   if (_isFinite(currentUserId) && currentUserId !== GUEST_USER_ID) {
     store.dispatch(
-      loadCompleteUser(currentUserId)
-    ).then(() => store.dispatch(clearCheckingLoginStatus()))
+      ensureUserLoggedIn(true)
+    ).then(() =>
+      store.dispatch(loadCompleteUser(currentUserId))
+    ).then(() =>
+      store.dispatch(clearCheckingLoginStatus())
+    ).catch(() => store.dispatch(clearCheckingLoginStatus()))
   }
   else {
     store.dispatch(clearCheckingLoginStatus())

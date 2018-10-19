@@ -155,7 +155,7 @@ export const fetchUser = function(userId) {
  * Pings the server to ensure the current (given) user is logged in with
  * the server, and automatically signs out the user locally if not.
  */
-export const ensureUserLoggedIn = function() {
+export const ensureUserLoggedIn = function(squelchError=false) {
   return function(dispatch) {
     return new Endpoint(
       api.user.whoami, {schema: userSchema()}
@@ -166,10 +166,12 @@ export const ensureUserLoggedIn = function() {
     }).catch(error => {
       // a 401 (unauthorized) indicates that the user is not logged in. Logout
       // the current user locally to reflect that fact and dispatch an error
-      // indicating the user should sign in to continue.
+      // indicating the user should sign in to continue (unless squelched).
       if (error.response && error.response.status === 401) {
         dispatch(logoutUser())
-        dispatch(addError(AppErrors.user.unauthenticated))
+        if (!squelchError) {
+          dispatch(addError(AppErrors.user.unauthenticated))
+        }
       }
 
       throw error
