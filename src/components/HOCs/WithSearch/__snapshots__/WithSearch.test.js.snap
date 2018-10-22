@@ -59,7 +59,7 @@ Object {
         ],
       },
       "sort": Object {
-        "direction": "asc",
+        "direction": "desc",
         "sortBy": "created",
       },
     },
@@ -106,7 +106,7 @@ ShallowWrapper {
                 ],
               },
               "sort": Object {
-                "direction": "asc",
+                "direction": "desc",
                 "sortBy": "created",
               },
             },
@@ -147,7 +147,7 @@ ShallowWrapper {
             ],
           },
           "sort": Object {
-            "direction": "asc",
+            "direction": "desc",
             "sortBy": "created",
           },
         },
@@ -194,7 +194,7 @@ ShallowWrapper {
               ],
             },
             "sort": Object {
-              "direction": "asc",
+              "direction": "desc",
               "sortBy": "created",
             },
           },
@@ -251,7 +251,7 @@ ShallowWrapper {
                 ],
               },
               "sort": Object {
-                "direction": "asc",
+                "direction": "desc",
                 "sortBy": "created",
               },
             },
@@ -292,7 +292,7 @@ ShallowWrapper {
             ],
           },
           "sort": Object {
-            "direction": "asc",
+            "direction": "desc",
             "sortBy": "created",
           },
         },
@@ -339,7 +339,7 @@ ShallowWrapper {
               ],
             },
             "sort": Object {
-              "direction": "asc",
+              "direction": "desc",
               "sortBy": "created",
             },
           },
