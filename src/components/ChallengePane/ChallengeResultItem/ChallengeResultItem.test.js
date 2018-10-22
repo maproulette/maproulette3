@@ -30,6 +30,7 @@ beforeEach(() => {
     startBrowsingChallenge: jest.fn(),
     stopBrowsingChallenge: jest.fn(),
     intl: {formatMessage: jest.fn()},
+    isStarting: false,
   }
 })
 

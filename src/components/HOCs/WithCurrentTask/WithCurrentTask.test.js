@@ -123,7 +123,7 @@ test("completeTask does not call addComment if no comment", async () => {
   expect(addTaskComment).not.toHaveBeenCalled()
 })
 
-test("completeTask calls loadRandomTaskFromChallenge without proximate task by default", () => {
+test("completeTask calls loadRandomTaskFromChallenge without proximate task by default",  async () => {
   const dispatch  = jest.fn(() => Promise.resolve())
   const history = {
    push: jest.fn(),
@@ -131,11 +131,11 @@ test("completeTask calls loadRandomTaskFromChallenge without proximate task by d
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, undefined)
 })
 
-test("completeTask calls loadRandomTaskFromChallenge with task if proximate load method", () => {
+test("completeTask calls loadRandomTaskFromChallenge with task if proximate load method", async () => {
   const dispatch  = jest.fn(() => Promise.resolve())
   const history = {
    push: jest.fn(),
@@ -143,7 +143,7 @@ test("completeTask calls loadRandomTaskFromChallenge with task if proximate load
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  mappedProps.completeTask(task.id, challenge.id,
+  await mappedProps.completeTask(task.id, challenge.id,
                            completionStatus, "", TaskLoadMethod.proximity)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, task.id)
 })

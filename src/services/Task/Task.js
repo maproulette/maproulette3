@@ -426,8 +426,9 @@ export const deleteTask = function(taskId) {
  */
 export const retrieveChallengeTask = function(dispatch, endpoint) {
   return endpoint.execute().then(normalizedTaskResults => {
-    if (!_isNumber(normalizedTaskResults.result) &&
-        _isEmpty(normalizedTaskResults.result)) {
+    if (!normalizedTaskResults ||
+        (!_isNumber(normalizedTaskResults.result) &&
+         _isEmpty(normalizedTaskResults.result))) {
       return null
     }
 
@@ -462,6 +463,7 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
   }).catch((error) => {
     dispatch(addError(AppErrors.task.fetchFailure))
     console.log(error.response || error)
+    throw error
   })
 }
 
