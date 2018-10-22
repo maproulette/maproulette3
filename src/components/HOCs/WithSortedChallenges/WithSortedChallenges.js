@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
 import _sortBy from 'lodash/sortBy'
+import _reverse from 'lodash/reverse'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
 import WithChallengeSearch from '../WithSearch/WithChallengeSearch'
@@ -21,7 +22,7 @@ export const sortChallenges = function(props, challengesProp='challenges') {
     sortedChallenges = _sortBy(sortedChallenges, 'name')
   }
   else if (sortCriteria === SORT_CREATED) {
-    sortedChallenges = _sortBy(sortedChallenges, 'created')
+    sortedChallenges = _reverse(_sortBy(sortedChallenges, 'created'))
   }
   else {
     // default "smart" sort. Prioritizes featured and user-saved challenges
