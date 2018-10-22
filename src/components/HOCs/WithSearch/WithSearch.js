@@ -143,10 +143,10 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
 
       switch(sortBy) {
         case SORT_NAME:
-          sort = {sortBy, direction: 'desc'}
+          sort = {sortBy, direction: 'asc'}
           break
         case SORT_CREATED:
-          sort = {sortBy, direction: 'asc'}
+          sort = {sortBy, direction: 'desc'}
           break
         default:
           sort = {sortBy: null, direction: null}
