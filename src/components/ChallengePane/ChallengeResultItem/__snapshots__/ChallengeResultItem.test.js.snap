@@ -34,6 +34,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -1507,6 +1508,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -2082,6 +2084,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -2658,6 +2661,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -3300,6 +3304,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -3804,6 +3809,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -4319,6 +4325,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -6047,6 +6054,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -6551,6 +6559,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -7066,6 +7075,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -8805,6 +8815,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}
@@ -8921,7 +8932,7 @@ ShallowWrapper {
                                                   className="control"
                                         >
                                                   <button
-                                                            className="button is-outlined start-challenge is-loading"
+                                                            className="button is-outlined start-challenge"
                                                             onClick={[Function]}
                                                   >
                                                             <FormattedMessage
@@ -9177,7 +9188,7 @@ ShallowWrapper {
                                                 className="control"
                                     >
                                                 <button
-                                                            className="button is-outlined start-challenge is-loading"
+                                                            className="button is-outlined start-challenge"
                                                             onClick={[Function]}
                                                 >
                                                             <FormattedMessage
@@ -9268,7 +9279,7 @@ ShallowWrapper {
                                                 className="control"
                                 >
                                                 <button
-                                                                className="button is-outlined start-challenge is-loading"
+                                                                className="button is-outlined start-challenge"
                                                                 onClick={[Function]}
                                                 >
                                                                 <FormattedMessage
@@ -9445,7 +9456,7 @@ ShallowWrapper {
                                         className="control"
                     >
                                         <button
-                                                            className="button is-outlined start-challenge is-loading"
+                                                            className="button is-outlined start-challenge"
                                                             onClick={[Function]}
                                         >
                                                             <FormattedMessage
@@ -9488,7 +9499,7 @@ ShallowWrapper {
                         className="control"
 >
                         <button
-                                                className="button is-outlined start-challenge is-loading"
+                                                className="button is-outlined start-challenge"
                                                 onClick={[Function]}
                         >
                                                 <FormattedMessage
@@ -9525,7 +9536,7 @@ ShallowWrapper {
                       "nodeType": "host",
                       "props": Object {
                         "children": <button
-                          className="button is-outlined start-challenge is-loading"
+                          className="button is-outlined start-challenge"
                           onClick={[Function]}
 >
                           <FormattedMessage
@@ -9547,7 +9558,7 @@ ShallowWrapper {
                             id="Challenge.controls.start.label"
                             values={Object {}}
 />,
-                          "className": "button is-outlined start-challenge is-loading",
+                          "className": "button is-outlined start-challenge",
                           "onClick": [Function],
                         },
                         "ref": null,
@@ -9759,7 +9770,7 @@ ShallowWrapper {
                                                             className="control"
                                                 >
                                                             <button
-                                                                        className="button is-outlined start-challenge is-loading"
+                                                                        className="button is-outlined start-challenge"
                                                                         onClick={[Function]}
                                                             >
                                                                         <FormattedMessage
@@ -10015,7 +10026,7 @@ ShallowWrapper {
                                                         className="control"
                                           >
                                                         <button
-                                                                      className="button is-outlined start-challenge is-loading"
+                                                                      className="button is-outlined start-challenge"
                                                                       onClick={[Function]}
                                                         >
                                                                       <FormattedMessage
@@ -10106,7 +10117,7 @@ ShallowWrapper {
                                                       className="control"
                                     >
                                                       <button
-                                                                        className="button is-outlined start-challenge is-loading"
+                                                                        className="button is-outlined start-challenge"
                                                                         onClick={[Function]}
                                                       >
                                                                         <FormattedMessage
@@ -10283,7 +10294,7 @@ ShallowWrapper {
                                             className="control"
                       >
                                             <button
-                                                                  className="button is-outlined start-challenge is-loading"
+                                                                  className="button is-outlined start-challenge"
                                                                   onClick={[Function]}
                                             >
                                                                   <FormattedMessage
@@ -10326,7 +10337,7 @@ ShallowWrapper {
                           className="control"
 >
                           <button
-                                                    className="button is-outlined start-challenge is-loading"
+                                                    className="button is-outlined start-challenge"
                                                     onClick={[Function]}
                           >
                                                     <FormattedMessage
@@ -10363,7 +10374,7 @@ ShallowWrapper {
                         "nodeType": "host",
                         "props": Object {
                           "children": <button
-                            className="button is-outlined start-challenge is-loading"
+                            className="button is-outlined start-challenge"
                             onClick={[Function]}
 >
                             <FormattedMessage
@@ -10385,7 +10396,7 @@ ShallowWrapper {
                               id="Challenge.controls.start.label"
                               values={Object {}}
 />,
-                            "className": "button is-outlined start-challenge is-loading",
+                            "className": "button is-outlined start-challenge",
                             "onClick": [Function],
                           },
                           "ref": null,
@@ -10544,6 +10555,7 @@ ShallowWrapper {
             "formatMessage": [Function],
           }
     }
+    isStarting={false}
     saveChallenge={[Function]}
     startBrowsingChallenge={[Function]}
     startChallenge={[Function]}

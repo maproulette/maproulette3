@@ -28,10 +28,15 @@ const WithOptionalManagement = function(WrappedComponent) {
       }
     }
 
+    setActive = (activeState) => {
+      this.setState({isActive: activeState})
+    }
+
     render() {
       return <WrappedComponent isActive={this.isActive}
                                toggleActive={this.toggleActive}
-                               {..._omit(this.props, ['isActive', 'toggleActive'])} />
+                               setActive={this.setActive}
+                               {..._omit(this.props, ['isActive', 'toggleActive', 'setActive'])} />
     }
   }
 }

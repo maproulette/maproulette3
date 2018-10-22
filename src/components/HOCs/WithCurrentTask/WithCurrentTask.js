@@ -113,9 +113,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Invoke to mark as a task as complete with the given status
      */
     completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy) => {
-      dispatch(
+      return dispatch(
         completeTask(taskId, challengeId, taskStatus)
       ).then(() => {
+        // Start loading the next task from the challenge.
+        nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+          visitNewTask(ownProps, taskId, newTask)
+        ).catch(error => {
+          ownProps.history.push(`/browse/challenges/${challengeId}`)
+        })
+
         if (_isString(comment) && comment.length > 0) {
           dispatch(addTaskComment(taskId, comment, taskStatus))
         }
@@ -127,11 +134,6 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           dispatch(renewVirtualChallenge(ownProps.virtualChallengeId))
         }
       })
-
-      // Load the next task from the challenge.
-      return nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
-        visitNewTask(ownProps, taskId, newTask)
-      )
     },
 
     /**

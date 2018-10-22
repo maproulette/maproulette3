@@ -1,3 +1,4 @@
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { LatLng } from 'leaflet'
 import _get from 'lodash/get'
@@ -8,6 +9,7 @@ import { loadRandomTaskFromChallenge,
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
+import WithOptionalManagement from '../WithOptionalManagement/WithOptionalManagement'
 
 /**
  * WithStartChallenge passes down a startChallenge function that, when invoked,
@@ -18,8 +20,21 @@ import AppErrors from '../../../services/Error/AppErrors'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithStartChallenge = WrappedComponent =>
-  connect(null, mapDispatchToProps)(WrappedComponent)
+export const WithStartChallenge = WrappedComponent => {
+  return WithOptionalManagement(
+    connect(null, mapDispatchToProps)(_WithStartChallenge(WrappedComponent))
+  )
+}
+
+export const _WithStartChallenge = function(WrappedComponent) {
+   return class extends Component {
+     render() {
+       return (
+         <WrappedComponent isStarting={this.props.isActive()} {...this.props} />
+       )
+     }
+   }
+ }
 
 /**
  * Return a task within the given challenge that is visible within the
@@ -85,6 +100,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
    * the current challenge map bounds. Otherwise a random task is loaded.
    */
   startChallenge: challenge => {
+    ownProps.setActive(true)
+
     if (challenge.isVirtual) {
       dispatch(loadRandomTaskFromVirtualChallenge(challenge.id)).then(task => {
         if (task) {
@@ -93,6 +110,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
         else {
           dispatch(addError(AppErrors.task.none))
         }
+      }).then(() => {
+        ownProps.setActive(false)
       })
     }
     else {
@@ -101,10 +120,15 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
                                             ownProps.clusteredTasks)
       if (visibleTask) {
         openTask(dispatch, challenge, visibleTask, ownProps.history)
+        ownProps.setActive(false)
       }
       else {
         dispatch(loadRandomTaskFromChallenge(challenge.id)).then(task => {
           openTask(dispatch, challenge, task, ownProps.history)
+        }).then(() => {
+          ownProps.setActive(false)
+        }).catch(() => {
+          ownProps.setActive(false)
         })
       }
     }

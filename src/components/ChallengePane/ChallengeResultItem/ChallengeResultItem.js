@@ -43,8 +43,6 @@ export class ChallengeResultItem extends Component {
      * ensure our state is synced up with any prop changes.
      **/
     isBrowsing: _get(this.props, 'browsedChallenge.id') === this.props.challenge.id,
-    /** Set to true when the user indicates they wish to start the challenge */
-    isStarting: false,
   }
 
   componentDidMount() {
@@ -147,10 +145,7 @@ export class ChallengeResultItem extends Component {
    * @private
    */
   startChallenge = () => {
-    if (!this.state.isStarting) {
-      this.props.startChallenge(this.props.challenge)
-      this.setState({isStarting: true})
-    }
+    this.props.startChallenge(this.props.challenge)
   }
 
   render() {
@@ -252,7 +247,7 @@ export class ChallengeResultItem extends Component {
               <div className="field is-grouped">
                 <p className="control">
                   <button className={classNames("button is-outlined start-challenge",
-                                                {"is-loading": this.state.isStarting})}
+                                                {"is-loading": this.props.isStarting})}
                           onClick={this.startChallenge}>
                     <FormattedMessage {...messages.start} />
                   </button>
@@ -298,6 +293,8 @@ ChallengeResultItem.propTypes = {
   saveChallenge: PropTypes.func.isRequired,
   /** Invoked when a user indicates they wish to unsave/bookmark a challenge */
   unsaveChallenge: PropTypes.func.isRequired,
+  /** Indicates whether the challenge is in the middle of being started */
+  isStarting: PropTypes.bool.isRequired,
 }
 
 export default injectIntl(ChallengeResultItem)
