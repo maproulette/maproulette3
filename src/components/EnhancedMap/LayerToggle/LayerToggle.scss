@@ -19,13 +19,17 @@
   }
 
   .layer-toggle__option-controls {
-    label {
+    div.checkbox {
       font-size: $size-7;
       padding-left: 1rem;
       color: $grey-dark;
 
       &:hover {
         color: $grey-dark;
+      }
+
+      label {
+        padding-left: 10px;
       }
     }
   }

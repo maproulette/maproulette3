@@ -25,7 +25,7 @@ beforeEach(() => {
       challenges: {
         sort: {
           sortBy: 'created',
-          direction: 'asc'
+          direction: 'desc'
         },
         filters: {
           difficulty: 'hard',
@@ -103,24 +103,24 @@ test("mapDispatchToProps maps call setKeywordFilter", () => {
                                     expect.objectContaining({keywords}))
 })
 
-test("mapDispatchToProps maps call setSearchSort: 'name' sort gets an 'desc' direction", () => {
+test("mapDispatchToProps maps call setSearchSort: 'name' sort gets an 'asc' direction", () => {
   const dispatch = jest.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const sortSetting = {sortBy: 'name'}
 
   mappedProps.setSearchSort(sortSetting)
   expect(dispatch).toBeCalled()
-  expect(setSort).toBeCalledWith('challenges', {sortBy: 'name', direction: 'desc'})
+  expect(setSort).toBeCalledWith('challenges', {sortBy: 'name', direction: 'asc'})
 })
 
-test("mapDispatchToProps maps call setSearchSort: 'created' sort gets an 'asc' direction", () => {
+test("mapDispatchToProps maps call setSearchSort: 'created' sort gets an 'desc' direction", () => {
   const dispatch = jest.fn()
   const mappedProps = mapDispatchToProps(dispatch, basicState, 'challenges')
   const sortSetting = {sortBy: 'created'}
 
   mappedProps.setSearchSort(sortSetting)
   expect(dispatch).toBeCalled()
-  expect(setSort).toBeCalledWith('challenges', {sortBy: 'created', direction: 'asc'})
+  expect(setSort).toBeCalledWith('challenges', {sortBy: 'created', direction: 'desc'})
 })
 
 test("mapDispatchToProps maps call setSearchSort: 'xxx' sort is set to null", () => {

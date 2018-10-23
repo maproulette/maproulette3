@@ -41,15 +41,13 @@ export class LayerToggle extends Component {
 
     const overlayToggles = _map(this.props.intersectingOverlays, layer => (
       <div key={layer.id} className="layer-toggle__option-controls">
-        <label className="checkbox"
-          onClick={e => {
-            e.preventDefault()
-            this.toggleOverlay(layer.id)
-          }}>
+        <div className="checkbox"
+          onClick={e => this.toggleOverlay(layer.id)}>
           <input type="checkbox"
                  checked={this.overlayVisible(layer.id)}
-                 onChange={_noop} /> {layer.name}
-        </label>
+                 onChange={_noop} />
+          <label>{layer.name}</label>
+        </div>
       </div>
     ))
 
@@ -76,16 +74,14 @@ export class LayerToggle extends Component {
             {overlayToggles}
             {this.props.toggleTaskFeatures &&
               <div className="layer-toggle__option-controls">
-                <label className="checkbox"
-                  onClick={e => {
-                    e.preventDefault()
-                    this.props.toggleTaskFeatures()
-                  }}>
+                <div className="checkbox"
+                  onClick={e => this.props.toggleTaskFeatures()}>
                   <input type="checkbox"
                          checked={this.props.showTaskFeatures}
                          onChange={_noop}
-                  /> <FormattedMessage {...messages.showTaskFeaturesLabel} />
-                </label>
+                  />
+                  <label><FormattedMessage {...messages.showTaskFeaturesLabel} /></label>
+                </div>
               </div>
             }
           </div>
