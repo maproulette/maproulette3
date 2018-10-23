@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import _takeRight from 'lodash/takeRight'
 import { ChallengeStatus,
-         isUsableChallengeStatus,
+         isAdminUsableChallengeStatus,
          messagesByStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import AsManager from '../../../../interactions/User/AsManager'
@@ -86,7 +86,7 @@ export class ChallengeOverview extends Component {
 
           <ChallengeKeywords challenge={this.props.challenge} />
 
-          {hasTasks && isUsableChallengeStatus(status) &&
+          {hasTasks && isAdminUsableChallengeStatus(status) &&
            <div className="view-challenge">
              <Link to={`/challenge/${this.props.challenge.id}`}
                    className="button is-outlined is-primary start-challenge-control">

@@ -14,7 +14,7 @@ import { addError } from '../../../../services/Error/Error'
 import AppErrors from '../../../../services/Error/AppErrors'
 import AsManageableChallenge
        from '../../../../interactions/Challenge/AsManageableChallenge'
-import { isUsableChallengeStatus }
+import { isAdminUsableChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithClusteredTasks
        from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
@@ -57,7 +57,7 @@ const WithCurrentChallenge = function(WrappedComponent,
           if (includeTasks) {
             // Only fetch tasks if the challenge is in a usable status. Otherwise
             // we risk errors if the tasks are still building or failed to build.
-            if (isUsableChallengeStatus(challenge.status)) {
+            if (isAdminUsableChallengeStatus(challenge.status)) {
               this.setState({loadingTasks: true})
               this.props.fetchClusteredTasks(challengeId).then(() =>
                 this.setState({loadingTasks: false})

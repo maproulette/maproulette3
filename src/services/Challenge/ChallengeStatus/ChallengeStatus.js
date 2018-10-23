@@ -46,3 +46,15 @@ export const isUsableChallengeStatus = function(status) {
          status === CHALLENGE_STATUS_NONE ||
          !_isFinite(status) // treat missing as NONE
 }
+
+/**
+ * Returns true if the given challenge status is considered to be usable
+ * and presentable to admin, false if not.
+ */
+export const isAdminUsableChallengeStatus = function(status) {
+  return status === CHALLENGE_STATUS_READY ||
+         status === CHALLENGE_STATUS_PARTIALLY_LOADED ||
+         status === CHALLENGE_STATUS_NONE ||
+         status === CHALLENGE_STATUS_FINISHED ||
+         !_isFinite(status) // treat missing as NONE
+}
