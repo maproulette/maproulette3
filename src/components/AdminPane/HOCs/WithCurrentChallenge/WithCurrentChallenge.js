@@ -57,7 +57,7 @@ const WithCurrentChallenge = function(WrappedComponent,
           if (includeTasks) {
             // Only fetch tasks if the challenge is in a usable status. Otherwise
             // we risk errors if the tasks are still building or failed to build.
-            if (isUsableChallengeStatus(challenge.status)) {
+            if (isUsableChallengeStatus(challenge.status, true)) {
               this.setState({loadingTasks: true})
               this.props.fetchClusteredTasks(challengeId).then(() =>
                 this.setState({loadingTasks: false})
