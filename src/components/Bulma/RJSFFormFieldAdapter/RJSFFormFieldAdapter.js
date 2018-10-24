@@ -196,7 +196,7 @@ export const CheckboxField = ({id, label, required, rawDescription, children}) =
  * `"ui:widget": DropzoneTextUpload`). The form field should be of type string,
  * and it will be set with the text content of the uploaded file.
  */
-export const DropzoneTextUpload = ({required, onChange, readonly}) => {
+export const DropzoneTextUpload = ({id, required, onChange, readonly, formContext}) => {
   if (readonly) {
     return (
       <div className="readonly-file">
@@ -207,8 +207,10 @@ export const DropzoneTextUpload = ({required, onChange, readonly}) => {
 
   return (
     <Dropzone className="dropzone" acceptClassName="active" multiple={false} disablePreview
-              onDrop={files =>
-                extractFileContentAsString(files[0]).then(content => onChange(content))}>
+              onDrop={files => {
+                formContext[id] = {file: files[0]}
+                onChange(files[0].name)
+              }}>
       {({acceptedFiles}) => {
         if (acceptedFiles.length > 0) {
           return <p>{acceptedFiles[0].name}</p>
@@ -239,23 +241,4 @@ export const MarkdownDescriptionField = ({id, description}) => {
       <MarkdownContent markdown={description} />
     </div>
   )
-}
-
-/**
- * Helper function that returns a Promise that extracts the content from the
- * given file and resolves with the content as a string.
- */
-const extractFileContentAsString = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (reader.readyState === FileReader.DONE) {
-        resolve(reader.result)
-      }
-    }
-    reader.onabort = () => reject(new Error('upload-failed', 'File upload failed'))
-    reader.onerror = () => reject(new Error('upload-failed', 'File upload failed'))
-
-    reader.readAsText(file)
-  })
 }
