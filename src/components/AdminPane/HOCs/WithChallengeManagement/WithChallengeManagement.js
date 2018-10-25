@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
+import _compact from 'lodash/compact'
 import { saveChallenge,
          uploadChallengeGeoJSON,
          setIsEnabled,
@@ -9,7 +10,9 @@ import { saveChallenge,
          removeChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
 import { bulkUpdateTasks } from '../../../../services/Task/Task'
-
+import AsLineReadableFile
+       from '../../../../interactions/File/AsLineReadableFile'
+import WithProgress from '../../../HOCs/WithProgress/WithProgress'
 
 /**
  * WithChallengeManagement provides functions to its WrappedComponent that can
@@ -17,22 +20,41 @@ import { bulkUpdateTasks } from '../../../../services/Task/Task'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithChallengeManagement =
-  WrappedComponent => connect(null, mapDispatchToProps)(WrappedComponent)
+const WithChallengeManagement = WrappedComponent =>
+  WithProgress(connect(null, mapDispatchToProps)(WrappedComponent), 'creatingTasks')
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  saveChallenge: challengeData => {
-    return dispatch(saveChallenge(challengeData)).then(challenge => {
-      // If we have line-by-line GeoJSON, we need to submit that separately
+  saveChallenge: async challengeData => {
+    return dispatch(saveChallenge(challengeData)).then(async challenge => {
+      // If we have line-by-line GeoJSON, we need to stream that separately
       if (_isObject(challenge) && challengeData.lineByLineGeoJSON) {
-        return dispatch(
-          uploadChallengeGeoJSON(challenge.id, challengeData.lineByLineGeoJSON)
-        ).then(() => challenge)
+        ownProps.updateCreatingTasksProgress(true, 0)
+        const lineFile = AsLineReadableFile(challengeData.lineByLineGeoJSON)
+        let allLinesRead = false
+        let totalTasksCreated = 0
+
+        while (!allLinesRead) {
+          let taskLines = await lineFile.readLines(100)
+          if (taskLines[taskLines.length - 1] === null) {
+            allLinesRead = true
+            taskLines = _compact(taskLines)
+          }
+
+          await dispatch(uploadChallengeGeoJSON(challenge.id, taskLines.join('\n')))
+          totalTasksCreated += taskLines.length
+          ownProps.updateCreatingTasksProgress(true, totalTasksCreated)
+        }
+
+        ownProps.updateCreatingTasksProgress(false, 0)
+        return challenge
       }
       else {
-        return Promise.resolve(challenge)
+        return challenge
       }
-    }).catch(error => null)
+    }).catch(error => {
+      console.log(error)
+      return null
+    })
   },
 
   moveChallenge: (challengeId, toProjectId) =>

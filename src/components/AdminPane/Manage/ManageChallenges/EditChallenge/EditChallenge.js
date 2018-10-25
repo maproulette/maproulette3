@@ -13,6 +13,8 @@ import _difference from 'lodash/difference'
 import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
+import AsLineReadableFile
+       from '../../../../../interactions/File/AsLineReadableFile'
 import Steps from '../../../../Bulma/Steps'
 import StepNavigation
        from '../../StepNavigation/StepNavigation'
@@ -127,12 +129,16 @@ export class EditChallenge extends Component {
   /**
    * Validate GeoJSON data
    */
-  validateGeoJSON(jsonContent, errors) {
-    const geoJSON = AsValidatableGeoJSON(jsonContent)
+  validateGeoJSON(jsonFileField, errors) {
+    const geoJSON = AsValidatableGeoJSON(jsonFileField.file)
     const lintErrors = geoJSON.validate()
-
-    _each(lintErrors,
-          lintError => errors.localGeoJSON.addError(lintError.message))
+    if (lintErrors.length === 0) {
+      jsonFileField.validated = true
+    }
+    else {
+      _each(lintErrors,
+            lintError => errors.localGeoJSON.addError(lintError.message))
+    }
   }
 
   /**
@@ -160,8 +166,9 @@ export class EditChallenge extends Component {
       this.validateOverpass(formData.overpassQL, errors)
     }
 
-    if (!_isEmpty(formData.localGeoJSON)) {
-      this.validateGeoJSON(formData.localGeoJSON, errors)
+    if (!_isEmpty(formData.localGeoJSON) &&
+        !this.state.formContext["root_localGeoJSON"].validated) {
+      this.validateGeoJSON(this.state.formContext["root_localGeoJSON"], errors)
     }
 
     return errors
@@ -172,7 +179,6 @@ export class EditChallenge extends Component {
     if (this.canPrev()) {
       this.setState({
         activeStep: this.state.activeStep - 1,
-        formContext: {},
       })
     }
   }
@@ -182,7 +188,6 @@ export class EditChallenge extends Component {
     if (this.canNext()) {
       this.setState({
         activeStep: this.state.activeStep + 1,
-        formContext: {},
       })
       window.scrollTo(0, 0)
     }
@@ -205,10 +210,12 @@ export class EditChallenge extends Component {
 
   /** Complete the workflow, saving the challenge data */
   finish = () => {
-    const formData = this.prepareFormDataForSaving()
+    window.scrollTo(0, 0)
     this.setState({isSaving: true})
 
-    this.props.saveChallenge(formData).then(challenge => {
+    this.prepareFormDataForSaving().then(formData => {
+      return this.props.saveChallenge(formData)
+    }).then(challenge => {
       if (_isObject(challenge) && _isNumber(challenge.parent)) {
         this.props.history.push(
           `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
@@ -317,7 +324,7 @@ export class EditChallenge extends Component {
    * and massaging it back into the format of challenge data expected by the
    * server.
    */
-  prepareFormDataForSaving = () => {
+  prepareFormDataForSaving = async () => {
     const challengeData = AsEditableChallenge(Object.assign(
       this.prepareChallengeDataForForm(this.props.challenge),
       this.state.formData,
@@ -381,9 +388,20 @@ export class EditChallenge extends Component {
       // Line-by-line geojson needs to be submitted separately as it cannot be
       // embedded as valid JSON. Move it to a different field for later
       // processing.
-      if (challengeData.isLineByLineGeoJSON()) {
-        challengeData.lineByLineGeoJSON = challengeData.localGeoJSON
-        delete challengeData.localGeoJSON
+      if (challengeData.localGeoJSON) {
+        const geoJSONFile = this.state.formContext["root_localGeoJSON"].file
+        if (!geoJSONFile) {
+          throw new Error("No geojson file")
+        }
+
+        if (await AsValidatableGeoJSON(geoJSONFile).isLineByLine()) {
+          challengeData.lineByLineGeoJSON = geoJSONFile
+          delete challengeData.localGeoJSON
+        }
+        else {
+          challengeData.localGeoJSON =
+            (await AsLineReadableFile(geoJSONFile).allLines()).join('\n')
+        }
       }
     }
 
@@ -391,10 +409,29 @@ export class EditChallenge extends Component {
   }
 
   render() {
-    if (!this.props.project || this.state.isSaving) {
+    if (!this.props.project ||
+        (this.state.isSaving && !this.props.progress.creatingTasks.inProgress)) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
+        </div>
+      )
+    }
+
+    // If uploading tasks, show progress
+    if (this.props.progress.creatingTasks.inProgress) {
+      return (
+        <div className="pane-loading full-screen-height">
+          <div className="progress-status">
+            <h1 className="progress-status__title">
+              <FormattedMessage {...messages.creatingTasks} />
+            </h1>
+
+            <div className="progress-status__description">
+              {this.props.progress.creatingTasks.stepsCompleted} <FormattedMessage {...messages.tasksCreated} />
+              <BusySpinner />
+            </div>
+          </div>
         </div>
       )
     }

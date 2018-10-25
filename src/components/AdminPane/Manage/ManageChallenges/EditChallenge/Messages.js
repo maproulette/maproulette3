@@ -19,6 +19,16 @@ export default defineMessages({
     defaultMessage: "New Challenge",
   },
 
+  creatingTasks: {
+    id: 'Admin.EditChallenge.creatingTasks.header',
+    defaultMessage: "Uploading Tasks",
+  },
+
+  tasksCreated: {
+    id: 'Admin.EditChallenge.tasksCreated.label',
+    defaultMessage: "tasks uploaded",
+  },
+
   lineNumber: {
     id: "Admin.EditChallenge.lineNumber",
     defaultMessage: "Line {line, number}: ",
@@ -226,6 +236,10 @@ and [gdal](http://www.gdal.org/drv_geojson.html) can convert things like
 Shapefiles to GeoJSON.  When you convert, make sure that you use unprojected
 lon/lat on the WGS84 datum (EPSG:4326), because this is what MapRoulette uses
 internally.
+
+> Note: for challenges with a large number of tasks, we recommend using a
+[line-by-line](https://github.com/osmlab/maproulette3/wiki/Line-by-Line-GeoJSON-Format)
+format instead, which is much less memory-intensive to process.
 
 ### Via Remote GeoJSON URL
 
