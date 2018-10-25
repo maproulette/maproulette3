@@ -225,6 +225,7 @@ export class ViewChallengeTasks extends Component {
              {manager.canWriteProject(this.props.challenge.parent) &&
               <ConfirmAction>
                 <button className="button is-rounded is-outlined is-primary"
+                        disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}
                         onClick={this.markAsCreated}>
                   <FormattedMessage {...messages.markCreatedLabel} />
                 </button>
