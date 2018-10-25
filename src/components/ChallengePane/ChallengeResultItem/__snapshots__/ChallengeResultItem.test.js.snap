@@ -436,6 +436,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -574,6 +575,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -1148,6 +1150,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -1286,6 +1289,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -4758,6 +4762,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -4909,6 +4914,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -5596,6 +5602,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -5747,6 +5754,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -7508,6 +7516,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -7659,6 +7668,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -8346,6 +8356,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -8497,6 +8508,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -9248,6 +9260,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -9399,6 +9412,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -10086,6 +10100,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -10237,6 +10252,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -11026,6 +11042,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -11177,6 +11194,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -11898,6 +11916,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -12049,6 +12068,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,

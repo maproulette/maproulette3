@@ -5,8 +5,9 @@ import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
 import classNames from 'classnames'
+import parse from 'date-fns/parse'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import { messagesByDifficulty }
        from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
@@ -235,6 +236,17 @@ export class ChallengeResultItem extends Component {
                 <FormattedMessage {...messagesByDifficulty[this.props.challenge.difficulty]} />
               </span>
             </div>
+
+            {this.props.challenge.lastTaskRefresh &&
+              <div className="challenge-list__item__last-task-refresh">
+                <span className="challenge-list__item__field-label">
+                  <FormattedMessage {...messages.lastTaskRefreshLabel} />
+                </span>
+                <span className="challenge-list__item__field-value">
+                  <FormattedRelative value={parse(this.props.challenge.lastTaskRefresh)} />
+                </span>
+              </div>
+            }
 
             <div className="challenge-list__item__blurb">
               <MarkdownContent markdown={this.props.challenge.description ||
