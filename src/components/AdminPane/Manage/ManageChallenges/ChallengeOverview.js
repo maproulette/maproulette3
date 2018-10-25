@@ -86,7 +86,7 @@ export class ChallengeOverview extends Component {
 
           <ChallengeKeywords challenge={this.props.challenge} />
 
-          {hasTasks && isUsableChallengeStatus(status) &&
+          {hasTasks && isUsableChallengeStatus(status, true) &&
            <div className="view-challenge">
              <Link to={`/challenge/${this.props.challenge.id}`}
                    className="button is-outlined is-primary start-challenge-control">

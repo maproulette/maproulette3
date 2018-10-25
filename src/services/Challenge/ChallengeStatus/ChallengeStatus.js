@@ -40,9 +40,10 @@ export const statusLayerLabels = intl => _fromPairs(
  * Returns true if the given challenge status is considered to be usable
  * and presentable to users, false if not.
  */
-export const isUsableChallengeStatus = function(status) {
+export const isUsableChallengeStatus = function(status, allowFinishedStatus = false) {
   return status === CHALLENGE_STATUS_READY ||
          status === CHALLENGE_STATUS_PARTIALLY_LOADED ||
          status === CHALLENGE_STATUS_NONE ||
+         (allowFinishedStatus && status === CHALLENGE_STATUS_FINISHED) ||
          !_isFinite(status) // treat missing as NONE
 }
