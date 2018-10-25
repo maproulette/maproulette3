@@ -233,7 +233,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -300,7 +299,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -438,6 +436,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -576,6 +575,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -947,7 +947,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -1014,7 +1013,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -1152,6 +1150,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -1290,6 +1289,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -1680,7 +1680,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -1747,7 +1746,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -1943,7 +1941,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -2010,7 +2007,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -2260,7 +2256,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -2327,7 +2322,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -2523,7 +2517,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -2590,7 +2583,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -2856,7 +2848,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -2942,7 +2933,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -3153,7 +3143,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -3239,7 +3228,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -3453,7 +3441,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -3520,7 +3507,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -3681,7 +3667,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -3748,7 +3733,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -3962,7 +3946,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -4029,7 +4012,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -4190,7 +4172,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -4257,7 +4238,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -4566,7 +4546,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -4633,7 +4612,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -4784,6 +4762,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -4935,6 +4914,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -5406,7 +5386,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -5473,7 +5452,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -5624,6 +5602,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -5775,6 +5754,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -6215,7 +6195,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -6282,7 +6261,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -6443,7 +6421,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -6510,7 +6487,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -6724,7 +6700,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -6791,7 +6766,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -6952,7 +6926,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -7019,7 +6992,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -7328,7 +7300,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -7395,7 +7366,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -7546,6 +7516,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -7697,6 +7668,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -8168,7 +8140,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -8235,7 +8206,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -8386,6 +8356,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -8537,6 +8508,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -9072,7 +9044,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -9139,7 +9110,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -9290,6 +9260,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -9441,6 +9412,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -9912,7 +9884,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -9979,7 +9950,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -10130,6 +10100,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -10281,6 +10252,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -10835,7 +10807,6 @@ ShallowWrapper {
 >
                   foo
 </div>,
-                undefined,
               ],
             },
             "ref": null,
@@ -10921,7 +10892,6 @@ ShallowWrapper {
                 "rendered": "foo",
                 "type": "div",
               },
-              undefined,
             ],
             "type": "div",
           },
@@ -11072,6 +11042,7 @@ ShallowWrapper {
                                 />
                 </span>
 </div>,
+              undefined,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -11223,6 +11194,7 @@ ShallowWrapper {
               ],
               "type": "div",
             },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -11709,7 +11681,6 @@ ShallowWrapper {
 >
                     foo
 </div>,
-                  undefined,
                 ],
               },
               "ref": null,
@@ -11795,7 +11766,6 @@ ShallowWrapper {
                   "rendered": "foo",
                   "type": "div",
                 },
-                undefined,
               ],
               "type": "div",
             },
@@ -11946,6 +11916,7 @@ ShallowWrapper {
                                     />
                   </span>
 </div>,
+                undefined,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -12097,6 +12068,7 @@ ShallowWrapper {
                 ],
                 "type": "div",
               },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,

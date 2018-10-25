@@ -237,14 +237,16 @@ export class ChallengeResultItem extends Component {
               </span>
             </div>
 
-            <div className="challenge-list__item__last-task-refresh">
-              <span className="challenge-list__item__field-label">
-                <FormattedMessage {...messages.lastTaskRefreshLabel} />
-              </span>
-              <span className="challenge-list__item__field-value">
-                <FormattedRelative value={parse(this.props.challenge.lastTaskRefresh)} />
-              </span>
-            </div>
+            {this.props.challenge.lastTaskRefresh &&
+              <div className="challenge-list__item__last-task-refresh">
+                <span className="challenge-list__item__field-label">
+                  <FormattedMessage {...messages.lastTaskRefreshLabel} />
+                </span>
+                <span className="challenge-list__item__field-value">
+                  <FormattedRelative value={parse(this.props.challenge.lastTaskRefresh)} />
+                </span>
+              </div>
+            }
 
             <div className="challenge-list__item__blurb">
               <MarkdownContent markdown={this.props.challenge.description ||
