@@ -11,6 +11,7 @@ import _get from 'lodash/get'
 import _without from 'lodash/without'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
+import _filter from 'lodash/filter'
 import messages from './Messages'
 
 /**
@@ -33,7 +34,8 @@ export const jsSchema = intl => {
 
   const defaultBasemapChoices = [
     { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none }
-  ].concat(_map(LayerSources, source => ({id: source.id.toString(), name: source.name}))).concat([
+  ].concat(_map(_filter(LayerSources, source => !source.overlay),
+                source => ({id: source.id.toString(), name: source.name}))).concat([
     { id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }
   ])
 

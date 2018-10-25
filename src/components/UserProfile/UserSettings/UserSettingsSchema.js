@@ -1,6 +1,7 @@
 import _map from 'lodash/map'
 import _values from 'lodash/values'
 import _without from 'lodash/without'
+import _filter from 'lodash/filter'
 import { Locale,
          localeLabels,
          defaultLocale } from '../../../services/User/Locale/Locale'
@@ -30,7 +31,8 @@ export const jsSchema = intl => {
 
   const defaultBasemapChoices = [
     { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none }
-  ].concat(_map(LayerSources, source => ({id: source.id, name: source.name}))).concat([
+  ].concat(_map(_filter(LayerSources, source => !source.overlay),
+                source => ({id: source.id, name: source.name}))).concat([
     { id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }
   ])
 
