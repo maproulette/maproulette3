@@ -137,6 +137,11 @@ export default defineMessages({
     defaultMessage: "Unable to render the map. This is usally caused by a problematic custom basemap.",
   },
 
+  dashboardRenderFailure: {
+    id: 'Errors.dashboard.renderFailure',
+    defaultMessage: "Unable to render the dashboard. Switching to a working layout.",
+  },
+
   josmNoResponse: {
     id: 'Errors.josm.noResponse',
     defaultMessage: "OSM remote control did not respond. Do you have JOSM " +

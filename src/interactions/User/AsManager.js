@@ -18,9 +18,14 @@ export class AsManager extends AsEndUser {
   /**
    * Determines if the user is the owner of the given project.
    *
-   * @return true if the user is the owner, false if not.
+   * @return true if the user is the owner, false if not or if the project is
+   *              undefined.
    */
   isProjectOwner(project) {
+    if (!project) {
+      return false
+    }
+
     const osmId = _get(this.user, 'osmProfile.id')
     return (_isFinite(osmId) && osmId === project.owner)
   }
@@ -29,6 +34,10 @@ export class AsManager extends AsEndUser {
    * Returns the user's group types (roles) for the given project.
    */
   projectGroupTypes(project) {
+    if (!this.user || !project) {
+      return []
+    }
+
     return _map(
       _filter(this.user.groups, userGroup =>
         userGroup.groupType === GROUP_TYPE_SUPERUSER ||

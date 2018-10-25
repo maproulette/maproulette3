@@ -15,6 +15,7 @@ import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _fromPairs from 'lodash/fromPairs'
 import _isUndefined from 'lodash/isUndefined'
+import _groupBy from 'lodash/groupBy'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -112,6 +113,40 @@ export const fetchFeaturedChallenges = function(limit = 50) {
     }).catch((error) => {
       dispatch(addError(AppErrors.challenge.fetchFailure))
       console.log(error.response || error)
+    })
+  }
+}
+
+/**
+ * Retrieve a listing of challenges in the given projects, up to the given limit.
+ *
+ * @param {array} projectIds
+ * @param {number} limit
+ */
+export const fetchProjectChallengeListing = function(projectIds, onlyEnabled=false, limit = -1) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.challenges.listing,
+      {
+        schema: [ challengeSchema() ],
+        params: {
+          projectList: _isArray(projectIds) ? projectIds.join(',') : projectIds,
+          onlyEnabled,
+          limit,
+        }
+      }
+    ).execute().then(normalizedResults => {
+      dispatch(receiveChallenges(normalizedResults.entities))
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.fetchFailure))
+        console.log(error.response || error)
+      }
     })
   }
 }
@@ -365,6 +400,32 @@ export const fetchChallengeComments = function(challengeId) {
         }))
       }
 
+      return normalizedComments
+    })
+  }
+}
+
+/**
+ * Fetch challenge comments for the given project
+ */
+export const fetchProjectChallengeComments = function(projectId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.project.comments, {variables: {id: projectId}}
+    ).execute().then(rawComments => {
+      const normalizedComments = normalize(rawComments, [ commentSchema() ])
+      dispatch(receiveComments(normalizedComments.entities))
+
+      // Group comments by challenge and update challenges.
+      const commentsByChallenge = _groupBy(rawComments, 'challengeId')
+      const normalizedChallenges = {
+        challenges: _fromPairs(_map(commentsByChallenge, (comments, challengeId) => [
+          parseInt(challengeId, 10), {
+          id: parseInt(challengeId, 10),
+          comments: _map(comments, 'id'),
+        }]))
+      }
+      dispatch(receiveChallenges(normalizedChallenges))
       return normalizedComments
     })
   }

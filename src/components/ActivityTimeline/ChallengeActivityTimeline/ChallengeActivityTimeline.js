@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
+import classNames from 'classnames'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import _groupBy from 'lodash/groupBy'
@@ -53,7 +54,8 @@ export class ChallengeActivityTimeline extends Component {
         return (
           <p key={`${isoDate}-${entry.status}`}
              className="timeline-item__activity-entry">
-            <span className="badge inverted" data-badge={entry.count}>
+            <span className={classNames("badge", {inverted: this.props.invertBadges})}
+                  data-badge={entry.count}>
               {localizedStatusLabels[keysByStatus[entry.status]]}
             </span>
           </p>
@@ -111,10 +113,12 @@ ChallengeActivityTimeline.propTypes = {
     count: PropTypes.number.isRequired,
     statusName: PropTypes.string,
   })),
+  invertBadges: PropTypes.bool,
 }
 
 ChallengeActivityTimeline.defaultProps = {
   activity: [],
+  invertBadges: true,
 }
 
 export default injectIntl(ChallengeActivityTimeline)

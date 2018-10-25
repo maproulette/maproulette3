@@ -61,10 +61,12 @@ export class BurndownChart extends Component {
 
     return (
       <div className="burndown-chart">
-        <p className="subheading">
-          <FormattedMessage {...messages.heading}
-                            values={{taskCount: this.props.tasksAvailable}} />
-        </p>
+        {!this.props.suppressHeading &&
+         <p className="subheading">
+           <FormattedMessage {...messages.heading}
+                             values={{taskCount: this.props.tasksAvailable}} />
+         </p>
+        }
         <ResponsiveLine data={burndownMetrics}
                         colors={["#61CDBB"]}
                         margin={{

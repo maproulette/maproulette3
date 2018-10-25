@@ -1,0 +1,24 @@
+@import 'variables.scss';
+
+.admin__manage.projects-dashboard {
+  &__dashboard-controls {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .projects-dashboard__no-projects {
+    margin: 40px 15px 15px 15px;
+    padding: 15px;
+    color: $primary;
+    background-color: $white;
+    font-size: $size-5;
+    border-radius: $radius-medium;
+    text-align: center;
+  }
+
+  .heading-name {
+    transform-origin: left;
+    transform: rotate(0deg) translate(0px, 0px);
+    transition: transform 0.5s;
+  }
+}

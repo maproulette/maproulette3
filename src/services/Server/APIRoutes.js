@@ -28,11 +28,13 @@ const apiRoutes = factory => {
       'edit': factory.put('/project/:id'),
       'activity': factory.get('/data/project/activity'),
       'managers': factory.get('/user/project/:projectId'),
+      'comments': factory.get('/project/:id/comments'),
       'setManagerPermission': factory.put('/user/:userId/project/:projectId/:groupType'),
       'removeManager': factory.delete('/user/:userId/project/:projectId/-1'),
       'delete': factory.delete('/project/:id'),
     },
     'challenges': {
+      'listing': factory.get('/challenges/listing'),
       'featured': factory.get('/challenges/featured'),
       'search': factory.get('/challenges/extendedFind'),
       'actions': factory.get('/data/project/summary'),

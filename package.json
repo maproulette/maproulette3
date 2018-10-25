@@ -39,6 +39,7 @@
     "react-dom": "^16.0.0",
     "react-dom-confetti": "^0.0.10",
     "react-dropzone": "^4.2.3",
+    "react-grid-layout": "^0.16.6",
     "react-intl": "^2.3.0",
     "react-jsonschema-form": "^1.0.1",
     "react-leaflet": "^1.8.0",
@@ -59,7 +60,8 @@
     "remark": "^7.0.1",
     "remark-react": "^4.0.0",
     "route-matcher": "^0.1.0",
-    "stale-lru-cache": "^5.1.1"
+    "stale-lru-cache": "^5.1.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "chimp": "^0.51.1",

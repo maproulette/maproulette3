@@ -1,10 +1,8 @@
 @import 'variables.scss';
-@import 'svg-assets.scss';
 
 .admin {
   display: flex;
   justify-content: center;
-  // background: url($background-logo) no-repeat 100% 10%;
 
   .signin-button {
     margin-top: 20px;
@@ -40,10 +38,6 @@
     }
   }
 
-  &--intro {
-    margin-bottom: 1.5em;
-  }
-
   .tabs {
     ul {
       border-bottom: 2px solid $grey-lightest-less;
@@ -67,6 +61,245 @@
             color: $green;
             border-bottom: 3px solid $green;
             padding-bottom: 11px;
+          }
+        }
+      }
+    }
+  }
+
+  &__manage {
+    &__header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 2px solid $grey-lightest-more;
+      margin-top: 0;
+      padding-bottom: 10px;
+      margin-bottom: 40px;
+    }
+
+    .subtitle, .subtitle:not(:last-child) {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    &__heading {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+
+      h3 {
+        font-size: $size-3;
+        color: $subtitle-color;
+
+        display: flex;
+        justify-content: flex-start;
+
+        .busy-spinner {
+          margin-left: 1em;
+          padding-top: 0.25em;
+        }
+      }
+    }
+
+    nav.breadcrumb {
+      overflow: visible;
+      font-size: $size-5;
+      margin-bottom: 0;
+
+      li.is-active a {
+        color: $green;
+        font-weight: $weight-semibold;
+
+        .busy-spinner {
+          margin-left: 10px;
+        }
+      }
+
+      @media(max-width: 1000px) {
+        font-size: $size-6;
+        padding-top: 0.5em;
+      }
+
+      @media(max-width: 700px) {
+        ul {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    }
+
+    .status-section {
+      .columns {
+        margin-bottom: 0;
+        margin-left: -0.25em;
+
+        .column {
+          padding: 0.25em;
+        }
+      }
+
+      .status-label {
+        font-weight: $weight-light;
+        color: $grey;
+        font-size: $size-6-plus;
+      }
+
+      .status-value {
+        color: $grey;
+        font-size: $size-6-plus;
+      }
+
+      .start-challenge-control {
+        margin: 15px 0px 5px 0px;
+      }
+    }
+
+    &__controls.columns {
+      font-size: $size-5;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin: 0;
+
+      .admin__manage__controls--control {
+        padding: 8px 12px;
+
+        a {
+          color: $grey-light;
+
+          .basic-dropdown-indicator {
+            border-color: $grey-light;
+            vertical-align: super;
+          }
+
+          &:hover {
+            color: $grey-darkest;
+
+            .basic-dropdown-indicator {
+              border-color: $grey-darkest;
+            }
+          }
+        }
+
+        svg {
+          fill: $grey-light;
+          height: $size-5;
+          width: auto;
+
+          &:hover {
+            fill: $grey-darkest;
+          }
+        }
+
+        &:first-child {
+          padding-left: 0;
+        }
+      }
+    }
+
+    &__pane-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    &__primary-content {
+      padding: 15px 0 15px 15px;
+      flex: 1 2 600px;
+      min-width: 350px;
+      max-width: 1000px;
+      position: relative;
+
+      &.wide {
+        max-width: inherit;
+      }
+    }
+
+    &__managed-item-list {
+      font-size: $size-5;
+
+      svg.icon {
+        height: 18px;
+        width: auto;
+      }
+
+      .item-status-icon svg.icon {
+        height: 20px;
+        width: auto;
+        vertical-align: middle;
+      }
+
+      .item-entry {
+        &:not(:last-child) {
+          margin-bottom: 0.75rem;
+        }
+
+        .columns {
+          margin: 0;
+
+          .column a {
+            vertical-align: middle;
+          }
+        }
+
+        .column.item-visibility {
+          max-width: 40px;
+
+          svg.icon {
+            height: 24px;
+            width: auto;
+            fill: $green-light;
+            vertical-align: middle;
+
+            &.enabled {
+              fill: $green;
+            }
+          }
+        }
+
+        .column.item-pinned {
+          max-width: 50px;
+
+          svg.icon {
+            height: 18px;
+            width: auto;
+            fill: $grey-lightest;
+            vertical-align: middle;
+            transform: rotate(10deg);
+
+            &.enabled {
+              fill: $blue;
+            }
+          }
+        }
+
+        .column.item-id {
+          max-width: 100px;
+        }
+
+        .column.item-priority {
+          max-width: 100px;
+        }
+
+        .column.controls {
+          color: $grey-light;
+
+          svg {
+            fill: $grey-light;
+
+            &:hover {
+              fill: $grey-darkest;
+            }
+          }
+
+          a, a:link, a:visited, a:active {
+            color: $grey-light;
+          }
+
+          a:hover {
+            color: $grey-darkest;
           }
         }
       }

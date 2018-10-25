@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage,
          FormattedDate } from 'react-intl'
-import AsManager from '../../../../interactions/User/AsManager'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
-import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import messages from './Messages'
 import './ProjectOverview.css'
 
@@ -23,16 +21,16 @@ export default class ProjectOverview extends Component {
   }
 
   render() {
-    const manager = AsManager(this.props.user)
-
     return (
       <div className="project-overview">
         <div className="project-overview__status status-section">
-          <div className="columns">
-            <div className="column project-overview__description">
-              <MarkdownContent markdown={this.props.project.description} />
-            </div>
-          </div>
+          {!this.props.suppressDescription &&
+           <div className="columns">
+             <div className="column project-overview__description">
+               <MarkdownContent markdown={this.props.project.description} />
+             </div>
+           </div>
+          }
 
           <div className="columns">
             <div className="column is-one-quarter status-label">
@@ -59,17 +57,6 @@ export default class ProjectOverview extends Component {
                              day='2-digit' />
             </div>
           </div>
-
-          {manager.canAdministrateProject(this.props.project) &&
-           <div className="project-overview__controls">
-             <ConfirmAction>
-               <div className="button is-outlined is-danger project-overview__controls__delete-project"
-                    onClick={this.deleteProject}>
-                 <FormattedMessage {...messages.deleteProject} />
-               </div>
-             </ConfirmAction>
-           </div>
-          }
         </div>
       </div>
     )
@@ -83,4 +70,6 @@ ProjectOverview.propTypes = {
   managesSingleProject: PropTypes.bool.isRequired,
   /** Invoked if the user wishes to delete the project */
   deleteProject: PropTypes.func.isRequired,
+  /** Set to true to suppress display of project description */
+  suppressDescription: PropTypes.bool,
 }

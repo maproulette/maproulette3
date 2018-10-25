@@ -1,22 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _values from 'lodash/values'
 import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
+import _map from 'lodash/map'
 import { fetchProject,
-         fetchProjectActivity,
-         fetchProjectManagers,
-         addProjectManager,
-         setProjectManagerPermissions,
-         removeProjectManager,
-         saveProject,
-         deleteProject} from '../../../../services/Project/Project'
-import { fetchProjectChallenges,
+         fetchProjectActivity } from '../../../../services/Project/Project'
+import { challengeDenormalizationSchema,
+         fetchProjectChallenges,
          fetchProjectChallengeActions,
-         fetchLatestProjectChallengeActivity }
+         fetchLatestProjectChallengeActivity,
+         fetchProjectChallengeComments }
        from '../../../../services/Challenge/Challenge'
 import AppErrors from '../../../../services/Error/AppErrors'
 import { addError } from '../../../../services/Error/Error'
@@ -32,6 +30,7 @@ import AsManager from '../../../../interactions/User/AsManager'
  * Supported options:
  * - includeChallenges
  * - includeActivity
+ * - includeComments
  * - historicalMonths
  * - defaultToOnlyProject
  * - restrictToGivenProjects
@@ -126,6 +125,10 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
             retrievals.push(props.fetchLatestProjectChallengeActivity(projectId))
           }
 
+          if (options.includeComments) {
+            retrievals.push(props.fetchProjectChallengeComments(projectId))
+          }
+
           Promise.all(retrievals).then(() =>
             this.setState({loadingChallenges: false})
           )
@@ -158,6 +161,10 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       if (options.includeChallenges && _isFinite(projectId)) {
         const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
         challenges = _filter(allChallenges, {parent: projectId})
+
+        challenges = _map(challenges, challenge =>
+          denormalize(challenge, challengeDenormalizationSchema(), this.props.entities)
+        )
       }
 
       return <WrappedComponent {..._omit(this.props, ['entities',
@@ -166,6 +173,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
                                                       'fetchProjectChallenges'])}
                                project={project}
                                challenges={challenges}
+                               activity={options.includeActivity ? _get(project, 'activity') : undefined}
                                routedProjectId={this.routedProjectId(this.props)}
                                loadingProject={this.state.loadingProject}
                                loadingChallenges={this.state.loadingChallenges} />
@@ -181,23 +189,14 @@ const mapDispatchToProps = dispatch => ({
   fetchProject: projectId => dispatch(fetchProject(projectId)),
   fetchProjectActivity: (projectId, startDate) =>
     dispatch(fetchProjectActivity(projectId, startDate)),
-  saveProject: projectData => dispatch(saveProject(projectData)),
   fetchProjectChallenges: projectId =>
     dispatch(fetchProjectChallenges(projectId, -1)),
   fetchLatestProjectChallengeActivity: projectId =>
     dispatch(fetchLatestProjectChallengeActivity(projectId)),
   fetchProjectChallengeActions: projectId =>
     dispatch(fetchProjectChallengeActions(projectId)),
-  fetchProjectManagers: projectId =>
-    dispatch(fetchProjectManagers(projectId)),
-  addProjectManager: (projectId, username, groupType) =>
-    dispatch(addProjectManager(projectId, username, groupType)),
-  setProjectManagerGroupType: (projectId, osmUserId, groupType) =>
-    dispatch(setProjectManagerPermissions(projectId, osmUserId, groupType)),
-  removeProjectManager: (projectId, osmUserId) =>
-    dispatch(removeProjectManager(projectId, osmUserId)),
-  deleteProject: (projectId, immediate=false) =>
-    dispatch(deleteProject(projectId, immediate)),
+  fetchProjectChallengeComments: projectId =>
+    dispatch(fetchProjectChallengeComments(projectId)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),
 })
 

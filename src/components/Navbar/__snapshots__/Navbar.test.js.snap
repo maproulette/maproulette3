@@ -1455,7 +1455,7 @@ ShallowWrapper {
 }
 `;
 
-exports[`includes an admin link if user is logged in 1`] = `
+exports[`includes a link to user profile page if user is logged in 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],

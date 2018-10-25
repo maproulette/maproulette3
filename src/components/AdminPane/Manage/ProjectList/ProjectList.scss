@@ -2,7 +2,31 @@
 
 .admin__manage__managed-item-list.project-list {
   font-size: $size-5;
-  margin: 30px 20px 0 20px;
+  margin: 0px 20px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+
+  &.compact-view {
+    flex-direction: column;
+    flex-wrap: no-wrap;
+  }
+
+  .project-list__favorites {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .project-list__heading {
+    color: $green;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid $grey-lightest-less;
+
+    h2 {
+      font-weight: $weight-semibold;
+    }
+  }
 
   .columns {
     margin-left: 0;
@@ -28,67 +52,6 @@
 
     &__project-name {
       color: $primary
-    }
-
-    &.is-active {
-      background-color: $white;
-      font-weight: $weight-semibold;
-      margin-bottom: 0;
-      border-radius: $radius-medium $radius-medium 0 0;
-    }
-
-    .collapsible-icon {
-      .icon {
-        border-color: $grey-light;
-        border-bottom-width: 2px;
-        border-left-width: 2px;
-        margin-right: 10px;
-        margin-left: 10px;
-      }
-    }
-  }
-
-  .project-list__project-content {
-    background-color: $white;
-    border-radius: 0px 0px $radius-medium $radius-medium;
-    margin-bottom: 35px;
-    
-    .tabs ul li {
-      a {
-        padding-bottom: 3px;
-      }
-
-      &.is-active a {
-        padding-bottom: 3px;
-      }
-    }
-
-    .tab-content {
-      padding: 0 20px 20px 20px;
-    }
-  }
-
-  .project-list__project-challenge-preview {
-    margin-left: 10px;
-    background-color: $grey-lightest;
-    padding: 1px 10px;
-    border-radius: $radius-medium;
-    margin-bottom: 32px;
-
-    &__header {
-      font-size: $size-7;
-      color: $grey;
-      text-transform: uppercase;
-      margin: 10px;
-      font-weight: 300;
-    }
-
-    .challenge-list {
-      font-size: $size-6;
-
-      .item-entry:last-child > .challenge-list-item {
-        border-bottom: none;
-      }
     }
   }
 }

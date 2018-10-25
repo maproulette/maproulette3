@@ -32,7 +32,8 @@ export default class QuickTextBox extends Component {
       <div className={classNames('quick-text-box', this.props.className)}>
         <div className='control-wrapper'>
           <input type="text"
-                  className="input is-medium quick-text-box__input"
+                 className={classNames("input quick-text-box__input",
+                                       this.props.small ? "is-small" : "is-medium")}
                   placeholder={this.props.placeholder}
                   maxLength="50"
                   onChange={(e) => this.props.setText(e.target.value)}
@@ -40,12 +41,14 @@ export default class QuickTextBox extends Component {
                   value={this.props.text} />
         </div>
 
-        <button className="button has-svg-icon quick-text-box__done-button"
+        <button className={classNames("button has-svg-icon quick-text-box__done-button",
+                                      this.props.small ? "is-small" : "is-medium")}
                 onClick={this.props.done}>
           <SvgSymbol viewBox='0 0 20 20' sym="check-icon"/>
         </button>
 
-        <button className="button has-svg-icon quick-text-box__cancel-button"
+        <button className={classNames("button has-svg-icon quick-text-box__cancel-button",
+                                      this.props.small ? "is-small" : "is-medium")}
                 onClick={this.props.cancel}>
           <SvgSymbol viewBox='0 0 20 20' sym="cancel-icon"/>
         </button>
@@ -65,4 +68,10 @@ QuickTextBox.propTypes = {
   cancel: PropTypes.func.isRequired,
   /** Placeholder text */
   placeHolder: PropTypes.string,
+  /** Set to true for smaller size */
+  small: PropTypes.bool,
+}
+
+QuickTextBox.defaultProps = {
+  small: false,
 }

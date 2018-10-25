@@ -195,6 +195,22 @@ $tablet: 40px;
     height: 20px;
     width: auto;
     transition: fill 0.3s;
+
+    &.is-primary {
+      fill: $primary;
+    }
+
+    &.is-danger {
+      fill: $danger;
+    }
+  }
+
+  &.is-active .control-icon svg {
+    fill: $black;
+  }
+
+  &.is-small .control-icon svg {
+    height: 15px;
   }
 
   .control-label {
@@ -243,7 +259,7 @@ $tablet: 40px;
 }
 
 .button.is-danger {
-  @include invert-on-hover($coral, $white);
+  @include invert-on-hover($danger, $white);
 }
 
 .button.is-primary.is-loading {
@@ -261,6 +277,10 @@ $tablet: 40px;
       margin-right: 0;
     }
   }
+}
+
+a.is-danger {
+  color: $danger;
 }
 
 .full-width {
@@ -288,6 +308,12 @@ img.is-circular {
 
 .animate-slide-exit.animate-slide-exit-active {
   transform: translate(-100%, 0);
+}
+
+.clickable {
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 @import '../node_modules/bulma/bulma.sass';

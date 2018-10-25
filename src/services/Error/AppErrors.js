@@ -64,6 +64,10 @@ export default {
     renderFailure: messages.mapRenderFailure,
   },
 
+  dashboard: {
+    renderFailure: messages.dashboardRenderFailure,
+  },
+
   josm: {
     noResponse: messages.josmNoResponse,
   },

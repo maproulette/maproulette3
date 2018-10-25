@@ -12,7 +12,11 @@
 
   button.button {
     height: 45px;
-    margin-right: 5px;
+    margin-left: 5px;
+
+    &.is-small {
+      height: 32px;
+    }
   }
 
   &__done-button.button {

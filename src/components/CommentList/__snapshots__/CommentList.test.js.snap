@@ -106,12 +106,12 @@ ShallowWrapper {
                     className="comment-list__comment__header"
           >
                     <div
-                              className="comment-list__comment--author"
+                              className="comment-list__comment__author"
                     >
                               joe
                     </div>
                     <div
-                              className="comment-list__comment--published-at"
+                              className="comment-list__comment__published-at"
                     >
                               <span
                                         className="time-part"
@@ -139,8 +139,15 @@ ShallowWrapper {
                     className="with-triangle-border"
           >
                     <MarkdownContent
-                              className="comment-list__comment--content"
+                              className="comment-list__comment__content"
                               markdown="Joe's comment"
+                    />
+          </div>
+          <div
+                    className="comment-list__comment__meta"
+          >
+                    <div
+                              className="comment-list__comment__challenge-name"
                     />
           </div>
 </li>,
@@ -151,12 +158,12 @@ ShallowWrapper {
                     className="comment-list__comment__header"
           >
                     <div
-                              className="comment-list__comment--author"
+                              className="comment-list__comment__author"
                     >
                               sarah
                     </div>
                     <div
-                              className="comment-list__comment--published-at"
+                              className="comment-list__comment__published-at"
                     >
                               <span
                                         className="time-part"
@@ -184,8 +191,15 @@ ShallowWrapper {
                     className="with-triangle-border"
           >
                     <MarkdownContent
-                              className="comment-list__comment--content"
+                              className="comment-list__comment__content"
                               markdown="Sarah's comment"
+                    />
+          </div>
+          <div
+                    className="comment-list__comment__meta"
+          >
+                    <div
+                              className="comment-list__comment__challenge-name"
                     />
           </div>
 </li>,
@@ -196,12 +210,12 @@ ShallowWrapper {
                     className="comment-list__comment__header"
           >
                     <div
-                              className="comment-list__comment--author"
+                              className="comment-list__comment__author"
                     >
                               bob
                     </div>
                     <div
-                              className="comment-list__comment--published-at"
+                              className="comment-list__comment__published-at"
                     >
                               <span
                                         className="time-part"
@@ -229,8 +243,15 @@ ShallowWrapper {
                     className="with-triangle-border"
           >
                     <MarkdownContent
-                              className="comment-list__comment--content"
+                              className="comment-list__comment__content"
                               markdown="Bob's comment"
+                    />
+          </div>
+          <div
+                    className="comment-list__comment__meta"
+          >
+                    <div
+                              className="comment-list__comment__challenge-name"
                     />
           </div>
 </li>,
@@ -249,12 +270,12 @@ ShallowWrapper {
               className="comment-list__comment__header"
 >
               <div
-                            className="comment-list__comment--author"
+                            className="comment-list__comment__author"
               >
                             joe
               </div>
               <div
-                            className="comment-list__comment--published-at"
+                            className="comment-list__comment__published-at"
               >
                             <span
                                           className="time-part"
@@ -282,11 +303,17 @@ ShallowWrapper {
               className="with-triangle-border"
 >
               <MarkdownContent
-                            className="comment-list__comment--content"
+                            className="comment-list__comment__content"
                             markdown="Joe's comment"
               />
 </div>,
-            false,
+            <div
+              className="comment-list__comment__meta"
+>
+              <div
+                            className="comment-list__comment__challenge-name"
+              />
+</div>,
           ],
           "className": "comment-list__comment",
         },
@@ -299,12 +326,12 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="comment-list__comment--author"
+                  className="comment-list__comment__author"
 >
                   joe
 </div>,
                 <div
-                  className="comment-list__comment--published-at"
+                  className="comment-list__comment__published-at"
 >
                   <span
                                     className="time-part"
@@ -338,7 +365,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": "joe",
-                  "className": "comment-list__comment--author",
+                  "className": "comment-list__comment__author",
                 },
                 "ref": null,
                 "rendered": "joe",
@@ -371,7 +398,7 @@ ShallowWrapper {
                       />
 </span>,
                   ],
-                  "className": "comment-list__comment--published-at",
+                  "className": "comment-list__comment__published-at",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -451,7 +478,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                className="comment-list__comment--content"
+                className="comment-list__comment__content"
                 markdown="Joe's comment"
 />,
               "className": "with-triangle-border",
@@ -462,7 +489,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "className": "comment-list__comment--content",
+                "className": "comment-list__comment__content",
                 "markdown": "Joe's comment",
               },
               "ref": null,
@@ -471,7 +498,37 @@ ShallowWrapper {
             },
             "type": "div",
           },
-          false,
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="comment-list__comment__challenge-name"
+/>,
+                false,
+              ],
+              "className": "comment-list__comment__meta",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": undefined,
+                  "className": "comment-list__comment__challenge-name",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "div",
+              },
+              false,
+            ],
+            "type": "div",
+          },
         ],
         "type": "li",
       },
@@ -485,12 +542,12 @@ ShallowWrapper {
               className="comment-list__comment__header"
 >
               <div
-                            className="comment-list__comment--author"
+                            className="comment-list__comment__author"
               >
                             sarah
               </div>
               <div
-                            className="comment-list__comment--published-at"
+                            className="comment-list__comment__published-at"
               >
                             <span
                                           className="time-part"
@@ -518,11 +575,17 @@ ShallowWrapper {
               className="with-triangle-border"
 >
               <MarkdownContent
-                            className="comment-list__comment--content"
+                            className="comment-list__comment__content"
                             markdown="Sarah's comment"
               />
 </div>,
-            false,
+            <div
+              className="comment-list__comment__meta"
+>
+              <div
+                            className="comment-list__comment__challenge-name"
+              />
+</div>,
           ],
           "className": "comment-list__comment",
         },
@@ -535,12 +598,12 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="comment-list__comment--author"
+                  className="comment-list__comment__author"
 >
                   sarah
 </div>,
                 <div
-                  className="comment-list__comment--published-at"
+                  className="comment-list__comment__published-at"
 >
                   <span
                                     className="time-part"
@@ -574,7 +637,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": "sarah",
-                  "className": "comment-list__comment--author",
+                  "className": "comment-list__comment__author",
                 },
                 "ref": null,
                 "rendered": "sarah",
@@ -607,7 +670,7 @@ ShallowWrapper {
                       />
 </span>,
                   ],
-                  "className": "comment-list__comment--published-at",
+                  "className": "comment-list__comment__published-at",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -687,7 +750,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                className="comment-list__comment--content"
+                className="comment-list__comment__content"
                 markdown="Sarah's comment"
 />,
               "className": "with-triangle-border",
@@ -698,7 +761,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "className": "comment-list__comment--content",
+                "className": "comment-list__comment__content",
                 "markdown": "Sarah's comment",
               },
               "ref": null,
@@ -707,7 +770,37 @@ ShallowWrapper {
             },
             "type": "div",
           },
-          false,
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="comment-list__comment__challenge-name"
+/>,
+                false,
+              ],
+              "className": "comment-list__comment__meta",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": undefined,
+                  "className": "comment-list__comment__challenge-name",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "div",
+              },
+              false,
+            ],
+            "type": "div",
+          },
         ],
         "type": "li",
       },
@@ -721,12 +814,12 @@ ShallowWrapper {
               className="comment-list__comment__header"
 >
               <div
-                            className="comment-list__comment--author"
+                            className="comment-list__comment__author"
               >
                             bob
               </div>
               <div
-                            className="comment-list__comment--published-at"
+                            className="comment-list__comment__published-at"
               >
                             <span
                                           className="time-part"
@@ -754,11 +847,17 @@ ShallowWrapper {
               className="with-triangle-border"
 >
               <MarkdownContent
-                            className="comment-list__comment--content"
+                            className="comment-list__comment__content"
                             markdown="Bob's comment"
               />
 </div>,
-            false,
+            <div
+              className="comment-list__comment__meta"
+>
+              <div
+                            className="comment-list__comment__challenge-name"
+              />
+</div>,
           ],
           "className": "comment-list__comment",
         },
@@ -771,12 +870,12 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="comment-list__comment--author"
+                  className="comment-list__comment__author"
 >
                   bob
 </div>,
                 <div
-                  className="comment-list__comment--published-at"
+                  className="comment-list__comment__published-at"
 >
                   <span
                                     className="time-part"
@@ -810,7 +909,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": "bob",
-                  "className": "comment-list__comment--author",
+                  "className": "comment-list__comment__author",
                 },
                 "ref": null,
                 "rendered": "bob",
@@ -843,7 +942,7 @@ ShallowWrapper {
                       />
 </span>,
                   ],
-                  "className": "comment-list__comment--published-at",
+                  "className": "comment-list__comment__published-at",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -923,7 +1022,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                className="comment-list__comment--content"
+                className="comment-list__comment__content"
                 markdown="Bob's comment"
 />,
               "className": "with-triangle-border",
@@ -934,7 +1033,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "className": "comment-list__comment--content",
+                "className": "comment-list__comment__content",
                 "markdown": "Bob's comment",
               },
               "ref": null,
@@ -943,7 +1042,37 @@ ShallowWrapper {
             },
             "type": "div",
           },
-          false,
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="comment-list__comment__challenge-name"
+/>,
+                false,
+              ],
+              "className": "comment-list__comment__meta",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": undefined,
+                  "className": "comment-list__comment__challenge-name",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "div",
+              },
+              false,
+            ],
+            "type": "div",
+          },
         ],
         "type": "li",
       },
@@ -964,12 +1093,12 @@ ShallowWrapper {
                         className="comment-list__comment__header"
             >
                         <div
-                                    className="comment-list__comment--author"
+                                    className="comment-list__comment__author"
                         >
                                     joe
                         </div>
                         <div
-                                    className="comment-list__comment--published-at"
+                                    className="comment-list__comment__published-at"
                         >
                                     <span
                                                 className="time-part"
@@ -997,8 +1126,15 @@ ShallowWrapper {
                         className="with-triangle-border"
             >
                         <MarkdownContent
-                                    className="comment-list__comment--content"
+                                    className="comment-list__comment__content"
                                     markdown="Joe's comment"
+                        />
+            </div>
+            <div
+                        className="comment-list__comment__meta"
+            >
+                        <div
+                                    className="comment-list__comment__challenge-name"
                         />
             </div>
 </li>,
@@ -1009,12 +1145,12 @@ ShallowWrapper {
                         className="comment-list__comment__header"
             >
                         <div
-                                    className="comment-list__comment--author"
+                                    className="comment-list__comment__author"
                         >
                                     sarah
                         </div>
                         <div
-                                    className="comment-list__comment--published-at"
+                                    className="comment-list__comment__published-at"
                         >
                                     <span
                                                 className="time-part"
@@ -1042,8 +1178,15 @@ ShallowWrapper {
                         className="with-triangle-border"
             >
                         <MarkdownContent
-                                    className="comment-list__comment--content"
+                                    className="comment-list__comment__content"
                                     markdown="Sarah's comment"
+                        />
+            </div>
+            <div
+                        className="comment-list__comment__meta"
+            >
+                        <div
+                                    className="comment-list__comment__challenge-name"
                         />
             </div>
 </li>,
@@ -1054,12 +1197,12 @@ ShallowWrapper {
                         className="comment-list__comment__header"
             >
                         <div
-                                    className="comment-list__comment--author"
+                                    className="comment-list__comment__author"
                         >
                                     bob
                         </div>
                         <div
-                                    className="comment-list__comment--published-at"
+                                    className="comment-list__comment__published-at"
                         >
                                     <span
                                                 className="time-part"
@@ -1087,8 +1230,15 @@ ShallowWrapper {
                         className="with-triangle-border"
             >
                         <MarkdownContent
-                                    className="comment-list__comment--content"
+                                    className="comment-list__comment__content"
                                     markdown="Bob's comment"
+                        />
+            </div>
+            <div
+                        className="comment-list__comment__meta"
+            >
+                        <div
+                                    className="comment-list__comment__challenge-name"
                         />
             </div>
 </li>,
@@ -1107,12 +1257,12 @@ ShallowWrapper {
                 className="comment-list__comment__header"
 >
                 <div
-                                className="comment-list__comment--author"
+                                className="comment-list__comment__author"
                 >
                                 joe
                 </div>
                 <div
-                                className="comment-list__comment--published-at"
+                                className="comment-list__comment__published-at"
                 >
                                 <span
                                                 className="time-part"
@@ -1140,11 +1290,17 @@ ShallowWrapper {
                 className="with-triangle-border"
 >
                 <MarkdownContent
-                                className="comment-list__comment--content"
+                                className="comment-list__comment__content"
                                 markdown="Joe's comment"
                 />
 </div>,
-              false,
+              <div
+                className="comment-list__comment__meta"
+>
+                <div
+                                className="comment-list__comment__challenge-name"
+                />
+</div>,
             ],
             "className": "comment-list__comment",
           },
@@ -1157,12 +1313,12 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="comment-list__comment--author"
+                    className="comment-list__comment__author"
 >
                     joe
 </div>,
                   <div
-                    className="comment-list__comment--published-at"
+                    className="comment-list__comment__published-at"
 >
                     <span
                                         className="time-part"
@@ -1196,7 +1352,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "joe",
-                    "className": "comment-list__comment--author",
+                    "className": "comment-list__comment__author",
                   },
                   "ref": null,
                   "rendered": "joe",
@@ -1229,7 +1385,7 @@ ShallowWrapper {
                         />
 </span>,
                     ],
-                    "className": "comment-list__comment--published-at",
+                    "className": "comment-list__comment__published-at",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -1309,7 +1465,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  className="comment-list__comment--content"
+                  className="comment-list__comment__content"
                   markdown="Joe's comment"
 />,
                 "className": "with-triangle-border",
@@ -1320,7 +1476,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "className": "comment-list__comment--content",
+                  "className": "comment-list__comment__content",
                   "markdown": "Joe's comment",
                 },
                 "ref": null,
@@ -1329,7 +1485,37 @@ ShallowWrapper {
               },
               "type": "div",
             },
-            false,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <div
+                    className="comment-list__comment__challenge-name"
+/>,
+                  false,
+                ],
+                "className": "comment-list__comment__meta",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": undefined,
+                    "className": "comment-list__comment__challenge-name",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "div",
+                },
+                false,
+              ],
+              "type": "div",
+            },
           ],
           "type": "li",
         },
@@ -1343,12 +1529,12 @@ ShallowWrapper {
                 className="comment-list__comment__header"
 >
                 <div
-                                className="comment-list__comment--author"
+                                className="comment-list__comment__author"
                 >
                                 sarah
                 </div>
                 <div
-                                className="comment-list__comment--published-at"
+                                className="comment-list__comment__published-at"
                 >
                                 <span
                                                 className="time-part"
@@ -1376,11 +1562,17 @@ ShallowWrapper {
                 className="with-triangle-border"
 >
                 <MarkdownContent
-                                className="comment-list__comment--content"
+                                className="comment-list__comment__content"
                                 markdown="Sarah's comment"
                 />
 </div>,
-              false,
+              <div
+                className="comment-list__comment__meta"
+>
+                <div
+                                className="comment-list__comment__challenge-name"
+                />
+</div>,
             ],
             "className": "comment-list__comment",
           },
@@ -1393,12 +1585,12 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="comment-list__comment--author"
+                    className="comment-list__comment__author"
 >
                     sarah
 </div>,
                   <div
-                    className="comment-list__comment--published-at"
+                    className="comment-list__comment__published-at"
 >
                     <span
                                         className="time-part"
@@ -1432,7 +1624,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "sarah",
-                    "className": "comment-list__comment--author",
+                    "className": "comment-list__comment__author",
                   },
                   "ref": null,
                   "rendered": "sarah",
@@ -1465,7 +1657,7 @@ ShallowWrapper {
                         />
 </span>,
                     ],
-                    "className": "comment-list__comment--published-at",
+                    "className": "comment-list__comment__published-at",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -1545,7 +1737,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  className="comment-list__comment--content"
+                  className="comment-list__comment__content"
                   markdown="Sarah's comment"
 />,
                 "className": "with-triangle-border",
@@ -1556,7 +1748,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "className": "comment-list__comment--content",
+                  "className": "comment-list__comment__content",
                   "markdown": "Sarah's comment",
                 },
                 "ref": null,
@@ -1565,7 +1757,37 @@ ShallowWrapper {
               },
               "type": "div",
             },
-            false,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <div
+                    className="comment-list__comment__challenge-name"
+/>,
+                  false,
+                ],
+                "className": "comment-list__comment__meta",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": undefined,
+                    "className": "comment-list__comment__challenge-name",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "div",
+                },
+                false,
+              ],
+              "type": "div",
+            },
           ],
           "type": "li",
         },
@@ -1579,12 +1801,12 @@ ShallowWrapper {
                 className="comment-list__comment__header"
 >
                 <div
-                                className="comment-list__comment--author"
+                                className="comment-list__comment__author"
                 >
                                 bob
                 </div>
                 <div
-                                className="comment-list__comment--published-at"
+                                className="comment-list__comment__published-at"
                 >
                                 <span
                                                 className="time-part"
@@ -1612,11 +1834,17 @@ ShallowWrapper {
                 className="with-triangle-border"
 >
                 <MarkdownContent
-                                className="comment-list__comment--content"
+                                className="comment-list__comment__content"
                                 markdown="Bob's comment"
                 />
 </div>,
-              false,
+              <div
+                className="comment-list__comment__meta"
+>
+                <div
+                                className="comment-list__comment__challenge-name"
+                />
+</div>,
             ],
             "className": "comment-list__comment",
           },
@@ -1629,12 +1857,12 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="comment-list__comment--author"
+                    className="comment-list__comment__author"
 >
                     bob
 </div>,
                   <div
-                    className="comment-list__comment--published-at"
+                    className="comment-list__comment__published-at"
 >
                     <span
                                         className="time-part"
@@ -1668,7 +1896,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "bob",
-                    "className": "comment-list__comment--author",
+                    "className": "comment-list__comment__author",
                   },
                   "ref": null,
                   "rendered": "bob",
@@ -1701,7 +1929,7 @@ ShallowWrapper {
                         />
 </span>,
                     ],
-                    "className": "comment-list__comment--published-at",
+                    "className": "comment-list__comment__published-at",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -1781,7 +2009,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  className="comment-list__comment--content"
+                  className="comment-list__comment__content"
                   markdown="Bob's comment"
 />,
                 "className": "with-triangle-border",
@@ -1792,7 +2020,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "className": "comment-list__comment--content",
+                  "className": "comment-list__comment__content",
                   "markdown": "Bob's comment",
                 },
                 "ref": null,
@@ -1801,7 +2029,37 @@ ShallowWrapper {
               },
               "type": "div",
             },
-            false,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <div
+                    className="comment-list__comment__challenge-name"
+/>,
+                  false,
+                ],
+                "className": "comment-list__comment__meta",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": undefined,
+                    "className": "comment-list__comment__challenge-name",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "div",
+                },
+                false,
+              ],
+              "type": "div",
+            },
           ],
           "type": "li",
         },
@@ -1874,12 +2132,12 @@ ShallowWrapper {
                     className="comment-list__comment__header"
           >
                     <div
-                              className="comment-list__comment--author"
+                              className="comment-list__comment__author"
                     >
                               joe
                     </div>
                     <div
-                              className="comment-list__comment--published-at"
+                              className="comment-list__comment__published-at"
                     >
                               <span
                                         className="time-part"
@@ -1907,23 +2165,30 @@ ShallowWrapper {
                     className="with-triangle-border"
           >
                     <MarkdownContent
-                              className="comment-list__comment--content"
+                              className="comment-list__comment__content"
                               markdown="Joe's comment"
                     />
           </div>
           <div
-                    className="comment-list__comment--task-link"
+                    className="comment-list__comment__meta"
           >
-                    <Link
-                              replace={false}
-                              to="/challenge/987/task/654"
+                    <div
+                              className="comment-list__comment__challenge-name"
+                    />
+                    <div
+                              className="comment-list__comment__task-link"
                     >
-                              <FormattedMessage
-                                        defaultMessage="View Task"
-                                        id="CommentList.controls.viewTask.label"
-                                        values={Object {}}
-                              />
-                    </Link>
+                              <Link
+                                        replace={false}
+                                        to="/challenge/987/task/654"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="View Task"
+                                                  id="CommentList.controls.viewTask.label"
+                                                  values={Object {}}
+                                        />
+                              </Link>
+                    </div>
           </div>
 </li>,
         <li
@@ -1933,12 +2198,12 @@ ShallowWrapper {
                     className="comment-list__comment__header"
           >
                     <div
-                              className="comment-list__comment--author"
+                              className="comment-list__comment__author"
                     >
                               sarah
                     </div>
                     <div
-                              className="comment-list__comment--published-at"
+                              className="comment-list__comment__published-at"
                     >
                               <span
                                         className="time-part"
@@ -1966,23 +2231,30 @@ ShallowWrapper {
                     className="with-triangle-border"
           >
                     <MarkdownContent
-                              className="comment-list__comment--content"
+                              className="comment-list__comment__content"
                               markdown="Sarah's comment"
                     />
           </div>
           <div
-                    className="comment-list__comment--task-link"
+                    className="comment-list__comment__meta"
           >
-                    <Link
-                              replace={false}
-                              to="/challenge/987/task/654"
+                    <div
+                              className="comment-list__comment__challenge-name"
+                    />
+                    <div
+                              className="comment-list__comment__task-link"
                     >
-                              <FormattedMessage
-                                        defaultMessage="View Task"
-                                        id="CommentList.controls.viewTask.label"
-                                        values={Object {}}
-                              />
-                    </Link>
+                              <Link
+                                        replace={false}
+                                        to="/challenge/987/task/654"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="View Task"
+                                                  id="CommentList.controls.viewTask.label"
+                                                  values={Object {}}
+                                        />
+                              </Link>
+                    </div>
           </div>
 </li>,
         <li
@@ -1992,12 +2264,12 @@ ShallowWrapper {
                     className="comment-list__comment__header"
           >
                     <div
-                              className="comment-list__comment--author"
+                              className="comment-list__comment__author"
                     >
                               bob
                     </div>
                     <div
-                              className="comment-list__comment--published-at"
+                              className="comment-list__comment__published-at"
                     >
                               <span
                                         className="time-part"
@@ -2025,23 +2297,30 @@ ShallowWrapper {
                     className="with-triangle-border"
           >
                     <MarkdownContent
-                              className="comment-list__comment--content"
+                              className="comment-list__comment__content"
                               markdown="Bob's comment"
                     />
           </div>
           <div
-                    className="comment-list__comment--task-link"
+                    className="comment-list__comment__meta"
           >
-                    <Link
-                              replace={false}
-                              to="/challenge/987/task/654"
+                    <div
+                              className="comment-list__comment__challenge-name"
+                    />
+                    <div
+                              className="comment-list__comment__task-link"
                     >
-                              <FormattedMessage
-                                        defaultMessage="View Task"
-                                        id="CommentList.controls.viewTask.label"
-                                        values={Object {}}
-                              />
-                    </Link>
+                              <Link
+                                        replace={false}
+                                        to="/challenge/987/task/654"
+                              >
+                                        <FormattedMessage
+                                                  defaultMessage="View Task"
+                                                  id="CommentList.controls.viewTask.label"
+                                                  values={Object {}}
+                                        />
+                              </Link>
+                    </div>
           </div>
 </li>,
       ],
@@ -2059,12 +2338,12 @@ ShallowWrapper {
               className="comment-list__comment__header"
 >
               <div
-                            className="comment-list__comment--author"
+                            className="comment-list__comment__author"
               >
                             joe
               </div>
               <div
-                            className="comment-list__comment--published-at"
+                            className="comment-list__comment__published-at"
               >
                             <span
                                           className="time-part"
@@ -2092,23 +2371,30 @@ ShallowWrapper {
               className="with-triangle-border"
 >
               <MarkdownContent
-                            className="comment-list__comment--content"
+                            className="comment-list__comment__content"
                             markdown="Joe's comment"
               />
 </div>,
             <div
-              className="comment-list__comment--task-link"
+              className="comment-list__comment__meta"
 >
-              <Link
-                            replace={false}
-                            to="/challenge/987/task/654"
+              <div
+                            className="comment-list__comment__challenge-name"
+              />
+              <div
+                            className="comment-list__comment__task-link"
               >
-                            <FormattedMessage
-                                          defaultMessage="View Task"
-                                          id="CommentList.controls.viewTask.label"
-                                          values={Object {}}
-                            />
-              </Link>
+                            <Link
+                                          replace={false}
+                                          to="/challenge/987/task/654"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="View Task"
+                                                        id="CommentList.controls.viewTask.label"
+                                                        values={Object {}}
+                                          />
+                            </Link>
+              </div>
 </div>,
           ],
           "className": "comment-list__comment",
@@ -2122,12 +2408,12 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="comment-list__comment--author"
+                  className="comment-list__comment__author"
 >
                   joe
 </div>,
                 <div
-                  className="comment-list__comment--published-at"
+                  className="comment-list__comment__published-at"
 >
                   <span
                                     className="time-part"
@@ -2161,7 +2447,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": "joe",
-                  "className": "comment-list__comment--author",
+                  "className": "comment-list__comment__author",
                 },
                 "ref": null,
                 "rendered": "joe",
@@ -2194,7 +2480,7 @@ ShallowWrapper {
                       />
 </span>,
                   ],
-                  "className": "comment-list__comment--published-at",
+                  "className": "comment-list__comment__published-at",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -2274,7 +2560,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                className="comment-list__comment--content"
+                className="comment-list__comment__content"
                 markdown="Joe's comment"
 />,
               "className": "with-triangle-border",
@@ -2285,7 +2571,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "className": "comment-list__comment--content",
+                "className": "comment-list__comment__content",
                 "markdown": "Joe's comment",
               },
               "ref": null,
@@ -2299,48 +2585,91 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <Link
-                replace={false}
-                to="/challenge/987/task/654"
+              "children": Array [
+                <div
+                  className="comment-list__comment__challenge-name"
+/>,
+                <div
+                  className="comment-list__comment__task-link"
 >
-                <FormattedMessage
-                                defaultMessage="View Task"
-                                id="CommentList.controls.viewTask.label"
-                                values={Object {}}
-                />
-</Link>,
-              "className": "comment-list__comment--task-link",
+                  <Link
+                                    replace={false}
+                                    to="/challenge/987/task/654"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Task"
+                                                      id="CommentList.controls.viewTask.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</div>,
+              ],
+              "className": "comment-list__comment__meta",
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "children": <FormattedMessage
-                  defaultMessage="View Task"
-                  id="CommentList.controls.viewTask.label"
-                  values={Object {}}
-/>,
-                "replace": false,
-                "to": "/challenge/987/task/654",
-              },
-              "ref": null,
-              "rendered": Object {
+            "rendered": Array [
+              Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "host",
                 "props": Object {
-                  "defaultMessage": "View Task",
-                  "id": "CommentList.controls.viewTask.label",
-                  "values": Object {},
+                  "children": undefined,
+                  "className": "comment-list__comment__challenge-name",
                 },
                 "ref": null,
                 "rendered": null,
-                "type": [Function],
+                "type": "div",
               },
-              "type": [Function],
-            },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/987/task/654"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Task"
+                                        id="CommentList.controls.viewTask.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "comment-list__comment__task-link",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Task"
+                      id="CommentList.controls.viewTask.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/987/task/654",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Task",
+                      "id": "CommentList.controls.viewTask.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "div",
+              },
+            ],
             "type": "div",
           },
         ],
@@ -2356,12 +2685,12 @@ ShallowWrapper {
               className="comment-list__comment__header"
 >
               <div
-                            className="comment-list__comment--author"
+                            className="comment-list__comment__author"
               >
                             sarah
               </div>
               <div
-                            className="comment-list__comment--published-at"
+                            className="comment-list__comment__published-at"
               >
                             <span
                                           className="time-part"
@@ -2389,23 +2718,30 @@ ShallowWrapper {
               className="with-triangle-border"
 >
               <MarkdownContent
-                            className="comment-list__comment--content"
+                            className="comment-list__comment__content"
                             markdown="Sarah's comment"
               />
 </div>,
             <div
-              className="comment-list__comment--task-link"
+              className="comment-list__comment__meta"
 >
-              <Link
-                            replace={false}
-                            to="/challenge/987/task/654"
+              <div
+                            className="comment-list__comment__challenge-name"
+              />
+              <div
+                            className="comment-list__comment__task-link"
               >
-                            <FormattedMessage
-                                          defaultMessage="View Task"
-                                          id="CommentList.controls.viewTask.label"
-                                          values={Object {}}
-                            />
-              </Link>
+                            <Link
+                                          replace={false}
+                                          to="/challenge/987/task/654"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="View Task"
+                                                        id="CommentList.controls.viewTask.label"
+                                                        values={Object {}}
+                                          />
+                            </Link>
+              </div>
 </div>,
           ],
           "className": "comment-list__comment",
@@ -2419,12 +2755,12 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="comment-list__comment--author"
+                  className="comment-list__comment__author"
 >
                   sarah
 </div>,
                 <div
-                  className="comment-list__comment--published-at"
+                  className="comment-list__comment__published-at"
 >
                   <span
                                     className="time-part"
@@ -2458,7 +2794,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": "sarah",
-                  "className": "comment-list__comment--author",
+                  "className": "comment-list__comment__author",
                 },
                 "ref": null,
                 "rendered": "sarah",
@@ -2491,7 +2827,7 @@ ShallowWrapper {
                       />
 </span>,
                   ],
-                  "className": "comment-list__comment--published-at",
+                  "className": "comment-list__comment__published-at",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -2571,7 +2907,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                className="comment-list__comment--content"
+                className="comment-list__comment__content"
                 markdown="Sarah's comment"
 />,
               "className": "with-triangle-border",
@@ -2582,7 +2918,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "className": "comment-list__comment--content",
+                "className": "comment-list__comment__content",
                 "markdown": "Sarah's comment",
               },
               "ref": null,
@@ -2596,48 +2932,91 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <Link
-                replace={false}
-                to="/challenge/987/task/654"
+              "children": Array [
+                <div
+                  className="comment-list__comment__challenge-name"
+/>,
+                <div
+                  className="comment-list__comment__task-link"
 >
-                <FormattedMessage
-                                defaultMessage="View Task"
-                                id="CommentList.controls.viewTask.label"
-                                values={Object {}}
-                />
-</Link>,
-              "className": "comment-list__comment--task-link",
+                  <Link
+                                    replace={false}
+                                    to="/challenge/987/task/654"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Task"
+                                                      id="CommentList.controls.viewTask.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</div>,
+              ],
+              "className": "comment-list__comment__meta",
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "children": <FormattedMessage
-                  defaultMessage="View Task"
-                  id="CommentList.controls.viewTask.label"
-                  values={Object {}}
-/>,
-                "replace": false,
-                "to": "/challenge/987/task/654",
-              },
-              "ref": null,
-              "rendered": Object {
+            "rendered": Array [
+              Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "host",
                 "props": Object {
-                  "defaultMessage": "View Task",
-                  "id": "CommentList.controls.viewTask.label",
-                  "values": Object {},
+                  "children": undefined,
+                  "className": "comment-list__comment__challenge-name",
                 },
                 "ref": null,
                 "rendered": null,
-                "type": [Function],
+                "type": "div",
               },
-              "type": [Function],
-            },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/987/task/654"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Task"
+                                        id="CommentList.controls.viewTask.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "comment-list__comment__task-link",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Task"
+                      id="CommentList.controls.viewTask.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/987/task/654",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Task",
+                      "id": "CommentList.controls.viewTask.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "div",
+              },
+            ],
             "type": "div",
           },
         ],
@@ -2653,12 +3032,12 @@ ShallowWrapper {
               className="comment-list__comment__header"
 >
               <div
-                            className="comment-list__comment--author"
+                            className="comment-list__comment__author"
               >
                             bob
               </div>
               <div
-                            className="comment-list__comment--published-at"
+                            className="comment-list__comment__published-at"
               >
                             <span
                                           className="time-part"
@@ -2686,23 +3065,30 @@ ShallowWrapper {
               className="with-triangle-border"
 >
               <MarkdownContent
-                            className="comment-list__comment--content"
+                            className="comment-list__comment__content"
                             markdown="Bob's comment"
               />
 </div>,
             <div
-              className="comment-list__comment--task-link"
+              className="comment-list__comment__meta"
 >
-              <Link
-                            replace={false}
-                            to="/challenge/987/task/654"
+              <div
+                            className="comment-list__comment__challenge-name"
+              />
+              <div
+                            className="comment-list__comment__task-link"
               >
-                            <FormattedMessage
-                                          defaultMessage="View Task"
-                                          id="CommentList.controls.viewTask.label"
-                                          values={Object {}}
-                            />
-              </Link>
+                            <Link
+                                          replace={false}
+                                          to="/challenge/987/task/654"
+                            >
+                                          <FormattedMessage
+                                                        defaultMessage="View Task"
+                                                        id="CommentList.controls.viewTask.label"
+                                                        values={Object {}}
+                                          />
+                            </Link>
+              </div>
 </div>,
           ],
           "className": "comment-list__comment",
@@ -2716,12 +3102,12 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="comment-list__comment--author"
+                  className="comment-list__comment__author"
 >
                   bob
 </div>,
                 <div
-                  className="comment-list__comment--published-at"
+                  className="comment-list__comment__published-at"
 >
                   <span
                                     className="time-part"
@@ -2755,7 +3141,7 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": "bob",
-                  "className": "comment-list__comment--author",
+                  "className": "comment-list__comment__author",
                 },
                 "ref": null,
                 "rendered": "bob",
@@ -2788,7 +3174,7 @@ ShallowWrapper {
                       />
 </span>,
                   ],
-                  "className": "comment-list__comment--published-at",
+                  "className": "comment-list__comment__published-at",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -2868,7 +3254,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": <MarkdownContent
-                className="comment-list__comment--content"
+                className="comment-list__comment__content"
                 markdown="Bob's comment"
 />,
               "className": "with-triangle-border",
@@ -2879,7 +3265,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "className": "comment-list__comment--content",
+                "className": "comment-list__comment__content",
                 "markdown": "Bob's comment",
               },
               "ref": null,
@@ -2893,48 +3279,91 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <Link
-                replace={false}
-                to="/challenge/987/task/654"
+              "children": Array [
+                <div
+                  className="comment-list__comment__challenge-name"
+/>,
+                <div
+                  className="comment-list__comment__task-link"
 >
-                <FormattedMessage
-                                defaultMessage="View Task"
-                                id="CommentList.controls.viewTask.label"
-                                values={Object {}}
-                />
-</Link>,
-              "className": "comment-list__comment--task-link",
+                  <Link
+                                    replace={false}
+                                    to="/challenge/987/task/654"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Task"
+                                                      id="CommentList.controls.viewTask.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</div>,
+              ],
+              "className": "comment-list__comment__meta",
             },
             "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "children": <FormattedMessage
-                  defaultMessage="View Task"
-                  id="CommentList.controls.viewTask.label"
-                  values={Object {}}
-/>,
-                "replace": false,
-                "to": "/challenge/987/task/654",
-              },
-              "ref": null,
-              "rendered": Object {
+            "rendered": Array [
+              Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "class",
+                "nodeType": "host",
                 "props": Object {
-                  "defaultMessage": "View Task",
-                  "id": "CommentList.controls.viewTask.label",
-                  "values": Object {},
+                  "children": undefined,
+                  "className": "comment-list__comment__challenge-name",
                 },
                 "ref": null,
                 "rendered": null,
-                "type": [Function],
+                "type": "div",
               },
-              "type": [Function],
-            },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/987/task/654"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Task"
+                                        id="CommentList.controls.viewTask.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "comment-list__comment__task-link",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Task"
+                      id="CommentList.controls.viewTask.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/987/task/654",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Task",
+                      "id": "CommentList.controls.viewTask.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "div",
+              },
+            ],
             "type": "div",
           },
         ],
@@ -2957,12 +3386,12 @@ ShallowWrapper {
                         className="comment-list__comment__header"
             >
                         <div
-                                    className="comment-list__comment--author"
+                                    className="comment-list__comment__author"
                         >
                                     joe
                         </div>
                         <div
-                                    className="comment-list__comment--published-at"
+                                    className="comment-list__comment__published-at"
                         >
                                     <span
                                                 className="time-part"
@@ -2990,23 +3419,30 @@ ShallowWrapper {
                         className="with-triangle-border"
             >
                         <MarkdownContent
-                                    className="comment-list__comment--content"
+                                    className="comment-list__comment__content"
                                     markdown="Joe's comment"
                         />
             </div>
             <div
-                        className="comment-list__comment--task-link"
+                        className="comment-list__comment__meta"
             >
-                        <Link
-                                    replace={false}
-                                    to="/challenge/987/task/654"
+                        <div
+                                    className="comment-list__comment__challenge-name"
+                        />
+                        <div
+                                    className="comment-list__comment__task-link"
                         >
-                                    <FormattedMessage
-                                                defaultMessage="View Task"
-                                                id="CommentList.controls.viewTask.label"
-                                                values={Object {}}
-                                    />
-                        </Link>
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/987/task/654"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Task"
+                                                            id="CommentList.controls.viewTask.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </div>
             </div>
 </li>,
           <li
@@ -3016,12 +3452,12 @@ ShallowWrapper {
                         className="comment-list__comment__header"
             >
                         <div
-                                    className="comment-list__comment--author"
+                                    className="comment-list__comment__author"
                         >
                                     sarah
                         </div>
                         <div
-                                    className="comment-list__comment--published-at"
+                                    className="comment-list__comment__published-at"
                         >
                                     <span
                                                 className="time-part"
@@ -3049,23 +3485,30 @@ ShallowWrapper {
                         className="with-triangle-border"
             >
                         <MarkdownContent
-                                    className="comment-list__comment--content"
+                                    className="comment-list__comment__content"
                                     markdown="Sarah's comment"
                         />
             </div>
             <div
-                        className="comment-list__comment--task-link"
+                        className="comment-list__comment__meta"
             >
-                        <Link
-                                    replace={false}
-                                    to="/challenge/987/task/654"
+                        <div
+                                    className="comment-list__comment__challenge-name"
+                        />
+                        <div
+                                    className="comment-list__comment__task-link"
                         >
-                                    <FormattedMessage
-                                                defaultMessage="View Task"
-                                                id="CommentList.controls.viewTask.label"
-                                                values={Object {}}
-                                    />
-                        </Link>
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/987/task/654"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Task"
+                                                            id="CommentList.controls.viewTask.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </div>
             </div>
 </li>,
           <li
@@ -3075,12 +3518,12 @@ ShallowWrapper {
                         className="comment-list__comment__header"
             >
                         <div
-                                    className="comment-list__comment--author"
+                                    className="comment-list__comment__author"
                         >
                                     bob
                         </div>
                         <div
-                                    className="comment-list__comment--published-at"
+                                    className="comment-list__comment__published-at"
                         >
                                     <span
                                                 className="time-part"
@@ -3108,23 +3551,30 @@ ShallowWrapper {
                         className="with-triangle-border"
             >
                         <MarkdownContent
-                                    className="comment-list__comment--content"
+                                    className="comment-list__comment__content"
                                     markdown="Bob's comment"
                         />
             </div>
             <div
-                        className="comment-list__comment--task-link"
+                        className="comment-list__comment__meta"
             >
-                        <Link
-                                    replace={false}
-                                    to="/challenge/987/task/654"
+                        <div
+                                    className="comment-list__comment__challenge-name"
+                        />
+                        <div
+                                    className="comment-list__comment__task-link"
                         >
-                                    <FormattedMessage
-                                                defaultMessage="View Task"
-                                                id="CommentList.controls.viewTask.label"
-                                                values={Object {}}
-                                    />
-                        </Link>
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/987/task/654"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Task"
+                                                            id="CommentList.controls.viewTask.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </div>
             </div>
 </li>,
         ],
@@ -3142,12 +3592,12 @@ ShallowWrapper {
                 className="comment-list__comment__header"
 >
                 <div
-                                className="comment-list__comment--author"
+                                className="comment-list__comment__author"
                 >
                                 joe
                 </div>
                 <div
-                                className="comment-list__comment--published-at"
+                                className="comment-list__comment__published-at"
                 >
                                 <span
                                                 className="time-part"
@@ -3175,23 +3625,30 @@ ShallowWrapper {
                 className="with-triangle-border"
 >
                 <MarkdownContent
-                                className="comment-list__comment--content"
+                                className="comment-list__comment__content"
                                 markdown="Joe's comment"
                 />
 </div>,
               <div
-                className="comment-list__comment--task-link"
+                className="comment-list__comment__meta"
 >
-                <Link
-                                replace={false}
-                                to="/challenge/987/task/654"
+                <div
+                                className="comment-list__comment__challenge-name"
+                />
+                <div
+                                className="comment-list__comment__task-link"
                 >
-                                <FormattedMessage
-                                                defaultMessage="View Task"
-                                                id="CommentList.controls.viewTask.label"
-                                                values={Object {}}
-                                />
-                </Link>
+                                <Link
+                                                replace={false}
+                                                to="/challenge/987/task/654"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Task"
+                                                                id="CommentList.controls.viewTask.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </div>
 </div>,
             ],
             "className": "comment-list__comment",
@@ -3205,12 +3662,12 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="comment-list__comment--author"
+                    className="comment-list__comment__author"
 >
                     joe
 </div>,
                   <div
-                    className="comment-list__comment--published-at"
+                    className="comment-list__comment__published-at"
 >
                     <span
                                         className="time-part"
@@ -3244,7 +3701,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "joe",
-                    "className": "comment-list__comment--author",
+                    "className": "comment-list__comment__author",
                   },
                   "ref": null,
                   "rendered": "joe",
@@ -3277,7 +3734,7 @@ ShallowWrapper {
                         />
 </span>,
                     ],
-                    "className": "comment-list__comment--published-at",
+                    "className": "comment-list__comment__published-at",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -3357,7 +3814,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  className="comment-list__comment--content"
+                  className="comment-list__comment__content"
                   markdown="Joe's comment"
 />,
                 "className": "with-triangle-border",
@@ -3368,7 +3825,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "className": "comment-list__comment--content",
+                  "className": "comment-list__comment__content",
                   "markdown": "Joe's comment",
                 },
                 "ref": null,
@@ -3382,48 +3839,91 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <Link
-                  replace={false}
-                  to="/challenge/987/task/654"
+                "children": Array [
+                  <div
+                    className="comment-list__comment__challenge-name"
+/>,
+                  <div
+                    className="comment-list__comment__task-link"
 >
-                  <FormattedMessage
-                                    defaultMessage="View Task"
-                                    id="CommentList.controls.viewTask.label"
-                                    values={Object {}}
-                  />
-</Link>,
-                "className": "comment-list__comment--task-link",
+                    <Link
+                                        replace={false}
+                                        to="/challenge/987/task/654"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Task"
+                                                            id="CommentList.controls.viewTask.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</div>,
+                ],
+                "className": "comment-list__comment__meta",
               },
               "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <FormattedMessage
-                    defaultMessage="View Task"
-                    id="CommentList.controls.viewTask.label"
-                    values={Object {}}
-/>,
-                  "replace": false,
-                  "to": "/challenge/987/task/654",
-                },
-                "ref": null,
-                "rendered": Object {
+              "rendered": Array [
+                Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "host",
                   "props": Object {
-                    "defaultMessage": "View Task",
-                    "id": "CommentList.controls.viewTask.label",
-                    "values": Object {},
+                    "children": undefined,
+                    "className": "comment-list__comment__challenge-name",
                   },
                   "ref": null,
                   "rendered": null,
-                  "type": [Function],
+                  "type": "div",
                 },
-                "type": [Function],
-              },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/987/task/654"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Task"
+                                            id="CommentList.controls.viewTask.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "comment-list__comment__task-link",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Task"
+                        id="CommentList.controls.viewTask.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/987/task/654",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Task",
+                        "id": "CommentList.controls.viewTask.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "div",
+                },
+              ],
               "type": "div",
             },
           ],
@@ -3439,12 +3939,12 @@ ShallowWrapper {
                 className="comment-list__comment__header"
 >
                 <div
-                                className="comment-list__comment--author"
+                                className="comment-list__comment__author"
                 >
                                 sarah
                 </div>
                 <div
-                                className="comment-list__comment--published-at"
+                                className="comment-list__comment__published-at"
                 >
                                 <span
                                                 className="time-part"
@@ -3472,23 +3972,30 @@ ShallowWrapper {
                 className="with-triangle-border"
 >
                 <MarkdownContent
-                                className="comment-list__comment--content"
+                                className="comment-list__comment__content"
                                 markdown="Sarah's comment"
                 />
 </div>,
               <div
-                className="comment-list__comment--task-link"
+                className="comment-list__comment__meta"
 >
-                <Link
-                                replace={false}
-                                to="/challenge/987/task/654"
+                <div
+                                className="comment-list__comment__challenge-name"
+                />
+                <div
+                                className="comment-list__comment__task-link"
                 >
-                                <FormattedMessage
-                                                defaultMessage="View Task"
-                                                id="CommentList.controls.viewTask.label"
-                                                values={Object {}}
-                                />
-                </Link>
+                                <Link
+                                                replace={false}
+                                                to="/challenge/987/task/654"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Task"
+                                                                id="CommentList.controls.viewTask.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </div>
 </div>,
             ],
             "className": "comment-list__comment",
@@ -3502,12 +4009,12 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="comment-list__comment--author"
+                    className="comment-list__comment__author"
 >
                     sarah
 </div>,
                   <div
-                    className="comment-list__comment--published-at"
+                    className="comment-list__comment__published-at"
 >
                     <span
                                         className="time-part"
@@ -3541,7 +4048,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "sarah",
-                    "className": "comment-list__comment--author",
+                    "className": "comment-list__comment__author",
                   },
                   "ref": null,
                   "rendered": "sarah",
@@ -3574,7 +4081,7 @@ ShallowWrapper {
                         />
 </span>,
                     ],
-                    "className": "comment-list__comment--published-at",
+                    "className": "comment-list__comment__published-at",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -3654,7 +4161,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  className="comment-list__comment--content"
+                  className="comment-list__comment__content"
                   markdown="Sarah's comment"
 />,
                 "className": "with-triangle-border",
@@ -3665,7 +4172,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "className": "comment-list__comment--content",
+                  "className": "comment-list__comment__content",
                   "markdown": "Sarah's comment",
                 },
                 "ref": null,
@@ -3679,48 +4186,91 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <Link
-                  replace={false}
-                  to="/challenge/987/task/654"
+                "children": Array [
+                  <div
+                    className="comment-list__comment__challenge-name"
+/>,
+                  <div
+                    className="comment-list__comment__task-link"
 >
-                  <FormattedMessage
-                                    defaultMessage="View Task"
-                                    id="CommentList.controls.viewTask.label"
-                                    values={Object {}}
-                  />
-</Link>,
-                "className": "comment-list__comment--task-link",
+                    <Link
+                                        replace={false}
+                                        to="/challenge/987/task/654"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Task"
+                                                            id="CommentList.controls.viewTask.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</div>,
+                ],
+                "className": "comment-list__comment__meta",
               },
               "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <FormattedMessage
-                    defaultMessage="View Task"
-                    id="CommentList.controls.viewTask.label"
-                    values={Object {}}
-/>,
-                  "replace": false,
-                  "to": "/challenge/987/task/654",
-                },
-                "ref": null,
-                "rendered": Object {
+              "rendered": Array [
+                Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "host",
                   "props": Object {
-                    "defaultMessage": "View Task",
-                    "id": "CommentList.controls.viewTask.label",
-                    "values": Object {},
+                    "children": undefined,
+                    "className": "comment-list__comment__challenge-name",
                   },
                   "ref": null,
                   "rendered": null,
-                  "type": [Function],
+                  "type": "div",
                 },
-                "type": [Function],
-              },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/987/task/654"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Task"
+                                            id="CommentList.controls.viewTask.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "comment-list__comment__task-link",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Task"
+                        id="CommentList.controls.viewTask.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/987/task/654",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Task",
+                        "id": "CommentList.controls.viewTask.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "div",
+                },
+              ],
               "type": "div",
             },
           ],
@@ -3736,12 +4286,12 @@ ShallowWrapper {
                 className="comment-list__comment__header"
 >
                 <div
-                                className="comment-list__comment--author"
+                                className="comment-list__comment__author"
                 >
                                 bob
                 </div>
                 <div
-                                className="comment-list__comment--published-at"
+                                className="comment-list__comment__published-at"
                 >
                                 <span
                                                 className="time-part"
@@ -3769,23 +4319,30 @@ ShallowWrapper {
                 className="with-triangle-border"
 >
                 <MarkdownContent
-                                className="comment-list__comment--content"
+                                className="comment-list__comment__content"
                                 markdown="Bob's comment"
                 />
 </div>,
               <div
-                className="comment-list__comment--task-link"
+                className="comment-list__comment__meta"
 >
-                <Link
-                                replace={false}
-                                to="/challenge/987/task/654"
+                <div
+                                className="comment-list__comment__challenge-name"
+                />
+                <div
+                                className="comment-list__comment__task-link"
                 >
-                                <FormattedMessage
-                                                defaultMessage="View Task"
-                                                id="CommentList.controls.viewTask.label"
-                                                values={Object {}}
-                                />
-                </Link>
+                                <Link
+                                                replace={false}
+                                                to="/challenge/987/task/654"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Task"
+                                                                id="CommentList.controls.viewTask.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </div>
 </div>,
             ],
             "className": "comment-list__comment",
@@ -3799,12 +4356,12 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="comment-list__comment--author"
+                    className="comment-list__comment__author"
 >
                     bob
 </div>,
                   <div
-                    className="comment-list__comment--published-at"
+                    className="comment-list__comment__published-at"
 >
                     <span
                                         className="time-part"
@@ -3838,7 +4395,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": "bob",
-                    "className": "comment-list__comment--author",
+                    "className": "comment-list__comment__author",
                   },
                   "ref": null,
                   "rendered": "bob",
@@ -3871,7 +4428,7 @@ ShallowWrapper {
                         />
 </span>,
                     ],
-                    "className": "comment-list__comment--published-at",
+                    "className": "comment-list__comment__published-at",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -3951,7 +4508,7 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": <MarkdownContent
-                  className="comment-list__comment--content"
+                  className="comment-list__comment__content"
                   markdown="Bob's comment"
 />,
                 "className": "with-triangle-border",
@@ -3962,7 +4519,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "class",
                 "props": Object {
-                  "className": "comment-list__comment--content",
+                  "className": "comment-list__comment__content",
                   "markdown": "Bob's comment",
                 },
                 "ref": null,
@@ -3976,48 +4533,91 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <Link
-                  replace={false}
-                  to="/challenge/987/task/654"
+                "children": Array [
+                  <div
+                    className="comment-list__comment__challenge-name"
+/>,
+                  <div
+                    className="comment-list__comment__task-link"
 >
-                  <FormattedMessage
-                                    defaultMessage="View Task"
-                                    id="CommentList.controls.viewTask.label"
-                                    values={Object {}}
-                  />
-</Link>,
-                "className": "comment-list__comment--task-link",
+                    <Link
+                                        replace={false}
+                                        to="/challenge/987/task/654"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Task"
+                                                            id="CommentList.controls.viewTask.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</div>,
+                ],
+                "className": "comment-list__comment__meta",
               },
               "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "children": <FormattedMessage
-                    defaultMessage="View Task"
-                    id="CommentList.controls.viewTask.label"
-                    values={Object {}}
-/>,
-                  "replace": false,
-                  "to": "/challenge/987/task/654",
-                },
-                "ref": null,
-                "rendered": Object {
+              "rendered": Array [
+                Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "class",
+                  "nodeType": "host",
                   "props": Object {
-                    "defaultMessage": "View Task",
-                    "id": "CommentList.controls.viewTask.label",
-                    "values": Object {},
+                    "children": undefined,
+                    "className": "comment-list__comment__challenge-name",
                   },
                   "ref": null,
                   "rendered": null,
-                  "type": [Function],
+                  "type": "div",
                 },
-                "type": [Function],
-              },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/987/task/654"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Task"
+                                            id="CommentList.controls.viewTask.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "comment-list__comment__task-link",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Task"
+                        id="CommentList.controls.viewTask.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/987/task/654",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Task",
+                        "id": "CommentList.controls.viewTask.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "div",
+                },
+              ],
               "type": "div",
             },
           ],

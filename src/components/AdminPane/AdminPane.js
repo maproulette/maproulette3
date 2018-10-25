@@ -7,12 +7,13 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import MobileNotSupported
        from '../MobileNotSupported/MobileNotSupported'
-import Manage from './Manage/Manage'
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
-import EditProject from './Manage/ManageProjects/EditProject/EditProject'
+import EditProject from './Manage/EditProject/EditProject'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
 import ReviewTask from './Manage/ReviewTask/ReviewTask'
-import ViewChallenge from './Manage/ViewChallenge/ViewChallenge'
+import ProjectsDashboard from './Manage/ProjectsDashboard/ProjectsDashboard'
+import ProjectDashboard from './Manage/ProjectDashboard/ProjectDashboard'
+import ChallengeDashboard from './Manage/ChallengeDashboard/ChallengeDashboard'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
 import './AdminPane.css'
@@ -57,24 +58,24 @@ export class AdminPane extends Component {
             <div className="admin-pane">
               <Switch>
                 <Route exact path='/admin/metrics'
-                      render={props => <MetricsSummary allStatuses={true} {...props} />} />
+                       render={props => <MetricsSummary allStatuses={true} {...props} />} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
-                      component={EditTask} />
+                       component={EditTask} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/review'
-                      component={ReviewTask} />
+                       component={ReviewTask} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId'
-                      component={ViewChallenge} />
+                       component={ChallengeDashboard} />
                 <Route exact path='/admin/project/:projectId/challenges/new'
-                      component={EditChallenge} />
+                       component={EditChallenge} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId/edit'
-                      component={EditChallenge} />
+                       component={EditChallenge} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId/clone'
-                      component={EditChallenge} />
+                       component={EditChallenge} />
                 <Route exact path='/admin/project/:projectId/edit' component={EditProject} />
-                <Route exact path='/admin/projects' component={Manage} />
-                <Route exact path='/admin/project/:projectId' component={Manage} />
+                <Route exact path='/admin/projects' component={ProjectsDashboard} />
+                <Route exact path='/admin/project/:projectId' component={ProjectDashboard} />
                 <Route exact path='/admin/projects/new' component={EditProject} />
-                <Route component={Manage} />
+                <Route component={ProjectsDashboard} />
               </Switch>
             </div>
           </div>

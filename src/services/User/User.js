@@ -319,7 +319,7 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
  * Update the given user's settings with the given settings.
  */
 export const updateUserSettings = function(userId, settings) {
-  return updateUser(userId, (dispatch) => {
+  return updateUser(userId, dispatch => {
     // Optimistically assume it will succeed and update the local store.
     // If it doesn't, it'll get updated properly by the server response.
     dispatch(receiveUsers({[userId]: {id: userId, settings}}))
@@ -328,6 +328,56 @@ export const updateUserSettings = function(userId, settings) {
       api.user.updateSettings, {variables: {userId}, json: settings}
     ).execute()
   }, true)
+}
+
+/**
+ * Updates an app/client-specific setting for the user on the server.
+ * appSettings should be a JSON-compatible object of the form
+ * `{ settingName: ...  }`
+ */
+export const updateUserAppSetting = function(userId, appId, appSetting) {
+  return updateUser(userId, dispatch => {
+    return new Endpoint(
+      api.users.single, {schema: userSchema(), variables: {id: userId}}
+    ).execute().then(normalizedResults => {
+      const oldUser = normalizedResults.entities.users[normalizedResults.result]
+
+      // Combined properties format for multiple client applications:
+      // {
+      //   "my_application_id": {
+      //     "meta": {
+      //       "revision": timestamp,
+      //     },
+      //     "settings": {
+      //       "first_app_setting": ...,
+      //       "second_app_setting": ...,
+      //       ...
+      //     }
+      //   },
+      //   ...
+      // }
+      const userData =
+        Object.assign({}, oldUser, {
+          properties: Object.assign({}, _get(oldUser, 'properties'), {
+            [appId]: {
+              meta: Object.assign({}, _get(oldUser, `properties.${appId}.meta`), {
+                revision: Date.now(),
+              }),
+              settings: Object.assign({}, _get(oldUser, `properties.${appId}.settings`), appSetting),
+            }
+          })
+        })
+
+      // Optimistically assume update will succeed and update the local store.
+      // If it doesn't, it'll get updated properly by the server response.
+      dispatch(receiveUsers({users: {[userId]: userData}}))
+
+      return new Endpoint(api.user.updateSettings, {
+        variables: { userId },
+        json: userData,
+      }).execute()
+    })
+  })
 }
 
 /**
@@ -496,6 +546,11 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
 
     if (_isArray(entity.savedTasks)) {
       mergedState[entity.id].savedTasks = entity.savedTasks
+    }
+
+    // Always completely replace app-specific properties with new ones
+    if (_isObject(entity.properties)) {
+      mergedState[entity.id].properties = entity.properties
     }
   }
 }

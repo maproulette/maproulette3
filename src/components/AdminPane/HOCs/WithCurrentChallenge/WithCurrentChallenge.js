@@ -83,7 +83,7 @@ const WithCurrentChallenge = function(WrappedComponent,
       let challenge = null
       let clusteredTasks = null
 
-      if (!isNaN(challengeId)) {
+      if (_isFinite(challengeId)) {
         challenge = AsManageableChallenge(
           denormalize(_get(this.props, `entities.challenges.${challengeId}`),
                       challengeDenormalizationSchema(),

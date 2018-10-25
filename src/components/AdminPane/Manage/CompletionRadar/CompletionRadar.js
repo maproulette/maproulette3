@@ -26,20 +26,22 @@ export class CompletionRadar extends Component {
 
     let totalEvaluated = 0
     const metrics = _map(statusesToChart, status => {
-      totalEvaluated += this.props.taskMetrics[status]
+      totalEvaluated += this.props.taskMetrics[status] || 0
 
       return {
         status: localizedLabels[status],
-        tasks: this.props.taskMetrics[status],
+        tasks: this.props.taskMetrics[status] || 0,
       }
     })
 
     return (
       <div className="completion-radar-chart">
-        <p className="subheading">
-          <FormattedMessage {...messages.heading}
-                            values={{taskCount: totalEvaluated}} />
-        </p>
+        {!this.props.suppressHeading &&
+         <p className="subheading">
+           <FormattedMessage {...messages.heading}
+                             values={{taskCount: totalEvaluated}} />
+         </p>
+        }
         <ResponsiveRadar data={metrics}
                          colors={["#61CDBB"]}
                          keys={["tasks"]}
@@ -78,6 +80,7 @@ export class CompletionRadar extends Component {
 
 CompletionRadar.propTypes = {
   taskMetrics: PropTypes.object.isRequired,
+  suppressHeading: PropTypes.bool,
 }
 
 export default injectIntl(CompletionRadar)

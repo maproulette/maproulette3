@@ -64,7 +64,7 @@ test("deactivate function called when search icon clicked", () => {
   )
 
   wrapper.find('.search-box--done-button').simulate('click')
-  expect(basicProps.deactivate.mock.calls.length).toBe(1)
+  expect(basicProps.deactivate).toHaveBeenCalled()
   expect(wrapper).toMatchSnapshot()
 })
 
@@ -126,7 +126,7 @@ test("setSearch called when the query in box is changed", () => {
   )
 
   wrapper.find('.search-box__input').simulate('change', { target: { value: 'Hello' } })
-  expect(basicProps.setSearch.mock.calls.length).toBe(1)
+  expect(basicProps.setSearch).toHaveBeenCalled()
   expect(wrapper).toMatchSnapshot()
 })
 
@@ -137,7 +137,7 @@ test("clearSearch called when the clear button is pressed", () => {
   )
 
   wrapper.find('.search-box--clear-button').simulate('click')
-  expect(basicProps.clearSearch.mock.calls.length).toBe(1)
+  expect(basicProps.clearSearch).toHaveBeenCalled()
   expect(wrapper).toMatchSnapshot()
 })
 
@@ -147,7 +147,7 @@ test("clearSearch is called when escape is pressed", () => {
   )
 
   wrapper.find('.search-box__input').simulate('keydown', {key: 'Escape'})
-  expect(basicProps.clearSearch.mock.calls.length).toBe(1)
+  expect(basicProps.clearSearch).toHaveBeenCalled()
   expect(wrapper).toMatchSnapshot()
 })
 
@@ -157,7 +157,7 @@ test("deactivate is called when escape is pressed", () => {
   )
 
   wrapper.find('.search-box__input').simulate('keydown', {key: 'Enter'})
-  expect(basicProps.deactivate.mock.calls.length).toBe(1)
+  expect(basicProps.deactivate).toHaveBeenCalled()
   expect(wrapper).toMatchSnapshot()
 })
 
