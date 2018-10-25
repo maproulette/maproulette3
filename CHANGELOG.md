@@ -7,6 +7,41 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.1.0] - 2018-10-30
+### Added
+- Add more keyboard shortcuts for task completion (#477).
+- Show age of tasks when browsing a challenge (#468).
+- Show the lat/lon of task under Location (#467).
+- Offer default layers and overlays from OSM Editor Layer Index (#466).
+- Allow mustache tags in instructions that reference task properties (#456).
+- New flexible, widget-based project/challenge administration interface (#450).
+- When showing tasks on search map, indicate how many tasks are shown (#435).
+- Support for Level0 editor (#423).
+- Sort control for challenge results (#211).
+- Help link in top navbar (#72).
+- Support for streamable line-by-line GeoJSON format.
+- Advanced option for challenge-owners to ignore detected GeoJSON errors.
+- Support for map overlays.
+- Use browser geolocation service for Near Me filter when available.
+- Open links in markdown content in new tabs.
+
+### Fixed
+- Don't prompt user to login if page doesn't require it (#492).
+- Don't prematurely display that a challenge is complete (#429, #458).
+- Don't preserve zoom if task features won't fit on map (#451).
+- Fix labels cut off on some charts (#448).
+- Don't re-encrypt user API key on user profile updates (#437, #442).
+- Allow challenge source to be modified if tasks fail to build (#436).
+- User could sometimes receive duplicate task with old status (#428).
+- Don't enable reset-tasks control for challenge owners if no tasks selected.
+- Don't show challenges with no remaining tasks in search results (#464).
+
+### Changed
+- Allow user to skip task after opening editor (#469).
+- Do not allow modification of priority for individual tasks (#390).
+- [internal] Refactor challenge search to use unified service.
+
+
 ## [v3.0.6] - 2018-07-02
 ### Added
 - Map control to fit task-completion map to task features.
