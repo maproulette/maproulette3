@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import remark from 'remark'
+import externalLinks from 'remark-external-links'
 import reactRenderer from 'remark-react'
 import PropTypes from 'prop-types'
 
@@ -20,7 +21,10 @@ export default class MarkdownContent extends Component {
 
     return (
       <div className={this.props.className}>
-        {remark().use(reactRenderer).processSync(normalizedMarkdown).contents}
+        {
+          remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
+                  .use(reactRenderer).processSync(normalizedMarkdown).contents
+        }
       </div>
     )
   }
