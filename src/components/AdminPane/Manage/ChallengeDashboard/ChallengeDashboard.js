@@ -138,7 +138,7 @@ export class ChallengeDashboard extends Component {
           </nav>
 
           <div className="columns admin__manage__controls">
-            {hasTasks && isUsableChallengeStatus(status) &&
+            {hasTasks && isUsableChallengeStatus(status, true) &&
              <div className="column is-narrow admin__manage__controls--control">
                <Link to={`/challenge/${this.props.challenge.id}`}>
                  <FormattedMessage {...messages.startChallengeLabel} />
