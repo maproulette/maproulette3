@@ -12,7 +12,7 @@ import './LeaderboardBlock.css'
 
 const descriptor = {
   blockKey: 'LeaderboardBlock',
-  label: "Leaderboard",
+  label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
   defaultWidth: 4,
   defaultHeight: 8,
@@ -40,7 +40,7 @@ export class LeaderboardBlock extends Component {
       <QuickBlock {...this.props}
                   className="leaderboard-block"
                   blockTitle={<FormattedMessage {...messages.title} />}
-                  titleControls={selector}>
+                  headerControls={selector}>
         <ChallengeLeaderboard suppressHeader
                               monthsPast={monthsPast}
                               {...this.props} />

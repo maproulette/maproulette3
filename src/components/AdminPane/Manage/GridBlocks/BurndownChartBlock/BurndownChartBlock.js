@@ -9,7 +9,7 @@ import './BurndownChartBlock.css'
 
 const descriptor = {
   blockKey: 'BurndownChartBlock',
-  label: "Burndown Chart",
+  label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
   defaultWidth: 4,
   defaultHeight: 12,
@@ -20,8 +20,10 @@ export class BurndownChartBlock extends Component {
     return (
       <QuickBlock {...this.props}
                   className="burndown-chart-block"
-                  blockTitle={<FormattedMessage {...messages.title}
-                                                values={{taskCount: this.props.tasksAvailable}} />}>
+                  blockTitle={
+                    <FormattedMessage {...messages.title}
+                                      values={{taskCount: this.props.tasksAvailable}} />
+                  }>
         <BurndownChart {...this.props} suppressHeading />
       </QuickBlock>
     )

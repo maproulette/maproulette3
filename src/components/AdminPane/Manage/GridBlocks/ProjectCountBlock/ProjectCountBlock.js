@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
 import { DashboardDataTarget } from '../../../../../services/Dashboard/Dashboard'
 import { registerBlockType } from '../BlockTypes'
 import QuickBlock from '../QuickBlock'
+import messages from './Messages'
 
 const descriptor = {
   blockKey: 'ProjectCountBlock',
-  label: "Project Count",
+  label: messages.label,
   targets: [DashboardDataTarget.projects],
   defaultWidth: 6,
   defaultHeight: 4,
@@ -17,7 +19,7 @@ export class ProjectCountBlock extends Component {
     return (
       <QuickBlock {...this.props}
                   className="project-count-grid-block"
-                  blockTitle="Project Count">
+                  blockTitle={<FormattedMessage {...messages.title} />}>
         <h1>{this.props.filteredProjects.length}</h1>
       </QuickBlock>
     )

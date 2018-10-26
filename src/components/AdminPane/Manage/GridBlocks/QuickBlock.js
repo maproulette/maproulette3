@@ -5,8 +5,8 @@ import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import SimpleDropdown from '../../../Bulma/SimpleDropdown'
-import BlockControl from './BlockControl'
-import BlockControlDivider from './BlockControlDivider'
+import MenuControl from './MenuControl'
+import MenuControlDivider from './MenuControlDivider'
 
 const DeactivatableDropdown = WithDeactivateOnOutsideClick(SimpleDropdown)
 
@@ -32,24 +32,24 @@ export default class QuickBlock extends Component {
               <h2 className="subtitle">{this.props.blockTitle}</h2>
             </div>
 
-            {this.props.titleControls}
+            {this.props.headerControls}
 
             <DeactivatableDropdown
                           className="grid-block__header__title-row__controls"
                           isRight
                           label={<SvgSymbol className="grid-block__header__title-row__controls__icon"
                                             sym="cog-icon" viewBox="0 0 20 20" />}>
-              {this.props.blockControls &&
+              {this.props.menuControls &&
                 <React.Fragment>
-                  {this.props.blockControls}
+                  {this.props.menuControls}
 
-                  <BlockControlDivider />
+                  <MenuControlDivider />
                 </React.Fragment>
               }
 
-              <BlockControl>
+              <MenuControl>
                 <a className="is-danger" onClick={this.props.removeBlock}>Remove</a>
-              </BlockControl>
+              </MenuControl>
             </DeactivatableDropdown>
           </div>
 
@@ -67,8 +67,10 @@ export default class QuickBlock extends Component {
 QuickBlock.propTypes = {
   /** Title of block */
   blockTitle: PropTypes.node.isRequired,
-  /** Optional controls to display in block header */
-  blockControls: PropTypes.element,
+  /** Optional controls to display in block header next to the title */
+  headerControls: PropTypes.element,
+  /** Optional controls to display in block drop-down menu */
+  menuControls: PropTypes.element,
   /** Optional, additional content to display in block header */
   headerContent: PropTypes.element,
 }

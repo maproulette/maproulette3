@@ -8,7 +8,7 @@ import messages from './Messages'
 
 const descriptor = {
   blockKey: 'CompletionProgressBlock',
-  label: "Completion Progress",
+  label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
   defaultWidth: 4,
   defaultHeight: 5,

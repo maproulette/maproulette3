@@ -11,7 +11,7 @@ import messages from './Messages'
 
 const descriptor = {
   blockKey: 'RecentActivityBlock',
-  label: "Recent Activity",
+  label: messages.label,
   targets: [DashboardDataTarget.challenge],
   defaultWidth: 4,
   defaultHeight: 14,

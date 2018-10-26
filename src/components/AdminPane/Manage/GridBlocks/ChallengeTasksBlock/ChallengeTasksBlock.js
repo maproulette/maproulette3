@@ -8,7 +8,7 @@ import messages from './Messages'
 
 const descriptor = {
   blockKey: 'ChallengeTasksBlock',
-  label: "Tasks",
+  label: messages.label,
   targets: [DashboardDataTarget.challenge],
   defaultWidth: 8,
   defaultHeight: 49,

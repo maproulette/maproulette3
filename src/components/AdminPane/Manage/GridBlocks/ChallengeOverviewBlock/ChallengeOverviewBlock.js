@@ -14,7 +14,7 @@ import './ChallengeOverviewBlock.css'
 
 const descriptor = {
   blockKey: 'ChallengeOverviewBlock',
-  label: "Challenge Overview",
+  label: messages.label,
   targets: [DashboardDataTarget.challenge],
   defaultWidth: 4,
   defaultHeight: 7,

@@ -10,7 +10,7 @@ import './ProjectOverviewBlock.css'
 
 const descriptor = {
   blockKey: 'ProjectOverviewBlock',
-  label: "Overview",
+  label: messages.label,
   targets: [DashboardDataTarget.project],
   defaultWidth: 4,
   defaultHeight: 7,

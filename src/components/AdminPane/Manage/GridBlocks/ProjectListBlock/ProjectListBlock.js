@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import { DashboardDataTarget }
        from '../../../../../services/Dashboard/Dashboard'
 import { registerBlockType } from '../BlockTypes'
@@ -14,12 +15,13 @@ import SearchBox from '../../../../SearchBox/SearchBox'
 import SvgControl from '../../../../Bulma/SvgControl'
 import ProjectList from '../../ProjectList/ProjectList'
 import QuickBlock from '../QuickBlock'
-import BlockControl from '../BlockControl'
+import MenuControl from '../MenuControl'
+import messages from './Messages'
 import './ProjectListBlock.css'
 
 const descriptor = {
   blockKey: 'ProjectListBlock',
-  label: "Project List",
+  label: messages.label,
   targets: [DashboardDataTarget.projects],
   defaultWidth: 12,
   minWidth: 4,
@@ -54,25 +56,26 @@ export class ProjectListBlock extends Component {
   render() {
     const viewControls = (
       <div className="project-list-block__view-controls">
-        <BlockControl>
+        <MenuControl>
           {this.viewControl("card", "cards-icon")}
           {this.viewControl("mixed")}
           {this.viewControl("list")}
-        </BlockControl>
+        </MenuControl>
       </div>
     )
 
     const searchControl = this.props.projects.length === 0 ? null : (
-      <ProjectAndChallengeSearch className="project-list-block__searchbox"
-                                 placeholder="Search" />
+      <ProjectAndChallengeSearch
+        className="project-list-block__searchbox"
+        placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)} />
     )
 
     return (
       <QuickBlock {...this.props}
                   className="project-list-block"
-                  blockTitle="Projects"
-                  titleControls={searchControl}
-                  blockControls={viewControls}>
+                  blockTitle={<FormattedMessage {...messages.title} />}
+                  headerControls={searchControl}
+                  menuControls={viewControls}>
         <ProjectList {...this.props}
                      projects={this.props.resultProjects}
                      expandedView={this.props.blockConfiguration.view === 'card'}
@@ -93,7 +96,7 @@ const Block =
   WithSearchResults( // for projects
     WithSearchResults( // for challenges
       WithChallengeResultParents(
-        ProjectListBlock,
+        injectIntl(ProjectListBlock),
       ),
       'adminChallenges',
       'challenges',
