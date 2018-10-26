@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import { DashboardDataTarget } from '../../../../../services/Dashboard/Dashboard'
 import { extendedFind } from '../../../../../services/Challenge/Challenge'
 import WithSearchResults
@@ -15,7 +15,7 @@ import './ChallengeListBlock.css'
 
 const descriptor = {
   blockKey: 'ChallengeListBlock',
-  label: "Challenges",
+  label: messages.label,
   targets: [DashboardDataTarget.challenges],
   minWidth: 3,
   defaultWidth: 12,
@@ -38,14 +38,14 @@ export class ChallengeListBlock extends Component {
   render() {
     const searchControl = this.props.projects.length === 0 ? null : (
       <ChallengeSearch className="challenge-list-block__searchbox"
-                       placeholder="Search" />
+                       placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)} />
     )
 
     return (
       <QuickBlock {...this.props}
                   className="challenge-list-block"
                   blockTitle={<FormattedMessage {...messages.title} />}
-                  titleControls={searchControl}>
+                  headerControls={searchControl}>
         <ChallengeList {...this.props}
                        challenges={this.props.challenges}
                        suppressControls />
@@ -60,7 +60,7 @@ ChallengeListBlock.propTypes = {
 }
 
 const Block = WithSearchResults(
-  ChallengeListBlock,
+  injectIntl(ChallengeListBlock),
   'challengeListBlock',
   'challenges',
   'challenges'

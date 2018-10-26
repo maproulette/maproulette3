@@ -11,7 +11,7 @@ import './CalendarHeatmapBlock.css'
 
 const descriptor = {
   blockKey: 'CalendarHeatmapBlock',
-  label: "Daily Heatmap",
+  label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
   defaultWidth: 8,
   defaultHeight: 7,
@@ -38,7 +38,7 @@ export class CalendarHeatmapBlock extends Component {
     return (
       <QuickBlock {...this.props}
                   className={`calendar-heatmap-block months-${monthsPast}`}
-                  titleControls={selector}
+                  headerControls={selector}
                   blockTitle={<FormattedMessage {...messages.title} />}>
         <CalendarHeatmap {...this.props} suppressHeading months={monthsPast} />
       </QuickBlock>

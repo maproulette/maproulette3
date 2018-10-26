@@ -9,7 +9,7 @@ import './StatusRadarBlock.css'
 
 const descriptor = {
   blockKey: 'StatusRadarBlock',
-  label: "Status Radar",
+  label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
   defaultWidth: 4,
   defaultHeight: 12,

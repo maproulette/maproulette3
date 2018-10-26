@@ -14,7 +14,7 @@ import './CommentsBlock.css'
 
 const descriptor = {
   blockKey: 'CommentsBlock',
-  label: "Comments",
+  label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
   defaultWidth: 4,
   defaultHeight: 12,
@@ -46,7 +46,7 @@ export class CommentsBlock extends Component {
       <QuickBlock {...this.props}
                   className="comments-block"
                   blockTitle={<FormattedMessage {...messages.title} />}
-                  titleControls={exportControl}>
+                  headerControls={exportControl}>
         <CommentList includeChallengeNames={_get(this.props, 'challenges.length', 0) > 1}
                      includeTaskLinks
                      comments={comments} />

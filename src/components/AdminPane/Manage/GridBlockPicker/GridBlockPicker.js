@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
+import _isObject from 'lodash/isObject'
 import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import DropdownButton from '../../../Bulma/DropdownButton'
@@ -16,7 +17,7 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class GridBlockPicker extends Component {
+export class GridBlockPicker extends Component {
   blockSelected = ({key}) => {
     this.props.onBlockSelected(key)
   }
@@ -25,7 +26,9 @@ export default class GridBlockPicker extends Component {
     const menuOptions =
       _map(this.props.availableBlocks(), descriptor => ({
         key: descriptor.blockKey,
-        text: descriptor.label || descriptor.blockKey,
+        text: _isObject(descriptor.label) ?
+              this.props.intl.formatMessage(descriptor.label) :
+              (descriptor.label || descriptor.blockKey),
       }))
 
     if (menuOptions.length === 0) {
@@ -50,3 +53,5 @@ GridBlockPicker.propTypes = {
   dashboard: PropTypes.object.isRequired,
   onBlockSelected: PropTypes.func.isRequired,
 }
+
+export default injectIntl(GridBlockPicker)

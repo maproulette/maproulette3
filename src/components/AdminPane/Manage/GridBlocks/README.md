@@ -8,6 +8,9 @@ If you're creating a block that others might benefit from, consider
 implementing it as a first-party block and submitting a pull request to have it
 included with MapRoulette.
 
+> Please note that all new first-party blocks need to be properly
+> internationalized to be accepted into the project
+
 ### Preparing to create a first-party block
 
 You should add your block into `src/components/AdminPane/Manage/GridBlocks/` (in
@@ -43,9 +46,11 @@ render:
 > you'll need to implement.
 
 QuickBlock expects a `blockTitle` prop with the title of the block to be
-displayed in the block header, accepts an optional `blockControls` prop where
-you can include any controls you'd also like displayed in the block header, and
-then renders the given children as the content of the block.
+displayed in the block header. It also accepts an optional `headerControls`
+prop where you can include any controls you'd like displayed in the block
+header next to the title, and a `menuControls` prop for controls to display in
+the block's drop-down menu. It renders the given children as the content of the
+block.
 
 ##### Adding a descriptor
 You'll also need to create a **descriptor** object that tells MapRoulette
@@ -63,7 +68,8 @@ conflict with a first-party block.
 compatible.
 
 * `label` is a human-readable name for your block that users will see in the
-Add Block menu
+Add Widget menu. It can be a string or (preferably) an internationalized
+message object.
 
 * `defaultWidth` is the default width of the component in columns
 

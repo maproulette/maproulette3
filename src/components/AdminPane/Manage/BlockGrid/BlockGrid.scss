@@ -42,6 +42,7 @@
         &__title {
           cursor: move;
           margin-right: 15px;
+          flex-shrink: 0;
 
           .subtitle {
             font-weight: $weight-normal;
@@ -75,6 +76,12 @@
         &__filter {
           margin-right: 1em;
         }
+      }
+    }
+
+    &__menu-controls {
+      &__control {
+        padding: 0.5em;
       }
     }
 
