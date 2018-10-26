@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import _debounce from 'lodash/debounce'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFunction from 'lodash/isFunction'
@@ -67,7 +66,7 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
       }
 
       if (!_isEqual(prevSearch, currentSearch)) {
-        debouncedFetch(this.props, searchFunction)
+        this.props.performSearch(this.props.searchCriteria, searchFunction)
       }
     }
 
@@ -96,9 +95,6 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
      }
    }
 }
-
-const debouncedFetch = _debounce((props, searchFunction) =>
-    props.performSearch(props.searchCriteria, searchFunction), 1000, {leading: true})
 
 export const mapStateToProps = (state, searchGroup) => {
   return {

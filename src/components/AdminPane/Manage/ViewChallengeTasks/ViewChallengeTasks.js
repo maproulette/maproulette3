@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
+import _noop from 'lodash/noop'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
@@ -214,6 +215,7 @@ export class ViewChallengeTasks extends Component {
                  checked={this.props.allTasksAreSelected()}
                  indeterminate={this.props.someTasksAreSelected()}
                  onClick={() => this.props.toggleAllTasksSelection()}
+                 onChange={_noop}
                />
              </label>
              <DeactivatableDropdownButton options={taskSelectionActions}

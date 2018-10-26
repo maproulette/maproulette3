@@ -116,12 +116,12 @@ export const fetchProject = function(projectId) {
  *
  * @param {string} query - the search string
  */
-export const searchProjects = function(query, onlyEnabled=false, limit=50) {
+export const searchProjects = function(searchCriteria, onlyEnabled=false, limit=50) {
   return function(dispatch) {
     return new Endpoint(api.projects.search, {
         schema: [ projectSchema() ],
         params: {
-          q: `%${query}%`,
+          q: `%${searchCriteria.query}%`,
           onlyEnabled: onlyEnabled ? 'true' : 'false',
           limit,
         }
