@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import _debounce from 'lodash/debounce'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFunction from 'lodash/isFunction'
@@ -38,13 +39,20 @@ import WithUserLocation from '../WithUserLocation/WithUserLocation'
  * @param {string} searchGroup - The group name of the search criteria to work with
  * @param {function} searchFunction - which function to call when performing a search
  */
-const WithSearch = (WrappedComponent, searchGroup, searchFunction) =>
-  WithUserLocation(
+const WithSearch = (WrappedComponent, searchGroup, searchFunction) => {
+  // Debounce the search function so the server doesn't get hammered as a user
+  // types in a query string
+  const debouncedSearch = searchFunction ?
+    _debounce(props => props.performSearch(props.searchCriteria, searchFunction),
+              1000, {leading: true}) : null
+
+  return WithUserLocation(
     connect(
       (state) => mapStateToProps(state, searchGroup),
       (state, ownProps) => mapDispatchToProps(state, ownProps, searchGroup)
-    )(_WithSearch(WrappedComponent, searchGroup, searchFunction), searchGroup)
+    )(_WithSearch(WrappedComponent, searchGroup, debouncedSearch), searchGroup)
   )
+}
 
 export const _WithSearch = function(WrappedComponent, searchGroup, searchFunction) {
    return class extends Component {
@@ -66,7 +74,7 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
       }
 
       if (!_isEqual(prevSearch, currentSearch)) {
-        this.props.performSearch(this.props.searchCriteria, searchFunction)
+        searchFunction(this.props)
       }
     }
 
