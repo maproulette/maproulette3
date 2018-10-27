@@ -6,8 +6,9 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
+import _isFinite from 'lodash/isFinite'
 import WithChallengeSearch from '../WithSearch/WithChallengeSearch'
-import { SORT_NAME, SORT_CREATED, ALL_SORT_OPTIONS }
+import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, ALL_SORT_OPTIONS }
        from '../../../services/Search/Search'
 
 const FEATURED_POINTS = -1
@@ -15,26 +16,31 @@ const SAVED_POINTS = -2
 
 export const sortChallenges = function(props, challengesProp='challenges') {
   const sortCriteria = _get(props, 'searchSort.sortBy')
-
   let sortedChallenges = props[challengesProp]
 
   if (sortCriteria === SORT_NAME) {
     sortedChallenges = _sortBy(sortedChallenges, 'name')
   }
   else if (sortCriteria === SORT_CREATED) {
-    sortedChallenges = _reverse(_sortBy(sortedChallenges, 'created'))
+    sortedChallenges = _reverse(_sortBy(sortedChallenges,
+      c => c.created ? c.created : ''))
+  }
+  else if (sortCriteria === SORT_POPULARITY) {
+    sortedChallenges = _reverse(_sortBy(sortedChallenges,
+      c => _isFinite(c.popularity) ? c.popularity : 0))
   }
   else {
-    // default "smart" sort. Prioritizes featured and user-saved challenges
+    // default "smart" sort. Prioritizes featured and user-saved challenges,
+    // followed by popular challenges
     const savedChallenges = _get(props, 'user.savedChallenges', [])
 
-    sortedChallenges = _sortBy(sortedChallenges, challenge => {
+    sortedChallenges = _sortBy(sortedChallenges, [challenge => {
       let score = 0
       score += challenge.featured ? FEATURED_POINTS : 0
       score += _findIndex(savedChallenges, {id: challenge.id}) !== -1 ?
                SAVED_POINTS : 0
       return score
-    })
+    }, challenge => -1 * challenge.popularity])
   }
 
   return sortedChallenges
@@ -45,7 +51,6 @@ export default function(WrappedComponent,
                         challengesProp='challenges',
                         outputProp) {
   class WithSortedChallenges extends Component {
-
     render() {
       const sortedChallenges = sortChallenges(this.props, challengesProp)
 
