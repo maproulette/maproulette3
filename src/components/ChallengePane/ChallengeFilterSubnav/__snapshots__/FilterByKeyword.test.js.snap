@@ -65,7 +65,11 @@ ShallowWrapper {
         "touchstart",
       ],
       "excludeScrollbar": false,
-      "label": undefined,
+      "label": <FormattedMessage
+        defaultMessage="Work on"
+        id="ChallengeFilterSubnav.filter.keyword.label"
+        values={Object {}}
+/>,
       "onChange": [Function],
       "options": Array [
         Object {
@@ -139,7 +143,11 @@ ShallowWrapper {
           "touchstart",
         ],
         "excludeScrollbar": false,
-        "label": undefined,
+        "label": <FormattedMessage
+          defaultMessage="Work on"
+          id="ChallengeFilterSubnav.filter.keyword.label"
+          values={Object {}}
+/>,
         "onChange": [Function],
         "options": Array [
           Object {

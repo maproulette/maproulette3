@@ -72,32 +72,36 @@ ShallowWrapper {
         "touchstart",
       ],
       "excludeScrollbar": false,
-      "label": undefined,
+      "label": <FormattedMessage
+        defaultMessage="Location"
+        id="ChallengeFilterSubnav.filter.location.label"
+        values={Object {}}
+/>,
       "onChange": [Function],
       "options": Array [
         Object {
           "key": "any",
-          "text": undefined,
+          "text": "Anywhere",
           "value": undefined,
         },
         Object {
           "key": "withinMapBounds",
-          "text": undefined,
+          "text": "Within Map Bounds",
           "value": "withinMapBounds",
         },
         Object {
           "key": "intersectingMapBounds",
-          "text": undefined,
+          "text": "Intersecting Map Bounds",
           "value": "intersectingMapBounds",
         },
         Object {
           "key": "nearMe",
-          "text": undefined,
+          "text": "Near Me",
           "value": "nearMe",
         },
       ],
       "outsideClickIgnoreClass": "ignore-react-onclickoutside",
-      "placeholder": undefined,
+      "placeholder": "Anywhere",
       "preventDefault": false,
       "stopPropagation": false,
       "value": undefined,
@@ -117,32 +121,36 @@ ShallowWrapper {
           "touchstart",
         ],
         "excludeScrollbar": false,
-        "label": undefined,
+        "label": <FormattedMessage
+          defaultMessage="Location"
+          id="ChallengeFilterSubnav.filter.location.label"
+          values={Object {}}
+/>,
         "onChange": [Function],
         "options": Array [
           Object {
             "key": "any",
-            "text": undefined,
+            "text": "Anywhere",
             "value": undefined,
           },
           Object {
             "key": "withinMapBounds",
-            "text": undefined,
+            "text": "Within Map Bounds",
             "value": "withinMapBounds",
           },
           Object {
             "key": "intersectingMapBounds",
-            "text": undefined,
+            "text": "Intersecting Map Bounds",
             "value": "intersectingMapBounds",
           },
           Object {
             "key": "nearMe",
-            "text": undefined,
+            "text": "Near Me",
             "value": "nearMe",
           },
         ],
         "outsideClickIgnoreClass": "ignore-react-onclickoutside",
-        "placeholder": undefined,
+        "placeholder": "Anywhere",
         "preventDefault": false,
         "stopPropagation": false,
         "value": undefined,

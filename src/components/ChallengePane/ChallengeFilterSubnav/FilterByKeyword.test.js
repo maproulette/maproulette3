@@ -51,7 +51,7 @@ test("it renders with props as expected", () => {
 })
 
 test("it calls setKeywordFilter if an onChange occurs with a value", () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <FilterByKeyword {...basicProps} />
   )
 
@@ -60,7 +60,7 @@ test("it calls setKeywordFilter if an onChange occurs with a value", () => {
 })
 
 test("it calls removeSearchFilters if an onChange occurs with a null value", () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <FilterByKeyword {...basicProps} />
   )
 

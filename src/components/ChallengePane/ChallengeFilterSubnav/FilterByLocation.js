@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _map from 'lodash/map'
 import _reject from 'lodash/reject'
 import _isEmpty from 'lodash/isEmpty'
-import { injectIntl } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
 import MenuList from '../../Bulma/MenuList'
 import { ChallengeLocation,
@@ -70,7 +70,7 @@ export class FilterByLocation extends Component {
     const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
       <Selection placeholder={anyOption.text}
-                 label={this.props.intl.formatMessage(messages.locationLabel)}
+                 label={<FormattedMessage {...messages.locationLabel} />}
                  options={selectOptions}
                  value={this.props.searchFilters.location}
                  onChange={this.updateFilter}

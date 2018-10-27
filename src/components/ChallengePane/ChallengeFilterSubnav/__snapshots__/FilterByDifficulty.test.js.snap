@@ -64,32 +64,36 @@ ShallowWrapper {
         "touchstart",
       ],
       "excludeScrollbar": false,
-      "label": undefined,
+      "label": <FormattedMessage
+        defaultMessage="Difficulty"
+        id="ChallengeFilterSubnav.filter.difficulty.label"
+        values={Object {}}
+/>,
       "onChange": [Function],
       "options": Array [
         Object {
           "key": "any",
-          "text": undefined,
+          "text": "Any",
           "value": undefined,
         },
         Object {
           "key": 1,
-          "text": undefined,
+          "text": "Easy",
           "value": 1,
         },
         Object {
           "key": 2,
-          "text": undefined,
+          "text": "Normal",
           "value": 2,
         },
         Object {
           "key": 3,
-          "text": undefined,
+          "text": "Expert",
           "value": 3,
         },
       ],
       "outsideClickIgnoreClass": "ignore-react-onclickoutside",
-      "placeholder": undefined,
+      "placeholder": "Any",
       "preventDefault": false,
       "stopPropagation": false,
       "value": 1,
@@ -109,32 +113,36 @@ ShallowWrapper {
           "touchstart",
         ],
         "excludeScrollbar": false,
-        "label": undefined,
+        "label": <FormattedMessage
+          defaultMessage="Difficulty"
+          id="ChallengeFilterSubnav.filter.difficulty.label"
+          values={Object {}}
+/>,
         "onChange": [Function],
         "options": Array [
           Object {
             "key": "any",
-            "text": undefined,
+            "text": "Any",
             "value": undefined,
           },
           Object {
             "key": 1,
-            "text": undefined,
+            "text": "Easy",
             "value": 1,
           },
           Object {
             "key": 2,
-            "text": undefined,
+            "text": "Normal",
             "value": 2,
           },
           Object {
             "key": 3,
-            "text": undefined,
+            "text": "Expert",
             "value": 3,
           },
         ],
         "outsideClickIgnoreClass": "ignore-react-onclickoutside",
-        "placeholder": undefined,
+        "placeholder": "Any",
         "preventDefault": false,
         "stopPropagation": false,
         "value": 1,
