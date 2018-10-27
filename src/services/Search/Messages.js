@@ -12,6 +12,10 @@ export default defineMessages({
     id: "Challenge.sort.created",
     defaultMessage: "Newest",
   },
+  popularity: {
+    id: "Challenge.sort.popularity",
+    defaultMessage: "Popular",
+  },
   default: {
     id: "Challenge.sort.default",
     defaultMessage: "Smart",

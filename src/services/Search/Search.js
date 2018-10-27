@@ -33,8 +33,9 @@ export const SET_CHALLENGE_OWNER_MAP_BOUNDS = 'SET_CHALLENGE_OWNER_MAP_BOUNDS'
 // Sort options
 export const SORT_NAME = 'name'
 export const SORT_CREATED = 'created'
+export const SORT_POPULARITY = 'popularity'
 export const SORT_DEFAULT = 'default'
-export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_DEFAULT]
+export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_DEFAULT]
 
 /** Returns object containing localized labels  */
 export const sortLabels = intl => _fromPairs(
