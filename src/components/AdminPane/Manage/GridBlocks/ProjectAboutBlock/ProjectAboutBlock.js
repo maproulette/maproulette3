@@ -11,6 +11,7 @@ const descriptor = {
   blockKey: 'ProjectAboutBlock',
   label: messages.label,
   targets: [DashboardDataTarget.projects, DashboardDataTarget.project],
+  minWidth: 3,
   defaultWidth: 6,
   defaultHeight: 7,
 }

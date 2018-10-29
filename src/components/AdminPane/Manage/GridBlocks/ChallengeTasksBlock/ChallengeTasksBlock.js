@@ -10,6 +10,7 @@ const descriptor = {
   blockKey: 'ChallengeTasksBlock',
   label: messages.label,
   targets: [DashboardDataTarget.challenge],
+  minWidth: 4,
   defaultWidth: 8,
   defaultHeight: 49,
 }
