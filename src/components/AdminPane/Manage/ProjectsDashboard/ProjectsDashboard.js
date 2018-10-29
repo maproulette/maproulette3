@@ -31,14 +31,14 @@ export const defaultDashboardSetup = function() {
     label: "Projects",
     filters: defaultProjectFilters(),
     blocks: [
-      blockDescriptor('ProjectListBlock'),
       blockDescriptor('ProjectAboutBlock'),
       blockDescriptor('ProjectCountBlock'),
+      blockDescriptor('ProjectListBlock'),
     ],
     layout: [
-      {i: generateDashboardId(), x: 0, y: 0, w: 6, h: 20},
-      {i: generateDashboardId(), x: 6, y: 0, w: 6, h: 7},
-      {i: generateDashboardId(), x: 6, y: 7, w: 6, h: 5},
+      {i: generateDashboardId(), x: 0, y: 0, w: 4, h: 10},
+      {i: generateDashboardId(), x: 0, y: 10, w: 4, h: 10},
+      {i: generateDashboardId(), x: 8, y: 4, w: 8, h: 20},
     ],
   }
 }
