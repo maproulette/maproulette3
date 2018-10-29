@@ -51,7 +51,6 @@ export const defaultDashboardSetup = function() {
       blockDescriptor('RecentActivityBlock'),
       blockDescriptor('CommentsBlock'),
       blockDescriptor('BurndownChartBlock'),
-      blockDescriptor('CalendarHeatmapBlock'),
       blockDescriptor('StatusRadarBlock'),
       blockDescriptor('ChallengeTasksBlock'),
     ],
@@ -62,8 +61,7 @@ export const defaultDashboardSetup = function() {
       {i: generateDashboardId(), x: 0, y: 20, w: 4, h: 14},
       {i: generateDashboardId(), x: 0, y: 34, w: 4, h: 12},
       {i: generateDashboardId(), x: 0, y: 46, w: 4, h: 12},
-      {i: generateDashboardId(), x: 0, y: 58, w: 4, h: 7},
-      {i: generateDashboardId(), x: 0, y: 65, w: 4, h: 12},
+      {i: generateDashboardId(), x: 0, y: 58, w: 4, h: 12},
       {i: generateDashboardId(), x: 4, y: 0, w: 8, h: 49},
     ],
   }

@@ -15,6 +15,7 @@ const descriptor = {
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
   defaultWidth: 8,
   defaultHeight: 7,
+  minWidth: 5,
   defaultConfiguration: {
     monthsPast: 12,
   },

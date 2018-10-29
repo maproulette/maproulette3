@@ -38,17 +38,17 @@ export const defaultDashboardSetup = function() {
     filters: defaultChallengeFilters(),
     blocks: [
       blockDescriptor('ProjectOverviewBlock'),
-      blockDescriptor('CommentsBlock'),
       blockDescriptor('CompletionProgressBlock'),
       blockDescriptor('BurndownChartBlock'),
+      blockDescriptor('CommentsBlock'),
       blockDescriptor('ChallengeListBlock'),
     ],
     layout: [
       {i: generateDashboardId(), x: 0, y: 0, w: 4, h: 7},
-      {i: generateDashboardId(), x: 0, y: 7, w: 4, h: 10},
-      {i: generateDashboardId(), x: 4, y: 0, w: 4, h: 5},
-      {i: generateDashboardId(), x: 4, y: 5, w: 4, h: 12},
-      {i: generateDashboardId(), x: 8, y: 0, w: 4, h: 17},
+      {i: generateDashboardId(), x: 0, y: 7, w: 4, h: 5},
+      {i: generateDashboardId(), x: 0, y: 12, w: 4, h: 12},
+      {i: generateDashboardId(), x: 0, y: 24, w: 4, h: 10},
+      {i: generateDashboardId(), x: 8, y: 0, w: 8, h: 34},
     ],
   }
 }

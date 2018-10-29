@@ -28,7 +28,7 @@ const descriptor = {
   defaultHeight: 15,
   minHeight: 11,
   defaultConfiguration: {
-    view: 'cards',
+    view: 'card',
     sortBy: ['name'],
   }
 }
