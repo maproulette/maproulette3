@@ -80,7 +80,7 @@ export class ProjectListBlock extends Component {
                      projects={this.props.resultProjects}
                      expandedView={this.props.blockConfiguration.view === 'card'}
                      mixedView={this.props.blockConfiguration.view === 'mixed'}
-                     showPreview={this.props.resultProjects.length < this.props.projects.length} />
+                     showPreview={this.props.adminProjectsSearchActive} />
       </QuickBlock>
     )
   }
@@ -100,8 +100,7 @@ const Block =
       ),
       'adminChallenges',
       'challenges',
-      'filteredChallenges',
-      true
+      'filteredChallenges'
     ),
     'adminProjects',
     'filteredProjects',

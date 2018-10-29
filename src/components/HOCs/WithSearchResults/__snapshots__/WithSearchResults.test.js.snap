@@ -79,6 +79,7 @@ ShallowWrapper {
           ],
         },
       ],
+      "mySearchNameSearchActive": false,
       "searchCriteria": Object {
         "query": "",
       },
@@ -129,6 +130,7 @@ ShallowWrapper {
             ],
           },
         ],
+        "mySearchNameSearchActive": false,
         "searchCriteria": Object {
           "query": "",
         },
@@ -200,6 +202,7 @@ ShallowWrapper {
           ],
         },
       ],
+      "mySearchNameSearchActive": false,
       "searchCriteria": Object {
         "query": "#bar",
       },
@@ -223,6 +226,7 @@ ShallowWrapper {
             ],
           },
         ],
+        "mySearchNameSearchActive": false,
         "searchCriteria": Object {
           "query": "#bar",
         },
@@ -303,6 +307,7 @@ ShallowWrapper {
           ],
         },
       ],
+      "mySearchNameSearchActive": false,
       "searchCriteria": Object {
         "query": "",
       },
@@ -335,6 +340,7 @@ ShallowWrapper {
             ],
           },
         ],
+        "mySearchNameSearchActive": false,
         "searchCriteria": Object {
           "query": "",
         },
