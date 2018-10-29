@@ -10,6 +10,7 @@ const descriptor = {
   blockKey: 'ProjectCountBlock',
   label: messages.label,
   targets: [DashboardDataTarget.projects],
+  minWidth: 2,
   defaultWidth: 6,
   defaultHeight: 4,
 }

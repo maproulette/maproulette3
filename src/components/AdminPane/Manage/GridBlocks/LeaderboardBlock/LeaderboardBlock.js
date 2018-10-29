@@ -14,6 +14,7 @@ const descriptor = {
   blockKey: 'LeaderboardBlock',
   label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
+  minWidth: 3,
   defaultWidth: 4,
   defaultHeight: 8,
   defaultConfiguration: {

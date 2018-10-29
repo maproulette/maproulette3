@@ -11,6 +11,7 @@ const descriptor = {
   blockKey: 'BurndownChartBlock',
   label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
+  minWidth: 3,
   defaultWidth: 4,
   defaultHeight: 12,
 }

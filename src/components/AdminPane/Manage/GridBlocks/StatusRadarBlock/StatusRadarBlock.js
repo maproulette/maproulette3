@@ -11,6 +11,7 @@ const descriptor = {
   blockKey: 'StatusRadarBlock',
   label: messages.label,
   targets: [DashboardDataTarget.challenges, DashboardDataTarget.challenge],
+  minWidth: 3,
   defaultWidth: 4,
   defaultHeight: 12,
 }

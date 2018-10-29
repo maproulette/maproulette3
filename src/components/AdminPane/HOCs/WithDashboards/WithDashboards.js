@@ -25,6 +25,26 @@ export const WithDashboards = function(WrappedComponent,
     }
 
     /**
+     * Sets up a brand-new dashboard based on the given default configuration
+     * function
+     */
+    setupDashboard = defaultConfiguration => {
+      const conf = defaultConfiguration()
+      // Ensure default layout honors properties from each block's descriptor
+      for (let i = 0; i < conf.blocks.length; i++) {
+        const block = conf.blocks[i]
+        conf.layout[i] = Object.assign({}, {
+          minW: block.minWidth,
+          maxW: block.maxWidth,
+          minH: block.minHeight,
+          maxH: block.maxHeight,
+        }, conf.layout[i])
+      }
+
+      return conf
+    }
+
+    /**
      * Retrieves all dashboards from the user's app settings
      *
      * @private
@@ -86,7 +106,8 @@ export const WithDashboards = function(WrappedComponent,
         })
       }
 
-      return migrateDashboard(configuration, defaultConfiguration)
+      return migrateDashboard(configuration,
+                              () => this.setupDashboard(defaultConfiguration))
     }
 
     /**
@@ -159,7 +180,7 @@ export const WithDashboards = function(WrappedComponent,
       // complete, we should get rerendered and have it available, so do not
       // assign it to currentDashboard.
       if (!currentDashboard) {
-        this.saveDashboardConfiguration(defaultConfiguration())
+        this.saveDashboardConfiguration(this.setupDashboard(defaultConfiguration))
       }
 
       return !currentDashboard ? null : this.completeDashboard(currentDashboard)
@@ -169,7 +190,7 @@ export const WithDashboards = function(WrappedComponent,
      * Add a new, default dashboard configuration
      */
     addNewDashboardConfiguration = () => {
-      const newConfiguration = defaultConfiguration()
+      const newConfiguration = this.setupDashboard(defaultConfiguration)
       newConfiguration.label = `(New) ${newConfiguration.label}`
 
       this.saveDashboardConfiguration(newConfiguration)

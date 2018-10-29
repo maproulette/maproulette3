@@ -16,6 +16,7 @@ const descriptor = {
   blockKey: 'ChallengeOverviewBlock',
   label: messages.label,
   targets: [DashboardDataTarget.challenge],
+  minWidth: 3,
   defaultWidth: 4,
   defaultHeight: 7,
 }
