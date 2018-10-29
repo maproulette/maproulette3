@@ -4,7 +4,7 @@ import _keys from 'lodash/keys'
 import _without from 'lodash/without'
 import _isEmpty from 'lodash/isEmpty'
 import _first from 'lodash/first'
-import { injectIntl } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import { CHALLENGE_CATEGORY_OTHER,
          categoryMatchingKeywords,
          combinedCategoryKeywords,
@@ -88,7 +88,7 @@ export class FilterByKeyword extends Component {
     const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
       <Selection placeholder={anyOption.text}
-                 label={this.props.intl.formatMessage(messages.keywordLabel)}
+                 label={<FormattedMessage {...messages.keywordLabel} />}
                  options={selectOptions}
                  value={_isEmpty(this.props.searchFilters.keywords) ?
                         null : activeCategory}

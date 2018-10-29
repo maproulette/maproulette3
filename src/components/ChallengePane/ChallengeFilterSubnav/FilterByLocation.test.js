@@ -54,7 +54,7 @@ test("it renders with props as expected", () => {
 })
 
 test("it calls setSearchFilters/locateMapToUser if an onChange occurs with 'nearMe'", () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <FilterByLocation {...basicProps} />
   )
 
@@ -65,7 +65,7 @@ test("it calls setSearchFilters/locateMapToUser if an onChange occurs with 'near
 
 
 test("it calls setSearchFilters if an onChange occurs with withinMapBounds", () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <FilterByLocation {...basicProps} />
   )
 
@@ -74,7 +74,7 @@ test("it calls setSearchFilters if an onChange occurs with withinMapBounds", () 
 })
 
 test("it calls removeSearchFilters if an onChange occurs with a null value", () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <FilterByLocation {...basicProps} />
   )
 

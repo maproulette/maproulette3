@@ -83,7 +83,7 @@ export class NavDropdown extends Component {
 
 NavDropdown.propTypes = {
   /** Label displayed above the dropdown */
-  label: PropTypes.element,
+  label: PropTypes.node,
   /** Invoked when the value is changed */
   onChange: PropTypes.func,
   /** Optional placeholder to be displayed when there is no value */

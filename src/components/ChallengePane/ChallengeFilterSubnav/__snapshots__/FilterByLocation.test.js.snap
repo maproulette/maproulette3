@@ -72,7 +72,11 @@ ShallowWrapper {
         "touchstart",
       ],
       "excludeScrollbar": false,
-      "label": undefined,
+      "label": <FormattedMessage
+        defaultMessage="Location"
+        id="ChallengeFilterSubnav.filter.location.label"
+        values={Object {}}
+/>,
       "onChange": [Function],
       "options": Array [
         Object {
@@ -117,7 +121,11 @@ ShallowWrapper {
           "touchstart",
         ],
         "excludeScrollbar": false,
-        "label": undefined,
+        "label": <FormattedMessage
+          defaultMessage="Location"
+          id="ChallengeFilterSubnav.filter.location.label"
+          values={Object {}}
+/>,
         "onChange": [Function],
         "options": Array [
           Object {
