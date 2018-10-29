@@ -33,12 +33,9 @@ const fuzzySearchOptions = {
  * @param {string} outputProp - optional name of the prop to use when passing
  *        down the filtered results. By default it will be the same as
  *        itemsProp.
- * @param {boolean} normallyClosed - optional boolean that causes no results to
- *        be passed through if there is no search query. By default, this HOC is
- *        "normally open" and passes through all results if there is no query
  */
 export const WithSearchResults = function(WrappedComponent, searchName,
-                                          itemsProp, outputProp, normallyClosed = false) {
+                                          itemsProp, outputProp) {
   return class extends Component {
     /**
      * @private
@@ -60,7 +57,8 @@ export const WithSearchResults = function(WrappedComponent, searchName,
     render() {
       const query = _get(this.props, `searchCriteria.query`, '')
       let items = this.props[itemsProp]
-      let searchResults = normallyClosed ? [] : this.props[itemsProp]
+      let searchResults = this.props[itemsProp]
+      let searchActive = false
 
       if (_isString(query) && query.length > 0 &&
           _isArray(items) && items.length > 0) {
@@ -74,6 +72,7 @@ export const WithSearchResults = function(WrappedComponent, searchName,
         if (items.length > 0 && queryParts.query.length > 0) {
           const fuzzySearch = new Fuse(items, fuzzySearchOptions)
           searchResults = fuzzySearch.search(queryParts.query)
+          searchActive = true
         }
         else {
           searchResults = items
@@ -84,14 +83,17 @@ export const WithSearchResults = function(WrappedComponent, searchName,
         outputProp = itemsProp
       }
 
-      return <WrappedComponent {...{[outputProp]: searchResults}}
+      return <WrappedComponent {...{
+                                 [outputProp]: searchResults,
+                                 [`${searchName}SearchActive`]: searchActive,
+                               }}
                                {..._omit(this.props, outputProp)} />
     }
   }
 }
 
-export default (WrappedComponent, searchName, itemsProp, outputProp, normallyClosed) =>
+export default (WrappedComponent, searchName, itemsProp, outputProp) =>
   WithSearch(
-    WithSearchResults(WrappedComponent, searchName, itemsProp, outputProp, normallyClosed),
+    WithSearchResults(WrappedComponent, searchName, itemsProp, outputProp),
     searchName
   )
