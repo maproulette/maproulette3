@@ -43,7 +43,7 @@ export default class MenuList extends Component {
     const menuList = <ul className="menu-list">{menuItems}</ul>
     return !this.props.label ? menuList : (
       <React.Fragment>
-        <p className="menu-label">{this.props.label}</p> 
+        <p className="menu-label">{this.props.label}</p>
         {menuList}
       </React.Fragment>
     )
@@ -52,7 +52,7 @@ export default class MenuList extends Component {
 
 MenuList.propTypes = {
   /** Heading for the menu */
-  label: PropTypes.string,
+  label: PropTypes.node,
   /** Array of menu options, each with at least key and text fields */
   options: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.node,

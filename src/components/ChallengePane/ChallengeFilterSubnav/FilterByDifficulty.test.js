@@ -38,7 +38,7 @@ beforeEach(() => {
   basicProps = _cloneDeep(propsFixture)
   basicProps.setSearchFilters = jest.fn()
   basicProps.removeSearchFilters = jest.fn()
-  basicProps.intl = {formatMessage: jest.fn()}
+  basicProps.intl = {formatMessage: jest.fn(m => m.defaultMessage)}
 })
 
 test("it renders with props as expected", () => {
@@ -50,7 +50,7 @@ test("it renders with props as expected", () => {
 })
 
 test("it calls setSearchFilters if an onChange occurs with a value", () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <FilterByDifficulty {...basicProps} />
   )
 
@@ -59,7 +59,7 @@ test("it calls setSearchFilters if an onChange occurs with a value", () => {
 })
 
 test("it calls removeSearchFilters if an onChange occurs with a null value", () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <FilterByDifficulty {...basicProps} />
   )
 

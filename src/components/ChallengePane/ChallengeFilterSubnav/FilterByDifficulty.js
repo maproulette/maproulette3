@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _map from 'lodash/map'
-import { injectIntl } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
 import MenuList from '../../Bulma/MenuList'
 import { ChallengeDifficulty,
@@ -51,7 +51,7 @@ export class FilterByDifficulty extends Component {
     const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
       <Selection placeholder={anyOption.text}
-                 label={this.props.intl.formatMessage(messages.difficultyLabel)}
+                 label={<FormattedMessage {...messages.difficultyLabel} />}
                  options={selectOptions}
                  value={this.props.searchFilters.difficulty}
                  onChange={this.updateFilter}
