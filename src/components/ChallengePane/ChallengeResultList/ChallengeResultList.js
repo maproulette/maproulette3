@@ -9,8 +9,10 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
+import WithPagedChallenges from '../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
 import SortChallengesSelector from './SortChallengesSelector'
+import LoadMoreButton from './LoadMoreButton'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import StartVirtualChallenge from './StartVirtualChallenge'
@@ -33,7 +35,7 @@ export class ChallengeResultList extends Component {
   }
 
   render() {
-    const challengeResults = this.props.challenges
+    const challengeResults = this.props.pagedChallenges
 
     if (_isFinite(this.props.loadingBrowsedChallenge)) {
       return (
@@ -119,6 +121,10 @@ export class ChallengeResultList extends Component {
 
         {virtualChallengeOption}
         {results}
+
+        <div className="after-results">
+          <LoadMoreButton {...this.props} />
+        </div>
       </div>
     )
   }
@@ -133,6 +139,13 @@ ChallengeResultList.propTypes = {
 
   /** Remaining challenges after all filters, searches, etc. applied */
   challenges: PropTypes.array.isRequired,
+
+  /** Remaining challenges after challenges have been paged */
+  pagedChallenges: PropTypes.array.isRequired,
 }
 
-export default WithCurrentUser(WithSortedChallenges(ChallengeResultList))
+export default WithCurrentUser(
+                 WithSortedChallenges(
+                   WithPagedChallenges(ChallengeResultList, "challenges", "pagedChallenges")
+                 )
+               )

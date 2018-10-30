@@ -20,6 +20,7 @@ import { fetchProjects } from './services/Project/Project'
 import { fetchFeaturedChallenges,
          extendedFind,
          fetchChallengeActions } from './services/Challenge/Challenge'
+import { RESULTS_PER_PAGE } from './services/Search/Search'
 import { ensureUserLoggedIn, loadCompleteUser, GUEST_USER_ID }
        from './services/User/User'
 import { setCheckingLoginStatus,
@@ -70,7 +71,7 @@ const {store} = initializePersistedStore((store) => {
 
   // Seed our store with some challenges.
   store.dispatch(fetchFeaturedChallenges())
-  store.dispatch(extendedFind({}, 100))
+  store.dispatch(extendedFind({}, RESULTS_PER_PAGE))
 
   // Seed our store with projects
   store.dispatch(fetchProjects())

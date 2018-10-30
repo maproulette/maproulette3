@@ -7,7 +7,8 @@ import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
 import { SORT_NAME, SORT_CREATED, SORT_POPULARITY,
-         setSort, removeSort, clearSort,
+         setSort, removeSort,
+         setPage, removePage,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
          setChallengeSearchMapBounds, setChallengeBrowseMapBounds,
@@ -90,10 +91,13 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
            }
        })
 
+       const isLoading = _get(this.props, `currentSearch.${searchGroup}.meta.fetchingResults`) != null
+
        return (
           <WrappedComponent searchGroup={searchGroup}
                             searchQueries={searchQueries}
                             searchFunction={searchFunction}
+                            isLoading={isLoading}
                             {...searchQueries[searchGroup]}
                             {..._omit(this.props, ['searchQueries',
                                                    'setSearch', 'clearSearch',
@@ -110,6 +114,7 @@ export const mapStateToProps = (state, searchGroup) => {
     searchCriteria: _get(state, `currentSearch.${searchGroup}`),
     searchFilters: _get(state, `currentSearch.${searchGroup}.filters`, {}),
     searchSort: _get(state, `currentSearch.${searchGroup}.sort`, {}),
+    searchPage: _get(state, `currentSearch.${searchGroup}.page`, {}),
     mapBounds: convertBounds(_get(state, `currentSearch.${searchGroup}.mapBounds`,
                                   {bounds: DEFAULT_MAP_BOUNDS})),
   }
@@ -166,7 +171,12 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   removeSearchSort:
     criteriaNames => dispatch(removeSort(searchGroup, criteriaNames)),
 
-  clearSearchSort: () => dispatch(clearSort(searchGroup)),
+  setSearchPage: page => {
+    dispatch(setPage(searchGroup, page))
+  },
+
+  removeSearchPage:
+    criteriaNames => dispatch(removePage(searchGroup, criteriaNames)),
 
   setSearchFilters:
     filterCriteria => {

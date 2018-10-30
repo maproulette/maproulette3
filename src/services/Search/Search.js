@@ -18,7 +18,9 @@ export const RECEIVED_RESULTS = 'RECEIVED_RESULTS'
 
 export const SET_SORT = 'SET_SORT'
 export const REMOVE_SORT = 'REMOVE_SORT'
-export const CLEAR_SORT = 'CLEAR_SORT'
+
+export const SET_PAGE = 'SET_PAGE'
+export const REMOVE_PAGE = 'REMOVE_PAGE'
 
 export const SET_FILTERS = 'SET_FILTERS'
 export const REMOVE_FILTERS = 'REMOVE_FILTERS'
@@ -36,6 +38,9 @@ export const SORT_CREATED = 'created'
 export const SORT_POPULARITY = 'popularity'
 export const SORT_DEFAULT = 'default'
 export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_DEFAULT]
+
+// Default Results Per page
+export const RESULTS_PER_PAGE = 50
 
 /** Returns object containing localized labels  */
 export const sortLabels = intl => _fromPairs(
@@ -115,10 +120,20 @@ export const removeSort = function(searchName, criteriaNames) {
   }
 }
 
-export const clearSort = function(searchName) {
+export const setPage = function(searchName, page) {
+  console.log("Search.setPage")
   return {
-    type: CLEAR_SORT,
+    type: SET_PAGE,
     searchName,
+    page,
+  }
+}
+
+export const removePage = function(searchName, criteriaNames) {
+  return {
+    type: REMOVE_PAGE,
+    searchName,
+    criteriaNames,
   }
 }
 
@@ -256,9 +271,11 @@ export const performSearch = function(searchName, query, asyncSearchAction) {
       return null
     }
 
+    const resultsPerPage = _get(query, 'page.resultsPerPage')
+
     dispatch(fetchingResults(searchName, fetchId))
     return dispatch(
-      asyncSearchAction(query)
+      asyncSearchAction(query, resultsPerPage)
     ).then(() => dispatch(receivedResults(searchName, fetchId)))
     .catch((error) => {
       // 404 indicates no results.
@@ -278,10 +295,12 @@ export const currentSearch = function(state={}, action) {
     case SET_SEARCH:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.query`, action.query)
+      _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
     case CLEAR_SEARCH:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.query`, null)
+      _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
     case FETCHING_RESULTS:
       mergedState = _cloneDeep(state)
@@ -303,27 +322,40 @@ export const currentSearch = function(state={}, action) {
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.sort`,
             Object.assign({}, _get(state, `${action.searchName}.sort`), action.sortCriteria))
+      _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
     case REMOVE_SORT:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.sort`,
             Object.assign({}, _omit(_get(state, `${action.searchName}.sort`), action.criteriaNames)))
+      _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
-    case CLEAR_SORT:
-      return Object.assign({}, _omit(state, `${action.searchName}.sort`))
+    case SET_PAGE:
+      mergedState = _cloneDeep(state)
+      _set(mergedState, `${action.searchName}.page`,
+            Object.assign({}, _get(state, `${action.searchName}.page`), action.page))
+      return mergedState
+
+    case REMOVE_PAGE:
+      mergedState = _cloneDeep(state)
+      _set(mergedState, `${action.searchName}.page`,
+            Object.assign({}, _omit(_get(state, `${action.searchName}.page`), action.criteriaNames)))
+      return mergedState
 
     case SET_FILTERS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.filters`,
             Object.assign({}, _get(state, `${action.searchName}.filters`), action.filterCriteria))
+      _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
     case REMOVE_FILTERS:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.filters`,
             Object.assign({}, _omit(_get(state, `${action.searchName}.filters`), action.criteriaNames)))
+      _set(mergedState, `${action.searchName}.page`, null)
       return mergedState
 
     case CLEAR_FILTERS:

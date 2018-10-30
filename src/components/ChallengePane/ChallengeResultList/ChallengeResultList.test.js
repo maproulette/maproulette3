@@ -37,11 +37,13 @@ beforeEach(() => {
       savedChallenges: [],
     },
     unfilteredChallenges: challenges,
+    pagedChallenges: challenges,
     challenges,
     startChallenge: jest.fn(),
     saveChallenge: jest.fn(),
     unsaveChallenge: jest.fn(),
     startMapBoundedTasks: jest.fn(),
+    setSearchPage: jest.fn(),
     intl: {formatMessage: jest.fn()},
   }
 })
@@ -58,6 +60,7 @@ test("renders with props as expected", () => {
 
 test("renders with no challenges", () => {
   basicProps.challenges = []
+  basicProps.pagedChallenges = []
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} />
   )
@@ -78,6 +81,7 @@ test("renders with props className in encapsulating div", () => {
 test("renders with a busySpinner if props fetchingChallenges", () => {
   const fetchingChallenges = basicProps.challenges
   basicProps.challenges = []
+  basicProps.pagedChallenges = []
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} fetchingChallenges={fetchingChallenges} />
@@ -90,6 +94,7 @@ test("renders with a busySpinner if props fetchingChallenges", () => {
 test("always includes actively browsed challenge in the result list", () => {
   const browsed = basicProps.challenges[0]
   basicProps.challenges = []
+  basicProps.pagedChallenges = []
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} browsedChallenge={browsed} />
@@ -104,6 +109,7 @@ test("always includes actively browsed challenge in the result list", () => {
 test("doesn't duplicate actively browsed challenge in the result list", () => {
   const browsed = basicProps.challenges[0]
   basicProps.challenges = [browsed]
+  basicProps.pagedChallenges = [browsed]
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} browsedChallenge={browsed} />
@@ -117,6 +123,7 @@ test("doesn't duplicate actively browsed challenge in the result list", () => {
 
 test("shows a clear-filters button if some challenges are filtered", () => {
   basicProps.challenges = [challenges[0]]
+  basicProps.pagedChallenges = [challenges[0]]
 
   const wrapper = shallow(
     <ChallengeResultList {...basicProps} />

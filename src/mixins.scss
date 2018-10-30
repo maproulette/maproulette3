@@ -18,6 +18,10 @@
     @include button-color($background-color, $foreground-color);
   }
 
+  &.no-focus:focus:not(:hover) {
+    @include button-color($foreground-color, $background-color);
+  }
+
   &.is-loading {
     &:enabled:focus:after {
       // Change spinner color. Bulma css has !important so we have to as well.
