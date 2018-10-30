@@ -1,0 +1,5 @@
+@import 'mixins.scss';
+
+button.load-more-button {
+  @include invert-on-hover($green, $white);
+}
