@@ -10,6 +10,7 @@ import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import TaskEditControl from '../ActiveTaskControls/TaskEditControl/TaskEditControl'
+import TaskCommentInput from '../ActiveTaskControls/TaskCommentInput/TaskCommentInput'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './ReviewTaskControls.css'
@@ -23,13 +24,25 @@ import './ReviewTaskControls.css'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ReviewTaskControls extends Component {
+  state = {
+    comment: "",
+  }
+
+  setComment = comment => this.setState({comment})
+
   /** Navigate to the previous sequential task */
   prevTask = () =>
-    this.props.previousSequentialTask(this.props.task)
+    this.props.previousSequentialTask(this.props.task, this.state.comment)
 
   /** Navigate to the next sequential task */
   nextTask = () =>
-    this.props.nextSequentialTask(this.props.task)
+    this.props.nextSequentialTask(this.props.task, this.state.comment)
+
+  /** Save Task Comment */
+  postComment = () => {
+    this.props.postTaskComment(this.props.task, this.state.comment)
+    this.setComment("")
+  }
 
   /** Process keyboard shortcuts for the review controls */
   handleKeyboardShortcuts = (event) => {
@@ -72,6 +85,19 @@ export class ReviewTaskControls extends Component {
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
+        <div className="review-task-controls__control-block">
+          <TaskCommentInput className="review-task-controls__task-comment"
+                            value={this.state.comment}
+                            commentChanged={this.setComment}
+                            {..._omit(this.props, 'className')} />
+            <button className="button large-and-wide post-comment-control"
+                    onClick={this.postComment}>
+              <span className="control-label">
+                <FormattedMessage {...messages.postCommentLabel} />
+              </span>
+            </button>
+        </div>
+
         <div className="review-task-controls__control-block">
           <button className="button previous-task-control large-and-wide"
                   onClick={this.prevTask}>
