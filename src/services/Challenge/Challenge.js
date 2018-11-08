@@ -572,8 +572,11 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
  * line-by-line GeoJSON, which must be submitted separately from the challenge,
  * but standard geoJSON files can also be accommodated (set lineByLine to false
  * in that case).
+ *
+ * If removeUnmatchedTasks is set to true, then incomplete tasks will be removed
+ * prior to processing of updated sourced data
  */
-export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=true) {
+export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=true, removeUnmatchedTasks=false) {
   return function(dispatch) {
     // Server expects the file in a form part named "json"
     const formData = new FormData()
@@ -585,7 +588,7 @@ export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=
     return new Endpoint(
       api.challenge.uploadGeoJSON, {
         variables: {id: challengeId},
-        params: {lineByLine},
+        params: {lineByLine, removeUnmatched: removeUnmatchedTasks},
         formData,
       }
     ).execute()
@@ -615,12 +618,17 @@ export const setIsEnabled = function(challengeId, isEnabled) {
 
 /**
  * Rebuild tasks in the given challenge
+ *
+ * If removeUnmatchedTasks is set to true, then incomplete tasks that don't
+ * match a task in the updated source data will be removed
  */
-export const rebuildChallenge = function(challengeId) {
+export const rebuildChallenge = function(challengeId, removeUnmatchedTasks=false) {
   return function(dispatch) {
     return new Endpoint(
-      api.challenge.rebuild,
-      {variables: {id: challengeId}}
+      api.challenge.rebuild, {
+        variables: {id: challengeId},
+        params: {removeUnmatched: removeUnmatchedTasks},
+      }
     ).execute().then(() =>
       fetchChallenge(challengeId)(dispatch) // Refresh challenge data
     ).catch(error => {

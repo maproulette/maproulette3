@@ -41,6 +41,8 @@ import AsValidatableGeoJSON
        from '../../../../../interactions/GeoJSON/AsValidatableGeoJSON'
 import AsValidatableOverpass
        from '../../../../../interactions/Overpass/AsValidatableOverpass'
+import TaskUploadingProgress
+       from '../../TaskUploadingProgress/TaskUploadingProgress'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import { preparePriorityRuleGroupForForm,
          preparePriorityRuleGroupForSaving } from './PriorityRuleGroup'
@@ -409,8 +411,9 @@ export class EditChallenge extends Component {
   }
 
   render() {
-    if (!this.props.project ||
-        (this.state.isSaving && !this.props.progress.creatingTasks.inProgress)) {
+    const isUploadingTasks = _get(this.props, 'progress.creatingTasks.inProgress', false)
+
+    if (!this.props.project || (this.state.isSaving && !isUploadingTasks)) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
@@ -418,22 +421,8 @@ export class EditChallenge extends Component {
       )
     }
 
-    // If uploading tasks, show progress
-    if (this.props.progress.creatingTasks.inProgress) {
-      return (
-        <div className="pane-loading full-screen-height">
-          <div className="progress-status">
-            <h1 className="progress-status__title">
-              <FormattedMessage {...messages.creatingTasks} />
-            </h1>
-
-            <div className="progress-status__description">
-              {this.props.progress.creatingTasks.stepsCompleted} <FormattedMessage {...messages.tasksCreated} />
-              <BusySpinner />
-            </div>
-          </div>
-        </div>
-      )
+    if (isUploadingTasks) {
+      return <TaskUploadingProgress {...this.props} />
     }
 
     const challengeData = this.prepareChallengeDataForForm()

@@ -18,7 +18,8 @@ export default class GeographicIndexingNotice extends Component {
     const reindexingDelay =
       _get(process.env, 'REACT_APP_GEOGRAPHIC_INDEXING_DELAY', 0)
 
-    if (differenceInHours(Date.now(), _get(this.props, 'challenge.modified', 0)) >
+    // If enough time has passed, nothing to show
+    if (differenceInHours(Date.now(), _get(this.props, 'challenge.lastTaskRefresh', 0)) >
         reindexingDelay) {
       return null
     }

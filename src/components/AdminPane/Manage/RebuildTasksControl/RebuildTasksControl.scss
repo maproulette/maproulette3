@@ -1,0 +1,60 @@
+@import "mixins.scss";
+
+.rebuild-tasks-control {
+  .modal .modal-content .message {
+    background-color: $white;
+  }
+
+  &__explanation {
+    @include markdown-content();
+    background-color: $grey-lightest-more;
+    border-radius: $radius-medium;
+    padding: 1em;
+
+    li {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  &__options {
+    background-color: $white;
+    margin: 20px 0;
+  }
+
+  &__upload-geojson {
+    margin-top: 1em;
+
+    form.rjsf .dropzone {
+      background-color: transparent;
+    }
+  }
+
+  &__remove-unmatched-option {
+    label.checkbox {
+      color: $primary
+    }
+
+    input {
+      margin-right: 0.5em;
+    }
+  }
+
+  &__warning {
+    color: $danger;
+    font-weight: $weight-semibold;
+  }
+
+  &__modal-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+
+    button.button {
+      margin-right: 15px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

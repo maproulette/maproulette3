@@ -21,12 +21,12 @@ export default defineMessages({
 
   idLabel: {
     id: "Task.fields.id.label",
-    defaultMessage: "Task Id",
+    defaultMessage: "Internal Id",
   },
 
-  nameLabel: {
-    id: "Task.fields.name.label",
-    defaultMessage: "Name",
+  featureIdLabel: {
+    id: "Task.fields.featureId.label",
+    defaultMessage: "Feature Id",
   },
 
   statusLabel: {

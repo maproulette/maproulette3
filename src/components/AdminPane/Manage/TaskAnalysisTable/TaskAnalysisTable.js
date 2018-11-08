@@ -65,16 +65,16 @@ export class TaskAnalysisTable extends Component {
       resizable: false,
       className: 'task-analysis-table__selection-option',
     }, {
+      id: 'featureId',
+      Header: this.props.intl.formatMessage(messages.featureIdLabel),
+      accessor: t => t.name || t.title,
+      exportable: t => t.name || t.title,
+    }, {
       id: 'id',
       Header: this.props.intl.formatMessage(messages.idLabel),
       accessor: 'id',
       exportable: t => t.id,
-      maxWidth: 95,
-    }, {
-      id: 'name',
-      Header: this.props.intl.formatMessage(messages.nameLabel),
-      accessor: t => t.name || t.title,
-      exportable: t => t.name || t.title,
+      maxWidth: 120,
     }, {
       id: 'status',
       Header: this.props.intl.formatMessage(messages.statusLabel),
@@ -157,6 +157,7 @@ export class TaskAnalysisTable extends Component {
                       <ViewTaskSubComponent taskId={props.original.id} />
                     }
                     collapseOnDataChange={false}
+                    defaultSorted={[ {id: 'featureId', desc: false} ]}
         />
       </div>
     )
