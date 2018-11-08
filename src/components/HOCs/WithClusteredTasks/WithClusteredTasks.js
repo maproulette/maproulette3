@@ -17,7 +17,7 @@ export const mapStateToProps = state => ({
 })
 
 export const mapDispatchToProps = dispatch => ({
-  fetchClusteredTasks: (challengeId, isVirtualChallenge) =>
+  fetchClusteredTasks: async (challengeId, isVirtualChallenge) =>
     dispatch(fetchClusteredTasks(challengeId, isVirtualChallenge)),
 })
 

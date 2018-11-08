@@ -19,16 +19,6 @@ export default defineMessages({
     defaultMessage: "New Challenge",
   },
 
-  creatingTasks: {
-    id: 'Admin.EditChallenge.creatingTasks.header',
-    defaultMessage: "Uploading Tasks",
-  },
-
-  tasksCreated: {
-    id: 'Admin.EditChallenge.tasksCreated.label',
-    defaultMessage: "tasks uploaded",
-  },
-
   lineNumber: {
     id: "Admin.EditChallenge.lineNumber",
     defaultMessage: "Line {line, number}: ",

@@ -29,11 +29,6 @@ export default defineMessages({
     defaultMessage: "Rebuild",
   },
 
-  rebuildChallengePrompt: {
-    id: "Admin.Challenge.controls.rebuild.prompt",
-    defaultMessage: "Rebuilding will re-run the Overpass query and refresh your challenge with the latest data. Tasks marked as fixed will be removed from your challenge (affecting your metrics), while tasks for new data will be added. In some situations tasks may be duplicated if matching up old data with new data is unsuccessful. Do you wish to proceed?",
-  },
-
   cloneChallengeLabel: {
     id: "Admin.Challenge.controls.clone.label",
     defaultMessage: "Clone",

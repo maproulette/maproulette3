@@ -5,8 +5,14 @@ import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _maxBy from 'lodash/maxBy'
 import parse from 'date-fns/parse'
+import { ChallengeStatus }
+       from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { isCompletionStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
+
+export const SOURCE_OVERPASS = 'overpass'
+export const SOURCE_REMOTE = 'remote'
+export const SOURCE_LOCAL = 'local'
 
 /**
  * AsManageableChallenge adds functionality to a Challenge related to
@@ -18,12 +24,27 @@ export class AsManageableChallenge {
   }
 
   isRebuildable() {
-    return !_isEmpty(this.overpassQL)
+    return _isFinite(this.status) &&
+           this.status !== ChallengeStatus.none &&
+           this.status !== ChallengeStatus.building
+  }
+
+  dataSource() {
+    if (!_isEmpty(this.overpassQL)) {
+      return SOURCE_OVERPASS
+    }
+    else if (!_isEmpty(this.remoteGeoJson)) {
+      return SOURCE_REMOTE
+    }
+    else {
+      return SOURCE_LOCAL
+    }
   }
 
   isComplete() {
-    return _get(this, 'actions.total', 0) > 0 &&
-           _get(this, 'actions.available') === 0
+    return this.status === ChallengeStatus.finished ||
+           (_get(this, 'actions.total', 0) > 0 &&
+            _get(this, 'actions.available') === 0)
   }
 
   completionPercentage() {

@@ -31,33 +31,7 @@ export class ChallengeOverviewBlock extends Component {
                   className="challenge-overview-block"
                   blockTitle={<FormattedMessage {...messages.title} />}>
         <div className="columns">
-          <div className="column is-one-quarter status-label">
-            <FormattedMessage {...messages.creationDate} />
-          </div>
-
-          <div className="column is-narrow status-value">
-            {this.props.challenge.created &&
-             <FormattedDate value={new Date(this.props.challenge.created)}
-                            year='numeric' month='long' day='2-digit' />
-            }
-          </div>
-        </div>
-
-        <div className="columns">
-          <div className="column is-one-quarter status-label">
-            <FormattedMessage {...messages.lastModifiedDate} />
-          </div>
-
-          <div className="column is-narrow status-value">
-            {this.props.challenge.modified &&
-             <FormattedDate value={new Date(this.props.challenge.modified)}
-                            year='numeric' month='long' day='2-digit' />
-            }
-          </div>
-        </div>
-
-        <div className="columns">
-          <div className="column is-one-quarter status-label">
+          <div className="column is-one-third status-label">
             <FormattedMessage {...messages.status} />
           </div>
 
@@ -67,7 +41,7 @@ export class ChallengeOverviewBlock extends Component {
         </div>
 
         <div className="columns">
-          <div className="column is-one-quarter status-label">
+          <div className="column is-one-third status-label">
             <FormattedMessage {...messages.visibleLabel} />
           </div>
 
@@ -80,6 +54,45 @@ export class ChallengeOverviewBlock extends Component {
         </div>
 
         <ChallengeKeywords challenge={this.props.challenge} />
+
+        <div className="columns">
+          <div className="column is-one-third status-label">
+            <FormattedMessage {...messages.creationDate} />
+          </div>
+
+          <div className="column is-narrow status-value">
+            {this.props.challenge.created &&
+             <FormattedDate value={new Date(this.props.challenge.created)}
+                            year='numeric' month='long' day='2-digit' />
+            }
+          </div>
+        </div>
+
+        <div className="columns">
+          <div className="column is-one-third status-label">
+            <FormattedMessage {...messages.lastModifiedDate} />
+          </div>
+
+          <div className="column is-narrow status-value">
+            {this.props.challenge.modified &&
+             <FormattedDate value={new Date(this.props.challenge.modified)}
+                            year='numeric' month='long' day='2-digit' />
+            }
+          </div>
+        </div>
+
+        <div className="columns">
+          <div className="column is-one-third status-label">
+            <FormattedMessage {...messages.tasksRefreshDate} />
+          </div>
+
+          <div className="column is-narrow status-value">
+            {this.props.challenge.lastTaskRefresh &&
+             <FormattedDate value={new Date(this.props.challenge.lastTaskRefresh)}
+                            year='numeric' month='long' day='2-digit' />
+            }
+          </div>
+        </div>
       </QuickBlock>
     )
   }

@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Modified:",
   },
 
+  tasksRefreshDate: {
+    id: "GridBlocks.ChallengeOverviewBlock.fields.tasksRefreshDate.label",
+    defaultMessage: "Tasks Refreshed:",
+  },
+
   status: {
     id: "GridBlocks.ChallengeOverviewBlock.fields.status.label",
     defaultMessage: "Status:",

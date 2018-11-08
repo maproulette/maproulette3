@@ -24,6 +24,9 @@ import WithChallengeMetrics
 import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import Dashboard from '../Dashboard/Dashboard'
+import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
+import TaskUploadingProgress
+       from '../TaskUploadingProgress/TaskUploadingProgress'
 import { blockDescriptor } from '../GridBlocks/BlockTypes'
 import DropdownButton from '../../../Bulma/DropdownButton'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -79,10 +82,6 @@ export class ChallengeDashboard extends Component {
                                this.props.challenge.id)
   }
 
-  rebuildChallenge = () => {
-    this.props.rebuildChallenge(this.props.challenge.id)
-  }
-
   moveChallenge = action => {
     this.props.moveChallenge(this.props.challenge.id, action.projectId)
   }
@@ -90,6 +89,11 @@ export class ChallengeDashboard extends Component {
   render() {
     if (!this.props.challenge) {
       return <BusySpinner />
+    }
+
+    const isUploadingTasks = _get(this.props, 'progress.creatingTasks.inProgress', false)
+    if (isUploadingTasks) {
+      return <TaskUploadingProgress {...this.props} />
     }
 
     const manager = AsManager(this.props.user)
@@ -168,11 +172,7 @@ export class ChallengeDashboard extends Component {
 
                {this.props.challenge.isRebuildable() &&
                  <div className="column is-narrow admin__manage__controls--control">
-                   <ConfirmAction prompt={<FormattedMessage {...messages.rebuildChallengePrompt} />}>
-                     <a onClick={this.rebuildChallenge}>
-                       <FormattedMessage {...messages.rebuildChallengeLabel } />
-                     </a>
-                   </ConfirmAction>
+                   <RebuildTasksControl {...this.props} />
                  </div>
                }
 
