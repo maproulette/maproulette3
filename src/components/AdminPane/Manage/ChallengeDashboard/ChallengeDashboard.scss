@@ -228,5 +228,16 @@
       margin-left: 10px;
       margin-top: 4px;
     }
+
+    &__clear-filters-control.button {
+      color: white;
+      margin-right: 45px;
+      fill: white;
+
+      &:hover {
+        color: $black;
+        fill: $black;
+      }
+    }
   }
 }

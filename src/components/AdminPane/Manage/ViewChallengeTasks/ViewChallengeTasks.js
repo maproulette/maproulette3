@@ -34,6 +34,7 @@ import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
+import { geoJson } from 'leaflet'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
@@ -46,9 +47,21 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 export class ViewChallengeTasks extends Component {
   state = {
     bulkUpdating: false,
+    initialBounds: null,
   }
 
   componentDidUpdate(prevProps) {
+    if (!this.state.initialBounds) {
+      const bounding = _get(this.props, 'challenge.bounding.bounding') ||
+                       _get(this.props, 'challenge.bounding')
+
+      if (bounding) {
+        this.setState({initialBounds: {mapBounds: geoJson(bounding).getBounds(), mapZoom: this.props.mapZoom}})
+      }
+      else {
+        this.setState({initialBounds: {mapBounds: this.props.mapBounds, mapZoom: this.props.mapZoom}})
+      }
+    }
     // When bulk updating, wait until the tasks have been reloaded before turning
     // off the bulkUpdating flag and refreshing any selected tasks.
     if (this.state.bulkUpdating && prevProps.loadingTasks && !this.props.loadingTasks) {
@@ -76,6 +89,12 @@ export class ViewChallengeTasks extends Component {
     this.props.applyBulkTaskChanges(
       tasks, {status: TaskStatus.created}
     ).then(() => this.props.refreshChallenge())
+  }
+
+  resetMapBounds = () => {
+    this.props.setChallengeOwnerMapBounds(this.props.challenge.id,
+                                          this.state.initialBounds.mapBounds,
+                                          this.state.initialBounds.mapZoom)
   }
 
   render() {
@@ -183,6 +202,17 @@ export class ViewChallengeTasks extends Component {
       }))
     )
 
+    const clearFiltersControl = (
+      <button className="button is-clear has-svg-icon admin__manage-tasks__task-controls__clear-filters-control"
+              onClick={() => {
+                this.props.clearAllFilters()
+                this.resetMapBounds()
+              }}>
+        <SvgSymbol viewBox='0 0 20 20' sym="close-icon" />
+        <FormattedMessage {...messages.clearFiltersLabel} />
+      </button>
+    )
+
     return (
       <div className='admin__manage-tasks'>
         <GeographicIndexingNotice challenge={this.props.challenge} />
@@ -246,6 +276,7 @@ export class ViewChallengeTasks extends Component {
 
         <TaskAnalysisTable filterOptions={filterOptions}
                            totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
+                           clearFiltersControl={clearFiltersControl}
                            {...this.props} />
       </div>
     )
@@ -275,6 +306,8 @@ ViewChallengeTasks.propTypes = {
   mapZoom: PropTypes.number,
   /** Invoked when the challenge owner pans or zooms the challenge map */
   setChallengeOwnerMapBounds: PropTypes.func.isRequired,
+  /** Clears any applied filters */
+  clearAllFilters: PropTypes.func.isRequired,
 }
 
 ViewChallengeTasks.defaultProps = {

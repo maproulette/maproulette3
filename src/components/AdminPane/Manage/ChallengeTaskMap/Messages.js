@@ -29,4 +29,3 @@ export default defineMessages({
     defaultMessage: "Status:",
   },
 })
-

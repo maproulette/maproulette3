@@ -205,13 +205,13 @@ export default class EnhancedMap extends Map {
       }
     }
 
-    if (this.props.initialBounds && _isEmpty(this.props.features)) {
+    if (this.props.initialBounds) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.initialBounds && _isEmpty(this.props.features)) {
+    if (this.props.initialBounds) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
     else if (!this.props.center.equals(prevProps.center)) {

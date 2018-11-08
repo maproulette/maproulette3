@@ -30,7 +30,9 @@ const FitBoundsLeafletControl = Control.extend({
       }
     })
 
-    map.fitBounds(geoJSONFeatures.getBounds().pad(0.5))
+    if (geoJSONFeatures.getLayers().length !== 0) {
+      map.fitBounds(geoJSONFeatures.getBounds().pad(0.5))
+    }
   },
 
   onAdd: function(map) {

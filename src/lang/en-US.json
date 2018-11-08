@@ -238,6 +238,7 @@
   "Admin.manageTasks.controls.changePriority.label": "Change Priority",
   "Admin.manageTasks.priorityLabel": "Priority",
   "Admin.manageTasks.controls.exportCSV.label": "Export CSV",
+  "Admin.manageTasks.controls.clearFilters.label": "Clear Filters",
   "Metrics.tasks.evaluatedByUser.label": "Tasks Evaluated by Users",
   "AutosuggestTextBox.labels.noResults": "No matches",
   "Form.textUpload.prompt": "Drop GeoJSON file here or click to select file",

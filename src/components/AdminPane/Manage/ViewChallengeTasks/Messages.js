@@ -71,5 +71,10 @@ export default defineMessages({
   exportCSVLabel: {
     id: "Admin.manageTasks.controls.exportCSV.label",
     defaultMessage: "Export CSV",
-  }
+  },
+
+  clearFiltersLabel: {
+    id: "Admin.manageTasks.controls.clearFilters.label",
+    defaultMessage: "Clear Filters",
+  },
 })
