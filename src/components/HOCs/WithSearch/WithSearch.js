@@ -44,7 +44,7 @@ const WithSearch = (WrappedComponent, searchGroup, searchFunction) => {
   // types in a query string
   const debouncedSearch = searchFunction ?
     _debounce(props => props.performSearch(props.searchCriteria, searchFunction),
-              1000, {leading: true}) : null
+              1000, {leading: false}) : null
 
   return WithUserLocation(
     connect(
