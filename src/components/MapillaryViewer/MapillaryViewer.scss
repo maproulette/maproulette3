@@ -1,0 +1,14 @@
+@import "variables.scss";
+
+.mapillary-viewer {
+  .message-header {
+    .button.icon-only .control-icon svg {
+      fill: $white;
+    }
+  }
+
+  &__license {
+    font-size: $size-8;
+    text-align: right;
+  }
+}

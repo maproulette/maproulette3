@@ -7,6 +7,7 @@ import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isObject from 'lodash/isObject'
 import { taskDenormalizationSchema,
+         fetchTask,
          loadCompleteTask,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
@@ -107,6 +108,22 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
         return normalizedResults
       })
+    },
+
+    /**
+     * Refresh just the task data (no comments, location, etc.), potentially
+     * including mapillary image if desired
+     */
+    refreshTask: async (taskId, includeMapillary=false) => {
+      const normalizedResults = await dispatch(fetchTask(taskId, false, includeMapillary))
+
+      if (!_isFinite(normalizedResults.result) ||
+          _get(normalizedResults, `entities.tasks.${normalizedResults.result}.deleted`)) {
+        dispatch(addError(AppErrors.task.doesNotExist))
+        ownProps.history.push('/')
+      }
+
+      return normalizedResults
     },
 
     /**

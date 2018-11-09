@@ -6,6 +6,7 @@ Object {
   "contactTaskOwnerURL": [Function],
   "loadTask": [Function],
   "nextTask": [Function],
+  "refreshTask": [Function],
 }
 `;
 

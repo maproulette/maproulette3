@@ -46,7 +46,10 @@ ShallowWrapper {
                               "lng": 0,
                             }
           }
+          mapillaryCount={0}
+          mapillaryLoading={false}
           setTaskMapBounds={[Function]}
+          showMapillary={undefined}
           showTaskFeatures={true}
           task={
                     Object {
@@ -61,6 +64,7 @@ ShallowWrapper {
                               },
                             }
           }
+          toggleMapillary={[Function]}
           toggleTaskFeatures={[Function]}
 />,
         <EnhancedMap
@@ -110,6 +114,7 @@ ShallowWrapper {
                     zIndex={1}
           />
 </EnhancedMap>,
+        null,
       ],
       "className": "task-map full-screen-map task",
     },
@@ -124,7 +129,10 @@ ShallowWrapper {
             "lat": 0,
             "lng": 0,
           },
+          "mapillaryCount": 0,
+          "mapillaryLoading": false,
           "setTaskMapBounds": [Function],
+          "showMapillary": undefined,
           "showTaskFeatures": true,
           "task": Object {
             "geometries": Object {
@@ -137,6 +145,7 @@ ShallowWrapper {
               "minZoom": 1,
             },
           },
+          "toggleMapillary": [Function],
           "toggleTaskFeatures": [Function],
         },
         "ref": null,
@@ -183,6 +192,7 @@ ShallowWrapper {
               zIndex={1}
 />,
             Array [],
+            undefined,
           ],
           "features": null,
           "fitFeaturesOnlyAsNecessary": true,
@@ -244,9 +254,11 @@ ShallowWrapper {
             "rendered": null,
             "type": [Function],
           },
+          undefined,
         ],
         "type": [Function],
       },
+      null,
     ],
     "type": "div",
   },
@@ -264,7 +276,10 @@ ShallowWrapper {
                                     "lng": 0,
                                   }
             }
+            mapillaryCount={0}
+            mapillaryLoading={false}
             setTaskMapBounds={[Function]}
+            showMapillary={undefined}
             showTaskFeatures={true}
             task={
                         Object {
@@ -279,6 +294,7 @@ ShallowWrapper {
                                     },
                                   }
             }
+            toggleMapillary={[Function]}
             toggleTaskFeatures={[Function]}
 />,
           <EnhancedMap
@@ -328,6 +344,7 @@ ShallowWrapper {
                         zIndex={1}
             />
 </EnhancedMap>,
+          null,
         ],
         "className": "task-map full-screen-map task",
       },
@@ -342,7 +359,10 @@ ShallowWrapper {
               "lat": 0,
               "lng": 0,
             },
+            "mapillaryCount": 0,
+            "mapillaryLoading": false,
             "setTaskMapBounds": [Function],
+            "showMapillary": undefined,
             "showTaskFeatures": true,
             "task": Object {
               "geometries": Object {
@@ -355,6 +375,7 @@ ShallowWrapper {
                 "minZoom": 1,
               },
             },
+            "toggleMapillary": [Function],
             "toggleTaskFeatures": [Function],
           },
           "ref": null,
@@ -401,6 +422,7 @@ ShallowWrapper {
                 zIndex={1}
 />,
               Array [],
+              undefined,
             ],
             "features": null,
             "fitFeaturesOnlyAsNecessary": true,
@@ -462,9 +484,11 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
+            undefined,
           ],
           "type": [Function],
         },
+        null,
       ],
       "type": "div",
     },

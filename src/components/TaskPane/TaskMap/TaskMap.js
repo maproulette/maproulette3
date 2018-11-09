@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl } from 'react-leaflet'
+import { ZoomControl, LayerGroup, Marker, Popup } from 'react-leaflet'
+import L from 'leaflet'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
+import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
+import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
 import SourcedTileLayer
        from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
@@ -34,6 +37,8 @@ import './TaskMap.css'
 export class TaskMap extends Component {
   state = {
     showTaskFeatures: true,
+    mapillaryLayerLoading: false,
+    mapillaryViewerImage: null,
   }
 
   /**
@@ -44,6 +49,47 @@ export class TaskMap extends Component {
     this.setState({showTaskFeatures: !this.state.showTaskFeatures})
   }
 
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * Mapillary markers on or off.
+   */
+  toggleMapillaryVisibility = async () => {
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    this.props.challenge.id
+    // If there's no mapillary data, we'll reload the task and request it
+    if (!this.props.showMapillaryLayer && !this.props.task.mapillaryImages) {
+      this.setState({mapillaryLayerLoading: true})
+      this.props.setShowMapillaryLayer(challengeId, isVirtual, true)
+      await this.props.refreshTask(this.props.task.id, true)
+      this.setState({mapillaryLayerLoading: false})
+    }
+    else {
+      this.props.setShowMapillaryLayer(challengeId, isVirtual, !this.props.showMapillaryLayer)
+    }
+  }
+
+  /**
+   * Reloads the task data with mapillary image info requested if needed
+   */
+  loadMapillaryIfNeeded = () => {
+    // If we're supposed to show mapillary images but don't have them,
+    // explicitly reload the task with mapillary images
+    if (this.props.task &&
+        this.props.showMapillaryLayer &&
+        !this.props.task.mapillaryImages) {
+      this.props.refreshTask(this.props.task.id, true)
+    }
+  }
+
+  componentDidMount() {
+    this.loadMapillaryIfNeeded()
+  }
+
+  componentDidUpdate() {
+    this.loadMapillaryIfNeeded()
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     // We want to avoid constantly re-rendering, so we only re-render if the
     // task or our internal state changes. We care about changes to the task
@@ -52,7 +98,18 @@ export class TaskMap extends Component {
       return true
     }
 
+    if (nextProps.showMapillaryLayer !== this.props.showMapillaryLayer ||
+        nextState.mapillaryLayerLoading !== this.state.mapillaryLayerLoading ||
+        nextState.mapillaryViewerImage !== this.state.mapillaryViewerImage) {
+      return true
+    }
+
     if(_get(nextProps, 'task.id') !== _get(this.props, 'task.id')) {
+      return true
+    }
+
+    if(_get(nextProps, 'task.mapillaryImages.length') !==
+       _get(this.props, 'task.mapillaryImages.length')) {
       return true
     }
 
@@ -94,6 +151,34 @@ export class TaskMap extends Component {
     }
   }
 
+  mapillaryImageMarkers = () => {
+    if (_get(this.props, 'task.mapillaryImages.length', 0) === 0) {
+      return []
+    }
+
+    const icon = L.vectorIcon({
+      svgHeight: 12,
+      svgWidth: 12,
+      type: 'circle',
+      shape: { r: 6, cx: 6, cy: 6 },
+      style: { fill: "#39AF64" }, // mapillary green
+    })
+
+    const markers = _map(this.props.task.mapillaryImages, (imageInfo, index) =>
+      <Marker key={imageInfo.key} position={[imageInfo.lat, imageInfo.lon]}
+              icon={icon}
+              onMouseover={({target}) => target.openPopup()}
+              onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})}>
+        <Popup>
+          <img src={imageInfo.url_320} alt="From Mapillary"
+               onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})} />
+        </Popup>
+      </Marker>
+    )
+
+    return <LayerGroup key={Date.now()}>{markers}</LayerGroup>
+  }
+
   render() {
     if (!this.props.task || !_isObject(this.props.task.parent)) {
       return <BusySpinner />
@@ -102,6 +187,9 @@ export class TaskMap extends Component {
     const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
+
+    const mapillaryMarkers = this.props.showMapillaryLayer ?
+                             this.mapillaryImageMarkers() : []
 
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
@@ -113,9 +201,13 @@ export class TaskMap extends Component {
 
     return (
       <div className={classNames("task-map full-screen-map task")}>
-        <LayerToggle showTaskFeatures={this.state.showTaskFeatures}
+        <LayerToggle {...this.props}
+                     showTaskFeatures={this.state.showTaskFeatures}
                      toggleTaskFeatures={this.toggleTaskFeatureVisibility}
-                     {...this.props} />
+                     showMapillary={this.props.showMapillaryLayer}
+                     toggleMapillary={this.toggleMapillaryVisibility}
+                     mapillaryLoading={this.state.mapillaryLayerLoading}
+                     mapillaryCount={_get(this.props, 'task.mapillaryImages.length', 0)} />
         <EnhancedMap center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom}
                      features={_get(this.props.task, 'geometries.features')}
@@ -128,7 +220,15 @@ export class TaskMap extends Component {
           <FitBoundsControl />
           <SourcedTileLayer maxZoom={maxZoom} {...this.props} zIndex={1} />
           {overlayLayers}
+          {this.props.showMapillaryLayer && mapillaryMarkers}
         </EnhancedMap>
+
+        {this.state.mapillaryViewerImage &&
+         <MapillaryViewer key={Date.now()}
+                          images={this.props.task.mapillaryImages}
+                          initialImageKey={this.state.mapillaryViewerImage}
+                          onDeactivate={() => this.setState({mapillaryViewerImage: null})} />
+        }
       </div>
     )
   }
