@@ -163,16 +163,16 @@ export const fetchProjectChallengeListing = function(projectIds, onlyEnabled=fal
  * @param {number} limit
  */
 export const extendedFind = function(criteria, limit=50) {
-  const queryString = criteria['searchQuery']
-  const filters = criteria['filters'] || {}
-  const onlyEnabled = _isUndefined(criteria['onlyEnabled']) ?
-                          true : criteria['onlyEnabled']
+  const queryString = criteria.searchQuery
+  const filters = criteria.filters || {}
+  const onlyEnabled = _isUndefined(criteria.onlyEnabled) ?
+                          true : criteria.onlyEnabled
 
-  const bounds = criteria['bounds']
+  const bounds = criteria.bounds
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const direction = _get(criteria, 'sortCriteria.direction')
   const sort = sortBy ? `${sortBy} ${direction}` : null
-  const page = criteria['page'] || 0
+  const page = _isFinite(criteria.page) ? criteria.page : 0
 
   return function(dispatch) {
     const queryParts = parseQueryString(queryString)

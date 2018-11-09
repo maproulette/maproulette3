@@ -121,7 +121,6 @@ export const removeSort = function(searchName, criteriaNames) {
 }
 
 export const setPage = function(searchName, page) {
-  console.log("Search.setPage")
   return {
     type: SET_PAGE,
     searchName,
