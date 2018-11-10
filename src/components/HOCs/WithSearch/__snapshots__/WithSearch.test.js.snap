@@ -4,10 +4,10 @@ exports[`mapDispatchToProps maps function performSearch 1`] = `
 Object {
   "clearSearch": [Function],
   "clearSearchFilters": [Function],
-  "clearSearchSort": [Function],
   "locateMapToUser": [Function],
   "performSearch": [Function],
   "removeSearchFilters": [Function],
+  "removeSearchPage": [Function],
   "removeSearchSort": [Function],
   "setChallengeBrowseMapBounds": [Function],
   "setChallengeOwnerMapBounds": [Function],
@@ -15,6 +15,7 @@ Object {
   "setKeywordFilter": [Function],
   "setSearch": [Function],
   "setSearchFilters": [Function],
+  "setSearchPage": [Function],
   "setSearchSort": [Function],
   "setTaskMapBounds": [Function],
 }
@@ -24,10 +25,10 @@ exports[`mapDispatchToProps maps function setSearch 1`] = `
 Object {
   "clearSearch": [Function],
   "clearSearchFilters": [Function],
-  "clearSearchSort": [Function],
   "locateMapToUser": [Function],
   "performSearch": [Function],
   "removeSearchFilters": [Function],
+  "removeSearchPage": [Function],
   "removeSearchSort": [Function],
   "setChallengeBrowseMapBounds": [Function],
   "setChallengeOwnerMapBounds": [Function],
@@ -35,6 +36,7 @@ Object {
   "setKeywordFilter": [Function],
   "setSearch": [Function],
   "setSearchFilters": [Function],
+  "setSearchPage": [Function],
   "setSearchSort": [Function],
   "setTaskMapBounds": [Function],
 }
@@ -79,6 +81,7 @@ Object {
   },
   "searchCriteria": undefined,
   "searchFilters": Object {},
+  "searchPage": Object {},
   "searchSort": Object {},
 }
 `;
@@ -153,6 +156,7 @@ ShallowWrapper {
         },
         "searchQueryTest": "searchQueryValue",
       },
+      "isLoading": false,
       "searchFunction": [Function],
       "searchGroup": "challenges",
       "searchQueries": Object {
@@ -200,6 +204,7 @@ ShallowWrapper {
           },
           "searchQueryTest": "searchQueryValue",
         },
+        "isLoading": false,
         "searchFunction": [Function],
         "searchGroup": "challenges",
         "searchQueries": Object {
@@ -298,6 +303,7 @@ ShallowWrapper {
         },
         "searchQueryTest": "searchQueryValue",
       },
+      "isLoading": false,
       "searchFunction": [Function],
       "searchGroup": "challenges",
       "searchQueries": Object {
@@ -345,6 +351,7 @@ ShallowWrapper {
           },
           "searchQueryTest": "searchQueryValue",
         },
+        "isLoading": false,
         "searchFunction": [Function],
         "searchGroup": "challenges",
         "searchQueries": Object {

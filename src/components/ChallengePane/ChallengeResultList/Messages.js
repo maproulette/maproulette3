@@ -28,4 +28,9 @@ export default defineMessages({
     id: "VirtualChallenge.fields.name.label",
     defaultMessage: 'Name your "virtual" challenge',
   },
+
+  loadMoreLabel: {
+    id: "Challenge.controls.loadMore.label",
+    defaultMessage: "More Results",
+  },
 })
