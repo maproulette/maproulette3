@@ -99,9 +99,9 @@ export class AsValidatableGeoJSON {
     try {
       let geoJSON = this.geoJSONString
       if (geoJSON === null && this.geoJSONFile) {
-        geoJSON = (await this.geoJSONFile.allLines).join('\n')
+        let geoJSONLines = await this.geoJSONFile.allLines()
+        geoJSON = geoJSONLines.join('\n')
       }
-
       geoJSONObject = JSON.parse(geoJSON)
     }
     catch(parseError) {
