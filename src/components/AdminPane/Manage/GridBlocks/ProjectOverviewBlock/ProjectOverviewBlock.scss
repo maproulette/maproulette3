@@ -1,4 +1,22 @@
 .project-overview-block {
+  .grid-block__content {
+    .columns {
+      margin: -0.5em 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .column {
+        padding: 0.25em;
+      }
+    }
+  }
+
   .project-overview__status.status-section  {
     padding-top: 5px;
   }
