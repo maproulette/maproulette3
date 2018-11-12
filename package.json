@@ -42,6 +42,7 @@
     "react-grid-layout": "^0.16.6",
     "react-intl": "^2.3.0",
     "react-jsonschema-form": "^1.0.1",
+    "react-jsonschema-form-async": "^0.2.0",
     "react-leaflet": "^1.8.0",
     "react-leaflet-markercluster": "^1.1.7",
     "react-onclickoutside": "^6.6.3",

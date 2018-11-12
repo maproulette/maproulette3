@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Form from "react-jsonschema-form"
+import Form from 'react-jsonschema-form-async';
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _isString from 'lodash/isString'
@@ -7,8 +7,8 @@ import _isEmpty from 'lodash/isEmpty'
 import _isUndefined from 'lodash/isUndefined'
 import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
-import _each from 'lodash/each'
 import _filter from 'lodash/filter'
+import _first from 'lodash/first'
 import _difference from 'lodash/difference'
 import _get from 'lodash/get'
 import { FormattedMessage, injectIntl } from 'react-intl'
@@ -131,49 +131,70 @@ export class EditChallenge extends Component {
   /**
    * Validate GeoJSON data
    */
-  validateGeoJSON(jsonFileField, errors) {
+  async validateGeoJSON(jsonFileField) {
+    let response = {}
+
     const geoJSON = AsValidatableGeoJSON(jsonFileField.file)
-    const lintErrors = geoJSON.validate()
+    const lintErrors = await geoJSON.validate()
+
     if (lintErrors.length === 0) {
       jsonFileField.validated = true
     }
     else {
-      _each(lintErrors,
-            lintError => errors.localGeoJSON.addError(lintError.message))
+      response.errors = {localGeoJSON: _first(lintErrors).message}
     }
+
+    return response
   }
 
   /**
    * Validate Overpass query
    */
-  validateOverpass(query, errors) {
+  validateOverpass(query) {
+    let response = {}
+
     const lintErrors = AsValidatableOverpass(query).validate()
-    _each(lintErrors, lintError =>
-      errors.overpassQL.addError(this.props.intl.formatMessage(lintError.message))
-    )
+
+    if (lintErrors.length > 0) {
+      response.errors = {overpassQL: this.props.intl.formatMessage(_first(lintErrors).message)}
+    }
+
+    return response
   }
 
   /**
    * Perform additional validation checks beyond schema validation. Primarily
    * we check Overpass queries and GeoJSON.
    */
-  additionalValidation = (formData, errors) => {
+  validateGeoJSONSource = async (formData) => {
+    let response = {}
+
     // Skip additional source data validation if user has indicated they wish
     // to ignore source errors.
-    if (formData.ignoreSourceErrors) {
-      return errors
+    if (formData.ignoreSourceErrors ||
+        challengeSteps[this.state.activeStep].name !== "GeoJSON") {
+      return response
     }
 
-    if (!_isEmpty(formData.overpassQL)) {
-      this.validateOverpass(formData.overpassQL, errors)
+    if (formData.source === "Overpass Query") {
+      response = this.validateOverpass(formData.overpassQL)
     }
 
-    if (!_isEmpty(formData.localGeoJSON) &&
+    if (formData.source === "Local File" &&
+        !_isEmpty(formData.localGeoJSON) &&
         !this.state.formContext["root_localGeoJSON"].validated) {
-      this.validateGeoJSON(this.state.formContext["root_localGeoJSON"], errors)
+      response = await this.validateGeoJSON(this.state.formContext["root_localGeoJSON"])
     }
 
-    return errors
+    if (response.errors) {
+      throw response
+    }
+
+    return response
+  }
+
+  asyncSubmit = (formData, result) => {
+    return this.isFinishing ? this.finish() : this.nextStep()
   }
 
   /** Back up to the previous step in the workflow */
@@ -243,8 +264,9 @@ export class EditChallenge extends Component {
   }
 
   /** Receive errors from form validation */
-  errorHandler = errors => {
-    if (errors.length > 0) {
+  errorHandler = (errors, err, formData) => {
+    if ((errors && errors.length > 0) ||
+        (err && err.length > 0)) {
       window.scrollTo(0, 100)
     }
   }
@@ -390,7 +412,8 @@ export class EditChallenge extends Component {
       // Line-by-line geojson needs to be submitted separately as it cannot be
       // embedded as valid JSON. Move it to a different field for later
       // processing.
-      if (challengeData.localGeoJSON) {
+      if (challengeData.source === "Local File" &&
+          challengeData.localGeoJSON) {
         const geoJSONFile = this.state.formContext["root_localGeoJSON"].file
         if (!geoJSONFile) {
           throw new Error("No geojson file")
@@ -404,6 +427,11 @@ export class EditChallenge extends Component {
           challengeData.localGeoJSON =
             (await AsLineReadableFile(geoJSONFile).allLines()).join('\n')
         }
+      }
+      else {
+        // It's possible someone could have uploaded a file and then changed
+        // there source type so let's remove localGeoJSON if it's not local.
+        delete challengeData.localGeoJSON
       }
     }
 
@@ -481,7 +509,7 @@ export class EditChallenge extends Component {
                    onStepClick={AsEditableChallenge(challengeData).isNew() ? undefined : this.jumpToStep}
             />
             <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
-                  validate={this.additionalValidation}
+                  onAsyncValidate={this.validateGeoJSONSource}
                   uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
                   FieldTemplate={CustomFieldTemplate}
                   ArrayFieldTemplate={CustomArrayFieldTemplate}
@@ -491,7 +519,7 @@ export class EditChallenge extends Component {
                   formData={challengeData}
                   formContext={this.state.formContext}
                   onChange={this.changeHandler}
-                  onSubmit={() => this.isFinishing ? this.finish() : this.nextStep()}
+                  onSubmit={this.asyncSubmit}
                   onError={this.errorHandler}
             >
               <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
