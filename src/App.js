@@ -96,7 +96,7 @@ export class App extends Component {
           <CachedRoute exact path='/about' component={AboutPane} />
           <CachedRoute path='/user/profile' component={UserProfile} />
           <CachedRoute path='/leaderboard' component={Leaderboard} />
-          <CachedRoute path='/challenge/:challengeId/leaderboard/' component={ChallengeLeaderboard} />
+          <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
           <CachedRoute path='/admin' component={AdminPane} />
           <CachedRoute path='/error' component={ErrorPane} />
           <Route component={PageNotFound} />
