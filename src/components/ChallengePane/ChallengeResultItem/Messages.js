@@ -47,5 +47,10 @@ export default defineMessages({
   lastTaskRefreshLabel: {
     id: "Challenge.fields.lastTaskRefresh.label",
     defaultMessage: "Tasks From",
-  }
+  },
+
+  viewLeaderboard: {
+    id: "Challenge.fields.viewLeaderboard.label",
+    defaultMessage: "View Leaderboard",
+  },
 })
