@@ -28,8 +28,9 @@
     margin-bottom: 20px;
 
     .button.new-challenge {
+      box-sizing: content-box;
       margin: 20px 0px 12px 0px;
-      padding: 16px 30px 16px 30px;
+      padding: 0px 30px;
       font-size: $size-5;
       font-weight: $weight-normal;
     }
