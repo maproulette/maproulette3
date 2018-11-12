@@ -18,7 +18,7 @@ import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import _isUndefined from 'lodash/isUndefined'
 import _isString from 'lodash/isString'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 
@@ -73,13 +73,17 @@ export const removeTask = function(taskId) {
 /**
  * Fetch data for the given task. Normally that data will be added to the redux
  * store, but that can be suppressed with the supressReceive flag.
+ *
+ * If info on available mapillary images for the task is also desired, set
+ * includeMapillary to true
  */
-export const fetchTask = function(taskId, suppressReceive=false) {
+export const fetchTask = function(taskId, suppressReceive=false, includeMapillary=false) {
   return function(dispatch) {
-    return new Endpoint(
-      api.task.single,
-      {schema: taskSchema(), variables: {id: taskId}}
-    ).execute().then(normalizedResults => {
+    return new Endpoint(api.task.single, {
+      schema: taskSchema(),
+      variables: {id: taskId},
+      params: {mapillary: includeMapillary}
+    }).execute().then(normalizedResults => {
       if (!suppressReceive) {
         dispatch(receiveTasks(normalizedResults.entities))
       }
@@ -132,7 +136,7 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
 export const addTaskComment = function(taskId, comment, taskStatus) {
   return function(dispatch) {
     const params = {comment}
-    if (_isNumber(taskStatus)) {
+    if (_isFinite(taskStatus)) {
       params.actionId = taskStatus
     }
 
@@ -187,15 +191,18 @@ export const fetchTaskComments = function(taskId) {
 /**
  * Retrieve the given task data plus accompanying data like comments,
  * performing multiple API requests as needed.
+ *
+ * If info on available mapillary images for the task is also desired, set
+ * includeMapillary to true
  */
-export const loadCompleteTask = function(taskId) {
+export const loadCompleteTask = function(taskId, includeMapillary=false) {
   return function(dispatch) {
     if (!taskId) {
       return null
     }
 
     return dispatch(
-      fetchTask(taskId)
+      fetchTask(taskId, false, includeMapillary)
     ).then(normalizedResults => {
       const task = _get(normalizedResults, `entities.tasks.${taskId}`)
       if (_isObject(task)) {
@@ -216,15 +223,23 @@ export const loadCompleteTask = function(taskId) {
  * Retrieve a random task from the given challenge. If priorTaskId is given,
  * then an attempt will be made to retrieve a task geographically proximate to
  * the given task.
+ *
+ * If info on available mapillary images for the task is also desired, set
+ * includeMapillary to true
  */
-export const loadRandomTaskFromChallenge = function(challengeId, priorTaskId) {
+export const loadRandomTaskFromChallenge = function(challengeId,
+                                                    priorTaskId,
+                                                    includeMapillary=false) {
   return function(dispatch) {
     return retrieveChallengeTask(dispatch, new Endpoint(
       api.challenge.randomTask,
       {
         schema: [ taskSchema() ],
         variables: {id: challengeId},
-        params: _isNumber(priorTaskId) ? {proximity: priorTaskId} : undefined
+        params: {
+          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+          mapillary: includeMapillary,
+        }
       }
     ))
   }
@@ -234,16 +249,23 @@ export const loadRandomTaskFromChallenge = function(challengeId, priorTaskId) {
  * Retrieve a random task from the given virtual challenge. If priorTaskId is
  * given, then an attempt will be made to retrieve a task geographically
  * proximate to the given task.
+ *
+ * If info on available mapillary images for the task is also desired, set
+ * includeMapillary to true
  */
 export const loadRandomTaskFromVirtualChallenge = function(virtualChallengeId,
-                                                           priorTaskId) {
+                                                           priorTaskId,
+                                                           includeMapillary=false) {
   return function(dispatch) {
     return retrieveChallengeTask(dispatch, new Endpoint(
       api.virtualChallenge.randomTask,
       {
         schema: taskSchema(),
         variables: {id: virtualChallengeId},
-        params: _isNumber(priorTaskId) ? {proximity: priorTaskId} : undefined
+        params: {
+          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
+          mapillary: includeMapillary,
+        }
       }
     ))
   }
@@ -369,7 +391,7 @@ export const saveTask = function(originalTaskData) {
     // Setup the save function to either edit or create the task
     // depending on whether it has an id.
     const saveEndpoint = new Endpoint(
-      _isNumber(taskData.id) ? api.task.edit : api.task.create,
+      _isFinite(taskData.id) ? api.task.edit : api.task.create,
       {
         schema: taskSchema(),
         variables: {id: taskData.id},
@@ -427,7 +449,7 @@ export const deleteTask = function(taskId) {
 export const retrieveChallengeTask = function(dispatch, endpoint) {
   return endpoint.execute().then(normalizedTaskResults => {
     if (!normalizedTaskResults ||
-        (!_isNumber(normalizedTaskResults.result) &&
+        (!_isFinite(normalizedTaskResults.result) &&
          _isEmpty(normalizedTaskResults.result))) {
       return null
     }
@@ -441,7 +463,7 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
       // of `parent`, and the geometries back as `geometry` instead of
       // `geometries`. Normalize these.
       const taskEntity = normalizedTaskResults.entities.tasks[retrievedTaskId]
-      if (!_isNumber(taskEntity.parent)) {
+      if (!_isFinite(taskEntity.parent)) {
         taskEntity.parent = taskEntity.parentId
       }
 

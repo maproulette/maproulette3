@@ -84,6 +84,25 @@ export class LayerToggle extends Component {
                 </div>
               </div>
             }
+            {this.props.toggleMapillary &&
+              <div className="layer-toggle__option-controls">
+                <div className="checkbox"
+                  onClick={e => this.props.toggleMapillary()}>
+                  <input type="checkbox"
+                         checked={this.props.showMapillary || false}
+                         onChange={_noop}
+                  />
+                  <label>
+                    <FormattedMessage
+                      {...messages.showMapillaryLabel}
+                    /> {(this.props.showMapillary && !this.props.mapillaryLoading) &&
+                        <FormattedMessage {...messages.imageCount}
+                                          values={{count: this.props.mapillaryCount}} />
+                    } {this.props.mapillaryLoading && <FormattedMessage {...messages.loading} />}
+                  </label>
+                </div>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -108,6 +127,12 @@ LayerToggle.propTypes = {
   showTaskFeatures: PropTypes.bool,
   /** Invoked when the user toggles visibility of task features */
   toggleTaskFeatures: PropTypes.func,
+  /** Set to true if Mapillary layer is to be shown on the map */
+  showMapillary: PropTypes.bool,
+  /** Set to the number of Mapillary markers available in layer */
+  mapillaryCount: PropTypes.number,
+  /** Invoked when the user toggles visibility of Mapillary layer */
+  toggleMapillary: PropTypes.func,
 }
 
 export default WithVisibleLayer(WithLayerSources(LayerToggle))

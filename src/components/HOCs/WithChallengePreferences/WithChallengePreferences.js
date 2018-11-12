@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isNumber'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { setPreferences,
@@ -20,12 +20,12 @@ const WithChallengePreferences = WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
 export const mapStateToProps = (state, ownProps) => {
-  const isVirtual = _isNumber(ownProps.virtualChallengeId)
+  const isVirtual = _isFinite(ownProps.virtualChallengeId)
   const concreteChallengeId = _get(ownProps, 'challenge.id', ownProps.challengeId)
   const challengeId = isVirtual ? ownProps.virtualChallengeId : concreteChallengeId
   const mappedProps = {}
 
-  if (_isNumber(challengeId)) {
+  if (_isFinite(challengeId)) {
     mappedProps.minimizeChallenge =
       _get(state.currentPreferences,
            `${preferenceGroup(isVirtual)}.${challengeId}.minimize`,
@@ -50,6 +50,10 @@ export const mapStateToProps = (state, ownProps) => {
     mappedProps.visibleMapLayer =
       _get(state.currentPreferences,
            `${preferenceGroup(isVirtual)}.${challengeId}.visibleMapLayer`)
+
+    mappedProps.showMapillaryLayer =
+      _get(state.currentPreferences,
+           `${preferenceGroup(isVirtual)}.${challengeId}.showMapillaryLayer`)
   }
 
   return mappedProps
@@ -75,6 +79,10 @@ export const mapDispatchToProps = dispatch => ({
   setVisibleMapLayer: (challengeId, isVirtual, visibleMapLayerId) =>
     dispatch(setPreferences(preferenceGroup(isVirtual),
                             {[challengeId]: {visibleMapLayer: visibleMapLayerId}})),
+
+  setShowMapillaryLayer: (challengeId, isVirtual, showMapillary) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual),
+                            {[challengeId]: {showMapillaryLayer: showMapillary}})),
 })
 
 export const preferenceGroup = function(isVirtualChallenge) {

@@ -3,6 +3,7 @@ import { Map } from 'react-leaflet'
 import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
 import _isEmpty from 'lodash/isEmpty'
 import _map from 'lodash/map'
+import _isEqual from 'lodash/isEqual'
 
 /**
  * EnhancedMap is an extension of the react-leaflet Map that provides
@@ -217,7 +218,7 @@ export default class EnhancedMap extends Map {
       this.leafletElement.panTo(this.props.center)
     }
 
-    if (this.props.features !== prevProps.features ||
+    if (!_isEqual(this.props.features, prevProps.features) ||
         this.props.justFitFeatures !== prevProps.justFitFeatures) {
       this.updateFeatures(this.props.features)
     }

@@ -2,18 +2,26 @@ import React, { Component } from 'react'
 import onClickOutside from 'react-onclickoutside'
 import _omit from 'lodash/omit'
 
-export default function(WrappedComponent) {
+export default function(WrappedComponent, initiallyActive=false) {
   class WithDeactivateOnOutsideClick extends Component {
-    state = {isActive: false}
+    state = {isActive: initiallyActive}
 
     activate = () => {
       this.setState({isActive: true})
       this.props.enableOnClickOutside()
+
+      if (this.props.onActivate) {
+        this.props.onActivate()
+      }
     }
 
     deactivate = () => {
       this.setState({isActive: false})
       this.props.disableOnClickOutside()
+
+      if (this.props.onDeactivate) {
+        this.props.onDeactivate()
+      }
     }
 
     toggleActive = () => this.state.isActive ? this.deactivate() : this.activate()
