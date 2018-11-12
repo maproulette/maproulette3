@@ -10,8 +10,6 @@ import { fetchChallenge }
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
-const FRESHNESS_THRESHOLD = 60000 // 1 minute
-
 /**
  * WithChallenge provides functions for loading a challenge.
  *
@@ -21,7 +19,6 @@ export const WithChallenge = function(WrappedComponent) {
   class _WithChallenge extends Component {
     state = {
       challenge: null,
-      loadingChallenge: null,
     }
 
     /**
@@ -41,31 +38,17 @@ export const WithChallenge = function(WrappedComponent) {
     updateChallenge = props => {
       const challengeId = this.parseChallengeId(props)
 
-      if (_isFinite(challengeId)) {
-        if (_get(this.state, 'challenge.id') !== challengeId ||
-            _isFinite(this.state.loadingBrowsedChallenge)) {
-          let challenge = _get(props.entities, `challenges.${challengeId}`)
+      if (_get(this.state, 'challenge.id') !== challengeId) {
+        let challenge = _get(props.entities, `challenges.${challengeId}`)
 
-          if (_isObject(challenge)) {
-            // If our challenge data is stale, refresh it.
-            if (Date.now() - challenge._meta.fetchedAt > FRESHNESS_THRESHOLD) {
-              challenge = null
-            }
-          }
-
-          if (_isObject(challenge)) {
-            this.setState({
-              challenge: challenge,
-              loadingChallenge: null
-            })
-          }
+        if (_isObject(challenge)) {
+          this.setState({
+            challenge: challenge
+          })
         }
-      }
-      else if (_isObject(this.state.challenge)) {
-        this.setState({
-          challenge: null,
-          loadingChallenge: null
-        })
+        else {
+          this.props.loadChallenge(challengeId)
+        }
       }
     }
 
@@ -80,7 +63,6 @@ export const WithChallenge = function(WrappedComponent) {
     render() {
       return (
         <WrappedComponent challenge = {this.state.challenge}
-                          loadingChallenge = {this.state.loadingChallenge}
                           {..._omit(this.props, ['entities',
                                                  'loadChallenge'])} />
       )
