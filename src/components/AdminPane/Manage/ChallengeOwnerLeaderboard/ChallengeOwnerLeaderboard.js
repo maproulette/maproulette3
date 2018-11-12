@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Leaderboard from '../../../Leaderboard/Leaderboard'
 
-export default class ChallengeLeaderboard extends Component {
+export default class ChallengeOwnerLeaderboard extends Component {
   render() {
     return <Leaderboard leaderboardOptions={{onlyEnabled: false, filterChallenges: true}}
                         topLeaderCount={0}

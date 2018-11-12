@@ -248,6 +248,16 @@ export class ChallengeResultItem extends Component {
               </div>
             }
 
+            <div className="challenge-list__item__leaderboard">
+              <span className="challenge-list__item__field-value">
+                <Link to={
+                  `/challenge/${this.props.challenge.id}/leaderboard`
+                }>
+                  <FormattedMessage {...messages.viewLeaderboard} />
+                </Link>
+              </span>
+            </div>
+
             <div className="challenge-list__item__blurb">
               <MarkdownContent markdown={this.props.challenge.description ||
                                         this.props.challenge.blurb} />

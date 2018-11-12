@@ -116,6 +116,24 @@ ShallowWrapper {
                               </span>
                     </div>
                     <div
+                              className="challenge-list__item__leaderboard"
+                    >
+                              <span
+                                        className="challenge-list__item__field-value"
+                              >
+                                        <Link
+                                                  replace={false}
+                                                  to="/challenge/309/leaderboard"
+                                        >
+                                                  <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                  />
+                                        </Link>
+                              </span>
+                    </div>
+                    <div
                               className="challenge-list__item__blurb"
                     >
                               <MarkdownContent
@@ -359,6 +377,24 @@ ShallowWrapper {
                         </span>
             </div>
             <div
+                        className="challenge-list__item__leaderboard"
+            >
+                        <span
+                                    className="challenge-list__item__field-value"
+                        >
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </span>
+            </div>
+            <div
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
@@ -437,6 +473,24 @@ ShallowWrapper {
                 </span>
 </div>,
               undefined,
+              <div
+                className="challenge-list__item__leaderboard"
+>
+                <span
+                                className="challenge-list__item__field-value"
+                >
+                                <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Leaderboard"
+                                                                id="Challenge.fields.viewLeaderboard.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </span>
+</div>,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -576,6 +630,79 @@ ShallowWrapper {
               "type": "div",
             },
             undefined,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <span
+                  className="challenge-list__item__field-value"
+>
+                  <Link
+                                    replace={false}
+                                    to="/challenge/309/leaderboard"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Leaderboard"
+                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</span>,
+                "className": "challenge-list__item__leaderboard",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/309/leaderboard"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Leaderboard"
+                                        id="Challenge.fields.viewLeaderboard.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "challenge-list__item__field-value",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Leaderboard"
+                      id="Challenge.fields.viewLeaderboard.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/309/leaderboard",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Leaderboard",
+                      "id": "Challenge.fields.viewLeaderboard.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "span",
+              },
+              "type": "div",
+            },
             Object {
               "instance": null,
               "key": undefined,
@@ -830,6 +957,24 @@ ShallowWrapper {
                                     </span>
                         </div>
                         <div
+                                    className="challenge-list__item__leaderboard"
+                        >
+                                    <span
+                                                className="challenge-list__item__field-value"
+                                    >
+                                                <Link
+                                                            replace={false}
+                                                            to="/challenge/309/leaderboard"
+                                                >
+                                                            <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                            />
+                                                </Link>
+                                    </span>
+                        </div>
+                        <div
                                     className="challenge-list__item__blurb"
                         >
                                     <MarkdownContent
@@ -1073,6 +1218,24 @@ ShallowWrapper {
                             </span>
               </div>
               <div
+                            className="challenge-list__item__leaderboard"
+              >
+                            <span
+                                          className="challenge-list__item__field-value"
+                            >
+                                          <Link
+                                                        replace={false}
+                                                        to="/challenge/309/leaderboard"
+                                          >
+                                                        <FormattedMessage
+                                                                      defaultMessage="View Leaderboard"
+                                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                                      values={Object {}}
+                                                        />
+                                          </Link>
+                            </span>
+              </div>
+              <div
                             className="challenge-list__item__blurb"
               >
                             <MarkdownContent
@@ -1151,6 +1314,24 @@ ShallowWrapper {
                   </span>
 </div>,
                 undefined,
+                <div
+                  className="challenge-list__item__leaderboard"
+>
+                  <span
+                                    className="challenge-list__item__field-value"
+                  >
+                                    <Link
+                                                      replace={false}
+                                                      to="/challenge/309/leaderboard"
+                                    >
+                                                      <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                      />
+                                    </Link>
+                  </span>
+</div>,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -1290,6 +1471,79 @@ ShallowWrapper {
                 "type": "div",
               },
               undefined,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <span
+                    className="challenge-list__item__field-value"
+>
+                    <Link
+                                        replace={false}
+                                        to="/challenge/309/leaderboard"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</span>,
+                  "className": "challenge-list__item__leaderboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/309/leaderboard"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Leaderboard"
+                                            id="Challenge.fields.viewLeaderboard.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "challenge-list__item__field-value",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Leaderboard"
+                        id="Challenge.fields.viewLeaderboard.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/309/leaderboard",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Leaderboard",
+                        "id": "Challenge.fields.viewLeaderboard.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": "div",
+              },
               Object {
                 "instance": null,
                 "key": undefined,
@@ -4416,6 +4670,24 @@ ShallowWrapper {
                               </span>
                     </div>
                     <div
+                              className="challenge-list__item__leaderboard"
+                    >
+                              <span
+                                        className="challenge-list__item__field-value"
+                              >
+                                        <Link
+                                                  replace={false}
+                                                  to="/challenge/309/leaderboard"
+                                        >
+                                                  <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                  />
+                                        </Link>
+                              </span>
+                    </div>
+                    <div
                               className="challenge-list__item__blurb"
                     >
                               <MarkdownContent
@@ -4672,6 +4944,24 @@ ShallowWrapper {
                         </span>
             </div>
             <div
+                        className="challenge-list__item__leaderboard"
+            >
+                        <span
+                                    className="challenge-list__item__field-value"
+                        >
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </span>
+            </div>
+            <div
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
@@ -4763,6 +5053,24 @@ ShallowWrapper {
                 </span>
 </div>,
               undefined,
+              <div
+                className="challenge-list__item__leaderboard"
+>
+                <span
+                                className="challenge-list__item__field-value"
+                >
+                                <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Leaderboard"
+                                                                id="Challenge.fields.viewLeaderboard.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </span>
+</div>,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -4915,6 +5223,79 @@ ShallowWrapper {
               "type": "div",
             },
             undefined,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <span
+                  className="challenge-list__item__field-value"
+>
+                  <Link
+                                    replace={false}
+                                    to="/challenge/309/leaderboard"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Leaderboard"
+                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</span>,
+                "className": "challenge-list__item__leaderboard",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/309/leaderboard"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Leaderboard"
+                                        id="Challenge.fields.viewLeaderboard.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "challenge-list__item__field-value",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Leaderboard"
+                      id="Challenge.fields.viewLeaderboard.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/309/leaderboard",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Leaderboard",
+                      "id": "Challenge.fields.viewLeaderboard.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "span",
+              },
+              "type": "div",
+            },
             Object {
               "instance": null,
               "key": undefined,
@@ -5256,6 +5637,24 @@ ShallowWrapper {
                                     </span>
                         </div>
                         <div
+                                    className="challenge-list__item__leaderboard"
+                        >
+                                    <span
+                                                className="challenge-list__item__field-value"
+                                    >
+                                                <Link
+                                                            replace={false}
+                                                            to="/challenge/309/leaderboard"
+                                                >
+                                                            <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                            />
+                                                </Link>
+                                    </span>
+                        </div>
+                        <div
                                     className="challenge-list__item__blurb"
                         >
                                     <MarkdownContent
@@ -5512,6 +5911,24 @@ ShallowWrapper {
                             </span>
               </div>
               <div
+                            className="challenge-list__item__leaderboard"
+              >
+                            <span
+                                          className="challenge-list__item__field-value"
+                            >
+                                          <Link
+                                                        replace={false}
+                                                        to="/challenge/309/leaderboard"
+                                          >
+                                                        <FormattedMessage
+                                                                      defaultMessage="View Leaderboard"
+                                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                                      values={Object {}}
+                                                        />
+                                          </Link>
+                            </span>
+              </div>
+              <div
                             className="challenge-list__item__blurb"
               >
                             <MarkdownContent
@@ -5603,6 +6020,24 @@ ShallowWrapper {
                   </span>
 </div>,
                 undefined,
+                <div
+                  className="challenge-list__item__leaderboard"
+>
+                  <span
+                                    className="challenge-list__item__field-value"
+                  >
+                                    <Link
+                                                      replace={false}
+                                                      to="/challenge/309/leaderboard"
+                                    >
+                                                      <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                      />
+                                    </Link>
+                  </span>
+</div>,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -5755,6 +6190,79 @@ ShallowWrapper {
                 "type": "div",
               },
               undefined,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <span
+                    className="challenge-list__item__field-value"
+>
+                    <Link
+                                        replace={false}
+                                        to="/challenge/309/leaderboard"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</span>,
+                  "className": "challenge-list__item__leaderboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/309/leaderboard"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Leaderboard"
+                                            id="Challenge.fields.viewLeaderboard.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "challenge-list__item__field-value",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Leaderboard"
+                        id="Challenge.fields.viewLeaderboard.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/309/leaderboard",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Leaderboard",
+                        "id": "Challenge.fields.viewLeaderboard.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": "div",
+              },
               Object {
                 "instance": null,
                 "key": undefined,
@@ -7170,6 +7678,24 @@ ShallowWrapper {
                               </span>
                     </div>
                     <div
+                              className="challenge-list__item__leaderboard"
+                    >
+                              <span
+                                        className="challenge-list__item__field-value"
+                              >
+                                        <Link
+                                                  replace={false}
+                                                  to="/challenge/309/leaderboard"
+                                        >
+                                                  <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                  />
+                                        </Link>
+                              </span>
+                    </div>
+                    <div
                               className="challenge-list__item__blurb"
                     >
                               <MarkdownContent
@@ -7426,6 +7952,24 @@ ShallowWrapper {
                         </span>
             </div>
             <div
+                        className="challenge-list__item__leaderboard"
+            >
+                        <span
+                                    className="challenge-list__item__field-value"
+                        >
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </span>
+            </div>
+            <div
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
@@ -7517,6 +8061,24 @@ ShallowWrapper {
                 </span>
 </div>,
               undefined,
+              <div
+                className="challenge-list__item__leaderboard"
+>
+                <span
+                                className="challenge-list__item__field-value"
+                >
+                                <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Leaderboard"
+                                                                id="Challenge.fields.viewLeaderboard.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </span>
+</div>,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -7669,6 +8231,79 @@ ShallowWrapper {
               "type": "div",
             },
             undefined,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <span
+                  className="challenge-list__item__field-value"
+>
+                  <Link
+                                    replace={false}
+                                    to="/challenge/309/leaderboard"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Leaderboard"
+                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</span>,
+                "className": "challenge-list__item__leaderboard",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/309/leaderboard"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Leaderboard"
+                                        id="Challenge.fields.viewLeaderboard.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "challenge-list__item__field-value",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Leaderboard"
+                      id="Challenge.fields.viewLeaderboard.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/309/leaderboard",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Leaderboard",
+                      "id": "Challenge.fields.viewLeaderboard.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "span",
+              },
+              "type": "div",
+            },
             Object {
               "instance": null,
               "key": undefined,
@@ -8010,6 +8645,24 @@ ShallowWrapper {
                                     </span>
                         </div>
                         <div
+                                    className="challenge-list__item__leaderboard"
+                        >
+                                    <span
+                                                className="challenge-list__item__field-value"
+                                    >
+                                                <Link
+                                                            replace={false}
+                                                            to="/challenge/309/leaderboard"
+                                                >
+                                                            <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                            />
+                                                </Link>
+                                    </span>
+                        </div>
+                        <div
                                     className="challenge-list__item__blurb"
                         >
                                     <MarkdownContent
@@ -8266,6 +8919,24 @@ ShallowWrapper {
                             </span>
               </div>
               <div
+                            className="challenge-list__item__leaderboard"
+              >
+                            <span
+                                          className="challenge-list__item__field-value"
+                            >
+                                          <Link
+                                                        replace={false}
+                                                        to="/challenge/309/leaderboard"
+                                          >
+                                                        <FormattedMessage
+                                                                      defaultMessage="View Leaderboard"
+                                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                                      values={Object {}}
+                                                        />
+                                          </Link>
+                            </span>
+              </div>
+              <div
                             className="challenge-list__item__blurb"
               >
                             <MarkdownContent
@@ -8357,6 +9028,24 @@ ShallowWrapper {
                   </span>
 </div>,
                 undefined,
+                <div
+                  className="challenge-list__item__leaderboard"
+>
+                  <span
+                                    className="challenge-list__item__field-value"
+                  >
+                                    <Link
+                                                      replace={false}
+                                                      to="/challenge/309/leaderboard"
+                                    >
+                                                      <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                      />
+                                    </Link>
+                  </span>
+</div>,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -8509,6 +9198,79 @@ ShallowWrapper {
                 "type": "div",
               },
               undefined,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <span
+                    className="challenge-list__item__field-value"
+>
+                    <Link
+                                        replace={false}
+                                        to="/challenge/309/leaderboard"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</span>,
+                  "className": "challenge-list__item__leaderboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/309/leaderboard"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Leaderboard"
+                                            id="Challenge.fields.viewLeaderboard.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "challenge-list__item__field-value",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Leaderboard"
+                        id="Challenge.fields.viewLeaderboard.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/309/leaderboard",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Leaderboard",
+                        "id": "Challenge.fields.viewLeaderboard.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": "div",
+              },
               Object {
                 "instance": null,
                 "key": undefined,
@@ -8914,6 +9676,24 @@ ShallowWrapper {
                               </span>
                     </div>
                     <div
+                              className="challenge-list__item__leaderboard"
+                    >
+                              <span
+                                        className="challenge-list__item__field-value"
+                              >
+                                        <Link
+                                                  replace={false}
+                                                  to="/challenge/309/leaderboard"
+                                        >
+                                                  <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                  />
+                                        </Link>
+                              </span>
+                    </div>
+                    <div
                               className="challenge-list__item__blurb"
                     >
                               <MarkdownContent
@@ -9170,6 +9950,24 @@ ShallowWrapper {
                         </span>
             </div>
             <div
+                        className="challenge-list__item__leaderboard"
+            >
+                        <span
+                                    className="challenge-list__item__field-value"
+                        >
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </span>
+            </div>
+            <div
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
@@ -9261,6 +10059,24 @@ ShallowWrapper {
                 </span>
 </div>,
               undefined,
+              <div
+                className="challenge-list__item__leaderboard"
+>
+                <span
+                                className="challenge-list__item__field-value"
+                >
+                                <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Leaderboard"
+                                                                id="Challenge.fields.viewLeaderboard.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </span>
+</div>,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -9413,6 +10229,79 @@ ShallowWrapper {
               "type": "div",
             },
             undefined,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <span
+                  className="challenge-list__item__field-value"
+>
+                  <Link
+                                    replace={false}
+                                    to="/challenge/309/leaderboard"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Leaderboard"
+                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</span>,
+                "className": "challenge-list__item__leaderboard",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/309/leaderboard"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Leaderboard"
+                                        id="Challenge.fields.viewLeaderboard.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "challenge-list__item__field-value",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Leaderboard"
+                      id="Challenge.fields.viewLeaderboard.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/309/leaderboard",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Leaderboard",
+                      "id": "Challenge.fields.viewLeaderboard.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "span",
+              },
+              "type": "div",
+            },
             Object {
               "instance": null,
               "key": undefined,
@@ -9754,6 +10643,24 @@ ShallowWrapper {
                                     </span>
                         </div>
                         <div
+                                    className="challenge-list__item__leaderboard"
+                        >
+                                    <span
+                                                className="challenge-list__item__field-value"
+                                    >
+                                                <Link
+                                                            replace={false}
+                                                            to="/challenge/309/leaderboard"
+                                                >
+                                                            <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                            />
+                                                </Link>
+                                    </span>
+                        </div>
+                        <div
                                     className="challenge-list__item__blurb"
                         >
                                     <MarkdownContent
@@ -10010,6 +10917,24 @@ ShallowWrapper {
                             </span>
               </div>
               <div
+                            className="challenge-list__item__leaderboard"
+              >
+                            <span
+                                          className="challenge-list__item__field-value"
+                            >
+                                          <Link
+                                                        replace={false}
+                                                        to="/challenge/309/leaderboard"
+                                          >
+                                                        <FormattedMessage
+                                                                      defaultMessage="View Leaderboard"
+                                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                                      values={Object {}}
+                                                        />
+                                          </Link>
+                            </span>
+              </div>
+              <div
                             className="challenge-list__item__blurb"
               >
                             <MarkdownContent
@@ -10101,6 +11026,24 @@ ShallowWrapper {
                   </span>
 </div>,
                 undefined,
+                <div
+                  className="challenge-list__item__leaderboard"
+>
+                  <span
+                                    className="challenge-list__item__field-value"
+                  >
+                                    <Link
+                                                      replace={false}
+                                                      to="/challenge/309/leaderboard"
+                                    >
+                                                      <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                      />
+                                    </Link>
+                  </span>
+</div>,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -10253,6 +11196,79 @@ ShallowWrapper {
                 "type": "div",
               },
               undefined,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <span
+                    className="challenge-list__item__field-value"
+>
+                    <Link
+                                        replace={false}
+                                        to="/challenge/309/leaderboard"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</span>,
+                  "className": "challenge-list__item__leaderboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/309/leaderboard"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Leaderboard"
+                                            id="Challenge.fields.viewLeaderboard.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "challenge-list__item__field-value",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Leaderboard"
+                        id="Challenge.fields.viewLeaderboard.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/309/leaderboard",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Leaderboard",
+                        "id": "Challenge.fields.viewLeaderboard.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": "div",
+              },
               Object {
                 "instance": null,
                 "key": undefined,
@@ -10667,6 +11683,24 @@ ShallowWrapper {
                               </span>
                     </div>
                     <div
+                              className="challenge-list__item__leaderboard"
+                    >
+                              <span
+                                        className="challenge-list__item__field-value"
+                              >
+                                        <Link
+                                                  replace={false}
+                                                  to="/challenge/309/leaderboard"
+                                        >
+                                                  <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                  />
+                                        </Link>
+                              </span>
+                    </div>
+                    <div
                               className="challenge-list__item__blurb"
                     >
                               <MarkdownContent
@@ -10952,6 +11986,24 @@ ShallowWrapper {
                         </span>
             </div>
             <div
+                        className="challenge-list__item__leaderboard"
+            >
+                        <span
+                                    className="challenge-list__item__field-value"
+                        >
+                                    <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                    >
+                                                <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                                />
+                                    </Link>
+                        </span>
+            </div>
+            <div
                         className="challenge-list__item__blurb"
             >
                         <MarkdownContent
@@ -11043,6 +12095,24 @@ ShallowWrapper {
                 </span>
 </div>,
               undefined,
+              <div
+                className="challenge-list__item__leaderboard"
+>
+                <span
+                                className="challenge-list__item__field-value"
+                >
+                                <Link
+                                                replace={false}
+                                                to="/challenge/309/leaderboard"
+                                >
+                                                <FormattedMessage
+                                                                defaultMessage="View Leaderboard"
+                                                                id="Challenge.fields.viewLeaderboard.label"
+                                                                values={Object {}}
+                                                />
+                                </Link>
+                </span>
+</div>,
               <div
                 className="challenge-list__item__blurb"
 >
@@ -11195,6 +12265,79 @@ ShallowWrapper {
               "type": "div",
             },
             undefined,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <span
+                  className="challenge-list__item__field-value"
+>
+                  <Link
+                                    replace={false}
+                                    to="/challenge/309/leaderboard"
+                  >
+                                    <FormattedMessage
+                                                      defaultMessage="View Leaderboard"
+                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                      values={Object {}}
+                                    />
+                  </Link>
+</span>,
+                "className": "challenge-list__item__leaderboard",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Link
+                    replace={false}
+                    to="/challenge/309/leaderboard"
+>
+                    <FormattedMessage
+                                        defaultMessage="View Leaderboard"
+                                        id="Challenge.fields.viewLeaderboard.label"
+                                        values={Object {}}
+                    />
+</Link>,
+                  "className": "challenge-list__item__field-value",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="View Leaderboard"
+                      id="Challenge.fields.viewLeaderboard.label"
+                      values={Object {}}
+/>,
+                    "replace": false,
+                    "to": "/challenge/309/leaderboard",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "defaultMessage": "View Leaderboard",
+                      "id": "Challenge.fields.viewLeaderboard.label",
+                      "values": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                "type": "span",
+              },
+              "type": "div",
+            },
             Object {
               "instance": null,
               "key": undefined,
@@ -11541,6 +12684,24 @@ ShallowWrapper {
                                     </span>
                         </div>
                         <div
+                                    className="challenge-list__item__leaderboard"
+                        >
+                                    <span
+                                                className="challenge-list__item__field-value"
+                                    >
+                                                <Link
+                                                            replace={false}
+                                                            to="/challenge/309/leaderboard"
+                                                >
+                                                            <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                            />
+                                                </Link>
+                                    </span>
+                        </div>
+                        <div
                                     className="challenge-list__item__blurb"
                         >
                                     <MarkdownContent
@@ -11826,6 +12987,24 @@ ShallowWrapper {
                             </span>
               </div>
               <div
+                            className="challenge-list__item__leaderboard"
+              >
+                            <span
+                                          className="challenge-list__item__field-value"
+                            >
+                                          <Link
+                                                        replace={false}
+                                                        to="/challenge/309/leaderboard"
+                                          >
+                                                        <FormattedMessage
+                                                                      defaultMessage="View Leaderboard"
+                                                                      id="Challenge.fields.viewLeaderboard.label"
+                                                                      values={Object {}}
+                                                        />
+                                          </Link>
+                            </span>
+              </div>
+              <div
                             className="challenge-list__item__blurb"
               >
                             <MarkdownContent
@@ -11917,6 +13096,24 @@ ShallowWrapper {
                   </span>
 </div>,
                 undefined,
+                <div
+                  className="challenge-list__item__leaderboard"
+>
+                  <span
+                                    className="challenge-list__item__field-value"
+                  >
+                                    <Link
+                                                      replace={false}
+                                                      to="/challenge/309/leaderboard"
+                                    >
+                                                      <FormattedMessage
+                                                                        defaultMessage="View Leaderboard"
+                                                                        id="Challenge.fields.viewLeaderboard.label"
+                                                                        values={Object {}}
+                                                      />
+                                    </Link>
+                  </span>
+</div>,
                 <div
                   className="challenge-list__item__blurb"
 >
@@ -12069,6 +13266,79 @@ ShallowWrapper {
                 "type": "div",
               },
               undefined,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <span
+                    className="challenge-list__item__field-value"
+>
+                    <Link
+                                        replace={false}
+                                        to="/challenge/309/leaderboard"
+                    >
+                                        <FormattedMessage
+                                                            defaultMessage="View Leaderboard"
+                                                            id="Challenge.fields.viewLeaderboard.label"
+                                                            values={Object {}}
+                                        />
+                    </Link>
+</span>,
+                  "className": "challenge-list__item__leaderboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Link
+                      replace={false}
+                      to="/challenge/309/leaderboard"
+>
+                      <FormattedMessage
+                                            defaultMessage="View Leaderboard"
+                                            id="Challenge.fields.viewLeaderboard.label"
+                                            values={Object {}}
+                      />
+</Link>,
+                    "className": "challenge-list__item__field-value",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="View Leaderboard"
+                        id="Challenge.fields.viewLeaderboard.label"
+                        values={Object {}}
+/>,
+                      "replace": false,
+                      "to": "/challenge/309/leaderboard",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "defaultMessage": "View Leaderboard",
+                        "id": "Challenge.fields.viewLeaderboard.label",
+                        "values": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  "type": "span",
+                },
+                "type": "div",
+              },
               Object {
                 "instance": null,
                 "key": undefined,

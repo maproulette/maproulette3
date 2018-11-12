@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { DashboardDataTarget } from '../../../../../services/Dashboard/Dashboard'
 import { registerBlockType } from '../BlockTypes'
-import ChallengeLeaderboard
-       from '../../ChallengeLeaderboard/ChallengeLeaderboard'
+import ChallengeOwnerLeaderboard
+       from '../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard'
 import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickBlock from '../QuickBlock'
@@ -42,7 +42,7 @@ export class LeaderboardBlock extends Component {
                   className="leaderboard-block"
                   blockTitle={<FormattedMessage {...messages.title} />}
                   headerControls={selector}>
-        <ChallengeLeaderboard suppressHeader
+        <ChallengeOwnerLeaderboard suppressHeader
                               monthsPast={monthsPast}
                               {...this.props} />
       </QuickBlock>

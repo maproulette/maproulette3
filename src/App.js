@@ -22,6 +22,7 @@ import LoadRandomVirtualChallengeTask
 import Navbar from './components/Navbar/Navbar'
 import UserProfile from './components/UserProfile/UserProfile'
 import Leaderboard from './components/Leaderboard/Leaderboard'
+import ChallengeLeaderboard from './components/ChallengeLeaderboard/ChallengeLeaderboard'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
 import MobileNotSupported
@@ -95,6 +96,7 @@ export class App extends Component {
           <CachedRoute exact path='/about' component={AboutPane} />
           <CachedRoute path='/user/profile' component={UserProfile} />
           <CachedRoute path='/leaderboard' component={Leaderboard} />
+          <CachedRoute path='/challenge/:challengeId/leaderboard/' component={ChallengeLeaderboard} />
           <CachedRoute path='/admin' component={AdminPane} />
           <CachedRoute path='/error' component={ErrorPane} />
           <Route component={PageNotFound} />

@@ -42,7 +42,7 @@ export class Leaderboard extends Component {
 
       return (
         <div className="leaderboard__board__leader" key={leader.userId}>
-          {withRibbon ? 
+          {withRibbon ?
             <Ribbon className="leaderboard__board__leader__rank">
               #{index + offset}
             </Ribbon> :
@@ -118,6 +118,9 @@ export class Leaderboard extends Component {
              </div>
            </div>
           }
+          {this.props.displayName &&
+            <h1 className="leaderboard__board__display-name">{this.props.displayName}</h1>
+          }
 
           {this.props.leaderboard.length === 0 &&
            <div className="leaderboard__board__no-leaders">
@@ -155,6 +158,8 @@ Leaderboard.propTypes = {
   suppressTopChallenges: PropTypes.bool,
   /** Set to true to render in the compact view */
   compactView: PropTypes.bool,
+  /** Optional displayName to show in title */
+  displayName: PropTypes.string,
 }
 
 export default WithLeaderboard(injectIntl(Leaderboard), INITIAL_MONTHS_PAST)
