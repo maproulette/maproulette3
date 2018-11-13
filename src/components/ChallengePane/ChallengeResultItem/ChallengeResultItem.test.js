@@ -60,7 +60,7 @@ test("shows the name of the parent project", () => {
   )
 
   expect(
-    wrapper.find('.challenge-list__item__project-name').text()
+    wrapper.find('.challenge-list__item__project-name').children().first().text()
   ).toBe(basicProps.challenge.parent.displayName)
   expect(wrapper).toMatchSnapshot()
 })

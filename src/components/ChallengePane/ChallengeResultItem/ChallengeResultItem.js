@@ -216,9 +216,11 @@ export class ChallengeResultItem extends Component {
                 {this.props.challenge.name}
               </div>
             </div>
-            <div className="challenge-list__item__project-name">
+            <Link className="challenge-list__item__project-name"
+              onClick={(e) => {e.stopPropagation()}}
+              to={`/project/${this.props.challenge.parent.id}/leaderboard`}>
               {_get(this.props, 'challenge.parent.displayName')}
-            </div>
+            </Link>
           </div>
           <a className="card-header-icon" aria-label="more options">
             <span className="icon"></span>

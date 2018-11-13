@@ -23,6 +23,7 @@ import Navbar from './components/Navbar/Navbar'
 import UserProfile from './components/UserProfile/UserProfile'
 import Leaderboard from './components/Leaderboard/Leaderboard'
 import ChallengeLeaderboard from './components/ChallengeLeaderboard/ChallengeLeaderboard'
+import ProjectLeaderboard from './components/ProjectLeaderboard/ProjectLeaderboard'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
 import MobileNotSupported
@@ -97,6 +98,7 @@ export class App extends Component {
           <CachedRoute path='/user/profile' component={UserProfile} />
           <CachedRoute path='/leaderboard' component={Leaderboard} />
           <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
+          <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
           <CachedRoute path='/admin' component={AdminPane} />
           <CachedRoute path='/error' component={ErrorPane} />
           <Route component={PageNotFound} />

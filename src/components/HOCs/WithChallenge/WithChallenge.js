@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
-import _debounce from 'lodash/debounce'
 import _omit from 'lodash/omit'
 import { fetchChallenge }
        from '../../../services/Challenge/Challenge'
@@ -56,10 +55,6 @@ export const WithChallenge = function(WrappedComponent) {
       this.updateChallenge(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      this.updateChallenge(nextProps)
-    }
-
     render() {
       return (
         <WrappedComponent challenge = {this.state.challenge}
@@ -78,7 +73,7 @@ const mapStateToProps = state => ({
 
 export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    loadChallenge: _debounce(
+    loadChallenge:
       challengeId => {
         return dispatch(
           fetchChallenge(challengeId)
@@ -90,10 +85,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             ownProps.history.push('/')
           }
         })
-      },
-      5000,
-      {leading: true},
-    ),
+      }
   }
 }
 

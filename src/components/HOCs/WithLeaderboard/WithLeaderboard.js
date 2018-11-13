@@ -3,6 +3,7 @@ import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
+import _isEqual from 'lodash/isEqual'
 import subMonths from 'date-fns/sub_months'
 import { fetchLeaderboard } from '../../../services/Leaderboard/Leaderboard'
 
@@ -36,6 +37,11 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
             _isArray(this.props.challenges)) {
           params.set('forChallenges', [_map(this.props.challenges, 'id')])
         }
+
+        if (this.props.leaderboardOptions.filterProjects &&
+            _isArray(this.props.projects)) {
+          params.set('forProjects', [_map(this.props.projects, 'id')])
+        }
       }
 
       return params.values()
@@ -66,8 +72,11 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
     componentDidUpdate(prevProps) {
       // A change to state will also fetch leaderboard data, so we only need to
       // worry about fetching if we're controlled and props change.
-      if (this.props.monthsPast !== prevProps.monthsPast) {
-        this.updateLeaderboard(this.monthsPastStartDate(this.props.monthsPast))
+      if (this.props.monthsPast !== prevProps.monthsPast ||
+          !_isEqual(this.props.challenges, prevProps.challenges) ||
+          !_isEqual(this.props.projects, prevProps.projects)) {
+        this.updateLeaderboard(this.monthsPastStartDate(this.props.monthsPast ||
+                                                        this.state.monthsPast))
       }
     }
 
@@ -80,5 +89,5 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
     }
   }
 }
-  
+
 export default WithLeaderboard

@@ -74,11 +74,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -207,11 +210,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -246,11 +252,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -308,14 +317,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -915,11 +927,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -1048,11 +1063,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -1087,11 +1105,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -1149,14 +1170,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -1819,11 +1843,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -1890,11 +1917,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -1929,11 +1959,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -1991,14 +2024,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -2080,11 +2116,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -2151,11 +2190,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -2190,11 +2232,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -2252,14 +2297,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -2395,11 +2443,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -2466,11 +2517,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -2505,11 +2559,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -2567,14 +2624,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -2656,11 +2716,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -2727,11 +2790,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -2766,11 +2832,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -2828,14 +2897,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -2977,11 +3049,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -3053,11 +3128,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -3097,11 +3175,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -3178,14 +3259,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -3272,11 +3356,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -3348,11 +3435,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -3392,11 +3482,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -3473,14 +3566,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -3607,11 +3703,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -3651,11 +3750,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -3690,11 +3792,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -3752,14 +3857,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -3833,11 +3941,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -3877,11 +3988,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -3916,11 +4030,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -3978,14 +4095,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -4112,11 +4232,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -4156,11 +4279,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -4195,11 +4321,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -4257,14 +4386,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -4338,11 +4470,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -4382,11 +4517,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -4421,11 +4559,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -4483,14 +4624,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -4628,11 +4772,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -4774,11 +4921,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -4813,11 +4963,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -4875,14 +5028,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -5595,11 +5751,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -5741,11 +5900,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -5780,11 +5942,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -5842,14 +6007,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -6615,11 +6783,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -6659,11 +6830,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -6698,11 +6872,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -6760,14 +6937,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -6841,11 +7021,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -6885,11 +7068,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -6924,11 +7110,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -6986,14 +7175,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -7120,11 +7312,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -7164,11 +7359,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -7203,11 +7401,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -7265,14 +7466,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -7346,11 +7550,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -7390,11 +7597,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -7429,11 +7639,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -7491,14 +7704,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -7636,11 +7852,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -7782,11 +8001,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -7821,11 +8043,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -7883,14 +8108,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -8603,11 +8831,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -8749,11 +8980,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -8788,11 +9022,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -8850,14 +9087,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -9634,11 +9874,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -9780,11 +10023,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -9819,11 +10065,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -9881,14 +10130,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -10601,11 +10853,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -10747,11 +11002,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -10786,11 +11044,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -10848,14 +11109,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
@@ -11641,11 +11905,14 @@ ShallowWrapper {
                                         Challenge-309
                               </div>
                     </div>
-                    <div
+                    <Link
                               className="challenge-list__item__project-name"
+                              onClick={[Function]}
+                              replace={false}
+                              to="/project/undefined/leaderboard"
                     >
                               foo
-                    </div>
+                    </Link>
           </div>
           <a
                     aria-label="more options"
@@ -11792,11 +12059,14 @@ ShallowWrapper {
                                           Challenge-309
                             </div>
               </div>
-              <div
+              <Link
                             className="challenge-list__item__project-name"
+                            onClick={[Function]}
+                            replace={false}
+                            to="/project/undefined/leaderboard"
               >
                             foo
-              </div>
+              </Link>
 </div>,
             <a
               aria-label="more options"
@@ -11836,11 +12106,14 @@ ShallowWrapper {
                                     Challenge-309
                   </div>
 </div>,
-                <div
+                <Link
                   className="challenge-list__item__project-name"
+                  onClick={[Function]}
+                  replace={false}
+                  to="/project/undefined/leaderboard"
 >
                   foo
-</div>,
+</Link>,
               ],
             },
             "ref": null,
@@ -11917,14 +12190,17 @@ ShallowWrapper {
               Object {
                 "instance": null,
                 "key": undefined,
-                "nodeType": "host",
+                "nodeType": "class",
                 "props": Object {
                   "children": "foo",
                   "className": "challenge-list__item__project-name",
+                  "onClick": [Function],
+                  "replace": false,
+                  "to": "/project/undefined/leaderboard",
                 },
                 "ref": null,
                 "rendered": "foo",
-                "type": "div",
+                "type": [Function],
               },
             ],
             "type": "div",
@@ -12642,11 +12918,14 @@ ShallowWrapper {
                                                 Challenge-309
                                     </div>
                         </div>
-                        <div
+                        <Link
                                     className="challenge-list__item__project-name"
+                                    onClick={[Function]}
+                                    replace={false}
+                                    to="/project/undefined/leaderboard"
                         >
                                     foo
-                        </div>
+                        </Link>
             </div>
             <a
                         aria-label="more options"
@@ -12793,11 +13072,14 @@ ShallowWrapper {
                                                 Challenge-309
                                 </div>
                 </div>
-                <div
+                <Link
                                 className="challenge-list__item__project-name"
+                                onClick={[Function]}
+                                replace={false}
+                                to="/project/undefined/leaderboard"
                 >
                                 foo
-                </div>
+                </Link>
 </div>,
               <a
                 aria-label="more options"
@@ -12837,11 +13119,14 @@ ShallowWrapper {
                                         Challenge-309
                     </div>
 </div>,
-                  <div
+                  <Link
                     className="challenge-list__item__project-name"
+                    onClick={[Function]}
+                    replace={false}
+                    to="/project/undefined/leaderboard"
 >
                     foo
-</div>,
+</Link>,
                 ],
               },
               "ref": null,
@@ -12918,14 +13203,17 @@ ShallowWrapper {
                 Object {
                   "instance": null,
                   "key": undefined,
-                  "nodeType": "host",
+                  "nodeType": "class",
                   "props": Object {
                     "children": "foo",
                     "className": "challenge-list__item__project-name",
+                    "onClick": [Function],
+                    "replace": false,
+                    "to": "/project/undefined/leaderboard",
                   },
                   "ref": null,
                   "rendered": "foo",
-                  "type": "div",
+                  "type": [Function],
                 },
               ],
               "type": "div",
