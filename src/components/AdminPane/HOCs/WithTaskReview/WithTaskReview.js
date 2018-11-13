@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
-import { loadPreviousSequentialTaskFromChallenge,
+import { addTaskComment,
+         loadPreviousSequentialTaskFromChallenge,
          loadNextSequentialTaskFromChallenge }
        from '../../../../services/Task/Task'
 
@@ -31,12 +32,20 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Move to the next sequential task during challenge review.
      */
-    nextSequentialTask: task => {
+    nextSequentialTask: (task) => {
       dispatch(
         loadNextSequentialTaskFromChallenge(task.parent.id, task.id)
       ).then(newTask =>
         reviewNewTask(task, newTask, ownProps.history)
       )
+    },
+
+    /**
+     * Move to the next sequential task during challenge review and save
+     * any comments.
+     */
+    postTaskComment: (task, reviewComment) => {
+      dispatch(addTaskComment(task.id, reviewComment))
     },
 
     /**

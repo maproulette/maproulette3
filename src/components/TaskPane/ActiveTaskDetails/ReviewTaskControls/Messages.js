@@ -20,4 +20,9 @@ export default defineMessages({
     id: "Admin.TaskReview.controls.modifyTask.label",
     defaultMessage: "Modify Task Data",
   },
+  postCommentLabel: {
+    id: "Admin.TaskReview.controls.postTaskComment.label",
+    defaultMessage: "Post",
+  },
+
 })

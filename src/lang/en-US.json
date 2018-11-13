@@ -349,6 +349,7 @@
   "Admin.TaskReview.controls.nextTask.label": "Next Task",
   "Admin.TaskReview.controls.editTask.label": "Edit Task",
   "Admin.TaskReview.controls.modifyTask.label": "Modify Task Data",
+  "Admin.TaskReview.controls.postTaskComment.label": "Post",
   "ActiveTask.subheading.status": "Existing Status",
   "ActiveTask.controls.status.tooltip": "Existing Status",
   "ActiveTask.controls.viewChangset.label": "View Changeset",
