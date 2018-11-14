@@ -7,6 +7,21 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.1.1] - 2018-11-12
+### Added
+- Mapillary map layer when completing tasks
+- Support rebuild of challenges sourced from local or remote GeoJSON (#527)
+- Option to remove unmatched tasks on challenge rebuild to reduce stale tasks
+- Control to load more challenge results in search results
+- Public leaderboards for each challenge (#536)
+
+### Fixed
+- Fix lag when typing a search query
+- Show GeoJSON validation errors (lost in line-by-line enhancement)
+- Allow switch to different GeoJSON source even after prior source had error
+- Reduce extraneous scrollbars from Create dashboard (#519)
+
+
 ## [v3.1.0] - 2018-10-30
 ### Added
 - Add more keyboard shortcuts for task completion (#477).
