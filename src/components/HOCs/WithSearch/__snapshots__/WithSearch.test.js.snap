@@ -2,12 +2,12 @@
 
 exports[`mapDispatchToProps maps function performSearch 1`] = `
 Object {
+  "clearMapBounds": [Function],
   "clearSearch": [Function],
   "clearSearchFilters": [Function],
   "locateMapToUser": [Function],
   "performSearch": [Function],
   "removeSearchFilters": [Function],
-  "removeSearchPage": [Function],
   "removeSearchSort": [Function],
   "setChallengeBrowseMapBounds": [Function],
   "setChallengeOwnerMapBounds": [Function],
@@ -23,12 +23,12 @@ Object {
 
 exports[`mapDispatchToProps maps function setSearch 1`] = `
 Object {
+  "clearMapBounds": [Function],
   "clearSearch": [Function],
   "clearSearchFilters": [Function],
   "locateMapToUser": [Function],
   "performSearch": [Function],
   "removeSearchFilters": [Function],
-  "removeSearchPage": [Function],
   "removeSearchSort": [Function],
   "setChallengeBrowseMapBounds": [Function],
   "setChallengeOwnerMapBounds": [Function],

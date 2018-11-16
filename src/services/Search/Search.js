@@ -30,6 +30,7 @@ export const SET_CHALLENGE_SEARCH_MAP_BOUNDS = 'SET_CHALLENGE_SEARCH_MAP_BOUNDS'
 export const SET_CHALLENGE_BROWSE_MAP_BOUNDS = 'SET_CHALLENGE_BROWSE_MAP_BOUNDS'
 export const SET_TASK_MAP_BOUNDS = 'SET_TASK_MAP_BOUNDS'
 export const SET_CHALLENGE_OWNER_MAP_BOUNDS = 'SET_CHALLENGE_OWNER_MAP_BOUNDS'
+export const CLEAR_MAP_BOUNDS = 'CLEAR_MAP_BOUNDS'
 
 
 // Sort options
@@ -128,11 +129,10 @@ export const setPage = function(searchName, page) {
   }
 }
 
-export const removePage = function(searchName, criteriaNames) {
+export const removePage = function(searchName) {
   return {
     type: REMOVE_PAGE,
     searchName,
-    criteriaNames,
   }
 }
 
@@ -173,11 +173,12 @@ export const clearFilters = function(searchName) {
  *        action, false if the bounds are simply being altered in response
  *        to normal panning and zooming.
  */
-export const setChallengeSearchMapBounds = function(searchName, bounds, fromUserAction=false) {
+export const setChallengeSearchMapBounds = function(searchName, bounds, zoom, fromUserAction=false) {
   return {
     type: SET_CHALLENGE_SEARCH_MAP_BOUNDS,
     searchName,
     bounds: fromLatLngBounds(bounds),
+    zoom,
     fromUserAction,
   }
 }
@@ -237,6 +238,16 @@ export const setChallengeOwnerMapBounds = function(searchName, challengeId, boun
     challengeId,
     bounds: fromLatLngBounds(bounds),
     zoom,
+  }
+}
+
+/**
+ * Remove from the redux store with the bounds associated with the given search name
+ */
+export const clearMapBounds = function(searchName) {
+  return {
+    type: CLEAR_MAP_BOUNDS,
+    searchName,
   }
 }
 
@@ -340,7 +351,7 @@ export const currentSearch = function(state={}, action) {
     case REMOVE_PAGE:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.page`,
-            Object.assign({}, _omit(_get(state, `${action.searchName}.page`), action.criteriaNames)))
+            Object.assign({}, _omit(_get(state, `${action.searchName}.page`))))
       return mergedState
 
     case SET_FILTERS:
@@ -366,6 +377,7 @@ export const currentSearch = function(state={}, action) {
             Object.assign({}, _get(state, `${action.searchName}.mapBounds`),
               {
                 bounds: action.bounds,
+                zoom: action.zoom,
                 fromUserAction: action.fromUserAction,
               }))
       return mergedState
@@ -404,6 +416,9 @@ export const currentSearch = function(state={}, action) {
               updatedAt: Date.now(),
             }))
       return mergedState
+
+    case CLEAR_MAP_BOUNDS:
+      return Object.assign({}, _omit(state, `${action.searchName}.mapBounds`))
 
     default:
       return state

@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import MapPane from '../EnhancedMap/MapPane/MapPane'
-import ChallengeSearchMap from '../ChallengeSearchMap/ChallengeSearchMap'
 import AboutModal from './AboutModal/AboutModal'
 
 /**
@@ -13,10 +11,6 @@ export default class AboutPane extends Component {
   render() {
     return (
       <div className="about-pane">
-        <MapPane>
-          <ChallengeSearchMap className="about" {...this.props} />
-        </MapPane>
-
         <AboutModal {...this.props} />
       </div>
     )
