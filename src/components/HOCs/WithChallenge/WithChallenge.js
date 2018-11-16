@@ -58,8 +58,7 @@ export const WithChallenge = function(WrappedComponent) {
     render() {
       return (
         <WrappedComponent challenge = {this.state.challenge}
-                          {..._omit(this.props, ['entities',
-                                                 'loadChallenge'])} />
+                          {..._omit(this.props, ['loadChallenge'])} />
       )
     }
   }
@@ -68,7 +67,6 @@ export const WithChallenge = function(WrappedComponent) {
 }
 
 const mapStateToProps = state => ({
-  entities: state.entities,
 })
 
 export const mapDispatchToProps = (dispatch, ownProps) => {
