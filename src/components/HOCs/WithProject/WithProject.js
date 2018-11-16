@@ -25,16 +25,10 @@ const WithProject = function(WrappedComponent) {
       const projectId = this.currentProjectId(props)
 
       if (_isFinite(projectId) && !this.state.project) {
-        let project = _get(this.props, `entities.projects.${projectId}`)
-        if (!project ) {
-          props.fetchProject(projectId).then(normalizedProject => {
-            const project = normalizedProject.entities.projects[normalizedProject.result]
-            this.setState({project: project})
-          })
-        }
-        else {
+        props.fetchProject(projectId).then(normalizedProject => {
+          const project = normalizedProject.entities.projects[normalizedProject.result]
           this.setState({project: project})
-        }
+        })
       }
     }
 
@@ -47,15 +41,13 @@ const WithProject = function(WrappedComponent) {
     }
 
     render() {
-      return <WrappedComponent {..._omit(this.props, ['entities',
-                                                      'fetchProject'])}
+      return <WrappedComponent {..._omit(this.props, ['fetchProject'])}
                                project={this.state.project} />
     }
   }
 }
 
 const mapStateToProps = state => ({
-  entities: state.entities,
 })
 
 const mapDispatchToProps = dispatch => ({
