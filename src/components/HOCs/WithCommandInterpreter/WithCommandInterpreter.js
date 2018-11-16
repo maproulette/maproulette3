@@ -35,7 +35,7 @@ const WithCommandInterpreter = function(WrappedComponent) {
       return <WrappedComponent {..._omit(this.props, ['searchQuery', 'clearSearch',
                                           'executeSearch'])}
                                searchQuery={{query: this.state.commandString}}
-                               executeSearch={this.executeCommand}
+                               setSearch={this.executeSearch}
                                clearSearch={this.clearSearch} />
     }
   }

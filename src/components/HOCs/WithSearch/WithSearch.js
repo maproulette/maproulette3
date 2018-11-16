@@ -7,12 +7,11 @@ import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
 import { SORT_NAME, SORT_CREATED, SORT_POPULARITY,
-         setSort, removeSort,
-         setPage, removePage,
+         setSort, removeSort, setPage,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
          setChallengeSearchMapBounds, setChallengeBrowseMapBounds,
-         setTaskMapBounds, setChallengeOwnerMapBounds,
+         setTaskMapBounds, setChallengeOwnerMapBounds, clearMapBounds,
          performSearch }
        from '../../../services/Search/Search'
 import { addError } from '../../../services/Error/Error'
@@ -147,26 +146,26 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   },
 
   setSearchSort: sortCriteria => {
-      const sortBy = _get(sortCriteria, 'sortBy')
-      let sort = null
+    const sortBy = _get(sortCriteria, 'sortBy')
+    let sort = null
 
-      switch(sortBy) {
-        case SORT_NAME:
-          sort = {sortBy, direction: 'asc'}
-          break
-        case SORT_CREATED:
-          sort = {sortBy, direction: 'desc'}
-          break
-        case SORT_POPULARITY:
-          sort = {sortBy, direction: 'desc'}
-          break
-        default:
-          sort = {sortBy: null, direction: null}
-          break
-      }
+    switch(sortBy) {
+      case SORT_NAME:
+        sort = {sortBy, direction: 'asc'}
+        break
+      case SORT_CREATED:
+        sort = {sortBy, direction: 'desc'}
+        break
+      case SORT_POPULARITY:
+        sort = {sortBy, direction: 'desc'}
+        break
+      default:
+        sort = {sortBy: null, direction: null}
+        break
+    }
 
-      dispatch(setSort(searchGroup, sort))
-    },
+    dispatch(setSort(searchGroup, sort))
+  },
 
   removeSearchSort:
     criteriaNames => dispatch(removeSort(searchGroup, criteriaNames)),
@@ -175,25 +174,24 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     dispatch(setPage(searchGroup, page))
   },
 
-  removeSearchPage:
-    criteriaNames => dispatch(removePage(searchGroup, criteriaNames)),
+  setSearchFilters: filterCriteria => {
+    dispatch(setFilters(searchGroup, filterCriteria))
+  },
 
-  setSearchFilters:
-    filterCriteria => {
-      dispatch(setFilters(searchGroup, filterCriteria))
-    },
-
-  removeSearchFilters:
-    criteriaNames => dispatch(removeFilters(searchGroup, criteriaNames)),
+  removeSearchFilters: criteriaNames => {
+    dispatch(removeFilters(searchGroup, criteriaNames))
+  },
 
   setKeywordFilter: keywords => {
     dispatch(setFilters(searchGroup, {keywords}))
   },
 
-  clearSearchFilters: () => dispatch(clearFilters(searchGroup)),
+  clearSearchFilters: (clearRoute = true) => {
+    dispatch(clearFilters(searchGroup))
+  },
 
   setChallengeSearchMapBounds: (bounds, zoom, fromUserAction=false) => {
-    dispatch(setChallengeSearchMapBounds(searchGroup, bounds, fromUserAction))
+    dispatch(setChallengeSearchMapBounds(searchGroup, bounds, zoom, fromUserAction))
   },
 
   setChallengeBrowseMapBounds: (challengeId, bounds, zoom) => {
@@ -206,6 +204,10 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
 
   setTaskMapBounds: (taskId, bounds, zoom, fromUserAction=false) => {
     dispatch(setTaskMapBounds(searchGroup, taskId, bounds, zoom, fromUserAction))
+  },
+
+  clearMapBounds: () => {
+    dispatch(clearMapBounds(searchGroup))
   },
 
   locateMapToUser: user => {

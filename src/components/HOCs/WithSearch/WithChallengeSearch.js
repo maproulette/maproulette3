@@ -2,6 +2,7 @@ import _get from 'lodash/get'
 import _isUndefined from 'lodash/isUndefined'
 import WithSearch from '../WithSearch/WithSearch'
 import { extendedFind } from '../../../services/Challenge/Challenge'
+import WithSearchRoute from '../WithSearchRoute/WithSearchRoute'
 
 const SEARCH_GROUP = 'challenges'
 
@@ -28,5 +29,5 @@ const performChallengeSearch = (query, limit) => {
 }
 
 export default (WrappedComponent) => {
-  return WithSearch(WrappedComponent, SEARCH_GROUP, performChallengeSearch)
+  return WithSearch(WithSearchRoute(WrappedComponent, SEARCH_GROUP), SEARCH_GROUP, performChallengeSearch)
 }

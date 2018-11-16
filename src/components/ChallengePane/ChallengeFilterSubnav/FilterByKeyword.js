@@ -76,7 +76,7 @@ export class FilterByKeyword extends Component {
       Renderable: OtherKeywordsOption,
       ownProps: {
         searchQuery: {query: otherKeyword},
-        executeSearch: this.setOtherKeywords,
+        setSearch: this.setOtherKeywords,
         clearSearch: this.clearOtherKeywords,
         placeholder: '',
       },
