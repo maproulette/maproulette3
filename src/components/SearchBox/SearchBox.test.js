@@ -8,7 +8,7 @@ let basicProps = null
 
 beforeEach(() => {
   basicProps = Object.assign({}, propsFixture)
-  basicProps.setSearch = jest.fn()
+  basicProps.executeSearch = jest.fn()
   basicProps.clearSearch = jest.fn()
   basicProps.fetchResults = jest.fn()
   basicProps.deactivate = jest.fn()
@@ -120,13 +120,13 @@ test("placeholder props is inserted into text box", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test("setSearch called when the query in box is changed", () => {
+test("executeSearch called when the query in box is changed", () => {
   const wrapper = shallow(
     <SearchBox {...basicProps} />
   )
 
   wrapper.find('.search-box__input').simulate('change', { target: { value: 'Hello' } })
-  expect(basicProps.setSearch).toHaveBeenCalled()
+  expect(basicProps.executeSearch).toHaveBeenCalled()
   expect(wrapper).toMatchSnapshot()
 })
 

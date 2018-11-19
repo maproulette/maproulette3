@@ -8,13 +8,13 @@ ShallowWrapper {
     className="my-class"
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -356,13 +356,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "test me",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -746,13 +746,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -1094,13 +1094,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "some query",
           }
     }
-    setSearch={[Function]}
     showDoneButton={true}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -1571,13 +1571,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -1919,13 +1919,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -2267,13 +2267,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "test me",
           }
     }
-    setSearch={[Function]}
     showDoneButton={false}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -2658,13 +2658,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "",
           }
     }
-    setSearch={[Function]}
     suppressIcon={true}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -2955,14 +2955,362 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "",
           }
     }
-    setSearch={[Function]}
     suppressIcon={false}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": <div
+        className="search-box__search-field"
+>
+        <div
+                className="control-wrapper"
+        >
+                <SvgSymbol
+                        className="search-box__icon"
+                        sym="search-icon"
+                        viewBox="0 0 20 20"
+                />
+                <div
+                        className="control is-medium"
+                >
+                        <input
+                                className="input is-medium search-box__input"
+                                maxLength="63"
+                                onChange={[Function]}
+                                onKeyDown={[Function]}
+                                placeholder={undefined}
+                                type="text"
+                                value=""
+                        />
+                </div>
+        </div>
+</div>,
+      "className": "search-box",
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="control-wrapper"
+>
+            <SvgSymbol
+                        className="search-box__icon"
+                        sym="search-icon"
+                        viewBox="0 0 20 20"
+            />
+            <div
+                        className="control is-medium"
+            >
+                        <input
+                                    className="input is-medium search-box__input"
+                                    maxLength="63"
+                                    onChange={[Function]}
+                                    onKeyDown={[Function]}
+                                    placeholder={undefined}
+                                    type="text"
+                                    value=""
+                        />
+            </div>
+</div>,
+          null,
+          null,
+        ],
+        "className": "search-box__search-field",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <SvgSymbol
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
+/>,
+              <div
+                className="control is-medium"
+>
+                <input
+                                className="input is-medium search-box__input"
+                                maxLength="63"
+                                onChange={[Function]}
+                                onKeyDown={[Function]}
+                                placeholder={undefined}
+                                type="text"
+                                value=""
+                />
+</div>,
+            ],
+            "className": "control-wrapper",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "className": "search-box__icon",
+                "sym": "search-icon",
+                "viewBox": "0 0 20 20",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  placeholder={undefined}
+                  type="text"
+                  value=""
+/>,
+                "className": "control is-medium",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "className": "input is-medium search-box__input",
+                  "maxLength": "63",
+                  "onChange": [Function],
+                  "onKeyDown": [Function],
+                  "placeholder": undefined,
+                  "type": "text",
+                  "value": "",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "input",
+              },
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+        null,
+        null,
+      ],
+      "type": "div",
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <div
+          className="search-box__search-field"
+>
+          <div
+                    className="control-wrapper"
+          >
+                    <SvgSymbol
+                              className="search-box__icon"
+                              sym="search-icon"
+                              viewBox="0 0 20 20"
+                    />
+                    <div
+                              className="control is-medium"
+                    >
+                              <input
+                                        className="input is-medium search-box__input"
+                                        maxLength="63"
+                                        onChange={[Function]}
+                                        onKeyDown={[Function]}
+                                        placeholder={undefined}
+                                        type="text"
+                                        value=""
+                              />
+                    </div>
+          </div>
+</div>,
+        "className": "search-box",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="control-wrapper"
+>
+              <SvgSymbol
+                            className="search-box__icon"
+                            sym="search-icon"
+                            viewBox="0 0 20 20"
+              />
+              <div
+                            className="control is-medium"
+              >
+                            <input
+                                          className="input is-medium search-box__input"
+                                          maxLength="63"
+                                          onChange={[Function]}
+                                          onKeyDown={[Function]}
+                                          placeholder={undefined}
+                                          type="text"
+                                          value=""
+                            />
+              </div>
+</div>,
+            null,
+            null,
+          ],
+          "className": "search-box__search-field",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <SvgSymbol
+                  className="search-box__icon"
+                  sym="search-icon"
+                  viewBox="0 0 20 20"
+/>,
+                <div
+                  className="control is-medium"
+>
+                  <input
+                                    className="input is-medium search-box__input"
+                                    maxLength="63"
+                                    onChange={[Function]}
+                                    onKeyDown={[Function]}
+                                    placeholder={undefined}
+                                    type="text"
+                                    value=""
+                  />
+</div>,
+              ],
+              "className": "control-wrapper",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "className": "search-box__icon",
+                  "sym": "search-icon",
+                  "viewBox": "0 0 20 20",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <input
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder={undefined}
+                    type="text"
+                    value=""
+/>,
+                  "className": "control is-medium",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "className": "input is-medium search-box__input",
+                    "maxLength": "63",
+                    "onChange": [Function],
+                    "onKeyDown": [Function],
+                    "placeholder": undefined,
+                    "type": "text",
+                    "value": "",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "input",
+                },
+                "type": "div",
+              },
+            ],
+            "type": "div",
+          },
+          null,
+          null,
+        ],
+        "type": "div",
+      },
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`executeSearch called when the query in box is changed 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <SearchBox
+    clearSearch={[Function]}
+    deactivate={[Function]}
+    executeSearch={[Function]}
+    fetchResults={[Function]}
+    searchQuery={
+        Object {
+            "query": "",
+          }
+    }
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -3304,6 +3652,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
@@ -3313,7 +3662,6 @@ ShallowWrapper {
             "query": "test me",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -3697,13 +4045,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -4045,6 +4393,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     placeholder="some text here"
     searchQuery={
@@ -4052,7 +4401,6 @@ ShallowWrapper {
             "query": "",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -4387,354 +4735,6 @@ ShallowWrapper {
 }
 `;
 
-exports[`setSearch called when the query in box is changed 1`] = `
-ShallowWrapper {
-  "length": 1,
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
-    searchQuery={
-        Object {
-            "query": "",
-          }
-    }
-    setSearch={[Function]}
-/>,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "host",
-    "props": Object {
-      "children": <div
-        className="search-box__search-field"
->
-        <div
-                className="control-wrapper"
-        >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
-        </div>
-</div>,
-      "className": "search-box",
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          <div
-            className="control-wrapper"
->
-            <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-            />
-            <div
-                        className="control is-medium"
-            >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
-            </div>
-</div>,
-          null,
-          null,
-        ],
-        "className": "search-box__search-field",
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <SvgSymbol
-                className="search-box__icon"
-                sym="search-icon"
-                viewBox="0 0 20 20"
-/>,
-              <div
-                className="control is-medium"
->
-                <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                />
-</div>,
-            ],
-            "className": "control-wrapper",
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "className": "search-box__icon",
-                "sym": "search-icon",
-                "viewBox": "0 0 20 20",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": <input
-                  className="input is-medium search-box__input"
-                  maxLength="63"
-                  onChange={[Function]}
-                  onKeyDown={[Function]}
-                  placeholder={undefined}
-                  type="text"
-                  value=""
-/>,
-                "className": "control is-medium",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "className": "input is-medium search-box__input",
-                  "maxLength": "63",
-                  "onChange": [Function],
-                  "onKeyDown": [Function],
-                  "placeholder": undefined,
-                  "type": "text",
-                  "value": "",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": "input",
-              },
-              "type": "div",
-            },
-          ],
-          "type": "div",
-        },
-        null,
-        null,
-      ],
-      "type": "div",
-    },
-    "type": "div",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": <div
-          className="search-box__search-field"
->
-          <div
-                    className="control-wrapper"
-          >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
-          </div>
-</div>,
-        "className": "search-box",
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            <div
-              className="control-wrapper"
->
-              <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
-              />
-              <div
-                            className="control is-medium"
-              >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
-              </div>
-</div>,
-            null,
-            null,
-          ],
-          "className": "search-box__search-field",
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <SvgSymbol
-                  className="search-box__icon"
-                  sym="search-icon"
-                  viewBox="0 0 20 20"
-/>,
-                <div
-                  className="control is-medium"
->
-                  <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                  />
-</div>,
-              ],
-              "className": "control-wrapper",
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "className": "search-box__icon",
-                  "sym": "search-icon",
-                  "viewBox": "0 0 20 20",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": <input
-                    className="input is-medium search-box__input"
-                    maxLength="63"
-                    onChange={[Function]}
-                    onKeyDown={[Function]}
-                    placeholder={undefined}
-                    type="text"
-                    value=""
-/>,
-                  "className": "control is-medium",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "className": "input is-medium search-box__input",
-                    "maxLength": "63",
-                    "onChange": [Function],
-                    "onKeyDown": [Function],
-                    "placeholder": undefined,
-                    "type": "text",
-                    "value": "",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": "input",
-                },
-                "type": "div",
-              },
-            ],
-            "type": "div",
-          },
-          null,
-          null,
-        ],
-        "type": "div",
-      },
-      "type": "div",
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
-`;
-
 exports[`shows a clear button if there is a query in the search box 1`] = `
 ShallowWrapper {
   "length": 1,
@@ -4742,13 +4742,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "test me",
           }
     }
-    setSearch={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -5132,13 +5132,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SearchBox
     clearSearch={[Function]}
     deactivate={[Function]}
+    executeSearch={[Function]}
     fetchResults={[Function]}
     searchQuery={
         Object {
             "query": "test Me",
           }
     }
-    setSearch={[Function]}
     showDoneButton={true}
 />,
   Symbol(enzyme.__renderer__): Object {

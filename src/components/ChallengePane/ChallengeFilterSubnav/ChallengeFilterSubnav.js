@@ -5,6 +5,7 @@ import SearchBox from '../../SearchBox/SearchBox'
 import MobileFilterMenu from '../../MobileFilterMenu/MobileFilterMenu'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
+import WithCommandInterpreter from '../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
 import FilterByLocation from './FilterByLocation'
@@ -13,6 +14,7 @@ import messages from './Messages'
 
 // Setup child components with necessary HOCs
 const LocationFilter = WithCurrentUser(FilterByLocation)
+const CommandSearchBox = WithCommandInterpreter(SearchBox)
 
 /**
  * ChallengeFilterSubnav presents a navigation bar that contains options
@@ -43,7 +45,7 @@ export class ChallengeFilterSubnav extends Component {
               <LocationFilter {...this.props} />
             </MediaQuery>
 
-            <SearchBox className='navbar-item'
+            <CommandSearchBox className='navbar-item'
                              placeholder={this.props.intl.formatMessage(messages.searchLabel)}
                              {...this.props} />
           </div>

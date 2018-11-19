@@ -112,11 +112,11 @@ ShallowWrapper {
           "key": "other",
           "ownProps": Object {
             "clearSearch": [Function],
+            "executeSearch": [Function],
             "placeholder": "",
             "searchQuery": Object {
               "query": "C",
             },
-            "setSearch": [Function],
           },
           "text": undefined,
           "value": "other",
@@ -190,11 +190,11 @@ ShallowWrapper {
             "key": "other",
             "ownProps": Object {
               "clearSearch": [Function],
+              "executeSearch": [Function],
               "placeholder": "",
               "searchQuery": Object {
                 "query": "C",
               },
-              "setSearch": [Function],
             },
             "text": undefined,
             "value": "other",
