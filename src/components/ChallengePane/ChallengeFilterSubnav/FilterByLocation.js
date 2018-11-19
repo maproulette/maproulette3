@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _map from 'lodash/map'
-import _reject from 'lodash/reject'
 import _isEmpty from 'lodash/isEmpty'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import NavDropdown from '../../Bulma/NavDropdown'
@@ -61,11 +60,6 @@ export class FilterByLocation extends Component {
       value: undefined,
     }
     selectOptions.unshift(anyOption)
-
-    // If there is no user, remove the nearMe option.
-    if (!this.props.user) {
-      selectOptions = _reject(selectOptions, {value: ChallengeLocation.nearMe})
-    }
 
     const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
