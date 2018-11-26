@@ -12,7 +12,7 @@ import _omit from 'lodash/omit'
  *
  * Supported Actions:
  *    m/  => Execute a map bounds search with either a bounding box or a centerpoint
- *    default => Execute a standard search query
+ *    s/ or default => Execute a standard search query
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
@@ -50,8 +50,14 @@ const WithCommandInterpreter = function(WrappedComponent) {
         }
       }
       else {
+        let query = commandString
+
+        if (_startsWith(commandString, 's/') && commandString.length > 2) {
+          query = commandString.substr(2)
+        }
+
         // Standard search query
-        this.props.setSearch(commandString)
+        this.props.setSearch(query)
       }
 
       this.setState({commandString})
