@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
 import _pick from 'lodash/pick'
 import { TaskStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
+import Button from '../../../../Button/Button'
 import messages from './Messages'
 
 /**
@@ -32,11 +32,12 @@ export default class TaskTooHardControl extends Component {
   }
   render() {
     return (
-      <button className={classNames("button large-and-wide full-width label-only too-hard-control",
-                                    this.props.className)}
-              onClick={() => this.props.complete(TaskStatus.tooHard)}>
+      <Button
+        className="mr-button--blue-fill"
+        onClick={() => this.props.complete(TaskStatus.tooHard)}
+      >
         <FormattedMessage {...messages.tooHardLabel} />
-      </button>
+      </Button>
     )
   }
 }

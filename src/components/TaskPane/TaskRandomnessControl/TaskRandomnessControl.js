@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import _isFinite from 'lodash/isFinite'
 import { FormattedMessage } from 'react-intl'
 import { TaskLoadMethod, messagesByLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import messages from './Messages'
-import './TaskRandomnessControl.css'
+import './TaskRandomnessControl.scss'
 
 /**
  * TaskRandomnessControl displays a switch for toggling tracking of the current
@@ -27,13 +26,8 @@ export default class TaskRandomnessControl extends Component {
       return null
     }
 
-    // Don't show control in minimized mode.
-    if (this.props.isMinimized) {
-      return null
-    }
-
     return (
-      <div className={classNames("task-randomness-control", this.props.className)}>
+      <div className="task-randomness-control">
         <div className="control">
           <div className="task-randomness-control__prompt">
             <FormattedMessage {...messages.taskLoadByLabel} />

@@ -1,0 +1,7 @@
+@import 'mixins.scss';
+
+.project-about-widget {
+  .widget__content {
+    @include markdown-content();
+  }
+}

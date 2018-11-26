@@ -5,30 +5,45 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskMap
-    activateKeyboardShortcutGroup={[Function]}
+    activateKeyboardShortcutGroup={
+      [MockFunction] {
+        "calls": Array [
+          Array [
+            Object {},
+            [Function],
+          ],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
+    }
     centerPoint={
-        Object {
-            "lat": 0,
-            "lng": 0,
-          }
+      Object {
+        "lat": 0,
+        "lng": 0,
+      }
     }
-    deactivateKeyboardShortcutGroup={[Function]}
-    fetchOSMData={[Function]}
-    setTaskMapBounds={[Function]}
+    deactivateKeyboardShortcutGroup={[MockFunction]}
+    fetchOSMData={[MockFunction]}
+    setTaskMapBounds={[MockFunction]}
     task={
-        Object {
-            "geometries": Object {
-              "features": null,
-            },
-            "id": 2,
-            "parent": Object {
-              "defaultZoom": 2,
-              "maxZoom": 0,
-              "minZoom": 1,
-            },
-          }
+      Object {
+        "geometries": Object {
+          "features": null,
+        },
+        "id": 2,
+        "parent": Object {
+          "defaultZoom": 2,
+          "maxZoom": 0,
+          "minZoom": 1,
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -43,46 +58,60 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
-          activateKeyboardShortcutGroup={[Function]}
-          centerPoint={
-                    Object {
-                              "lat": 0,
-                              "lng": 0,
-                            }
+          activateKeyboardShortcutGroup={
+            [MockFunction] {
+              "calls": Array [
+                Array [
+                  Object {},
+                  [Function],
+                ],
+              ],
+              "results": Array [
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+              ],
+            }
           }
-          deactivateKeyboardShortcutGroup={[Function]}
-          fetchOSMData={[Function]}
+          centerPoint={
+            Object {
+              "lat": 0,
+              "lng": 0,
+            }
+          }
+          deactivateKeyboardShortcutGroup={[MockFunction]}
+          fetchOSMData={[MockFunction]}
           mapillaryCount={0}
           mapillaryLoading={false}
           osmDataLoading={false}
-          setTaskMapBounds={[Function]}
-          showMapillary={undefined}
+          setTaskMapBounds={[MockFunction]}
           showOSMData={false}
           showTaskFeatures={true}
           task={
-                    Object {
-                              "geometries": Object {
-                                "features": null,
-                              },
-                              "id": 2,
-                              "parent": Object {
-                                "defaultZoom": 2,
-                                "maxZoom": 0,
-                                "minZoom": 1,
-                              },
-                            }
+            Object {
+              "geometries": Object {
+                "features": null,
+              },
+              "id": 2,
+              "parent": Object {
+                "defaultZoom": 2,
+                "maxZoom": 0,
+                "minZoom": 1,
+              },
+            }
           }
           toggleMapillary={[Function]}
           toggleOSMData={[Function]}
           toggleTaskFeatures={[Function]}
-/>,
+        />,
         <EnhancedMap
           animateFeatures={true}
           center={
-                    Object {
-                              "lat": 0,
-                              "lng": 0,
-                            }
+            Object {
+              "lat": 0,
+              "lng": 0,
+            }
           }
           features={null}
           fitFeaturesOnlyAsNecessary={true}
@@ -94,42 +123,57 @@ ShallowWrapper {
           worldCopyJump={true}
           zoom={2}
           zoomControl={false}
->
+        >
           <ZoomControl
-                    position="topright"
+            position="topright"
           />
           <Connect(InjectIntl(FitBoundsControl)) />
           <InjectIntl(SourcedTileLayer)
-                    activateKeyboardShortcutGroup={[Function]}
-                    centerPoint={
-                              Object {
-                                        "lat": 0,
-                                        "lng": 0,
-                                      }
-                    }
-                    deactivateKeyboardShortcutGroup={[Function]}
-                    fetchOSMData={[Function]}
-                    maxZoom={0}
-                    setTaskMapBounds={[Function]}
-                    task={
-                              Object {
-                                        "geometries": Object {
-                                          "features": null,
-                                        },
-                                        "id": 2,
-                                        "parent": Object {
-                                          "defaultZoom": 2,
-                                          "maxZoom": 0,
-                                          "minZoom": 1,
-                                        },
-                                      }
-                    }
-                    zIndex={1}
+            activateKeyboardShortcutGroup={
+              [MockFunction] {
+                "calls": Array [
+                  Array [
+                    Object {},
+                    [Function],
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "isThrow": false,
+                    "value": undefined,
+                  },
+                ],
+              }
+            }
+            centerPoint={
+              Object {
+                "lat": 0,
+                "lng": 0,
+              }
+            }
+            deactivateKeyboardShortcutGroup={[MockFunction]}
+            fetchOSMData={[MockFunction]}
+            maxZoom={0}
+            setTaskMapBounds={[MockFunction]}
+            task={
+              Object {
+                "geometries": Object {
+                  "features": null,
+                },
+                "id": 2,
+                "parent": Object {
+                  "defaultZoom": 2,
+                  "maxZoom": 0,
+                  "minZoom": 1,
+                },
+              }
+            }
+            zIndex={1}
           />
-</EnhancedMap>,
+        </EnhancedMap>,
         null,
       ],
-      "className": "task-map full-screen-map task",
+      "className": "task-map task",
     },
     "ref": null,
     "rendered": Array [
@@ -138,17 +182,30 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "activateKeyboardShortcutGroup": [Function],
+          "activateKeyboardShortcutGroup": [MockFunction] {
+            "calls": Array [
+              Array [
+                Object {},
+                [Function],
+              ],
+            ],
+            "results": Array [
+              Object {
+                "isThrow": false,
+                "value": undefined,
+              },
+            ],
+          },
           "centerPoint": Object {
             "lat": 0,
             "lng": 0,
           },
-          "deactivateKeyboardShortcutGroup": [Function],
-          "fetchOSMData": [Function],
+          "deactivateKeyboardShortcutGroup": [MockFunction],
+          "fetchOSMData": [MockFunction],
           "mapillaryCount": 0,
           "mapillaryLoading": false,
           "osmDataLoading": false,
-          "setTaskMapBounds": [Function],
+          "setTaskMapBounds": [MockFunction],
           "showMapillary": undefined,
           "showOSMData": false,
           "showTaskFeatures": true,
@@ -184,35 +241,50 @@ ShallowWrapper {
           "children": Array [
             <ZoomControl
               position="topright"
-/>,
+            />,
             <Connect(InjectIntl(FitBoundsControl)) />,
             <InjectIntl(SourcedTileLayer)
-              activateKeyboardShortcutGroup={[Function]}
-              centerPoint={
-                            Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        }
+              activateKeyboardShortcutGroup={
+                [MockFunction] {
+                  "calls": Array [
+                    Array [
+                      Object {},
+                      [Function],
+                    ],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                }
               }
-              deactivateKeyboardShortcutGroup={[Function]}
-              fetchOSMData={[Function]}
+              centerPoint={
+                Object {
+                  "lat": 0,
+                  "lng": 0,
+                }
+              }
+              deactivateKeyboardShortcutGroup={[MockFunction]}
+              fetchOSMData={[MockFunction]}
               maxZoom={0}
-              setTaskMapBounds={[Function]}
+              setTaskMapBounds={[MockFunction]}
               task={
-                            Object {
-                                          "geometries": Object {
-                                            "features": null,
-                                          },
-                                          "id": 2,
-                                          "parent": Object {
-                                            "defaultZoom": 2,
-                                            "maxZoom": 0,
-                                            "minZoom": 1,
-                                          },
-                                        }
+                Object {
+                  "geometries": Object {
+                    "features": null,
+                  },
+                  "id": 2,
+                  "parent": Object {
+                    "defaultZoom": 2,
+                    "maxZoom": 0,
+                    "minZoom": 1,
+                  },
+                }
               }
               zIndex={1}
-/>,
+            />,
             Array [],
             false,
             undefined,
@@ -255,15 +327,28 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "activateKeyboardShortcutGroup": [Function],
+              "activateKeyboardShortcutGroup": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    Object {},
+                    [Function],
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "isThrow": false,
+                    "value": undefined,
+                  },
+                ],
+              },
               "centerPoint": Object {
                 "lat": 0,
                 "lng": 0,
               },
-              "deactivateKeyboardShortcutGroup": [Function],
-              "fetchOSMData": [Function],
+              "deactivateKeyboardShortcutGroup": [MockFunction],
+              "fetchOSMData": [MockFunction],
               "maxZoom": 0,
-              "setTaskMapBounds": [Function],
+              "setTaskMapBounds": [MockFunction],
               "task": Object {
                 "geometries": Object {
                   "features": null,
@@ -298,46 +383,60 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
-            activateKeyboardShortcutGroup={[Function]}
-            centerPoint={
-                        Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  }
+            activateKeyboardShortcutGroup={
+              [MockFunction] {
+                "calls": Array [
+                  Array [
+                    Object {},
+                    [Function],
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "isThrow": false,
+                    "value": undefined,
+                  },
+                ],
+              }
             }
-            deactivateKeyboardShortcutGroup={[Function]}
-            fetchOSMData={[Function]}
+            centerPoint={
+              Object {
+                "lat": 0,
+                "lng": 0,
+              }
+            }
+            deactivateKeyboardShortcutGroup={[MockFunction]}
+            fetchOSMData={[MockFunction]}
             mapillaryCount={0}
             mapillaryLoading={false}
             osmDataLoading={false}
-            setTaskMapBounds={[Function]}
-            showMapillary={undefined}
+            setTaskMapBounds={[MockFunction]}
             showOSMData={false}
             showTaskFeatures={true}
             task={
-                        Object {
-                                    "geometries": Object {
-                                      "features": null,
-                                    },
-                                    "id": 2,
-                                    "parent": Object {
-                                      "defaultZoom": 2,
-                                      "maxZoom": 0,
-                                      "minZoom": 1,
-                                    },
-                                  }
+              Object {
+                "geometries": Object {
+                  "features": null,
+                },
+                "id": 2,
+                "parent": Object {
+                  "defaultZoom": 2,
+                  "maxZoom": 0,
+                  "minZoom": 1,
+                },
+              }
             }
             toggleMapillary={[Function]}
             toggleOSMData={[Function]}
             toggleTaskFeatures={[Function]}
-/>,
+          />,
           <EnhancedMap
             animateFeatures={true}
             center={
-                        Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  }
+              Object {
+                "lat": 0,
+                "lng": 0,
+              }
             }
             features={null}
             fitFeaturesOnlyAsNecessary={true}
@@ -349,42 +448,57 @@ ShallowWrapper {
             worldCopyJump={true}
             zoom={2}
             zoomControl={false}
->
+          >
             <ZoomControl
-                        position="topright"
+              position="topright"
             />
             <Connect(InjectIntl(FitBoundsControl)) />
             <InjectIntl(SourcedTileLayer)
-                        activateKeyboardShortcutGroup={[Function]}
-                        centerPoint={
-                                    Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              }
-                        }
-                        deactivateKeyboardShortcutGroup={[Function]}
-                        fetchOSMData={[Function]}
-                        maxZoom={0}
-                        setTaskMapBounds={[Function]}
-                        task={
-                                    Object {
-                                                "geometries": Object {
-                                                  "features": null,
-                                                },
-                                                "id": 2,
-                                                "parent": Object {
-                                                  "defaultZoom": 2,
-                                                  "maxZoom": 0,
-                                                  "minZoom": 1,
-                                                },
-                                              }
-                        }
-                        zIndex={1}
+              activateKeyboardShortcutGroup={
+                [MockFunction] {
+                  "calls": Array [
+                    Array [
+                      Object {},
+                      [Function],
+                    ],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                }
+              }
+              centerPoint={
+                Object {
+                  "lat": 0,
+                  "lng": 0,
+                }
+              }
+              deactivateKeyboardShortcutGroup={[MockFunction]}
+              fetchOSMData={[MockFunction]}
+              maxZoom={0}
+              setTaskMapBounds={[MockFunction]}
+              task={
+                Object {
+                  "geometries": Object {
+                    "features": null,
+                  },
+                  "id": 2,
+                  "parent": Object {
+                    "defaultZoom": 2,
+                    "maxZoom": 0,
+                    "minZoom": 1,
+                  },
+                }
+              }
+              zIndex={1}
             />
-</EnhancedMap>,
+          </EnhancedMap>,
           null,
         ],
-        "className": "task-map full-screen-map task",
+        "className": "task-map task",
       },
       "ref": null,
       "rendered": Array [
@@ -393,17 +507,30 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
-            "activateKeyboardShortcutGroup": [Function],
+            "activateKeyboardShortcutGroup": [MockFunction] {
+              "calls": Array [
+                Array [
+                  Object {},
+                  [Function],
+                ],
+              ],
+              "results": Array [
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+              ],
+            },
             "centerPoint": Object {
               "lat": 0,
               "lng": 0,
             },
-            "deactivateKeyboardShortcutGroup": [Function],
-            "fetchOSMData": [Function],
+            "deactivateKeyboardShortcutGroup": [MockFunction],
+            "fetchOSMData": [MockFunction],
             "mapillaryCount": 0,
             "mapillaryLoading": false,
             "osmDataLoading": false,
-            "setTaskMapBounds": [Function],
+            "setTaskMapBounds": [MockFunction],
             "showMapillary": undefined,
             "showOSMData": false,
             "showTaskFeatures": true,
@@ -439,35 +566,50 @@ ShallowWrapper {
             "children": Array [
               <ZoomControl
                 position="topright"
-/>,
+              />,
               <Connect(InjectIntl(FitBoundsControl)) />,
               <InjectIntl(SourcedTileLayer)
-                activateKeyboardShortcutGroup={[Function]}
-                centerPoint={
-                                Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              }
+                activateKeyboardShortcutGroup={
+                  [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {},
+                        [Function],
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  }
                 }
-                deactivateKeyboardShortcutGroup={[Function]}
-                fetchOSMData={[Function]}
+                centerPoint={
+                  Object {
+                    "lat": 0,
+                    "lng": 0,
+                  }
+                }
+                deactivateKeyboardShortcutGroup={[MockFunction]}
+                fetchOSMData={[MockFunction]}
                 maxZoom={0}
-                setTaskMapBounds={[Function]}
+                setTaskMapBounds={[MockFunction]}
                 task={
-                                Object {
-                                                "geometries": Object {
-                                                  "features": null,
-                                                },
-                                                "id": 2,
-                                                "parent": Object {
-                                                  "defaultZoom": 2,
-                                                  "maxZoom": 0,
-                                                  "minZoom": 1,
-                                                },
-                                              }
+                  Object {
+                    "geometries": Object {
+                      "features": null,
+                    },
+                    "id": 2,
+                    "parent": Object {
+                      "defaultZoom": 2,
+                      "maxZoom": 0,
+                      "minZoom": 1,
+                    },
+                  }
                 }
                 zIndex={1}
-/>,
+              />,
               Array [],
               false,
               undefined,
@@ -510,15 +652,28 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "activateKeyboardShortcutGroup": [Function],
+                "activateKeyboardShortcutGroup": [MockFunction] {
+                  "calls": Array [
+                    Array [
+                      Object {},
+                      [Function],
+                    ],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                },
                 "centerPoint": Object {
                   "lat": 0,
                   "lng": 0,
                 },
-                "deactivateKeyboardShortcutGroup": [Function],
-                "fetchOSMData": [Function],
+                "deactivateKeyboardShortcutGroup": [MockFunction],
+                "fetchOSMData": [MockFunction],
                 "maxZoom": 0,
-                "setTaskMapBounds": [Function],
+                "setTaskMapBounds": [MockFunction],
                 "task": Object {
                   "geometries": Object {
                     "features": null,

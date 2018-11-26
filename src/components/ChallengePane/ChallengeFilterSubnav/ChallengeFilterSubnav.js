@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { injectIntl } from 'react-intl'
-import MediaQuery from 'react-responsive'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import SearchBox from '../../SearchBox/SearchBox'
-import MobileFilterMenu from '../../MobileFilterMenu/MobileFilterMenu'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
 import WithCommandInterpreter from '../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
 import FilterByLocation from './FilterByLocation'
-import './ChallengeFilterSubnav.css'
+import ClearFiltersControl from './ClearFiltersControl'
+import SortChallengesSelector from './SortChallengesSelector'
+import './ChallengeFilterSubnav.scss'
 import messages from './Messages'
 
 // Setup child components with necessary HOCs
@@ -29,28 +29,39 @@ const CommandSearchBox = WithCommandInterpreter(SearchBox)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeFilterSubnav extends Component {
+  clearFilters = () => {
+    this.props.clearSearchFilters()
+    this.props.clearSearch('challenges')
+  }
+
   render() {
+    const filtersActive =
+      this.props.unfilteredChallenges.length > this.props.challenges.length
+
     return (
-      <nav className="challenge-filter-subnav navbar sub-nav"
-           aria-label="challenge filters">
-				<div className="navbar-menu">
-          <div className="navbar-start">
-            <MediaQuery query="(max-width: 1024px)">
-              <MobileFilterMenu {...this.props} />
-            </MediaQuery>
+      <header
+        className="mr-bg-white-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-flex mr-items-center mr-justify-between"
+      >
+        <div className="mr-flex-grow mr-flex mr-items-center mr-justify-between lg:mr-justify-start">
+          <h1 className="mr-hidden xl:mr-flex mr-text-3xl mr-leading-tight mr-font-normal mr-mr-6">
+            <FormattedMessage {...messages.header} />
+          </h1>
 
-            <MediaQuery query="(min-width: 1024px)">
-              <FilterByKeyword {...this.props} />
-              <FilterByDifficulty {...this.props} />
-              <LocationFilter {...this.props} />
-            </MediaQuery>
+          <div className="mr-hidden lg:mr-flex">
+            <SortChallengesSelector {...this.props} />
+            <FilterByKeyword {...this.props} />
+            <FilterByDifficulty {...this.props} />
+            <LocationFilter {...this.props} />
 
-            <CommandSearchBox className='navbar-item'
-                             placeholder={this.props.intl.formatMessage(messages.searchLabel)}
-                             {...this.props} />
+            <CommandSearchBox
+              {...this.props}
+              placeholder={this.props.intl.formatMessage(messages.searchLabel)}
+            />
           </div>
+
+          {filtersActive && <ClearFiltersControl clearFilters={this.clearFilters} />}
 				</div>
-			</nav>
+			</header>
     )
   }
 }

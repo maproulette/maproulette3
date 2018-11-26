@@ -14,7 +14,7 @@ import ProjectOverview from '../ProjectOverview/ProjectOverview'
 import ProjectManagers from '../ProjectManagers/ProjectManagers'
 import ChallengeList from '../ChallengeList/ChallengeList'
 import messages from './Messages'
-import './ProjectCard.css'
+import './ProjectCard.scss'
 
 export class ProjectCard extends Component {
   render() {

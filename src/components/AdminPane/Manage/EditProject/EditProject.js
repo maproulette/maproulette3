@@ -8,17 +8,16 @@ import _snakeCase from 'lodash/snakeCase'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
-import { CustomFieldTemplate }
+import { CustomSelectWidget }
        from '../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import { jsSchema, uiSchema } from './EditProjectSchema'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './EditProject.css'
+import './EditProject.scss'
 
 /**
  * EditProject provies a simple form for creating/editing a Project. We
@@ -81,8 +80,6 @@ export class EditProject extends Component {
 
     return (
       <div className="admin__manage edit-project">
-        <div className="admin__manage__pane-wrapper">
-          <div className="admin__manage__primary-content">
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li>
@@ -98,6 +95,7 @@ export class EditProject extends Component {
               </li>
               }
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   {
                     _isObject(this.props.project) ?
@@ -110,32 +108,34 @@ export class EditProject extends Component {
             </ul>
           </nav>
 
-          <Form schema={jsSchema(this.props.intl)}
-                uiSchema={uiSchema}
-                FieldTemplate={CustomFieldTemplate}
-                liveValidate
-                noHtml5Validate
-                showErrorList={false}
-                formData={projectData}
-                onChange={this.changeHandler}
-                onSubmit={this.finish}>
-            <div className="form-controls">
-              <button className="button is-secondary is-outlined"
-                      disabled={this.state.isSaving}
-                      onClick={this.cancel}>
-                <FormattedMessage {...messages.cancel} />
-              </button>
+          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+            <Form
+              schema={jsSchema(this.props.intl)}
+              uiSchema={uiSchema(this.props.intl)}
+              widgets={{SelectWidget: CustomSelectWidget}}
+              className="form"
+              liveValidate
+              noHtml5Validate
+              showErrorList={false}
+              formData={projectData}
+              onChange={this.changeHandler}
+              onSubmit={this.finish}
+            >
+              <div className="form-controls">
+                <button className="mr-button mr-button--blue"
+                        disabled={this.state.isSaving}
+                        onClick={this.cancel}>
+                  <FormattedMessage {...messages.cancel} />
+                </button>
 
-              <button className={classNames("button is-primary is-outlined has-svg-icon",
-                                            {"is-loading": this.state.isSaving})}
-                      onClick={this.props.finish}>
-                <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
-                <FormattedMessage {...messages.save} />
-              </button>
-            </div>
+                <button className={classNames("mr-button mr-button--green mr-ml-4",
+                                              {"is-loading": this.state.isSaving})}
+                        onClick={this.props.finish}>
+                  <FormattedMessage {...messages.save} />
+                </button>
+              </div>
             </Form>
           </div>
-        </div>
       </div>
     )
   }

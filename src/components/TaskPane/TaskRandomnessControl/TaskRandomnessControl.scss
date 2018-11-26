@@ -7,10 +7,15 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+
+    .radio {
+      line-height: 1.5em;
+    }
   }
 
   &__prompt {
     margin-right: 0.5em;
+    font-size: $size-5;
   }
 
   &__options {

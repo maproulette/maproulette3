@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import './LoadMoreButton.css'
+import './LoadMoreButton.scss'
 
 
 /**
@@ -17,7 +17,7 @@ export default class LoadMoreButton extends Component {
     }
 
     return (
-      <button className={classNames("button is-outlined load-more-button",
+      <button className={classNames("mr-button",
                                     this.props.className,
                                     {"is-loading": this.props.isLoading,
                                      "no-focus": !this.props.isLoading})}

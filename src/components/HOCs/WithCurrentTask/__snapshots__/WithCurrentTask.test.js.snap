@@ -7,6 +7,7 @@ Object {
   "fetchOSMUser": [Function],
   "loadTask": [Function],
   "nextTask": [Function],
+  "postTaskComment": [Function],
   "refreshTask": [Function],
 }
 `;

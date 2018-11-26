@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage,
          FormattedDate,
          FormattedTime } from 'react-intl'
@@ -13,7 +12,7 @@ import _reverse from 'lodash/reverse'
 import _each from 'lodash/each'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import messages from './Messages'
-import './CommentList.css'
+import './CommentList.scss'
 
 /**
  * CommentList renders the given comments as a list with some basic formatting,
@@ -24,7 +23,7 @@ import './CommentList.css'
 export default class CommentList extends Component {
   render() {
     if (this.props.comments.length === 0) {
-      return <div className="comment-list none">No Comments</div>
+      return <div className="mr-px-4 comment-list none">No Comments</div>
     }
 
     const commentDates = new Map()
@@ -38,53 +37,43 @@ export default class CommentList extends Component {
 
     const commentItems = _map(sortedComments, comment =>
       !_isObject(comment) ? null : (
-        <li key={comment.id} className="comment-list__comment">
-          <div className="comment-list__comment__header">
-            <div className="comment-list__comment__author">
-              {comment.osm_username}
-            </div>
-            <div className="comment-list__comment__published-at">
-              <span className="time-part">
-                <FormattedTime value={commentDates.get(comment.id)}
-                               hour='2-digit'
-                               minute='2-digit' />,
-              </span>
-
-              <span className="date-part">
-                <FormattedDate value={commentDates.get(comment.id)}
-                               year='numeric'
-                               month='long'
-                               day='2-digit' />
-              </span>
-            </div>
+        <article key={comment.id} className="mr-pr-4 mr-mb-4">
+          <div className="mr-list-reset mr-mb-2 mr-text-xs">
+            <span className="mr-font-medium">
+              <FormattedTime
+                value={commentDates.get(comment.id)}
+                hour='2-digit'
+                minute='2-digit'
+              />, <FormattedDate
+                value={commentDates.get(comment.id)}
+                year='numeric'
+                month='long'
+                day='2-digit'
+              />
+            </span> &mdash; {comment.osm_username}
+          </div>
+          <div className="mr-text-sm mr-rounded-sm mr-bg-black-10 mr-p-2">
+            <MarkdownContent markdown={comment.comment} />
           </div>
 
-          <div className="with-triangle-border">
-            <MarkdownContent className="comment-list__comment__content"
-                             markdown={comment.comment} />
-          </div>
-
-          <div className="comment-list__comment__meta">
-            <div className="comment-list__comment__challenge-name">
-              {this.props.includeChallengeNames && comment.challengeName}
-            </div>
-
-            {this.props.includeTaskLinks &&
-             <div className="comment-list__comment__task-link">
+          {(this.props.includeChallengeNames || this.props.includeTaskLinks) &&
+            <ul className="mr-flex mr-justify-between">
+              {this.props.includeChallengeNames &&
+               <li>{comment.challengeName}</li>
+              }
+              {this.props.includeTaskLinks &&
                <Link to={`/challenge/${comment.challengeId}/task/${comment.taskId}`}>
                  <FormattedMessage {...messages.viewTaskLabel} />
                </Link>
-             </div>
-            }
-          </div>
-        </li>
+              }
+            </ul>
+          }
+        </article>
       )
     )
 
     return (
-      <ul className={classNames('comment-list', this.props.className)}>
-        {commentItems}
-      </ul>
+      <React.Fragment>{commentItems}</React.Fragment>
     )
   }
 }

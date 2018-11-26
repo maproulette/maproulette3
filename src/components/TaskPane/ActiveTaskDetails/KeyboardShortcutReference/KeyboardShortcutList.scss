@@ -1,0 +1,21 @@
+@import 'variables.scss';
+
+.keyboard-shortcut-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+  dl {
+    display: flex;
+
+    dt {
+      min-width: 30px;
+      margin-right: 15px;
+      font-family: monospace;
+      font-weight: $weight-bold;
+    }
+
+    dd {
+      font-size: $size-7;
+    }
+  }
+}

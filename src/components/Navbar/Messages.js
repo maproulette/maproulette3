@@ -4,9 +4,14 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Navbar.
  */
 export default defineMessages({
+  dashboard: {
+    id: 'Navbar.links.dashboard',
+    defaultMessage: "Dashboard",
+  },
+
   results: {
     id: 'Navbar.links.challengeResults',
-    defaultMessage: "Challenges",
+    defaultMessage: "Find Challenges",
   },
 
   leaderboard: {
@@ -21,16 +26,16 @@ export default defineMessages({
 
   help: {
     id: 'Navbar.links.help',
-    defaultMessage: "Help",
+    defaultMessage: "Learn",
   },
 
   profile: {
-    id: 'Navbar.links.mobile.userProfile',
+    id: 'Navbar.links.userProfile',
     defaultMessage: "User Profile",
   },
 
   signout: {
-    id: 'Navbar.mobile.links.signout',
+    id: 'Navbar.links.signout',
     defaultMessage: "Sign out",
   },
 })

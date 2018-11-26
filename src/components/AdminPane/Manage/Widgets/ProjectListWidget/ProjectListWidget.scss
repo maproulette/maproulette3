@@ -1,0 +1,28 @@
+@import 'variables.scss';
+
+.admin .project-list-widget {
+  .widget__header__title-row {
+  }
+
+  .widget__header__title-row__title {
+    h2.subtitle {
+      margin-top: 8px;
+      margin-right: 30px;
+    }
+  }
+
+  &__searchbox.search-box {
+    max-width: 250px;
+    margin: 10px 20px 10px 0;
+    background-color: $white;
+
+    .control-wrapper {
+      width: 100%;
+    }
+  }
+
+  .project-list {
+    display: flex;
+    justify-content: center;
+  }
+}

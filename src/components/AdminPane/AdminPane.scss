@@ -73,10 +73,8 @@
       flex-wrap: wrap;
       align-items: flex-start;
       justify-content: space-between;
-      border-bottom: 2px solid $grey-lightest-more;
       margin-top: 0;
-      padding-bottom: 10px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     .subtitle, .subtitle:not(:last-child) {
@@ -108,14 +106,23 @@
       overflow: visible;
       font-size: $size-5;
       margin-bottom: 0;
+      color: $white;
+
+      li a {
+        color: $white;
+      }
 
       li.is-active a {
-        color: $green;
+        color: $white;
         font-weight: $weight-semibold;
 
         .busy-spinner {
           margin-left: 10px;
         }
+      }
+
+      li + li:before {
+        color: $white;
       }
 
       @media(max-width: 1000px) {
@@ -168,29 +175,29 @@
         padding: 8px 12px;
 
         a {
-          color: $grey-light;
+          color: #91F3A2;
 
           .basic-dropdown-indicator {
-            border-color: $grey-light;
+            border-color: #91F3A2;
             vertical-align: super;
           }
 
           &:hover {
-            color: $grey-darkest;
+            color: $white;
 
             .basic-dropdown-indicator {
-              border-color: $grey-darkest;
+              border-color: $white;
             }
           }
         }
 
         svg {
-          fill: $grey-light;
+          fill: #91F3A2;
           height: $size-5;
           width: auto;
 
           &:hover {
-            fill: $grey-darkest;
+            fill: $white;
           }
         }
 

@@ -54,16 +54,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <PlaceDescription
     place={
-        Object {
-            "address": Object {
-              "city": "My City",
-              "country": "USA",
-              "county": "Long Beach County",
-              "state": "Washington",
-            },
-          }
+      Object {
+        "address": Object {
+          "city": "My City",
+          "country": "USA",
+          "county": "Long Beach County",
+          "state": "Washington",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -113,17 +113,17 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <PlaceDescription
     place={
-        Object {
-            "address": Object {
-              "city": "My City",
-              "continent": "Africa",
-              "country": null,
-              "county": "Orange",
-              "state": "Washington",
-            },
-          }
+      Object {
+        "address": Object {
+          "city": "My City",
+          "continent": "Africa",
+          "country": null,
+          "county": "Orange",
+          "state": "Washington",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -173,17 +173,17 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <PlaceDescription
     place={
-        Object {
-            "address": Object {
-              "city": null,
-              "country": "USA",
-              "county": "Orange",
-              "hamlet": "The Shire",
-              "state": "Washington",
-            },
-          }
+      Object {
+        "address": Object {
+          "city": null,
+          "country": "USA",
+          "county": "Orange",
+          "hamlet": "The Shire",
+          "state": "Washington",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -233,17 +233,17 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <PlaceDescription
     place={
-        Object {
-            "address": Object {
-              "city": null,
-              "country": "USA",
-              "county": "Orange",
-              "state": "Washington",
-              "town": "Our Town",
-            },
-          }
+      Object {
+        "address": Object {
+          "city": null,
+          "country": "USA",
+          "county": "Orange",
+          "state": "Washington",
+          "town": "Our Town",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -293,17 +293,17 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <PlaceDescription
     place={
-        Object {
-            "address": Object {
-              "city": null,
-              "country": "USA",
-              "county": "Orange",
-              "state": "Washington",
-              "village": "Village Square",
-            },
-          }
+      Object {
+        "address": Object {
+          "city": null,
+          "country": "USA",
+          "county": "Orange",
+          "state": "Washington",
+          "village": "Village Square",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -353,16 +353,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <PlaceDescription
     place={
-        Object {
-            "address": Object {
-              "city": "My City",
-              "country": "USA",
-              "county": "Orange",
-              "state": "Washington",
-            },
-          }
+      Object {
+        "address": Object {
+          "city": "My City",
+          "country": "USA",
+          "county": "Orange",
+          "state": "Washington",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -413,16 +413,16 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <PlaceDescription
     className="my-test"
     place={
-        Object {
-            "address": Object {
-              "city": "My City",
-              "country": "USA",
-              "county": "Orange",
-              "state": "Washington",
-            },
-          }
+      Object {
+        "address": Object {
+          "city": "My City",
+          "country": "USA",
+          "county": "Orange",
+          "state": "Washington",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

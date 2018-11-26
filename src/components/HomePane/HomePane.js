@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './HomePane.css'
+import './HomePane.scss'
 
 /**
  * HomePane displays the home page content
@@ -62,7 +62,7 @@ export default class HomePane extends Component {
 
           <div className='home-pane__footer'>
             <p>
-              MapRoulette <a target="_blank" href={
+              MapRoulette <a target="_blank" rel="noopener noreferrer" href={
                 `${process.env.REACT_APP_GIT_REPOSITORY_URL}/releases/tag/${version}`
               }>
                 {version}

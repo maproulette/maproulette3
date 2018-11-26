@@ -2,7 +2,9 @@
 
 # dependencies
 /node_modules
-/src/**/*.css
+
+# Built by tailwind
+src/index.css
 
 # Imagery
 src/imagery.json

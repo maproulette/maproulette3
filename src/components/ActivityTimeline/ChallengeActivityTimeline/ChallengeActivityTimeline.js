@@ -14,7 +14,7 @@ import parse from 'date-fns/parse'
 import { statusLabels,
          keysByStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
-import '../ActivityTimeline.css'
+import '../ActivityTimeline.scss'
 
 /**
  * ChallengeActivityTimeline displays recent challenge activity from the given

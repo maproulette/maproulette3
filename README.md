@@ -63,13 +63,13 @@ server.
    on the command line (e.g. `-Dmr3.host="http://127.0.0.1:3000`). See the
    maproulette2 docs for details on starting up the server
 
-5. Point your browser at the back-end server, http://127.0.0.1:9000 by
-   default
-
-> While you can also point your browser directly at the front-end server on
-> port 3000, OAuth will not work correctly and you therefore won't be able to
-> sign in. When you first fire up the front-end server, it will automatically
-> open a browser tab pointing port 3000 -- just close it.
+5. Edit your `.env.development.local` file in your front-end project and set:
+   ```
+   REACT_APP_SERVER_OAUTH_URL='http://127.0.0.1:9000/auth/authenticate?redirect=http://127.0.0.1:3000'
+   ```
+   (assuming your back-end server is on port 9000 and front-end is on port 3000).
+   Restart or startup your front-end server, and then navigate to the front-end
+   at http://127.0.0.1:3000
 
 #### Developing with a pre-existing back-end server
 
@@ -78,7 +78,9 @@ a local one you have installed. *Please do not use the production MapRoulette
 server for development use*
 
 1. Open MapRoulette on that server normally in your browser, visit your user
-   profile, and take note of your API key at the bottom of the page
+   profile, and take note of your API key at the bottom of the page.
+   Alternatively, you can use the server's `super.key` if it has been setup
+   with one and you have access to it
 
 2. Edit your `.env.development.local` file and override the following config
    variables:
@@ -87,8 +89,8 @@ server for development use*
   REACT_APP_SERVER_API_KEY='your-api-key-for-that-server'
   ```
 
-3. Restart your dev server if it's already running (ctrl-c then `yarn run
-   start` again)
+3. Restart your front-end dev server if it's already running (ctrl-c then `yarn
+   run start` again)
 
 4. Point your browser directly at the front-end server, http://127.0.0.1:3000
    by default. Once the page finishes loading, you should show up as signed-in

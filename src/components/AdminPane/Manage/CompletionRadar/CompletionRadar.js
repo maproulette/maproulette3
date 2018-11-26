@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { ResponsiveRadar } from '@nivo/radar'
 import { TaskStatus,
@@ -35,7 +36,7 @@ export class CompletionRadar extends Component {
     })
 
     return (
-      <div className="completion-radar-chart">
+      <div className={classNames("completion-radar-chart", this.props.className)}>
         {!this.props.suppressHeading &&
          <p className="subheading">
            <FormattedMessage {...messages.heading}

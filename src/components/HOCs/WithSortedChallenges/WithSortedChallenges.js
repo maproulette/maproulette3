@@ -9,7 +9,7 @@ import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _toLower from 'lodash/toLower'
 import WithChallengeSearch from '../WithSearch/WithChallengeSearch'
-import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, ALL_SORT_OPTIONS }
+import { SORT_NAME, SORT_CREATED, SORT_POPULARITY }
        from '../../../services/Search/Search'
 
 const FEATURED_POINTS = -1
@@ -59,8 +59,7 @@ export default function(WrappedComponent,
         outputProp = challengesProp
       }
 
-      return <WrappedComponent sortOptions = {ALL_SORT_OPTIONS}
-                               {...{[outputProp]: sortedChallenges}}
+      return <WrappedComponent {...{[outputProp]: sortedChallenges}}
                                {..._omit(this.props, outputProp)} />
     }
   }

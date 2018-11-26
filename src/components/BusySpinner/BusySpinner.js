@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import './BusySpinner.css'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import './BusySpinner.scss'
 
 /**
  * BusySpinner displays a simple busy spinner. By default it's shown centered
@@ -16,7 +17,11 @@ export default class BusySpinner extends Component {
                                    'has-centered-children': this.props.inline !== true,
                                    'inline': this.props.inline,
                                  }, this.props.className)}>
-        <div className="busy-spinner-icon" />
+        <SvgSymbol
+          sym="spinner-icon"
+          className="mr-fill-green-lighter mr-w-5 mr-h-5"
+          viewBox="0 0 20 20"
+        />
       </div>
     )
   }

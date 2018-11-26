@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './StepNavigation.css'
+import './StepNavigation.scss'
 
 /**
  * StepNavigation renders cancel, prev, next, and finish controls, as

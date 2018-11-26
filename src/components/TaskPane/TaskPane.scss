@@ -2,5 +2,18 @@
 
 .task-pane {
   position: relative;
-  background-color: $grey-lighter;
+
+  .widget-workspace {
+    .widget-grid {
+      .widget__header__title-row {
+        line-height: 1em;
+
+        &__title .subtitle {
+          text-transform: uppercase;
+          font-size: $size-6;
+          font-weight: $weight-semibold;
+        }
+      }
+    }
+  }
 }

@@ -7,7 +7,7 @@ import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './ShareLink.css'
+import './ShareLink.scss'
 
 /**
  * ShareLink presents a link icon that toggles a small Bulma dropdown
@@ -25,7 +25,11 @@ export class ShareLink extends Component {
       <div className={classNames('share-link dropdown', {'is-active': this.props.isActive},
                                  this.props.className)}>
         <div className='dropdown-trigger' onClick={this.props.toggleActive}>
-          <SvgSymbol viewBox='0 0 20 20' sym="link-icon" />
+          <SvgSymbol
+            viewBox="0 0 20 14"
+            sym="link-icon"
+            className="mr-fill-current mr-w-4 mr-h-4"
+          />
         </div>
 
         {this.props.isActive &&

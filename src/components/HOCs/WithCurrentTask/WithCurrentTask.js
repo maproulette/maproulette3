@@ -202,6 +202,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       )
     },
 
+    /**
+     * Post a comment on the task without performing any other action
+     */
+    postTaskComment: (task, comment) => {
+      dispatch(addTaskComment(task.id, comment))
+    },
+
     fetchOSMUser,
     fetchOSMData: bbox => {
       return fetchOSMData(bbox).catch(error => {

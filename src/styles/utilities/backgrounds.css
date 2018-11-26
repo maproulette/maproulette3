@@ -1,0 +1,27 @@
+.mr-bg-hero {
+  background-image: url('./static/images/bg-hero.jpg');
+
+  @screen retina {
+    background-image: url('./static/images/bg-hero@2x.jpg');
+  }
+}
+
+.mr-bg-map {
+  background-image: url('./static/images/bg-map.jpg');
+
+  @screen retina {
+    background-image: url('./static/images/bg-map@2x.jpg');
+  }
+}
+
+.mr-bg-road {
+  background-image: url('./static/images/bg-road.jpg');
+
+  @screen retina {
+    background-image: url('./static/images/bg-road@2x.jpg');
+  }
+}
+
+.mr-bg-featured-challenges {
+  background-image: url('./static/images/bg-featured-challenges.svg');
+}

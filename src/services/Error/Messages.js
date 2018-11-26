@@ -155,9 +155,9 @@ export default defineMessages({
     defaultMessage: "No results found by Nominatim.",
   },
 
-  dashboardRenderFailure: {
-    id: 'Errors.dashboard.renderFailure',
-    defaultMessage: "Unable to render the dashboard. Switching to a working layout.",
+  widgetWorkspaceRenderFailure: {
+    id: 'Errors.widgetWorkspace.renderFailure',
+    defaultMessage: "Unable to render workspace. Switching to a working layout.",
   },
 
   josmNoResponse: {

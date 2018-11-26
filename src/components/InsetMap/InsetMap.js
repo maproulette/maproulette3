@@ -5,7 +5,7 @@ import { Map, Marker } from 'react-leaflet'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import { layerSourceWithId,
          defaultLayerSource } from '../../services/VisibleLayer/LayerSources'
-import './InsetMap.css'
+import './InsetMap.scss'
 
 export default class InsetMap extends Component {
   render() {

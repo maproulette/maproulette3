@@ -4,7 +4,7 @@ import Confetti from 'react-dom-confetti'
 import Modal from '../Bulma/Modal'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './CongratulateModal.css'
+import './CongratulateModal.scss'
 
 /**
  * CongratulateModal presents a celebratory modal that displays a
@@ -26,24 +26,28 @@ export default class CongratulateModal extends Component {
 
   render() {
     return (
-      <Modal className="congratulate-modal" onClose={this.dismiss} isActive={this.state.active}>
+      <Modal
+        className="congratulate-modal"
+        contentClassName="mr-bg-blue-dark"
+        onClose={this.dismiss}
+        isActive={this.state.active}
+      >
         <div className="has-svg-icon congratulate-modal__close-control"
              aria-label="close"
              onClick={this.dismiss}>
           <SvgSymbol sym="outline-close-icon" viewBox="0 0 20 20" />
         </div>
 
-        <div className="congratulate-modal__content">
+        <div className="congratulate-modal__content mr-bg-blue-dark mr-text-white">
           <div className="congratulate-modal__message">
             <SvgSymbol sym="trophy-icon" viewBox="0 0 20 20"
                        className="congratulate-modal__message__trophy" />
             <h2><FormattedMessage {...messages.header} /></h2>
             <p><FormattedMessage {...messages.primaryMessage} /></p>
             <Confetti className="congratulate-modal__confetti" active={this.state.confetti} />
-            <div className="button is-primary is-outlined congratulate-modal__dismiss-control"
-                 onClick={this.dismiss}>
+            <button className="mr-button mr-mt-8" onClick={this.dismiss}>
               <FormattedMessage {...messages.dismiss} />
-            </div>
+            </button>
           </div>
         </div>
       </Modal>

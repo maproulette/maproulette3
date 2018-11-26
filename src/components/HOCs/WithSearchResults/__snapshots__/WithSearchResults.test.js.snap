@@ -6,31 +6,31 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Component
     myItems={
-        Array [
-            Object {
-              "name": "first item",
-              "tags": Array [
-                "foo",
-              ],
-            },
-            Object {
-              "name": "second item",
-            },
-            Object {
-              "name": "third item",
-              "tags": Array [
-                "bar",
-                "baz",
-              ],
-            },
-          ]
+      Array [
+        Object {
+          "name": "first item",
+          "tags": Array [
+            "foo",
+          ],
+        },
+        Object {
+          "name": "second item",
+        },
+        Object {
+          "name": "third item",
+          "tags": Array [
+            "bar",
+            "baz",
+          ],
+        },
+      ]
     }
     searchCriteria={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -156,31 +156,31 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Component
     myItems={
-        Array [
-            Object {
-              "name": "first item",
-              "tags": Array [
-                "foo",
-              ],
-            },
-            Object {
-              "name": "second item",
-            },
-            Object {
-              "name": "third item",
-              "tags": Array [
-                "bar",
-                "baz",
-              ],
-            },
-          ]
+      Array [
+        Object {
+          "name": "first item",
+          "tags": Array [
+            "foo",
+          ],
+        },
+        Object {
+          "name": "second item",
+        },
+        Object {
+          "name": "third item",
+          "tags": Array [
+            "bar",
+            "baz",
+          ],
+        },
+      ]
     }
     searchCriteria={
-        Object {
-            "query": "#bar",
-          }
+      Object {
+        "query": "#bar",
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -252,31 +252,31 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Component
     myItems={
-        Array [
-            Object {
-              "name": "first item",
-              "tags": Array [
-                "foo",
-              ],
-            },
-            Object {
-              "name": "second item",
-            },
-            Object {
-              "name": "third item",
-              "tags": Array [
-                "bar",
-                "baz",
-              ],
-            },
-          ]
+      Array [
+        Object {
+          "name": "first item",
+          "tags": Array [
+            "foo",
+          ],
+        },
+        Object {
+          "name": "second item",
+        },
+        Object {
+          "name": "third item",
+          "tags": Array [
+            "bar",
+            "baz",
+          ],
+        },
+      ]
     }
     searchCriteria={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

@@ -15,8 +15,10 @@ export default class Modal extends Component {
     return (
       <div className={classNames('modal', {'is-active': this.props.isActive},
                                  this.props.className)}>
-        <div className="modal-background" onClick={this.props.onClose} />
-        <div className="modal-content">{this.props.children}</div>
+        <div className="modal-background mr-bg-blue-dark-75" onClick={this.props.onClose} />
+        <div className={classNames("modal-content", this.props.contentClassName)}>
+          {this.props.children}
+        </div>
       </div>
     )
   }

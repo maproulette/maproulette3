@@ -24,10 +24,10 @@ import { ensureUserLoggedIn, fetchSavedChallenges }
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus } from './services/Status/Status'
 import WithUserLocale from './components/HOCs/WithUserLocale/WithUserLocale'
-import './theme.css'
+import './theme.scss'
 import './index.css'
-import '../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
-import '../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 addLocaleData([...en, ...fr, ...es, ...de, ...af, ...ja, ...ko])
 
@@ -38,7 +38,7 @@ const ConnectedIntl = WithUserLocale(props => (
   </IntlProvider>
 ))
 
-const {store} = initializePersistedStore(store => {
+const {store} = initializePersistedStore(function(store) {
   store.dispatch(setCheckingLoginStatus())
 
   // Load current user if there is an active session
@@ -81,7 +81,7 @@ const {store} = initializePersistedStore(store => {
   // Render the app
   ReactDOM.render(
     <Provider store={store}>
-      <ConnectedIntl {...this.props}>
+      <ConnectedIntl>
         <Router history={routerHistory}>
           <App />
         </Router>

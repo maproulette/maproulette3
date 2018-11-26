@@ -10,6 +10,9 @@ import { logoutUser,
          updateUserSettings,
          updateUserAppSetting,
          fetchTopChallenges,
+         fetchSavedChallenges,
+         fetchSavedTasks,
+         fetchUserActivity,
          resetAPIKey,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../interactions/User/AsEndUser'
@@ -51,12 +54,15 @@ export const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
     loadCompleteUser,
     logoutUser,
+    fetchSavedChallenges,
     saveChallenge,
     unsaveChallenge,
+    fetchSavedTasks,
     saveTask,
     unsaveTask,
     updateUserSettings,
     fetchTopChallenges,
+    fetchUserActivity,
     resetAPIKey,
   }, dispatch)
 

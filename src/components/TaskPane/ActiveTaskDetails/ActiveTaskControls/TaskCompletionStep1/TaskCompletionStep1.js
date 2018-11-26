@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _omit from 'lodash/omit'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
+import UserEditorSelector
+       from '../../../../UserEditorSelector/UserEditorSelector'
 import TaskEditControl from '../TaskEditControl/TaskEditControl'
 import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
-import './TaskCompletionStep1.css'
+import './TaskCompletionStep1.scss'
 
 
 /**
@@ -19,24 +20,21 @@ import './TaskCompletionStep1.css'
 export default class TaskCompletionStep1 extends Component {
   render() {
     return (
-      <div className="active-task-controls__step1 active-task-controls__control-block">
-        {this.props.allowedProgressions.has(TaskStatus.fixed) &&
-          <TaskEditControl pickEditor={this.props.pickEditor}
-                           className="active-task-controls__edit-control"
-                           {..._omit(this.props, 'className')} />
-        }
+      <div>
+        <UserEditorSelector {...this.props} className="mr-mb-4" />
+        <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
+          {this.props.allowedProgressions.has(TaskStatus.fixed) &&
+          <TaskEditControl {...this.props} />
+          }
 
-        {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
-          <TaskFalsePositiveControl complete={this.props.complete}
-                                    className="active-task-controls__false-positive-control"
-                                    {..._omit(this.props, 'className')} />
-        }
+          {this.props.allowedProgressions.has(TaskStatus.falsePositive) &&
+          <TaskFalsePositiveControl {...this.props} />
+          }
 
-        {this.props.allowedProgressions.has(TaskStatus.skipped) &&
-          <TaskSkipControl complete={this.props.complete}
-                          className="active-task-controls__skip-control"
-                          {..._omit(this.props, 'className')} />
-        }
+          {this.props.allowedProgressions.has(TaskStatus.skipped) &&
+          <TaskSkipControl {...this.props} />
+          }
+        </div>
       </div>
     )
   }

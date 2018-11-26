@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
-import './ChallengeKeywords.css'
+import './ChallengeKeywords.scss'
 
 /**
  * ChallengeKeywords renders the keywords of the given challenge as a tag set.
@@ -24,7 +25,13 @@ export default class ChallengeKeywords extends Component {
       return <span className="tag" key={keyword}>{keyword}</span>
     }))
 
-    return <div className="challenge-keywords">{keywords}</div>
+    return (
+      <div
+        className={classNames("challenge-keywords", this.props.className)}
+      >
+        {keywords}
+      </div>
+    )
   }
 }
 

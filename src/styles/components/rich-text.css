@@ -1,0 +1,13 @@
+.mr-rich-text {
+  @apply mr-break-words;
+
+  p,
+  ul,
+  ol {
+    @apply mr-text-base mr-my-6;
+
+    @screen md {
+      @apply mr-text-md;
+    }
+  }
+}

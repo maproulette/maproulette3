@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import MenuList from './MenuList'
-import './Menu.css'
+import './Menu.scss'
 
 /**
  * Menu renders a Bulma menu with the given menuLists

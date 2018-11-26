@@ -13,7 +13,8 @@ import _toPairs from 'lodash/toPairs'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
-import { defaultRoutes as api, isSecurityError } from '../Server/Server'
+import { defaultRoutes as api, isSecurityError, credentialsPolicy }
+       from '../Server/Server'
 import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -385,12 +386,13 @@ export const updateUserAppSetting = function(userId, appId, appSetting) {
  */
 export const resetAPIKey = function(userId) {
   return function(dispatch) {
-    const resetURI = `/auth/generateAPIKey?userId=${userId}`
+    const resetURI =
+      `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/generateAPIKey?userId=${userId}`
 
     // Since we're bypassing Endpoint and manually performing an update, we
     // need to also manually reset the request cache.
     resetCache()
-    fetch(resetURI, {credentials: 'same-origin'}).then(() => {
+    fetch(resetURI, {credentials: credentialsPolicy}).then(() => {
       return fetchUser(userId)(dispatch)
     }).catch(error => {
       if (isSecurityError(error)) {
@@ -471,11 +473,11 @@ export const unsaveTask = function(userId, taskId) {
  * Logout the current user on both the client and server.
  */
 export const logoutUser = function() {
-  const logoutURI = '/auth/signout'
+  const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
 
   return function(dispatch) {
     dispatch(setCurrentUser(GUEST_USER_ID))
-    fetch(logoutURI, {credentials: 'same-origin'})
+    fetch(logoutURI, {credentials: credentialsPolicy})
   }
 }
 

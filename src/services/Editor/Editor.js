@@ -18,6 +18,9 @@ export const JOSM_LAYER = 2
 export const LEVEL0 = 3
 export const JOSM_FEATURES = 4
 
+// Default editor choice if user has not selected an editor
+export const DEFAULT_EDITOR = ID
+
 /**
  * Supported names of properties used to identify an OSM entity associated with
  * a feature.

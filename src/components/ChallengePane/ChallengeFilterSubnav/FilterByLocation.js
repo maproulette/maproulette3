@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import { injectIntl, FormattedMessage } from 'react-intl'
-import NavDropdown from '../../Bulma/NavDropdown'
-import MenuList from '../../Bulma/MenuList'
 import { ChallengeLocation,
          locationLabels }
        from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
+import Dropdown from '../../Dropdown/Dropdown'
+import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
 /**
@@ -23,13 +24,11 @@ export class FilterByLocation extends Component {
    *
    * @private
    */
-  updateFilter = ({ value }) => {
+  updateFilter = value => {
     if (_isEmpty(value)) {
       this.props.removeSearchFilters(['location'])
     }
     else {
-      this.props.setSearchFilters({location: value})
-
       // For nearMe, we actually use the withinMapBounds setting -- we just
       // also set the map bounds to be near the user.
       if (value === ChallengeLocation.nearMe) {
@@ -47,28 +46,41 @@ export class FilterByLocation extends Component {
   render() {
     const localizedLocationLabels = locationLabels(this.props.intl)
 
-    let selectOptions = _map(ChallengeLocation, (location, name) => ({
-      key: location,
-      text: localizedLocationLabels[name],
-      value: location,
-    }))
+    const menuItems = _map(ChallengeLocation, (location, name) => (
+      <li key={location}>
+        <Link to={{}} onClick={() => this.updateFilter(location)}>
+          {localizedLocationLabels[name]}
+        </Link>
+      </li>
+    ))
 
     // Add 'Any' option to start of dropdown
-    const anyOption = {
-      key: 'any',
-      text: localizedLocationLabels.any,
-      value: undefined,
-    }
-    selectOptions.unshift(anyOption)
+    menuItems.unshift(
+      <li key='any'>
+        <Link to={{}} onClick={() => this.updateFilter(null)}>
+          {localizedLocationLabels.any}
+        </Link>
+      </li>
+    )
 
-    const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
-      <Selection placeholder={anyOption.text}
-                 label={<FormattedMessage {...messages.locationLabel} />}
-                 options={selectOptions}
-                 value={this.props.searchFilters.location}
-                 onChange={this.updateFilter}
-      />
+      <Dropdown
+        className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
+        button={
+          <ButtonFilter
+            type={<FormattedMessage {...messages.locationLabel} />}
+            selection={
+              _isEmpty(this.props.searchFilters.location) ?
+              localizedLocationLabels.any :
+              localizedLocationLabels[this.props.searchFilters.location]
+            }
+          />
+        }
+      >
+        <ol className="mr-list-dropdown mr-list-dropdown--ruled">
+          {menuItems}
+        </ol>
+      </Dropdown>
     )
   }
 }
@@ -86,13 +98,10 @@ FilterByLocation.propTypes = {
   searchFilters: PropTypes.object,
   /** The current logged-in user, if any */
   user: PropTypes.object,
-  /** Set to true to render a MenuList instead of NavDropdown */
-  asMenuList: PropTypes.bool,
 }
 
 FilterByLocation.defaultProps = {
   searchFilters: {},
-  asMenuList: false,
 }
 
 export default injectIntl(FilterByLocation)

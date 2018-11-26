@@ -6,7 +6,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <CommentCountBadge
     comments={Array []}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -22,12 +22,12 @@ ShallowWrapper {
       "children": <span
         className="badge is-badge-outlined is-empty"
         data-badge={0}
->
+      >
         <SvgSymbol
-                sym="chat-icon"
-                viewBox="0 0 20 20"
+          sym="chat-icon"
+          viewBox="0 0 20 20"
         />
-</span>,
+      </span>,
       "className": "comment-count-badge",
     },
     "ref": null,
@@ -39,7 +39,7 @@ ShallowWrapper {
         "children": <SvgSymbol
           sym="chat-icon"
           viewBox="0 0 20 20"
-/>,
+        />,
         "className": "badge is-badge-outlined is-empty",
         "data-badge": 0,
       },
@@ -69,12 +69,12 @@ ShallowWrapper {
         "children": <span
           className="badge is-badge-outlined is-empty"
           data-badge={0}
->
+        >
           <SvgSymbol
-                    sym="chat-icon"
-                    viewBox="0 0 20 20"
+            sym="chat-icon"
+            viewBox="0 0 20 20"
           />
-</span>,
+        </span>,
         "className": "comment-count-badge",
       },
       "ref": null,
@@ -86,7 +86,7 @@ ShallowWrapper {
           "children": <SvgSymbol
             sym="chat-icon"
             viewBox="0 0 20 20"
-/>,
+          />,
           "className": "badge is-badge-outlined is-empty",
           "data-badge": 0,
         },
@@ -124,19 +124,19 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <CommentCountBadge
     comments={
-        Array [
-            Object {
-              "id": 123,
-            },
-            Object {
-              "id": 456,
-            },
-            Object {
-              "id": 789,
-            },
-          ]
+      Array [
+        Object {
+          "id": 123,
+        },
+        Object {
+          "id": 456,
+        },
+        Object {
+          "id": 789,
+        },
+      ]
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -152,12 +152,12 @@ ShallowWrapper {
       "children": <span
         className="badge is-badge-outlined"
         data-badge={3}
->
+      >
         <SvgSymbol
-                sym="chat-icon"
-                viewBox="0 0 20 20"
+          sym="chat-icon"
+          viewBox="0 0 20 20"
         />
-</span>,
+      </span>,
       "className": "comment-count-badge",
     },
     "ref": null,
@@ -169,7 +169,7 @@ ShallowWrapper {
         "children": <SvgSymbol
           sym="chat-icon"
           viewBox="0 0 20 20"
-/>,
+        />,
         "className": "badge is-badge-outlined",
         "data-badge": 3,
       },
@@ -199,12 +199,12 @@ ShallowWrapper {
         "children": <span
           className="badge is-badge-outlined"
           data-badge={3}
->
+        >
           <SvgSymbol
-                    sym="chat-icon"
-                    viewBox="0 0 20 20"
+            sym="chat-icon"
+            viewBox="0 0 20 20"
           />
-</span>,
+        </span>,
         "className": "comment-count-badge",
       },
       "ref": null,
@@ -216,7 +216,7 @@ ShallowWrapper {
           "children": <SvgSymbol
             sym="chat-icon"
             viewBox="0 0 20 20"
-/>,
+          />,
           "className": "badge is-badge-outlined",
           "data-badge": 3,
         },

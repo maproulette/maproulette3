@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ShareButtons, generateShareIcon } from 'react-share'
-import './ChallengeShareControls.css'
+import './ChallengeShareControls.scss'
 
 export default class ChallengeShareControls extends Component {
   render() {

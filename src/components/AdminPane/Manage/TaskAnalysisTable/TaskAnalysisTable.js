@@ -16,8 +16,8 @@ import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import '../../../../../node_modules/react-table/react-table.css'
-import './TaskAnalysisTable.css'
+import 'react-table/react-table.css'
+import './TaskAnalysisTable.scss'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)

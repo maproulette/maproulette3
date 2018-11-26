@@ -71,8 +71,8 @@ export default {
     placeNotFound: messages.placeNotFound,
   },
 
-  dashboard: {
-    renderFailure: messages.dashboardRenderFailure,
+  widgetWorkspace: {
+    renderFailure: messages.widgetWorkspaceRenderFailure,
   },
 
   josm: {

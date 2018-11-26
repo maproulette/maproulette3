@@ -10,7 +10,7 @@ import FilterByKeyword
        from '../ChallengePane/ChallengeFilterSubnav/FilterByKeyword'
 import WithDeactivateOnOutsideClick from
        '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import './MobileFilterMenu.css'
+import './MobileFilterMenu.scss'
 
 // Setup child components with necessary HOCs
 const LocationFilter = WithCurrentUser(FilterByLocation)
