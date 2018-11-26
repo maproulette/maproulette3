@@ -34,7 +34,7 @@ export default class SearchBox extends Component {
    * @private
    */
   queryChanged = (e) => {
-    this.props.setSearch(e.target.value)
+    this.props.executeSearch(e.target.value)
   }
 
   render() {
@@ -83,7 +83,7 @@ export default class SearchBox extends Component {
 
 SearchBox.propTypes = {
   /** Invoked when the user modifies the search text */
-  setSearch: PropTypes.func.isRequired,
+  executeSearch: PropTypes.func.isRequired,
   /** Invoked when the user clears the search text */
   clearSearch: PropTypes.func.isRequired,
   /** Invoked if user explicitly signals completion of search */
