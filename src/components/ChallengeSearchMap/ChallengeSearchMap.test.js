@@ -14,7 +14,7 @@ beforeEach(() => {
     },
     source: {id: 'foo'},
     visibleOverlays: [],
-    setChallengeSearchMapBounds: jest.fn(),
+    updateChallengeSearchMapBounds: jest.fn(),
   }
 })
 
@@ -60,7 +60,7 @@ test("moving the map signals that the challenge search map bounds should be upda
   )
 
   wrapper.instance().updateBounds(bounds, zoom, false)
-  expect(basicProps.setChallengeSearchMapBounds).toBeCalledWith(bounds, zoom, false)
+  expect(basicProps.updateChallengeSearchMapBounds).toBeCalledWith(bounds, false)
 })
 
 test("moving the map signals that the challenges should be updated if filtering on map bounds", () => {
@@ -73,5 +73,5 @@ test("moving the map signals that the challenges should be updated if filtering 
   )
 
   wrapper.instance().updateBounds(bounds, zoom, false)
-  expect(basicProps.setChallengeSearchMapBounds).toBeCalledWith(bounds, zoom, false)
+  expect(basicProps.updateChallengeSearchMapBounds).toBeCalledWith(bounds, false)
 })

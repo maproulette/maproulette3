@@ -86,13 +86,13 @@ test("executeRouteSearch executes setSearchFilters when passed location=", () =>
 
 test("executeRouteSearch executes setChallengeSearchMapBounds when passed challengeSearch=", () => {
   const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
-  basicProps.history = {location: {search: "?challengeSearch=1,2,3,4:5"}}
+  basicProps.history = {location: {search: "?challengeSearch=1,2,3,4"}}
 
   const wrapper = shallow(
     <WrappedComponent {...basicProps} />
   )
   expect(basicProps.setChallengeSearchMapBounds).toHaveBeenCalledWith(
-    {"_northEast": {"lat": 4, "lng": 3}, "_southWest": {"lat": 2, "lng": 1}}, 5, true)
+    {"_northEast": {"lat": 4, "lng": 3}, "_southWest": {"lat": 2, "lng": 1}}, true)
 })
 
 test("executeRouteSearch executes a the given function for the correct key", () => {
@@ -104,17 +104,17 @@ test("executeRouteSearch executes a the given function for the correct key", () 
 test("callBoundsSet calls the given function with the parsed bounds", () => {
   const funcToCall = jest.fn()
 
-  callBoundsSet("1,2,3,4:5", funcToCall)
+  callBoundsSet("1,2,3,4", funcToCall)
 
   expect(funcToCall).toBeCalledWith(
     {"_northEast": {"lat": 4, "lng": 3},
-     "_southWest": {"lat": 2, "lng": 1}}, 5, true)
+     "_southWest": {"lat": 2, "lng": 1}}, true)
 })
 
 test("callBoundsSet does not call the given function if given invalid bounds", () => {
   const funcToCall = jest.fn()
 
-  callBoundsSet("1234:5", funcToCall)
+  callBoundsSet("1234", funcToCall)
 
   expect(funcToCall).not.toBeCalled()
 })
@@ -154,12 +154,12 @@ test("addSearchCriteriaToRoute will preserve existing criteria on the route", ()
 })
 
 
-test("addBoundsToRoute will add the LatLngBounds and zoom to the route", () => {
+test("addBoundsToRoute will add the LatLngBounds to the route", () => {
   const bounds = toLatLngBounds([1,2,3,4])
   const history = {location: {search: "?name=map&go=true", pathname: "http:mytest"}, replace: jest.fn()}
 
-  addBoundsToRoute(history, "challengeSearch", bounds, 5)
-  expect(history.replace).toBeCalledWith("http:mytest?name=map&go=true&challengeSearch=1,2,3,4:5")
+  addBoundsToRoute(history, "challengeSearch", bounds)
+  expect(history.replace).toBeCalledWith("http:mytest?name=map&go=true&challengeSearch=1,2,3,4")
 })
 
 test("removeSearchCriteriaFromRoute will remove the criteria from the route", () => {

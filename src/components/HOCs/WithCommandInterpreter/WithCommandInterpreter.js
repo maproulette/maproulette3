@@ -68,7 +68,7 @@ export const executeCommand = (props, commandString) => {
         // We need to clear the search first so that any string searches won't
         // be hanging around in redux
         props.clearSearch()
-        props.setChallengeSearchMapBounds(bounds, 3, true)
+        props.updateChallengeSearchMapBounds(bounds, true)
       }
       break;
     case 's/':
@@ -103,7 +103,7 @@ WithCommandInterpreter.propTypes = {
   /** Invoked to execute a search query with search text */
   setSearch: PropTypes.func,
   /** Invoked to execute a map bounds search */
-  setChallengeSearchMapBounds: PropTypes.func,
+  updateChallengeSearchMapBounds: PropTypes.func,
   /** Invoked when the user clears the search text or changes search type */
   clearSearch: PropTypes.func.isRequired,
 }

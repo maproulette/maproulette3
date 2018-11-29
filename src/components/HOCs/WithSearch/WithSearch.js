@@ -190,8 +190,8 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     dispatch(clearFilters(searchGroup))
   },
 
-  setChallengeSearchMapBounds: (bounds, zoom, fromUserAction=false) => {
-    dispatch(setChallengeSearchMapBounds(searchGroup, bounds, zoom, fromUserAction))
+  setChallengeSearchMapBounds: (bounds, fromUserAction=false) => {
+    dispatch(setChallengeSearchMapBounds(searchGroup, bounds, fromUserAction))
   },
 
   setChallengeBrowseMapBounds: (challengeId, bounds, zoom) => {

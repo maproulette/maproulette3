@@ -173,12 +173,11 @@ export const clearFilters = function(searchName) {
  *        action, false if the bounds are simply being altered in response
  *        to normal panning and zooming.
  */
-export const setChallengeSearchMapBounds = function(searchName, bounds, zoom, fromUserAction=false) {
+export const setChallengeSearchMapBounds = function(searchName, bounds, fromUserAction=false) {
   return {
     type: SET_CHALLENGE_SEARCH_MAP_BOUNDS,
     searchName,
     bounds: fromLatLngBounds(bounds),
-    zoom,
     fromUserAction,
   }
 }
@@ -377,7 +376,6 @@ export const currentSearch = function(state={}, action) {
             Object.assign({}, _get(state, `${action.searchName}.mapBounds`),
               {
                 bounds: action.bounds,
-                zoom: action.zoom,
                 fromUserAction: action.fromUserAction,
               }))
       return mergedState

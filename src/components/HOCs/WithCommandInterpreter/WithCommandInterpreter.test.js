@@ -7,7 +7,7 @@ let basicProps = {}
 beforeEach(() => {
   basicProps.setSearch = jest.fn()
   basicProps.clearSearch = jest.fn()
-  basicProps.setChallengeSearchMapBounds = jest.fn()
+  basicProps.updateChallengeSearchMapBounds = jest.fn()
 })
 
 
@@ -23,7 +23,7 @@ test("executeCommand recognizes m/ with 4 bounds", () => {
 
   executeCommand(basicProps, "m/1.1,2.2,3.3,4.4")
   expect(basicProps.setSearch).not.toHaveBeenCalled()
-  expect(basicProps.setChallengeSearchMapBounds).toHaveBeenCalledWith([1.1, 2.2, 3.3, 4.4], 3, true)
+  expect(basicProps.updateChallengeSearchMapBounds).toHaveBeenCalledWith([1.1, 2.2, 3.3, 4.4], true)
 })
 
 test("executeCommand recognizes m/ with 2 bounds as centerpoint", () => {
@@ -31,5 +31,5 @@ test("executeCommand recognizes m/ with 2 bounds as centerpoint", () => {
 
   executeCommand(basicProps, "m/1,4")
   expect(basicProps.setSearch).not.toHaveBeenCalled()
-  expect(basicProps.setChallengeSearchMapBounds).toHaveBeenCalledWith([0.625, 3.625, 1.375, 4.375], 3, true)
+  expect(basicProps.updateChallengeSearchMapBounds).toHaveBeenCalledWith([0.625, 3.625, 1.375, 4.375], true)
 })

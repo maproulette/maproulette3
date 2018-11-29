@@ -89,8 +89,7 @@ export const _WithSearchRoute = function(WrappedComponent, searchGroup) {
             filterCriteria.location === 'intersectingMapBounds') {
           if (_get(this.props, `currentSearch.${searchGroup}`)) {
             const bounds = _get(this.props, `currentSearch.${searchGroup}.mapBounds.bounds`)
-            const zoom = _get(this.props, `currentSearch.${searchGroup}.mapBounds.zoom`)
-            addBoundsToRoute(this.props.history, 'challengeSearch', bounds, zoom)
+            addBoundsToRoute(this.props.history, 'challengeSearch', bounds)
           }
         }
       }
@@ -115,15 +114,15 @@ export const _WithSearchRoute = function(WrappedComponent, searchGroup) {
       clearRoute && this.props.history.push(`${this.props.history.location.pathname}`)
     }
 
-    setChallengeSearchMapBounds = (bounds, zoom, fromUserAction=false) => {
-      this.props.setChallengeSearchMapBounds(bounds, zoom, fromUserAction)
+    updateChallengeSearchMapBounds = (bounds, fromUserAction=false) => {
+      this.props.setChallengeSearchMapBounds(bounds, fromUserAction)
 
       // Only update the route if the map bounds would impact the search
       const isLoading = _isUndefined(this.props.isLoading) ? true : this.props.isLoading
       if (!isLoading && searchGroup === "challenges" && _get(this.props, `currentSearch.${searchGroup}`)) {
         if (_get(this.props, `currentSearch.${searchGroup}.filters.location`) === 'withinMapBounds' ||
             _get(this.props, `currentSearch.${searchGroup}.filters.location`) === 'intersectingMapBounds') {
-          addBoundsToRoute(this.props.history, 'challengeSearch', bounds, zoom)
+          addBoundsToRoute(this.props.history, 'challengeSearch', bounds)
         }
         else {
           removeSearchCriteriaFromRoute(this.props.history, ['challengeSearch'])
@@ -142,7 +141,7 @@ export const _WithSearchRoute = function(WrappedComponent, searchGroup) {
                             removeSearchFilters={this.removeSearchFilters}
                             setKeywordFilter={this.setKeywordFilter}
                             clearSearchFilters={this.clearSearchFilters}
-                            setChallengeSearchMapBounds={this.setChallengeSearchMapBounds} />
+                            updateChallengeSearchMapBounds={this.updateChallengeSearchMapBounds} />
        )
      }
    }
@@ -156,12 +155,9 @@ export const executeRouteSearch = (routeCriteria, searchString) => {
 }
 
 export const callBoundsSet = (param, functionToCall) => {
-  const boundsZoom = _split(param, ":")
-  const bounds = _split(boundsZoom[0], ',')
-  const zoom = parseInt(boundsZoom[1], 10)
-
+  const bounds = _split(param, ',')
   if (bounds && bounds.length === 4) {
-    functionToCall(toLatLngBounds(bounds), zoom, true)
+    functionToCall(toLatLngBounds(bounds), true)
   }
   else {
     // Invalid Bounds given
@@ -197,9 +193,9 @@ export const addSearchCriteriaToRoute = (history, newCriteria) => {
   history.replace(`${history.location.pathname}?${newRoute}`)
 }
 
-export const addBoundsToRoute = (history, boundsType, bounds, zoom) => {
+export const addBoundsToRoute = (history, boundsType, bounds) => {
   addSearchCriteriaToRoute(history,
-    {[boundsType]: `${_join(fromLatLngBounds(bounds), ',')}:${zoom}`})
+    {[boundsType]: `${_join(fromLatLngBounds(bounds), ',')}`})
 }
 
 export const removeSearchCriteriaFromRoute = (history, criteriaKeys) => {
