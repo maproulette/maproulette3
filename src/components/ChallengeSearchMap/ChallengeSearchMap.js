@@ -102,14 +102,13 @@ export class ChallengeSearchMap extends Component {
    * @private
    */
   updateBounds = (bounds, zoom, fromUserAction=false) => {
-
     // If the new bounds are the same as the old, do nothing.
     if (this.currentBounds && this.currentBounds.equals(bounds)) {
       return
     }
 
     this.currentBounds = bounds
-    this.props.setChallengeSearchMapBounds(bounds, zoom, fromUserAction)
+    this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
   }
 
   /**
@@ -157,13 +156,11 @@ export class ChallengeSearchMap extends Component {
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
 
-    const zoom = _get(this.props, 'mapBounds.zoom') || 3
-
     return (
       <div key='ChallengeSearchMap'
            className={classNames('full-screen-map', this.props.className)}>
         <LayerToggle {...this.props} />
-        <EnhancedMap center={latLng(0, 45)} zoom={zoom} minZoom={2} maxZoom={18}
+        <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}
                      initialBounds = {_get(this.props, 'mapBounds.bounds')}
                      zoomControl={false} animate={true}
@@ -190,7 +187,7 @@ ChallengeSearchMap.propTypes = {
    */
   mapBounds: PropTypes.object,
   /** Invoked when the user moves the challenge Search map */
-  setChallengeSearchMapBounds: PropTypes.func.isRequired,
+  updateChallengeSearchMapBounds: PropTypes.func.isRequired,
   /** The currently enabled challenge filter, if any */
   searchFilters: PropTypes.object,
   /** Task markers to display */

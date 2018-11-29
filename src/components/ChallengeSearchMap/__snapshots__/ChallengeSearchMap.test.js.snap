@@ -19,12 +19,12 @@ ShallowWrapper {
             },
           }
     }
-    setChallengeSearchMapBounds={[Function]}
     source={
         Object {
             "id": "foo",
           }
     }
+    updateChallengeSearchMapBounds={[Function]}
     visibleOverlays={Array []}
 />,
   Symbol(enzyme.__renderer__): Object {
@@ -55,12 +55,12 @@ ShallowWrapper {
                               },
                             }
           }
-          setChallengeSearchMapBounds={[Function]}
           source={
                     Object {
                               "id": "foo",
                             }
           }
+          updateChallengeSearchMapBounds={[Function]}
           visibleOverlays={Array []}
 />,
         <EnhancedMap
@@ -110,12 +110,12 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    setChallengeSearchMapBounds={[Function]}
                     source={
                               Object {
                                         "id": "foo",
                                       }
                     }
+                    updateChallengeSearchMapBounds={[Function]}
                     visibleOverlays={Array []}
                     zIndex={1}
           />
@@ -143,10 +143,10 @@ ShallowWrapper {
               },
             },
           },
-          "setChallengeSearchMapBounds": [Function],
           "source": Object {
             "id": "foo",
           },
+          "updateChallengeSearchMapBounds": [Function],
           "visibleOverlays": Array [],
         },
         "ref": null,
@@ -183,12 +183,12 @@ ShallowWrapper {
                                           },
                                         }
               }
-              setChallengeSearchMapBounds={[Function]}
               source={
                             Object {
                                           "id": "foo",
                                         }
               }
+              updateChallengeSearchMapBounds={[Function]}
               visibleOverlays={Array []}
               zIndex={1}
 />,
@@ -243,10 +243,10 @@ ShallowWrapper {
                   },
                 },
               },
-              "setChallengeSearchMapBounds": [Function],
               "source": Object {
                 "id": "foo",
               },
+              "updateChallengeSearchMapBounds": [Function],
               "visibleOverlays": Array [],
               "zIndex": 1,
             },
@@ -284,12 +284,12 @@ ShallowWrapper {
                                     },
                                   }
             }
-            setChallengeSearchMapBounds={[Function]}
             source={
                         Object {
                                     "id": "foo",
                                   }
             }
+            updateChallengeSearchMapBounds={[Function]}
             visibleOverlays={Array []}
 />,
           <EnhancedMap
@@ -339,12 +339,12 @@ ShallowWrapper {
                                                 },
                                               }
                         }
-                        setChallengeSearchMapBounds={[Function]}
                         source={
                                     Object {
                                                 "id": "foo",
                                               }
                         }
+                        updateChallengeSearchMapBounds={[Function]}
                         visibleOverlays={Array []}
                         zIndex={1}
             />
@@ -372,10 +372,10 @@ ShallowWrapper {
                 },
               },
             },
-            "setChallengeSearchMapBounds": [Function],
             "source": Object {
               "id": "foo",
             },
+            "updateChallengeSearchMapBounds": [Function],
             "visibleOverlays": Array [],
           },
           "ref": null,
@@ -412,12 +412,12 @@ ShallowWrapper {
                                                 },
                                               }
                 }
-                setChallengeSearchMapBounds={[Function]}
                 source={
                                 Object {
                                                 "id": "foo",
                                               }
                 }
+                updateChallengeSearchMapBounds={[Function]}
                 visibleOverlays={Array []}
                 zIndex={1}
 />,
@@ -472,10 +472,10 @@ ShallowWrapper {
                     },
                   },
                 },
-                "setChallengeSearchMapBounds": [Function],
                 "source": Object {
                   "id": "foo",
                 },
+                "updateChallengeSearchMapBounds": [Function],
                 "visibleOverlays": Array [],
                 "zIndex": 1,
               },
