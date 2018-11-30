@@ -10,7 +10,7 @@ import { toLatLngBounds, fromLatLngBounds }
        from '../../../services/MapBounds/MapBounds'
 
 /**
- * WithSearchRoute gets wrapped by WithSearch to add/remove values to the URL route
+ * WithSearchRoute adds functionality to WithSearch to add/remove values to the URL route
  * as criteria changes. Then when the app is loaded any criteria on the
  * route will be used to filter the challenge search shown.
  *

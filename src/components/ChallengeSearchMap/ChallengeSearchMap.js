@@ -156,13 +156,16 @@ export class ChallengeSearchMap extends Component {
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
 
+    // If the app is still loading then we have no initialBounds
+    const initialBounds = this.props.isLoading ? null : _get(this.props, 'mapBounds.bounds')
+
     return (
       <div key='ChallengeSearchMap'
            className={classNames('full-screen-map', this.props.className)}>
         <LayerToggle {...this.props} />
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}
-                     initialBounds = {_get(this.props, 'mapBounds.bounds')}
+                     initialBounds = {initialBounds}
                      zoomControl={false} animate={true}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
