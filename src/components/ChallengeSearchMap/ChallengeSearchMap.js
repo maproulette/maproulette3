@@ -14,7 +14,6 @@ import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
-import WithChallengeSearch from '../HOCs/WithSearch/WithChallengeSearch'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -157,7 +156,7 @@ export class ChallengeSearchMap extends Component {
     )
 
     // If the app is still loading then we have no initialBounds
-    const initialBounds = this.props.isLoading ? null : _get(this.props, 'mapBounds.bounds')
+    const initialBounds = !this.props.loadedFromRouteDone ? null : _get(this.props, 'mapBounds.bounds')
 
     return (
       <div key='ChallengeSearchMap'
@@ -197,11 +196,9 @@ ChallengeSearchMap.propTypes = {
   taskMarkers: PropTypes.array,
 }
 
-export default WithChallengeSearch(
-    WithVisibleLayer(
+export default WithVisibleLayer(
       WithIntersectingOverlays(
         injectIntl(ChallengeSearchMap),
         'challenges'
       )
     )
-  )

@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
-import _split from 'lodash/split'
 import _each from 'lodash/each'
-import _map from 'lodash/map'
 import queryString from 'query-string'
 import { toLatLngBounds, fromLatLngBounds }
        from '../../../services/MapBounds/MapBounds'
@@ -30,7 +28,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
     routeCriteria = {
        sort: param => this.props.setSearchSort({sortBy: param}),
        difficulty: param => this.props.setSearchFilters({difficulty: parseInt(param, 10)}),
-       keywords: param => this.props.setKeywordFilter(_split(param, ',')),
+       keywords: param => this.props.setKeywordFilter(param.split(',')),
        location: param => this.props.setSearchFilters({location: param}),
        query: param => this.props.setSearch(param),
        challengeSearch: param => this.props.setChallengeSearchMapBounds(toLatLngBounds(param), true)
@@ -78,18 +76,9 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       this.props.setSearchFilters(filterCriteria)
       addSearchCriteriaToRoute(this.props.history, filterCriteria)
 
-      // If our app is still loading then we don't want to mess with the URL route
-      // and we only want to add the map bounds if they are relevant to the
-      // challenge search results. (ie. 'withinMapBounds' or 'intersectingMapBounds')
-      if (searchGroup === "challenges" && !this.props.isLoading) {
-        if (filterCriteria.location === 'withinMapBounds' ||
-            filterCriteria.location === 'intersectingMapBounds') {
-          if (_get(this.props, `currentSearch.${searchGroup}`)) {
-            const bounds = _get(this.props, `currentSearch.${searchGroup}.mapBounds.bounds`)
-            addBoundsToRoute(this.props.history, 'challengeSearch', bounds)
-          }
-        }
-      }
+      const bounds = _get(this.props, `currentSearch.${searchGroup}.mapBounds.bounds`) ||
+                     _get(this.props, `mapBounds.bounds`)
+      updateBoundsOnRoute(this.props, searchGroup, bounds, filterCriteria.location, false)
     }
 
     removeSearchFilters = (criteriaNames) => {
@@ -116,24 +105,15 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
     updateChallengeSearchMapBounds = (bounds, fromUserAction=false) => {
       this.props.setChallengeSearchMapBounds(bounds, fromUserAction)
 
-      // If our app is still loading then we don't want to mess with the URL route
-      // and we only want to add the map bounds if they are relevant to the
-      // challenge search results. (ie. 'withinMapBounds' or 'intersectingMapBounds')
-      if (!this.props.isLoading && searchGroup === "challenges" && _get(this.props, `currentSearch.${searchGroup}`)) {
-        if (_get(this.props, `currentSearch.${searchGroup}.filters.location`) === 'withinMapBounds' ||
-            _get(this.props, `currentSearch.${searchGroup}.filters.location`) === 'intersectingMapBounds') {
-          addBoundsToRoute(this.props.history, 'challengeSearch', bounds)
-        }
-        else {
-          removeSearchCriteriaFromRoute(this.props.history, ['challengeSearch'])
-        }
-      }
+      const locationFilter = _get(this.props, `currentSearch.${searchGroup}.filters.location`)
+      updateBoundsOnRoute(this.props, searchGroup, bounds, locationFilter, true)
     }
 
     render() {
       return (
         <WrappedComponent {...this.props}
                             isLoading={this.props.isLoading || !this.state.loadedFromRoute}
+                            loadedFromRouteDone={this.state.loadedFromRoute}
                             setSearch={this.setSearch}
                             clearSearch={this.clearSearch}
                             setSearchSort={this.setSearchSort}
@@ -160,7 +140,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
 export const executeRouteSearch = (routeCriteria, searchString) => {
   const searchCriteria = queryString.parse(searchString)
   _each(searchCriteria, (value, key) => {
-    if (routeCriteria[key]) {
+    if (routeCriteria[key] && !_isEmpty(value)) {
       routeCriteria[key](value)
     }
   })
@@ -182,6 +162,20 @@ export const addSearchCriteriaToRoute = (history, newCriteria) => {
   history.replace(`${history.location.pathname}?${newRoute}`)
 }
 
+export const updateBoundsOnRoute = (props, searchGroup, bounds, locationFilter, removeIfNeeded = true) => {
+  // If our app is still loading then we don't want to mess with the URL route
+  // and we only want to add the map bounds if they are relevant to the
+  // challenge search results. (ie. 'withinMapBounds' or 'intersectingMapBounds')
+  if (!props.isLoading && _get(props, `currentSearch.${searchGroup}`)) {
+    if ( locationFilter === 'withinMapBounds' || locationFilter === 'intersectingMapBounds') {
+      addBoundsToRoute(props.history, 'challengeSearch', bounds)
+    }
+    else if (removeIfNeeded) {
+      removeSearchCriteriaFromRoute(props.history, ['challengeSearch'])
+    }
+  }
+}
+
 export const addBoundsToRoute = (history, boundsType, bounds) => {
   addSearchCriteriaToRoute(history,
     {[boundsType]: `${fromLatLngBounds(bounds).join(',')}`})
@@ -194,7 +188,7 @@ export const removeSearchCriteriaFromRoute = (history, criteriaKeys) => {
     delete searchCriteria[key]
   })
 
-  const newRoute = _map(searchCriteria, (value, key) => `${key}=${value}`).join('&')
+  const newRoute = queryString.stringify(searchCriteria)
   history.replace(`${history.location.pathname}?${newRoute}`)
 }
 
