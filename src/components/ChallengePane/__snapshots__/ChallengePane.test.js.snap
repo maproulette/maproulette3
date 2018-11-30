@@ -107,7 +107,7 @@ ShallowWrapper {
                     </Sidebar>
           </MediaQuery>
           <Connect(MapPane)>
-                    <Component
+                    <Connect(Connect(Connect(Component)))
                               challenge={undefined}
                               intl={
                                         Object {
@@ -212,7 +212,7 @@ ShallowWrapper {
               </Sidebar>
 </MediaQuery>,
             <Connect(MapPane)>
-              <Component
+              <Connect(Connect(Connect(Component)))
                             challenge={undefined}
                             intl={
                                           Object {
@@ -401,7 +401,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "children": <Component
+              "children": <Connect(Connect(Connect(Component)))
                 challenge={undefined}
                 intl={
                                 Object {
@@ -532,7 +532,7 @@ ShallowWrapper {
                         </Sidebar>
             </MediaQuery>
             <Connect(MapPane)>
-                        <Component
+                        <Connect(Connect(Connect(Component)))
                                     challenge={undefined}
                                     intl={
                                                 Object {
@@ -637,7 +637,7 @@ ShallowWrapper {
                 </Sidebar>
 </MediaQuery>,
               <Connect(MapPane)>
-                <Component
+                <Connect(Connect(Connect(Component)))
                                 challenge={undefined}
                                 intl={
                                                 Object {
@@ -826,7 +826,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "children": <Component
+                "children": <Connect(Connect(Connect(Component)))
                   challenge={undefined}
                   intl={
                                     Object {
