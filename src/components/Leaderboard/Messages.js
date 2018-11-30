@@ -43,5 +43,8 @@ export default defineMessages({
     id: "Leaderboard.users.none",
     defaultMessage: "No users for time period",
   },
+  loadMoreLabel: {
+    id: "Leaderboard.controls.loadMore.label",
+    defaultMessage: "Show More",
+  },
 })
-

@@ -296,6 +296,7 @@
   "Leaderboard.user.points": "Points",
   "Leaderboard.user.topChallenges": "Top Challenges",
   "Leaderboard.users.none": "No users for time period",
+  "Leaderboard.controls.loadMore.label": "Show More",
   "General.controls.moreResults.label": "More Results",
   "MobileNotSupported.header": "Please Visit on your Computer",
   "MobileNotSupported.message": "Sorry, MapRoulette does not currently support mobile devices.",

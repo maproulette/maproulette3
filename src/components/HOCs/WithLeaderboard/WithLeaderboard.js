@@ -4,8 +4,9 @@ import _isArray from 'lodash/isArray'
 import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
-import subMonths from 'date-fns/sub_months'
-import { fetchLeaderboard } from '../../../services/Leaderboard/Leaderboard'
+import _get from 'lodash/get'
+import { fetchLeaderboard, fetchLeaderboardForUser,
+         DEFAULT_LEADERBOARD_COUNT } from '../../../services/Leaderboard/Leaderboard'
 
 /**
  * WithLeaderboard provides leaderboard and leaderboardLoading props containing
@@ -19,14 +20,16 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
       monthsPast: initialMonthsPast,
       leaderboard: null,
       leaderboardLoading: false,
+      userLeaderboard: null,
+      showingCount: DEFAULT_LEADERBOARD_COUNT,
     }
 
-    leaderboardParams = startDate => {
-      const params = new Map([['startDate', startDate],
-                              ['endDate', null],
+    leaderboardParams = (numberMonths) => {
+      const params = new Map([['numberMonths', numberMonths],
                               ['onlyEnabled', true],
                               ['forProjects', null],
-                              ['forChallenges', null]])
+                              ['forChallenges', null],
+                              ['forUsers', null]])
 
       if (_isObject(this.props.leaderboardOptions)) {
         if (_isBoolean(this.props.leaderboardOptions.onlyEnabled)) {
@@ -47,26 +50,40 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
       return params.values()
     }
 
-    updateLeaderboard = startDate => {
-      this.setState({leaderboardLoading: true})
+    updateLeaderboard = (numberMonths, loadMore = false) => {
+      let showingCount = this.state.showingCount
 
-      fetchLeaderboard(...this.leaderboardParams(startDate)).then(leaderboard => {
+      if (loadMore) {
+        showingCount += DEFAULT_LEADERBOARD_COUNT
+      }
+
+      this.setState({leaderboardLoading: true, showingCount})
+
+      fetchLeaderboard(...this.leaderboardParams(numberMonths), showingCount).then(leaderboard => {
         this.setState({leaderboard, leaderboardLoading: false})
       })
-    }
 
-    monthsPastStartDate = monthsPast => subMonths(new Date(), monthsPast)
+      const userId = _get(this.props, 'user.id')
+      if (userId) {
+        fetchLeaderboardForUser(userId, 1, ...this.leaderboardParams(numberMonths)).then(userLeaderboard => {
+          this.setState({userLeaderboard: userLeaderboard})
+        })
+      }
+    }
 
     setMonthsPast = monthsPast => {
       if (monthsPast !== this.state.monthsPast) {
         this.setState({monthsPast})
-        this.updateLeaderboard(this.monthsPastStartDate(monthsPast))
+        this.updateLeaderboard(monthsPast)
       }
     }
 
+    loadMore = () => {
+      this.updateLeaderboard(this.props.monthsPast || this.state.monthsPast, true)
+    }
+
     componentDidMount() {
-      this.updateLeaderboard(this.monthsPastStartDate(this.props.monthsPast ||
-                                                      this.state.monthsPast))
+      this.updateLeaderboard(this.props.monthsPast || this.state.monthsPast)
     }
 
     componentDidUpdate(prevProps) {
@@ -75,16 +92,20 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
       if (this.props.monthsPast !== prevProps.monthsPast ||
           !_isEqual(this.props.challenges, prevProps.challenges) ||
           !_isEqual(this.props.projects, prevProps.projects)) {
-        this.updateLeaderboard(this.monthsPastStartDate(this.props.monthsPast ||
-                                                        this.state.monthsPast))
+        this.updateLeaderboard(this.props.monthsPast || this.state.monthsPast)
       }
     }
 
     render() {
+      const moreResults = this.state.leaderboard ? this.state.showingCount <= this.state.leaderboard.length : true
+
       return <WrappedComponent leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
+                               userLeaderboard={this.state.userLeaderboard}
                                monthsPast={this.state.monthsPast}
                                setMonthsPast={this.setMonthsPast}
+                               loadMore={this.loadMore}
+                               hasMoreResults={moreResults}
                                {...this.props} />
     }
   }
