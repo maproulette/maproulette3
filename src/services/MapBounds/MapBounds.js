@@ -2,6 +2,8 @@ import _isEmpty from 'lodash/isEmpty'
 import _isFunction from 'lodash/isFunction'
 import _isArray from 'lodash/isArray'
 import _max from 'lodash/max'
+import _split from 'lodash/split'
+import _isString from 'lodash/isString'
 import { LatLngBounds, LatLng } from 'leaflet'
 
 /** Default map bounds in absence of any state */
@@ -70,6 +72,15 @@ export const toLatLngBounds = function(arrayBounds) {
   else if (_isFunction(arrayBounds.toBBoxString)) {
     // they gave us a LatLngBounds. Just return it.
     return arrayBounds
+  }
+  else if (_isString(arrayBounds)) {
+    const bounds = _split(arrayBounds, ',')
+    if (bounds && bounds.length === 4) {
+      return toLatLngBounds(bounds)
+    }
+    else {
+      throw new Error("Invalid bounds given: " + arrayBounds)
+    }
   }
   else {
     throw new Error("Invalid bounds array given")
