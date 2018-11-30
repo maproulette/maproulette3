@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import { callBoundsSet, parseRouteSearch,
-         addSearchCriteriaToRoute,
+import { addSearchCriteriaToRoute,
          addBoundsToRoute, removeSearchCriteriaFromRoute,
         executeRouteSearch } from './WithSearchRoute'
 import { toLatLngBounds, fromLatLngBounds }
       from '../../../services/MapBounds/MapBounds'
-import { _WithSearchRoute } from './WithSearchRoute'
+import { WithSearchRoute } from './WithSearchRoute'
 
 let basicProps = {}
 
@@ -21,7 +20,7 @@ beforeEach(() => {
 })
 
 test("executeRouteSearch clears old redux values first", () => {
-  const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
+  const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?query=test"}}
 
   const wrapper = shallow(
@@ -33,7 +32,7 @@ test("executeRouteSearch clears old redux values first", () => {
 })
 
 test("executeRouteSearch executes setSearch when passed query=", () => {
-  const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
+  const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?query=test"}}
 
   const wrapper = shallow(
@@ -44,7 +43,7 @@ test("executeRouteSearch executes setSearch when passed query=", () => {
 
 
 test("executeRouteSearch executes setSearchSort when passed sort=", () => {
-  const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
+  const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?sort=name"}}
 
   const wrapper = shallow(
@@ -54,7 +53,7 @@ test("executeRouteSearch executes setSearchSort when passed sort=", () => {
 })
 
 test("executeRouteSearch executes setSearchFilters when passed difficulty=", () => {
-  const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
+  const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?difficulty=1"}}
 
   const wrapper = shallow(
@@ -65,7 +64,7 @@ test("executeRouteSearch executes setSearchFilters when passed difficulty=", () 
 
 
 test("executeRouteSearch executes setKeywordFilter when passed keywords=", () => {
-  const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
+  const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?keywords=water,road"}}
 
   const wrapper = shallow(
@@ -75,7 +74,7 @@ test("executeRouteSearch executes setKeywordFilter when passed keywords=", () =>
 })
 
 test("executeRouteSearch executes setSearchFilters when passed location=", () => {
-  const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
+  const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?location=in-bounds"}}
 
   const wrapper = shallow(
@@ -85,7 +84,7 @@ test("executeRouteSearch executes setSearchFilters when passed location=", () =>
 })
 
 test("executeRouteSearch executes setChallengeSearchMapBounds when passed challengeSearch=", () => {
-  const WrappedComponent = _WithSearchRoute(() => <div className="child" />, "challenges")
+  const WrappedComponent = WithSearchRoute(() => <div className="child" />, "challenges")
   basicProps.history = {location: {search: "?challengeSearch=1,2,3,4"}}
 
   const wrapper = shallow(
@@ -99,37 +98,6 @@ test("executeRouteSearch executes a the given function for the correct key", () 
   const routeCriteria = {myKey: jest.fn()}
   executeRouteSearch(routeCriteria, "?myKey=test")
   expect(routeCriteria.myKey).toHaveBeenCalledWith("test")
-})
-
-test("callBoundsSet calls the given function with the parsed bounds", () => {
-  const funcToCall = jest.fn()
-
-  callBoundsSet("1,2,3,4", funcToCall)
-
-  expect(funcToCall).toBeCalledWith(
-    {"_northEast": {"lat": 4, "lng": 3},
-     "_southWest": {"lat": 2, "lng": 1}}, true)
-})
-
-test("callBoundsSet does not call the given function if given invalid bounds", () => {
-  const funcToCall = jest.fn()
-
-  callBoundsSet("1234", funcToCall)
-
-  expect(funcToCall).not.toBeCalled()
-})
-
-test("parseRouteSearch breaks apart query route into parameters", () => {
-  const result = parseRouteSearch("?a=1&b=2&c=3")
-
-  expect(result).toEqual({"a": "1", "b": "2", "c": "3"})
-})
-
-
-test("parseRouteSearch will still work with only one parameter and no ?", () => {
-  const result = parseRouteSearch("a=1")
-
-  expect(result).toEqual({"a": "1"})
 })
 
 test("addSearchCriteriaToRoute will add the given criteria to the query route", () => {
@@ -150,7 +118,7 @@ test("addSearchCriteriaToRoute will preserve existing criteria on the route", ()
   const history = {location: {search: "?name=map&go=true", pathname: "http:mytest"}, replace: jest.fn()}
 
   addSearchCriteriaToRoute(history, {x: "y", z: "444"})
-  expect(history.replace).toBeCalledWith("http:mytest?name=map&go=true&x=y&z=444")
+  expect(history.replace).toBeCalledWith("http:mytest?go=true&name=map&x=y&z=444")
 })
 
 
@@ -159,7 +127,7 @@ test("addBoundsToRoute will add the LatLngBounds to the route", () => {
   const history = {location: {search: "?name=map&go=true", pathname: "http:mytest"}, replace: jest.fn()}
 
   addBoundsToRoute(history, "challengeSearch", bounds)
-  expect(history.replace).toBeCalledWith("http:mytest?name=map&go=true&challengeSearch=1,2,3,4")
+  expect(history.replace).toBeCalledWith("http:mytest?challengeSearch=1%2C2%2C3%2C4&go=true&name=map")
 })
 
 test("removeSearchCriteriaFromRoute will remove the criteria from the route", () => {
@@ -180,5 +148,5 @@ test("removeSearchCriteriaFromRoute is ok with null criteriaKeys", () => {
   const history = {location: {search: "?name=map&go=true", pathname: "http:mytest"}, replace: jest.fn()}
 
   removeSearchCriteriaFromRoute(history, null)
-  expect(history.replace).toBeCalledWith("http:mytest?name=map&go=true")
+  expect(history.replace).toBeCalledWith("http:mytest?go=true&name=map")
 })
