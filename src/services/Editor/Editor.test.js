@@ -1,9 +1,12 @@
-import { featureOSMId,
-         constructJosmURI,
+import { Editor,
+         osmObjectParams,
+         featureOSMId,
+         josmLoadAndZoomURI,
          constructIdURI,
          constructLevel0URI } from './Editor'
 import _cloneDeep from 'lodash/cloneDeep'
 
+let dispatch = null
 let task = null
 let basicFeature = null
 let pointFeature = null
@@ -18,6 +21,8 @@ let centerPoint = null
 let mapBounds = null
 
 beforeEach(() => {
+  dispatch = jest.fn()
+
   basicFeature = {
     type: 'Feature',
     properties: {
@@ -110,14 +115,58 @@ beforeEach(() => {
   }
 })
 
-describe('constructJosmURI', () => {
+
+describe('osmObjectParams', () => {
+  beforeEach(() => {
+    pointFeature.properties.osmid = '123'
+    lineStringFeature.properties.osmid = '456'
+    polygonFeature.properties.osmid='789'
+    multiPolygonFeature.properties.osmid='246'
+
+    taskGeometries.features = [
+      pointFeature, lineStringFeature, polygonFeature, multiPolygonFeature
+    ]
+  })
+
+  test("it builds a comma-separated string of task feature osm identifiers", () => {
+    expect(osmObjectParams(task)).toEqual('node123,way456,way789,relation246')
+  })
+
+  test("it abbreviates objects when given abbreviated argument", () => {
+    expect(osmObjectParams(task, true)).toEqual('n123,w456,w789,r246')
+  })
+
+  test("it skips task features missing osm identifiers", () => {
+    delete pointFeature.properties.osmid
+
+    expect(osmObjectParams(task)).toEqual('way456,way789,relation246')
+  })
+
+  test("it returns an empty string if there are no features", () => {
+    taskGeometries.features = []
+
+    expect(osmObjectParams(task)).toEqual('')
+  })
+
+  test("it returns an empty string if no features osm ids", () => {
+    delete pointFeature.properties.osmid
+    delete lineStringFeature.properties.osmid
+    delete polygonFeature.properties.osmid
+    delete multiPolygonFeature.properties.osmid
+
+    expect(osmObjectParams(task)).toEqual('')
+  })
+})
+
+
+describe('josmLoadAndZoomURI', () => {
   test("the uri includes the load_and_zoom command", () => {
-    const uri = constructJosmURI(false, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
     expect(uri).toEqual(expect.stringContaining("load_and_zoom"))
   })
 
   test("the uri includes bounding box corners from mapbounds", () => {
-    const uri = constructJosmURI(false, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(expect.stringContaining(`left=${southWestCorner.lng}`))
     expect(uri).toEqual(expect.stringContaining(`bottom=${southWestCorner.lat}`))
@@ -125,28 +174,28 @@ describe('constructJosmURI', () => {
     expect(uri).toEqual(expect.stringContaining(`top=${northEastCorner.lat}`))
   })
 
-  test("sets new_layer to false if asNewLayer argument is false", () => {
-    const uri = constructJosmURI(false, task, mapBounds)
+  test("sets new_layer to false for standard josm editor option", () => {
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(expect.stringContaining("new_layer=false"))
   })
 
-  test("sets new_layer to true if asNewLayer argument is true", () => {
-    const uri = constructJosmURI(true, task, mapBounds)
+  test("sets new_layer to true for josm w/layer editor option", () => {
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josmLayer, task, mapBounds)
 
     expect(uri).toEqual(expect.stringContaining("new_layer=true"))
   })
 
   test("uri includes a URI-encoded checkin comment from the task challenge", () => {
     challenge.checkinComment = "###Non-Conforming"
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(expect.stringContaining("Conforming"))
     expect(uri).not.toEqual(expect.stringContaining("#"))
   })
 
   test("uri includes a URI-encoded source from the task challenge", () => {
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(expect.stringContaining("My%20source"))
   })
@@ -154,7 +203,7 @@ describe('constructJosmURI', () => {
   test("uri includes a node selection for Point features with an OSM id", () => {
     pointFeature.properties.osmid = '123'
     taskGeometries.features = [ pointFeature ]
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`select=node123`)
@@ -164,7 +213,7 @@ describe('constructJosmURI', () => {
   test("uri includes a way selection for LineString features with an OSM id", () => {
     lineStringFeature.properties.osmid = '456'
     taskGeometries.features = [ lineStringFeature ]
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`select=way456`)
@@ -174,7 +223,7 @@ describe('constructJosmURI', () => {
   test("uri includes a way selection for Polygon features with an OSM id", () => {
     polygonFeature.properties.osmid = '789'
     taskGeometries.features = [ polygonFeature ]
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`select=way789`)
@@ -184,7 +233,7 @@ describe('constructJosmURI', () => {
   test("uri includes a relation selection for MultiPolygon features with an OSM id", () => {
     multiPolygonFeature.properties.osmid = '135'
     taskGeometries.features = [ multiPolygonFeature ]
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`select=relation135`)
@@ -194,7 +243,7 @@ describe('constructJosmURI', () => {
   test("features lacking an OSM id are not selected", () => {
     delete pointFeature.properties.osmid
     taskGeometries.features = [ pointFeature ]
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).not.toEqual(
       expect.stringContaining('select=node')
@@ -204,7 +253,7 @@ describe('constructJosmURI', () => {
   test("features using the alternate @id property are still selected", () => {
     pointFeature.properties['@id'] = '123'
     taskGeometries.features = [ pointFeature ]
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`select=node123`)
@@ -216,7 +265,7 @@ describe('constructJosmURI', () => {
     lineStringFeature.properties.osmid = '456'
     multiPolygonFeature.properties.osmid = '135'
     taskGeometries.features = [ pointFeature, lineStringFeature, multiPolygonFeature ]
-    const uri = constructJosmURI(true, task, mapBounds)
+    const uri = josmLoadAndZoomURI(dispatch, Editor.josm, task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`select=node123,way456,relation135`)
@@ -419,19 +468,25 @@ describe('constructLevel0URI', () => {
 })
 
 describe('featureOSMId', () => {
-  test("returns null if the given feature doesn't have properties", () => {
-    delete basicFeature.properties
+  test("returns the numerical id from the `osmid` field if it exists", () => {
+    basicFeature.osmid = '"123"'
 
-    expect(featureOSMId(basicFeature)).toBeNull()
+    expect(featureOSMId(basicFeature)).toEqual('123')
   })
 
-  test("returns the numeical id from the `osmid` property if it exists", () => {
+  test("returns the numerical id from the `@id` field if it exists", () => {
+    basicFeature['@id'] = '"node/1042007773"'
+
+    expect(featureOSMId(basicFeature)).toEqual('1042007773')
+  })
+
+  test("also looks for `osmid` property if no fields match", () => {
     basicFeature.properties.osmid = '"123"'
 
     expect(featureOSMId(basicFeature)).toEqual('123')
   })
 
-  test("returns the numerical id from the `@id` property if it exists", () => {
+  test("also looks for `@id` property if no fields match", () => {
     basicFeature.properties['@id'] = '"node/1042007773"'
 
     expect(featureOSMId(basicFeature)).toEqual('1042007773')

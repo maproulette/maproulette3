@@ -45,6 +45,9 @@ export default class TaskEditControl extends Component {
       case editShortcuts.editJosmLayer.key:
         this.props.pickEditor({value: Editor.josmLayer})
         break
+      case editShortcuts.editJosmFeatures.key:
+        this.props.pickEditor({value: Editor.josmFeatures})
+        break
       case editShortcuts.editLevel0.key:
         this.props.pickEditor({value: Editor.level0})
         break

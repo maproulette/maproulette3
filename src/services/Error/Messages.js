@@ -147,4 +147,10 @@ export default defineMessages({
     defaultMessage: "OSM remote control did not respond. Do you have JOSM " +
                     "running with Remote Control enabled?"
   },
+  josmMissingOSMIds: {
+    id: 'Errors.josm.missingFeatureIds',
+    defaultMessage: "This task's features do not include the OSM identifiers " +
+                    "required to open them standalone in JOSM. Please choose " +
+                    "another editing option."
+  },
 })

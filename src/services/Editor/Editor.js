@@ -10,18 +10,19 @@ import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import messages from './Messages'
 
-// Editor constants defined on server
+// Editor option constants based on constants defined on server
 export const NONE = -1
 export const ID = 0
 export const JOSM = 1
 export const JOSM_LAYER = 2
 export const LEVEL0 = 3
+export const JOSM_FEATURES = 4
 
 /**
  * Supported names of properties used to identify an OSM entity associated with
  * a feature.
  */
-export const osmNodeIdentifiers = ['osmid', '@id', 'osmIdentifier']
+export const osmIdentifierFields = ['osmid', 'id', '@id', 'osmIdentifier']
 
 // Reference to open editor window
 let editorWindowReference = null
@@ -31,6 +32,7 @@ export const Editor = Object.freeze({
   id: ID,
   josm: JOSM,
   josmLayer: JOSM_LAYER,
+  josmFeatures: JOSM_FEATURES,
   level0: LEVEL0,
 })
 
@@ -76,17 +78,13 @@ export const editTask = function(editor, task, mapBounds) {
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
     }
-    else if (editor === JOSM || editor === JOSM_LAYER) {
-      openJOSM(dispatch,
-               editor,
-               task,
-               constructJosmURI(editor === JOSM_LAYER, task, mapBounds))
+    else if (isJosmEditor(editor)) {
+      const josmURIFunction =
+        editor === JOSM_FEATURES ? josmLoadObjectURI : josmLoadAndZoomURI
+
+      openJOSM(dispatch, editor, task, mapBounds, josmURIFunction)
     }
   }
-}
-
-export const isWebEditor = function(editor) {
-  return editor === ID || editor === LEVEL0
 }
 
 export const closeEditor = function() {
@@ -112,28 +110,28 @@ export const openEditor = function(state=null, action) {
   }
 }
 
-export const shortFeatureStrings = function(task) {
-  return _compact(task.geometries.features.map((feature) => {
-    const osmId = featureOSMId(feature)
-    if (!osmId) {
-      return null
-    }
+// Helper functions
 
-    switch (feature.geometry.type) {
-      case 'Point':
-        return `n${osmId}`
-      case 'LineString':
-        return `w${osmId}`
-      case 'Polygon':
-        return `w${osmId}`
-      case 'MultiPolygon':
-        return `r${osmId}`
-      default:
-        return null
-    }
-	}))
+/**
+ * Returns true if the given editor option represents a web editor, false
+ * otherwise
+ */
+export const isWebEditor = function(editor) {
+  return editor === ID || editor === LEVEL0
 }
 
+/**
+ * Returns true if the given editor option represents a variant of the
+ * JOSM editor, false if not
+ */
+export const isJosmEditor = function(editor) {
+  return editor === JOSM || editor === JOSM_LAYER || editor === JOSM_FEATURES
+}
+
+/**
+ * Returns the centerpoint of the given mapBounds if they are for the
+ * given task, or else computes and returns the task's centerpoint
+ */
 export const taskCenterPoint = function(mapBounds, task) {
   // If the mapbounds don't match the task, compute our own centerpoint.
   return mapBounds.taskId === task.id ?
@@ -141,6 +139,9 @@ export const taskCenterPoint = function(mapBounds, task) {
          AsMappableTask(task).calculateCenterPoint()
 }
 
+/**
+ * Builds a Id editor URI for editing of the given task
+ */
 export const constructIdURI = function(task, mapBounds) {
   const baseUriComponent =
     `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
@@ -149,7 +150,7 @@ export const constructIdURI = function(task, mapBounds) {
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
 
-  const idUriComponent = "id=" + shortFeatureStrings(task).join(',')
+  const idUriComponent = "id=" + osmObjectParams(task, true)
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
 
@@ -157,6 +158,9 @@ export const constructIdURI = function(task, mapBounds) {
          [idUriComponent, mapUriComponent, commentUriComponent].join('&')
 }
 
+/**
+ * Builds a Level0 editor URI for editing of the given task
+ */
 export const constructLevel0URI = function(task, mapBounds) {
   const baseUriComponent =
     `${process.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`
@@ -168,35 +172,22 @@ export const constructLevel0URI = function(task, mapBounds) {
   const commentComponent =
     "comment=" + encodeURIComponent(task.parent.checkinComment)
 
-  const urlComponent = "url=" + shortFeatureStrings(task).join(',')
+  const urlComponent = "url=" + osmObjectParams(task, true)
 
   return baseUriComponent +
          [mapCenterComponent, commentComponent, urlComponent].join('&')
 }
 
 /**
- * Builds a URI for the JOSM Remote Control plugin to load the given task
- * features and zoom to the given map bounds.
- *
- * @see See https://wiki.openstreetmap.org/wiki/JOSM/RemoteControl
+ * Extracts osm identifiers from the given task's features and returns
+ * them as a comma-separated string. Features with missing osm ids are
+ * skipped, and an empty string is returned if the task has no features
+ * or none of its features have osm ids
  */
-export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
-  // If the mapbounds don't match the task, compute our own bounds.
-  const bounds = mapBounds.taskId === task.id ?
-                 mapBounds.bounds :
-                 toLatLngBounds(AsMappableTask(task).calculateBBox())
-
-  const sw = bounds.getSouthWest()
-  const ne = bounds.getNorthEast()
-  let uri = `http://127.0.0.1:8111/load_and_zoom?left=${sw.lng}&right=${ne.lng}` +
-            `&top=${ne.lat}&bottom=${sw.lat}&new_layer=${asNewLayer ? 'true' : 'false'}` +
-            `&changeset_comment=${encodeURIComponent(task.parent.checkinComment)}` +
-            `&changeset_source=${encodeURIComponent(task.parent.checkinSource)}` +
-            `&select=`
-
-  let selects = []
+export const osmObjectParams = function(task, abbreviated=false) {
+  let objects = []
   if (task.geometries && task.geometries.features) {
-    selects = _compact(task.geometries.features.map((feature) => {
+    objects = _compact(task.geometries.features.map(feature => {
       const osmId = featureOSMId(feature)
       if (!osmId) {
         return null
@@ -204,23 +195,112 @@ export const constructJosmURI = function(asNewLayer = false, task, mapBounds) {
 
       switch (feature.geometry.type) {
         case 'Point':
-          return `node${osmId}`
+          return `${abbreviated ? 'n' : 'node'}${osmId}`
         case 'LineString':
-          return `way${osmId}`
         case 'Polygon':
-          return `way${osmId}`
+          return `${abbreviated ? 'w' : 'way'}${osmId}`
         case 'MultiPolygon':
-          return `relation${osmId}`
+          return `${abbreviated ? 'r' : 'relation'}${osmId}`
         default:
           return null
       }
     }))
   }
 
-  return uri + selects.join(',')
+  return objects.join(',')
 }
 
-const openJOSM = function(dispatch, editor, task, uri) {
+/**
+ * Return the JOSM editor host
+ */
+export const josmHost = function() {
+  return 'http://127.0.0.1:8111/'
+}
+
+/**
+ * Generate appropriate JOSM editor URI bbox params based on the given
+ * mapBounds, if they match the task, or else the computed bbox from the task
+ * itself
+ */
+export const josmBoundsParams = function(task, mapBounds) {
+  // If the mapbounds don't match the task, compute our own bounds.
+  const bounds = mapBounds.taskId === task.id ?
+                 mapBounds.bounds :
+                 toLatLngBounds(AsMappableTask(task).calculateBBox())
+
+  const sw = bounds.getSouthWest()
+  const ne = bounds.getNorthEast()
+  return `left=${sw.lng}&right=${ne.lng}&top=${ne.lat}&bottom=${sw.lat}`
+}
+
+/**
+ * Generate appropriate JOSM editor URI layer params for setting up a new layer, if
+ * desired, as well as naming the layer
+ */
+export const josmLayerParams = function(task, asNewLayer) {
+  return `new_layer=${asNewLayer ? 'true' : 'false'}&` +
+         `layer_name=${encodeURIComponent("Maproulette Task " + task.id)}`
+}
+
+/**
+ * Generate appropriate JOSM editor URI changeset params with the comment
+ * and source from the given task's challenge
+ */
+export const josmChangesetParams = function(task) {
+  return `changeset_comment=${encodeURIComponent(task.parent.checkinComment)}` +
+         `&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`
+}
+
+/*
+ * Builds a URI for the JOSM load_and_zoom remote control command
+ *
+ * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#load_and_zoom
+ */
+export const josmLoadAndZoomURI = function(dispatch, editor, task, mapBounds) {
+  return josmHost() + 'load_and_zoom?' + [
+    josmBoundsParams(task, mapBounds),
+    josmLayerParams(task, editor === JOSM_LAYER),
+    josmChangesetParams(task),
+    `select=${osmObjectParams(task)}`
+  ].join('&')
+}
+
+/*
+ * Builds a URI for the JOSM load_object remote control command, useful for loading
+ * just a task's features. If the task contains no features with OSM identifiers
+ * then an error is dispatched and null is returned
+ *
+ * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#load_object
+ */
+export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds) {
+  const objects = osmObjectParams(task)
+
+  // We can't load objects if there are none. This is usually because the
+  // task features are missing OSM ids
+  if (objects.length === 0) {
+    dispatch(addError(AppErrors.josm.missingOSMIds))
+    dispatch(editorOpened(editor, task.id, RequestStatus.error))
+    return null
+  }
+
+  return josmHost() + 'load_object?' + [
+    josmBoundsParams(task, mapBounds),
+    josmLayerParams(task, true),
+    josmChangesetParams(task),
+    `objects=${objects}`
+  ].join('&')
+}
+
+/**
+ * Execute an ajax request to open the JOSM editor. The given josmURIFunction
+ * will be invoked to generate the remote-control command URI
+ */
+const openJOSM = function(dispatch, editor, task, mapBounds, josmURIFunction) {
+  const uri = josmURIFunction(dispatch, editor, task, mapBounds)
+  if (!uri) {
+    return
+  }
+
   fetch(uri).then(response => {
     if (response.status === 200) {
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
@@ -230,27 +310,41 @@ const openJOSM = function(dispatch, editor, task, uri) {
       dispatch(editorOpened(editor, task.id, RequestStatus.error))
     }
   }).catch(error => {
+    // Could be no response, but could also be download too large or some other
+    // JOSM error
     dispatch(addError(AppErrors.josm.noResponse))
     dispatch(editorOpened(editor, task.id, RequestStatus.error))
   })
 }
 
 /**
- * Return an OSM id for the given feature, if available.
+ * Retrieve an OSM identifier for the given task feature, if available
  */
 export const featureOSMId = function(feature) {
-  if (!feature.properties) {
-    return null
-  }
+  // Identifiers can live on the feature itself or as a property
+  const osmId = firstTruthyValue(feature, osmIdentifierFields) ||
+                firstTruthyValue(feature.properties, osmIdentifierFields)
 
-  const osmIdProperty = _find(osmNodeIdentifiers, idName => feature.properties[idName])
-  const idValue = osmIdProperty ? feature.properties[osmIdProperty] : null
-  if (!idValue) {
+  if (!osmId) {
     return null
   }
 
   // id properties may contain additional information, such as a representation
-  // of the feature type. We want to return just the the numerical OSM id.
-  const match = /(\d+)/.exec(idValue)
+  // of the feature type. We want to return just the the numerical OSM id
+  const match = /(\d+)/.exec(osmId)
   return (match && match.length > 1) ? match[1] : null
+}
+
+/**
+ * Returns the first truthy value from the given object that is encountered a
+ * given acceptable key, which are attempted in order. If no truthy values are
+ * found, or if the given object is null/undefined, then undefined is returned.
+ */
+export const firstTruthyValue = function(object, acceptableKeys) {
+  if (!object) {
+    return undefined
+  }
+
+  const matchingKey = _find(acceptableKeys, key => object[key])
+  return matchingKey ? object[matchingKey] : undefined
 }

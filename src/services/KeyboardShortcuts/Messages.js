@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Edit in new JOSM layer",
   },
 
+  editJosmFeatures: {
+    id: "KeyMapping.openEditor.editJosmFeatures",
+    defaultMessage: "Edit just features in JOSM",
+  },
+
   editLevel0: {
     id: "KeyMapping.openEditor.editLevel0",
     defaultMessage: "Edit in Level0",
