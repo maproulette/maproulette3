@@ -34,6 +34,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -249,6 +256,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -462,6 +476,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -688,6 +709,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -863,6 +891,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -1026,6 +1061,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -1187,6 +1229,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -1356,6 +1405,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -1515,6 +1571,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -1672,6 +1735,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -1844,6 +1914,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -2007,6 +2084,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -2168,6 +2252,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -2337,6 +2428,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -2496,6 +2594,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -2653,6 +2758,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -2832,6 +2944,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -3007,6 +3126,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -3170,6 +3296,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -3331,6 +3464,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -3500,6 +3640,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -3659,6 +3806,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -3816,6 +3970,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -3988,6 +4149,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -4151,6 +4319,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -4312,6 +4487,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -4481,6 +4663,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -4640,6 +4829,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -4797,6 +4993,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -4976,6 +5179,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -5151,6 +5361,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -5314,6 +5531,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -5475,6 +5699,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -5644,6 +5875,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -5803,6 +6041,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -5960,6 +6205,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -6132,6 +6384,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -6295,6 +6554,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -6456,6 +6722,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -6625,6 +6898,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -6784,6 +7064,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -6941,6 +7228,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {

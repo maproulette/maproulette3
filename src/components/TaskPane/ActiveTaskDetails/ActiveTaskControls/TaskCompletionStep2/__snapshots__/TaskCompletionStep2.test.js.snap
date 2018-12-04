@@ -35,6 +35,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -204,6 +211,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -364,6 +378,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -529,6 +550,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -689,6 +717,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -858,6 +893,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -1027,6 +1069,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -1187,6 +1236,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -1352,6 +1408,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -1512,6 +1575,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -1681,6 +1751,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -1850,6 +1927,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -2010,6 +2094,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -2175,6 +2266,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -2335,6 +2433,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -2504,6 +2609,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -2673,6 +2785,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -2833,6 +2952,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -2998,6 +3124,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -3158,6 +3291,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -3336,6 +3476,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -3510,6 +3657,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -3671,6 +3825,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -3830,6 +3991,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -3994,6 +4162,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -4154,6 +4329,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -4321,161 +4503,11 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
-              "editJosmLayer": Object {
-                "key": "t",
+              "editJosmFeatures": Object {
+                "key": "y",
                 "label": Object {
-                  "defaultMessage": "Edit in new JOSM layer",
-                  "id": "KeyMapping.openEditor.editJosmLayer",
-                },
-              },
-              "editLevel0": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Edit in Level0",
-                  "id": "KeyMapping.openEditor.editLevel0",
-                },
-              },
-            },
-            "taskCompletion": Object {
-              "alreadyFixed": Object {
-                "key": "x",
-                "label": Object {
-                  "defaultMessage": "Already fixed",
-                  "id": "KeyMapping.taskCompletion.alreadyFixed",
-                },
-              },
-              "falsePositive": Object {
-                "key": "q",
-                "label": Object {
-                  "defaultMessage": "Not an Issue",
-                  "id": "KeyMapping.taskCompletion.falsePositive",
-                },
-              },
-              "fixed": Object {
-                "key": "f",
-                "label": Object {
-                  "defaultMessage": "I fixed it!",
-                  "id": "KeyMapping.taskCompletion.fixed",
-                },
-              },
-              "skip": Object {
-                "key": "w",
-                "label": Object {
-                  "defaultMessage": "Skip",
-                  "id": "KeyMapping.taskCompletion.skip",
-                },
-              },
-              "tooHard": Object {
-                "key": "d",
-                "label": Object {
-                  "defaultMessage": "Too difficult / Couldn't see",
-                  "id": "KeyMapping.taskCompletion.tooHard",
-                },
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": Object {
-                  "defaultMessage": "ESC",
-                  "id": "KeyMapping.taskEditing.escapeLabel",
-                },
-                "label": Object {
-                  "defaultMessage": "Cancel Editing",
-                  "id": "KeyMapping.taskEditing.cancel",
-                },
-              },
-              "fitBounds": Object {
-                "key": "0",
-                "label": Object {
-                  "defaultMessage": "Fit Map to Task Features",
-                  "id": "KeyMapping.taskEditing.fitBounds",
-                },
-              },
-            },
-            "taskReview": Object {
-              "nextTask": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Next Task",
-                  "id": "KeyMapping.taskReview.nextTask",
-                },
-              },
-              "prevTask": Object {
-                "key": "h",
-                "label": Object {
-                  "defaultMessage": "Previous Task",
-                  "id": "KeyMapping.taskReview.prevTask",
-                },
-              },
-            },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": Object {
-                  "defaultMessage": "Edit in Id",
-                  "id": "KeyMapping.openEditor.editId",
-                },
-              },
-              "editJosm": Object {
-                "key": "r",
-                "label": Object {
-                  "defaultMessage": "Edit in JOSM",
-                  "id": "KeyMapping.openEditor.editJosm",
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -4633,6 +4665,177 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "alreadyFixed": Object {
+                "key": "x",
+                "label": Object {
+                  "defaultMessage": "Already fixed",
+                  "id": "KeyMapping.taskCompletion.alreadyFixed",
+                },
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "fixed": Object {
+                "key": "f",
+                "label": Object {
+                  "defaultMessage": "I fixed it!",
+                  "id": "KeyMapping.taskCompletion.fixed",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+              "tooHard": Object {
+                "key": "d",
+                "label": Object {
+                  "defaultMessage": "Too difficult / Couldn't see",
+                  "id": "KeyMapping.taskCompletion.tooHard",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -4793,6 +4996,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -4949,6 +5159,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -5119,6 +5336,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -5280,6 +5504,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -5439,6 +5670,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -5603,6 +5841,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -5763,6 +6008,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -5930,161 +6182,11 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
-                "editJosmLayer": Object {
-                  "key": "t",
+                "editJosmFeatures": Object {
+                  "key": "y",
                   "label": Object {
-                    "defaultMessage": "Edit in new JOSM layer",
-                    "id": "KeyMapping.openEditor.editJosmLayer",
-                  },
-                },
-                "editLevel0": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Edit in Level0",
-                    "id": "KeyMapping.openEditor.editLevel0",
-                  },
-                },
-              },
-              "taskCompletion": Object {
-                "alreadyFixed": Object {
-                  "key": "x",
-                  "label": Object {
-                    "defaultMessage": "Already fixed",
-                    "id": "KeyMapping.taskCompletion.alreadyFixed",
-                  },
-                },
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": Object {
-                    "defaultMessage": "Not an Issue",
-                    "id": "KeyMapping.taskCompletion.falsePositive",
-                  },
-                },
-                "fixed": Object {
-                  "key": "f",
-                  "label": Object {
-                    "defaultMessage": "I fixed it!",
-                    "id": "KeyMapping.taskCompletion.fixed",
-                  },
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": Object {
-                    "defaultMessage": "Skip",
-                    "id": "KeyMapping.taskCompletion.skip",
-                  },
-                },
-                "tooHard": Object {
-                  "key": "d",
-                  "label": Object {
-                    "defaultMessage": "Too difficult / Couldn't see",
-                    "id": "KeyMapping.taskCompletion.tooHard",
-                  },
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": Object {
-                    "defaultMessage": "ESC",
-                    "id": "KeyMapping.taskEditing.escapeLabel",
-                  },
-                  "label": Object {
-                    "defaultMessage": "Cancel Editing",
-                    "id": "KeyMapping.taskEditing.cancel",
-                  },
-                },
-                "fitBounds": Object {
-                  "key": "0",
-                  "label": Object {
-                    "defaultMessage": "Fit Map to Task Features",
-                    "id": "KeyMapping.taskEditing.fitBounds",
-                  },
-                },
-              },
-              "taskReview": Object {
-                "nextTask": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Next Task",
-                    "id": "KeyMapping.taskReview.nextTask",
-                  },
-                },
-                "prevTask": Object {
-                  "key": "h",
-                  "label": Object {
-                    "defaultMessage": "Previous Task",
-                    "id": "KeyMapping.taskReview.prevTask",
-                  },
-                },
-              },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": Object {
-                    "defaultMessage": "Edit in Id",
-                    "id": "KeyMapping.openEditor.editId",
-                  },
-                },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": Object {
-                    "defaultMessage": "Edit in JOSM",
-                    "id": "KeyMapping.openEditor.editJosm",
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -6242,6 +6344,177 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "alreadyFixed": Object {
+                  "key": "x",
+                  "label": Object {
+                    "defaultMessage": "Already fixed",
+                    "id": "KeyMapping.taskCompletion.alreadyFixed",
+                  },
+                },
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "fixed": Object {
+                  "key": "f",
+                  "label": Object {
+                    "defaultMessage": "I fixed it!",
+                    "id": "KeyMapping.taskCompletion.fixed",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+                "tooHard": Object {
+                  "key": "d",
+                  "label": Object {
+                    "defaultMessage": "Too difficult / Couldn't see",
+                    "id": "KeyMapping.taskCompletion.tooHard",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -6402,6 +6675,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -6558,6 +6838,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -6736,6 +7023,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -6910,6 +7204,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -7071,6 +7372,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -7230,6 +7538,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -7394,6 +7709,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -7554,6 +7876,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -7721,161 +8050,11 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
-              "editJosmLayer": Object {
-                "key": "t",
+              "editJosmFeatures": Object {
+                "key": "y",
                 "label": Object {
-                  "defaultMessage": "Edit in new JOSM layer",
-                  "id": "KeyMapping.openEditor.editJosmLayer",
-                },
-              },
-              "editLevel0": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Edit in Level0",
-                  "id": "KeyMapping.openEditor.editLevel0",
-                },
-              },
-            },
-            "taskCompletion": Object {
-              "alreadyFixed": Object {
-                "key": "x",
-                "label": Object {
-                  "defaultMessage": "Already fixed",
-                  "id": "KeyMapping.taskCompletion.alreadyFixed",
-                },
-              },
-              "falsePositive": Object {
-                "key": "q",
-                "label": Object {
-                  "defaultMessage": "Not an Issue",
-                  "id": "KeyMapping.taskCompletion.falsePositive",
-                },
-              },
-              "fixed": Object {
-                "key": "f",
-                "label": Object {
-                  "defaultMessage": "I fixed it!",
-                  "id": "KeyMapping.taskCompletion.fixed",
-                },
-              },
-              "skip": Object {
-                "key": "w",
-                "label": Object {
-                  "defaultMessage": "Skip",
-                  "id": "KeyMapping.taskCompletion.skip",
-                },
-              },
-              "tooHard": Object {
-                "key": "d",
-                "label": Object {
-                  "defaultMessage": "Too difficult / Couldn't see",
-                  "id": "KeyMapping.taskCompletion.tooHard",
-                },
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": Object {
-                  "defaultMessage": "ESC",
-                  "id": "KeyMapping.taskEditing.escapeLabel",
-                },
-                "label": Object {
-                  "defaultMessage": "Cancel Editing",
-                  "id": "KeyMapping.taskEditing.cancel",
-                },
-              },
-              "fitBounds": Object {
-                "key": "0",
-                "label": Object {
-                  "defaultMessage": "Fit Map to Task Features",
-                  "id": "KeyMapping.taskEditing.fitBounds",
-                },
-              },
-            },
-            "taskReview": Object {
-              "nextTask": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Next Task",
-                  "id": "KeyMapping.taskReview.nextTask",
-                },
-              },
-              "prevTask": Object {
-                "key": "h",
-                "label": Object {
-                  "defaultMessage": "Previous Task",
-                  "id": "KeyMapping.taskReview.prevTask",
-                },
-              },
-            },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": Object {
-                  "defaultMessage": "Edit in Id",
-                  "id": "KeyMapping.openEditor.editId",
-                },
-              },
-              "editJosm": Object {
-                "key": "r",
-                "label": Object {
-                  "defaultMessage": "Edit in JOSM",
-                  "id": "KeyMapping.openEditor.editJosm",
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -8033,6 +8212,177 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "alreadyFixed": Object {
+                "key": "x",
+                "label": Object {
+                  "defaultMessage": "Already fixed",
+                  "id": "KeyMapping.taskCompletion.alreadyFixed",
+                },
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "fixed": Object {
+                "key": "f",
+                "label": Object {
+                  "defaultMessage": "I fixed it!",
+                  "id": "KeyMapping.taskCompletion.fixed",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+              "tooHard": Object {
+                "key": "d",
+                "label": Object {
+                  "defaultMessage": "Too difficult / Couldn't see",
+                  "id": "KeyMapping.taskCompletion.tooHard",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -8193,6 +8543,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -8349,6 +8706,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -8519,6 +8883,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -8680,6 +9051,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -8839,6 +9217,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -9003,6 +9388,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -9163,6 +9555,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -9330,161 +9729,11 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
-                "editJosmLayer": Object {
-                  "key": "t",
+                "editJosmFeatures": Object {
+                  "key": "y",
                   "label": Object {
-                    "defaultMessage": "Edit in new JOSM layer",
-                    "id": "KeyMapping.openEditor.editJosmLayer",
-                  },
-                },
-                "editLevel0": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Edit in Level0",
-                    "id": "KeyMapping.openEditor.editLevel0",
-                  },
-                },
-              },
-              "taskCompletion": Object {
-                "alreadyFixed": Object {
-                  "key": "x",
-                  "label": Object {
-                    "defaultMessage": "Already fixed",
-                    "id": "KeyMapping.taskCompletion.alreadyFixed",
-                  },
-                },
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": Object {
-                    "defaultMessage": "Not an Issue",
-                    "id": "KeyMapping.taskCompletion.falsePositive",
-                  },
-                },
-                "fixed": Object {
-                  "key": "f",
-                  "label": Object {
-                    "defaultMessage": "I fixed it!",
-                    "id": "KeyMapping.taskCompletion.fixed",
-                  },
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": Object {
-                    "defaultMessage": "Skip",
-                    "id": "KeyMapping.taskCompletion.skip",
-                  },
-                },
-                "tooHard": Object {
-                  "key": "d",
-                  "label": Object {
-                    "defaultMessage": "Too difficult / Couldn't see",
-                    "id": "KeyMapping.taskCompletion.tooHard",
-                  },
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": Object {
-                    "defaultMessage": "ESC",
-                    "id": "KeyMapping.taskEditing.escapeLabel",
-                  },
-                  "label": Object {
-                    "defaultMessage": "Cancel Editing",
-                    "id": "KeyMapping.taskEditing.cancel",
-                  },
-                },
-                "fitBounds": Object {
-                  "key": "0",
-                  "label": Object {
-                    "defaultMessage": "Fit Map to Task Features",
-                    "id": "KeyMapping.taskEditing.fitBounds",
-                  },
-                },
-              },
-              "taskReview": Object {
-                "nextTask": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Next Task",
-                    "id": "KeyMapping.taskReview.nextTask",
-                  },
-                },
-                "prevTask": Object {
-                  "key": "h",
-                  "label": Object {
-                    "defaultMessage": "Previous Task",
-                    "id": "KeyMapping.taskReview.prevTask",
-                  },
-                },
-              },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": Object {
-                    "defaultMessage": "Edit in Id",
-                    "id": "KeyMapping.openEditor.editId",
-                  },
-                },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": Object {
-                    "defaultMessage": "Edit in JOSM",
-                    "id": "KeyMapping.openEditor.editJosm",
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -9642,6 +9891,177 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "alreadyFixed": Object {
+                  "key": "x",
+                  "label": Object {
+                    "defaultMessage": "Already fixed",
+                    "id": "KeyMapping.taskCompletion.alreadyFixed",
+                  },
+                },
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "fixed": Object {
+                  "key": "f",
+                  "label": Object {
+                    "defaultMessage": "I fixed it!",
+                    "id": "KeyMapping.taskCompletion.fixed",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+                "tooHard": Object {
+                  "key": "d",
+                  "label": Object {
+                    "defaultMessage": "Too difficult / Couldn't see",
+                    "id": "KeyMapping.taskCompletion.tooHard",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -9802,6 +10222,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -9958,6 +10385,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -10136,6 +10570,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -10310,6 +10751,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -10471,6 +10919,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -10630,6 +11085,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -10794,6 +11256,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -10954,6 +11423,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -11121,161 +11597,11 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
-              "editJosmLayer": Object {
-                "key": "t",
+              "editJosmFeatures": Object {
+                "key": "y",
                 "label": Object {
-                  "defaultMessage": "Edit in new JOSM layer",
-                  "id": "KeyMapping.openEditor.editJosmLayer",
-                },
-              },
-              "editLevel0": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Edit in Level0",
-                  "id": "KeyMapping.openEditor.editLevel0",
-                },
-              },
-            },
-            "taskCompletion": Object {
-              "alreadyFixed": Object {
-                "key": "x",
-                "label": Object {
-                  "defaultMessage": "Already fixed",
-                  "id": "KeyMapping.taskCompletion.alreadyFixed",
-                },
-              },
-              "falsePositive": Object {
-                "key": "q",
-                "label": Object {
-                  "defaultMessage": "Not an Issue",
-                  "id": "KeyMapping.taskCompletion.falsePositive",
-                },
-              },
-              "fixed": Object {
-                "key": "f",
-                "label": Object {
-                  "defaultMessage": "I fixed it!",
-                  "id": "KeyMapping.taskCompletion.fixed",
-                },
-              },
-              "skip": Object {
-                "key": "w",
-                "label": Object {
-                  "defaultMessage": "Skip",
-                  "id": "KeyMapping.taskCompletion.skip",
-                },
-              },
-              "tooHard": Object {
-                "key": "d",
-                "label": Object {
-                  "defaultMessage": "Too difficult / Couldn't see",
-                  "id": "KeyMapping.taskCompletion.tooHard",
-                },
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": Object {
-                  "defaultMessage": "ESC",
-                  "id": "KeyMapping.taskEditing.escapeLabel",
-                },
-                "label": Object {
-                  "defaultMessage": "Cancel Editing",
-                  "id": "KeyMapping.taskEditing.cancel",
-                },
-              },
-              "fitBounds": Object {
-                "key": "0",
-                "label": Object {
-                  "defaultMessage": "Fit Map to Task Features",
-                  "id": "KeyMapping.taskEditing.fitBounds",
-                },
-              },
-            },
-            "taskReview": Object {
-              "nextTask": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Next Task",
-                  "id": "KeyMapping.taskReview.nextTask",
-                },
-              },
-              "prevTask": Object {
-                "key": "h",
-                "label": Object {
-                  "defaultMessage": "Previous Task",
-                  "id": "KeyMapping.taskReview.prevTask",
-                },
-              },
-            },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": Object {
-                  "defaultMessage": "Edit in Id",
-                  "id": "KeyMapping.openEditor.editId",
-                },
-              },
-              "editJosm": Object {
-                "key": "r",
-                "label": Object {
-                  "defaultMessage": "Edit in JOSM",
-                  "id": "KeyMapping.openEditor.editJosm",
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -11433,6 +11759,177 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "alreadyFixed": Object {
+                "key": "x",
+                "label": Object {
+                  "defaultMessage": "Already fixed",
+                  "id": "KeyMapping.taskCompletion.alreadyFixed",
+                },
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "fixed": Object {
+                "key": "f",
+                "label": Object {
+                  "defaultMessage": "I fixed it!",
+                  "id": "KeyMapping.taskCompletion.fixed",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+              "tooHard": Object {
+                "key": "d",
+                "label": Object {
+                  "defaultMessage": "Too difficult / Couldn't see",
+                  "id": "KeyMapping.taskCompletion.tooHard",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -11593,6 +12090,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -11749,6 +12253,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -11919,6 +12430,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -12080,6 +12598,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -12239,6 +12764,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -12403,6 +12935,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -12563,6 +13102,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -12730,161 +13276,11 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
-                "editJosmLayer": Object {
-                  "key": "t",
+                "editJosmFeatures": Object {
+                  "key": "y",
                   "label": Object {
-                    "defaultMessage": "Edit in new JOSM layer",
-                    "id": "KeyMapping.openEditor.editJosmLayer",
-                  },
-                },
-                "editLevel0": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Edit in Level0",
-                    "id": "KeyMapping.openEditor.editLevel0",
-                  },
-                },
-              },
-              "taskCompletion": Object {
-                "alreadyFixed": Object {
-                  "key": "x",
-                  "label": Object {
-                    "defaultMessage": "Already fixed",
-                    "id": "KeyMapping.taskCompletion.alreadyFixed",
-                  },
-                },
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": Object {
-                    "defaultMessage": "Not an Issue",
-                    "id": "KeyMapping.taskCompletion.falsePositive",
-                  },
-                },
-                "fixed": Object {
-                  "key": "f",
-                  "label": Object {
-                    "defaultMessage": "I fixed it!",
-                    "id": "KeyMapping.taskCompletion.fixed",
-                  },
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": Object {
-                    "defaultMessage": "Skip",
-                    "id": "KeyMapping.taskCompletion.skip",
-                  },
-                },
-                "tooHard": Object {
-                  "key": "d",
-                  "label": Object {
-                    "defaultMessage": "Too difficult / Couldn't see",
-                    "id": "KeyMapping.taskCompletion.tooHard",
-                  },
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": Object {
-                    "defaultMessage": "ESC",
-                    "id": "KeyMapping.taskEditing.escapeLabel",
-                  },
-                  "label": Object {
-                    "defaultMessage": "Cancel Editing",
-                    "id": "KeyMapping.taskEditing.cancel",
-                  },
-                },
-                "fitBounds": Object {
-                  "key": "0",
-                  "label": Object {
-                    "defaultMessage": "Fit Map to Task Features",
-                    "id": "KeyMapping.taskEditing.fitBounds",
-                  },
-                },
-              },
-              "taskReview": Object {
-                "nextTask": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Next Task",
-                    "id": "KeyMapping.taskReview.nextTask",
-                  },
-                },
-                "prevTask": Object {
-                  "key": "h",
-                  "label": Object {
-                    "defaultMessage": "Previous Task",
-                    "id": "KeyMapping.taskReview.prevTask",
-                  },
-                },
-              },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": Object {
-                    "defaultMessage": "Edit in Id",
-                    "id": "KeyMapping.openEditor.editId",
-                  },
-                },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": Object {
-                    "defaultMessage": "Edit in JOSM",
-                    "id": "KeyMapping.openEditor.editJosm",
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -13042,6 +13438,177 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "alreadyFixed": Object {
+                  "key": "x",
+                  "label": Object {
+                    "defaultMessage": "Already fixed",
+                    "id": "KeyMapping.taskCompletion.alreadyFixed",
+                  },
+                },
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "fixed": Object {
+                  "key": "f",
+                  "label": Object {
+                    "defaultMessage": "I fixed it!",
+                    "id": "KeyMapping.taskCompletion.fixed",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+                "tooHard": Object {
+                  "key": "d",
+                  "label": Object {
+                    "defaultMessage": "Too difficult / Couldn't see",
+                    "id": "KeyMapping.taskCompletion.tooHard",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -13202,6 +13769,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -13358,6 +13932,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -13536,6 +14117,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -13710,6 +14298,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -13871,6 +14466,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -14030,6 +14632,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -14194,6 +14803,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -14354,6 +14970,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -14521,161 +15144,11 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
-              "editJosmLayer": Object {
-                "key": "t",
+              "editJosmFeatures": Object {
+                "key": "y",
                 "label": Object {
-                  "defaultMessage": "Edit in new JOSM layer",
-                  "id": "KeyMapping.openEditor.editJosmLayer",
-                },
-              },
-              "editLevel0": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Edit in Level0",
-                  "id": "KeyMapping.openEditor.editLevel0",
-                },
-              },
-            },
-            "taskCompletion": Object {
-              "alreadyFixed": Object {
-                "key": "x",
-                "label": Object {
-                  "defaultMessage": "Already fixed",
-                  "id": "KeyMapping.taskCompletion.alreadyFixed",
-                },
-              },
-              "falsePositive": Object {
-                "key": "q",
-                "label": Object {
-                  "defaultMessage": "Not an Issue",
-                  "id": "KeyMapping.taskCompletion.falsePositive",
-                },
-              },
-              "fixed": Object {
-                "key": "f",
-                "label": Object {
-                  "defaultMessage": "I fixed it!",
-                  "id": "KeyMapping.taskCompletion.fixed",
-                },
-              },
-              "skip": Object {
-                "key": "w",
-                "label": Object {
-                  "defaultMessage": "Skip",
-                  "id": "KeyMapping.taskCompletion.skip",
-                },
-              },
-              "tooHard": Object {
-                "key": "d",
-                "label": Object {
-                  "defaultMessage": "Too difficult / Couldn't see",
-                  "id": "KeyMapping.taskCompletion.tooHard",
-                },
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": Object {
-                  "defaultMessage": "ESC",
-                  "id": "KeyMapping.taskEditing.escapeLabel",
-                },
-                "label": Object {
-                  "defaultMessage": "Cancel Editing",
-                  "id": "KeyMapping.taskEditing.cancel",
-                },
-              },
-              "fitBounds": Object {
-                "key": "0",
-                "label": Object {
-                  "defaultMessage": "Fit Map to Task Features",
-                  "id": "KeyMapping.taskEditing.fitBounds",
-                },
-              },
-            },
-            "taskReview": Object {
-              "nextTask": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Next Task",
-                  "id": "KeyMapping.taskReview.nextTask",
-                },
-              },
-              "prevTask": Object {
-                "key": "h",
-                "label": Object {
-                  "defaultMessage": "Previous Task",
-                  "id": "KeyMapping.taskReview.prevTask",
-                },
-              },
-            },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": Object {
-                  "defaultMessage": "Edit in Id",
-                  "id": "KeyMapping.openEditor.editId",
-                },
-              },
-              "editJosm": Object {
-                "key": "r",
-                "label": Object {
-                  "defaultMessage": "Edit in JOSM",
-                  "id": "KeyMapping.openEditor.editJosm",
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -14833,6 +15306,177 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "alreadyFixed": Object {
+                "key": "x",
+                "label": Object {
+                  "defaultMessage": "Already fixed",
+                  "id": "KeyMapping.taskCompletion.alreadyFixed",
+                },
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "fixed": Object {
+                "key": "f",
+                "label": Object {
+                  "defaultMessage": "I fixed it!",
+                  "id": "KeyMapping.taskCompletion.fixed",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+              "tooHard": Object {
+                "key": "d",
+                "label": Object {
+                  "defaultMessage": "Too difficult / Couldn't see",
+                  "id": "KeyMapping.taskCompletion.tooHard",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -14993,6 +15637,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -15149,6 +15800,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -15319,6 +15977,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -15480,6 +16145,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -15639,6 +16311,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -15803,6 +16482,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -15963,6 +16649,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -16130,161 +16823,11 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
-                "editJosmLayer": Object {
-                  "key": "t",
+                "editJosmFeatures": Object {
+                  "key": "y",
                   "label": Object {
-                    "defaultMessage": "Edit in new JOSM layer",
-                    "id": "KeyMapping.openEditor.editJosmLayer",
-                  },
-                },
-                "editLevel0": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Edit in Level0",
-                    "id": "KeyMapping.openEditor.editLevel0",
-                  },
-                },
-              },
-              "taskCompletion": Object {
-                "alreadyFixed": Object {
-                  "key": "x",
-                  "label": Object {
-                    "defaultMessage": "Already fixed",
-                    "id": "KeyMapping.taskCompletion.alreadyFixed",
-                  },
-                },
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": Object {
-                    "defaultMessage": "Not an Issue",
-                    "id": "KeyMapping.taskCompletion.falsePositive",
-                  },
-                },
-                "fixed": Object {
-                  "key": "f",
-                  "label": Object {
-                    "defaultMessage": "I fixed it!",
-                    "id": "KeyMapping.taskCompletion.fixed",
-                  },
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": Object {
-                    "defaultMessage": "Skip",
-                    "id": "KeyMapping.taskCompletion.skip",
-                  },
-                },
-                "tooHard": Object {
-                  "key": "d",
-                  "label": Object {
-                    "defaultMessage": "Too difficult / Couldn't see",
-                    "id": "KeyMapping.taskCompletion.tooHard",
-                  },
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": Object {
-                    "defaultMessage": "ESC",
-                    "id": "KeyMapping.taskEditing.escapeLabel",
-                  },
-                  "label": Object {
-                    "defaultMessage": "Cancel Editing",
-                    "id": "KeyMapping.taskEditing.cancel",
-                  },
-                },
-                "fitBounds": Object {
-                  "key": "0",
-                  "label": Object {
-                    "defaultMessage": "Fit Map to Task Features",
-                    "id": "KeyMapping.taskEditing.fitBounds",
-                  },
-                },
-              },
-              "taskReview": Object {
-                "nextTask": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Next Task",
-                    "id": "KeyMapping.taskReview.nextTask",
-                  },
-                },
-                "prevTask": Object {
-                  "key": "h",
-                  "label": Object {
-                    "defaultMessage": "Previous Task",
-                    "id": "KeyMapping.taskReview.prevTask",
-                  },
-                },
-              },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": Object {
-                    "defaultMessage": "Edit in Id",
-                    "id": "KeyMapping.openEditor.editId",
-                  },
-                },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": Object {
-                    "defaultMessage": "Edit in JOSM",
-                    "id": "KeyMapping.openEditor.editJosm",
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -16442,6 +16985,177 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "alreadyFixed": Object {
+                  "key": "x",
+                  "label": Object {
+                    "defaultMessage": "Already fixed",
+                    "id": "KeyMapping.taskCompletion.alreadyFixed",
+                  },
+                },
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "fixed": Object {
+                  "key": "f",
+                  "label": Object {
+                    "defaultMessage": "I fixed it!",
+                    "id": "KeyMapping.taskCompletion.fixed",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+                "tooHard": Object {
+                  "key": "d",
+                  "label": Object {
+                    "defaultMessage": "Too difficult / Couldn't see",
+                    "id": "KeyMapping.taskCompletion.tooHard",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -16602,6 +17316,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -16758,6 +17479,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -16936,6 +17664,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -17110,6 +17845,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -17271,6 +18013,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -17430,6 +18179,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -17594,6 +18350,13 @@ ShallowWrapper {
                                     "id": "KeyMapping.openEditor.editJosm",
                                   },
                                 },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                                  },
+                                },
                                 "editJosmLayer": Object {
                                   "key": "t",
                                   "label": Object {
@@ -17754,6 +18517,13 @@ ShallowWrapper {
                                   "label": Object {
                                     "defaultMessage": "Edit in JOSM",
                                     "id": "KeyMapping.openEditor.editJosm",
+                                  },
+                                },
+                                "editJosmFeatures": Object {
+                                  "key": "y",
+                                  "label": Object {
+                                    "defaultMessage": "Edit just features in JOSM",
+                                    "id": "KeyMapping.openEditor.editJosmFeatures",
                                   },
                                 },
                                 "editJosmLayer": Object {
@@ -17921,161 +18691,11 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
-              "editJosmLayer": Object {
-                "key": "t",
+              "editJosmFeatures": Object {
+                "key": "y",
                 "label": Object {
-                  "defaultMessage": "Edit in new JOSM layer",
-                  "id": "KeyMapping.openEditor.editJosmLayer",
-                },
-              },
-              "editLevel0": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Edit in Level0",
-                  "id": "KeyMapping.openEditor.editLevel0",
-                },
-              },
-            },
-            "taskCompletion": Object {
-              "alreadyFixed": Object {
-                "key": "x",
-                "label": Object {
-                  "defaultMessage": "Already fixed",
-                  "id": "KeyMapping.taskCompletion.alreadyFixed",
-                },
-              },
-              "falsePositive": Object {
-                "key": "q",
-                "label": Object {
-                  "defaultMessage": "Not an Issue",
-                  "id": "KeyMapping.taskCompletion.falsePositive",
-                },
-              },
-              "fixed": Object {
-                "key": "f",
-                "label": Object {
-                  "defaultMessage": "I fixed it!",
-                  "id": "KeyMapping.taskCompletion.fixed",
-                },
-              },
-              "skip": Object {
-                "key": "w",
-                "label": Object {
-                  "defaultMessage": "Skip",
-                  "id": "KeyMapping.taskCompletion.skip",
-                },
-              },
-              "tooHard": Object {
-                "key": "d",
-                "label": Object {
-                  "defaultMessage": "Too difficult / Couldn't see",
-                  "id": "KeyMapping.taskCompletion.tooHard",
-                },
-              },
-            },
-            "taskEditing": Object {
-              "cancel": Object {
-                "key": "Escape",
-                "keyLabel": Object {
-                  "defaultMessage": "ESC",
-                  "id": "KeyMapping.taskEditing.escapeLabel",
-                },
-                "label": Object {
-                  "defaultMessage": "Cancel Editing",
-                  "id": "KeyMapping.taskEditing.cancel",
-                },
-              },
-              "fitBounds": Object {
-                "key": "0",
-                "label": Object {
-                  "defaultMessage": "Fit Map to Task Features",
-                  "id": "KeyMapping.taskEditing.fitBounds",
-                },
-              },
-            },
-            "taskReview": Object {
-              "nextTask": Object {
-                "key": "l",
-                "label": Object {
-                  "defaultMessage": "Next Task",
-                  "id": "KeyMapping.taskReview.nextTask",
-                },
-              },
-              "prevTask": Object {
-                "key": "h",
-                "label": Object {
-                  "defaultMessage": "Previous Task",
-                  "id": "KeyMapping.taskReview.prevTask",
-                },
-              },
-            },
-          },
-          "mapBounds": Object {
-            "task": Object {
-              "bounds": Array [
-                0,
-                0,
-                0,
-                0,
-              ],
-            },
-          },
-          "task": Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          },
-          "user": Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "settings": Object {
-              "defaultEditor": 1,
-            },
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "activateKeyboardShortcut": [Function],
-          "activateKeyboardShortcutGroup": [Function],
-          "allowedProgressions": Set {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-          },
-          "cancelEditing": [Function],
-          "comment": "Foo",
-          "complete": [Function],
-          "deactivateKeyboardShortcut": [Function],
-          "deactivateKeyboardShortcutGroup": [Function],
-          "intl": Object {
-            "formatMessage": [Function],
-          },
-          "keyboardShortcutGroups": Object {
-            "openEditor": Object {
-              "editId": Object {
-                "key": "e",
-                "label": Object {
-                  "defaultMessage": "Edit in Id",
-                  "id": "KeyMapping.openEditor.editId",
-                },
-              },
-              "editJosm": Object {
-                "key": "r",
-                "label": Object {
-                  "defaultMessage": "Edit in JOSM",
-                  "id": "KeyMapping.openEditor.editJosm",
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -18233,6 +18853,177 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
+              "editJosmLayer": Object {
+                "key": "t",
+                "label": Object {
+                  "defaultMessage": "Edit in new JOSM layer",
+                  "id": "KeyMapping.openEditor.editJosmLayer",
+                },
+              },
+              "editLevel0": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Edit in Level0",
+                  "id": "KeyMapping.openEditor.editLevel0",
+                },
+              },
+            },
+            "taskCompletion": Object {
+              "alreadyFixed": Object {
+                "key": "x",
+                "label": Object {
+                  "defaultMessage": "Already fixed",
+                  "id": "KeyMapping.taskCompletion.alreadyFixed",
+                },
+              },
+              "falsePositive": Object {
+                "key": "q",
+                "label": Object {
+                  "defaultMessage": "Not an Issue",
+                  "id": "KeyMapping.taskCompletion.falsePositive",
+                },
+              },
+              "fixed": Object {
+                "key": "f",
+                "label": Object {
+                  "defaultMessage": "I fixed it!",
+                  "id": "KeyMapping.taskCompletion.fixed",
+                },
+              },
+              "skip": Object {
+                "key": "w",
+                "label": Object {
+                  "defaultMessage": "Skip",
+                  "id": "KeyMapping.taskCompletion.skip",
+                },
+              },
+              "tooHard": Object {
+                "key": "d",
+                "label": Object {
+                  "defaultMessage": "Too difficult / Couldn't see",
+                  "id": "KeyMapping.taskCompletion.tooHard",
+                },
+              },
+            },
+            "taskEditing": Object {
+              "cancel": Object {
+                "key": "Escape",
+                "keyLabel": Object {
+                  "defaultMessage": "ESC",
+                  "id": "KeyMapping.taskEditing.escapeLabel",
+                },
+                "label": Object {
+                  "defaultMessage": "Cancel Editing",
+                  "id": "KeyMapping.taskEditing.cancel",
+                },
+              },
+              "fitBounds": Object {
+                "key": "0",
+                "label": Object {
+                  "defaultMessage": "Fit Map to Task Features",
+                  "id": "KeyMapping.taskEditing.fitBounds",
+                },
+              },
+            },
+            "taskReview": Object {
+              "nextTask": Object {
+                "key": "l",
+                "label": Object {
+                  "defaultMessage": "Next Task",
+                  "id": "KeyMapping.taskReview.nextTask",
+                },
+              },
+              "prevTask": Object {
+                "key": "h",
+                "label": Object {
+                  "defaultMessage": "Previous Task",
+                  "id": "KeyMapping.taskReview.prevTask",
+                },
+              },
+            },
+          },
+          "mapBounds": Object {
+            "task": Object {
+              "bounds": Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+            },
+          },
+          "task": Object {
+            "id": 123,
+            "parent": Object {
+              "id": 321,
+            },
+            "status": 0,
+          },
+          "user": Object {
+            "id": 357,
+            "isLoggedIn": true,
+            "settings": Object {
+              "defaultEditor": 1,
+            },
+          },
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "activateKeyboardShortcut": [Function],
+          "activateKeyboardShortcutGroup": [Function],
+          "allowedProgressions": Set {
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+          },
+          "cancelEditing": [Function],
+          "comment": "Foo",
+          "complete": [Function],
+          "deactivateKeyboardShortcut": [Function],
+          "deactivateKeyboardShortcutGroup": [Function],
+          "intl": Object {
+            "formatMessage": [Function],
+          },
+          "keyboardShortcutGroups": Object {
+            "openEditor": Object {
+              "editId": Object {
+                "key": "e",
+                "label": Object {
+                  "defaultMessage": "Edit in Id",
+                  "id": "KeyMapping.openEditor.editId",
+                },
+              },
+              "editJosm": Object {
+                "key": "r",
+                "label": Object {
+                  "defaultMessage": "Edit in JOSM",
+                  "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -18393,6 +19184,13 @@ ShallowWrapper {
                   "id": "KeyMapping.openEditor.editJosm",
                 },
               },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
+                },
+              },
               "editJosmLayer": Object {
                 "key": "t",
                 "label": Object {
@@ -18549,6 +19347,13 @@ ShallowWrapper {
                 "label": Object {
                   "defaultMessage": "Edit in JOSM",
                   "id": "KeyMapping.openEditor.editJosm",
+                },
+              },
+              "editJosmFeatures": Object {
+                "key": "y",
+                "label": Object {
+                  "defaultMessage": "Edit just features in JOSM",
+                  "id": "KeyMapping.openEditor.editJosmFeatures",
                 },
               },
               "editJosmLayer": Object {
@@ -18719,6 +19524,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -18880,6 +19692,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -19039,6 +19858,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -19203,6 +20029,13 @@ ShallowWrapper {
                                           "id": "KeyMapping.openEditor.editJosm",
                                         },
                                       },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
+                                        },
+                                      },
                                       "editJosmLayer": Object {
                                         "key": "t",
                                         "label": Object {
@@ -19363,6 +20196,13 @@ ShallowWrapper {
                                         "label": Object {
                                           "defaultMessage": "Edit in JOSM",
                                           "id": "KeyMapping.openEditor.editJosm",
+                                        },
+                                      },
+                                      "editJosmFeatures": Object {
+                                        "key": "y",
+                                        "label": Object {
+                                          "defaultMessage": "Edit just features in JOSM",
+                                          "id": "KeyMapping.openEditor.editJosmFeatures",
                                         },
                                       },
                                       "editJosmLayer": Object {
@@ -19530,161 +20370,11 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
-                "editJosmLayer": Object {
-                  "key": "t",
+                "editJosmFeatures": Object {
+                  "key": "y",
                   "label": Object {
-                    "defaultMessage": "Edit in new JOSM layer",
-                    "id": "KeyMapping.openEditor.editJosmLayer",
-                  },
-                },
-                "editLevel0": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Edit in Level0",
-                    "id": "KeyMapping.openEditor.editLevel0",
-                  },
-                },
-              },
-              "taskCompletion": Object {
-                "alreadyFixed": Object {
-                  "key": "x",
-                  "label": Object {
-                    "defaultMessage": "Already fixed",
-                    "id": "KeyMapping.taskCompletion.alreadyFixed",
-                  },
-                },
-                "falsePositive": Object {
-                  "key": "q",
-                  "label": Object {
-                    "defaultMessage": "Not an Issue",
-                    "id": "KeyMapping.taskCompletion.falsePositive",
-                  },
-                },
-                "fixed": Object {
-                  "key": "f",
-                  "label": Object {
-                    "defaultMessage": "I fixed it!",
-                    "id": "KeyMapping.taskCompletion.fixed",
-                  },
-                },
-                "skip": Object {
-                  "key": "w",
-                  "label": Object {
-                    "defaultMessage": "Skip",
-                    "id": "KeyMapping.taskCompletion.skip",
-                  },
-                },
-                "tooHard": Object {
-                  "key": "d",
-                  "label": Object {
-                    "defaultMessage": "Too difficult / Couldn't see",
-                    "id": "KeyMapping.taskCompletion.tooHard",
-                  },
-                },
-              },
-              "taskEditing": Object {
-                "cancel": Object {
-                  "key": "Escape",
-                  "keyLabel": Object {
-                    "defaultMessage": "ESC",
-                    "id": "KeyMapping.taskEditing.escapeLabel",
-                  },
-                  "label": Object {
-                    "defaultMessage": "Cancel Editing",
-                    "id": "KeyMapping.taskEditing.cancel",
-                  },
-                },
-                "fitBounds": Object {
-                  "key": "0",
-                  "label": Object {
-                    "defaultMessage": "Fit Map to Task Features",
-                    "id": "KeyMapping.taskEditing.fitBounds",
-                  },
-                },
-              },
-              "taskReview": Object {
-                "nextTask": Object {
-                  "key": "l",
-                  "label": Object {
-                    "defaultMessage": "Next Task",
-                    "id": "KeyMapping.taskReview.nextTask",
-                  },
-                },
-                "prevTask": Object {
-                  "key": "h",
-                  "label": Object {
-                    "defaultMessage": "Previous Task",
-                    "id": "KeyMapping.taskReview.prevTask",
-                  },
-                },
-              },
-            },
-            "mapBounds": Object {
-              "task": Object {
-                "bounds": Array [
-                  0,
-                  0,
-                  0,
-                  0,
-                ],
-              },
-            },
-            "task": Object {
-              "id": 123,
-              "parent": Object {
-                "id": 321,
-              },
-              "status": 0,
-            },
-            "user": Object {
-              "id": 357,
-              "isLoggedIn": true,
-              "settings": Object {
-                "defaultEditor": 1,
-              },
-            },
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "activateKeyboardShortcut": [Function],
-            "activateKeyboardShortcutGroup": [Function],
-            "allowedProgressions": Set {
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-            },
-            "cancelEditing": [Function],
-            "comment": "Foo",
-            "complete": [Function],
-            "deactivateKeyboardShortcut": [Function],
-            "deactivateKeyboardShortcutGroup": [Function],
-            "intl": Object {
-              "formatMessage": [Function],
-            },
-            "keyboardShortcutGroups": Object {
-              "openEditor": Object {
-                "editId": Object {
-                  "key": "e",
-                  "label": Object {
-                    "defaultMessage": "Edit in Id",
-                    "id": "KeyMapping.openEditor.editId",
-                  },
-                },
-                "editJosm": Object {
-                  "key": "r",
-                  "label": Object {
-                    "defaultMessage": "Edit in JOSM",
-                    "id": "KeyMapping.openEditor.editJosm",
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -19842,6 +20532,177 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
+                "editJosmLayer": Object {
+                  "key": "t",
+                  "label": Object {
+                    "defaultMessage": "Edit in new JOSM layer",
+                    "id": "KeyMapping.openEditor.editJosmLayer",
+                  },
+                },
+                "editLevel0": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Edit in Level0",
+                    "id": "KeyMapping.openEditor.editLevel0",
+                  },
+                },
+              },
+              "taskCompletion": Object {
+                "alreadyFixed": Object {
+                  "key": "x",
+                  "label": Object {
+                    "defaultMessage": "Already fixed",
+                    "id": "KeyMapping.taskCompletion.alreadyFixed",
+                  },
+                },
+                "falsePositive": Object {
+                  "key": "q",
+                  "label": Object {
+                    "defaultMessage": "Not an Issue",
+                    "id": "KeyMapping.taskCompletion.falsePositive",
+                  },
+                },
+                "fixed": Object {
+                  "key": "f",
+                  "label": Object {
+                    "defaultMessage": "I fixed it!",
+                    "id": "KeyMapping.taskCompletion.fixed",
+                  },
+                },
+                "skip": Object {
+                  "key": "w",
+                  "label": Object {
+                    "defaultMessage": "Skip",
+                    "id": "KeyMapping.taskCompletion.skip",
+                  },
+                },
+                "tooHard": Object {
+                  "key": "d",
+                  "label": Object {
+                    "defaultMessage": "Too difficult / Couldn't see",
+                    "id": "KeyMapping.taskCompletion.tooHard",
+                  },
+                },
+              },
+              "taskEditing": Object {
+                "cancel": Object {
+                  "key": "Escape",
+                  "keyLabel": Object {
+                    "defaultMessage": "ESC",
+                    "id": "KeyMapping.taskEditing.escapeLabel",
+                  },
+                  "label": Object {
+                    "defaultMessage": "Cancel Editing",
+                    "id": "KeyMapping.taskEditing.cancel",
+                  },
+                },
+                "fitBounds": Object {
+                  "key": "0",
+                  "label": Object {
+                    "defaultMessage": "Fit Map to Task Features",
+                    "id": "KeyMapping.taskEditing.fitBounds",
+                  },
+                },
+              },
+              "taskReview": Object {
+                "nextTask": Object {
+                  "key": "l",
+                  "label": Object {
+                    "defaultMessage": "Next Task",
+                    "id": "KeyMapping.taskReview.nextTask",
+                  },
+                },
+                "prevTask": Object {
+                  "key": "h",
+                  "label": Object {
+                    "defaultMessage": "Previous Task",
+                    "id": "KeyMapping.taskReview.prevTask",
+                  },
+                },
+              },
+            },
+            "mapBounds": Object {
+              "task": Object {
+                "bounds": Array [
+                  0,
+                  0,
+                  0,
+                  0,
+                ],
+              },
+            },
+            "task": Object {
+              "id": 123,
+              "parent": Object {
+                "id": 321,
+              },
+              "status": 0,
+            },
+            "user": Object {
+              "id": 357,
+              "isLoggedIn": true,
+              "settings": Object {
+                "defaultEditor": 1,
+              },
+            },
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "activateKeyboardShortcut": [Function],
+            "activateKeyboardShortcutGroup": [Function],
+            "allowedProgressions": Set {
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+            },
+            "cancelEditing": [Function],
+            "comment": "Foo",
+            "complete": [Function],
+            "deactivateKeyboardShortcut": [Function],
+            "deactivateKeyboardShortcutGroup": [Function],
+            "intl": Object {
+              "formatMessage": [Function],
+            },
+            "keyboardShortcutGroups": Object {
+              "openEditor": Object {
+                "editId": Object {
+                  "key": "e",
+                  "label": Object {
+                    "defaultMessage": "Edit in Id",
+                    "id": "KeyMapping.openEditor.editId",
+                  },
+                },
+                "editJosm": Object {
+                  "key": "r",
+                  "label": Object {
+                    "defaultMessage": "Edit in JOSM",
+                    "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {
@@ -20002,6 +20863,13 @@ ShallowWrapper {
                     "id": "KeyMapping.openEditor.editJosm",
                   },
                 },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
+                  },
+                },
                 "editJosmLayer": Object {
                   "key": "t",
                   "label": Object {
@@ -20158,6 +21026,13 @@ ShallowWrapper {
                   "label": Object {
                     "defaultMessage": "Edit in JOSM",
                     "id": "KeyMapping.openEditor.editJosm",
+                  },
+                },
+                "editJosmFeatures": Object {
+                  "key": "y",
+                  "label": Object {
+                    "defaultMessage": "Edit just features in JOSM",
+                    "id": "KeyMapping.openEditor.editJosmFeatures",
                   },
                 },
                 "editJosmLayer": Object {

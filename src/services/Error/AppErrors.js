@@ -70,5 +70,6 @@ export default {
 
   josm: {
     noResponse: messages.josmNoResponse,
+    missingOSMIds: messages.josmMissingOSMIds,
   },
 }
