@@ -134,7 +134,7 @@
   "Admin.EditChallenge.form.ignoreSourceErrors.label": "Ignore Errors",
   "Admin.EditChallenge.form.ignoreSourceErrors.description": "Proceed despite detected errors in source data. Only expert users who fully understand the implications should attempt this.",
   "Admin.EditChallenge.form.step3.label": "Priorities",
-  "Admin.EditChallenge.form.step3.description": "The priority of tasks can be defined as High, Medium and Low. All high priority tasks will be shown first, then medium and finally low.",
+  "Admin.EditChallenge.form.step3.description": "The priority of tasks can be defined as High, Medium and Low. All high priority tasks will be offered to users first when working through a challenge, followed by medium and finally low priority tasks. Each task's priority is assigned automatically based on the rules you specify below, each of which is evaluated against the task's feature properties (OSM tags if you are using an Overpass query, otherwise whatever properties you've chosen to include in your GeoJSON). Tasks that don't pass any rules will be assigned the default priority.",
   "Admin.EditChallenge.form.defaultPriority.label": "Default Priority",
   "Admin.EditChallenge.form.defaultPriority.description": "Default priority level for tasks in this challenge",
   "Admin.EditChallenge.form.step4.label": "Extra",

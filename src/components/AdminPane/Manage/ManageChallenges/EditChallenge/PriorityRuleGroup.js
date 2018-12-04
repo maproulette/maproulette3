@@ -5,9 +5,9 @@ import _compact from 'lodash/compact'
 import _trim from 'lodash/trim'
 
 /**
-  * Prepares a group of priority rules for saving, converting it to the
-  * (stringified) JSON representation expected by the server.
-  */
+ * Prepares a group of priority rules from the server to the representation
+ * expected by the edit form
+ */
 export const preparePriorityRuleGroupForForm = ruleObject => {
   const preparedGroup = {
     ruleGroup: {},
@@ -22,6 +22,7 @@ export const preparePriorityRuleGroupForForm = ruleObject => {
         let [key, ...value] = rule.value.split('.')
         return {
           key,
+          valueType: rule.type,
           operator: rule.operator,
           value: _trim(value.join('.')),
         }
@@ -44,16 +45,25 @@ export const preparePriorityRuleGroupForSaving = ruleGroup => {
       return null
     }
 
+    // Due to react-jsonschema-form bug #768, the default operator values
+    // don't get populated if the user doesn't change their selection, so we
+    // set the operator to the default here if needed
+    if (!rule.operator && rule.valueType) {
+      if (rule.valueType === "string") {
+        rule.operator = "equal" // default string operator
+      }
+      else {
+        rule.operator = "==" // default numeric operator
+      }
+    }
+
     // The server expects the Key and Value to be represented as a single
     // `value` string, dot-separated. To work-around an MR2 bug, we set
     // empty values to a single space for now.
-    const value = `${rule.key}.${_isEmpty(rule.value) ? ' ' : rule.value}`
-
     return {
-      field: "tag", // only tags are currently supported
-      type: "string", // only strings are currently supported
+      value: `${rule.key}.${_isEmpty(rule.value) ? ' ' : rule.value}`,
+      type: rule.valueType,
       operator: rule.operator,
-      value,
     }
   }))
 
