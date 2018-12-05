@@ -8,11 +8,13 @@ Object {
       "key": "firstTag",
       "operator": "equals",
       "value": "foo",
+      "valueType": "string",
     },
     Object {
       "key": "secondTag",
       "operator": "contains",
       "value": "bar",
+      "valueType": "string",
     },
   ],
 }
@@ -26,6 +28,7 @@ Object {
       "key": "thirdTag",
       "operator": "is_empty",
       "value": "",
+      "valueType": "string",
     },
   ],
 }
@@ -36,16 +39,24 @@ Object {
   "condition": "AND",
   "rules": Array [
     Object {
-      "field": "tag",
       "operator": "equals",
       "type": "string",
       "value": "firstTag.foo",
     },
     Object {
-      "field": "tag",
       "operator": "contains",
       "type": "string",
       "value": "secondTag.bar",
+    },
+    Object {
+      "operator": "==",
+      "type": "integer",
+      "value": "fourthTag.123",
+    },
+    Object {
+      "operator": "<=",
+      "type": "integer",
+      "value": "fifthTag.456",
     },
   ],
 }
@@ -56,7 +67,6 @@ Object {
   "condition": "AND",
   "rules": Array [
     Object {
-      "field": "tag",
       "operator": "is_empty",
       "type": "string",
       "value": "thirdTag. ",
