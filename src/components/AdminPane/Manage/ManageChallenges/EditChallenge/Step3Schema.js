@@ -45,24 +45,59 @@ export const jsSchema = intl => {
             items: {
               type: "object",
               properties: {
-                key: {
-                  title: "Key",
+                valueType: {
+                  title: "Property Type",
                   type: "string",
+                  enum: ["string", "integer", "double", "long"],
+                  default: "string",
                 },
-                operator: {
+                key: {
+                  title: "Property Name",
                   type: "string",
-                  enum: ["equal", "not_equal",
-                        "contains", "not_contains",
-                        "is_empty", "is_not_empty"],
-                  enumNames: ["equals", "doesn't equal",
-                              "contains", "doesn't contain",
-                              "is empty", "isn't empty"],
-                  default: "equal",
                 },
                 value: {
-                  title: "Value",
+                  title: "Property Value",
                   type: "string",
                 },
+              },
+              required: [ "valueType" ],
+              dependencies: { // Show operators appropriate to value type
+                valueType: {
+                  oneOf: [
+                    {
+                      properties: {
+                        valueType: {
+                          enum: ["string"],
+                        },
+                        operator: {
+                          title: "Operator",
+                          type: "string",
+                          enum: ["equal", "not_equal",
+                                "contains", "not_contains",
+                                "is_empty", "is_not_empty"],
+                          enumNames: ["equals", "doesn't equal",
+                                      "contains", "doesn't contain",
+                                      "is empty", "isn't empty"],
+                          default: "equal", // doesn't work, rjsf bug #768
+                        },
+                      },
+                    },
+                    {
+                      properties: {
+                        valueType: {
+                          enum: ["integer", "double", "long"],
+                        },
+                        operator: {
+                          title: "Operator",
+                          type: "string",
+                          enum: ["==", "!=", "<", "<=", ">", ">="],
+                          enumNames: ["=", "≠", "<", "<=", ">", ">="],
+                          default: "==", // doesn't work, rjsf bug #768
+                        },
+                      },
+                    }
+                  ]
+                }
               },
             },
           },
@@ -118,19 +153,24 @@ const priorityRuleGroupUISchema = {
   rules: {
     items: {
       "ui:options": { inline: true, label: false },
+      classNames: "priority-rule",
       keyType: {
         "ui:widget": "select",
       },
+      valueType: {
+        "ui:widget": "select",
+      },
       key: {
-        "ui:placeholder": "OSM Tag Name",
+        "ui:placeholder": "Property Name",
       },
       operator: {
         "ui:widget": "select",
       },
       value: {
-        "ui:placeholder": "Value",
+        "ui:placeholder": "Property Value",
       },
-    }
+      "ui:order": [ "valueType", "key", "operator", "value" ],
+    },
   },
 }
 

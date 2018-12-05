@@ -13,4 +13,10 @@
       }
     }
   }
+
+  .rjsf .array-field .priority-rule {
+    input[type=text] {
+      max-width: 150px;
+    }
+  }
 }

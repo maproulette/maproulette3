@@ -308,8 +308,14 @@ will not be able to make sense of it.
     id: 'Admin.EditChallenge.form.step3.description',
     defaultMessage:
       "The priority of tasks can be defined as High, Medium and Low. All " +
-      "high priority tasks will be shown first, then medium and finally " +
-      "low.",
+      "high priority tasks will be offered to users first when working " +
+      "through a challenge, followed by medium and finally low priority " +
+      "tasks. Each task's priority is assigned automatically based on " +
+      "the rules you specify below, each of which is evaluated against the " +
+      "task's feature properties (OSM tags if you are using an Overpass " +
+      "query, otherwise whatever properties you've chosen to include in " +
+      "your GeoJSON). Tasks that don't pass any rules will be assigned " +
+      "the default priority.",
   },
 
   defaultPriorityLabel: {

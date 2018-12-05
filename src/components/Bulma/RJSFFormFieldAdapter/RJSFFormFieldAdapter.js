@@ -53,7 +53,8 @@ export const CustomFieldTemplate = props => {
 
 export const CustomArrayFieldTemplate = props => {
   const itemFields = _map(props.items, element =>
-    <div key={element.index} className="array-field__item">
+    <div key={element.index}
+         className={classNames("array-field__item", _get(props, 'uiSchema.items.classNames'))}>
       <div className={classNames({
         inline: _get(props, 'uiSchema.items.ui:options.inline')}
       )}>
