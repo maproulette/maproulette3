@@ -178,7 +178,7 @@ Internationalization and localization is performed via
 co-located Messages.js files that contain messages intended for display,
 along with default (U.S. English) versions of each message. Translation files
 that contain translated versions of these messages for supported locales are
-stored in the src/lang/ directory. A fresh en-US.json file can be built from
+stored in the `src/lang/` directory. A fresh en-US.json file can be built from
 the latest messages using `yarn run build-intl`, which is also run
 automatically as part of the `yarn build` script used for creating production
 builds. Translation files for other locales must be updated manually.
