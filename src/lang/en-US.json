@@ -355,6 +355,7 @@
   "ActiveTask.controls.viewChangset.label": "View Changeset",
   "MobileTask.subheading.instructions": "Instructions",
   "Task.controls.contactOwner.label": "Contact Owner",
+  "Task.controls.contactLink.label": "Message {owner} through OSM",
   "Task.management.heading": "Management Options",
   "Task.management.controls.review.label": "Review",
   "Task.management.controls.modify.label": "Modify",

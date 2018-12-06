@@ -4,7 +4,6 @@ import { mapStateToProps,
          mapDispatchToProps,
          visitNewTask } from './WithCurrentTask'
 import { taskDenormalizationSchema,
-         loadCompleteTask,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          addTaskComment,
@@ -60,6 +59,7 @@ beforeEach(() => {
 
   loadRandomTaskFromChallenge.mockClear()
   loadRandomTaskFromVirtualChallenge.mockClear()
+  jest.useFakeTimers()
 })
 
 test("mapStateToProps maps task from the taskId in the route", () => {
@@ -155,8 +155,9 @@ test("completeTask calls fetchChallengeActions", () => {
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
-
   mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  jest.runOnlyPendingTimers()
+
   expect(fetchChallengeActions).toBeCalledWith(challenge.id)
 })
 

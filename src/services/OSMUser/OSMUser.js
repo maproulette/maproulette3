@@ -1,5 +1,3 @@
-// Utility functions
-
 /**
  * Retrieve OpenStreetMap user data for the user with the given OSM user id
  * (not the same as a MapRoulette user id). Note that this does not update the
@@ -23,15 +21,4 @@ export const fetchOSMUser = function(osmUserId) {
       }
     }).catch(error => reject(error))
   })
-}
-
-/**
- * Returns a Promise that resolves to the URL to be used for sending an
- * OpenStreetMap message to the user with the given OSM user id (not
- * MapRoulette user id).
- */
-export const contactOSMUserURL = function(osmUserId) {
-  return fetchOSMUser(osmUserId).then(osmUserData =>
-    `https://www.openstreetmap.org/message/new/${osmUserData.displayName}`
-  )
 }

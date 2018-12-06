@@ -8,4 +8,9 @@ export default defineMessages({
     id: 'Task.controls.contactOwner.label',
     defaultMessage: 'Contact Owner',
   },
+
+  contactLinkLabel: {
+    id: 'Task.controls.contactLink.label',
+    defaultMessage: 'Message {owner} through OSM',
+  },
 })

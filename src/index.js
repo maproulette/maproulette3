@@ -16,12 +16,9 @@ import _isEmpty from 'lodash/isEmpty'
 import App from './App';
 import BusySpinner from './components/BusySpinner/BusySpinner'
 import { initializePersistedStore } from './PersistedStore'
-import { fetchProjects } from './services/Project/Project'
-import { fetchFeaturedChallenges,
-         extendedFind,
-         fetchChallengeActions } from './services/Challenge/Challenge'
-import { RESULTS_PER_PAGE } from './services/Search/Search'
-import { ensureUserLoggedIn, loadCompleteUser, GUEST_USER_ID }
+import { extendedFind } from './services/Challenge/Challenge'
+import { SortOptions, RESULTS_PER_PAGE } from './services/Search/Search'
+import { ensureUserLoggedIn, fetchSavedChallenges, GUEST_USER_ID }
        from './services/User/User'
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus } from './services/Status/Status'
@@ -56,7 +53,7 @@ const {store} = initializePersistedStore((store) => {
     store.dispatch(
       ensureUserLoggedIn(true)
     ).then(() =>
-      store.dispatch(loadCompleteUser(currentUserId))
+      store.dispatch(fetchSavedChallenges(currentUserId))
     ).then(() =>
       store.dispatch(clearCheckingLoginStatus())
     ).catch(() => store.dispatch(clearCheckingLoginStatus()))
@@ -65,16 +62,10 @@ const {store} = initializePersistedStore((store) => {
     store.dispatch(clearCheckingLoginStatus())
   }
 
-  // Fetch all challenge actions, which will include a count of available
-  // tasks so we can tell which challenges are already complete.
-  store.dispatch(fetchChallengeActions())
-
-  // Seed our store with some challenges.
-  store.dispatch(fetchFeaturedChallenges())
-  store.dispatch(extendedFind({}, RESULTS_PER_PAGE))
-
-  // Seed our store with projects
-  store.dispatch(fetchProjects())
+  // Seed our store with some currently popular challenges.
+  store.dispatch(
+    extendedFind({sortCriteria: {sortBy: SortOptions.popular}}, RESULTS_PER_PAGE)
+  )
 
   // Setup the router history object separately so that it can be integrated
   // with 3rd-party libraries. If the user has configured Matomo/PIWIK for
