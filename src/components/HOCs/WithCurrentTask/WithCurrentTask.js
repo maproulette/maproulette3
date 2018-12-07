@@ -5,22 +5,27 @@ import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
-import _isObject from 'lodash/isObject'
+import _isPlainObject from 'lodash/isPlainObject'
 import { taskDenormalizationSchema,
          fetchTask,
-         loadCompleteTask,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
+import { fetchChallenge, fetchParentProject }
+       from '../../../services/Challenge/Challenge'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
-import { contactOSMUserURL } from '../../../services/OSMUser/OSMUser'
+import { fetchOSMUser } from '../../../services/OSMUser/OSMUser'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 import { renewVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
+
+const TASK_STALE = 30000 // 30 seconds
+const CHALLENGE_STALE = 300000 // 5 minutes
+const PROJECT_STALE = 300000 // 5 minutes
 
 /**
  * WithCurrentTask passes down the denormalized task specified in either the
@@ -46,7 +51,7 @@ const WithLoadedTask = function(WrappedComponent) {
   return class extends Component {
     loadNeededTask = props => {
       if (_isFinite(props.taskId)) {
-        props.loadTask(props.taskId)
+        props.loadTask(props.taskId, props.task)
       }
     }
 
@@ -56,7 +61,10 @@ const WithLoadedTask = function(WrappedComponent) {
 
     componentWillReceiveProps(nextProps) {
       if (nextProps.taskId !== this.props.taskId) {
-        this.loadNeededTask(nextProps)
+        // Only fetch if task data is missing or stale
+        if (!nextProps.task || isStale(nextProps.task, TASK_STALE)) {
+          this.loadNeededTask(nextProps)
+        }
       }
     }
 
@@ -95,15 +103,31 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      *
      * @private
      */
-    loadTask: taskId => {
+    loadTask: (taskId, existingTask=null) => {
       dispatch(
-        loadCompleteTask(taskId)
+        fetchTask(taskId)
       ).then(normalizedResults => {
         if (!_isFinite(normalizedResults.result) ||
             _get(normalizedResults,
                  `entities.tasks.${normalizedResults.result}.deleted`)) {
           dispatch(addError(AppErrors.task.doesNotExist))
           ownProps.history.push('/')
+          return
+        }
+
+        const loadedTask = normalizedResults.entities.tasks[normalizedResults.result]
+        // Load the parent challenge if missing or stale
+        if (!_isPlainObject(_get(existingTask, 'parent')) ||
+            isStale(existingTask.parent, CHALLENGE_STALE)) {
+          dispatch(
+            fetchChallenge(loadedTask.parent)
+          ).then(normalizedChallengeResults => {
+            // Load the parent project if missing or stale
+            if (!_isPlainObject(_get(existingTask, 'parent.parent')) ||
+                isStale(existingTask.parent.parent, PROJECT_STALE)) {
+              fetchParentProject(dispatch, normalizedChallengeResults)
+            }
+          })
         }
 
         return normalizedResults
@@ -143,12 +167,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         if (_isString(comment) && comment.length > 0) {
           dispatch(addTaskComment(taskId, comment, taskStatus))
         }
-        dispatch(fetchChallengeActions(challengeId))
+
+        // Updating the challenge actions will allow us to show more accurate
+        // completion progress, but this can be done in the background
+        setTimeout(() => dispatch(fetchChallengeActions(challengeId)), 500)
 
         // If working on a virtual challenge, renew it (extend its expiration)
-        // since we've seen some activity.
+        // since we've seen some activity, but this can be done in the
+        // background
         if (_isFinite(ownProps.virtualChallengeId)) {
-          dispatch(renewVirtualChallenge(ownProps.virtualChallengeId))
+          setTimeout(() => dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)), 1000)
         }
       })
     },
@@ -167,7 +195,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       )
     },
 
-    contactTaskOwnerURL: ownerOSMId => contactOSMUserURL(ownerOSMId),
+    fetchOSMUser,
   }
 }
 
@@ -189,6 +217,14 @@ export const challengeIdFromRoute = (props, defaultId) => {
     parseInt(_get(props, 'match.params.challengeId'), 10)
 
   return _isFinite(challengeId) ? challengeId : defaultId
+}
+
+/**
+ * Returns true if the at least staleTime milliseconds has elapsed since
+ * the given entity was last fetched from the server, false otherwise
+ */
+export const isStale = (entity, staleTime) => {
+  return Date.now() - _get(entity, '_meta.fetchedAt', 0) > staleTime
 }
 
 /**
@@ -221,7 +257,7 @@ export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
  * is complete and congratulate the user.
  */
 export const visitNewTask = function(props, currentTaskId, newTask) {
-  if (_isObject(newTask) && newTask.id !== currentTaskId) {
+  if (_isPlainObject(newTask) && newTask.id !== currentTaskId) {
     // The route we use is different for virtual challenges vs standard
     // challenges.
     if (_isFinite(props.virtualChallengeId)) {

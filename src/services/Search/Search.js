@@ -43,6 +43,14 @@ export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_
 // Default Results Per page
 export const RESULTS_PER_PAGE = 50
 
+export const SortOptions = {
+  name: SORT_NAME,
+  created: SORT_CREATED,
+  popular: SORT_POPULARITY,
+  default: SORT_DEFAULT,
+}
+
+
 /** Returns object containing localized labels  */
 export const sortLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])

@@ -170,7 +170,7 @@ export const extendedFind = function(criteria, limit=50) {
 
   const bounds = criteria.bounds
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const direction = _get(criteria, 'sortCriteria.direction')
+  const direction = _get(criteria, 'sortCriteria.direction', 'DESC')
   const sort = sortBy ? `${sortBy} ${direction}` : null
   const page = _isFinite(criteria.page) ? criteria.page : 0
 
@@ -480,27 +480,6 @@ export const fetchChallenge = function(challengeId, suppressReceive = false) {
 }
 
 /**
- * Convenience function that fetches the given challenge plus its parent project,
- * so that a fully denormalized challenge entity can be reliably created.
- */
-export const loadCompleteChallenge = function(challengeId) {
-  return function(dispatch) {
-    if (!challengeId) {
-      return null
-    }
-
-    return dispatch(fetchChallenge(challengeId, true)).then(normalizedChallengeResults =>
-      fetchParentProject(dispatch, normalizedChallengeResults).then(() =>
-        dispatch(receiveChallenges(normalizedChallengeResults.entities))
-      ).then(() => normalizedChallengeResults)
-    ).catch((error) => {
-      dispatch(addError(AppErrors.challenge.fetchFailure))
-      console.log(error.response || error)
-    })
-  }
-}
-
-/**
  * Saves the given challenge (either creating it or updating it, depending on
  * whether it already has an id) and updates the redux store with the latest
  * version from the server.
@@ -563,7 +542,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
 
           // Reload challenge data to ensure our local store is in sync with the
           // server in case optimistic changes were made.
-          dispatch(loadCompleteChallenge(challengeData.id))
+          dispatch(fetchChallenge(challengeData.id))
         }
       })
     })
@@ -706,7 +685,7 @@ export const deleteChallenge = function(challengeId) {
  * > Note that if the results contain multiple challenges, only the
  * > parent project of the first result is retrieved.
  */
-const fetchParentProject = function(dispatch, normalizedChallengeResults) {
+export const fetchParentProject = function(dispatch, normalizedChallengeResults) {
   const challenge = challengeResultEntity(normalizedChallengeResults)
 
   if (challenge) {

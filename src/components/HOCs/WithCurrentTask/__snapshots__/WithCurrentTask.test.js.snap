@@ -3,7 +3,7 @@
 exports[`mapDispatchToProps maps some functions 1`] = `
 Object {
   "completeTask": [Function],
-  "contactTaskOwnerURL": [Function],
+  "fetchOSMUser": [Function],
   "loadTask": [Function],
   "nextTask": [Function],
   "refreshTask": [Function],

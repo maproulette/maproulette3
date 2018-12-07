@@ -3,8 +3,7 @@ import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
-import { challengeSchema,
-         loadCompleteChallenge } from '../Challenge/Challenge'
+import { challengeSchema } from '../Challenge/Challenge'
 import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
 import { addServerError, addError } from '../Error/Error'
@@ -189,37 +188,6 @@ export const fetchTaskComments = function(taskId) {
 }
 
 /**
- * Retrieve the given task data plus accompanying data like comments,
- * performing multiple API requests as needed.
- *
- * If info on available mapillary images for the task is also desired, set
- * includeMapillary to true
- */
-export const loadCompleteTask = function(taskId, includeMapillary=false) {
-  return function(dispatch) {
-    if (!taskId) {
-      return null
-    }
-
-    return dispatch(
-      fetchTask(taskId, false, includeMapillary)
-    ).then(normalizedResults => {
-      const task = _get(normalizedResults, `entities.tasks.${taskId}`)
-      if (_isObject(task)) {
-        // Kick off fetches of supplementary data, but don't wait for them.
-        dispatch(loadCompleteChallenge(task.parent))
-        fetchTaskPlace(
-          normalizedResults.entities.tasks[taskId]
-        )(dispatch)
-        fetchTaskComments(taskId)(dispatch)
-      }
-
-      return normalizedResults
-    })
-  }
-}
-
-/**
  * Retrieve a random task from the given challenge. If priorTaskId is given,
  * then an attempt will be made to retrieve a task geographically proximate to
  * the given task.
@@ -326,12 +294,21 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
  * @private
  */
 const updateTaskStatus = function(dispatch, taskId, newStatus) {
+  // Optimistically assume request will succeed. The store will be updated
+  // with fresh task data from the server if the save encounters an error.
+  dispatch(receiveTasks({
+    tasks: {
+      [taskId]: {
+        id: taskId,
+        status: newStatus,
+      }
+    }
+  }))
+
   return new Endpoint(
     api.task.updateStatus,
     {schema: taskSchema(), variables: {id: taskId, status: newStatus}}
-  ).execute().then(() =>
-    fetchTask(taskId)(dispatch) // Refresh task data
-  ).catch(error => {
+  ).execute().catch(error => {
     if (isSecurityError(error)) {
       dispatch(ensureUserLoggedIn()).then(() =>
         dispatch(addError(AppErrors.user.unauthorized))
@@ -341,6 +318,7 @@ const updateTaskStatus = function(dispatch, taskId, newStatus) {
       dispatch(addError(AppErrors.task.updateFailure))
       console.log(error.response || error)
     }
+    fetchTask(taskId)(dispatch) // Fetch accurate task data
   })
 }
 
