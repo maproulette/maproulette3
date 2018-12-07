@@ -2536,10 +2536,6 @@ core-js@^2.4.0, core-js@^2.5.0:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.6.tgz#0fe6d45bf3cac3ac364a9d72de7576f4eb221b9d"
 
-core-js@^2.5.7:
-  version "2.5.7"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
-
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -8051,15 +8047,14 @@ react-jsonschema-form-async@^0.2.0:
     lodash "^4.17.5"
     prop-types "^15.6.1"
 
-react-jsonschema-form@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-jsonschema-form/-/react-jsonschema-form-1.0.6.tgz#ceef7c2c386e46a149ec94203547dd9111913e36"
+react-jsonschema-form@1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npmjs.org/react-jsonschema-form/-/react-jsonschema-form-1.0.3.tgz#83bf8c5330651a949d8b0ac644fb92c6665348b5"
   dependencies:
     ajv "^5.2.3"
-    babel-runtime "^6.26.0"
-    core-js "^2.5.7"
     lodash.topath "^4.5.2"
     prop-types "^15.5.8"
+    setimmediate "^1.0.5"
 
 react-leaflet-markercluster@^1.1.7:
   version "1.1.8"

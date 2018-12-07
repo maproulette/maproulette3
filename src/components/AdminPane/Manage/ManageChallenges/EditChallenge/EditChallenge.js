@@ -35,6 +35,8 @@ import { ChallengeCategoryKeywords,
          categoryMatchingKeywords,
          rawCategoryKeywords }
        from '../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
+import { basemapLayerSources }
+       from '../../../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import AsEditableChallenge
        from '../../../../../interactions/Challenge/AsEditableChallenge'
 import AsValidatableGeoJSON
@@ -199,6 +201,8 @@ export class EditChallenge extends Component {
 
   /** Back up to the previous step in the workflow */
   prevStep = () => {
+    this.isFinishing = false
+
     if (this.canPrev()) {
       this.setState({
         activeStep: this.state.activeStep - 1,
@@ -295,16 +299,25 @@ export class EditChallenge extends Component {
       }
     }
 
-    // Copy basemap layer id to defaultBasemap so the proper layer will be
-    // selected in the form even if it isn't represented by one one of the
-    // ChallengeBasemap constants
+    // The server uses two fields to represent the default basemap: a legacy
+    // numeric identifier and a new optional string identifier for layers from
+    // the OSM Editor Layer Index. If we're editing a legacy challenge that
+    // doesn't use the layer index string identifiers, then we convert the
+    // numeric id to an appropriate string identifier here (assuming it is
+    // specifying a default layer at all).
     if (_isUndefined(this.state.formData.defaultBasemap)) {
-      if (!_isEmpty(challengeData.defaultBasemapId)) {
+      if (!_isEmpty(challengeData.defaultBasemapId)) { // layer index string
         challengeData.defaultBasemap = challengeData.defaultBasemapId
       }
-      else if (_isFinite(challengeData.defaultBasemap)) {
-        // Use string for form
-        challengeData.defaultBasemap = challengeData.defaultBasemap.toString()
+      else if (_isFinite(challengeData.defaultBasemap)) { // numeric identifier
+        // Convert to corresponding layer-index string identifier for form if
+        // possible. Otherwise just go with string representation of numerical
+        // id, which is still used to represent things like a custom basemap
+        // indicator (this is a bit of a hack to support everything in a single
+        // form field)
+        challengeData.defaultBasemap =
+          basemapLayerSources()[challengeData.defaultBasemap] ||
+          challengeData.defaultBasemap.toString()
       }
     }
 
