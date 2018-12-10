@@ -92,8 +92,9 @@ export const WithSearchResults = function(WrappedComponent, searchName,
   }
 }
 
-export default (WrappedComponent, searchName, itemsProp, outputProp) =>
+export default (WrappedComponent, searchName, itemsProp, outputProp, searchFunction = null) =>
   WithSearch(
     WithSearchResults(WrappedComponent, searchName, itemsProp, outputProp),
-    searchName
+    searchName,
+    searchFunction
   )

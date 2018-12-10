@@ -10,6 +10,7 @@ import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
+import { RESULTS_PER_PAGE } from '../Search/Search'
 import { GroupType } from './GroupType/GroupType'
 import { addServerError,
          addError } from '../Error/Error'
@@ -73,10 +74,13 @@ export const fetchProjects = function(limit=50) {
  * Fetch data on projects the current user has permission to manage (up to the
  * given limit).
  */
-export const fetchManageableProjects = function(limit=50) {
+export const fetchManageableProjects = function(criteria = null) {
+  const page = _isFinite(_get(criteria, 'page.currentPage')) ? criteria.page.currentPage : 0
+  const limit = _isFinite(_get(criteria, 'page.resultsPerPage')) ? criteria.page.resultsPerPage : RESULTS_PER_PAGE
+
   return function(dispatch) {
     return new Endpoint(
-      api.projects.managed, {schema: [ projectSchema() ], params: {limit}}
+      api.projects.managed, {schema: [ projectSchema() ], params: {limit: limit, page: (page * limit)}}
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults

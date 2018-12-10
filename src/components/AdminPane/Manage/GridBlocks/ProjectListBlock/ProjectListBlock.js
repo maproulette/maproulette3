@@ -4,13 +4,15 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import { DashboardDataTarget }
        from '../../../../../services/Dashboard/Dashboard'
 import { registerBlockType } from '../BlockTypes'
-import { searchProjects } from '../../../../../services/Project/Project'
+import { searchProjects, fetchManageableProjects } from '../../../../../services/Project/Project'
 import { extendedFind } from '../../../../../services/Challenge/Challenge'
+import { RESULTS_PER_PAGE } from '../../../../../services/Search/Search'
 import WithChallengeResultParents
        from '../../../HOCs/WithChallengeResultParents/WithChallengeResultParents'
 import WithSearchResults
        from '../../../../HOCs/WithSearchResults/WithSearchResults'
 import WithComboSearch from '../../../HOCs/WithComboSearch/WithComboSearch'
+import WithPagedChallenges from '../../../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import SearchBox from '../../../../SearchBox/SearchBox'
 import SvgControl from '../../../../Bulma/SvgControl'
 import ProjectList from '../../ProjectList/ProjectList'
@@ -37,7 +39,7 @@ const descriptor = {
 const ProjectAndChallengeSearch = WithComboSearch(SearchBox, {
   'adminProjects': searchProjects,
   'adminChallenges': queryCriteria =>
-    extendedFind({searchQuery: queryCriteria.query, onlyEnabled: false}, 1000),
+    extendedFind({searchQuery: queryCriteria.query, onlyEnabled: false}, RESULTS_PER_PAGE),
 })
 
 export class ProjectListBlock extends Component {
@@ -77,7 +79,7 @@ export class ProjectListBlock extends Component {
                   headerControls={searchControl}
                   menuControls={viewControls}>
         <ProjectList {...this.props}
-                     projects={this.props.resultProjects}
+                     projects={this.props.pagedProjects}
                      expandedView={this.props.blockConfiguration.view === 'card'}
                      mixedView={this.props.blockConfiguration.view === 'mixed'}
                      showPreview={this.props.adminProjectsSearchActive} />
@@ -93,18 +95,20 @@ ProjectListBlock.propTypes = {
 }
 
 const Block =
-  WithSearchResults( // for projects
-    WithSearchResults( // for challenges
-      WithChallengeResultParents(
-        injectIntl(ProjectListBlock),
+    WithSearchResults( // for projects
+      WithSearchResults( // for challenges
+        WithPagedChallenges(
+          WithChallengeResultParents(
+            injectIntl(ProjectListBlock),
+          ), "resultProjects", "pagedProjects"),
+        'adminChallenges',
+        'challenges',
+        'filteredChallenges'
       ),
-      'adminChallenges',
-      'challenges',
-      'filteredChallenges'
-    ),
-    'adminProjects',
-    'filteredProjects',
-    'resultProjects'
-  )
+      'adminProjects',
+      'filteredProjects',
+      'resultProjects',
+      fetchManageableProjects
+    )
 
 registerBlockType(Block, descriptor)

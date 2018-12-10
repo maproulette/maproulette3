@@ -29,7 +29,7 @@ import AppErrors from '../Error/AppErrors'
 import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
-import { parseQueryString } from '../Search/Search'
+import { parseQueryString, RESULTS_PER_PAGE } from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
 
 // normalizr schema
@@ -102,7 +102,7 @@ export const removeChallenge = function(challengeId) {
  *
  * @param {number} limit
  */
-export const fetchFeaturedChallenges = function(limit = 50) {
+export const fetchFeaturedChallenges = function(limit = RESULTS_PER_PAGE) {
   return function(dispatch) {
     return new Endpoint(
       api.challenges.featured,
@@ -162,7 +162,7 @@ export const fetchProjectChallengeListing = function(projectIds, onlyEnabled=fal
                               'page'
  * @param {number} limit
  */
-export const extendedFind = function(criteria, limit=50) {
+export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
   const queryString = criteria.searchQuery
   const filters = criteria.filters || {}
   const onlyEnabled = _isUndefined(criteria.onlyEnabled) ?

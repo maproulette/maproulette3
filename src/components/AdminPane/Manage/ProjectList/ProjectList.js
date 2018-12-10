@@ -5,6 +5,7 @@ import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import _differenceBy from 'lodash/differenceBy'
 import ProjectCard from '../ProjectCard/ProjectCard'
+import PageResultsButton from '../../../LoadMoreButton/PageResultsButton'
 import './ProjectList.css'
 
 /**
@@ -47,6 +48,10 @@ export default class ProjectList extends Component {
 
           <div className='admin__manage__managed-item-list project-list compact-view'>
             {unpinnedCards}
+
+            <div className="after-results">
+              <PageResultsButton {...this.props} />
+            </div>
           </div>
         </React.Fragment>
       )
@@ -56,6 +61,10 @@ export default class ProjectList extends Component {
         <div className={classNames('admin__manage__managed-item-list project-list',
                                   {"compact-view": !this.props.expandedView})}>
           {pinnedCards.concat(unpinnedCards)}
+
+          <div className="after-results">
+            <PageResultsButton {...this.props} />
+          </div>
         </div>
       )
     }

@@ -189,6 +189,7 @@
   "Admin.Project.headers.challengePreview": "Challenge Matches",
   "Admin.ProjectDashboard.controls.edit.label": "Edit",
   "Admin.ProjectDashboard.controls.addChallenge.label": "Add Challenge",
+  "Project.controls.loadMore.label": "More Results",
   "Admin.ProjectManagers.noManagers": "No Managers",
   "Admin.ProjectManagers.addManager": "Add Project Manager",
   "Admin.ProjectManagers.projectOwner": "Owner",
