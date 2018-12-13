@@ -4,7 +4,9 @@ import { bindActionCreators } from 'redux'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _omit from 'lodash/omit'
+import _each from 'lodash/each'
 import { fetchManageableProjects,
+         fetchProject,
          addProjectManager,
          setProjectManagerGroupType,
          fetchProjectManagers,
@@ -16,6 +18,7 @@ import { fetchProjectChallengeListing }
        from '../../../../services/Challenge/Challenge'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
 import AsManager from '../../../../interactions/User/AsManager'
+import WithPinned from '../../HOCs/WithPinned/WithPinned'
 
 /**
  * WithManageableProjects makes available to the WrappedComponent all the
@@ -37,6 +40,12 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
             this.setState({loadingChallenges: false})
           })
         }
+
+        _each(this.props.pinnedProjects, (pinnedProject) => {
+          if (!this.props.entities.projects[pinnedProject]) {
+            this.props.fetchProject(pinnedProject)
+          }
+        })
 
         this.setState({loadingProjects: false})
       })
@@ -74,6 +83,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
     fetchManageableProjects,
+    fetchProject,
     fetchProjectChallengeListing,
     saveProject,
     addProjectManager,
@@ -93,5 +103,5 @@ const mapDispatchToProps = dispatch => {
 
 export default (WrappedComponent, includeChallenges) =>
   connect(mapStateToProps, mapDispatchToProps)(
-    WithCurrentUser(WithManageableProjects(WrappedComponent, includeChallenges))
+    WithCurrentUser(WithPinned(WithManageableProjects(WrappedComponent, includeChallenges)))
   )

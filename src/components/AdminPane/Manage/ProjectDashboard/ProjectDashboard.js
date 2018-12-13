@@ -13,7 +13,6 @@ import WithCurrentProject
        from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import WithPinned from '../../HOCs/WithPinned/WithPinned'
 import WithDashboards from '../../HOCs/WithDashboards/WithDashboards'
 import WithDashboardEntityFilter
        from '../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter'
@@ -135,22 +134,20 @@ ProjectDashboard.propTypes = {
 export default
 WithManageableProjects(
   WithCurrentProject(
-    WithPinned(
-      WithDashboards(
-        WithDashboardEntityFilter(
-          WithChallengeMetrics(
-            injectIntl(ProjectDashboard),
-          ),
-          'challenge',
-          'challenges',
-          'pinnedChallenges',
-          'challenges',
-          challengePassesFilters
+    WithDashboards(
+      WithDashboardEntityFilter(
+        WithChallengeMetrics(
+          injectIntl(ProjectDashboard),
         ),
-        [DashboardDataTarget.project, DashboardDataTarget.challenges],
-        DASHBOARD_NAME,
-        defaultDashboardSetup
-      )
+        'challenge',
+        'challenges',
+        'pinnedChallenges',
+        'challenges',
+        challengePassesFilters
+      ),
+      [DashboardDataTarget.project, DashboardDataTarget.challenges],
+      DASHBOARD_NAME,
+      defaultDashboardSetup
     ),
     {
       restrictToGivenProjects: true,

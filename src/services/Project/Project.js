@@ -74,13 +74,12 @@ export const fetchProjects = function(limit=50) {
  * Fetch data on projects the current user has permission to manage (up to the
  * given limit).
  */
-export const fetchManageableProjects = function(criteria = null) {
-  const page = _isFinite(_get(criteria, 'page.currentPage')) ? criteria.page.currentPage : 0
-  const limit = _isFinite(_get(criteria, 'page.resultsPerPage')) ? criteria.page.resultsPerPage : RESULTS_PER_PAGE
+export const fetchManageableProjects = function(page = null, limit = RESULTS_PER_PAGE) {
+  const pageToFetch = _isFinite(page) ? page : 0
 
   return function(dispatch) {
     return new Endpoint(
-      api.projects.managed, {schema: [ projectSchema() ], params: {limit: limit, page: (page * limit)}}
+      api.projects.managed, {schema: [ projectSchema() ], params: {limit: limit, page: (pageToFetch * limit)}}
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults
@@ -120,13 +119,17 @@ export const fetchProject = function(projectId) {
  *
  * @param {string} query - the search string
  */
-export const searchProjects = function(searchCriteria, onlyEnabled=false, limit=50) {
+export const searchProjects = function(searchCriteria, onlyEnabled=false, limit=RESULTS_PER_PAGE) {
+  const query = _get(searchCriteria, 'searchQuery')
+  const page = _isFinite(_get(searchCriteria, 'page')) ? _get(searchCriteria, 'page') : 0
+
   return function(dispatch) {
     return new Endpoint(api.projects.search, {
         schema: [ projectSchema() ],
         params: {
-          q: `%${searchCriteria.query}%`,
+          q: `%${query}%`,
           onlyEnabled: onlyEnabled ? 'true' : 'false',
+          page: page * limit,
           limit,
         }
     }).execute().then(normalizedResults => {

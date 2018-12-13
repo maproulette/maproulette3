@@ -12,7 +12,7 @@ import WithChallengeResultParents
 import WithSearchResults
        from '../../../../HOCs/WithSearchResults/WithSearchResults'
 import WithComboSearch from '../../../HOCs/WithComboSearch/WithComboSearch'
-import WithPagedChallenges from '../../../../HOCs/WithPagedChallenges/WithPagedChallenges'
+import WithPagedProjects from '../../../../HOCs/WithPagedProjects/WithPagedProjects'
 import SearchBox from '../../../../SearchBox/SearchBox'
 import SvgControl from '../../../../Bulma/SvgControl'
 import ProjectList from '../../ProjectList/ProjectList'
@@ -20,6 +20,7 @@ import QuickBlock from '../QuickBlock'
 import MenuControl from '../MenuControl'
 import messages from './Messages'
 import './ProjectListBlock.css'
+import _get from 'lodash/get'
 
 const descriptor = {
   blockKey: 'ProjectListBlock',
@@ -37,9 +38,23 @@ const descriptor = {
 
 // Setup child components with needed HOCs.
 const ProjectAndChallengeSearch = WithComboSearch(SearchBox, {
-  'adminProjects': searchProjects,
-  'adminChallenges': queryCriteria =>
-    extendedFind({searchQuery: queryCriteria.query, onlyEnabled: false}, RESULTS_PER_PAGE),
+  'adminProjects': queryCriteria => {
+      // If no query is present then we don't need to search
+      if (!queryCriteria.query) {
+        return null
+      }
+      return searchProjects({searchQuery: queryCriteria.query,
+                             page: _get(queryCriteria, "page.currentPage")})
+    },
+  'adminChallenges': queryCriteria => {
+      // If no query is present then we don't need to search
+      if (!queryCriteria.query) {
+        return null
+      }
+      return extendedFind({searchQuery: queryCriteria.query,
+                           page: _get(queryCriteria, "page.currentPage"),
+                           onlyEnabled: false}, RESULTS_PER_PAGE)
+    },
 })
 
 export class ProjectListBlock extends Component {
@@ -97,7 +112,7 @@ ProjectListBlock.propTypes = {
 const Block =
     WithSearchResults( // for projects
       WithSearchResults( // for challenges
-        WithPagedChallenges(
+        WithPagedProjects(
           WithChallengeResultParents(
             injectIntl(ProjectListBlock),
           ), "resultProjects", "pagedProjects"),
@@ -108,7 +123,14 @@ const Block =
       'adminProjects',
       'filteredProjects',
       'resultProjects',
-      fetchManageableProjects
+      queryCriteria => {
+        // We only fetch all managed projects if we are not doing a query.
+        if (queryCriteria.query) {
+          return null
+        }
+        return fetchManageableProjects(_get(queryCriteria, 'page.currentPage'),
+                                       _get(queryCriteria, 'page.resultsPerPage'))
+      },
     )
 
 registerBlockType(Block, descriptor)

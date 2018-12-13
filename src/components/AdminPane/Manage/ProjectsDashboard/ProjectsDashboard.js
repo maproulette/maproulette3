@@ -32,10 +32,12 @@ export const defaultDashboardSetup = function() {
     filters: defaultProjectFilters(),
     blocks: [
       blockDescriptor('ProjectAboutBlock'),
+      blockDescriptor('ProjectCountBlock'),
       blockDescriptor('ProjectListBlock'),
     ],
     layout: [
       {i: generateDashboardId(), x: 0, y: 0, w: 4, h: 10},
+      {i: generateDashboardId(), x: 0, y: 10, w: 4, h: 10},
       {i: generateDashboardId(), x: 8, y: 4, w: 8, h: 20},
     ],
   }
