@@ -1,21 +1,22 @@
 @import 'variables.scss';
 
-.about-modal {
-  min-width: 335px;
-
-  .modal-content {
-    border-radius: $radius-medium;
-  }
+.home-pane {
+  background-color: $green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &__content {
+    min-width: 335px;
     padding: 40px;
     background-color: $white;
+    border-radius: $radius-medium;
 
     .columns.icon-columns {
       margin-bottom: 0;
     }
 
-    .about-modal__icon {
+    .home-pane__icon {
       width: 80px;
       height: auto;
       stroke-width: 2px;
@@ -37,7 +38,7 @@
     justify-content: center;
     margin-bottom: 30px;
 
-    ul.about-modal__feature-points {
+    ul.home-pane__feature-points {
       list-style: circle;
 
       li {
@@ -69,12 +70,12 @@
   }
 
   @media(max-width: $app-mobile-break), (max-height: 500px) {
-    .modal-content {
+    .pane-content {
       @media(max-width: 643px) {
         border-radius: 0;
       }
 
-      .about-modal__content {
+      .home-pane__content {
         padding: 20px 40px;
 
         h1 {
@@ -82,10 +83,10 @@
         }
       }
 
-      .about-modal__intro {
+      .home-pane__intro {
         margin-bottom: 15px;
 
-        ul.about-modal__feature-points {
+        ul.home-pane__feature-points {
           li {
             font-size: $size-6;
 

@@ -10,15 +10,13 @@ import af from 'react-intl/locale-data/af'
 import { Router } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import PiwikReactRouter from 'piwik-react-router'
-import _get from 'lodash/get'
-import _isFinite from 'lodash/isFinite'
 import _isEmpty from 'lodash/isEmpty'
 import App from './App';
 import BusySpinner from './components/BusySpinner/BusySpinner'
 import { initializePersistedStore } from './PersistedStore'
 import { extendedFind } from './services/Challenge/Challenge'
 import { SortOptions, RESULTS_PER_PAGE } from './services/Search/Search'
-import { ensureUserLoggedIn, fetchSavedChallenges, GUEST_USER_ID }
+import { ensureUserLoggedIn, fetchSavedChallenges }
        from './services/User/User'
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus } from './services/Status/Status'
@@ -37,30 +35,17 @@ const ConnectedIntl = WithUserLocale(props => (
   </IntlProvider>
 ))
 
-const configFromServer = window.mr3Config
-const {store} = initializePersistedStore((store) => {
+const {store} = initializePersistedStore(store => {
   store.dispatch(setCheckingLoginStatus())
 
-  // Load current user. Look first for config from server, but if that's not
-  // found then ensure user id from last session (if any) is still logged in.
-  let currentUserId = parseInt(_get(configFromServer, 'userId'), 10)
-  if (!_isFinite(currentUserId) || currentUserId === GUEST_USER_ID) {
-    // If there's a current user from the last session, try it.
-    currentUserId = _get(store.getState(), 'currentUser.userId')
-  }
-
-  if (_isFinite(currentUserId) && currentUserId !== GUEST_USER_ID) {
-    store.dispatch(
-      ensureUserLoggedIn(true)
-    ).then(() =>
-      store.dispatch(fetchSavedChallenges(currentUserId))
-    ).then(() =>
-      store.dispatch(clearCheckingLoginStatus())
-    ).catch(() => store.dispatch(clearCheckingLoginStatus()))
-  }
-  else {
+  // Load current user if there is an active session
+  store.dispatch(
+    ensureUserLoggedIn(true)
+  ).then(userId => {
+    store.dispatch(fetchSavedChallenges(userId))
+  }).then(() =>
     store.dispatch(clearCheckingLoginStatus())
-  }
+  ).catch(() => store.dispatch(clearCheckingLoginStatus()))
 
   // Seed our store with some currently popular challenges.
   store.dispatch(
@@ -91,7 +76,7 @@ const {store} = initializePersistedStore((store) => {
     <Provider store={store}>
       <ConnectedIntl {...this.props}>
         <Router history={routerHistory}>
-          <App initialUserId={currentUserId} />
+          <App />
         </Router>
       </ConnectedIntl>
     </Provider>,
