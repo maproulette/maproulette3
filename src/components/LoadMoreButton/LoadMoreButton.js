@@ -12,7 +12,7 @@ import './LoadMoreButton.css'
  */
 export default class LoadMoreButton extends Component {
   render() {
-    if (!this.props.hasMoreResults) {
+    if (!this.props.hasMoreResults && !this.props.isLoading) {
       return null
     }
 
