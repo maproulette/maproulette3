@@ -112,10 +112,10 @@ ProjectListBlock.propTypes = {
 const Block =
     WithSearchResults( // for projects
       WithSearchResults( // for challenges
-        WithPagedProjects(
-          WithChallengeResultParents(
-            injectIntl(ProjectListBlock),
-          ), "resultProjects", "pagedProjects"),
+        WithChallengeResultParents(
+          WithPagedProjects(
+            injectIntl(ProjectListBlock), "resultProjects", "pagedProjects")
+        ),
         'adminChallenges',
         'challenges',
         'filteredChallenges'
