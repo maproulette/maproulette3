@@ -8,6 +8,7 @@ import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _startsWith from 'lodash/startsWith'
 import _omit from 'lodash/omit'
+import _map from 'lodash/map'
 import WithSearch from '../WithSearch/WithSearch'
 import { parseQueryString } from '../../../services/Search/Search'
 
@@ -19,6 +20,7 @@ const fuzzySearchOptions = {
   distance: 500, // allowed distance from "location" (higher = less penalty for matches near end of string)
   maxPatternLength: 64, // max query length
   minMatchCharLength: 3,
+  includeScore: true,
   keys: ["name", "displayName", "blurb"], // fields to search
 }
 
@@ -71,7 +73,12 @@ export const WithSearchResults = function(WrappedComponent, searchName,
 
         if (items.length > 0 && queryParts.query.length > 0) {
           const fuzzySearch = new Fuse(items, fuzzySearchOptions)
-          searchResults = fuzzySearch.search(queryParts.query)
+          searchResults = _map(fuzzySearch.search(queryParts.query),
+                            (result) => {
+                              const item = result.item
+                              item.score = result.score
+                              return item
+                            })
           searchActive = true
         }
         else {

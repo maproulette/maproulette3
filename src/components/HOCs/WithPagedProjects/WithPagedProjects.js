@@ -5,8 +5,8 @@ import _omit from 'lodash/omit'
 import _isEmpty from 'lodash/isEmpty'
 import _slice from 'lodash/slice'
 import _sortBy from 'lodash/sortBy'
-import _filter from 'lodash/filter'
-import _reverse from 'lodash/reverse'
+import _each from 'lodash/each'
+import _find from 'lodash/find'
 import { RESULTS_PER_PAGE } from '../../../services/Search/Search'
 
 export default function(WrappedComponent,
@@ -27,11 +27,16 @@ export default function(WrappedComponent,
         pagedProjects = _sortBy(pagedProjects, (p) => p.displayName.toLowerCase())
         pagedProjects = _slice(pagedProjects, 0, numberResultsToShow)
       }
-      // Otherwise sort by the number of matching challenges
+      // Otherwise sort by the fuzzy search score
       else {
-        pagedProjects = _reverse(_sortBy(pagedProjects, (p) => {
-          return _filter(this.props.filteredChallenges, (c) => c.parent === p.id).length
-        }))
+        _each(this.props.filteredChallenges, (c) => {
+          const parent = _find(pagedProjects, (p) => p.id === c.parent)
+          if (!parent.score || c.score < parent.score) {
+            parent.score = c.score
+          }
+        })
+
+        pagedProjects = _sortBy(pagedProjects, (p) => p.score)
       }
 
       if (_isEmpty(outputProp)) {
