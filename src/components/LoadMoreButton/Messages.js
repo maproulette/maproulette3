@@ -1,11 +1,11 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with ChallengeResultList.
+ * Internationalized messages for use with LoadMoreButton.
  */
 export default defineMessages({
-  loadMoreLabel: {
-    id: "Project.controls.loadMore.label",
+  moreResultsLabel: {
+    id: "General.controls.moreResults.label",
     defaultMessage: "More Results",
   },
 })

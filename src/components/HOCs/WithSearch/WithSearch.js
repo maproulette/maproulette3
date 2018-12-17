@@ -179,7 +179,8 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     // If multiple WithSearch HOCs are chained, invoke parent setSearchPage
     // as well. The assumption is that they are configured to page
     // different entities (e.g. one pages projects and the other
-    // pages challenges)
+    // pages challenges). We want to pass through the search group that we
+    // we setSearchPage to apply to.
     if (_isFunction(ownProps.setSearchPage)) {
       ownProps.setSearchPage(page, applyToSearchGroup)
     }

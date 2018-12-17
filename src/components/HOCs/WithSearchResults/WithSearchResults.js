@@ -75,9 +75,8 @@ export const WithSearchResults = function(WrappedComponent, searchName,
           const fuzzySearch = new Fuse(items, fuzzySearchOptions)
           searchResults = _map(fuzzySearch.search(queryParts.query),
                             (result) => {
-                              const item = result.item
-                              item.score = result.score
-                              return item
+                              result.item.score = result.score
+                              return result.item
                             })
           searchActive = true
         }

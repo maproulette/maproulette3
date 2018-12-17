@@ -41,7 +41,7 @@ export const SORT_DEFAULT = 'default'
 export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_DEFAULT]
 
 // Default Results Per page
-export const RESULTS_PER_PAGE = 5
+export const RESULTS_PER_PAGE = 50
 
 export const SortOptions = {
   name: SORT_NAME,

@@ -6,7 +6,6 @@ import { DashboardDataTarget }
 import { registerBlockType } from '../BlockTypes'
 import { searchProjects, fetchManageableProjects } from '../../../../../services/Project/Project'
 import { extendedFind } from '../../../../../services/Challenge/Challenge'
-import { RESULTS_PER_PAGE } from '../../../../../services/Search/Search'
 import WithChallengeResultParents
        from '../../../HOCs/WithChallengeResultParents/WithChallengeResultParents'
 import WithSearchResults
@@ -44,7 +43,9 @@ const ProjectAndChallengeSearch = WithComboSearch(SearchBox, {
         return null
       }
       return searchProjects({searchQuery: queryCriteria.query,
-                             page: _get(queryCriteria, "page.currentPage")})
+                             page: _get(queryCriteria, "page.currentPage"),
+                             onlyEnabled: false},
+                             _get(queryCriteria, "page.resultsPerPage"))
     },
   'adminChallenges': queryCriteria => {
       // If no query is present then we don't need to search
@@ -53,7 +54,8 @@ const ProjectAndChallengeSearch = WithComboSearch(SearchBox, {
       }
       return extendedFind({searchQuery: queryCriteria.query,
                            page: _get(queryCriteria, "page.currentPage"),
-                           onlyEnabled: false}, RESULTS_PER_PAGE)
+                           onlyEnabled: false},
+                           _get(queryCriteria, "page.resultsPerPage"))
     },
 })
 

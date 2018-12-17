@@ -207,7 +207,7 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
     }
 
     queryParams.sort = sort
-    queryParams.page = page
+    queryParams.page = page * limit
 
     if (bounds) {
       const boundsObject = toLatLngBounds(bounds)

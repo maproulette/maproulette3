@@ -4,6 +4,7 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
 import _isFinite from 'lodash/isFinite'
+import _isUndefined from 'lodash/isUndefined'
 import startOfDay from 'date-fns/start_of_day'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
@@ -119,9 +120,13 @@ export const fetchProject = function(projectId) {
  *
  * @param {string} query - the search string
  */
-export const searchProjects = function(searchCriteria, onlyEnabled=false, limit=RESULTS_PER_PAGE) {
+export const searchProjects = function(searchCriteria, limit=RESULTS_PER_PAGE) {
   const query = _get(searchCriteria, 'searchQuery')
+  const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled) ? true : searchCriteria.onlyEnabled
+
+  // We are just making sure the pqge passed in is a) present and b) a number  
   const page = _isFinite(_get(searchCriteria, 'page')) ? _get(searchCriteria, 'page') : 0
+
 
   return function(dispatch) {
     return new Endpoint(api.projects.search, {
