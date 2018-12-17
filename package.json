@@ -12,7 +12,7 @@
     "@turf/boolean-disjoint": "^5.1.5",
     "@turf/center": "^5.1.5",
     "@turf/invariant": "^5.1.5",
-    "bulma": "^0.6.0",
+    "bulma": "0.6.0",
     "bulma-badge": "^0.1.0",
     "bulma-checkradio": "^1.0.1",
     "bulma-steps-component": "^0.5.3",
@@ -66,7 +66,6 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "chimp": "^0.51.1",
     "combine-react-intl-messages": "^1.0.6",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.1",
