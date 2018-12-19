@@ -7,7 +7,9 @@ import _slice from 'lodash/slice'
 import _sortBy from 'lodash/sortBy'
 import _each from 'lodash/each'
 import _find from 'lodash/find'
+import _filter from 'lodash/filter'
 import _isObject from 'lodash/isObject'
+import _differenceBy from 'lodash/differenceBy'
 import { RESULTS_PER_PAGE } from '../../../services/Search/Search'
 
 export default function(WrappedComponent,
@@ -28,7 +30,19 @@ export default function(WrappedComponent,
       // projects.
       if (!this.props.adminChallengesSearchActive) {
         pagedProjects = _sortBy(pagedProjects, (p) => p.displayName.toLowerCase())
+
+        // Grab ths pinnedProjects first so they don't get lost when we chunk.
+        let pinnedProjects = _filter(
+          pagedProjects,
+          project => this.props.pinnedProjects.indexOf(project.id) !== -1
+        )
+
+        // Then chunk of everything else.
+        pagedProjects = _differenceBy(pagedProjects, pinnedProjects, 'id')
         pagedProjects = _slice(pagedProjects, 0, numberResultsToShow)
+
+        // Now we want pinned projects first followed by the rest of the sorted projects
+        pagedProjects = pinnedProjects.concat(pagedProjects)
       }
       else {
          // Otherwise sort by the fuzzy search score. We want to move any matching

@@ -159,7 +159,7 @@ export const fetchProjectChallengeListing = function(projectIds, onlyEnabled=fal
  * @param {object} criteria - criteria to include in search. Can include keys:
  *                            'searchQuery', 'filters', 'onlyEnabled', 'bounds'
  *                            'sortCriteria.sortBy', 'sortCrtiera.direction',
-                              'page'
+                              'page','challengeStatus'
  * @param {number} limit
  */
 export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
@@ -170,9 +170,10 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
 
   const bounds = criteria.bounds
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const direction = _get(criteria, 'sortCriteria.direction', 'DESC')
-  const sort = sortBy ? `${sortBy} ${direction}` : null
+  const direction = _get(criteria, 'sortCriteria.direction', 'DESC').toUpperCase()
+  const sort = sortBy ? `${sortBy}` : null
   const page = _isFinite(criteria.page) ? criteria.page : 0
+  const challengeStatus = criteria.challengeStatus
 
   return function(dispatch) {
     const queryParts = parseQueryString(queryString)
@@ -207,7 +208,12 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
     }
 
     queryParams.sort = sort
+    queryParams.order = direction
     queryParams.page = page * limit
+
+    if (challengeStatus) {
+      queryParams.cStatus = challengeStatus.join(',')
+    }
 
     if (bounds) {
       const boundsObject = toLatLngBounds(bounds)

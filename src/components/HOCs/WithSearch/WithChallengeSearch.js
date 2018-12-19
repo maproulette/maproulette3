@@ -2,6 +2,7 @@ import _get from 'lodash/get'
 import _isUndefined from 'lodash/isUndefined'
 import WithSearch from '../WithSearch/WithSearch'
 import { extendedFind } from '../../../services/Challenge/Challenge'
+import { ChallengeStatus } from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithSearchRoute from '../WithSearchRoute/WithSearchRoute'
 
 const SEARCH_GROUP = 'challenges'
@@ -21,7 +22,12 @@ const buildCriteria = query => {
     bounds = _get(query, "mapBounds.bounds")
   }
 
-  return {searchQuery: queryString, filters, sortCriteria, bounds, page}
+  const challengeStatus = [ChallengeStatus.ready,
+                           ChallengeStatus.partiallyLoaded,
+                           ChallengeStatus.none,
+                           ChallengeStatus.empty]
+
+  return {searchQuery: queryString, filters, sortCriteria, bounds, page, challengeStatus}
 }
 
 const performChallengeSearch = (query, limit) => {

@@ -17,6 +17,7 @@ import App from './App';
 import BusySpinner from './components/BusySpinner/BusySpinner'
 import { initializePersistedStore } from './PersistedStore'
 import { extendedFind } from './services/Challenge/Challenge'
+import { ChallengeStatus } from './services/Challenge/ChallengeStatus/ChallengeStatus'
 import { SortOptions, RESULTS_PER_PAGE } from './services/Search/Search'
 import { ensureUserLoggedIn, fetchSavedChallenges, GUEST_USER_ID }
        from './services/User/User'
@@ -64,7 +65,11 @@ const {store} = initializePersistedStore((store) => {
 
   // Seed our store with some currently popular challenges.
   store.dispatch(
-    extendedFind({sortCriteria: {sortBy: SortOptions.popular}}, RESULTS_PER_PAGE)
+    extendedFind({sortCriteria: {sortBy: SortOptions.popular},
+                  challengeStatus: [ChallengeStatus.ready,
+                    ChallengeStatus.partiallyLoaded,
+                    ChallengeStatus.none, 
+                    ChallengeStatus.empty]}, RESULTS_PER_PAGE)
   )
 
   // Setup the router history object separately so that it can be integrated
