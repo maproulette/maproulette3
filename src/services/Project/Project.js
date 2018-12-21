@@ -116,6 +116,23 @@ export const fetchProject = function(projectId) {
 }
 
 /**
+ * Fetch data for the given project.
+ */
+export const fetchProjectsById = function(projectIds) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.project.multiple, {schema: [ projectSchema() ], params: {projectIds: projectIds}}
+    ).execute().then(normalizedResults => {
+      dispatch(receiveProjects(normalizedResults.entities))
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(AppErrors.project.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
  * Search projects by name using the given search string
  *
  * @param {string} query - the search string
@@ -124,7 +141,7 @@ export const searchProjects = function(searchCriteria, limit=RESULTS_PER_PAGE) {
   const query = _get(searchCriteria, 'searchQuery')
   const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled) ? true : searchCriteria.onlyEnabled
 
-  // We are just making sure the pqge passed in is a) present and b) a number  
+  // We are just making sure the pqge passed in is a) present and b) a number
   const page = _isFinite(_get(searchCriteria, 'page')) ? _get(searchCriteria, 'page') : 0
 
 

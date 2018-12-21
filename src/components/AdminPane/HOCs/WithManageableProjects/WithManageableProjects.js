@@ -7,6 +7,7 @@ import _omit from 'lodash/omit'
 import _each from 'lodash/each'
 import { fetchManageableProjects,
          fetchProject,
+         fetchProjectsById,
          addProjectManager,
          setProjectManagerGroupType,
          fetchProjectManagers,
@@ -41,11 +42,17 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
           })
         }
 
+        // Since we only fetched a small portion of the total projects in the
+        // database we need to make sure we also fetch the projects that are pinned.
+        let missingProjects = []
         _each(this.props.pinnedProjects, (pinnedProject) => {
           if (!this.props.entities.projects[pinnedProject]) {
-            this.props.fetchProject(pinnedProject)
+            missingProjects.push(pinnedProject)
           }
         })
+        if (missingProjects.length > 0) {
+          this.props.fetchProjectsById(missingProjects)
+        }
 
         this.setState({loadingProjects: false})
       })
@@ -84,6 +91,7 @@ const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
     fetchManageableProjects,
     fetchProject,
+    fetchProjectsById,
     fetchProjectChallengeListing,
     saveProject,
     addProjectManager,
