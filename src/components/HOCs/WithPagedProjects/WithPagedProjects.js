@@ -29,7 +29,7 @@ export default function(WrappedComponent,
       // also only going to only show numberResultsToShow projects if we are paging all
       // projects.
       if (!this.props.adminChallengesSearchActive) {
-        pagedProjects = _sortBy(pagedProjects, (p) => p.displayName.toLowerCase())
+        pagedProjects = _sortBy(pagedProjects, (p) => (p.displayName || p.name).toLowerCase())
 
         // Grab ths pinnedProjects first so they don't get lost when we chunk.
         let pinnedProjects = _filter(
