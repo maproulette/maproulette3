@@ -11,6 +11,7 @@ import WithChallengeResultParents
 import WithSearchResults
        from '../../../../HOCs/WithSearchResults/WithSearchResults'
 import WithComboSearch from '../../../HOCs/WithComboSearch/WithComboSearch'
+import WithSearch from '../../../../HOCs/WithSearch/WithSearch'
 import WithPagedProjects from '../../../../HOCs/WithPagedProjects/WithPagedProjects'
 import SearchBox from '../../../../SearchBox/SearchBox'
 import SvgControl from '../../../../Bulma/SvgControl'
@@ -112,6 +113,7 @@ ProjectListBlock.propTypes = {
 }
 
 const Block =
+  WithSearch(
     WithSearchResults( // for projects
       WithSearchResults( // for challenges
         WithChallengeResultParents(
@@ -124,15 +126,17 @@ const Block =
       ),
       'adminProjects',
       'filteredProjects',
-      'resultProjects',
-      queryCriteria => {
-        // We only fetch all managed projects if we are not doing a query.
-        if (queryCriteria.query) {
-          return null
-        }
-        return fetchManageableProjects(_get(queryCriteria, 'page.currentPage'),
-                                       _get(queryCriteria, 'page.resultsPerPage'))
-      },
-    )
+      'resultProjects'
+    ),
+    'adminProjectList',
+     queryCriteria => {
+       // We only fetch all managed projects if we are not doing a query.
+       if (queryCriteria.query) {
+         return null
+       }
+       return fetchManageableProjects(_get(queryCriteria, 'page.currentPage'),
+                                      _get(queryCriteria, 'page.resultsPerPage'))
+    },
+  )
 
 registerBlockType(Block, descriptor)

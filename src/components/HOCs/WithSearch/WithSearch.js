@@ -6,6 +6,7 @@ import _omit from 'lodash/omit'
 import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
+import _includes from 'lodash/includes'
 import { SORT_NAME, SORT_CREATED, SORT_POPULARITY,
          setSort, removeSort, setPage,
          setFilters, removeFilters, clearFilters,
@@ -170,19 +171,19 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   removeSearchSort:
     criteriaNames => dispatch(removeSort(searchGroup, criteriaNames)),
 
-  setSearchPage: (page, applyToSearchGroup = null) => {
+  setSearchPage: (page, applyToSearchGroups = null) => {
     // Only call setPage if it applies to the correct search group
-    if (applyToSearchGroup === null || searchGroup === applyToSearchGroup) {
+    if (applyToSearchGroups === null || _includes(applyToSearchGroups, searchGroup)) {
       dispatch(setPage(searchGroup, page))
     }
 
     // If multiple WithSearch HOCs are chained, invoke parent setSearchPage
     // as well. The assumption is that they are configured to page
     // different entities (e.g. one pages projects and the other
-    // pages challenges). We want to pass through the search group that we
-    // we setSearchPage to apply to.
+    // pages challenges). We want to pass through the search groups that
+    // we want setSearchPage to apply to.
     if (_isFunction(ownProps.setSearchPage)) {
-      ownProps.setSearchPage(page, applyToSearchGroup)
+      ownProps.setSearchPage(page, applyToSearchGroups)
     }
   },
 

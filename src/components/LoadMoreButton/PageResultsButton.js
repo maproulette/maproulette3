@@ -15,12 +15,12 @@ import messages from './Messages'
  */
 export default class PageResultsButton extends Component {
   render() {
-    const resultsPerPage = _get(this.props, `currentSearch.${this.props.searchGroup}.page.resultsPerPage`, RESULTS_PER_PAGE)
-    const currentPage = _get(this.props, `currentSearch.${this.props.searchGroup}.page.currentPage`, 0)
+    const resultsPerPage = _get(this.props, `searchPage.resultsPerPage`, RESULTS_PER_PAGE)
+    const currentPage = _get(this.props, `searchPage.currentPage`, 0)
 
     return (
       <LoadMoreButton {...this.props}
-          loadMore={() => this.props.setSearchPage({currentPage: (currentPage + 1), resultsPerPage})} >
+          loadMore={() => this.props.setSearchPage({currentPage: (currentPage + 1), resultsPerPage}, this.props.applyToSearchGroups)} >
         <FormattedMessage {...messages.moreResultsLabel} />
       </LoadMoreButton>
     )
@@ -35,5 +35,5 @@ PageResultsButton.propTypes = {
   /** Boolean flag indicating we should show a busy spinner */
   isLoading: PropTypes.bool,
   /** Search Group to apply the paging too */
-  searchGroup: PropTypes.string,
+  applyToSearchGroups: PropTypes.array,
 }

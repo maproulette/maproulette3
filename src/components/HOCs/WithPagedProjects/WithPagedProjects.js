@@ -17,17 +17,18 @@ export default function(WrappedComponent,
                         outputProp) {
   class WithPagedProjects extends Component {
     render() {
-      const currentPage = _get(this.props, 'searchPage.currentPage', 0)
-      const resultsPerPage = _get(this.props, 'searchPage.resultsPerPage', RESULTS_PER_PAGE)
+      const searchGroups = this.props.adminChallengesSearchActive ? ["adminProjects", "adminChallenges"] : ["adminProjectList"]
+      const pageGroup = this.props.adminChallengesSearchActive ? "adminProjects" : "adminProjectList"
+
+      const currentPage = _get(this.props, `currentSearch.${pageGroup}.page.currentPage`, 0)
+      const resultsPerPage = _get(this.props, `currentSearch.${pageGroup}.page.resultsPerPage`, RESULTS_PER_PAGE)
       const numberResultsToShow = (currentPage + 1) * resultsPerPage
 
       let pagedProjects = this.props[projectsProp]
 
       const hasMoreResults = (pagedProjects.length > numberResultsToShow) || this.props.isLoading
 
-      // Only sort by display name if we do not have a challenge search going. We are
-      // also only going to only show numberResultsToShow projects if we are paging all
-      // projects.
+      // Only sort by display name if we do not have a challenge search going.
       if (!this.props.adminChallengesSearchActive) {
         pagedProjects = _sortBy(pagedProjects, (p) => (p.displayName || p.name).toLowerCase())
 
@@ -55,6 +56,7 @@ export default function(WrappedComponent,
         })
 
         pagedProjects = _sortBy(pagedProjects, (p) => p.score)
+        pagedProjects = _slice(pagedProjects, 0, numberResultsToShow)
       }
 
       if (_isEmpty(outputProp)) {
@@ -63,7 +65,9 @@ export default function(WrappedComponent,
 
       return <WrappedComponent hasMoreResults={hasMoreResults}
                                {...{[outputProp]: pagedProjects}}
-                               {..._omit(this.props, outputProp)} />
+                               {..._omit(this.props, outputProp)}
+                               applyToSearchGroups={searchGroups}
+                               searchPage={{currentPage, resultsPerPage}} />
     }
   }
 
