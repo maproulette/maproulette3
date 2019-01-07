@@ -10,7 +10,7 @@ export default defineMessages({
   },
   es: {
     id: "Locale.es.label",
-    defaultMessage: "es (Spanish)",
+    defaultMessage: "es (Español)",
   },
   de: {
     id: "Locale.de.label",
@@ -24,5 +24,8 @@ export default defineMessages({
     id: "Locale.af.label",
     defaultMessage: "af (Afrikaans)",
   },
+  ja: {
+    id: "Locale.ja.label",
+    defaultMessage: "ja (日本語)",
+  },
 })
-
