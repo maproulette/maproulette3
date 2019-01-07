@@ -38,9 +38,9 @@ export default class SearchBox extends Component {
   }
 
   render() {
-    const query = _get(this.props, 'searchQuery.query') ||
-                  _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`)
-                  || ''
+    const query = (this.props.searchGroup ? 
+      _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
+      _get(this.props, 'searchQuery.query')) || ''
 
     const clearButton =
       query.length === 0 ? null :

@@ -170,7 +170,7 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
 
   const bounds = criteria.bounds
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const direction = _get(criteria, 'sortCriteria.direction', 'DESC').toUpperCase()
+  const direction = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? `${sortBy}` : null
   const page = _isFinite(criteria.page) ? criteria.page : 0
   const challengeStatus = criteria.challengeStatus
