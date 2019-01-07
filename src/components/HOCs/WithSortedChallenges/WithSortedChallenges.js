@@ -7,6 +7,7 @@ import _reverse from 'lodash/reverse'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
+import _toLower from 'lodash/toLower'
 import WithChallengeSearch from '../WithSearch/WithChallengeSearch'
 import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, ALL_SORT_OPTIONS }
        from '../../../services/Search/Search'
@@ -19,7 +20,7 @@ export const sortChallenges = function(props, challengesProp='challenges') {
   let sortedChallenges = props[challengesProp]
 
   if (sortCriteria === SORT_NAME) {
-    sortedChallenges = _sortBy(sortedChallenges, 'name')
+    sortedChallenges = _sortBy(sortedChallenges, (c) => _toLower(c.name))
   }
   else if (sortCriteria === SORT_CREATED) {
     sortedChallenges = _reverse(_sortBy(sortedChallenges,

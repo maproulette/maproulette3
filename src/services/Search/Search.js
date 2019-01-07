@@ -289,17 +289,20 @@ export const performSearch = function(searchName, query, asyncSearchAction) {
     }
 
     const resultsPerPage = _get(query, 'page.resultsPerPage')
+    const actionToDo = asyncSearchAction(query, resultsPerPage)
 
-    dispatch(fetchingResults(searchName, fetchId))
-    return dispatch(
-      asyncSearchAction(query, resultsPerPage)
-    ).then(() => dispatch(receivedResults(searchName, fetchId)))
-    .catch((error) => {
-      // 404 indicates no results.
-      if (error.response && error.response.status === 404) {
-        dispatch(receivedResults(searchName, fetchId))
-      }
-    })
+    if (actionToDo) {
+      dispatch(fetchingResults(searchName, fetchId))
+      return dispatch(
+        actionToDo
+      ).then(() => dispatch(receivedResults(searchName, fetchId)))
+      .catch((error) => {
+        // 404 indicates no results.
+        if (error.response && error.response.status === 404) {
+          dispatch(receivedResults(searchName, fetchId))
+        }
+      })
+    }
   }
 }
 

@@ -4,7 +4,10 @@ import { bindActionCreators } from 'redux'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _omit from 'lodash/omit'
+import _each from 'lodash/each'
 import { fetchManageableProjects,
+         fetchProject,
+         fetchProjectsById,
          addProjectManager,
          setProjectManagerGroupType,
          fetchProjectManagers,
@@ -16,6 +19,7 @@ import { fetchProjectChallengeListing }
        from '../../../../services/Challenge/Challenge'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
 import AsManager from '../../../../interactions/User/AsManager'
+import WithPinned from '../../HOCs/WithPinned/WithPinned'
 
 /**
  * WithManageableProjects makes available to the WrappedComponent all the
@@ -36,6 +40,18 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
           this.props.fetchProjectChallengeListing(result).then(() => {
             this.setState({loadingChallenges: false})
           })
+        }
+
+        // Since we only fetched a small portion of the total projects in the
+        // database we need to make sure we also fetch the projects that are pinned.
+        let missingProjects = []
+        _each(this.props.pinnedProjects, (pinnedProject) => {
+          if (!this.props.entities.projects[pinnedProject]) {
+            missingProjects.push(pinnedProject)
+          }
+        })
+        if (missingProjects.length > 0) {
+          this.props.fetchProjectsById(missingProjects)
         }
 
         this.setState({loadingProjects: false})
@@ -74,6 +90,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
     fetchManageableProjects,
+    fetchProject,
+    fetchProjectsById,
     fetchProjectChallengeListing,
     saveProject,
     addProjectManager,
@@ -93,5 +111,5 @@ const mapDispatchToProps = dispatch => {
 
 export default (WrappedComponent, includeChallenges) =>
   connect(mapStateToProps, mapDispatchToProps)(
-    WithCurrentUser(WithManageableProjects(WrappedComponent, includeChallenges))
+    WithCurrentUser(WithPinned(WithManageableProjects(WrappedComponent, includeChallenges)))
   )

@@ -14,6 +14,9 @@ export const CHALLENGE_STATUS_READY = 3
 export const CHALLENGE_STATUS_PARTIALLY_LOADED = 4
 export const CHALLENGE_STATUS_FINISHED = 5
 
+//We can ask the server for challenges that have no status by using -1
+export const CHALLENGE_STATUS_EMPTY = -1
+
 export const ChallengeStatus = Object.freeze({
   none: CHALLENGE_STATUS_NONE,
   building: CHALLENGE_STATUS_BUILDING,
@@ -21,6 +24,7 @@ export const ChallengeStatus = Object.freeze({
   ready: CHALLENGE_STATUS_READY,
   partiallyLoaded: CHALLENGE_STATUS_PARTIALLY_LOADED,
   finished: CHALLENGE_STATUS_FINISHED,
+  empty: CHALLENGE_STATUS_EMPTY,
 })
 
 /**

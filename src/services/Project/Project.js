@@ -4,12 +4,14 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
 import _isFinite from 'lodash/isFinite'
+import _isUndefined from 'lodash/isUndefined'
 import startOfDay from 'date-fns/start_of_day'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 import { RECEIVE_CHALLENGES } from '../Challenge/ChallengeActions'
+import { RESULTS_PER_PAGE } from '../Search/Search'
 import { GroupType } from './GroupType/GroupType'
 import { addServerError,
          addError } from '../Error/Error'
@@ -73,10 +75,12 @@ export const fetchProjects = function(limit=50) {
  * Fetch data on projects the current user has permission to manage (up to the
  * given limit).
  */
-export const fetchManageableProjects = function(limit=50) {
+export const fetchManageableProjects = function(page = null, limit = RESULTS_PER_PAGE) {
+  const pageToFetch = _isFinite(page) ? page : 0
+
   return function(dispatch) {
     return new Endpoint(
-      api.projects.managed, {schema: [ projectSchema() ], params: {limit}}
+      api.projects.managed, {schema: [ projectSchema() ], params: {limit: limit, page: (pageToFetch * limit)}}
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults
@@ -112,17 +116,42 @@ export const fetchProject = function(projectId) {
 }
 
 /**
+ * Fetch data for the given project.
+ */
+export const fetchProjectsById = function(projectIds) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.project.multiple, {schema: [ projectSchema() ], params: {projectIds: projectIds}}
+    ).execute().then(normalizedResults => {
+      dispatch(receiveProjects(normalizedResults.entities))
+      return normalizedResults
+    }).catch((error) => {
+      dispatch(addError(AppErrors.project.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
  * Search projects by name using the given search string
  *
  * @param {string} query - the search string
  */
-export const searchProjects = function(searchCriteria, onlyEnabled=false, limit=50) {
+export const searchProjects = function(searchCriteria, limit=RESULTS_PER_PAGE) {
+  const query = _get(searchCriteria, 'searchQuery')
+  const onlyEnabled = _isUndefined(searchCriteria.onlyEnabled) ? true : searchCriteria.onlyEnabled
+
+  // We are just making sure the pqge passed in is a) present and b) a number
+  const page = _isFinite(_get(searchCriteria, 'page')) ? _get(searchCriteria, 'page') : 0
+
+
   return function(dispatch) {
     return new Endpoint(api.projects.search, {
         schema: [ projectSchema() ],
         params: {
-          q: `%${searchCriteria.query}%`,
+          q: `%${query}%`,
           onlyEnabled: onlyEnabled ? 'true' : 'false',
+          page: page * limit,
           limit,
         }
     }).execute().then(normalizedResults => {

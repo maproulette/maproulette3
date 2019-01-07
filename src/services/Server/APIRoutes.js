@@ -23,6 +23,7 @@ const apiRoutes = factory => {
     },
     'project': {
       'single': factory.get('/project/:id'),
+      'multiple': factory.get('/projects'),
       'challenges': factory.get('/project/:id/challenges'),
       'create': factory.post('/project'),
       'edit': factory.put('/project/:id'),

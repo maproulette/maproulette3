@@ -29,7 +29,7 @@ import AppErrors from '../Error/AppErrors'
 import { RECEIVE_CHALLENGES,
          REMOVE_CHALLENGE } from './ChallengeActions'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
-import { parseQueryString } from '../Search/Search'
+import { parseQueryString, RESULTS_PER_PAGE } from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
 
 // normalizr schema
@@ -102,7 +102,7 @@ export const removeChallenge = function(challengeId) {
  *
  * @param {number} limit
  */
-export const fetchFeaturedChallenges = function(limit = 50) {
+export const fetchFeaturedChallenges = function(limit = RESULTS_PER_PAGE) {
   return function(dispatch) {
     return new Endpoint(
       api.challenges.featured,
@@ -159,10 +159,10 @@ export const fetchProjectChallengeListing = function(projectIds, onlyEnabled=fal
  * @param {object} criteria - criteria to include in search. Can include keys:
  *                            'searchQuery', 'filters', 'onlyEnabled', 'bounds'
  *                            'sortCriteria.sortBy', 'sortCrtiera.direction',
-                              'page'
+                              'page','challengeStatus'
  * @param {number} limit
  */
-export const extendedFind = function(criteria, limit=50) {
+export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
   const queryString = criteria.searchQuery
   const filters = criteria.filters || {}
   const onlyEnabled = _isUndefined(criteria.onlyEnabled) ?
@@ -170,9 +170,10 @@ export const extendedFind = function(criteria, limit=50) {
 
   const bounds = criteria.bounds
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const direction = _get(criteria, 'sortCriteria.direction', 'DESC')
-  const sort = sortBy ? `${sortBy} ${direction}` : null
+  const direction = _get(criteria, 'sortCriteria.direction', 'DESC').toUpperCase()
+  const sort = sortBy ? `${sortBy}` : null
   const page = _isFinite(criteria.page) ? criteria.page : 0
+  const challengeStatus = criteria.challengeStatus
 
   return function(dispatch) {
     const queryParts = parseQueryString(queryString)
@@ -207,7 +208,12 @@ export const extendedFind = function(criteria, limit=50) {
     }
 
     queryParams.sort = sort
-    queryParams.page = page
+    queryParams.order = direction
+    queryParams.page = page * limit
+
+    if (challengeStatus) {
+      queryParams.cStatus = challengeStatus.join(',')
+    }
 
     if (bounds) {
       const boundsObject = toLatLngBounds(bounds)
