@@ -1,6 +1,10 @@
 import { Page } from './Page'
 
 class HomePage extends Page {
+  get getStarted() {
+    return browser.element(".home-pane__view-challenges")
+  }
+
   get aboutNavLink() {
     return browser.element(".top-nav__about-link")
   }

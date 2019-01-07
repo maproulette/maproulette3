@@ -114,14 +114,6 @@ export default class Navbar extends Component {
 const NavbarPrimaryLinks = function(props) {
   return (
     <React.Fragment>
-      <Link to='/about' className="navbar-item top-nav__about-link"
-            onClick={props.onLinkClick}>
-        <span className={classNames('item-text',
-                                    {'is-active': props.location.pathname === '/about'})}>
-          <FormattedMessage {...messages.about} />
-        </span>
-      </Link>
-
       <Link to='/browse/challenges' className="navbar-item top-nav__browse-link"
             onClick={props.onLinkClick}>
         <span className={

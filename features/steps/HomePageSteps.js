@@ -1,5 +1,4 @@
 import HomePage from '../pages/HomePage'
-import AboutModal from '../pages/AboutModal'
 
 export default function() {
   this.Given(/^(\w+) visits (MapRoulette|the site|the home page)$/, function(username, pageName) {
@@ -12,14 +11,15 @@ export default function() {
     }
 
     HomePage.waitForKnownLoginStatus()
-
-    if (AboutModal.modal.isExisting()) {
-      AboutModal.getStarted.click()
-    }
+    HomePage.getStarted.click()
   })
 
   this.Given(/^(\w+) opens the Account nav menu$/, function(username) {
     HomePage.waitForKnownLoginStatus()
     HomePage.accountNavMenu.click()
+  })
+
+  this.Given(/^(\w+) clicks Get Started on the home page$/, function(user) {
+    HomePage.getStarted.click()
   })
 }

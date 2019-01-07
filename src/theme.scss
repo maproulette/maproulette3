@@ -34,12 +34,16 @@ $tablet: 40px;
 .full-screen-height {
   height: calc(100vh - #{$navbar-height} - #{$subnav-height});
 
+  &.no-subnav {
+    height: calc(100vh - #{$navbar-height});
+  }
+
   @media(max-width: $app-mobile-break) {
     height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height} - #{$mobile-address-bar-height});
   }
 }
 
-.task .full-screen-height, .about .full-screen-height, .page-not-found.full-screen-height {
+.task .full-screen-height, .page-not-found.full-screen-height {
   // no subnav in task mode or about pane
   .leaflet-container {
     height: calc(100vh - #{$navbar-height});

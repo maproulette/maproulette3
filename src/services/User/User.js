@@ -162,7 +162,7 @@ export const ensureUserLoggedIn = function(squelchError=false) {
     ).execute().then(normalizedResults => {
       dispatch(receiveUsers(normalizedResults.entities))
       dispatch(setCurrentUser(normalizedResults.result))
-      return true
+      return normalizedResults.result
     }).catch(error => {
       // a 401 (unauthorized) indicates that the user is not logged in. Logout
       // the current user locally to reflect that fact and dispatch an error

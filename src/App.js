@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
-import _isNumber from 'lodash/isNumber'
-import AboutPane from './components/AboutPane/AboutPane'
+import HomePane from './components/HomePane/HomePane'
 import ChallengePane from './components/ChallengePane/ChallengePane'
 import TaskPane from './components/TaskPane/TaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
 import PageNotFound from './components/PageNotFound/PageNotFound'
-import { GUEST_USER_ID } from './services/User/User'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithCurrentTask from './components/HOCs/WithCurrentTask/WithCurrentTask'
@@ -47,7 +45,7 @@ const ErrorPane = WithExternalError(ChallengePane)
  * @see See ChallengePane
  * @see See TaskPane
  * @see See AdminPane
- * @see See AboutPane
+ * @see See HomePane
  * @see See ErrorModal
  * @see See Sprites
  *
@@ -72,19 +70,12 @@ export class App extends Component {
       }
     }
 
-    let firstTimeModal = null
-    if (!this.state.firstTimeModalDismissed &&
-        (!_isNumber(this.props.initialUserId) ||
-         this.props.initialUserId === GUEST_USER_ID)) {
-      firstTimeModal = <AboutPane onDismiss={this.dismissModal} {...this.props} />
-    }
-
     return (
       <div className="App">
         <TopNav />
 
         <Switch>
-          <CachedRoute exact path='/' component={ChallengePane} />
+          <CachedRoute exact path='/' component={HomePane} />
           <CachedRoute path='/browse/challenges/:challengeId?' component={ChallengePane} />
           <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
           <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
@@ -94,7 +85,6 @@ export class App extends Component {
           <CachedRoute exact path='/virtual/:virtualChallengeId'
                  component={LoadRandomVirtualChallengeTask} />
           <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
-          <CachedRoute exact path='/about' component={AboutPane} />
           <CachedRoute path='/user/profile' component={UserProfile} />
           <CachedRoute path='/leaderboard' component={Leaderboard} />
           <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
@@ -104,7 +94,6 @@ export class App extends Component {
           <Route component={PageNotFound} />
         </Switch>
 
-        {firstTimeModal}
         <ErrorModal />
         <Sprites />
       </div>

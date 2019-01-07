@@ -1,8 +1,14 @@
 # Getting Started
 
-maproulette3 is a new front-end for MapRoulette built on React. The back-end
-server from the [maproulette2](https://github.com/maproulette/maproulette2)
-project is still required.
+maproulette3 is a new front-end for MapRoulette built with
+[React](https://reactjs.org/).
+
+A back-end server from the
+[maproulette2](https://github.com/maproulette/maproulette2) project is still
+required. You can either install and configure it locally, or -- if looking to
+do front-end development only -- can connect to a pre-existing server if you
+have access to one (you will need your API key for that server). **Please do
+not use the production server for development purposes.**
 
 ## Developing Locally
 
@@ -15,24 +21,34 @@ project is still required.
 
 ### Initial Setup
 
-1. Create a `.env.development.local` file and:
- * if you want some debug output, set `REACT_APP_DEBUG='enabled'`.
- * set feature flags to `enabled` or `disabled` as desired.
- * override any other settings from the `.env` file as needed or desired.
+1. Create a `.env.development.local` file and then look through `.env` at the
+   available configuration options and override any desired settings in your
+   new `.env.development.local`
 
-2. `yarn` to fetch and install NPM modules.
+2. `yarn` to fetch and install NPM modules
 
-3. `yarn run start` to fire up the front-end server.
+3. `yarn run start` to fire up the front-end development server
 
-4. Visit your [OpenStreetMap account](https://www.openstreetmap.org) and go
+As mentioned above, a back-end server from the
+[maproulette2](https://github.com/maproulette/maproulette2) project is also
+required. You can either install and configure it locally or, if you have access
+to a pre-existing server, connect directly to it by using your API key for that
+server.
+
+#### Developing with a local back-end server
+
+1. Install the back-end server using the instructions from the maproulette2
+   project, if you haven't already
+
+2. Visit your [OpenStreetMap account](https://www.openstreetmap.org) and go
    to My Settings -> oauth settings -> Register your application and setup a
    new application for development. For the `Main Application URL` and
    `Callback URL` settings, put in `http://127.0.0.1:9000` (assuming your
    back-end server is running on the default port 9000). The only app
    permission needed is to "read their user preferences". Take note of your new
-   app's consumer key and secret key, as you'll need them in the next step.
+   app's consumer key and secret key, as you'll need them in the next step
 
-5. In your back-end server project, setup a .conf file that overrides properties
+3. In your back-end server project, setup a .conf file that overrides properties
    as needed from `conf/application.conf` (unless you'd prefer to set explicit
    system properties on the command line when starting up the server). Refer
    to the `conf/application.conf` file, `conf/dev.conf` file and maproulette2
@@ -40,20 +56,44 @@ project is still required.
    very least, you'll want to make sure your JDBC url is correct and your OAuth
    consumer key and secret are set properly. You'll also need to set the
    `mr3.host` to the URL of your front-end dev server (`http://127.0.0.1:3000`
-   by default) and set `mr3.devMode=true` if you're doing development.
+   by default) and set `mr3.devMode=true` if you're doing development
 
-6. Fire up your back-end server, specifying the path to your .conf file with
+4. Fire up your back-end server, specifying the path to your .conf file with
    `-Dconfig.resource` or explicitly specifying the various system properties
    on the command line (e.g. `-Dmr3.host="http://127.0.0.1:3000`). See the
-   maproulette2 docs for details on starting up the server.
+   maproulette2 docs for details on starting up the server
 
-7. Point your browser at the back-end server, http://127.0.0.1:9000 by
-   default.
+5. Point your browser at the back-end server, http://127.0.0.1:9000 by
+   default
 
 > While you can also point your browser directly at the front-end server on
 > port 3000, OAuth will not work correctly and you therefore won't be able to
 > sign in. When you first fire up the front-end server, it will automatically
-> to open a browser tab pointing port 3000 -- just close it.
+> open a browser tab pointing port 3000 -- just close it.
+
+#### Developing with a pre-existing back-end server
+
+These instructions are for connecting to an existing back-end server, rather than
+a local one you have installed. *Please do not use the production MapRoulette
+server for development use*
+
+1. Open MapRoulette on that server normally in your browser, visit your user
+   profile, and take note of your API key at the bottom of the page
+
+2. Edit your `.env.development.local` file and override the following config
+   variables:
+  ```
+  REACT_APP_MAP_ROULETTE_SERVER_URL='https://yourserver.com'
+  REACT_APP_SERVER_API_KEY='your-api-key-for-that-server'
+  ```
+
+3. Restart your dev server if it's already running (ctrl-c then `yarn run
+   start` again)
+
+4. Point your browser directly at the front-end server, http://127.0.0.1:3000
+   by default. Once the page finishes loading, you should show up as signed-in
+   if all is working correctly
+
 
 ### Updating to the Latest Code
 

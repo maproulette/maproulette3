@@ -1,5 +1,4 @@
 import HomePage from '../pages/HomePage'
-import AboutModal from '../pages/AboutModal'
 import OpenStreetMap from '../pages/OpenStreetMap'
 
 const logInToOpenStreetMap = function(username, password) {
@@ -36,9 +35,7 @@ export default function() {
 
       HomePage.open()
       HomePage.waitForKnownLoginStatus()
-      if (AboutModal.modal.isExisting()) {
-        AboutModal.getStarted.click()
-      }
+      HomePage.getStarted.click()
 
       if (!HomePage.isSignedIn()) {
         HomePage.signinNavLink.click()

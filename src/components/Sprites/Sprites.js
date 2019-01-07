@@ -178,7 +178,7 @@ export default function () {
         <symbol id="layers-icon" viewBox="0 0 20 20">
           <path d="M10 1l10 6-10 6L0 7l10-6zm6.67 10L20 13l-10 6-10-6 3.33-2L10 15l6.67-4z"/>
         </symbol>
-        <symbol id="about-icon" viewBox="0 0 71 80">
+        <symbol id="home-icon" viewBox="0 0 71 80">
           <g id="Challenges" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <g id="Discovery" transform="translate(-805.000000, -198.000000)" stroke="#2281C2" strokeWidth="2" fillRule="nonzero">
               <g id="task-overlay" transform="translate(0.000000, 75.000000)">

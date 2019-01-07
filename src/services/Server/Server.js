@@ -3,16 +3,22 @@
  * fetchEndpoint, submitEndpoint, updateEndpoint, and deleteEndpoint functions
  * for retrieving and managing server content.
  *
- * @see See Server/Endpoints
+ * A CORS "credentials: same-origin" header is automatically included with each
+ * request so that cookies will be included. Learn more at
+ * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+ *
+ * @see See also Server/Endpoints
  */
 
 import { normalize } from 'normalizr'
 import { cache, resetCache } from './RequestCache'
 import _isArray from 'lodash/isArray'
+import _isEmpty from 'lodash/isEmpty'
 import RouteFactory from './RouteFactory'
 import apiRoutes from './APIRoutes'
 
 const baseURL = process.env.REACT_APP_MAP_ROULETTE_SERVER_URL
+const apiKey = process.env.REACT_APP_SERVER_API_KEY
 
 export const serverRouteFactory = new RouteFactory(baseURL)
 export const defaultRoutes = Object.freeze(apiRoutes(serverRouteFactory))
@@ -41,7 +47,14 @@ const dataAtUrl = function(url, fetchFunction) {
 export const fetchContent = function(url, normalizationSchema, options={}) {
   return dataAtUrl(url, () => {
     const retrieval = new Promise((resolve, reject) => {
-      fetch(url, {credentials: 'same-origin'}).then(checkStatus).then(parseJSON).then(jsonData => {
+      const headers = new Headers()
+      if (!_isEmpty(apiKey)) {
+        headers.append('apiKey', apiKey)
+      }
+
+      fetch(
+        url, {credentials: 'same-origin', headers}
+      ).then(checkStatus).then(parseJSON).then(jsonData => {
         let result = jsonData
         if (jsonData && normalizationSchema) {
           result = normalize(jsonData, normalizationSchema)
@@ -87,6 +100,9 @@ export const sendContent = function(method, url, jsonBody, formData, normalizati
     resetCache() // Clear the cache on updates to ensure fetches are fresh.
 
     const headers = new Headers()
+    if (!_isEmpty(apiKey)) {
+      headers.append('apiKey', apiKey)
+    }
     if (jsonBody) {
       headers.append('Content-Type', 'text/json')
     }
@@ -121,7 +137,12 @@ export const deleteContent = function(url) {
   return new Promise((resolve, reject) => {
     resetCache() // Clear the cache on deletes to ensure fetches are fresh.
 
-    fetch(url, {method: 'DELETE', credentials: 'same-origin'})
+    const headers = new Headers()
+    if (!_isEmpty(apiKey)) {
+      headers.append('apiKey', apiKey)
+    }
+
+    fetch(url, {method: 'DELETE', credentials: 'same-origin', headers})
       .then(checkStatus)
       .then(response => resolve(response))
       .catch(error => reject(error))
