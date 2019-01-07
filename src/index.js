@@ -53,7 +53,7 @@ const {store} = initializePersistedStore(store => {
     extendedFind({sortCriteria: {sortBy: SortOptions.popular},
                   challengeStatus: [ChallengeStatus.ready,
                     ChallengeStatus.partiallyLoaded,
-                    ChallengeStatus.none, 
+                    ChallengeStatus.none,
                     ChallengeStatus.empty]}, RESULTS_PER_PAGE)
   )
 

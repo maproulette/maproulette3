@@ -17,7 +17,7 @@ export default function(WrappedComponent,
 
       let pagedChallenges = this.props[challengesProp]
 
-      const hasMoreResults = (pagedChallenges.length > numberResultsToShow) || this.props.isLoading
+      const hasMoreResults = (pagedChallenges.length >= numberResultsToShow) || this.props.isLoading
       pagedChallenges = _slice(pagedChallenges, 0, numberResultsToShow)
 
       if (_isEmpty(outputProp)) {
