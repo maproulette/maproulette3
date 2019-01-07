@@ -72,7 +72,18 @@ ShallowWrapper {
                               "lng": 45,
                             }
           }
-          initialBounds={null}
+          initialBounds={
+                    Object {
+                              "_northEast": Object {
+                                "lat": 0,
+                                "lng": 0,
+                              },
+                              "_southWest": Object {
+                                "lat": 0,
+                                "lng": 0,
+                              },
+                            }
+          }
           justFitFeatures={false}
           maxZoom={18}
           minZoom={2}
@@ -184,7 +195,16 @@ ShallowWrapper {
             Array [],
             false,
           ],
-          "initialBounds": null,
+          "initialBounds": Object {
+            "_northEast": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+            "_southWest": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+          },
           "justFitFeatures": false,
           "maxZoom": 18,
           "minZoom": 2,
@@ -281,7 +301,18 @@ ShallowWrapper {
                                     "lng": 45,
                                   }
             }
-            initialBounds={null}
+            initialBounds={
+                        Object {
+                                    "_northEast": Object {
+                                      "lat": 0,
+                                      "lng": 0,
+                                    },
+                                    "_southWest": Object {
+                                      "lat": 0,
+                                      "lng": 0,
+                                    },
+                                  }
+            }
             justFitFeatures={false}
             maxZoom={18}
             minZoom={2}
@@ -393,7 +424,16 @@ ShallowWrapper {
               Array [],
               false,
             ],
-            "initialBounds": null,
+            "initialBounds": Object {
+              "_northEast": Object {
+                "lat": 0,
+                "lng": 0,
+              },
+              "_southWest": Object {
+                "lat": 0,
+                "lng": 0,
+              },
+            },
             "justFitFeatures": false,
             "maxZoom": 18,
             "minZoom": 2,
