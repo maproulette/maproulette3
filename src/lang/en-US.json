@@ -238,9 +238,6 @@
   "Admin.manageTasks.controls.changePriority.label": "Change Priority",
   "Admin.manageTasks.priorityLabel": "Priority",
   "Admin.manageTasks.controls.exportCSV.label": "Export CSV",
-  "Widgets.contrib.FooWidget.blockLabel": "Intl Foo",
-  "Widgets.contrib.FooWidget.title": "Foo Intl Widget",
-  "Widgets.contrib.FooWidget.content": "Some Foo",
   "Metrics.tasks.evaluatedByUser.label": "Tasks Evaluated by Users",
   "AutosuggestTextBox.labels.noResults": "No matches",
   "Form.textUpload.prompt": "Drop GeoJSON file here or click to select file",
@@ -513,8 +510,9 @@
   "Task.status.alreadyFixed": "Already Fixed",
   "Task.status.tooHard": "Too Hard",
   "Locale.en-US.label": "en-US (U.S. English)",
-  "Locale.es.label": "es (Spanish)",
+  "Locale.es.label": "es (Español)",
   "Locale.de.label": "de (Deutsch)",
   "Locale.fr.label": "fr (Français)",
-  "Locale.af.label": "af (Afrikaans)"
+  "Locale.af.label": "af (Afrikaans)",
+  "Locale.ja.label": "ja (日本語)"
 }

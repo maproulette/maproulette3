@@ -505,9 +505,9 @@
   "Task.status.alreadyFixed": "既に修正済",
   "Task.status.tooHard": "難しすぎ",
   "Locale.en-US.label": "en-US (U.S. English)",
-  "Locale.es.label": "es (Spanish)",
+  "Locale.es.label": "es (Español)",
   "Locale.de.label": "de (Deutsch)",
   "Locale.fr.label": "fr (Français)",
-  "Locale.af.label": "af (Afrikaans)"
+  "Locale.af.label": "af (Afrikaans)",
   "Locale.ja.label": "ja (日本語)"
 }
