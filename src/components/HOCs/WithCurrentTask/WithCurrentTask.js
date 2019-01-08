@@ -111,7 +111,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             _get(normalizedResults,
                  `entities.tasks.${normalizedResults.result}.deleted`)) {
           dispatch(addError(AppErrors.task.doesNotExist))
-          ownProps.history.push('/')
+          ownProps.history.push('/browse/challenges')
           return
         }
 
@@ -144,7 +144,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       if (!_isFinite(normalizedResults.result) ||
           _get(normalizedResults, `entities.tasks.${normalizedResults.result}.deleted`)) {
         dispatch(addError(AppErrors.task.doesNotExist))
-        ownProps.history.push('/')
+        ownProps.history.push('/browse/challenges')
       }
 
       return normalizedResults
@@ -271,7 +271,7 @@ export const visitNewTask = function(props, currentTaskId, newTask) {
   else {
     // Assume challenge is complete. Redirect home with note to congratulate
     // user.
-    props.history.push('/', {congratulate: true})
+    props.history.push('/browse/challenges', {congratulate: true})
   }
 }
 

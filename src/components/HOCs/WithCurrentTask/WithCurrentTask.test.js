@@ -207,7 +207,7 @@ test("completeTask routes the user home if the next task isn't new", async () =>
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
   await mappedProps.completeTask(task.id, challenge.id, completionStatus)
-  expect(history.push).toBeCalledWith('/', {congratulate: true})
+  expect(history.push).toBeCalledWith('/browse/challenges', {congratulate: true})
 })
 
 test("completeTask routes the user home if there is no next task", async () => {
@@ -221,5 +221,5 @@ test("completeTask routes the user home if there is no next task", async () => {
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
   await mappedProps.completeTask(task.id, challenge.id, completionStatus)
-  expect(history.push).toBeCalledWith('/', {congratulate: true})
+  expect(history.push).toBeCalledWith('/browse/challenges', {congratulate: true})
 })
