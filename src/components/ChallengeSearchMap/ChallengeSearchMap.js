@@ -165,7 +165,7 @@ export class ChallengeSearchMap extends Component {
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}
                      initialBounds = {initialBounds}
-                     zoomControl={false} animate={true}
+                     zoomControl={false} animate={true} worldCopyJump={true}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
           <SourcedTileLayer {...this.props} zIndex={1} />

@@ -19,7 +19,7 @@ export default class InsetMap extends Component {
              zoom={this.props.fixedZoom}
              minZoom={this.props.fixedZoom}
              maxZoom={this.props.fixedZoom}
-             zoomControl={false}
+             zoomControl={false} worldCopyJump={true}
              attributionControl={false}>
           <SourcedTileLayer source={layerSource} skipAttribution={true} />
           <Marker position={this.props.centerPoint}
