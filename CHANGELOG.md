@@ -7,6 +7,40 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.1.2] - 2019-01-10
+### Added
+- Japanese translation by @higa4
+- Allow commenting when reviewing task as a challenge owner (#138)
+- Option to edit only task features in JOSM (#452)
+- Include challenge search/filter criteria in URL for permalinking (#526)
+- Public challenge- and project-specific leaderboards (#536)
+- Allow longitudinal wrapping of maps (#593)
+- Offer "near me" challenge location search to signed-out users
+- Search-box short-command `m/` to move map to bounding box or centerpoint
+- Paging in admin area to improve performance for users managing a lot of
+projects and/or challenges
+- Option to clear filters when analyzing challenge tasks in admin area
+- Support numerical values and operators in challenge priority rule definitions
+- Minor optimizations to reduce number of network requests
+- [internal] Support front-end development without requiring installation of
+local back-end development server
+
+### Fixed
+- Formatting fix in README by @kant
+- Failure to clone challenges that used legacy basemaps (#549)
+- Extraneous backslashes in custom basemap examples (#575)
+- Confusing error message if browser window too narrow in admin area
+
+### Changed
+- keyboard shortcut key for opening Level0 editor is now `v` instead of `l`
+- The "about" modal dialog has been changed to a simple home page as a placeholder
+for an upcoming home page implementation
+
+### Removed
+- [internal] chimp end-to-end testing framework temporarily removed for Node.js 10
+compatibility
+
+
 ## [v3.1.1] - 2018-11-12
 ### Added
 - Mapillary map layer when completing tasks
