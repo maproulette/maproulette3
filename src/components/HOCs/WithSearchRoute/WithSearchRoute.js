@@ -113,6 +113,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
       return (
         <WrappedComponent {...this.props}
                             isLoading={this.props.isLoading || !this.state.loadedFromRoute}
+                            loadedFromRouteDone={this.state.loadedFromRoute || _isEmpty(this.props.history.location.search)}
                             setSearch={this.setSearch}
                             clearSearch={this.clearSearch}
                             setSearchSort={this.setSearchSort}

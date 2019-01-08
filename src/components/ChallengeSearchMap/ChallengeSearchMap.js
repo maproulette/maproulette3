@@ -156,7 +156,7 @@ export class ChallengeSearchMap extends Component {
     )
 
     // If the app is still loading then we have no initialBounds
-    const initialBounds = _get(this.props, 'mapBounds.bounds')
+    const initialBounds = !this.props.loadedFromRouteDone ? null : _get(this.props, 'mapBounds.bounds')
 
     return (
       <div key='ChallengeSearchMap'
