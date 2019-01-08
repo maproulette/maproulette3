@@ -16,7 +16,12 @@ export default defineMessages({
 
   pageMessage: {
     id: "MobileNotSupported.pageMessage",
-    defaultMessage: "Sorry, this page is not yet compatible with mobile devices."
+    defaultMessage: "Sorry, this page is not yet compatible with mobile devices and smaller screens."
+  },
+
+  widenDisplay: {
+    id: "MobileNotSupported.widenDisplay",
+    defaultMessage: "If using a computer, please widen your window or use a larger display."
   },
 })
 
