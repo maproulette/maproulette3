@@ -43,7 +43,7 @@ export class TaskAnalysisTable extends Component {
 
     const manager = AsManager(this.props.user)
 
-    const taskBaseRoute = 
+    const taskBaseRoute =
       `/admin/project/${this.props.challenge.parent.id}` +
       `/challenge/${this.props.challenge.id}/task`
 
@@ -144,6 +144,8 @@ export class TaskAnalysisTable extends Component {
                                     countShown,
                                     countTotal: this.props.totalTaskCount,
                                   }} />
+
+            {this.props.totalTaskCount !== countShown ? this.props.clearFiltersControl : null}
           </div>
         )
       },

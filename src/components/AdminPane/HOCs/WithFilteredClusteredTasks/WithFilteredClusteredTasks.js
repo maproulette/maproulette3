@@ -7,9 +7,9 @@ import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _differenceBy from 'lodash/differenceBy'
 import _omit from 'lodash/omit'
-import { TaskStatus }
+import { TaskStatus, keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
-import { TaskPriority }
+import { TaskPriority, keysByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
 
 /**
@@ -211,6 +211,14 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
       this.setState({selectedTasks: new Map(this.state.selectedTasks)})
     }
 
+    clearAllFilters = () => {
+      const filteredTasks = this.filterTasks(keysByStatus, keysByPriority)
+      const selectedTasks = this.unselectExcludedTasks(filteredTasks)
+      this.setState({filteredTasks, selectedTasks,
+                     includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
+                     includePriorities: _fromPairs(_map(TaskPriority, priority => [priority, true])), })
+    }
+
     componentDidMount() {
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
                                              this.state.includePriorities)
@@ -245,6 +253,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                                selectTasksWithPriority={this.selectTasksWithPriority}
                                allTasksAreSelected={this.allTasksAreSelected}
                                someTasksAreSelected={this.someTasksAreSelected}
+                               clearAllFilters={this.clearAllFilters}
                                {..._omit(this.props, outputProp)} />
     }
   }
