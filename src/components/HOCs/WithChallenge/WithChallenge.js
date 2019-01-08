@@ -80,7 +80,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
               _get(normalizedResults,
                    `entities.challenges.${normalizedResults.result}.deleted`)) {
             dispatch(addError(AppErrors.challenge.doesNotExist))
-            ownProps.history.push('/')
+            ownProps.history.push('/browse/challenges')
           }
         })
       }

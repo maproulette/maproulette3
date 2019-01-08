@@ -73,7 +73,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         if (!results.result ||
             results.entities.virtualChallenges[results.result].expiry < Date.now()) {
           dispatch(addError(AppErrors.virtualChallenge.expired))
-          ownProps.history.push('/')
+          ownProps.history.push('/browse/challenges')
         }
       })
     }, FRESHNESS_THRESHOLD),

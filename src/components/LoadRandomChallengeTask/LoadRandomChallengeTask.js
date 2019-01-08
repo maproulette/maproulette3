@@ -18,7 +18,7 @@ const _LoadRandomChallengeTask = class extends Component {
                   `/challenge/${challengeId}/task/${task.id}`)
           }
           else {
-            this.props.history.push('/')
+            this.props.history.push('/browse/challenges')
           }
         })
         .catch(error => {
