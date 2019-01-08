@@ -50,7 +50,7 @@ export class AdminPane extends Component {
     return (
       <React.Fragment>
         <MediaQuery query="(max-width: 1023px)">
-          <MobileNotSupported forPage />
+          <MobileNotSupported forPage widenDisplay />
         </MediaQuery>
 
         <MediaQuery query="(min-width: 1024px)">

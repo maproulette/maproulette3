@@ -28,6 +28,11 @@ export default class MobileNotSupported extends Component {
                                      messages.pageMessage :
                                      messages.message)} />
             </p>
+            {this.props.widenDisplay &&
+             <p className="mobile-not-supported__widen-display">
+               <FormattedMessage {...messages.widenDisplay} />
+             </p>
+            }
           </div>
         </div>
         <Sprites />
@@ -39,8 +44,11 @@ export default class MobileNotSupported extends Component {
 MobileNotSupported.propTypes = {
   /** Set to true if a single page is unsupported */
   forPage: PropTypes.bool,
+  /** Set to true to include note about widening display */
+  widenDisplay: PropTypes.bool,
 }
 
 MobileNotSupported.defaultProps = {
   forPage: false,
+  widenDisplay: false,
 }
