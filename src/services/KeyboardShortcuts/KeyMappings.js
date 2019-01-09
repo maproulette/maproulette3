@@ -9,7 +9,7 @@ import messages from './Messages'
  * (e.g. 'ESC' instead of 'Escape') is desired, in which case it too should
  * point to an internationalized message.
  *
- * > Note: `key` values should match keypress event
+ * > Note: `key` values should correspond to keyboard event
  * > [key values](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
  */
 export default {
@@ -18,7 +18,7 @@ export default {
     editJosm: {key: 'r', label: messages.editJosm},
     editJosmLayer: {key: 't', label: messages.editJosmLayer},
     editJosmFeatures: {key: 'y', label: messages.editJosmFeatures},
-    editLevel0: {key: 'l', label: messages.editLevel0},
+    editLevel0: {key: 'v', label: messages.editLevel0},
   },
   taskEditing: {
     cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},

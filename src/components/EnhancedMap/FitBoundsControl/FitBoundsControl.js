@@ -89,14 +89,14 @@ const FitBoundsLeafletControl = Control.extend({
 const keyboardHandler = function(key, controlFunction) {
   return Handler.extend({
     addHooks: function() {
-      DomEvent.on(document, 'keypress', this.onKeypress, this)
+      DomEvent.on(document, 'keydown', this.onKeydown, this)
     },
 
     removeHooks: function() {
-      DomEvent.off(document, 'keypress', this.onKeypress, this)
+      DomEvent.off(document, 'keydown', this.onKeydown, this)
     },
 
-    onKeypress: function(event) {
+    onKeydown: function(event) {
       if (event.key === key) {
         controlFunction()
       }

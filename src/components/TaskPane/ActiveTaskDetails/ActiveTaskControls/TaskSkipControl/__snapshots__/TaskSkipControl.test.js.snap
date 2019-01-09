@@ -46,7 +46,7 @@ ShallowWrapper {
                 },
               },
               "editLevel0": Object {
-                "key": "l",
+                "key": "v",
                 "label": Object {
                   "defaultMessage": "Edit in Level0",
                   "id": "KeyMapping.openEditor.editLevel0",
