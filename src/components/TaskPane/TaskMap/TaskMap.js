@@ -209,7 +209,7 @@ export class TaskMap extends Component {
                      mapillaryLoading={this.state.mapillaryLayerLoading}
                      mapillaryCount={_get(this.props, 'task.mapillaryImages.length', 0)} />
         <EnhancedMap center={this.props.centerPoint} zoom={zoom} zoomControl={false}
-                     minZoom={minZoom} maxZoom={maxZoom}
+                     minZoom={minZoom} maxZoom={maxZoom} worldCopyJump={true}
                      features={_get(this.props.task, 'geometries.features')}
                      justFitFeatures={!this.state.showTaskFeatures}
                      fitFeaturesOnlyAsNecessary

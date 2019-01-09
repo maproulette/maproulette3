@@ -82,6 +82,7 @@ ShallowWrapper {
           minZoom={1}
           onBoundsChange={[Function]}
           setInitialBounds={true}
+          worldCopyJump={true}
           zoom={2}
           zoomControl={false}
 >
@@ -201,6 +202,7 @@ ShallowWrapper {
           "minZoom": 1,
           "onBoundsChange": [Function],
           "setInitialBounds": true,
+          "worldCopyJump": true,
           "zoom": 2,
           "zoomControl": false,
         },
@@ -312,6 +314,7 @@ ShallowWrapper {
             minZoom={1}
             onBoundsChange={[Function]}
             setInitialBounds={true}
+            worldCopyJump={true}
             zoom={2}
             zoomControl={false}
 >
@@ -431,6 +434,7 @@ ShallowWrapper {
             "minZoom": 1,
             "onBoundsChange": [Function],
             "setInitialBounds": true,
+            "worldCopyJump": true,
             "zoom": 2,
             "zoomControl": false,
           },

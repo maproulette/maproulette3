@@ -309,7 +309,7 @@ export class ChallengeTaskMap extends Component {
                      zoom={_get(this.props.lastZoom, 3)} minZoom={1} maxZoom={18}
                      setInitialBounds={false}
                      initialBounds = {_get(this.props, 'lastBounds', this.currentBounds)}
-                     zoomControl={false} animate={true}
+                     zoomControl={false} animate={true} worldCopyJump={true}
                      features={bounding}
                      justFitFeatures={false}
                      onBoundsChange={this.updateBounds}>

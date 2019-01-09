@@ -143,7 +143,7 @@ export class ChallengeBrowseMap extends Component {
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}
                      initialBounds = {this.currentBounds}
-                     zoomControl={false} animate={true}
+                     zoomControl={false} animate={true} worldCopyJump={true}
                      features={bounding}
                      justFitFeatures={hasTaskMarkers}
                      onBoundsChange={this.updateBounds}>
