@@ -216,11 +216,13 @@ export class ChallengeResultItem extends Component {
                 {this.props.challenge.name}
               </div>
             </div>
-            <Link className="challenge-list__item__project-name"
-              onClick={(e) => {e.stopPropagation()}}
-              to={`/project/${this.props.challenge.parent.id}/leaderboard`}>
-              {_get(this.props, 'challenge.parent.displayName')}
-            </Link>
+            {this.props.challenge.parent && // virtual challenges don't have projects
+             <Link className="challenge-list__item__project-name"
+               onClick={(e) => {e.stopPropagation()}}
+               to={`/project/${this.props.challenge.parent.id}/leaderboard`}>
+               {_get(this.props, 'challenge.parent.displayName')}
+             </Link>
+            }
           </div>
           <a className="card-header-icon" aria-label="more options">
             <span className="icon"></span>
@@ -250,15 +252,17 @@ export class ChallengeResultItem extends Component {
               </div>
             }
 
-            <div className="challenge-list__item__leaderboard">
-              <span className="challenge-list__item__field-value">
-                <Link to={
-                  `/challenge/${this.props.challenge.id}/leaderboard`
-                }>
-                  <FormattedMessage {...messages.viewLeaderboard} />
-                </Link>
-              </span>
-            </div>
+            {!this.props.challenge.isVirtual &&
+             <div className="challenge-list__item__leaderboard">
+               <span className="challenge-list__item__field-value">
+                 <Link to={
+                   `/challenge/${this.props.challenge.id}/leaderboard`
+                 }>
+                   <FormattedMessage {...messages.viewLeaderboard} />
+                 </Link>
+               </span>
+             </div>
+            }
 
             <div className="challenge-list__item__blurb">
               <MarkdownContent markdown={this.props.challenge.description ||
