@@ -65,6 +65,17 @@ test("shows the name of the parent project", () => {
   expect(wrapper).toMatchSnapshot()
 })
 
+test("skips the project name if not available, e.g. for virtual challenges", () => {
+  basicProps.challenge.parent = undefined
+
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(wrapper.find('.challenge-list__item__project-name').exists()).toBe(false)
+  expect(wrapper).toMatchSnapshot()
+})
+
 test("renders featured challenges with a featured icon", () => {
   basicProps.challenge.featured = true
   const wrapper = shallow(
@@ -121,6 +132,28 @@ test("shows expanded view if being actively browsed", () => {
   )
 
   expect(wrapper.find('.challenge-list__item.is-active').exists()).toBe(true)
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("shows a challenge leaderboard link when being actively browsed", () => {
+  basicProps.browsedChallenge = basicProps.challenge
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(wrapper.find('.challenge-list__item__leaderboard').exists()).toBe(true)
+  expect(wrapper).toMatchSnapshot()
+})
+
+test("skips a challenge leaderboard link for virtual challenges", () => {
+  basicProps.browsedChallenge = basicProps.challenge
+  basicProps.challenge.isVirtual = true
+
+  const wrapper = shallow(
+    <ChallengeResultItem {...basicProps} />
+  )
+
+  expect(wrapper.find('.challenge-list__item__leaderboard').exists()).toBe(false)
   expect(wrapper).toMatchSnapshot()
 })
 
