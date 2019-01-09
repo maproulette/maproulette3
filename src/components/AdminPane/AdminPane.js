@@ -5,8 +5,8 @@ import MediaQuery from 'react-responsive'
 import AsManager from '../../interactions/User/AsManager'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
-import MobileNotSupported
-       from '../MobileNotSupported/MobileNotSupported'
+import ScreenTooNarrow
+       from '../ScreenTooNarrow/ScreenTooNarrow'
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
 import EditProject from './Manage/EditProject/EditProject'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
@@ -50,7 +50,7 @@ export class AdminPane extends Component {
     return (
       <React.Fragment>
         <MediaQuery query="(max-width: 1023px)">
-          <MobileNotSupported forPage widenDisplay />
+          <ScreenTooNarrow />
         </MediaQuery>
 
         <MediaQuery query="(min-width: 1024px)">
