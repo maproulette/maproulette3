@@ -103,7 +103,7 @@ export const jsSchema = intl => {
               },
               customBasemap: {
                 title: intl.formatMessage(messages.customBasemapLabel),
-                description: intl.formatMessage(messages.customBasemapDescription),
+                description: intl.formatMessage(messages.customBasemapDescription, {dummy: ''}),
                 type: "string",
               },
             },
