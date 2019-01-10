@@ -8,6 +8,8 @@ import _isString from 'lodash/isString'
 import _isPlainObject from 'lodash/isPlainObject'
 import { taskDenormalizationSchema,
          fetchTask,
+         fetchTaskComments,
+         fetchTaskPlace,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          addTaskComment,
@@ -129,6 +131,10 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             }
           })
         }
+
+        // Fetch the task comments and location data, but don't wait for them
+        dispatch(fetchTaskComments(taskId))
+        dispatch(fetchTaskPlace(loadedTask))
 
         return normalizedResults
       })

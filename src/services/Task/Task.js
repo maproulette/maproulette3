@@ -329,7 +329,7 @@ const updateTaskStatus = function(dispatch, taskId, newStatus) {
  * > Note that if the results contain multiple tasks, only the
  * > place description of the first result is retrieved.
  */
-const fetchTaskPlace = function(task) {
+export const fetchTaskPlace = function(task) {
   return function(dispatch) {
     return dispatch(
       fetchPlace(_get(task, 'location.coordinates[1]', 0),
