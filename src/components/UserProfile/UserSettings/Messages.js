@@ -34,9 +34,12 @@ export default defineMessages({
     defaultMessage: "Custom Basemap",
   },
 
+  // Note: dummy variable included to workaround react-intl
+  // [bug 1158](https://github.com/yahoo/react-intl/issues/1158)
+  // Just pass in an empty string for its value
   customBasemapDescription: {
     id: "UserSettings.form.customBasemap.description",
-    defaultMessage: "Insert a custom base map here. Eg. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png`",
+    defaultMessage: "Insert a custom base map here. E.g. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy}",
   },
 
   localeLabel: {
