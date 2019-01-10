@@ -4,6 +4,7 @@ import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
 import { logoutUser,
+         loadCompleteUser,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,
          updateUserSettings,
@@ -48,6 +49,7 @@ export const mapStateToProps = state => {
 
 export const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
+    loadCompleteUser,
     logoutUser,
     saveChallenge,
     unsaveChallenge,
