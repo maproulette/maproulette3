@@ -17,6 +17,13 @@ import messages from './Messages'
 import './UserProfile.css'
 
 export class UserProfile extends Component {
+  componentDidMount() {
+    // Make sure our user info is current
+    if (_get(this.props, 'user.isLoggedIn')) {
+      this.props.loadCompleteUser(this.props.user.id)
+    }
+  }
+
   render() {
     if (!_get(this.props, 'user.isLoggedIn')) {
       return (
