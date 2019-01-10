@@ -27,8 +27,6 @@ import EnhancedMap from '../../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../../EnhancedMap/LayerToggle/LayerToggle'
 import WithVisibleLayer from '../../../HOCs/WithVisibleLayer/WithVisibleLayer'
-import FitBoundsControl
-       from '../../../EnhancedMap/FitBoundsControl/FitBoundsControl'
 import WithIntersectingOverlays
        from '../../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithStatus from '../../../HOCs/WithStatus/WithStatus'
@@ -310,11 +308,11 @@ export class ChallengeTaskMap extends Component {
                      setInitialBounds={false}
                      initialBounds = {_get(this.props, 'lastBounds', this.currentBounds)}
                      zoomControl={false} animate={true} worldCopyJump={true}
-                     features={bounding}
+                     features={this.props.lastBounds ? undefined : bounding}
                      justFitFeatures={false}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
-          <FitBoundsControl />
+
           <SourcedTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
           {markers.length > 0 &&
