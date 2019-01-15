@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
-import './TaskLatLon.css'
+import './TaskLatLon.scss'
 
 /**
  * TaskLatLon displays the latitude and longitude of the task centerpoint, if

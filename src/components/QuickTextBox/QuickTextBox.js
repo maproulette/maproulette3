@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import './QuickTextBox.css'
+import './QuickTextBox.scss'
 
 /**
  * QuickTextBox renders a simple text input field with icon-only done/cancel

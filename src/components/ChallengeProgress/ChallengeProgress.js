@@ -11,7 +11,7 @@ import { TaskStatus, keysByStatus, statusLabels }
        from '../../services/Task/TaskStatus/TaskStatus'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './ChallengeProgress.css'
+import './ChallengeProgress.scss'
 
 export class ChallengeProgress extends Component {
   percent = (value, total) => Math.round(value / total * 100)

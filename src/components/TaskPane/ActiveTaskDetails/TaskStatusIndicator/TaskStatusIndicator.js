@@ -9,7 +9,7 @@ import WithDeactivateOnOutsideClick
 import Popout from '../../../Bulma/Popout'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './TaskStatusIndicator.css'
+import './TaskStatusIndicator.scss'
 
 const DeactivatablePopout = WithDeactivateOnOutsideClick(Popout)
 
@@ -77,6 +77,7 @@ export default class TaskStatusIndicator extends Component {
               {this.props.task.changesetId > 0 &&
                <a href={`https://www.openstreetmap.org/changeset/${this.props.task.changesetId}`}
                  target="_blank"
+                 rel="noopener noreferrer"
                  className="task-status__view-changeset-link">
                  <FormattedMessage {...messages.viewChangeset} />
                </a>

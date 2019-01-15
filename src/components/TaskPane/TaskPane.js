@@ -13,7 +13,7 @@ import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import ActiveTaskDetails from './ActiveTaskDetails/ActiveTaskDetails'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
-import './TaskPane.css'
+import './TaskPane.scss'
 
 // Setup child components with necessary HOCs
 const TaskDetailsSidebar = WithCurrentUser(WithEditor(ActiveTaskDetails))

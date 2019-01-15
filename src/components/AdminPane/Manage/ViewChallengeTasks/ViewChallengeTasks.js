@@ -264,8 +264,9 @@ export class ViewChallengeTasks extends Component {
               </ConfirmAction>
              }
              <a target="_blank"
-                 href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
-                 className="button is-outlined is-primary has-svg-icon csv-export"
+                rel="noopener noreferrer"
+                href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
+                className="button is-outlined is-primary has-svg-icon csv-export"
              >
                <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
                <FormattedMessage {...messages.exportCSVLabel} />

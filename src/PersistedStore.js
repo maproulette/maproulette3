@@ -45,7 +45,7 @@ const DATA_MODEL_VERSION = 9
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const initializePersistedStore = callback => {
+export const initializePersistedStore = function(callback) {
   // Migrations. Each key is a version number of the data model
   const dataMigrations = {
     3: state => {
@@ -166,7 +166,7 @@ export const initializePersistedStore = callback => {
 
   // Initialize redux-persist. Callback is invoked after store
   // has been hydrated from local storage.
-  const persistor = persistStore(store, undefined, () => callback(store))
+  const persistor = persistStore(store, null, function() {callback(store) })
 
   return {store, persistor}
 }

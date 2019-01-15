@@ -7,13 +7,88 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <ChallengeActivityTimeline
     activity={Array []}
     intl={
-        Object {
-            "formatDate": [Function],
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatDate": [MockFunction],
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Created",
+                "id": "Task.status.created",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Fixed",
+                "id": "Task.status.fixed",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Not an Issue",
+                "id": "Task.status.falsePositive",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Skipped",
+                "id": "Task.status.skipped",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Deleted",
+                "id": "Task.status.deleted",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Already Fixed",
+                "id": "Task.status.alreadyFixed",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Too Hard",
+                "id": "Task.status.tooHard",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
     invertBadges={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -29,37 +104,37 @@ ShallowWrapper {
       "children": Array [
         <header
           className="timeline-header"
->
+        >
           <span
-                    className="tag is-medium"
+            className="tag is-medium"
           >
-                    Latest
+            Latest
           </span>
-</header>,
+        </header>,
         Array [
           <div
             className="timeline-item no-activity"
->
+          >
             <div
-                        className="timeline-content"
+              className="timeline-content"
             >
-                        <p
-                                    className="heading"
-                        >
-                                    No Recent Activity
-                        </p>
+              <p
+                className="heading"
+              >
+                No Recent Activity
+              </p>
             </div>
-</div>,
+          </div>,
         ],
         <div
           className="timeline-header"
->
+        >
           <span
-                    className="tag is-medium"
+            className="tag is-medium"
           >
-                    End
+            End
           </span>
-</div>,
+        </div>,
       ],
       "className": "timeline activity-timeline",
     },
@@ -72,9 +147,9 @@ ShallowWrapper {
         "props": Object {
           "children": <span
             className="tag is-medium"
->
+          >
             Latest
-</span>,
+          </span>,
           "className": "timeline-header",
         },
         "ref": null,
@@ -99,13 +174,13 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="timeline-content"
->
+          >
             <p
-                        className="heading"
+              className="heading"
             >
-                        No Recent Activity
+              No Recent Activity
             </p>
-</div>,
+          </div>,
           "className": "timeline-item no-activity",
         },
         "ref": null,
@@ -116,9 +191,9 @@ ShallowWrapper {
           "props": Object {
             "children": <p
               className="heading"
->
+            >
               No Recent Activity
-</p>,
+            </p>,
             "className": "timeline-content",
           },
           "ref": null,
@@ -145,9 +220,9 @@ ShallowWrapper {
         "props": Object {
           "children": <span
             className="tag is-medium"
->
+          >
             End
-</span>,
+          </span>,
           "className": "timeline-header",
         },
         "ref": null,
@@ -177,37 +252,37 @@ ShallowWrapper {
         "children": Array [
           <header
             className="timeline-header"
->
+          >
             <span
-                        className="tag is-medium"
+              className="tag is-medium"
             >
-                        Latest
+              Latest
             </span>
-</header>,
+          </header>,
           Array [
             <div
               className="timeline-item no-activity"
->
+            >
               <div
-                            className="timeline-content"
+                className="timeline-content"
               >
-                            <p
-                                          className="heading"
-                            >
-                                          No Recent Activity
-                            </p>
+                <p
+                  className="heading"
+                >
+                  No Recent Activity
+                </p>
               </div>
-</div>,
+            </div>,
           ],
           <div
             className="timeline-header"
->
+          >
             <span
-                        className="tag is-medium"
+              className="tag is-medium"
             >
-                        End
+              End
             </span>
-</div>,
+          </div>,
         ],
         "className": "timeline activity-timeline",
       },
@@ -220,9 +295,9 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="tag is-medium"
->
+            >
               Latest
-</span>,
+            </span>,
             "className": "timeline-header",
           },
           "ref": null,
@@ -247,13 +322,13 @@ ShallowWrapper {
           "props": Object {
             "children": <div
               className="timeline-content"
->
+            >
               <p
-                            className="heading"
+                className="heading"
               >
-                            No Recent Activity
+                No Recent Activity
               </p>
-</div>,
+            </div>,
             "className": "timeline-item no-activity",
           },
           "ref": null,
@@ -264,9 +339,9 @@ ShallowWrapper {
             "props": Object {
               "children": <p
                 className="heading"
->
+              >
                 No Recent Activity
-</p>,
+              </p>,
               "className": "timeline-content",
             },
             "ref": null,
@@ -293,9 +368,9 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="tag is-medium"
->
+            >
               End
-</span>,
+            </span>,
             "className": "timeline-header",
           },
           "ref": null,
@@ -333,35 +408,137 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeActivityTimeline
     activity={
-        Array [
-            Object {
-              "count": 2,
-              "date": "2017-11-22T00:00:00",
-              "status": 1,
-              "statusName": "Fixed",
-            },
-            Object {
-              "count": 0,
-              "date": "2017-11-22T00:00:00",
-              "status": 3,
-              "statusName": "Skipped",
-            },
-            Object {
-              "count": 1,
-              "date": "2017-11-23T00:00:00",
-              "status": 1,
-              "statusName": "Fixed",
-            },
-          ]
+      Array [
+        Object {
+          "count": 2,
+          "date": "2017-11-22T00:00:00",
+          "status": 1,
+          "statusName": "Fixed",
+        },
+        Object {
+          "count": 0,
+          "date": "2017-11-22T00:00:00",
+          "status": 3,
+          "statusName": "Skipped",
+        },
+        Object {
+          "count": 1,
+          "date": "2017-11-23T00:00:00",
+          "status": 1,
+          "statusName": "Fixed",
+        },
+      ]
     }
     intl={
-        Object {
-            "formatDate": [Function],
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatDate": [MockFunction] {
+          "calls": Array [
+            Array [
+              2017-11-23T08:00:00.000Z,
+              Object {
+                "day": "numeric",
+                "month": "long",
+              },
+            ],
+            Array [
+              2017-11-22T08:00:00.000Z,
+              Object {
+                "day": "numeric",
+                "month": "long",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Created",
+                "id": "Task.status.created",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Fixed",
+                "id": "Task.status.fixed",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Not an Issue",
+                "id": "Task.status.falsePositive",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Skipped",
+                "id": "Task.status.skipped",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Deleted",
+                "id": "Task.status.deleted",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Already Fixed",
+                "id": "Task.status.alreadyFixed",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Too Hard",
+                "id": "Task.status.tooHard",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
     invertBadges={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -377,68 +554,68 @@ ShallowWrapper {
       "children": Array [
         <header
           className="timeline-header"
->
+        >
           <span
-                    className="tag is-medium"
+            className="tag is-medium"
           >
-                    Latest
+            Latest
           </span>
-</header>,
+        </header>,
         Array [
           <div
             className="timeline-item"
->
+          >
             <div
-                        className="timeline-marker"
+              className="timeline-marker"
             />
             <div
-                        className="timeline-content"
+              className="timeline-content"
             >
-                        <p
-                                    className="heading"
-                        />
-                        <p
-                                    className="timeline-item__activity-entry"
-                        >
-                                    <span
-                                                className="badge inverted"
-                                                data-badge={1}
-                                    />
-                        </p>
+              <p
+                className="heading"
+              />
+              <p
+                className="timeline-item__activity-entry"
+              >
+                <span
+                  className="badge inverted"
+                  data-badge={1}
+                />
+              </p>
             </div>
-</div>,
+          </div>,
           <div
             className="timeline-item"
->
+          >
             <div
-                        className="timeline-marker"
+              className="timeline-marker"
             />
             <div
-                        className="timeline-content"
+              className="timeline-content"
             >
-                        <p
-                                    className="heading"
-                        />
-                        <p
-                                    className="timeline-item__activity-entry"
-                        >
-                                    <span
-                                                className="badge inverted"
-                                                data-badge={2}
-                                    />
-                        </p>
+              <p
+                className="heading"
+              />
+              <p
+                className="timeline-item__activity-entry"
+              >
+                <span
+                  className="badge inverted"
+                  data-badge={2}
+                />
+              </p>
             </div>
-</div>,
+          </div>,
         ],
         <div
           className="timeline-header"
->
+        >
           <span
-                    className="tag is-medium"
+            className="tag is-medium"
           >
-                    End
+            End
           </span>
-</div>,
+        </div>,
       ],
       "className": "timeline activity-timeline",
     },
@@ -451,9 +628,9 @@ ShallowWrapper {
         "props": Object {
           "children": <span
             className="tag is-medium"
->
+          >
             Latest
-</span>,
+          </span>,
           "className": "timeline-header",
         },
         "ref": null,
@@ -479,22 +656,22 @@ ShallowWrapper {
           "children": Array [
             <div
               className="timeline-marker"
-/>,
+            />,
             <div
               className="timeline-content"
->
+            >
               <p
-                            className="heading"
+                className="heading"
               />
               <p
-                            className="timeline-item__activity-entry"
+                className="timeline-item__activity-entry"
               >
-                            <span
-                                          className="badge inverted"
-                                          data-badge={1}
-                            />
+                <span
+                  className="badge inverted"
+                  data-badge={1}
+                />
               </p>
-</div>,
+            </div>,
           ],
           "className": "timeline-item",
         },
@@ -519,16 +696,16 @@ ShallowWrapper {
               "children": Array [
                 <p
                   className="heading"
-/>,
+                />,
                 Array [
                   <p
                     className="timeline-item__activity-entry"
->
+                  >
                     <span
-                                        className="badge inverted"
-                                        data-badge={1}
+                      className="badge inverted"
+                      data-badge={1}
                     />
-</p>,
+                  </p>,
                 ],
               ],
               "className": "timeline-content",
@@ -555,7 +732,7 @@ ShallowWrapper {
                   "children": <span
                     className="badge inverted"
                     data-badge={1}
-/>,
+                  />,
                   "className": "timeline-item__activity-entry",
                 },
                 "ref": null,
@@ -588,22 +765,22 @@ ShallowWrapper {
           "children": Array [
             <div
               className="timeline-marker"
-/>,
+            />,
             <div
               className="timeline-content"
->
+            >
               <p
-                            className="heading"
+                className="heading"
               />
               <p
-                            className="timeline-item__activity-entry"
+                className="timeline-item__activity-entry"
               >
-                            <span
-                                          className="badge inverted"
-                                          data-badge={2}
-                            />
+                <span
+                  className="badge inverted"
+                  data-badge={2}
+                />
               </p>
-</div>,
+            </div>,
           ],
           "className": "timeline-item",
         },
@@ -628,16 +805,16 @@ ShallowWrapper {
               "children": Array [
                 <p
                   className="heading"
-/>,
+                />,
                 Array [
                   <p
                     className="timeline-item__activity-entry"
->
+                  >
                     <span
-                                        className="badge inverted"
-                                        data-badge={2}
+                      className="badge inverted"
+                      data-badge={2}
                     />
-</p>,
+                  </p>,
                 ],
               ],
               "className": "timeline-content",
@@ -664,7 +841,7 @@ ShallowWrapper {
                   "children": <span
                     className="badge inverted"
                     data-badge={2}
-/>,
+                  />,
                   "className": "timeline-item__activity-entry",
                 },
                 "ref": null,
@@ -696,9 +873,9 @@ ShallowWrapper {
         "props": Object {
           "children": <span
             className="tag is-medium"
->
+          >
             End
-</span>,
+          </span>,
           "className": "timeline-header",
         },
         "ref": null,
@@ -728,68 +905,68 @@ ShallowWrapper {
         "children": Array [
           <header
             className="timeline-header"
->
+          >
             <span
-                        className="tag is-medium"
+              className="tag is-medium"
             >
-                        Latest
+              Latest
             </span>
-</header>,
+          </header>,
           Array [
             <div
               className="timeline-item"
->
+            >
               <div
-                            className="timeline-marker"
+                className="timeline-marker"
               />
               <div
-                            className="timeline-content"
+                className="timeline-content"
               >
-                            <p
-                                          className="heading"
-                            />
-                            <p
-                                          className="timeline-item__activity-entry"
-                            >
-                                          <span
-                                                        className="badge inverted"
-                                                        data-badge={1}
-                                          />
-                            </p>
+                <p
+                  className="heading"
+                />
+                <p
+                  className="timeline-item__activity-entry"
+                >
+                  <span
+                    className="badge inverted"
+                    data-badge={1}
+                  />
+                </p>
               </div>
-</div>,
+            </div>,
             <div
               className="timeline-item"
->
+            >
               <div
-                            className="timeline-marker"
+                className="timeline-marker"
               />
               <div
-                            className="timeline-content"
+                className="timeline-content"
               >
-                            <p
-                                          className="heading"
-                            />
-                            <p
-                                          className="timeline-item__activity-entry"
-                            >
-                                          <span
-                                                        className="badge inverted"
-                                                        data-badge={2}
-                                          />
-                            </p>
+                <p
+                  className="heading"
+                />
+                <p
+                  className="timeline-item__activity-entry"
+                >
+                  <span
+                    className="badge inverted"
+                    data-badge={2}
+                  />
+                </p>
               </div>
-</div>,
+            </div>,
           ],
           <div
             className="timeline-header"
->
+          >
             <span
-                        className="tag is-medium"
+              className="tag is-medium"
             >
-                        End
+              End
             </span>
-</div>,
+          </div>,
         ],
         "className": "timeline activity-timeline",
       },
@@ -802,9 +979,9 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="tag is-medium"
->
+            >
               Latest
-</span>,
+            </span>,
             "className": "timeline-header",
           },
           "ref": null,
@@ -830,22 +1007,22 @@ ShallowWrapper {
             "children": Array [
               <div
                 className="timeline-marker"
-/>,
+              />,
               <div
                 className="timeline-content"
->
+              >
                 <p
-                                className="heading"
+                  className="heading"
                 />
                 <p
-                                className="timeline-item__activity-entry"
+                  className="timeline-item__activity-entry"
                 >
-                                <span
-                                                className="badge inverted"
-                                                data-badge={1}
-                                />
+                  <span
+                    className="badge inverted"
+                    data-badge={1}
+                  />
                 </p>
-</div>,
+              </div>,
             ],
             "className": "timeline-item",
           },
@@ -870,16 +1047,16 @@ ShallowWrapper {
                 "children": Array [
                   <p
                     className="heading"
-/>,
+                  />,
                   Array [
                     <p
                       className="timeline-item__activity-entry"
->
+                    >
                       <span
-                                            className="badge inverted"
-                                            data-badge={1}
+                        className="badge inverted"
+                        data-badge={1}
                       />
-</p>,
+                    </p>,
                   ],
                 ],
                 "className": "timeline-content",
@@ -906,7 +1083,7 @@ ShallowWrapper {
                     "children": <span
                       className="badge inverted"
                       data-badge={1}
-/>,
+                    />,
                     "className": "timeline-item__activity-entry",
                   },
                   "ref": null,
@@ -939,22 +1116,22 @@ ShallowWrapper {
             "children": Array [
               <div
                 className="timeline-marker"
-/>,
+              />,
               <div
                 className="timeline-content"
->
+              >
                 <p
-                                className="heading"
+                  className="heading"
                 />
                 <p
-                                className="timeline-item__activity-entry"
+                  className="timeline-item__activity-entry"
                 >
-                                <span
-                                                className="badge inverted"
-                                                data-badge={2}
-                                />
+                  <span
+                    className="badge inverted"
+                    data-badge={2}
+                  />
                 </p>
-</div>,
+              </div>,
             ],
             "className": "timeline-item",
           },
@@ -979,16 +1156,16 @@ ShallowWrapper {
                 "children": Array [
                   <p
                     className="heading"
-/>,
+                  />,
                   Array [
                     <p
                       className="timeline-item__activity-entry"
->
+                    >
                       <span
-                                            className="badge inverted"
-                                            data-badge={2}
+                        className="badge inverted"
+                        data-badge={2}
                       />
-</p>,
+                    </p>,
                   ],
                 ],
                 "className": "timeline-content",
@@ -1015,7 +1192,7 @@ ShallowWrapper {
                     "children": <span
                       className="badge inverted"
                       data-badge={2}
-/>,
+                    />,
                     "className": "timeline-item__activity-entry",
                   },
                   "ref": null,
@@ -1047,9 +1224,9 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="tag is-medium"
->
+            >
               End
-</span>,
+            </span>,
             "className": "timeline-header",
           },
           "ref": null,

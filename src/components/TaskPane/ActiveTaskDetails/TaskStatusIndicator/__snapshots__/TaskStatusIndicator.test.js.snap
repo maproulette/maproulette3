@@ -7,21 +7,21 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <TaskStatusIndicator
     allStatuses={false}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
     isMinimized={false}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 1,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 1,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -37,24 +37,24 @@ ShallowWrapper {
       "children": Array [
         <div
           className="active-task-details--sub-heading"
->
+        >
           <FormattedMessage
-                    defaultMessage="Existing Status"
-                    id="ActiveTask.subheading.status"
-                    values={Object {}}
+            defaultMessage="Existing Status"
+            id="ActiveTask.subheading.status"
+            values={Object {}}
           />
-</div>,
+        </div>,
         <div>
           <div
-                    className="task-status__label"
+            className="task-status__label"
           >
-                    <FormattedMessage
-                              defaultMessage="Fixed"
-                              id="Task.status.fixed"
-                              values={Object {}}
-                    />
+            <FormattedMessage
+              defaultMessage="Fixed"
+              id="Task.status.fixed"
+              values={Object {}}
+            />
           </div>
-</div>,
+        </div>,
       ],
       "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
     },
@@ -69,7 +69,7 @@ ShallowWrapper {
             defaultMessage="Existing Status"
             id="ActiveTask.subheading.status"
             values={Object {}}
-/>,
+          />,
           "className": "active-task-details--sub-heading",
         },
         "ref": null,
@@ -95,13 +95,13 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="task-status__label"
->
+          >
             <FormattedMessage
-                        defaultMessage="Fixed"
-                        id="Task.status.fixed"
-                        values={Object {}}
+              defaultMessage="Fixed"
+              id="Task.status.fixed"
+              values={Object {}}
             />
-</div>,
+          </div>,
         },
         "ref": null,
         "rendered": Object {
@@ -114,7 +114,7 @@ ShallowWrapper {
                 defaultMessage="Fixed"
                 id="Task.status.fixed"
                 values={Object {}}
-/>,
+              />,
               false,
             ],
             "className": "task-status__label",
@@ -152,24 +152,24 @@ ShallowWrapper {
         "children": Array [
           <div
             className="active-task-details--sub-heading"
->
+          >
             <FormattedMessage
-                        defaultMessage="Existing Status"
-                        id="ActiveTask.subheading.status"
-                        values={Object {}}
+              defaultMessage="Existing Status"
+              id="ActiveTask.subheading.status"
+              values={Object {}}
             />
-</div>,
+          </div>,
           <div>
             <div
-                        className="task-status__label"
+              className="task-status__label"
             >
-                        <FormattedMessage
-                                    defaultMessage="Fixed"
-                                    id="Task.status.fixed"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Fixed"
+                id="Task.status.fixed"
+                values={Object {}}
+              />
             </div>
-</div>,
+          </div>,
         ],
         "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
       },
@@ -184,7 +184,7 @@ ShallowWrapper {
               defaultMessage="Existing Status"
               id="ActiveTask.subheading.status"
               values={Object {}}
-/>,
+            />,
             "className": "active-task-details--sub-heading",
           },
           "ref": null,
@@ -210,13 +210,13 @@ ShallowWrapper {
           "props": Object {
             "children": <div
               className="task-status__label"
->
+            >
               <FormattedMessage
-                            defaultMessage="Fixed"
-                            id="Task.status.fixed"
-                            values={Object {}}
+                defaultMessage="Fixed"
+                id="Task.status.fixed"
+                values={Object {}}
               />
-</div>,
+            </div>,
           },
           "ref": null,
           "rendered": Object {
@@ -229,7 +229,7 @@ ShallowWrapper {
                   defaultMessage="Fixed"
                   id="Task.status.fixed"
                   values={Object {}}
-/>,
+                />,
                 false,
               ],
               "className": "task-status__label",
@@ -276,21 +276,21 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <TaskStatusIndicator
     allStatuses={false}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
     isMinimized={false}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 0,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -319,21 +319,21 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <TaskStatusIndicator
     allStatuses={true}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
     isMinimized={false}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 0,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -349,24 +349,24 @@ ShallowWrapper {
       "children": Array [
         <div
           className="active-task-details--sub-heading"
->
+        >
           <FormattedMessage
-                    defaultMessage="Existing Status"
-                    id="ActiveTask.subheading.status"
-                    values={Object {}}
+            defaultMessage="Existing Status"
+            id="ActiveTask.subheading.status"
+            values={Object {}}
           />
-</div>,
+        </div>,
         <div>
           <div
-                    className="task-status__label"
+            className="task-status__label"
           >
-                    <FormattedMessage
-                              defaultMessage="Created"
-                              id="Task.status.created"
-                              values={Object {}}
-                    />
+            <FormattedMessage
+              defaultMessage="Created"
+              id="Task.status.created"
+              values={Object {}}
+            />
           </div>
-</div>,
+        </div>,
       ],
       "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
     },
@@ -381,7 +381,7 @@ ShallowWrapper {
             defaultMessage="Existing Status"
             id="ActiveTask.subheading.status"
             values={Object {}}
-/>,
+          />,
           "className": "active-task-details--sub-heading",
         },
         "ref": null,
@@ -407,13 +407,13 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="task-status__label"
->
+          >
             <FormattedMessage
-                        defaultMessage="Created"
-                        id="Task.status.created"
-                        values={Object {}}
+              defaultMessage="Created"
+              id="Task.status.created"
+              values={Object {}}
             />
-</div>,
+          </div>,
         },
         "ref": null,
         "rendered": Object {
@@ -426,7 +426,7 @@ ShallowWrapper {
                 defaultMessage="Created"
                 id="Task.status.created"
                 values={Object {}}
-/>,
+              />,
               false,
             ],
             "className": "task-status__label",
@@ -464,24 +464,24 @@ ShallowWrapper {
         "children": Array [
           <div
             className="active-task-details--sub-heading"
->
+          >
             <FormattedMessage
-                        defaultMessage="Existing Status"
-                        id="ActiveTask.subheading.status"
-                        values={Object {}}
+              defaultMessage="Existing Status"
+              id="ActiveTask.subheading.status"
+              values={Object {}}
             />
-</div>,
+          </div>,
           <div>
             <div
-                        className="task-status__label"
+              className="task-status__label"
             >
-                        <FormattedMessage
-                                    defaultMessage="Created"
-                                    id="Task.status.created"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Created"
+                id="Task.status.created"
+                values={Object {}}
+              />
             </div>
-</div>,
+          </div>,
         ],
         "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
       },
@@ -496,7 +496,7 @@ ShallowWrapper {
               defaultMessage="Existing Status"
               id="ActiveTask.subheading.status"
               values={Object {}}
-/>,
+            />,
             "className": "active-task-details--sub-heading",
           },
           "ref": null,
@@ -522,13 +522,13 @@ ShallowWrapper {
           "props": Object {
             "children": <div
               className="task-status__label"
->
+            >
               <FormattedMessage
-                            defaultMessage="Created"
-                            id="Task.status.created"
-                            values={Object {}}
+                defaultMessage="Created"
+                id="Task.status.created"
+                values={Object {}}
               />
-</div>,
+            </div>,
           },
           "ref": null,
           "rendered": Object {
@@ -541,7 +541,7 @@ ShallowWrapper {
                   defaultMessage="Created"
                   id="Task.status.created"
                   values={Object {}}
-/>,
+                />,
                 false,
               ],
               "className": "task-status__label",
@@ -588,22 +588,22 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <TaskStatusIndicator
     allStatuses={false}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
     isMinimized={false}
     task={
-        Object {
-            "changesetId": 123456,
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 1,
-          }
+      Object {
+        "changesetId": 123456,
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 1,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -619,35 +619,36 @@ ShallowWrapper {
       "children": Array [
         <div
           className="active-task-details--sub-heading"
->
+        >
           <FormattedMessage
-                    defaultMessage="Existing Status"
-                    id="ActiveTask.subheading.status"
-                    values={Object {}}
+            defaultMessage="Existing Status"
+            id="ActiveTask.subheading.status"
+            values={Object {}}
           />
-</div>,
+        </div>,
         <div>
           <div
-                    className="task-status__label"
+            className="task-status__label"
           >
-                    <FormattedMessage
-                              defaultMessage="Fixed"
-                              id="Task.status.fixed"
-                              values={Object {}}
-                    />
-                    <a
-                              className="task-status__view-changeset-link"
-                              href="https://www.openstreetmap.org/changeset/123456"
-                              target="_blank"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="View Changeset"
-                                        id="ActiveTask.controls.viewChangset.label"
-                                        values={Object {}}
-                              />
-                    </a>
+            <FormattedMessage
+              defaultMessage="Fixed"
+              id="Task.status.fixed"
+              values={Object {}}
+            />
+            <a
+              className="task-status__view-changeset-link"
+              href="https://www.openstreetmap.org/changeset/123456"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <FormattedMessage
+                defaultMessage="View Changeset"
+                id="ActiveTask.controls.viewChangset.label"
+                values={Object {}}
+              />
+            </a>
           </div>
-</div>,
+        </div>,
       ],
       "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
     },
@@ -662,7 +663,7 @@ ShallowWrapper {
             defaultMessage="Existing Status"
             id="ActiveTask.subheading.status"
             values={Object {}}
-/>,
+          />,
           "className": "active-task-details--sub-heading",
         },
         "ref": null,
@@ -688,24 +689,25 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="task-status__label"
->
+          >
             <FormattedMessage
-                        defaultMessage="Fixed"
-                        id="Task.status.fixed"
-                        values={Object {}}
+              defaultMessage="Fixed"
+              id="Task.status.fixed"
+              values={Object {}}
             />
             <a
-                        className="task-status__view-changeset-link"
-                        href="https://www.openstreetmap.org/changeset/123456"
-                        target="_blank"
+              className="task-status__view-changeset-link"
+              href="https://www.openstreetmap.org/changeset/123456"
+              rel="noopener noreferrer"
+              target="_blank"
             >
-                        <FormattedMessage
-                                    defaultMessage="View Changeset"
-                                    id="ActiveTask.controls.viewChangset.label"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="View Changeset"
+                id="ActiveTask.controls.viewChangset.label"
+                values={Object {}}
+              />
             </a>
-</div>,
+          </div>,
         },
         "ref": null,
         "rendered": Object {
@@ -718,18 +720,19 @@ ShallowWrapper {
                 defaultMessage="Fixed"
                 id="Task.status.fixed"
                 values={Object {}}
-/>,
+              />,
               <a
                 className="task-status__view-changeset-link"
                 href="https://www.openstreetmap.org/changeset/123456"
+                rel="noopener noreferrer"
                 target="_blank"
->
+              >
                 <FormattedMessage
-                                defaultMessage="View Changeset"
-                                id="ActiveTask.controls.viewChangset.label"
-                                values={Object {}}
+                  defaultMessage="View Changeset"
+                  id="ActiveTask.controls.viewChangset.label"
+                  values={Object {}}
                 />
-</a>,
+              </a>,
             ],
             "className": "task-status__label",
           },
@@ -757,9 +760,10 @@ ShallowWrapper {
                   defaultMessage="View Changeset"
                   id="ActiveTask.controls.viewChangset.label"
                   values={Object {}}
-/>,
+                />,
                 "className": "task-status__view-changeset-link",
                 "href": "https://www.openstreetmap.org/changeset/123456",
+                "rel": "noopener noreferrer",
                 "target": "_blank",
               },
               "ref": null,
@@ -795,35 +799,36 @@ ShallowWrapper {
         "children": Array [
           <div
             className="active-task-details--sub-heading"
->
+          >
             <FormattedMessage
-                        defaultMessage="Existing Status"
-                        id="ActiveTask.subheading.status"
-                        values={Object {}}
+              defaultMessage="Existing Status"
+              id="ActiveTask.subheading.status"
+              values={Object {}}
             />
-</div>,
+          </div>,
           <div>
             <div
-                        className="task-status__label"
+              className="task-status__label"
             >
-                        <FormattedMessage
-                                    defaultMessage="Fixed"
-                                    id="Task.status.fixed"
-                                    values={Object {}}
-                        />
-                        <a
-                                    className="task-status__view-changeset-link"
-                                    href="https://www.openstreetmap.org/changeset/123456"
-                                    target="_blank"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="View Changeset"
-                                                id="ActiveTask.controls.viewChangset.label"
-                                                values={Object {}}
-                                    />
-                        </a>
+              <FormattedMessage
+                defaultMessage="Fixed"
+                id="Task.status.fixed"
+                values={Object {}}
+              />
+              <a
+                className="task-status__view-changeset-link"
+                href="https://www.openstreetmap.org/changeset/123456"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <FormattedMessage
+                  defaultMessage="View Changeset"
+                  id="ActiveTask.controls.viewChangset.label"
+                  values={Object {}}
+                />
+              </a>
             </div>
-</div>,
+          </div>,
         ],
         "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
       },
@@ -838,7 +843,7 @@ ShallowWrapper {
               defaultMessage="Existing Status"
               id="ActiveTask.subheading.status"
               values={Object {}}
-/>,
+            />,
             "className": "active-task-details--sub-heading",
           },
           "ref": null,
@@ -864,24 +869,25 @@ ShallowWrapper {
           "props": Object {
             "children": <div
               className="task-status__label"
->
+            >
               <FormattedMessage
-                            defaultMessage="Fixed"
-                            id="Task.status.fixed"
-                            values={Object {}}
+                defaultMessage="Fixed"
+                id="Task.status.fixed"
+                values={Object {}}
               />
               <a
-                            className="task-status__view-changeset-link"
-                            href="https://www.openstreetmap.org/changeset/123456"
-                            target="_blank"
+                className="task-status__view-changeset-link"
+                href="https://www.openstreetmap.org/changeset/123456"
+                rel="noopener noreferrer"
+                target="_blank"
               >
-                            <FormattedMessage
-                                          defaultMessage="View Changeset"
-                                          id="ActiveTask.controls.viewChangset.label"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="View Changeset"
+                  id="ActiveTask.controls.viewChangset.label"
+                  values={Object {}}
+                />
               </a>
-</div>,
+            </div>,
           },
           "ref": null,
           "rendered": Object {
@@ -894,18 +900,19 @@ ShallowWrapper {
                   defaultMessage="Fixed"
                   id="Task.status.fixed"
                   values={Object {}}
-/>,
+                />,
                 <a
                   className="task-status__view-changeset-link"
                   href="https://www.openstreetmap.org/changeset/123456"
+                  rel="noopener noreferrer"
                   target="_blank"
->
+                >
                   <FormattedMessage
-                                    defaultMessage="View Changeset"
-                                    id="ActiveTask.controls.viewChangset.label"
-                                    values={Object {}}
+                    defaultMessage="View Changeset"
+                    id="ActiveTask.controls.viewChangset.label"
+                    values={Object {}}
                   />
-</a>,
+                </a>,
               ],
               "className": "task-status__label",
             },
@@ -933,9 +940,10 @@ ShallowWrapper {
                     defaultMessage="View Changeset"
                     id="ActiveTask.controls.viewChangset.label"
                     values={Object {}}
-/>,
+                  />,
                   "className": "task-status__view-changeset-link",
                   "href": "https://www.openstreetmap.org/changeset/123456",
+                  "rel": "noopener noreferrer",
                   "target": "_blank",
                 },
                 "ref": null,
@@ -980,21 +988,36 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <TaskStatusIndicator
     allStatuses={false}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Existing Status",
+                "id": "ActiveTask.controls.status.tooltip",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": "Existing Status",
+            },
+          ],
+        },
+      }
     }
     isMinimized={true}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 3,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 3,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -1010,45 +1033,45 @@ ShallowWrapper {
       "children": Array [
         <div
           className="popout-content__header active-task-details--bordered"
->
+        >
           <h3
-                    className="info-popout--name"
+            className="info-popout--name"
           >
-                    <FormattedMessage
-                              defaultMessage="Existing Status"
-                              id="ActiveTask.subheading.status"
-                              values={Object {}}
-                    />
+            <FormattedMessage
+              defaultMessage="Existing Status"
+              id="ActiveTask.subheading.status"
+              values={Object {}}
+            />
           </h3>
-</div>,
+        </div>,
         <div
           className="popout-content__body"
->
+        >
           <span
-                    className="task-status__label"
+            className="task-status__label"
           >
-                    <FormattedMessage
-                              defaultMessage="Skipped"
-                              id="Task.status.skipped"
-                              values={Object {}}
-                    />
+            <FormattedMessage
+              defaultMessage="Skipped"
+              id="Task.status.skipped"
+              values={Object {}}
+            />
           </span>
-</div>,
+        </div>,
       ],
       "className": "task-status-popout",
       "control": <button
         className="button icon-only task-status"
->
+      >
         <span
-                className="control-icon"
-                title="Existing Status"
+          className="control-icon"
+          title="Existing Status"
         >
-                <SvgSymbol
-                        sym="flag-icon"
-                        viewBox="0 0 20 20"
-                />
+          <SvgSymbol
+            sym="flag-icon"
+            viewBox="0 0 20 20"
+          />
         </span>
-</button>,
+      </button>,
       "direction": "right",
       "eventTypes": Array [
         "mousedown",
@@ -1068,13 +1091,13 @@ ShallowWrapper {
         "props": Object {
           "children": <h3
             className="info-popout--name"
->
+          >
             <FormattedMessage
-                        defaultMessage="Existing Status"
-                        id="ActiveTask.subheading.status"
-                        values={Object {}}
+              defaultMessage="Existing Status"
+              id="ActiveTask.subheading.status"
+              values={Object {}}
             />
-</h3>,
+          </h3>,
           "className": "popout-content__header active-task-details--bordered",
         },
         "ref": null,
@@ -1087,7 +1110,7 @@ ShallowWrapper {
               defaultMessage="Existing Status"
               id="ActiveTask.subheading.status"
               values={Object {}}
-/>,
+            />,
             "className": "info-popout--name",
           },
           "ref": null,
@@ -1115,13 +1138,13 @@ ShallowWrapper {
         "props": Object {
           "children": <span
             className="task-status__label"
->
+          >
             <FormattedMessage
-                        defaultMessage="Skipped"
-                        id="Task.status.skipped"
-                        values={Object {}}
+              defaultMessage="Skipped"
+              id="Task.status.skipped"
+              values={Object {}}
             />
-</span>,
+          </span>,
           "className": "popout-content__body",
         },
         "ref": null,
@@ -1134,7 +1157,7 @@ ShallowWrapper {
               defaultMessage="Skipped"
               id="Task.status.skipped"
               values={Object {}}
-/>,
+            />,
             "className": "task-status__label",
           },
           "ref": null,
@@ -1167,45 +1190,45 @@ ShallowWrapper {
         "children": Array [
           <div
             className="popout-content__header active-task-details--bordered"
->
+          >
             <h3
-                        className="info-popout--name"
+              className="info-popout--name"
             >
-                        <FormattedMessage
-                                    defaultMessage="Existing Status"
-                                    id="ActiveTask.subheading.status"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Existing Status"
+                id="ActiveTask.subheading.status"
+                values={Object {}}
+              />
             </h3>
-</div>,
+          </div>,
           <div
             className="popout-content__body"
->
+          >
             <span
-                        className="task-status__label"
+              className="task-status__label"
             >
-                        <FormattedMessage
-                                    defaultMessage="Skipped"
-                                    id="Task.status.skipped"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Skipped"
+                id="Task.status.skipped"
+                values={Object {}}
+              />
             </span>
-</div>,
+          </div>,
         ],
         "className": "task-status-popout",
         "control": <button
           className="button icon-only task-status"
->
+        >
           <span
-                    className="control-icon"
-                    title="Existing Status"
+            className="control-icon"
+            title="Existing Status"
           >
-                    <SvgSymbol
-                              sym="flag-icon"
-                              viewBox="0 0 20 20"
-                    />
+            <SvgSymbol
+              sym="flag-icon"
+              viewBox="0 0 20 20"
+            />
           </span>
-</button>,
+        </button>,
         "direction": "right",
         "eventTypes": Array [
           "mousedown",
@@ -1225,13 +1248,13 @@ ShallowWrapper {
           "props": Object {
             "children": <h3
               className="info-popout--name"
->
+            >
               <FormattedMessage
-                            defaultMessage="Existing Status"
-                            id="ActiveTask.subheading.status"
-                            values={Object {}}
+                defaultMessage="Existing Status"
+                id="ActiveTask.subheading.status"
+                values={Object {}}
               />
-</h3>,
+            </h3>,
             "className": "popout-content__header active-task-details--bordered",
           },
           "ref": null,
@@ -1244,7 +1267,7 @@ ShallowWrapper {
                 defaultMessage="Existing Status"
                 id="ActiveTask.subheading.status"
                 values={Object {}}
-/>,
+              />,
               "className": "info-popout--name",
             },
             "ref": null,
@@ -1272,13 +1295,13 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="task-status__label"
->
+            >
               <FormattedMessage
-                            defaultMessage="Skipped"
-                            id="Task.status.skipped"
-                            values={Object {}}
+                defaultMessage="Skipped"
+                id="Task.status.skipped"
+                values={Object {}}
               />
-</span>,
+            </span>,
             "className": "popout-content__body",
           },
           "ref": null,
@@ -1291,7 +1314,7 @@ ShallowWrapper {
                 defaultMessage="Skipped"
                 id="Task.status.skipped"
                 values={Object {}}
-/>,
+              />,
               "className": "task-status__label",
             },
             "ref": null,
@@ -1333,21 +1356,21 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <TaskStatusIndicator
     allStatuses={false}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
     isMinimized={false}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 3,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 3,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -1363,24 +1386,24 @@ ShallowWrapper {
       "children": Array [
         <div
           className="active-task-details--sub-heading"
->
+        >
           <FormattedMessage
-                    defaultMessage="Existing Status"
-                    id="ActiveTask.subheading.status"
-                    values={Object {}}
+            defaultMessage="Existing Status"
+            id="ActiveTask.subheading.status"
+            values={Object {}}
           />
-</div>,
+        </div>,
         <div>
           <div
-                    className="task-status__label"
+            className="task-status__label"
           >
-                    <FormattedMessage
-                              defaultMessage="Skipped"
-                              id="Task.status.skipped"
-                              values={Object {}}
-                    />
+            <FormattedMessage
+              defaultMessage="Skipped"
+              id="Task.status.skipped"
+              values={Object {}}
+            />
           </div>
-</div>,
+        </div>,
       ],
       "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
     },
@@ -1395,7 +1418,7 @@ ShallowWrapper {
             defaultMessage="Existing Status"
             id="ActiveTask.subheading.status"
             values={Object {}}
-/>,
+          />,
           "className": "active-task-details--sub-heading",
         },
         "ref": null,
@@ -1421,13 +1444,13 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="task-status__label"
->
+          >
             <FormattedMessage
-                        defaultMessage="Skipped"
-                        id="Task.status.skipped"
-                        values={Object {}}
+              defaultMessage="Skipped"
+              id="Task.status.skipped"
+              values={Object {}}
             />
-</div>,
+          </div>,
         },
         "ref": null,
         "rendered": Object {
@@ -1440,7 +1463,7 @@ ShallowWrapper {
                 defaultMessage="Skipped"
                 id="Task.status.skipped"
                 values={Object {}}
-/>,
+              />,
               false,
             ],
             "className": "task-status__label",
@@ -1478,24 +1501,24 @@ ShallowWrapper {
         "children": Array [
           <div
             className="active-task-details--sub-heading"
->
+          >
             <FormattedMessage
-                        defaultMessage="Existing Status"
-                        id="ActiveTask.subheading.status"
-                        values={Object {}}
+              defaultMessage="Existing Status"
+              id="ActiveTask.subheading.status"
+              values={Object {}}
             />
-</div>,
+          </div>,
           <div>
             <div
-                        className="task-status__label"
+              className="task-status__label"
             >
-                        <FormattedMessage
-                                    defaultMessage="Skipped"
-                                    id="Task.status.skipped"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Skipped"
+                id="Task.status.skipped"
+                values={Object {}}
+              />
             </div>
-</div>,
+          </div>,
         ],
         "className": "task-status active-task-controls__vertical-control-block active-task-details--bordered",
       },
@@ -1510,7 +1533,7 @@ ShallowWrapper {
               defaultMessage="Existing Status"
               id="ActiveTask.subheading.status"
               values={Object {}}
-/>,
+            />,
             "className": "active-task-details--sub-heading",
           },
           "ref": null,
@@ -1536,13 +1559,13 @@ ShallowWrapper {
           "props": Object {
             "children": <div
               className="task-status__label"
->
+            >
               <FormattedMessage
-                            defaultMessage="Skipped"
-                            id="Task.status.skipped"
-                            values={Object {}}
+                defaultMessage="Skipped"
+                id="Task.status.skipped"
+                values={Object {}}
               />
-</div>,
+            </div>,
           },
           "ref": null,
           "rendered": Object {
@@ -1555,7 +1578,7 @@ ShallowWrapper {
                   defaultMessage="Skipped"
                   id="Task.status.skipped"
                   values={Object {}}
-/>,
+                />,
                 false,
               ],
               "className": "task-status__label",

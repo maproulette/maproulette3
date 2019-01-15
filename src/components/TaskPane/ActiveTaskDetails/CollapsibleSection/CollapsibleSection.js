@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _isFunction from 'lodash/isFunction'
 import _isBoolean from 'lodash/isBoolean'
-import './CollapsibleSection.css'
+import './CollapsibleSection.scss'
 
 /**
  * CollapsibleSection renders content that can be collapsed/minimized.
@@ -41,6 +41,7 @@ export default class CollapsibleSection extends Component {
           {this.props.heading}
 
           {!this.props.hideIndicator &&
+           // eslint-disable-next-line jsx-a11y/anchor-is-valid
            <a className="collapsible-icon" aria-label="more options">
              <span className="icon"></span>
            </a>

@@ -6,16 +6,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SavedTasks
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
     user={
-        Object {
-            "savedTasks": Array [],
-          }
+      Object {
+        "savedTasks": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -31,18 +31,18 @@ ShallowWrapper {
       "children": Array [
         <h2
           className="subtitle"
->
+        >
           <FormattedMessage
-                    defaultMessage="Tracked Tasks"
-                    id="UserProfile.savedTasks.header"
-                    values={Object {}}
+            defaultMessage="Tracked Tasks"
+            id="UserProfile.savedTasks.header"
+            values={Object {}}
           />
-</h2>,
+        </h2>,
         <div
           className="none"
->
+        >
           No Tasks
-</div>,
+        </div>,
       ],
       "className": "user-profile__saved-tasks",
     },
@@ -57,7 +57,7 @@ ShallowWrapper {
             defaultMessage="Tracked Tasks"
             id="UserProfile.savedTasks.header"
             values={Object {}}
-/>,
+          />,
           "className": "subtitle",
         },
         "ref": null,
@@ -100,18 +100,18 @@ ShallowWrapper {
         "children": Array [
           <h2
             className="subtitle"
->
+          >
             <FormattedMessage
-                        defaultMessage="Tracked Tasks"
-                        id="UserProfile.savedTasks.header"
-                        values={Object {}}
+              defaultMessage="Tracked Tasks"
+              id="UserProfile.savedTasks.header"
+              values={Object {}}
             />
-</h2>,
+          </h2>,
           <div
             className="none"
->
+          >
             No Tasks
-</div>,
+          </div>,
         ],
         "className": "user-profile__saved-tasks",
       },
@@ -126,7 +126,7 @@ ShallowWrapper {
               defaultMessage="Tracked Tasks"
               id="UserProfile.savedTasks.header"
               values={Object {}}
-/>,
+            />,
             "className": "subtitle",
           },
           "ref": null,
@@ -177,41 +177,76 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SavedTasks
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
-    }
-    user={
-        Object {
-            "savedTasks": Array [
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
               Object {
-                "id": 123,
-                "name": "First Task",
-                "parent": Object {
-                  "id": 321,
-                  "name": "First Challenge",
-                },
-              },
-              Object {
-                "id": 456,
-                "name": "Second Task",
-                "parent": Object {
-                  "id": 654,
-                  "name": "Second Challenge",
-                },
-              },
-              Object {
-                "id": 789,
-                "name": "Third Task",
-                "parent": Object {
-                  "id": 987,
-                  "name": "Third Challenge",
-                },
+                "defaultMessage": "Stop Tracking",
+                "id": "Task.unsave.control.tooltip",
               },
             ],
-          }
+            Array [
+              Object {
+                "defaultMessage": "Stop Tracking",
+                "id": "Task.unsave.control.tooltip",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Stop Tracking",
+                "id": "Task.unsave.control.tooltip",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-/>,
+    user={
+      Object {
+        "savedTasks": Array [
+          Object {
+            "id": 123,
+            "name": "First Task",
+            "parent": Object {
+              "id": 321,
+              "name": "First Challenge",
+            },
+          },
+          Object {
+            "id": 456,
+            "name": "Second Task",
+            "parent": Object {
+              "id": 654,
+              "name": "Second Challenge",
+            },
+          },
+          Object {
+            "id": 789,
+            "name": "Third Task",
+            "parent": Object {
+              "id": 987,
+              "name": "Third Challenge",
+            },
+          },
+        ],
+      }
+    }
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -227,105 +262,102 @@ ShallowWrapper {
       "children": Array [
         <h2
           className="subtitle"
->
+        >
           <FormattedMessage
-                    defaultMessage="Tracked Tasks"
-                    id="UserProfile.savedTasks.header"
-                    values={Object {}}
+            defaultMessage="Tracked Tasks"
+            id="UserProfile.savedTasks.header"
+            values={Object {}}
           />
-</h2>,
+        </h2>,
         <ul>
           <li
-                    className="user-profile__saved-tasks__task"
+            className="user-profile__saved-tasks__task"
           >
-                    <Link
-                              replace={false}
-                              to="/challenge/321/task/123"
-                    >
-                              <span
-                                        className="saved-tasks__task__name"
-                              >
-                                        First Task
-                              </span>
-                               — 
-                              First Challenge
-                    </Link>
-                    <span
-                              className="connector"
-                    />
-                    <a
-                              className="button is-clear"
-                              onClick={[Function]}
-                              title={undefined}
-                    >
-                              <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                              />
-                    </a>
+            <Link
+              replace={false}
+              to="/challenge/321/task/123"
+            >
+              <span
+                className="saved-tasks__task__name"
+              >
+                First Task
+              </span>
+               — 
+              First Challenge
+            </Link>
+            <span
+              className="connector"
+            />
+            <a
+              className="button is-clear"
+              onClick={[Function]}
+            >
+              <SvgSymbol
+                className="icon"
+                sym="trash-icon"
+                viewBox="0 0 20 20"
+              />
+            </a>
           </li>
           <li
-                    className="user-profile__saved-tasks__task"
+            className="user-profile__saved-tasks__task"
           >
-                    <Link
-                              replace={false}
-                              to="/challenge/654/task/456"
-                    >
-                              <span
-                                        className="saved-tasks__task__name"
-                              >
-                                        Second Task
-                              </span>
-                               — 
-                              Second Challenge
-                    </Link>
-                    <span
-                              className="connector"
-                    />
-                    <a
-                              className="button is-clear"
-                              onClick={[Function]}
-                              title={undefined}
-                    >
-                              <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                              />
-                    </a>
+            <Link
+              replace={false}
+              to="/challenge/654/task/456"
+            >
+              <span
+                className="saved-tasks__task__name"
+              >
+                Second Task
+              </span>
+               — 
+              Second Challenge
+            </Link>
+            <span
+              className="connector"
+            />
+            <a
+              className="button is-clear"
+              onClick={[Function]}
+            >
+              <SvgSymbol
+                className="icon"
+                sym="trash-icon"
+                viewBox="0 0 20 20"
+              />
+            </a>
           </li>
           <li
-                    className="user-profile__saved-tasks__task"
+            className="user-profile__saved-tasks__task"
           >
-                    <Link
-                              replace={false}
-                              to="/challenge/987/task/789"
-                    >
-                              <span
-                                        className="saved-tasks__task__name"
-                              >
-                                        Third Task
-                              </span>
-                               — 
-                              Third Challenge
-                    </Link>
-                    <span
-                              className="connector"
-                    />
-                    <a
-                              className="button is-clear"
-                              onClick={[Function]}
-                              title={undefined}
-                    >
-                              <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                              />
-                    </a>
+            <Link
+              replace={false}
+              to="/challenge/987/task/789"
+            >
+              <span
+                className="saved-tasks__task__name"
+              >
+                Third Task
+              </span>
+               — 
+              Third Challenge
+            </Link>
+            <span
+              className="connector"
+            />
+            <a
+              className="button is-clear"
+              onClick={[Function]}
+            >
+              <SvgSymbol
+                className="icon"
+                sym="trash-icon"
+                viewBox="0 0 20 20"
+              />
+            </a>
           </li>
-</ul>,
+        </ul>,
       ],
       "className": "user-profile__saved-tasks",
     },
@@ -340,7 +372,7 @@ ShallowWrapper {
             defaultMessage="Tracked Tasks"
             id="UserProfile.savedTasks.header"
             values={Object {}}
-/>,
+          />,
           "className": "subtitle",
         },
         "ref": null,
@@ -367,94 +399,91 @@ ShallowWrapper {
           "children": Array [
             <li
               className="user-profile__saved-tasks__task"
->
+            >
               <Link
-                            replace={false}
-                            to="/challenge/321/task/123"
+                replace={false}
+                to="/challenge/321/task/123"
               >
-                            <span
-                                          className="saved-tasks__task__name"
-                            >
-                                          First Task
-                            </span>
-                             — 
-                            First Challenge
+                <span
+                  className="saved-tasks__task__name"
+                >
+                  First Task
+                </span>
+                 — 
+                First Challenge
               </Link>
               <span
-                            className="connector"
+                className="connector"
               />
               <a
-                            className="button is-clear"
-                            onClick={[Function]}
-                            title={undefined}
+                className="button is-clear"
+                onClick={[Function]}
               >
-                            <SvgSymbol
-                                          className="icon"
-                                          sym="trash-icon"
-                                          viewBox="0 0 20 20"
-                            />
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
               </a>
-</li>,
+            </li>,
             <li
               className="user-profile__saved-tasks__task"
->
+            >
               <Link
-                            replace={false}
-                            to="/challenge/654/task/456"
+                replace={false}
+                to="/challenge/654/task/456"
               >
-                            <span
-                                          className="saved-tasks__task__name"
-                            >
-                                          Second Task
-                            </span>
-                             — 
-                            Second Challenge
+                <span
+                  className="saved-tasks__task__name"
+                >
+                  Second Task
+                </span>
+                 — 
+                Second Challenge
               </Link>
               <span
-                            className="connector"
+                className="connector"
               />
               <a
-                            className="button is-clear"
-                            onClick={[Function]}
-                            title={undefined}
+                className="button is-clear"
+                onClick={[Function]}
               >
-                            <SvgSymbol
-                                          className="icon"
-                                          sym="trash-icon"
-                                          viewBox="0 0 20 20"
-                            />
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
               </a>
-</li>,
+            </li>,
             <li
               className="user-profile__saved-tasks__task"
->
+            >
               <Link
-                            replace={false}
-                            to="/challenge/987/task/789"
+                replace={false}
+                to="/challenge/987/task/789"
               >
-                            <span
-                                          className="saved-tasks__task__name"
-                            >
-                                          Third Task
-                            </span>
-                             — 
-                            Third Challenge
+                <span
+                  className="saved-tasks__task__name"
+                >
+                  Third Task
+                </span>
+                 — 
+                Third Challenge
               </Link>
               <span
-                            className="connector"
+                className="connector"
               />
               <a
-                            className="button is-clear"
-                            onClick={[Function]}
-                            title={undefined}
+                className="button is-clear"
+                onClick={[Function]}
               >
-                            <SvgSymbol
-                                          className="icon"
-                                          sym="trash-icon"
-                                          viewBox="0 0 20 20"
-                            />
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
               </a>
-</li>,
+            </li>,
           ],
         },
         "ref": null,
@@ -468,29 +497,28 @@ ShallowWrapper {
                 <Link
                   replace={false}
                   to="/challenge/321/task/123"
->
+                >
                   <span
-                                    className="saved-tasks__task__name"
+                    className="saved-tasks__task__name"
                   >
-                                    First Task
+                    First Task
                   </span>
                    — 
                   First Challenge
-</Link>,
+                </Link>,
                 <span
                   className="connector"
-/>,
+                />,
                 <a
                   className="button is-clear"
                   onClick={[Function]}
-                  title={undefined}
->
+                >
                   <SvgSymbol
-                                    className="icon"
-                                    sym="trash-icon"
-                                    viewBox="0 0 20 20"
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
                   />
-</a>,
+                </a>,
               ],
               "className": "user-profile__saved-tasks__task",
             },
@@ -504,9 +532,9 @@ ShallowWrapper {
                   "children": Array [
                     <span
                       className="saved-tasks__task__name"
->
+                    >
                       First Task
-</span>,
+                    </span>,
                     " — ",
                     "First Challenge",
                   ],
@@ -552,7 +580,7 @@ ShallowWrapper {
                     className="icon"
                     sym="trash-icon"
                     viewBox="0 0 20 20"
-/>,
+                  />,
                   "className": "button is-clear",
                   "onClick": [Function],
                   "title": undefined,
@@ -585,29 +613,28 @@ ShallowWrapper {
                 <Link
                   replace={false}
                   to="/challenge/654/task/456"
->
+                >
                   <span
-                                    className="saved-tasks__task__name"
+                    className="saved-tasks__task__name"
                   >
-                                    Second Task
+                    Second Task
                   </span>
                    — 
                   Second Challenge
-</Link>,
+                </Link>,
                 <span
                   className="connector"
-/>,
+                />,
                 <a
                   className="button is-clear"
                   onClick={[Function]}
-                  title={undefined}
->
+                >
                   <SvgSymbol
-                                    className="icon"
-                                    sym="trash-icon"
-                                    viewBox="0 0 20 20"
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
                   />
-</a>,
+                </a>,
               ],
               "className": "user-profile__saved-tasks__task",
             },
@@ -621,9 +648,9 @@ ShallowWrapper {
                   "children": Array [
                     <span
                       className="saved-tasks__task__name"
->
+                    >
                       Second Task
-</span>,
+                    </span>,
                     " — ",
                     "Second Challenge",
                   ],
@@ -669,7 +696,7 @@ ShallowWrapper {
                     className="icon"
                     sym="trash-icon"
                     viewBox="0 0 20 20"
-/>,
+                  />,
                   "className": "button is-clear",
                   "onClick": [Function],
                   "title": undefined,
@@ -702,29 +729,28 @@ ShallowWrapper {
                 <Link
                   replace={false}
                   to="/challenge/987/task/789"
->
+                >
                   <span
-                                    className="saved-tasks__task__name"
+                    className="saved-tasks__task__name"
                   >
-                                    Third Task
+                    Third Task
                   </span>
                    — 
                   Third Challenge
-</Link>,
+                </Link>,
                 <span
                   className="connector"
-/>,
+                />,
                 <a
                   className="button is-clear"
                   onClick={[Function]}
-                  title={undefined}
->
+                >
                   <SvgSymbol
-                                    className="icon"
-                                    sym="trash-icon"
-                                    viewBox="0 0 20 20"
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
                   />
-</a>,
+                </a>,
               ],
               "className": "user-profile__saved-tasks__task",
             },
@@ -738,9 +764,9 @@ ShallowWrapper {
                   "children": Array [
                     <span
                       className="saved-tasks__task__name"
->
+                    >
                       Third Task
-</span>,
+                    </span>,
                     " — ",
                     "Third Challenge",
                   ],
@@ -786,7 +812,7 @@ ShallowWrapper {
                     className="icon"
                     sym="trash-icon"
                     viewBox="0 0 20 20"
-/>,
+                  />,
                   "className": "button is-clear",
                   "onClick": [Function],
                   "title": undefined,
@@ -825,105 +851,102 @@ ShallowWrapper {
         "children": Array [
           <h2
             className="subtitle"
->
+          >
             <FormattedMessage
-                        defaultMessage="Tracked Tasks"
-                        id="UserProfile.savedTasks.header"
-                        values={Object {}}
+              defaultMessage="Tracked Tasks"
+              id="UserProfile.savedTasks.header"
+              values={Object {}}
             />
-</h2>,
+          </h2>,
           <ul>
             <li
-                        className="user-profile__saved-tasks__task"
+              className="user-profile__saved-tasks__task"
             >
-                        <Link
-                                    replace={false}
-                                    to="/challenge/321/task/123"
-                        >
-                                    <span
-                                                className="saved-tasks__task__name"
-                                    >
-                                                First Task
-                                    </span>
-                                     — 
-                                    First Challenge
-                        </Link>
-                        <span
-                                    className="connector"
-                        />
-                        <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                        >
-                                    <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                    />
-                        </a>
+              <Link
+                replace={false}
+                to="/challenge/321/task/123"
+              >
+                <span
+                  className="saved-tasks__task__name"
+                >
+                  First Task
+                </span>
+                 — 
+                First Challenge
+              </Link>
+              <span
+                className="connector"
+              />
+              <a
+                className="button is-clear"
+                onClick={[Function]}
+              >
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
+              </a>
             </li>
             <li
-                        className="user-profile__saved-tasks__task"
+              className="user-profile__saved-tasks__task"
             >
-                        <Link
-                                    replace={false}
-                                    to="/challenge/654/task/456"
-                        >
-                                    <span
-                                                className="saved-tasks__task__name"
-                                    >
-                                                Second Task
-                                    </span>
-                                     — 
-                                    Second Challenge
-                        </Link>
-                        <span
-                                    className="connector"
-                        />
-                        <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                        >
-                                    <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                    />
-                        </a>
+              <Link
+                replace={false}
+                to="/challenge/654/task/456"
+              >
+                <span
+                  className="saved-tasks__task__name"
+                >
+                  Second Task
+                </span>
+                 — 
+                Second Challenge
+              </Link>
+              <span
+                className="connector"
+              />
+              <a
+                className="button is-clear"
+                onClick={[Function]}
+              >
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
+              </a>
             </li>
             <li
-                        className="user-profile__saved-tasks__task"
+              className="user-profile__saved-tasks__task"
             >
-                        <Link
-                                    replace={false}
-                                    to="/challenge/987/task/789"
-                        >
-                                    <span
-                                                className="saved-tasks__task__name"
-                                    >
-                                                Third Task
-                                    </span>
-                                     — 
-                                    Third Challenge
-                        </Link>
-                        <span
-                                    className="connector"
-                        />
-                        <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                        >
-                                    <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                    />
-                        </a>
+              <Link
+                replace={false}
+                to="/challenge/987/task/789"
+              >
+                <span
+                  className="saved-tasks__task__name"
+                >
+                  Third Task
+                </span>
+                 — 
+                Third Challenge
+              </Link>
+              <span
+                className="connector"
+              />
+              <a
+                className="button is-clear"
+                onClick={[Function]}
+              >
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
+              </a>
             </li>
-</ul>,
+          </ul>,
         ],
         "className": "user-profile__saved-tasks",
       },
@@ -938,7 +961,7 @@ ShallowWrapper {
               defaultMessage="Tracked Tasks"
               id="UserProfile.savedTasks.header"
               values={Object {}}
-/>,
+            />,
             "className": "subtitle",
           },
           "ref": null,
@@ -965,94 +988,91 @@ ShallowWrapper {
             "children": Array [
               <li
                 className="user-profile__saved-tasks__task"
->
+              >
                 <Link
-                                replace={false}
-                                to="/challenge/321/task/123"
+                  replace={false}
+                  to="/challenge/321/task/123"
                 >
-                                <span
-                                                className="saved-tasks__task__name"
-                                >
-                                                First Task
-                                </span>
-                                 — 
-                                First Challenge
+                  <span
+                    className="saved-tasks__task__name"
+                  >
+                    First Task
+                  </span>
+                   — 
+                  First Challenge
                 </Link>
                 <span
-                                className="connector"
+                  className="connector"
                 />
                 <a
-                                className="button is-clear"
-                                onClick={[Function]}
-                                title={undefined}
+                  className="button is-clear"
+                  onClick={[Function]}
                 >
-                                <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                />
+                  <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                  />
                 </a>
-</li>,
+              </li>,
               <li
                 className="user-profile__saved-tasks__task"
->
+              >
                 <Link
-                                replace={false}
-                                to="/challenge/654/task/456"
+                  replace={false}
+                  to="/challenge/654/task/456"
                 >
-                                <span
-                                                className="saved-tasks__task__name"
-                                >
-                                                Second Task
-                                </span>
-                                 — 
-                                Second Challenge
+                  <span
+                    className="saved-tasks__task__name"
+                  >
+                    Second Task
+                  </span>
+                   — 
+                  Second Challenge
                 </Link>
                 <span
-                                className="connector"
+                  className="connector"
                 />
                 <a
-                                className="button is-clear"
-                                onClick={[Function]}
-                                title={undefined}
+                  className="button is-clear"
+                  onClick={[Function]}
                 >
-                                <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                />
+                  <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                  />
                 </a>
-</li>,
+              </li>,
               <li
                 className="user-profile__saved-tasks__task"
->
+              >
                 <Link
-                                replace={false}
-                                to="/challenge/987/task/789"
+                  replace={false}
+                  to="/challenge/987/task/789"
                 >
-                                <span
-                                                className="saved-tasks__task__name"
-                                >
-                                                Third Task
-                                </span>
-                                 — 
-                                Third Challenge
+                  <span
+                    className="saved-tasks__task__name"
+                  >
+                    Third Task
+                  </span>
+                   — 
+                  Third Challenge
                 </Link>
                 <span
-                                className="connector"
+                  className="connector"
                 />
                 <a
-                                className="button is-clear"
-                                onClick={[Function]}
-                                title={undefined}
+                  className="button is-clear"
+                  onClick={[Function]}
                 >
-                                <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                />
+                  <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                  />
                 </a>
-</li>,
+              </li>,
             ],
           },
           "ref": null,
@@ -1066,29 +1086,28 @@ ShallowWrapper {
                   <Link
                     replace={false}
                     to="/challenge/321/task/123"
->
+                  >
                     <span
-                                        className="saved-tasks__task__name"
+                      className="saved-tasks__task__name"
                     >
-                                        First Task
+                      First Task
                     </span>
                      — 
                     First Challenge
-</Link>,
+                  </Link>,
                   <span
                     className="connector"
-/>,
+                  />,
                   <a
                     className="button is-clear"
                     onClick={[Function]}
-                    title={undefined}
->
+                  >
                     <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
                     />
-</a>,
+                  </a>,
                 ],
                 "className": "user-profile__saved-tasks__task",
               },
@@ -1102,9 +1121,9 @@ ShallowWrapper {
                     "children": Array [
                       <span
                         className="saved-tasks__task__name"
->
+                      >
                         First Task
-</span>,
+                      </span>,
                       " — ",
                       "First Challenge",
                     ],
@@ -1150,7 +1169,7 @@ ShallowWrapper {
                       className="icon"
                       sym="trash-icon"
                       viewBox="0 0 20 20"
-/>,
+                    />,
                     "className": "button is-clear",
                     "onClick": [Function],
                     "title": undefined,
@@ -1183,29 +1202,28 @@ ShallowWrapper {
                   <Link
                     replace={false}
                     to="/challenge/654/task/456"
->
+                  >
                     <span
-                                        className="saved-tasks__task__name"
+                      className="saved-tasks__task__name"
                     >
-                                        Second Task
+                      Second Task
                     </span>
                      — 
                     Second Challenge
-</Link>,
+                  </Link>,
                   <span
                     className="connector"
-/>,
+                  />,
                   <a
                     className="button is-clear"
                     onClick={[Function]}
-                    title={undefined}
->
+                  >
                     <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
                     />
-</a>,
+                  </a>,
                 ],
                 "className": "user-profile__saved-tasks__task",
               },
@@ -1219,9 +1237,9 @@ ShallowWrapper {
                     "children": Array [
                       <span
                         className="saved-tasks__task__name"
->
+                      >
                         Second Task
-</span>,
+                      </span>,
                       " — ",
                       "Second Challenge",
                     ],
@@ -1267,7 +1285,7 @@ ShallowWrapper {
                       className="icon"
                       sym="trash-icon"
                       viewBox="0 0 20 20"
-/>,
+                    />,
                     "className": "button is-clear",
                     "onClick": [Function],
                     "title": undefined,
@@ -1300,29 +1318,28 @@ ShallowWrapper {
                   <Link
                     replace={false}
                     to="/challenge/987/task/789"
->
+                  >
                     <span
-                                        className="saved-tasks__task__name"
+                      className="saved-tasks__task__name"
                     >
-                                        Third Task
+                      Third Task
                     </span>
                      — 
                     Third Challenge
-</Link>,
+                  </Link>,
                   <span
                     className="connector"
-/>,
+                  />,
                   <a
                     className="button is-clear"
                     onClick={[Function]}
-                    title={undefined}
->
+                  >
                     <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
                     />
-</a>,
+                  </a>,
                 ],
                 "className": "user-profile__saved-tasks__task",
               },
@@ -1336,9 +1353,9 @@ ShallowWrapper {
                     "children": Array [
                       <span
                         className="saved-tasks__task__name"
->
+                      >
                         Third Task
-</span>,
+                      </span>,
                       " — ",
                       "Third Challenge",
                     ],
@@ -1384,7 +1401,7 @@ ShallowWrapper {
                       className="icon"
                       sym="trash-icon"
                       viewBox="0 0 20 20"
-/>,
+                    />,
                     "className": "button is-clear",
                     "onClick": [Function],
                     "title": undefined,

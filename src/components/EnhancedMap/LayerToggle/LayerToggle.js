@@ -9,7 +9,7 @@ import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './LayerToggle.css'
+import './LayerToggle.scss'
 
 /**
  * LayerToggle presents a control for selecting the desired map layer/tiles.
@@ -30,6 +30,7 @@ export class LayerToggle extends Component {
     const baseSources = _filter(this.props.layerSources, source => !source.overlay)
 
     const layerButtons = _map(baseSources, layer => (
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <a className={classNames('dropdown-item',
                                {'is-active': this.props.source.id === layer.id})}
          key={layer.id}

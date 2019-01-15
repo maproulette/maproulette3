@@ -6,16 +6,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
     className="my-class"
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-    setSearch={[Function]}
-/>,
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -30,30 +30,29 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box my-class",
     },
     "ref": null,
@@ -65,26 +64,25 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -102,20 +100,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -144,10 +141,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -188,30 +184,29 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box my-class",
       },
       "ref": null,
@@ -223,26 +218,25 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -260,20 +254,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -302,10 +295,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -354,16 +346,28 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
-    searchQuery={
-        Object {
-            "query": "test me",
-          }
+    clearSearch={
+      [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
     }
-    setSearch={[Function]}
-/>,
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
+    searchQuery={
+      Object {
+        "query": "test me",
+      }
+    }
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -378,35 +382,46 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value="test me"
+            />
+          </div>
         </div>
         <button
-                aria-label="delete"
-                className="search-box--clear-button delete"
-                onClick={[Function]}
+          aria-label="delete"
+          className="search-box--clear-button delete"
+          onClick={
+            [MockFunction] {
+              "calls": Array [
+                Array [],
+              ],
+              "results": Array [
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+              ],
+            }
+          }
         />
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -418,32 +433,43 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
             </div>
-</div>,
+          </div>,
           null,
           <button
             aria-label="delete"
             className="search-box--clear-button delete"
-            onClick={[Function]}
-/>,
+            onClick={
+              [MockFunction] {
+                "calls": Array [
+                  Array [],
+                ],
+                "results": Array [
+                  Object {
+                    "isThrow": false,
+                    "value": undefined,
+                  },
+                ],
+              }
+            }
+          />,
         ],
         "className": "search-box__search-field",
       },
@@ -459,20 +485,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -501,10 +526,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value="test me"
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -538,7 +562,17 @@ ShallowWrapper {
           "props": Object {
             "aria-label": "delete",
             "className": "search-box--clear-button delete",
-            "onClick": [Function],
+            "onClick": [MockFunction] {
+              "calls": Array [
+                Array [],
+              ],
+              "results": Array [
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+              ],
+            },
           },
           "ref": null,
           "rendered": null,
@@ -557,35 +591,46 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value="test me"
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
+            </div>
           </div>
           <button
-                    aria-label="delete"
-                    className="search-box--clear-button delete"
-                    onClick={[Function]}
+            aria-label="delete"
+            className="search-box--clear-button delete"
+            onClick={
+              [MockFunction] {
+                "calls": Array [
+                  Array [],
+                ],
+                "results": Array [
+                  Object {
+                    "isThrow": false,
+                    "value": undefined,
+                  },
+                ],
+              }
+            }
           />
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -597,32 +642,43 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value="test me"
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
+                />
               </div>
-</div>,
+            </div>,
             null,
             <button
               aria-label="delete"
               className="search-box--clear-button delete"
-              onClick={[Function]}
-/>,
+              onClick={
+                [MockFunction] {
+                  "calls": Array [
+                    Array [],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                }
+              }
+            />,
           ],
           "className": "search-box__search-field",
         },
@@ -638,20 +694,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value="test me"
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -680,10 +735,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value="test me"
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -717,7 +771,17 @@ ShallowWrapper {
             "props": Object {
               "aria-label": "delete",
               "className": "search-box--clear-button delete",
-              "onClick": [Function],
+              "onClick": [MockFunction] {
+                "calls": Array [
+                  Array [],
+                ],
+                "results": Array [
+                  Object {
+                    "isThrow": false,
+                    "value": undefined,
+                  },
+                ],
+              },
             },
             "ref": null,
             "rendered": null,
@@ -744,16 +808,28 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
-    searchQuery={
-        Object {
-            "query": "",
-          }
+    clearSearch={
+      [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
     }
-    setSearch={[Function]}
-/>,
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
+    searchQuery={
+      Object {
+        "query": "",
+      }
+    }
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -768,30 +844,29 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -803,26 +878,25 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -840,20 +914,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -882,10 +955,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -926,30 +998,29 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -961,26 +1032,25 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -998,20 +1068,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -1040,10 +1109,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -1092,17 +1160,29 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
-    searchQuery={
-        Object {
-            "query": "some query",
-          }
+    clearSearch={[MockFunction]}
+    deactivate={
+      [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
     }
-    setSearch={[Function]}
+    fetchResults={[MockFunction]}
+    searchQuery={
+      Object {
+        "query": "some query",
+      }
+    }
+    setSearch={[MockFunction]}
     showDoneButton={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -1117,44 +1197,43 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="some query"
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value="some query"
+            />
+          </div>
         </div>
         <button
-                className="button is-clear has-svg-icon search-box--done-button"
-                onClick={[Function]}
+          className="button is-clear has-svg-icon search-box--done-button"
+          onClick={[Function]}
         >
-                <SvgSymbol
-                        sym="outline-arrow-right-icon"
-                        viewBox="0 0 20 20"
-                />
+          <SvgSymbol
+            sym="outline-arrow-right-icon"
+            viewBox="0 0 20 20"
+          />
         </button>
         <button
-                aria-label="delete"
-                className="search-box--clear-button delete"
-                onClick={[Function]}
+          aria-label="delete"
+          className="search-box--clear-button delete"
+          onClick={[MockFunction]}
         />
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -1166,40 +1245,39 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="some query"
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="some query"
+              />
             </div>
-</div>,
+          </div>,
           <button
             className="button is-clear has-svg-icon search-box--done-button"
             onClick={[Function]}
->
+          >
             <SvgSymbol
-                        sym="outline-arrow-right-icon"
-                        viewBox="0 0 20 20"
+              sym="outline-arrow-right-icon"
+              viewBox="0 0 20 20"
             />
-</button>,
+          </button>,
           <button
             aria-label="delete"
             className="search-box--clear-button delete"
-            onClick={[Function]}
-/>,
+            onClick={[MockFunction]}
+          />,
         ],
         "className": "search-box__search-field",
       },
@@ -1215,20 +1293,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="some query"
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="some query"
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -1257,10 +1334,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value="some query"
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -1294,7 +1370,7 @@ ShallowWrapper {
             "children": <SvgSymbol
               sym="outline-arrow-right-icon"
               viewBox="0 0 20 20"
-/>,
+            />,
             "className": "button is-clear has-svg-icon search-box--done-button",
             "onClick": [Function],
           },
@@ -1320,7 +1396,7 @@ ShallowWrapper {
           "props": Object {
             "aria-label": "delete",
             "className": "search-box--clear-button delete",
-            "onClick": [Function],
+            "onClick": [MockFunction],
           },
           "ref": null,
           "rendered": null,
@@ -1339,44 +1415,43 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value="some query"
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="some query"
+              />
+            </div>
           </div>
           <button
-                    className="button is-clear has-svg-icon search-box--done-button"
-                    onClick={[Function]}
+            className="button is-clear has-svg-icon search-box--done-button"
+            onClick={[Function]}
           >
-                    <SvgSymbol
-                              sym="outline-arrow-right-icon"
-                              viewBox="0 0 20 20"
-                    />
+            <SvgSymbol
+              sym="outline-arrow-right-icon"
+              viewBox="0 0 20 20"
+            />
           </button>
           <button
-                    aria-label="delete"
-                    className="search-box--clear-button delete"
-                    onClick={[Function]}
+            aria-label="delete"
+            className="search-box--clear-button delete"
+            onClick={[MockFunction]}
           />
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -1388,40 +1463,39 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value="some query"
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="some query"
+                />
               </div>
-</div>,
+            </div>,
             <button
               className="button is-clear has-svg-icon search-box--done-button"
               onClick={[Function]}
->
+            >
               <SvgSymbol
-                            sym="outline-arrow-right-icon"
-                            viewBox="0 0 20 20"
+                sym="outline-arrow-right-icon"
+                viewBox="0 0 20 20"
               />
-</button>,
+            </button>,
             <button
               aria-label="delete"
               className="search-box--clear-button delete"
-              onClick={[Function]}
-/>,
+              onClick={[MockFunction]}
+            />,
           ],
           "className": "search-box__search-field",
         },
@@ -1437,20 +1511,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="some query"
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value="some query"
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -1479,10 +1552,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value="some query"
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -1516,7 +1588,7 @@ ShallowWrapper {
               "children": <SvgSymbol
                 sym="outline-arrow-right-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               "className": "button is-clear has-svg-icon search-box--done-button",
               "onClick": [Function],
             },
@@ -1542,7 +1614,7 @@ ShallowWrapper {
             "props": Object {
               "aria-label": "delete",
               "className": "search-box--clear-button delete",
-              "onClick": [Function],
+              "onClick": [MockFunction],
             },
             "ref": null,
             "rendered": null,
@@ -1569,16 +1641,28 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
-    searchQuery={
-        Object {
-            "query": "",
-          }
+    clearSearch={[MockFunction]}
+    deactivate={
+      [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
     }
-    setSearch={[Function]}
-/>,
+    fetchResults={[MockFunction]}
+    searchQuery={
+      Object {
+        "query": "",
+      }
+    }
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -1593,30 +1677,29 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -1628,26 +1711,25 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -1665,20 +1747,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -1707,10 +1788,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -1751,30 +1831,29 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -1786,26 +1865,25 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -1823,20 +1901,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -1865,10 +1942,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -1917,16 +1993,16 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-    setSearch={[Function]}
-/>,
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -1941,30 +2017,29 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -1976,26 +2051,25 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -2013,20 +2087,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -2055,10 +2128,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -2099,30 +2171,29 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -2134,26 +2205,25 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -2171,20 +2241,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -2213,10 +2282,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -2265,17 +2333,17 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "test me",
-          }
+      Object {
+        "query": "test me",
+      }
     }
-    setSearch={[Function]}
+    setSearch={[MockFunction]}
     showDoneButton={false}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -2290,35 +2358,34 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value="test me"
+            />
+          </div>
         </div>
         <button
-                aria-label="delete"
-                className="search-box--clear-button delete"
-                onClick={[Function]}
+          aria-label="delete"
+          className="search-box--clear-button delete"
+          onClick={[MockFunction]}
         />
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -2330,32 +2397,31 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
             </div>
-</div>,
+          </div>,
           null,
           <button
             aria-label="delete"
             className="search-box--clear-button delete"
-            onClick={[Function]}
-/>,
+            onClick={[MockFunction]}
+          />,
         ],
         "className": "search-box__search-field",
       },
@@ -2371,20 +2437,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -2413,10 +2478,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value="test me"
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -2450,7 +2514,7 @@ ShallowWrapper {
           "props": Object {
             "aria-label": "delete",
             "className": "search-box--clear-button delete",
-            "onClick": [Function],
+            "onClick": [MockFunction],
           },
           "ref": null,
           "rendered": null,
@@ -2469,35 +2533,34 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value="test me"
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
+            </div>
           </div>
           <button
-                    aria-label="delete"
-                    className="search-box--clear-button delete"
-                    onClick={[Function]}
+            aria-label="delete"
+            className="search-box--clear-button delete"
+            onClick={[MockFunction]}
           />
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -2509,32 +2572,31 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value="test me"
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
+                />
               </div>
-</div>,
+            </div>,
             null,
             <button
               aria-label="delete"
               className="search-box--clear-button delete"
-              onClick={[Function]}
-/>,
+              onClick={[MockFunction]}
+            />,
           ],
           "className": "search-box__search-field",
         },
@@ -2550,20 +2612,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value="test me"
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -2592,10 +2653,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value="test me"
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -2629,7 +2689,7 @@ ShallowWrapper {
             "props": Object {
               "aria-label": "delete",
               "className": "search-box--clear-button delete",
-              "onClick": [Function],
+              "onClick": [MockFunction],
             },
             "ref": null,
             "rendered": null,
@@ -2656,17 +2716,17 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-    setSearch={[Function]}
+    setSearch={[MockFunction]}
     suppressIcon={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -2681,25 +2741,24 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -2711,21 +2770,20 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -2742,17 +2800,16 @@ ShallowWrapper {
               false,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -2769,10 +2826,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -2813,25 +2869,24 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -2843,21 +2898,20 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -2874,17 +2928,16 @@ ShallowWrapper {
                 false,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -2901,10 +2954,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -2953,17 +3005,17 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-    setSearch={[Function]}
+    setSearch={[MockFunction]}
     suppressIcon={false}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -2978,30 +3030,29 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -3013,26 +3064,25 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -3050,20 +3100,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -3092,10 +3141,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -3136,30 +3184,29 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -3171,26 +3218,25 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -3208,20 +3254,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -3250,10 +3295,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -3302,19 +3346,19 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "meta": Object {
-              "fetchingResults": "myFetchId",
-            },
-            "query": "test me",
-          }
+      Object {
+        "meta": Object {
+          "fetchingResults": "myFetchId",
+        },
+        "query": "test me",
+      }
     }
-    setSearch={[Function]}
-/>,
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -3329,35 +3373,34 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium is-loading"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium is-loading"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value="test me"
+            />
+          </div>
         </div>
         <button
-                aria-label="delete"
-                className="search-box--clear-button delete"
-                onClick={[Function]}
+          aria-label="delete"
+          className="search-box--clear-button delete"
+          onClick={[MockFunction]}
         />
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -3369,32 +3412,31 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium is-loading"
+              className="control is-medium is-loading"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
             </div>
-</div>,
+          </div>,
           null,
           <button
             aria-label="delete"
             className="search-box--clear-button delete"
-            onClick={[Function]}
-/>,
+            onClick={[MockFunction]}
+          />,
         ],
         "className": "search-box__search-field",
       },
@@ -3410,20 +3452,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium is-loading"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -3452,10 +3493,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value="test me"
-/>,
+                />,
                 "className": "control is-medium is-loading",
               },
               "ref": null,
@@ -3489,7 +3529,7 @@ ShallowWrapper {
           "props": Object {
             "aria-label": "delete",
             "className": "search-box--clear-button delete",
-            "onClick": [Function],
+            "onClick": [MockFunction],
           },
           "ref": null,
           "rendered": null,
@@ -3508,35 +3548,34 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium is-loading"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value="test me"
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium is-loading"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
+            </div>
           </div>
           <button
-                    aria-label="delete"
-                    className="search-box--clear-button delete"
-                    onClick={[Function]}
+            aria-label="delete"
+            className="search-box--clear-button delete"
+            onClick={[MockFunction]}
           />
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -3548,32 +3587,31 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium is-loading"
+                className="control is-medium is-loading"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value="test me"
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
+                />
               </div>
-</div>,
+            </div>,
             null,
             <button
               aria-label="delete"
               className="search-box--clear-button delete"
-              onClick={[Function]}
-/>,
+              onClick={[MockFunction]}
+            />,
           ],
           "className": "search-box__search-field",
         },
@@ -3589,20 +3627,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium is-loading"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value="test me"
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -3631,10 +3668,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value="test me"
-/>,
+                  />,
                   "className": "control is-medium is-loading",
                 },
                 "ref": null,
@@ -3668,7 +3704,7 @@ ShallowWrapper {
             "props": Object {
               "aria-label": "delete",
               "className": "search-box--clear-button delete",
-              "onClick": [Function],
+              "onClick": [MockFunction],
             },
             "ref": null,
             "rendered": null,
@@ -3695,16 +3731,16 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-    setSearch={[Function]}
-/>,
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -3719,30 +3755,29 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -3754,26 +3789,25 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -3791,20 +3825,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -3833,10 +3866,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -3877,30 +3909,29 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -3912,26 +3943,25 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -3949,20 +3979,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -3991,10 +4020,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -4043,17 +4071,17 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     placeholder="some text here"
     searchQuery={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-    setSearch={[Function]}
-/>,
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -4068,30 +4096,30 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder="some text here"
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              placeholder="some text here"
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -4103,26 +4131,26 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder="some text here"
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                placeholder="some text here"
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -4140,20 +4168,20 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder="some text here"
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  placeholder="some text here"
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -4185,7 +4213,7 @@ ShallowWrapper {
                   placeholder="some text here"
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -4226,30 +4254,30 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder="some text here"
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                placeholder="some text here"
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -4261,26 +4289,26 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder="some text here"
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  placeholder="some text here"
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -4298,20 +4326,20 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder="some text here"
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder="some text here"
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -4343,7 +4371,7 @@ ShallowWrapper {
                     placeholder="some text here"
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -4392,16 +4420,30 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "",
-          }
+      Object {
+        "query": "",
+      }
     }
-    setSearch={[Function]}
-/>,
+    setSearch={
+      [MockFunction] {
+        "calls": Array [
+          Array [
+            "Hello",
+          ],
+        ],
+        "results": Array [
+          Object {
+            "isThrow": false,
+            "value": undefined,
+          },
+        ],
+      }
+    }
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -4416,30 +4458,29 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -4451,26 +4492,25 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
             </div>
-</div>,
+          </div>,
           null,
           null,
         ],
@@ -4488,20 +4528,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value=""
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -4530,10 +4569,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value=""
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -4574,30 +4612,29 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value=""
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -4609,26 +4646,25 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value=""
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value=""
+                />
               </div>
-</div>,
+            </div>,
             null,
             null,
           ],
@@ -4646,20 +4682,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value=""
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value=""
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -4688,10 +4723,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value=""
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -4740,16 +4774,16 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "test me",
-          }
+      Object {
+        "query": "test me",
+      }
     }
-    setSearch={[Function]}
-/>,
+    setSearch={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -4764,35 +4798,34 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value="test me"
+            />
+          </div>
         </div>
         <button
-                aria-label="delete"
-                className="search-box--clear-button delete"
-                onClick={[Function]}
+          aria-label="delete"
+          className="search-box--clear-button delete"
+          onClick={[MockFunction]}
         />
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -4804,32 +4837,31 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
             </div>
-</div>,
+          </div>,
           null,
           <button
             aria-label="delete"
             className="search-box--clear-button delete"
-            onClick={[Function]}
-/>,
+            onClick={[MockFunction]}
+          />,
         ],
         "className": "search-box__search-field",
       },
@@ -4845,20 +4877,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test me"
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -4887,10 +4918,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value="test me"
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -4924,7 +4954,7 @@ ShallowWrapper {
           "props": Object {
             "aria-label": "delete",
             "className": "search-box--clear-button delete",
-            "onClick": [Function],
+            "onClick": [MockFunction],
           },
           "ref": null,
           "rendered": null,
@@ -4943,35 +4973,34 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value="test me"
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test me"
+              />
+            </div>
           </div>
           <button
-                    aria-label="delete"
-                    className="search-box--clear-button delete"
-                    onClick={[Function]}
+            aria-label="delete"
+            className="search-box--clear-button delete"
+            onClick={[MockFunction]}
           />
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -4983,32 +5012,31 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value="test me"
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test me"
+                />
               </div>
-</div>,
+            </div>,
             null,
             <button
               aria-label="delete"
               className="search-box--clear-button delete"
-              onClick={[Function]}
-/>,
+              onClick={[MockFunction]}
+            />,
           ],
           "className": "search-box__search-field",
         },
@@ -5024,20 +5052,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test me"
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value="test me"
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -5066,10 +5093,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value="test me"
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -5103,7 +5129,7 @@ ShallowWrapper {
             "props": Object {
               "aria-label": "delete",
               "className": "search-box--clear-button delete",
-              "onClick": [Function],
+              "onClick": [MockFunction],
             },
             "ref": null,
             "rendered": null,
@@ -5130,17 +5156,17 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SearchBox
-    clearSearch={[Function]}
-    deactivate={[Function]}
-    fetchResults={[Function]}
+    clearSearch={[MockFunction]}
+    deactivate={[MockFunction]}
+    fetchResults={[MockFunction]}
     searchQuery={
-        Object {
-            "query": "test Me",
-          }
+      Object {
+        "query": "test Me",
+      }
     }
-    setSearch={[Function]}
+    setSearch={[MockFunction]}
     showDoneButton={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -5155,44 +5181,43 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="search-box__search-field"
->
+      >
         <div
-                className="control-wrapper"
+          className="control-wrapper"
         >
-                <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
-                />
-                <div
-                        className="control is-medium"
-                >
-                        <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test Me"
-                        />
-                </div>
+          <SvgSymbol
+            className="search-box__icon"
+            sym="search-icon"
+            viewBox="0 0 20 20"
+          />
+          <div
+            className="control is-medium"
+          >
+            <input
+              className="input is-medium search-box__input"
+              maxLength="63"
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value="test Me"
+            />
+          </div>
         </div>
         <button
-                className="button is-clear has-svg-icon search-box--done-button"
-                onClick={[Function]}
+          className="button is-clear has-svg-icon search-box--done-button"
+          onClick={[Function]}
         >
-                <SvgSymbol
-                        sym="outline-arrow-right-icon"
-                        viewBox="0 0 20 20"
-                />
+          <SvgSymbol
+            sym="outline-arrow-right-icon"
+            viewBox="0 0 20 20"
+          />
         </button>
         <button
-                aria-label="delete"
-                className="search-box--clear-button delete"
-                onClick={[Function]}
+          aria-label="delete"
+          className="search-box--clear-button delete"
+          onClick={[MockFunction]}
         />
-</div>,
+      </div>,
       "className": "search-box",
     },
     "ref": null,
@@ -5204,40 +5229,39 @@ ShallowWrapper {
         "children": Array [
           <div
             className="control-wrapper"
->
+          >
             <SvgSymbol
-                        className="search-box__icon"
-                        sym="search-icon"
-                        viewBox="0 0 20 20"
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
             />
             <div
-                        className="control is-medium"
+              className="control is-medium"
             >
-                        <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test Me"
-                        />
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test Me"
+              />
             </div>
-</div>,
+          </div>,
           <button
             className="button is-clear has-svg-icon search-box--done-button"
             onClick={[Function]}
->
+          >
             <SvgSymbol
-                        sym="outline-arrow-right-icon"
-                        viewBox="0 0 20 20"
+              sym="outline-arrow-right-icon"
+              viewBox="0 0 20 20"
             />
-</button>,
+          </button>,
           <button
             aria-label="delete"
             className="search-box--clear-button delete"
-            onClick={[Function]}
-/>,
+            onClick={[MockFunction]}
+          />,
         ],
         "className": "search-box__search-field",
       },
@@ -5253,20 +5277,19 @@ ShallowWrapper {
                 className="search-box__icon"
                 sym="search-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               <div
                 className="control is-medium"
->
+              >
                 <input
-                                className="input is-medium search-box__input"
-                                maxLength="63"
-                                onChange={[Function]}
-                                onKeyDown={[Function]}
-                                placeholder={undefined}
-                                type="text"
-                                value="test Me"
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test Me"
                 />
-</div>,
+              </div>,
             ],
             "className": "control-wrapper",
           },
@@ -5295,10 +5318,9 @@ ShallowWrapper {
                   maxLength="63"
                   onChange={[Function]}
                   onKeyDown={[Function]}
-                  placeholder={undefined}
                   type="text"
                   value="test Me"
-/>,
+                />,
                 "className": "control is-medium",
               },
               "ref": null,
@@ -5332,7 +5354,7 @@ ShallowWrapper {
             "children": <SvgSymbol
               sym="outline-arrow-right-icon"
               viewBox="0 0 20 20"
-/>,
+            />,
             "className": "button is-clear has-svg-icon search-box--done-button",
             "onClick": [Function],
           },
@@ -5358,7 +5380,7 @@ ShallowWrapper {
           "props": Object {
             "aria-label": "delete",
             "className": "search-box--clear-button delete",
-            "onClick": [Function],
+            "onClick": [MockFunction],
           },
           "ref": null,
           "rendered": null,
@@ -5377,44 +5399,43 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="search-box__search-field"
->
+        >
           <div
-                    className="control-wrapper"
+            className="control-wrapper"
           >
-                    <SvgSymbol
-                              className="search-box__icon"
-                              sym="search-icon"
-                              viewBox="0 0 20 20"
-                    />
-                    <div
-                              className="control is-medium"
-                    >
-                              <input
-                                        className="input is-medium search-box__input"
-                                        maxLength="63"
-                                        onChange={[Function]}
-                                        onKeyDown={[Function]}
-                                        placeholder={undefined}
-                                        type="text"
-                                        value="test Me"
-                              />
-                    </div>
+            <SvgSymbol
+              className="search-box__icon"
+              sym="search-icon"
+              viewBox="0 0 20 20"
+            />
+            <div
+              className="control is-medium"
+            >
+              <input
+                className="input is-medium search-box__input"
+                maxLength="63"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                type="text"
+                value="test Me"
+              />
+            </div>
           </div>
           <button
-                    className="button is-clear has-svg-icon search-box--done-button"
-                    onClick={[Function]}
+            className="button is-clear has-svg-icon search-box--done-button"
+            onClick={[Function]}
           >
-                    <SvgSymbol
-                              sym="outline-arrow-right-icon"
-                              viewBox="0 0 20 20"
-                    />
+            <SvgSymbol
+              sym="outline-arrow-right-icon"
+              viewBox="0 0 20 20"
+            />
           </button>
           <button
-                    aria-label="delete"
-                    className="search-box--clear-button delete"
-                    onClick={[Function]}
+            aria-label="delete"
+            className="search-box--clear-button delete"
+            onClick={[MockFunction]}
           />
-</div>,
+        </div>,
         "className": "search-box",
       },
       "ref": null,
@@ -5426,40 +5447,39 @@ ShallowWrapper {
           "children": Array [
             <div
               className="control-wrapper"
->
+            >
               <SvgSymbol
-                            className="search-box__icon"
-                            sym="search-icon"
-                            viewBox="0 0 20 20"
+                className="search-box__icon"
+                sym="search-icon"
+                viewBox="0 0 20 20"
               />
               <div
-                            className="control is-medium"
+                className="control is-medium"
               >
-                            <input
-                                          className="input is-medium search-box__input"
-                                          maxLength="63"
-                                          onChange={[Function]}
-                                          onKeyDown={[Function]}
-                                          placeholder={undefined}
-                                          type="text"
-                                          value="test Me"
-                            />
+                <input
+                  className="input is-medium search-box__input"
+                  maxLength="63"
+                  onChange={[Function]}
+                  onKeyDown={[Function]}
+                  type="text"
+                  value="test Me"
+                />
               </div>
-</div>,
+            </div>,
             <button
               className="button is-clear has-svg-icon search-box--done-button"
               onClick={[Function]}
->
+            >
               <SvgSymbol
-                            sym="outline-arrow-right-icon"
-                            viewBox="0 0 20 20"
+                sym="outline-arrow-right-icon"
+                viewBox="0 0 20 20"
               />
-</button>,
+            </button>,
             <button
               aria-label="delete"
               className="search-box--clear-button delete"
-              onClick={[Function]}
-/>,
+              onClick={[MockFunction]}
+            />,
           ],
           "className": "search-box__search-field",
         },
@@ -5475,20 +5495,19 @@ ShallowWrapper {
                   className="search-box__icon"
                   sym="search-icon"
                   viewBox="0 0 20 20"
-/>,
+                />,
                 <div
                   className="control is-medium"
->
+                >
                   <input
-                                    className="input is-medium search-box__input"
-                                    maxLength="63"
-                                    onChange={[Function]}
-                                    onKeyDown={[Function]}
-                                    placeholder={undefined}
-                                    type="text"
-                                    value="test Me"
+                    className="input is-medium search-box__input"
+                    maxLength="63"
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    type="text"
+                    value="test Me"
                   />
-</div>,
+                </div>,
               ],
               "className": "control-wrapper",
             },
@@ -5517,10 +5536,9 @@ ShallowWrapper {
                     maxLength="63"
                     onChange={[Function]}
                     onKeyDown={[Function]}
-                    placeholder={undefined}
                     type="text"
                     value="test Me"
-/>,
+                  />,
                   "className": "control is-medium",
                 },
                 "ref": null,
@@ -5554,7 +5572,7 @@ ShallowWrapper {
               "children": <SvgSymbol
                 sym="outline-arrow-right-icon"
                 viewBox="0 0 20 20"
-/>,
+              />,
               "className": "button is-clear has-svg-icon search-box--done-button",
               "onClick": [Function],
             },
@@ -5580,7 +5598,7 @@ ShallowWrapper {
             "props": Object {
               "aria-label": "delete",
               "className": "search-box--clear-button delete",
-              "onClick": [Function],
+              "onClick": [MockFunction],
             },
             "ref": null,
             "rendered": null,

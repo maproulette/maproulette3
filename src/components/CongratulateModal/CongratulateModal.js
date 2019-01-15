@@ -4,7 +4,7 @@ import Confetti from 'react-dom-confetti'
 import Modal from '../Bulma/Modal'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './CongratulateModal.css'
+import './CongratulateModal.scss'
 
 /**
  * CongratulateModal presents a celebratory modal that displays a

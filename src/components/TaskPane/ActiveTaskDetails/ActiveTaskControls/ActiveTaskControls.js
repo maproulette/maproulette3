@@ -26,7 +26,7 @@ import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
-import './ActiveTaskControls.css'
+import './ActiveTaskControls.scss'
 
 const KeyboardReferencePopout =
   WithKeyboardShortcuts(WithDeactivateOnOutsideClick(KeyboardShortcutReference))

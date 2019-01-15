@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import { RESULTS_PER_PAGE } from '../../../services/Search/Search'
-import './LoadMoreButton.css'
+import './LoadMoreButton.scss'
 import messages from './Messages'
 
 

@@ -7,47 +7,132 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <FilterByKeyword
     asMenuList={false}
     challenges={
-        Array [
-            Object {
-              "blurb": "Challenge 309 blurb",
-              "description": "Challenge 309 description",
-              "id": 309,
-              "name": "Challenge 309",
-              "parent": Object {
-                "displayName": "foo",
-              },
-            },
-            Object {
-              "blurb": "Challenge 311 blurb",
-              "description": "Challenge 311 description",
-              "id": 311,
-              "name": "Challenge 311",
-              "parent": Object {
-                "displayName": "bar",
-              },
-            },
-          ]
+      Array [
+        Object {
+          "blurb": "Challenge 309 blurb",
+          "description": "Challenge 309 description",
+          "id": 309,
+          "name": "Challenge 309",
+          "parent": Object {
+            "displayName": "foo",
+          },
+        },
+        Object {
+          "blurb": "Challenge 311 blurb",
+          "description": "Challenge 311 description",
+          "id": 311,
+          "name": "Challenge 311",
+          "parent": Object {
+            "displayName": "bar",
+          },
+        },
+      ]
     }
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Roads / Pedestrian / Cycleways",
+                "id": "Challenge.keywords.navigation",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Water",
+                "id": "Challenge.keywords.water",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Points / Areas of Interest",
+                "id": "Challenge.keywords.pointsOfInterest",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Buildings",
+                "id": "Challenge.keywords.buildings",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Land Use / Administrative Boundaries",
+                "id": "Challenge.keywords.landUse",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Transit",
+                "id": "Challenge.keywords.transit",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Other",
+                "id": "Challenge.keywords.other",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Anything",
+                "id": "Challenge.keywords.any",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-    removeSearchFilters={[Function]}
+    removeSearchFilters={[MockFunction]}
     searchFilters={
-        Object {
-            "difficulty": 1,
-            "keywords": "Challenge",
-          }
+      Object {
+        "difficulty": 1,
+        "keywords": "Challenge",
+      }
     }
-    setKeywordFilter={[Function]}
+    setKeywordFilter={[MockFunction]}
     user={
-        Object {
-            "id": 11,
-            "savedChallenges": Array [],
-          }
+      Object {
+        "id": 11,
+        "savedChallenges": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -69,7 +154,7 @@ ShallowWrapper {
         defaultMessage="Work on"
         id="ChallengeFilterSubnav.filter.keyword.label"
         values={Object {}}
-/>,
+      />,
       "onChange": [Function],
       "options": Array [
         Object {
@@ -147,7 +232,7 @@ ShallowWrapper {
           defaultMessage="Work on"
           id="ChallengeFilterSubnav.filter.keyword.label"
           values={Object {}}
-/>,
+        />,
         "onChange": [Function],
         "options": Array [
           Object {

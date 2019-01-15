@@ -18,7 +18,7 @@ import BusySpinner from '../../../BusySpinner/BusySpinner'
 import { jsSchema, uiSchema } from './EditProjectSchema'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './EditProject.css'
+import './EditProject.scss'
 
 /**
  * EditProject provies a simple form for creating/editing a Project. We
@@ -98,6 +98,7 @@ export class EditProject extends Component {
               </li>
               }
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   {
                     _isObject(this.props.project) ?

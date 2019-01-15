@@ -18,7 +18,7 @@ const descriptor = {
   defaultHeight: 14,
 }
 
-export class RecentActivityBlock extends Component {
+export default class RecentActivityBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

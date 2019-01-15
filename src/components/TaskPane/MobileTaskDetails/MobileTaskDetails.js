@@ -22,7 +22,7 @@ import ChallengeShareControls
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './MobileTaskDetails.css'
+import './MobileTaskDetails.scss'
 
 /**
  * MobileTaskDetails displays a mobile-compatible bottom tab bar with options

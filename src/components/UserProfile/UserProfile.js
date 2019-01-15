@@ -14,7 +14,7 @@ import SavedChallenges from './SavedChallenges/SavedChallenges'
 import TopChallenges from './TopChallenges/TopChallenges'
 import UserSettings from './UserSettings/UserSettings'
 import messages from './Messages'
-import './UserProfile.css'
+import './UserProfile.scss'
 
 export class UserProfile extends Component {
   componentDidMount() {

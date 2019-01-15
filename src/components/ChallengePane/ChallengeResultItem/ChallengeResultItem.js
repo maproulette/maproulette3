@@ -16,7 +16,7 @@ import AsManager
 import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './ChallengeResultItem.css'
+import './ChallengeResultItem.scss'
 
 /**
  * ChallengeResultItem represents a single challenge result in a ChallengeResultList.
@@ -224,6 +224,7 @@ export class ChallengeResultItem extends Component {
              </Link>
             }
           </div>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a className="card-header-icon" aria-label="more options">
             <span className="icon"></span>
           </a>

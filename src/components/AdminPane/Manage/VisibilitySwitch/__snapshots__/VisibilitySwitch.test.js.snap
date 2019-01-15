@@ -6,13 +6,13 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <VisibilitySwitch
     challenge={
-        Object {
-            "enabled": false,
-            "id": 123,
-          }
+      Object {
+        "enabled": false,
+        "id": 123,
+      }
     }
-    updateEnabled={[Function]}
-/>,
+    updateEnabled={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -29,10 +29,9 @@ ShallowWrapper {
         <input
           checked={false}
           className="switch is-rounded short-and-wide"
-          disabled={undefined}
           onChange={[Function]}
           type="checkbox"
-/>,
+        />,
         <label />,
       ],
       "className": "field visibility-switch",
@@ -79,10 +78,9 @@ ShallowWrapper {
           <input
             checked={false}
             className="switch is-rounded short-and-wide"
-            disabled={undefined}
             onChange={[Function]}
             type="checkbox"
-/>,
+          />,
           <label />,
         ],
         "className": "field visibility-switch",
@@ -136,13 +134,13 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <VisibilitySwitch
     challenge={
-        Object {
-            "enabled": false,
-            "id": 123,
-          }
+      Object {
+        "enabled": false,
+        "id": 123,
+      }
     }
-    updateEnabled={[Function]}
-/>,
+    updateEnabled={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -159,10 +157,9 @@ ShallowWrapper {
         <input
           checked={false}
           className="switch is-rounded short-and-wide"
-          disabled={undefined}
           onChange={[Function]}
           type="checkbox"
-/>,
+        />,
         <label />,
       ],
       "className": "field visibility-switch",
@@ -209,10 +206,9 @@ ShallowWrapper {
           <input
             checked={false}
             className="switch is-rounded short-and-wide"
-            disabled={undefined}
             onChange={[Function]}
             type="checkbox"
-/>,
+          />,
           <label />,
         ],
         "className": "field visibility-switch",
@@ -266,13 +262,13 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <VisibilitySwitch
     challenge={
-        Object {
-            "enabled": true,
-            "id": 123,
-          }
+      Object {
+        "enabled": true,
+        "id": 123,
+      }
     }
-    updateEnabled={[Function]}
-/>,
+    updateEnabled={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -289,10 +285,9 @@ ShallowWrapper {
         <input
           checked={true}
           className="switch is-rounded short-and-wide"
-          disabled={undefined}
           onChange={[Function]}
           type="checkbox"
-/>,
+        />,
         <label />,
       ],
       "className": "field visibility-switch",
@@ -339,10 +334,9 @@ ShallowWrapper {
           <input
             checked={true}
             className="switch is-rounded short-and-wide"
-            disabled={undefined}
             onChange={[Function]}
             type="checkbox"
-/>,
+          />,
           <label />,
         ],
         "className": "field visibility-switch",

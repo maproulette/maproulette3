@@ -11,7 +11,7 @@ import IconButton from '../../../IconButton/IconButton'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import messages from './Messages'
-import './Dashboard.css'
+import './Dashboard.scss'
 
 /**
  * Renders a dashboard with the given configuration, expanding it with default
@@ -78,6 +78,7 @@ export class Dashboard extends Component {
       return (
         <li key={conf.id}
             className={classNames({"is-active": conf.id === this.props.currentConfiguration.id})}>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => this.props.switchDashboardConfiguration(conf.id)}>{tabLabel}</a>
         </li>
       )

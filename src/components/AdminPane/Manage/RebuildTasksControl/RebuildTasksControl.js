@@ -8,7 +8,7 @@ import Modal from '../../../Bulma/Modal'
 import { DropzoneTextUpload }
        from '../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import messages from './Messages'
-import './RebuildTasksControl.css'
+import './RebuildTasksControl.scss'
 
 /**
  * RebuildTasksControl displays a control a challenge owner can use to rebuild
@@ -71,6 +71,7 @@ export class RebuildTasksControl extends Component {
 
     return (
       <div className="rebuild-tasks-control">
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={this.initiateConfirmation}>
           <FormattedMessage {...messages.label } />
         </a>

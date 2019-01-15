@@ -5,14 +5,29 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskCommentInput
-    commentChanged={[Function]}
+    commentChanged={[MockFunction]}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Optional comment",
+                "id": "Task.controls.completionComment.placeholder",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
     value="foo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -28,10 +43,9 @@ ShallowWrapper {
       "children": <input
         name="comment"
         onChange={[Function]}
-        placeholder={undefined}
         type="text"
         value="foo"
-/>,
+      />,
       "className": "task-completion-comment",
     },
     "ref": null,
@@ -61,10 +75,9 @@ ShallowWrapper {
         "children": <input
           name="comment"
           onChange={[Function]}
-          placeholder={undefined}
           type="text"
           value="foo"
-/>,
+        />,
         "className": "task-completion-comment",
       },
       "ref": null,

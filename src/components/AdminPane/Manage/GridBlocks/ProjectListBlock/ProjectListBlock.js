@@ -19,7 +19,7 @@ import ProjectList from '../../ProjectList/ProjectList'
 import QuickBlock from '../QuickBlock'
 import MenuControl from '../MenuControl'
 import messages from './Messages'
-import './ProjectListBlock.css'
+import './ProjectListBlock.scss'
 import _get from 'lodash/get'
 
 const descriptor = {
@@ -60,7 +60,7 @@ const ProjectAndChallengeSearch = WithComboSearch(SearchBox, {
     },
 })
 
-export class ProjectListBlock extends Component {
+export default class ProjectListBlock extends Component {
   setView = view => {
     if (this.props.blockConfiguration.view !== view) {
       this.props.updateBlockConfiguration({view})

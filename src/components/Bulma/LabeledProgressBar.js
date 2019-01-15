@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedNumber } from 'react-intl'
 import classNames from 'classnames'
 import _isFinite from 'lodash/isFinite'
-import './LabeledProgressBar.css'
+import './LabeledProgressBar.scss'
 
 /**
  * LabeledProgressBar displays a Bulma `progress` component, along with

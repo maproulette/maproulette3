@@ -11,7 +11,7 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import AccountNavItem from './AccountNavItem/AccountNavItem'
 import SignInButton from '../SignInButton/SignInButton'
 import messages from './Messages'
-import './Navbar.css'
+import './Navbar.scss'
 
 /**
  * Navbar renders the primary top nav in the application, including the brand,
@@ -96,6 +96,7 @@ export default class Navbar extends Component {
                  </span>
                </Link>
 
+               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                <a className="navbar-item top-nav__signout-link" onClick={this.signout}>
                  <span className="item-text">
                    <FormattedMessage {...messages.signout} />

@@ -26,7 +26,7 @@ import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
 import MobileNotSupported
        from './components/MobileNotSupported/MobileNotSupported'
-import './App.css'
+import './App.scss'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
-import './ChallengeKeywords.css'
+import './ChallengeKeywords.scss'
 
 /**
  * ChallengeKeywords renders the keywords of the given challenge as a tag set.

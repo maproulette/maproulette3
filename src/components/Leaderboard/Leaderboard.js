@@ -16,7 +16,7 @@ import BusySpinner from '../BusySpinner/BusySpinner'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import Ribbon from '../Ribbon/Ribbon'
 import messages from './Messages'
-import './Leaderboard.css'
+import './Leaderboard.scss'
 
 // Setup child components with needed HOCs.
 const DeactivatableDropdown = WithDeactivateOnOutsideClick(SimpleDropdown)

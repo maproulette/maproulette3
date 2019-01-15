@@ -34,7 +34,7 @@ import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './ChallengeDashboard.css'
+import './ChallengeDashboard.scss'
 
 // Setup child components with needed HOCs.
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
@@ -131,6 +131,7 @@ export class ChallengeDashboard extends Component {
                 </Link>
               </li>
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   {this.props.challenge.name}
                   {this.props.loadingChallenge && <BusySpinner inline />}
@@ -162,6 +163,7 @@ export class ChallengeDashboard extends Component {
                    <DeactivatableDropdownButton options={managedProjectOptions}
                                                onSelect={this.moveChallenge}
                                                emptyContent={<FormattedMessage {...messages.noProjects} />}>
+                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                      <a>
                        <FormattedMessage {...messages.moveChallengeLabel} />
                        <div className="basic-dropdown-indicator" />
@@ -186,6 +188,7 @@ export class ChallengeDashboard extends Component {
 
                <div className="column is-narrow admin__manage__controls--control">
                  <ConfirmAction>
+                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                    <a className='button is-clear' onClick={this.deleteChallenge}>
                      <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
                    </a>

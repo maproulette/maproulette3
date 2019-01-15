@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import WithErrors from '../../HOCs/WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
-import './MapPane.css'
+import './MapPane.scss'
 
 /**
  * MapPane is a thin wrapper around map components that primarily serves as a

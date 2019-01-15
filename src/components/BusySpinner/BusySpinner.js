@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import './BusySpinner.css'
+import './BusySpinner.scss'
 
 /**
  * BusySpinner displays a simple busy spinner. By default it's shown centered

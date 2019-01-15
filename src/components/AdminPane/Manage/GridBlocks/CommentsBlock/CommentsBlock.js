@@ -10,7 +10,7 @@ import CommentList from '../../../../CommentList/CommentList'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './CommentsBlock.css'
+import './CommentsBlock.scss'
 
 const descriptor = {
   blockKey: 'CommentsBlock',
@@ -21,7 +21,7 @@ const descriptor = {
   defaultHeight: 12,
 }
 
-export class CommentsBlock extends Component {
+export default class CommentsBlock extends Component {
   render() {
     const comments = _compact(_flatMap(this.props.challenges, challenge =>
       challenge.comments ?
@@ -35,6 +35,7 @@ export class CommentsBlock extends Component {
     if (comments.length > 0 && _get(this.props, 'challenges.length', 0) === 1) {
       exportControl = (
         <a target="_blank"
+           rel="noopener noreferrer"
            href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
            className="button is-outlined is-green has-svg-icon export-control">
           <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />

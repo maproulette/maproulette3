@@ -10,7 +10,7 @@ import ChallengeKeywords from '../../ChallengeKeywords/ChallengeKeywords'
 import VisibilitySwitch from '../../VisibilitySwitch/VisibilitySwitch'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './ChallengeOverviewBlock.css'
+import './ChallengeOverviewBlock.scss'
 
 const descriptor = {
   blockKey: 'ChallengeOverviewBlock',
@@ -21,7 +21,7 @@ const descriptor = {
   defaultHeight: 7,
 }
 
-export class ChallengeOverviewBlock extends Component {
+export default class ChallengeOverviewBlock extends Component {
   render() {
     const manager = AsManager(this.props.user)
     const status = _get(this.props, 'challenge.status', ChallengeStatus.none)

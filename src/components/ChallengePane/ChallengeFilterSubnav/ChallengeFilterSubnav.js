@@ -9,7 +9,7 @@ import WithCommandInterpreter from '../../HOCs/WithCommandInterpreter/WithComman
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
 import FilterByLocation from './FilterByLocation'
-import './ChallengeFilterSubnav.css'
+import './ChallengeFilterSubnav.scss'
 import messages from './Messages'
 
 // Setup child components with necessary HOCs

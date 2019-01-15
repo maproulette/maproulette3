@@ -4,7 +4,7 @@ import _isFunction from 'lodash/isFunction'
 import _get from 'lodash/get'
 import classNames from 'classnames'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import './SearchBox.css'
+import './SearchBox.scss'
 
 /**
  * SearchBox UI component that presents an unmanaged text input for entering

@@ -9,7 +9,7 @@ import _omit from 'lodash/omit'
 import Popout from '../../../Bulma/Popout'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './KeyboardShortcutReference.css'
+import './KeyboardShortcutReference.scss'
 
 /**
  * KeyboardShortcutReference renders a control that, when clicked, displays a

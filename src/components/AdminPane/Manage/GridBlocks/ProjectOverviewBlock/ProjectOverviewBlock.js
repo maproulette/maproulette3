@@ -6,7 +6,7 @@ import ProjectOverview from '../../ProjectOverview/ProjectOverview'
 import MarkdownContent from '../../../../MarkdownContent/MarkdownContent'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './ProjectOverviewBlock.css'
+import './ProjectOverviewBlock.scss'
 
 const descriptor = {
   blockKey: 'ProjectOverviewBlock',
@@ -17,7 +17,7 @@ const descriptor = {
   defaultHeight: 7,
 }
 
-export class ProjectOverviewBlock extends Component {
+export default class ProjectOverviewBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

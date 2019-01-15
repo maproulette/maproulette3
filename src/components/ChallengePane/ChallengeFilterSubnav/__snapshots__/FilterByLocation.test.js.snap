@@ -7,54 +7,99 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <FilterByLocation
     asMenuList={false}
     challenges={
-        Array [
-            Object {
-              "blurb": "Challenge 309 blurb",
-              "description": "Challenge 309 description",
-              "id": 309,
-              "name": "Challenge 309",
-              "parent": Object {
-                "displayName": "foo",
-              },
-            },
-            Object {
-              "blurb": "Challenge 311 blurb",
-              "description": "Challenge 311 description",
-              "id": 311,
-              "name": "Challenge 311",
-              "parent": Object {
-                "displayName": "bar",
-              },
-            },
-          ]
+      Array [
+        Object {
+          "blurb": "Challenge 309 blurb",
+          "description": "Challenge 309 description",
+          "id": 309,
+          "name": "Challenge 309",
+          "parent": Object {
+            "displayName": "foo",
+          },
+        },
+        Object {
+          "blurb": "Challenge 311 blurb",
+          "description": "Challenge 311 description",
+          "id": 311,
+          "name": "Challenge 311",
+          "parent": Object {
+            "displayName": "bar",
+          },
+        },
+      ]
     }
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
-    }
-    locateMapToUser={[Function]}
-    mapBounds={
-        Object {
-            "challenges": Object {
-              "bounds": 1,
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Near Me",
+                "id": "Challenge.location.nearMe",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Within Map Bounds",
+                "id": "Challenge.location.withinMapBounds",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Intersecting Map Bounds",
+                "id": "Challenge.location.intersectingMapBounds",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Anywhere",
+                "id": "Challenge.location.any",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
             },
-          }
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-    removeSearchFilters={[Function]}
+    locateMapToUser={[MockFunction]}
+    mapBounds={
+      Object {
+        "challenges": Object {
+          "bounds": 1,
+        },
+      }
+    }
+    removeSearchFilters={[MockFunction]}
     searchFilters={
-        Object {
-            "difficulty": 1,
-          }
+      Object {
+        "difficulty": 1,
+      }
     }
-    setSearchFilters={[Function]}
+    setSearchFilters={[MockFunction]}
     user={
-        Object {
-            "id": 11,
-            "savedChallenges": Array [],
-          }
+      Object {
+        "id": 11,
+        "savedChallenges": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -76,7 +121,7 @@ ShallowWrapper {
         defaultMessage="Location"
         id="ChallengeFilterSubnav.filter.location.label"
         values={Object {}}
-/>,
+      />,
       "onChange": [Function],
       "options": Array [
         Object {
@@ -125,7 +170,7 @@ ShallowWrapper {
           defaultMessage="Location"
           id="ChallengeFilterSubnav.filter.location.label"
           values={Object {}}
-/>,
+        />,
         "onChange": [Function],
         "options": Array [
           Object {

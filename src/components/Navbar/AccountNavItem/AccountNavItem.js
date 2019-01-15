@@ -8,7 +8,7 @@ import SignInButton from '../../SignInButton/SignInButton'
 import WithDeactivateOnOutsideClick
        from '../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import messages from './Messages'
-import './AccountNavItem.css'
+import './AccountNavItem.scss'
 
 // constants for dropdown-menu control keys
 const SIGNOUT = 'signout'

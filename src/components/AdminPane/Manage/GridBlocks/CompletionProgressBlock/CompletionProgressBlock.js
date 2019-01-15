@@ -15,7 +15,7 @@ const descriptor = {
   defaultHeight: 5,
 }
 
-export class CompletionProgressBlock extends Component {
+export default class CompletionProgressBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

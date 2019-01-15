@@ -6,21 +6,46 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <AccountNavItem
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
-    }
-    logoutUser={[Function]}
-    user={
-        Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "osmProfile": Object {
-              "avatarURL": "some/url",
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "User Profile",
+                "id": "Navbar.links.userProfile",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Sign out",
+                "id": "Navbar.links.signout",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
             },
-          }
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-/>,
+    logoutUser={[MockFunction]}
+    user={
+      Object {
+        "id": 357,
+        "isLoggedIn": true,
+        "osmProfile": Object {
+          "avatarURL": "some/url",
+        },
+      }
+    }
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -36,52 +61,52 @@ ShallowWrapper {
       "children": <OnClickOutside(WithDeactivateOnOutsideClick)
         className="is-right navbar__account-nav-item__dropdown"
         eventTypes={
-                Array [
-                        "mousedown",
-                        "touchstart",
-                      ]
+          Array [
+            "mousedown",
+            "touchstart",
+          ]
         }
         excludeScrollbar={false}
         onSelect={[Function]}
         options={
-                Array [
-                        Object {
-                          "className": "profile",
-                          "key": "profile",
-                          "text": undefined,
-                          "value": "profile",
-                        },
-                        Object {
-                          "className": "signout",
-                          "key": "signout",
-                          "text": undefined,
-                          "value": "signout",
-                        },
-                      ]
+          Array [
+            Object {
+              "className": "profile",
+              "key": "profile",
+              "text": undefined,
+              "value": "profile",
+            },
+            Object {
+              "className": "signout",
+              "key": "signout",
+              "text": undefined,
+              "value": "signout",
+            },
+          ]
         }
         outsideClickIgnoreClass="ignore-react-onclickoutside"
         preventDefault={false}
         stopPropagation={false}
->
+      >
         <figure
-                className="navbar__account-nav-item__avatar image is-48x48"
+          className="navbar__account-nav-item__avatar image is-48x48"
         >
-                <div
-                        className="circular-image"
-                        style={
-                                Object {
-                                        "backgroundImage": "url(some/url)",
-                                      }
-                        }
-                />
+          <div
+            className="circular-image"
+            style={
+              Object {
+                "backgroundImage": "url(some/url)",
+              }
+            }
+          />
         </figure>
         <span
-                className="navbar__account-nav-item__username"
+          className="navbar__account-nav-item__username"
         />
         <div
-                className="navbar__account-nav-item__icon"
+          className="navbar__account-nav-item__icon"
         />
-</OnClickOutside(WithDeactivateOnOutsideClick)>,
+      </OnClickOutside(WithDeactivateOnOutsideClick)>,
       "className": "navbar-item navbar__account-nav-item signed-in login-status-known",
     },
     "ref": null,
@@ -93,22 +118,22 @@ ShallowWrapper {
         "children": Array [
           <figure
             className="navbar__account-nav-item__avatar image is-48x48"
->
+          >
             <div
-                        className="circular-image"
-                        style={
-                                    Object {
-                                                "backgroundImage": "url(some/url)",
-                                              }
-                        }
+              className="circular-image"
+              style={
+                Object {
+                  "backgroundImage": "url(some/url)",
+                }
+              }
             />
-</figure>,
+          </figure>,
           <span
             className="navbar__account-nav-item__username"
-/>,
+          />,
           <div
             className="navbar__account-nav-item__icon"
-/>,
+          />,
         ],
         "className": "is-right navbar__account-nav-item__dropdown",
         "eventTypes": Array [
@@ -145,11 +170,11 @@ ShallowWrapper {
             "children": <div
               className="circular-image"
               style={
-                            Object {
-                                          "backgroundImage": "url(some/url)",
-                                        }
+                Object {
+                  "backgroundImage": "url(some/url)",
+                }
               }
-/>,
+            />,
             "className": "navbar__account-nav-item__avatar image is-48x48",
           },
           "ref": null,
@@ -206,52 +231,52 @@ ShallowWrapper {
         "children": <OnClickOutside(WithDeactivateOnOutsideClick)
           className="is-right navbar__account-nav-item__dropdown"
           eventTypes={
-                    Array [
-                              "mousedown",
-                              "touchstart",
-                            ]
+            Array [
+              "mousedown",
+              "touchstart",
+            ]
           }
           excludeScrollbar={false}
           onSelect={[Function]}
           options={
-                    Array [
-                              Object {
-                                "className": "profile",
-                                "key": "profile",
-                                "text": undefined,
-                                "value": "profile",
-                              },
-                              Object {
-                                "className": "signout",
-                                "key": "signout",
-                                "text": undefined,
-                                "value": "signout",
-                              },
-                            ]
+            Array [
+              Object {
+                "className": "profile",
+                "key": "profile",
+                "text": undefined,
+                "value": "profile",
+              },
+              Object {
+                "className": "signout",
+                "key": "signout",
+                "text": undefined,
+                "value": "signout",
+              },
+            ]
           }
           outsideClickIgnoreClass="ignore-react-onclickoutside"
           preventDefault={false}
           stopPropagation={false}
->
+        >
           <figure
-                    className="navbar__account-nav-item__avatar image is-48x48"
+            className="navbar__account-nav-item__avatar image is-48x48"
           >
-                    <div
-                              className="circular-image"
-                              style={
-                                        Object {
-                                                  "backgroundImage": "url(some/url)",
-                                                }
-                              }
-                    />
+            <div
+              className="circular-image"
+              style={
+                Object {
+                  "backgroundImage": "url(some/url)",
+                }
+              }
+            />
           </figure>
           <span
-                    className="navbar__account-nav-item__username"
+            className="navbar__account-nav-item__username"
           />
           <div
-                    className="navbar__account-nav-item__icon"
+            className="navbar__account-nav-item__icon"
           />
-</OnClickOutside(WithDeactivateOnOutsideClick)>,
+        </OnClickOutside(WithDeactivateOnOutsideClick)>,
         "className": "navbar-item navbar__account-nav-item signed-in login-status-known",
       },
       "ref": null,
@@ -263,22 +288,22 @@ ShallowWrapper {
           "children": Array [
             <figure
               className="navbar__account-nav-item__avatar image is-48x48"
->
+            >
               <div
-                            className="circular-image"
-                            style={
-                                          Object {
-                                                        "backgroundImage": "url(some/url)",
-                                                      }
-                            }
+                className="circular-image"
+                style={
+                  Object {
+                    "backgroundImage": "url(some/url)",
+                  }
+                }
               />
-</figure>,
+            </figure>,
             <span
               className="navbar__account-nav-item__username"
-/>,
+            />,
             <div
               className="navbar__account-nav-item__icon"
-/>,
+            />,
           ],
           "className": "is-right navbar__account-nav-item__dropdown",
           "eventTypes": Array [
@@ -315,11 +340,11 @@ ShallowWrapper {
               "children": <div
                 className="circular-image"
                 style={
-                                Object {
-                                                "backgroundImage": "url(some/url)",
-                                              }
+                  Object {
+                    "backgroundImage": "url(some/url)",
+                  }
                 }
-/>,
+              />,
               "className": "navbar__account-nav-item__avatar image is-48x48",
             },
             "ref": null,
@@ -384,21 +409,21 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <AccountNavItem
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
-    logoutUser={[Function]}
+    logoutUser={[MockFunction]}
     user={
-        Object {
-            "id": 357,
-            "isLoggedIn": false,
-            "osmProfile": Object {
-              "avatarURL": "some/url",
-            },
-          }
+      Object {
+        "id": 357,
+        "isLoggedIn": false,
+        "osmProfile": Object {
+          "avatarURL": "some/url",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -414,21 +439,21 @@ ShallowWrapper {
       "children": <Connect(SignInButton)
         className="white-on-green navbar__account-nav-item__signin"
         intl={
-                Object {
-                        "formatMessage": [Function],
-                      }
+          Object {
+            "formatMessage": [MockFunction],
+          }
         }
-        logoutUser={[Function]}
+        logoutUser={[MockFunction]}
         user={
-                Object {
-                        "id": 357,
-                        "isLoggedIn": false,
-                        "osmProfile": Object {
-                          "avatarURL": "some/url",
-                        },
-                      }
+          Object {
+            "id": 357,
+            "isLoggedIn": false,
+            "osmProfile": Object {
+              "avatarURL": "some/url",
+            },
+          }
         }
-/>,
+      />,
       "className": "navbar-item navbar__account-nav-item login-status-known",
     },
     "ref": null,
@@ -439,9 +464,9 @@ ShallowWrapper {
       "props": Object {
         "className": "white-on-green navbar__account-nav-item__signin",
         "intl": Object {
-          "formatMessage": [Function],
+          "formatMessage": [MockFunction],
         },
-        "logoutUser": [Function],
+        "logoutUser": [MockFunction],
         "user": Object {
           "id": 357,
           "isLoggedIn": false,
@@ -465,21 +490,21 @@ ShallowWrapper {
         "children": <Connect(SignInButton)
           className="white-on-green navbar__account-nav-item__signin"
           intl={
-                    Object {
-                              "formatMessage": [Function],
-                            }
+            Object {
+              "formatMessage": [MockFunction],
+            }
           }
-          logoutUser={[Function]}
+          logoutUser={[MockFunction]}
           user={
-                    Object {
-                              "id": 357,
-                              "isLoggedIn": false,
-                              "osmProfile": Object {
-                                "avatarURL": "some/url",
-                              },
-                            }
+            Object {
+              "id": 357,
+              "isLoggedIn": false,
+              "osmProfile": Object {
+                "avatarURL": "some/url",
+              },
+            }
           }
-/>,
+        />,
         "className": "navbar-item navbar__account-nav-item login-status-known",
       },
       "ref": null,
@@ -490,9 +515,9 @@ ShallowWrapper {
         "props": Object {
           "className": "white-on-green navbar__account-nav-item__signin",
           "intl": Object {
-            "formatMessage": [Function],
+            "formatMessage": [MockFunction],
           },
-          "logoutUser": [Function],
+          "logoutUser": [MockFunction],
           "user": Object {
             "id": 357,
             "isLoggedIn": false,

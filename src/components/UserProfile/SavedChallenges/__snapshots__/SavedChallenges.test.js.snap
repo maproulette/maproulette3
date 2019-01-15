@@ -6,16 +6,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SavedChallenges
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
     user={
-        Object {
-            "savedChallenges": Array [],
-          }
+      Object {
+        "savedChallenges": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -31,18 +31,18 @@ ShallowWrapper {
       "children": Array [
         <h2
           className="subtitle"
->
+        >
           <FormattedMessage
-                    defaultMessage="Saved Challenges"
-                    id="UserProfile.savedChallenges.header"
-                    values={Object {}}
+            defaultMessage="Saved Challenges"
+            id="UserProfile.savedChallenges.header"
+            values={Object {}}
           />
-</h2>,
+        </h2>,
         <div
           className="none"
->
+        >
           No Challenges
-</div>,
+        </div>,
       ],
       "className": "user-profile__saved-challenges",
     },
@@ -57,7 +57,7 @@ ShallowWrapper {
             defaultMessage="Saved Challenges"
             id="UserProfile.savedChallenges.header"
             values={Object {}}
-/>,
+          />,
           "className": "subtitle",
         },
         "ref": null,
@@ -100,18 +100,18 @@ ShallowWrapper {
         "children": Array [
           <h2
             className="subtitle"
->
+          >
             <FormattedMessage
-                        defaultMessage="Saved Challenges"
-                        id="UserProfile.savedChallenges.header"
-                        values={Object {}}
+              defaultMessage="Saved Challenges"
+              id="UserProfile.savedChallenges.header"
+              values={Object {}}
             />
-</h2>,
+          </h2>,
           <div
             className="none"
->
+          >
             No Challenges
-</div>,
+          </div>,
         ],
         "className": "user-profile__saved-challenges",
       },
@@ -126,7 +126,7 @@ ShallowWrapper {
               defaultMessage="Saved Challenges"
               id="UserProfile.savedChallenges.header"
               values={Object {}}
-/>,
+            />,
             "className": "subtitle",
           },
           "ref": null,
@@ -177,29 +177,64 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SavedChallenges
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
-    }
-    user={
-        Object {
-            "savedChallenges": Array [
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
               Object {
-                "id": 321,
-                "name": "First Challenge",
-              },
-              Object {
-                "id": 654,
-                "name": "Second Challenge",
-              },
-              Object {
-                "id": 987,
-                "name": "Third Challenge",
+                "defaultMessage": "Unsave Challenge",
+                "id": "Challenge.controls.unsave.tooltip",
               },
             ],
-          }
+            Array [
+              Object {
+                "defaultMessage": "Unsave Challenge",
+                "id": "Challenge.controls.unsave.tooltip",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Unsave Challenge",
+                "id": "Challenge.controls.unsave.tooltip",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-/>,
+    user={
+      Object {
+        "savedChallenges": Array [
+          Object {
+            "id": 321,
+            "name": "First Challenge",
+          },
+          Object {
+            "id": 654,
+            "name": "Second Challenge",
+          },
+          Object {
+            "id": 987,
+            "name": "Third Challenge",
+          },
+        ],
+      }
+    }
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -215,87 +250,84 @@ ShallowWrapper {
       "children": Array [
         <h2
           className="subtitle"
->
+        >
           <FormattedMessage
-                    defaultMessage="Saved Challenges"
-                    id="UserProfile.savedChallenges.header"
-                    values={Object {}}
+            defaultMessage="Saved Challenges"
+            id="UserProfile.savedChallenges.header"
+            values={Object {}}
           />
-</h2>,
+        </h2>,
         <ul>
           <li
-                    className="user-profile__saved-challenges__challenge"
+            className="user-profile__saved-challenges__challenge"
           >
-                    <Link
-                              replace={false}
-                              to="/browse/challenges/321"
-                    >
-                              First Challenge
-                    </Link>
-                    <span
-                              className="connector"
-                    />
-                    <a
-                              className="button is-clear"
-                              onClick={[Function]}
-                              title={undefined}
-                    >
-                              <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                              />
-                    </a>
+            <Link
+              replace={false}
+              to="/browse/challenges/321"
+            >
+              First Challenge
+            </Link>
+            <span
+              className="connector"
+            />
+            <a
+              className="button is-clear"
+              onClick={[Function]}
+            >
+              <SvgSymbol
+                className="icon"
+                sym="trash-icon"
+                viewBox="0 0 20 20"
+              />
+            </a>
           </li>
           <li
-                    className="user-profile__saved-challenges__challenge"
+            className="user-profile__saved-challenges__challenge"
           >
-                    <Link
-                              replace={false}
-                              to="/browse/challenges/654"
-                    >
-                              Second Challenge
-                    </Link>
-                    <span
-                              className="connector"
-                    />
-                    <a
-                              className="button is-clear"
-                              onClick={[Function]}
-                              title={undefined}
-                    >
-                              <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                              />
-                    </a>
+            <Link
+              replace={false}
+              to="/browse/challenges/654"
+            >
+              Second Challenge
+            </Link>
+            <span
+              className="connector"
+            />
+            <a
+              className="button is-clear"
+              onClick={[Function]}
+            >
+              <SvgSymbol
+                className="icon"
+                sym="trash-icon"
+                viewBox="0 0 20 20"
+              />
+            </a>
           </li>
           <li
-                    className="user-profile__saved-challenges__challenge"
+            className="user-profile__saved-challenges__challenge"
           >
-                    <Link
-                              replace={false}
-                              to="/browse/challenges/987"
-                    >
-                              Third Challenge
-                    </Link>
-                    <span
-                              className="connector"
-                    />
-                    <a
-                              className="button is-clear"
-                              onClick={[Function]}
-                              title={undefined}
-                    >
-                              <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
-                              />
-                    </a>
+            <Link
+              replace={false}
+              to="/browse/challenges/987"
+            >
+              Third Challenge
+            </Link>
+            <span
+              className="connector"
+            />
+            <a
+              className="button is-clear"
+              onClick={[Function]}
+            >
+              <SvgSymbol
+                className="icon"
+                sym="trash-icon"
+                viewBox="0 0 20 20"
+              />
+            </a>
           </li>
-</ul>,
+        </ul>,
       ],
       "className": "user-profile__saved-challenges",
     },
@@ -310,7 +342,7 @@ ShallowWrapper {
             defaultMessage="Saved Challenges"
             id="UserProfile.savedChallenges.header"
             values={Object {}}
-/>,
+          />,
           "className": "subtitle",
         },
         "ref": null,
@@ -337,76 +369,73 @@ ShallowWrapper {
           "children": Array [
             <li
               className="user-profile__saved-challenges__challenge"
->
+            >
               <Link
-                            replace={false}
-                            to="/browse/challenges/321"
+                replace={false}
+                to="/browse/challenges/321"
               >
-                            First Challenge
+                First Challenge
               </Link>
               <span
-                            className="connector"
+                className="connector"
               />
               <a
-                            className="button is-clear"
-                            onClick={[Function]}
-                            title={undefined}
+                className="button is-clear"
+                onClick={[Function]}
               >
-                            <SvgSymbol
-                                          className="icon"
-                                          sym="trash-icon"
-                                          viewBox="0 0 20 20"
-                            />
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
               </a>
-</li>,
+            </li>,
             <li
               className="user-profile__saved-challenges__challenge"
->
+            >
               <Link
-                            replace={false}
-                            to="/browse/challenges/654"
+                replace={false}
+                to="/browse/challenges/654"
               >
-                            Second Challenge
+                Second Challenge
               </Link>
               <span
-                            className="connector"
+                className="connector"
               />
               <a
-                            className="button is-clear"
-                            onClick={[Function]}
-                            title={undefined}
+                className="button is-clear"
+                onClick={[Function]}
               >
-                            <SvgSymbol
-                                          className="icon"
-                                          sym="trash-icon"
-                                          viewBox="0 0 20 20"
-                            />
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
               </a>
-</li>,
+            </li>,
             <li
               className="user-profile__saved-challenges__challenge"
->
+            >
               <Link
-                            replace={false}
-                            to="/browse/challenges/987"
+                replace={false}
+                to="/browse/challenges/987"
               >
-                            Third Challenge
+                Third Challenge
               </Link>
               <span
-                            className="connector"
+                className="connector"
               />
               <a
-                            className="button is-clear"
-                            onClick={[Function]}
-                            title={undefined}
+                className="button is-clear"
+                onClick={[Function]}
               >
-                            <SvgSymbol
-                                          className="icon"
-                                          sym="trash-icon"
-                                          viewBox="0 0 20 20"
-                            />
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
               </a>
-</li>,
+            </li>,
           ],
         },
         "ref": null,
@@ -420,23 +449,22 @@ ShallowWrapper {
                 <Link
                   replace={false}
                   to="/browse/challenges/321"
->
+                >
                   First Challenge
-</Link>,
+                </Link>,
                 <span
                   className="connector"
-/>,
+                />,
                 <a
                   className="button is-clear"
                   onClick={[Function]}
-                  title={undefined}
->
+                >
                   <SvgSymbol
-                                    className="icon"
-                                    sym="trash-icon"
-                                    viewBox="0 0 20 20"
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
                   />
-</a>,
+                </a>,
               ],
               "className": "user-profile__saved-challenges__challenge",
             },
@@ -475,7 +503,7 @@ ShallowWrapper {
                     className="icon"
                     sym="trash-icon"
                     viewBox="0 0 20 20"
-/>,
+                  />,
                   "className": "button is-clear",
                   "onClick": [Function],
                   "title": undefined,
@@ -508,23 +536,22 @@ ShallowWrapper {
                 <Link
                   replace={false}
                   to="/browse/challenges/654"
->
+                >
                   Second Challenge
-</Link>,
+                </Link>,
                 <span
                   className="connector"
-/>,
+                />,
                 <a
                   className="button is-clear"
                   onClick={[Function]}
-                  title={undefined}
->
+                >
                   <SvgSymbol
-                                    className="icon"
-                                    sym="trash-icon"
-                                    viewBox="0 0 20 20"
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
                   />
-</a>,
+                </a>,
               ],
               "className": "user-profile__saved-challenges__challenge",
             },
@@ -563,7 +590,7 @@ ShallowWrapper {
                     className="icon"
                     sym="trash-icon"
                     viewBox="0 0 20 20"
-/>,
+                  />,
                   "className": "button is-clear",
                   "onClick": [Function],
                   "title": undefined,
@@ -596,23 +623,22 @@ ShallowWrapper {
                 <Link
                   replace={false}
                   to="/browse/challenges/987"
->
+                >
                   Third Challenge
-</Link>,
+                </Link>,
                 <span
                   className="connector"
-/>,
+                />,
                 <a
                   className="button is-clear"
                   onClick={[Function]}
-                  title={undefined}
->
+                >
                   <SvgSymbol
-                                    className="icon"
-                                    sym="trash-icon"
-                                    viewBox="0 0 20 20"
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
                   />
-</a>,
+                </a>,
               ],
               "className": "user-profile__saved-challenges__challenge",
             },
@@ -651,7 +677,7 @@ ShallowWrapper {
                     className="icon"
                     sym="trash-icon"
                     viewBox="0 0 20 20"
-/>,
+                  />,
                   "className": "button is-clear",
                   "onClick": [Function],
                   "title": undefined,
@@ -690,87 +716,84 @@ ShallowWrapper {
         "children": Array [
           <h2
             className="subtitle"
->
+          >
             <FormattedMessage
-                        defaultMessage="Saved Challenges"
-                        id="UserProfile.savedChallenges.header"
-                        values={Object {}}
+              defaultMessage="Saved Challenges"
+              id="UserProfile.savedChallenges.header"
+              values={Object {}}
             />
-</h2>,
+          </h2>,
           <ul>
             <li
-                        className="user-profile__saved-challenges__challenge"
+              className="user-profile__saved-challenges__challenge"
             >
-                        <Link
-                                    replace={false}
-                                    to="/browse/challenges/321"
-                        >
-                                    First Challenge
-                        </Link>
-                        <span
-                                    className="connector"
-                        />
-                        <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                        >
-                                    <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                    />
-                        </a>
+              <Link
+                replace={false}
+                to="/browse/challenges/321"
+              >
+                First Challenge
+              </Link>
+              <span
+                className="connector"
+              />
+              <a
+                className="button is-clear"
+                onClick={[Function]}
+              >
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
+              </a>
             </li>
             <li
-                        className="user-profile__saved-challenges__challenge"
+              className="user-profile__saved-challenges__challenge"
             >
-                        <Link
-                                    replace={false}
-                                    to="/browse/challenges/654"
-                        >
-                                    Second Challenge
-                        </Link>
-                        <span
-                                    className="connector"
-                        />
-                        <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                        >
-                                    <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                    />
-                        </a>
+              <Link
+                replace={false}
+                to="/browse/challenges/654"
+              >
+                Second Challenge
+              </Link>
+              <span
+                className="connector"
+              />
+              <a
+                className="button is-clear"
+                onClick={[Function]}
+              >
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
+              </a>
             </li>
             <li
-                        className="user-profile__saved-challenges__challenge"
+              className="user-profile__saved-challenges__challenge"
             >
-                        <Link
-                                    replace={false}
-                                    to="/browse/challenges/987"
-                        >
-                                    Third Challenge
-                        </Link>
-                        <span
-                                    className="connector"
-                        />
-                        <a
-                                    className="button is-clear"
-                                    onClick={[Function]}
-                                    title={undefined}
-                        >
-                                    <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                    />
-                        </a>
+              <Link
+                replace={false}
+                to="/browse/challenges/987"
+              >
+                Third Challenge
+              </Link>
+              <span
+                className="connector"
+              />
+              <a
+                className="button is-clear"
+                onClick={[Function]}
+              >
+                <SvgSymbol
+                  className="icon"
+                  sym="trash-icon"
+                  viewBox="0 0 20 20"
+                />
+              </a>
             </li>
-</ul>,
+          </ul>,
         ],
         "className": "user-profile__saved-challenges",
       },
@@ -785,7 +808,7 @@ ShallowWrapper {
               defaultMessage="Saved Challenges"
               id="UserProfile.savedChallenges.header"
               values={Object {}}
-/>,
+            />,
             "className": "subtitle",
           },
           "ref": null,
@@ -812,76 +835,73 @@ ShallowWrapper {
             "children": Array [
               <li
                 className="user-profile__saved-challenges__challenge"
->
+              >
                 <Link
-                                replace={false}
-                                to="/browse/challenges/321"
+                  replace={false}
+                  to="/browse/challenges/321"
                 >
-                                First Challenge
+                  First Challenge
                 </Link>
                 <span
-                                className="connector"
+                  className="connector"
                 />
                 <a
-                                className="button is-clear"
-                                onClick={[Function]}
-                                title={undefined}
+                  className="button is-clear"
+                  onClick={[Function]}
                 >
-                                <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                />
+                  <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                  />
                 </a>
-</li>,
+              </li>,
               <li
                 className="user-profile__saved-challenges__challenge"
->
+              >
                 <Link
-                                replace={false}
-                                to="/browse/challenges/654"
+                  replace={false}
+                  to="/browse/challenges/654"
                 >
-                                Second Challenge
+                  Second Challenge
                 </Link>
                 <span
-                                className="connector"
+                  className="connector"
                 />
                 <a
-                                className="button is-clear"
-                                onClick={[Function]}
-                                title={undefined}
+                  className="button is-clear"
+                  onClick={[Function]}
                 >
-                                <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                />
+                  <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                  />
                 </a>
-</li>,
+              </li>,
               <li
                 className="user-profile__saved-challenges__challenge"
->
+              >
                 <Link
-                                replace={false}
-                                to="/browse/challenges/987"
+                  replace={false}
+                  to="/browse/challenges/987"
                 >
-                                Third Challenge
+                  Third Challenge
                 </Link>
                 <span
-                                className="connector"
+                  className="connector"
                 />
                 <a
-                                className="button is-clear"
-                                onClick={[Function]}
-                                title={undefined}
+                  className="button is-clear"
+                  onClick={[Function]}
                 >
-                                <SvgSymbol
-                                                className="icon"
-                                                sym="trash-icon"
-                                                viewBox="0 0 20 20"
-                                />
+                  <SvgSymbol
+                    className="icon"
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                  />
                 </a>
-</li>,
+              </li>,
             ],
           },
           "ref": null,
@@ -895,23 +915,22 @@ ShallowWrapper {
                   <Link
                     replace={false}
                     to="/browse/challenges/321"
->
+                  >
                     First Challenge
-</Link>,
+                  </Link>,
                   <span
                     className="connector"
-/>,
+                  />,
                   <a
                     className="button is-clear"
                     onClick={[Function]}
-                    title={undefined}
->
+                  >
                     <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
                     />
-</a>,
+                  </a>,
                 ],
                 "className": "user-profile__saved-challenges__challenge",
               },
@@ -950,7 +969,7 @@ ShallowWrapper {
                       className="icon"
                       sym="trash-icon"
                       viewBox="0 0 20 20"
-/>,
+                    />,
                     "className": "button is-clear",
                     "onClick": [Function],
                     "title": undefined,
@@ -983,23 +1002,22 @@ ShallowWrapper {
                   <Link
                     replace={false}
                     to="/browse/challenges/654"
->
+                  >
                     Second Challenge
-</Link>,
+                  </Link>,
                   <span
                     className="connector"
-/>,
+                  />,
                   <a
                     className="button is-clear"
                     onClick={[Function]}
-                    title={undefined}
->
+                  >
                     <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
                     />
-</a>,
+                  </a>,
                 ],
                 "className": "user-profile__saved-challenges__challenge",
               },
@@ -1038,7 +1056,7 @@ ShallowWrapper {
                       className="icon"
                       sym="trash-icon"
                       viewBox="0 0 20 20"
-/>,
+                    />,
                     "className": "button is-clear",
                     "onClick": [Function],
                     "title": undefined,
@@ -1071,23 +1089,22 @@ ShallowWrapper {
                   <Link
                     replace={false}
                     to="/browse/challenges/987"
->
+                  >
                     Third Challenge
-</Link>,
+                  </Link>,
                   <span
                     className="connector"
-/>,
+                  />,
                   <a
                     className="button is-clear"
                     onClick={[Function]}
-                    title={undefined}
->
+                  >
                     <SvgSymbol
-                                        className="icon"
-                                        sym="trash-icon"
-                                        viewBox="0 0 20 20"
+                      className="icon"
+                      sym="trash-icon"
+                      viewBox="0 0 20 20"
                     />
-</a>,
+                  </a>,
                 ],
                 "className": "user-profile__saved-challenges__challenge",
               },
@@ -1126,7 +1143,7 @@ ShallowWrapper {
                       className="icon"
                       sym="trash-icon"
                       viewBox="0 0 20 20"
-/>,
+                    />,
                     "className": "button is-clear",
                     "onClick": [Function],
                     "title": undefined,

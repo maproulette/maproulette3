@@ -92,34 +92,34 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Component
     currentSearch={
-        Object {
-            "challenges": Object {
-              "filters": Object {
-                "difficulty": "hard",
-                "featured": true,
-                "keywords": "testing",
-                "location": "USA",
-              },
-              "mapBounds": Object {
-                "bounds": Array [
-                  1,
-                  2,
-                  3,
-                  4,
-                ],
-              },
-              "sort": Object {
-                "direction": "desc",
-                "sortBy": "created",
-              },
-            },
-            "searchQueryTest": "searchQueryValue",
-          }
+      Object {
+        "challenges": Object {
+          "filters": Object {
+            "difficulty": "hard",
+            "featured": true,
+            "keywords": "testing",
+            "location": "USA",
+          },
+          "mapBounds": Object {
+            "bounds": Array [
+              1,
+              2,
+              3,
+              4,
+            ],
+          },
+          "sort": Object {
+            "direction": "desc",
+            "sortBy": "created",
+          },
+        },
+        "searchQueryTest": "searchQueryValue",
+      }
     }
-    performSearch={[Function]}
+    performSearch={[MockFunction]}
     searchGroup="challenges"
-    setChallengeSearchMapBounds={[Function]}
-/>,
+    setChallengeSearchMapBounds={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -157,7 +157,7 @@ ShallowWrapper {
         "searchQueryTest": "searchQueryValue",
       },
       "isLoading": false,
-      "searchFunction": [Function],
+      "searchFunction": [MockFunction],
       "searchGroup": "challenges",
       "searchQueries": Object {
         "searchQueryTest": Object {
@@ -167,7 +167,7 @@ ShallowWrapper {
         },
       },
       "searchQuery": "searchQueryValue",
-      "setChallengeSearchMapBounds": [Function],
+      "setChallengeSearchMapBounds": [MockFunction],
       "setSearch": [Function],
     },
     "ref": null,
@@ -205,7 +205,7 @@ ShallowWrapper {
           "searchQueryTest": "searchQueryValue",
         },
         "isLoading": false,
-        "searchFunction": [Function],
+        "searchFunction": [MockFunction],
         "searchGroup": "challenges",
         "searchQueries": Object {
           "searchQueryTest": Object {
@@ -215,7 +215,7 @@ ShallowWrapper {
           },
         },
         "searchQuery": "searchQueryValue",
-        "setChallengeSearchMapBounds": [Function],
+        "setChallengeSearchMapBounds": [MockFunction],
         "setSearch": [Function],
       },
       "ref": null,
@@ -239,34 +239,34 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Component
     currentSearch={
-        Object {
-            "challenges": Object {
-              "filters": Object {
-                "difficulty": "hard",
-                "featured": true,
-                "keywords": "testing",
-                "location": "USA",
-              },
-              "mapBounds": Object {
-                "bounds": Array [
-                  1,
-                  2,
-                  3,
-                  4,
-                ],
-              },
-              "sort": Object {
-                "direction": "desc",
-                "sortBy": "created",
-              },
-            },
-            "searchQueryTest": "searchQueryValue",
-          }
+      Object {
+        "challenges": Object {
+          "filters": Object {
+            "difficulty": "hard",
+            "featured": true,
+            "keywords": "testing",
+            "location": "USA",
+          },
+          "mapBounds": Object {
+            "bounds": Array [
+              1,
+              2,
+              3,
+              4,
+            ],
+          },
+          "sort": Object {
+            "direction": "desc",
+            "sortBy": "created",
+          },
+        },
+        "searchQueryTest": "searchQueryValue",
+      }
     }
-    performSearch={[Function]}
+    performSearch={[MockFunction]}
     searchGroup="challenges"
-    setChallengeSearchMapBounds={[Function]}
-/>,
+    setChallengeSearchMapBounds={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -304,7 +304,7 @@ ShallowWrapper {
         "searchQueryTest": "searchQueryValue",
       },
       "isLoading": false,
-      "searchFunction": [Function],
+      "searchFunction": [MockFunction],
       "searchGroup": "challenges",
       "searchQueries": Object {
         "searchQueryTest": Object {
@@ -314,7 +314,7 @@ ShallowWrapper {
         },
       },
       "searchQuery": "searchQueryValue",
-      "setChallengeSearchMapBounds": [Function],
+      "setChallengeSearchMapBounds": [MockFunction],
       "setSearch": [Function],
     },
     "ref": null,
@@ -352,7 +352,7 @@ ShallowWrapper {
           "searchQueryTest": "searchQueryValue",
         },
         "isLoading": false,
-        "searchFunction": [Function],
+        "searchFunction": [MockFunction],
         "searchGroup": "challenges",
         "searchQueries": Object {
           "searchQueryTest": Object {
@@ -362,7 +362,7 @@ ShallowWrapper {
           },
         },
         "searchQuery": "searchQueryValue",
-        "setChallengeSearchMapBounds": [Function],
+        "setChallengeSearchMapBounds": [MockFunction],
         "setSearch": [Function],
       },
       "ref": null,

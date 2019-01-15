@@ -117,6 +117,7 @@ export class ChallengeSearchMap extends Component {
     const content = (
       <div className="marker-popup-content">
         <h3>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => this.props.history.push(
             `/browse/challenges/${marker.options.challengeId}`
           )}>
@@ -126,6 +127,7 @@ export class ChallengeSearchMap extends Component {
 
         <div className="marker-popup-content__links">
           <div>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => {
               this.props.onTaskClick(marker.options.challengeId,
                                      marker.options.isVirtualChallenge,

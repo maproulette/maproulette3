@@ -15,7 +15,7 @@ const descriptor = {
   defaultHeight: 4,
 }
 
-export class ProjectCountBlock extends Component {
+export default class ProjectCountBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

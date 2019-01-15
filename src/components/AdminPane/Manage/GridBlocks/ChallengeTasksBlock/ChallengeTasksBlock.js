@@ -15,7 +15,7 @@ const descriptor = {
   defaultHeight: 49,
 }
 
-export class ChallengeTasksBlock extends Component {
+export default class ChallengeTasksBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

@@ -8,7 +8,7 @@ import { sortLabels, SORT_DEFAULT } from '../../../services/Search/Search'
 import WithDeactivateOnOutsideClick
        from '../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import DropdownButton from '../../Bulma/DropdownButton'
-import './SortChallengesSelector.css'
+import './SortChallengesSelector.scss'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 

@@ -5,7 +5,7 @@ import { registerBlockType } from '../BlockTypes'
 import BurndownChart from '../../BurndownChart/BurndownChart'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './BurndownChartBlock.css'
+import './BurndownChartBlock.scss'
 
 const descriptor = {
   blockKey: 'BurndownChartBlock',
@@ -16,7 +16,7 @@ const descriptor = {
   defaultHeight: 12,
 }
 
-export class BurndownChartBlock extends Component {
+export default class BurndownChartBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

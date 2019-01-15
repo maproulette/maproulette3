@@ -29,7 +29,7 @@ import WithDeactivateOnOutsideClick from
        '../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
-import './ActiveTaskDetails.css'
+import './ActiveTaskDetails.scss'
 
 const SIDEBAR_TRANSITION_DELAY = 500 // milliseconds
 

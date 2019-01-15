@@ -24,7 +24,7 @@ import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './ProjectDashboard.css'
+import './ProjectDashboard.scss'
 
 // The name of this dashboard.
 const DASHBOARD_NAME = "project"
@@ -77,6 +77,7 @@ export class ProjectDashboard extends Component {
                 </Link>
               </li>
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   {this.props.project.displayName || this.props.project.name}
                   {this.props.loadingProject && <BusySpinner inline />}
@@ -105,6 +106,7 @@ export class ProjectDashboard extends Component {
             {manager.canAdministrateProject(this.props.project) &&
              <div className="column is-narrow admin__manage__controls--control">
                <ConfirmAction>
+                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                  <a className='button is-clear' onClick={this.deleteProject}>
                    <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
                  </a>

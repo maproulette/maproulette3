@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import Modal from '../Bulma/Modal'
 import messages from './Messages'
-import './ConfirmAction.css'
+import './ConfirmAction.scss'
 
 /**
  * ConfirmAction intercepts the onClick control of the immediate child and

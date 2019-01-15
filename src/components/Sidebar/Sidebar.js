@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import './Sidebar.css'
+import './Sidebar.scss'
 
 /**
  * Renders an unmanaged collapsible sidebar with the given children as content.
@@ -22,6 +22,7 @@ export default class Sidebar extends Component {
 
     const closeIcon =
       this.props.onClose ?
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <a className="delete sidebar__close" onClick={this.props.onClose}> </a> :
       null
 

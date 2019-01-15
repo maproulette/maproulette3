@@ -6,7 +6,7 @@ import { TagsInputField }
 import AutosuggestTextBox from '../../../AutosuggestTextBox/AutosuggestTextBox'
 import WithKeywordSearch from '../../HOCs/WithKeywordSearch/WithKeywordSearch'
 import messages from './Messages'
-import './KeywordAutosuggestInput.css'
+import './KeywordAutosuggestInput.scss'
 
 /**
  * KeywordAutosuggestInput combines the AutosuggestTextBox component with the

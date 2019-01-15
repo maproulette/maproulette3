@@ -9,7 +9,7 @@ import WithKeyboardShortcuts
        from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './FitBoundsControl.css'
+import './FitBoundsControl.scss'
 
 /**
  * Leaflet control for that fits the map bounds to the current features added
@@ -56,6 +56,7 @@ const FitBoundsLeafletControl = Control.extend({
 
     // build the control button, render it, and return it
     const controlContent = (
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <a className="fit-bounds-control button"
          title={this.options.intl.formatMessage(messages.tooltip)}
          onClick={() => this.fitFeatures(map)}>

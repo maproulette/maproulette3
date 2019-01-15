@@ -11,7 +11,7 @@ import { registerBlockType } from '../BlockTypes'
 import ChallengeList from '../../ChallengeList/ChallengeList'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './ChallengeListBlock.css'
+import './ChallengeListBlock.scss'
 
 const descriptor = {
   blockKey: 'ChallengeListBlock',
@@ -34,7 +34,7 @@ const ChallengeSearch = WithSearch(
     extendedFind({searchQuery: searchCriteria.query, onlyEnabled: false}, 1000),
 )
 
-export class ChallengeListBlock extends Component {
+export default class ChallengeListBlock extends Component {
   render() {
     const searchControl = this.props.projects.length === 0 ? null : (
       <ChallengeSearch className="challenge-list-block__searchbox"

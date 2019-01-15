@@ -7,7 +7,7 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import WithDeactivateOnOutsideClick from
        '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import messages from './Messages'
-import './HelpPopout.css'
+import './HelpPopout.scss'
 
 const DeactivatablePopout = WithDeactivateOnOutsideClick(Popout)
 

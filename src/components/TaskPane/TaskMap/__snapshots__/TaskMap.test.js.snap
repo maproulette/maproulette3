@@ -6,26 +6,26 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskMap
     centerPoint={
-        Object {
-            "lat": 0,
-            "lng": 0,
-          }
+      Object {
+        "lat": 0,
+        "lng": 0,
+      }
     }
-    setTaskMapBounds={[Function]}
+    setTaskMapBounds={[MockFunction]}
     task={
-        Object {
-            "geometries": Object {
-              "features": null,
-            },
-            "id": 2,
-            "parent": Object {
-              "defaultZoom": 2,
-              "maxZoom": 0,
-              "minZoom": 1,
-            },
-          }
+      Object {
+        "geometries": Object {
+          "features": null,
+        },
+        "id": 2,
+        "parent": Object {
+          "defaultZoom": 2,
+          "maxZoom": 0,
+          "minZoom": 1,
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -41,39 +41,38 @@ ShallowWrapper {
       "children": Array [
         <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
           centerPoint={
-                    Object {
-                              "lat": 0,
-                              "lng": 0,
-                            }
+            Object {
+              "lat": 0,
+              "lng": 0,
+            }
           }
           mapillaryCount={0}
           mapillaryLoading={false}
-          setTaskMapBounds={[Function]}
-          showMapillary={undefined}
+          setTaskMapBounds={[MockFunction]}
           showTaskFeatures={true}
           task={
-                    Object {
-                              "geometries": Object {
-                                "features": null,
-                              },
-                              "id": 2,
-                              "parent": Object {
-                                "defaultZoom": 2,
-                                "maxZoom": 0,
-                                "minZoom": 1,
-                              },
-                            }
+            Object {
+              "geometries": Object {
+                "features": null,
+              },
+              "id": 2,
+              "parent": Object {
+                "defaultZoom": 2,
+                "maxZoom": 0,
+                "minZoom": 1,
+              },
+            }
           }
           toggleMapillary={[Function]}
           toggleTaskFeatures={[Function]}
-/>,
+        />,
         <EnhancedMap
           animateFeatures={true}
           center={
-                    Object {
-                              "lat": 0,
-                              "lng": 0,
-                            }
+            Object {
+              "lat": 0,
+              "lng": 0,
+            }
           }
           features={null}
           fitFeaturesOnlyAsNecessary={true}
@@ -85,36 +84,36 @@ ShallowWrapper {
           worldCopyJump={true}
           zoom={2}
           zoomControl={false}
->
+        >
           <ZoomControl
-                    position="topright"
+            position="topright"
           />
           <Connect(InjectIntl(FitBoundsControl)) />
           <InjectIntl(SourcedTileLayer)
-                    centerPoint={
-                              Object {
-                                        "lat": 0,
-                                        "lng": 0,
-                                      }
-                    }
-                    maxZoom={0}
-                    setTaskMapBounds={[Function]}
-                    task={
-                              Object {
-                                        "geometries": Object {
-                                          "features": null,
-                                        },
-                                        "id": 2,
-                                        "parent": Object {
-                                          "defaultZoom": 2,
-                                          "maxZoom": 0,
-                                          "minZoom": 1,
-                                        },
-                                      }
-                    }
-                    zIndex={1}
+            centerPoint={
+              Object {
+                "lat": 0,
+                "lng": 0,
+              }
+            }
+            maxZoom={0}
+            setTaskMapBounds={[MockFunction]}
+            task={
+              Object {
+                "geometries": Object {
+                  "features": null,
+                },
+                "id": 2,
+                "parent": Object {
+                  "defaultZoom": 2,
+                  "maxZoom": 0,
+                  "minZoom": 1,
+                },
+              }
+            }
+            zIndex={1}
           />
-</EnhancedMap>,
+        </EnhancedMap>,
         null,
       ],
       "className": "task-map full-screen-map task",
@@ -132,7 +131,7 @@ ShallowWrapper {
           },
           "mapillaryCount": 0,
           "mapillaryLoading": false,
-          "setTaskMapBounds": [Function],
+          "setTaskMapBounds": [MockFunction],
           "showMapillary": undefined,
           "showTaskFeatures": true,
           "task": Object {
@@ -166,32 +165,32 @@ ShallowWrapper {
           "children": Array [
             <ZoomControl
               position="topright"
-/>,
+            />,
             <Connect(InjectIntl(FitBoundsControl)) />,
             <InjectIntl(SourcedTileLayer)
               centerPoint={
-                            Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        }
+                Object {
+                  "lat": 0,
+                  "lng": 0,
+                }
               }
               maxZoom={0}
-              setTaskMapBounds={[Function]}
+              setTaskMapBounds={[MockFunction]}
               task={
-                            Object {
-                                          "geometries": Object {
-                                            "features": null,
-                                          },
-                                          "id": 2,
-                                          "parent": Object {
-                                            "defaultZoom": 2,
-                                            "maxZoom": 0,
-                                            "minZoom": 1,
-                                          },
-                                        }
+                Object {
+                  "geometries": Object {
+                    "features": null,
+                  },
+                  "id": 2,
+                  "parent": Object {
+                    "defaultZoom": 2,
+                    "maxZoom": 0,
+                    "minZoom": 1,
+                  },
+                }
               }
               zIndex={1}
-/>,
+            />,
             Array [],
             undefined,
           ],
@@ -238,7 +237,7 @@ ShallowWrapper {
                 "lng": 0,
               },
               "maxZoom": 0,
-              "setTaskMapBounds": [Function],
+              "setTaskMapBounds": [MockFunction],
               "task": Object {
                 "geometries": Object {
                   "features": null,
@@ -273,39 +272,38 @@ ShallowWrapper {
         "children": Array [
           <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
             centerPoint={
-                        Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  }
+              Object {
+                "lat": 0,
+                "lng": 0,
+              }
             }
             mapillaryCount={0}
             mapillaryLoading={false}
-            setTaskMapBounds={[Function]}
-            showMapillary={undefined}
+            setTaskMapBounds={[MockFunction]}
             showTaskFeatures={true}
             task={
-                        Object {
-                                    "geometries": Object {
-                                      "features": null,
-                                    },
-                                    "id": 2,
-                                    "parent": Object {
-                                      "defaultZoom": 2,
-                                      "maxZoom": 0,
-                                      "minZoom": 1,
-                                    },
-                                  }
+              Object {
+                "geometries": Object {
+                  "features": null,
+                },
+                "id": 2,
+                "parent": Object {
+                  "defaultZoom": 2,
+                  "maxZoom": 0,
+                  "minZoom": 1,
+                },
+              }
             }
             toggleMapillary={[Function]}
             toggleTaskFeatures={[Function]}
-/>,
+          />,
           <EnhancedMap
             animateFeatures={true}
             center={
-                        Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  }
+              Object {
+                "lat": 0,
+                "lng": 0,
+              }
             }
             features={null}
             fitFeaturesOnlyAsNecessary={true}
@@ -317,36 +315,36 @@ ShallowWrapper {
             worldCopyJump={true}
             zoom={2}
             zoomControl={false}
->
+          >
             <ZoomControl
-                        position="topright"
+              position="topright"
             />
             <Connect(InjectIntl(FitBoundsControl)) />
             <InjectIntl(SourcedTileLayer)
-                        centerPoint={
-                                    Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              }
-                        }
-                        maxZoom={0}
-                        setTaskMapBounds={[Function]}
-                        task={
-                                    Object {
-                                                "geometries": Object {
-                                                  "features": null,
-                                                },
-                                                "id": 2,
-                                                "parent": Object {
-                                                  "defaultZoom": 2,
-                                                  "maxZoom": 0,
-                                                  "minZoom": 1,
-                                                },
-                                              }
-                        }
-                        zIndex={1}
+              centerPoint={
+                Object {
+                  "lat": 0,
+                  "lng": 0,
+                }
+              }
+              maxZoom={0}
+              setTaskMapBounds={[MockFunction]}
+              task={
+                Object {
+                  "geometries": Object {
+                    "features": null,
+                  },
+                  "id": 2,
+                  "parent": Object {
+                    "defaultZoom": 2,
+                    "maxZoom": 0,
+                    "minZoom": 1,
+                  },
+                }
+              }
+              zIndex={1}
             />
-</EnhancedMap>,
+          </EnhancedMap>,
           null,
         ],
         "className": "task-map full-screen-map task",
@@ -364,7 +362,7 @@ ShallowWrapper {
             },
             "mapillaryCount": 0,
             "mapillaryLoading": false,
-            "setTaskMapBounds": [Function],
+            "setTaskMapBounds": [MockFunction],
             "showMapillary": undefined,
             "showTaskFeatures": true,
             "task": Object {
@@ -398,32 +396,32 @@ ShallowWrapper {
             "children": Array [
               <ZoomControl
                 position="topright"
-/>,
+              />,
               <Connect(InjectIntl(FitBoundsControl)) />,
               <InjectIntl(SourcedTileLayer)
                 centerPoint={
-                                Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              }
+                  Object {
+                    "lat": 0,
+                    "lng": 0,
+                  }
                 }
                 maxZoom={0}
-                setTaskMapBounds={[Function]}
+                setTaskMapBounds={[MockFunction]}
                 task={
-                                Object {
-                                                "geometries": Object {
-                                                  "features": null,
-                                                },
-                                                "id": 2,
-                                                "parent": Object {
-                                                  "defaultZoom": 2,
-                                                  "maxZoom": 0,
-                                                  "minZoom": 1,
-                                                },
-                                              }
+                  Object {
+                    "geometries": Object {
+                      "features": null,
+                    },
+                    "id": 2,
+                    "parent": Object {
+                      "defaultZoom": 2,
+                      "maxZoom": 0,
+                      "minZoom": 1,
+                    },
+                  }
                 }
                 zIndex={1}
-/>,
+              />,
               Array [],
               undefined,
             ],
@@ -470,7 +468,7 @@ ShallowWrapper {
                   "lng": 0,
                 },
                 "maxZoom": 0,
-                "setTaskMapBounds": [Function],
+                "setTaskMapBounds": [MockFunction],
                 "task": Object {
                   "geometries": Object {
                     "features": null,

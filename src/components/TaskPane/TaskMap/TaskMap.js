@@ -25,7 +25,7 @@ import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import BusySpinner from '../../BusySpinner/BusySpinner'
-import './TaskMap.css'
+import './TaskMap.scss'
 
 /**
  * TaskMap renders a map (and controls) appropriate for the given task,

@@ -5,7 +5,7 @@ import { registerBlockType } from '../BlockTypes'
 import CompletionRadar from '../../CompletionRadar/CompletionRadar'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './StatusRadarBlock.css'
+import './StatusRadarBlock.scss'
 
 const descriptor = {
   blockKey: 'StatusRadarBlock',
@@ -16,7 +16,7 @@ const descriptor = {
   defaultHeight: 12,
 }
 
-export class StatusRadarBlock extends Component {
+export default class StatusRadarBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

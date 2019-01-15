@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl'
 import { TaskLoadMethod, messagesByLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import messages from './Messages'
-import './TaskRandomnessControl.css'
+import './TaskRandomnessControl.scss'
 
 /**
  * TaskRandomnessControl displays a switch for toggling tracking of the current

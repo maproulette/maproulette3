@@ -1,5 +1,5 @@
 import React from 'react'
-import './Sprites.css'
+import './Sprites.scss'
 
 /**
  * Most of these are from [Zondicons](http://www.zondicons.com/icons.html)

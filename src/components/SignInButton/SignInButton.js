@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import messages from './Messages'
-import './SignInButton.css'
+import './SignInButton.scss'
 
 /**
  * Renders a sign-in button that takes the user to OpenStreetMap oauth

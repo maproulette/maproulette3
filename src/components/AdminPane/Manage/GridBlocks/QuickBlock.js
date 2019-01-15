@@ -48,6 +48,7 @@ export default class QuickBlock extends Component {
               }
 
               <MenuControl>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a className="is-danger" onClick={this.props.removeBlock}>Remove</a>
               </MenuControl>
             </DeactivatableDropdown>

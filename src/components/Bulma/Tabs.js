@@ -24,6 +24,7 @@ export default class Tabs extends Component {
             "is-active": this.state.activeTab ?
                         name === this.state.activeTab :
                         name === _first(tabNames)})}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => this.setState({activeTab: name})}>{name}</a>
       </li>
     ))

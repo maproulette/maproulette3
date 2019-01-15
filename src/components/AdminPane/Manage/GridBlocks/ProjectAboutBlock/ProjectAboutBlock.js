@@ -5,7 +5,7 @@ import { registerBlockType } from '../BlockTypes'
 import MarkdownContent from '../../../../MarkdownContent/MarkdownContent'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './ProjectAboutBlock.css'
+import './ProjectAboutBlock.scss'
 
 const descriptor = {
   blockKey: 'ProjectAboutBlock',
@@ -16,7 +16,7 @@ const descriptor = {
   defaultHeight: 7,
 }
 
-export class ProjectAboutBlock extends Component {
+export default class ProjectAboutBlock extends Component {
   render() {
     return (
       <QuickBlock {...this.props}

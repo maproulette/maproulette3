@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './TaskNextControl.css'
+import './TaskNextControl.scss'
 
 /**
  * TaskNextControl displays a control for loading a new task without altering

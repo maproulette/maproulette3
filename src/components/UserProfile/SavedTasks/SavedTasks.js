@@ -33,9 +33,10 @@ export default class SavedTasks extends Component {
 
             <span className="connector" />
 
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a className='button is-clear'
-              onClick={() => this.props.unsaveTask(this.props.user.id, task.id)}
-              title={this.props.intl.formatMessage(messages.unsave)}>
+               onClick={() => this.props.unsaveTask(this.props.user.id, task.id)}
+               title={this.props.intl.formatMessage(messages.unsave)}>
               <SvgSymbol className='icon' sym='trash-icon' viewBox='0 0 20 20' />
             </a>
           </li>

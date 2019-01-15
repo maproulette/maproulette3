@@ -7,7 +7,7 @@ import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './CalendarHeatmapBlock.css'
+import './CalendarHeatmapBlock.scss'
 
 const descriptor = {
   blockKey: 'CalendarHeatmapBlock',
@@ -21,7 +21,7 @@ const descriptor = {
   },
 }
 
-export class CalendarHeatmapBlock extends Component {
+export default class CalendarHeatmapBlock extends Component {
   setMonthsPast = monthsPast => {
     if (this.props.blockConfiguration.monthsPast !== monthsPast) {
       this.props.updateBlockConfiguration({monthsPast})

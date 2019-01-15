@@ -50,6 +50,7 @@ export default class OwnerContactLink extends Component {
 
     if (!this.state.contactUrl) {
       return (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a className="active-task-details__contact-owner"
            onClick={this.updateContactOwnerUrl}>
           <SvgSymbol viewBox='0 0 20 20' sym="envelope-icon" />
@@ -61,7 +62,8 @@ export default class OwnerContactLink extends Component {
     return (
       <a className="active-task-details__contact-owner"
           href={this.state.contactUrl}
-          target='_blank'>
+          target='_blank'
+          rel="noopener noreferrer">
         <SvgSymbol viewBox='0 0 20 20' sym="envelope-icon" />
         <FormattedMessage {...messages.contactLinkLabel}
                           values={{owner: this.state.osmUsername}} />

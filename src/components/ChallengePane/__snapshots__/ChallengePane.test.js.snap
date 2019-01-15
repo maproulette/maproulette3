@@ -6,20 +6,20 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengePane
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
-    saveChallenge={[Function]}
-    startChallenge={[Function]}
-    unsaveChallenge={[Function]}
+    saveChallenge={[MockFunction]}
+    startChallenge={[MockFunction]}
+    unsaveChallenge={[MockFunction]}
     user={
-        Object {
-            "id": 11,
-            "savedChallenges": Array [],
-          }
+      Object {
+        "id": 11,
+        "savedChallenges": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -36,97 +36,95 @@ ShallowWrapper {
         false,
         <Component
           intl={
-                    Object {
-                              "formatMessage": [Function],
-                            }
+            Object {
+              "formatMessage": [MockFunction],
+            }
           }
-          saveChallenge={[Function]}
-          startChallenge={[Function]}
-          unsaveChallenge={[Function]}
+          saveChallenge={[MockFunction]}
+          startChallenge={[MockFunction]}
+          unsaveChallenge={[MockFunction]}
           user={
-                    Object {
-                              "id": 11,
-                              "savedChallenges": Array [],
-                            }
+            Object {
+              "id": 11,
+              "savedChallenges": Array [],
+            }
           }
-/>,
+        />,
         <div
           className="challenge-pane"
->
+        >
           <MediaQuery
-                    maxWidth={900}
-                    values={Object {}}
+            maxWidth={900}
+            values={Object {}}
           >
-                    <Sidebar
-                              className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
-                              isActive={true}
-                              toggleMinimized={[Function]}
-                    >
-                              <Connect(Connect(Component))
-                                        intl={
-                                                  Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                        }
-                                        saveChallenge={[Function]}
-                                        startChallenge={[Function]}
-                                        unsaveChallenge={[Function]}
-                                        user={
-                                                  Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                        }
-                              />
-                    </Sidebar>
+            <Sidebar
+              className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+              isActive={true}
+              toggleMinimized={[Function]}
+            >
+              <Connect(Connect(Component))
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction],
+                  }
+                }
+                saveChallenge={[MockFunction]}
+                startChallenge={[MockFunction]}
+                unsaveChallenge={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+            </Sidebar>
           </MediaQuery>
           <MediaQuery
-                    minWidth={901}
-                    values={Object {}}
+            minWidth={901}
+            values={Object {}}
           >
-                    <Sidebar
-                              className="inline full-screen-height with-shadow challenge-pane__results"
-                              isActive={true}
-                    >
-                              <Connect(Connect(Component))
-                                        intl={
-                                                  Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                        }
-                                        saveChallenge={[Function]}
-                                        startChallenge={[Function]}
-                                        unsaveChallenge={[Function]}
-                                        user={
-                                                  Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                        }
-                              />
-                    </Sidebar>
+            <Sidebar
+              className="inline full-screen-height with-shadow challenge-pane__results"
+              isActive={true}
+            >
+              <Connect(Connect(Component))
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction],
+                  }
+                }
+                saveChallenge={[MockFunction]}
+                startChallenge={[MockFunction]}
+                unsaveChallenge={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+            </Sidebar>
           </MediaQuery>
           <Connect(MapPane)>
-                    <Connect(Connect(Connect(Component)))
-                              challenge={undefined}
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              onTaskClick={undefined}
-                              saveChallenge={[Function]}
-                              startChallenge={[Function]}
-                              unsaveChallenge={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
+            <Connect(Connect(Connect(Component)))
+              intl={
+                Object {
+                  "formatMessage": [MockFunction],
+                }
+              }
+              saveChallenge={[MockFunction]}
+              startChallenge={[MockFunction]}
+              unsaveChallenge={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
           </Connect(MapPane)>
-</div>,
+        </div>,
       ],
     },
     "ref": null,
@@ -138,11 +136,11 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "intl": Object {
-            "formatMessage": [Function],
+            "formatMessage": [MockFunction],
           },
-          "saveChallenge": [Function],
-          "startChallenge": [Function],
-          "unsaveChallenge": [Function],
+          "saveChallenge": [MockFunction],
+          "startChallenge": [MockFunction],
+          "unsaveChallenge": [MockFunction],
           "user": Object {
             "id": 11,
             "savedChallenges": Array [],
@@ -161,76 +159,74 @@ ShallowWrapper {
             <MediaQuery
               maxWidth={900}
               values={Object {}}
->
+            >
               <Sidebar
-                            className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
-                            isActive={true}
-                            toggleMinimized={[Function]}
+                className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                isActive={true}
+                toggleMinimized={[Function]}
               >
-                            <Connect(Connect(Component))
-                                          intl={
-                                                        Object {
-                                                                      "formatMessage": [Function],
-                                                                    }
-                                          }
-                                          saveChallenge={[Function]}
-                                          startChallenge={[Function]}
-                                          unsaveChallenge={[Function]}
-                                          user={
-                                                        Object {
-                                                                      "id": 11,
-                                                                      "savedChallenges": Array [],
-                                                                    }
-                                          }
-                            />
+                <Connect(Connect(Component))
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
+                  }
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
+                />
               </Sidebar>
-</MediaQuery>,
+            </MediaQuery>,
             <MediaQuery
               minWidth={901}
               values={Object {}}
->
+            >
               <Sidebar
-                            className="inline full-screen-height with-shadow challenge-pane__results"
-                            isActive={true}
+                className="inline full-screen-height with-shadow challenge-pane__results"
+                isActive={true}
               >
-                            <Connect(Connect(Component))
-                                          intl={
-                                                        Object {
-                                                                      "formatMessage": [Function],
-                                                                    }
-                                          }
-                                          saveChallenge={[Function]}
-                                          startChallenge={[Function]}
-                                          unsaveChallenge={[Function]}
-                                          user={
-                                                        Object {
-                                                                      "id": 11,
-                                                                      "savedChallenges": Array [],
-                                                                    }
-                                          }
-                            />
+                <Connect(Connect(Component))
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
+                  }
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
+                />
               </Sidebar>
-</MediaQuery>,
+            </MediaQuery>,
             <Connect(MapPane)>
               <Connect(Connect(Connect(Component)))
-                            challenge={undefined}
-                            intl={
-                                          Object {
-                                                        "formatMessage": [Function],
-                                                      }
-                            }
-                            onTaskClick={undefined}
-                            saveChallenge={[Function]}
-                            startChallenge={[Function]}
-                            unsaveChallenge={[Function]}
-                            user={
-                                          Object {
-                                                        "id": 11,
-                                                        "savedChallenges": Array [],
-                                                      }
-                            }
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction],
+                  }
+                }
+                saveChallenge={[MockFunction]}
+                startChallenge={[MockFunction]}
+                unsaveChallenge={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
               />
-</Connect(MapPane)>,
+            </Connect(MapPane)>,
           ],
           "className": "challenge-pane",
         },
@@ -245,24 +241,24 @@ ShallowWrapper {
                 className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
                 isActive={true}
                 toggleMinimized={[Function]}
->
+              >
                 <Connect(Connect(Component))
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                saveChallenge={[Function]}
-                                startChallenge={[Function]}
-                                unsaveChallenge={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
+                  }
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
                 />
-</Sidebar>,
+              </Sidebar>,
               "maxWidth": 900,
               "values": Object {},
             },
@@ -274,20 +270,20 @@ ShallowWrapper {
               "props": Object {
                 "children": <Connect(Connect(Component))
                   intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
                   }
-                  saveChallenge={[Function]}
-                  startChallenge={[Function]}
-                  unsaveChallenge={[Function]}
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
                   user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
                   }
-/>,
+                />,
                 "className": "inline full-screen-height with-shadow challenge-pane__results is-minimized",
                 "isActive": true,
                 "toggleMinimized": [Function],
@@ -299,11 +295,11 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "intl": Object {
-                    "formatMessage": [Function],
+                    "formatMessage": [MockFunction],
                   },
-                  "saveChallenge": [Function],
-                  "startChallenge": [Function],
-                  "unsaveChallenge": [Function],
+                  "saveChallenge": [MockFunction],
+                  "startChallenge": [MockFunction],
+                  "unsaveChallenge": [MockFunction],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -325,24 +321,24 @@ ShallowWrapper {
               "children": <Sidebar
                 className="inline full-screen-height with-shadow challenge-pane__results"
                 isActive={true}
->
+              >
                 <Connect(Connect(Component))
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                saveChallenge={[Function]}
-                                startChallenge={[Function]}
-                                unsaveChallenge={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
+                  }
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
                 />
-</Sidebar>,
+              </Sidebar>,
               "minWidth": 901,
               "values": Object {},
             },
@@ -354,20 +350,20 @@ ShallowWrapper {
               "props": Object {
                 "children": <Connect(Connect(Component))
                   intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
                   }
-                  saveChallenge={[Function]}
-                  startChallenge={[Function]}
-                  unsaveChallenge={[Function]}
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
                   user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
                   }
-/>,
+                />,
                 "className": "inline full-screen-height with-shadow challenge-pane__results",
                 "isActive": true,
               },
@@ -378,11 +374,11 @@ ShallowWrapper {
                 "nodeType": "class",
                 "props": Object {
                   "intl": Object {
-                    "formatMessage": [Function],
+                    "formatMessage": [MockFunction],
                   },
-                  "saveChallenge": [Function],
-                  "startChallenge": [Function],
-                  "unsaveChallenge": [Function],
+                  "saveChallenge": [MockFunction],
+                  "startChallenge": [MockFunction],
+                  "unsaveChallenge": [MockFunction],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -402,23 +398,21 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <Connect(Connect(Connect(Component)))
-                challenge={undefined}
                 intl={
-                                Object {
-                                                "formatMessage": [Function],
-                                              }
+                  Object {
+                    "formatMessage": [MockFunction],
+                  }
                 }
-                onTaskClick={undefined}
-                saveChallenge={[Function]}
-                startChallenge={[Function]}
-                unsaveChallenge={[Function]}
+                saveChallenge={[MockFunction]}
+                startChallenge={[MockFunction]}
+                unsaveChallenge={[MockFunction]}
                 user={
-                                Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
                 }
-/>,
+              />,
             },
             "ref": null,
             "rendered": Object {
@@ -428,12 +422,12 @@ ShallowWrapper {
               "props": Object {
                 "challenge": undefined,
                 "intl": Object {
-                  "formatMessage": [Function],
+                  "formatMessage": [MockFunction],
                 },
                 "onTaskClick": undefined,
-                "saveChallenge": [Function],
-                "startChallenge": [Function],
-                "unsaveChallenge": [Function],
+                "saveChallenge": [MockFunction],
+                "startChallenge": [MockFunction],
+                "unsaveChallenge": [MockFunction],
                 "user": Object {
                   "id": 11,
                   "savedChallenges": Array [],
@@ -461,97 +455,95 @@ ShallowWrapper {
           false,
           <Component
             intl={
-                        Object {
-                                    "formatMessage": [Function],
-                                  }
+              Object {
+                "formatMessage": [MockFunction],
+              }
             }
-            saveChallenge={[Function]}
-            startChallenge={[Function]}
-            unsaveChallenge={[Function]}
+            saveChallenge={[MockFunction]}
+            startChallenge={[MockFunction]}
+            unsaveChallenge={[MockFunction]}
             user={
-                        Object {
-                                    "id": 11,
-                                    "savedChallenges": Array [],
-                                  }
+              Object {
+                "id": 11,
+                "savedChallenges": Array [],
+              }
             }
-/>,
+          />,
           <div
             className="challenge-pane"
->
+          >
             <MediaQuery
-                        maxWidth={900}
-                        values={Object {}}
+              maxWidth={900}
+              values={Object {}}
             >
-                        <Sidebar
-                                    className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
-                                    isActive={true}
-                                    toggleMinimized={[Function]}
-                        >
-                                    <Connect(Connect(Component))
-                                                intl={
-                                                            Object {
-                                                                        "formatMessage": [Function],
-                                                                      }
-                                                }
-                                                saveChallenge={[Function]}
-                                                startChallenge={[Function]}
-                                                unsaveChallenge={[Function]}
-                                                user={
-                                                            Object {
-                                                                        "id": 11,
-                                                                        "savedChallenges": Array [],
-                                                                      }
-                                                }
-                                    />
-                        </Sidebar>
+              <Sidebar
+                className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                isActive={true}
+                toggleMinimized={[Function]}
+              >
+                <Connect(Connect(Component))
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
+                  }
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
+                />
+              </Sidebar>
             </MediaQuery>
             <MediaQuery
-                        minWidth={901}
-                        values={Object {}}
+              minWidth={901}
+              values={Object {}}
             >
-                        <Sidebar
-                                    className="inline full-screen-height with-shadow challenge-pane__results"
-                                    isActive={true}
-                        >
-                                    <Connect(Connect(Component))
-                                                intl={
-                                                            Object {
-                                                                        "formatMessage": [Function],
-                                                                      }
-                                                }
-                                                saveChallenge={[Function]}
-                                                startChallenge={[Function]}
-                                                unsaveChallenge={[Function]}
-                                                user={
-                                                            Object {
-                                                                        "id": 11,
-                                                                        "savedChallenges": Array [],
-                                                                      }
-                                                }
-                                    />
-                        </Sidebar>
+              <Sidebar
+                className="inline full-screen-height with-shadow challenge-pane__results"
+                isActive={true}
+              >
+                <Connect(Connect(Component))
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
+                  }
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
+                />
+              </Sidebar>
             </MediaQuery>
             <Connect(MapPane)>
-                        <Connect(Connect(Connect(Component)))
-                                    challenge={undefined}
-                                    intl={
-                                                Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                    }
-                                    onTaskClick={undefined}
-                                    saveChallenge={[Function]}
-                                    startChallenge={[Function]}
-                                    unsaveChallenge={[Function]}
-                                    user={
-                                                Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                    }
-                        />
+              <Connect(Connect(Connect(Component)))
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction],
+                  }
+                }
+                saveChallenge={[MockFunction]}
+                startChallenge={[MockFunction]}
+                unsaveChallenge={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
             </Connect(MapPane)>
-</div>,
+          </div>,
         ],
       },
       "ref": null,
@@ -563,11 +555,11 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "intl": Object {
-              "formatMessage": [Function],
+              "formatMessage": [MockFunction],
             },
-            "saveChallenge": [Function],
-            "startChallenge": [Function],
-            "unsaveChallenge": [Function],
+            "saveChallenge": [MockFunction],
+            "startChallenge": [MockFunction],
+            "unsaveChallenge": [MockFunction],
             "user": Object {
               "id": 11,
               "savedChallenges": Array [],
@@ -586,76 +578,74 @@ ShallowWrapper {
               <MediaQuery
                 maxWidth={900}
                 values={Object {}}
->
+              >
                 <Sidebar
-                                className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
-                                isActive={true}
-                                toggleMinimized={[Function]}
+                  className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
+                  isActive={true}
+                  toggleMinimized={[Function]}
                 >
-                                <Connect(Connect(Component))
-                                                intl={
-                                                                Object {
-                                                                                "formatMessage": [Function],
-                                                                              }
-                                                }
-                                                saveChallenge={[Function]}
-                                                startChallenge={[Function]}
-                                                unsaveChallenge={[Function]}
-                                                user={
-                                                                Object {
-                                                                                "id": 11,
-                                                                                "savedChallenges": Array [],
-                                                                              }
-                                                }
-                                />
+                  <Connect(Connect(Component))
+                    intl={
+                      Object {
+                        "formatMessage": [MockFunction],
+                      }
+                    }
+                    saveChallenge={[MockFunction]}
+                    startChallenge={[MockFunction]}
+                    unsaveChallenge={[MockFunction]}
+                    user={
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
+                    }
+                  />
                 </Sidebar>
-</MediaQuery>,
+              </MediaQuery>,
               <MediaQuery
                 minWidth={901}
                 values={Object {}}
->
+              >
                 <Sidebar
-                                className="inline full-screen-height with-shadow challenge-pane__results"
-                                isActive={true}
+                  className="inline full-screen-height with-shadow challenge-pane__results"
+                  isActive={true}
                 >
-                                <Connect(Connect(Component))
-                                                intl={
-                                                                Object {
-                                                                                "formatMessage": [Function],
-                                                                              }
-                                                }
-                                                saveChallenge={[Function]}
-                                                startChallenge={[Function]}
-                                                unsaveChallenge={[Function]}
-                                                user={
-                                                                Object {
-                                                                                "id": 11,
-                                                                                "savedChallenges": Array [],
-                                                                              }
-                                                }
-                                />
+                  <Connect(Connect(Component))
+                    intl={
+                      Object {
+                        "formatMessage": [MockFunction],
+                      }
+                    }
+                    saveChallenge={[MockFunction]}
+                    startChallenge={[MockFunction]}
+                    unsaveChallenge={[MockFunction]}
+                    user={
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
+                    }
+                  />
                 </Sidebar>
-</MediaQuery>,
+              </MediaQuery>,
               <Connect(MapPane)>
                 <Connect(Connect(Connect(Component)))
-                                challenge={undefined}
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                onTaskClick={undefined}
-                                saveChallenge={[Function]}
-                                startChallenge={[Function]}
-                                unsaveChallenge={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
+                  }
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
                 />
-</Connect(MapPane)>,
+              </Connect(MapPane)>,
             ],
             "className": "challenge-pane",
           },
@@ -670,24 +660,24 @@ ShallowWrapper {
                   className="inline full-screen-height with-shadow challenge-pane__results is-minimized"
                   isActive={true}
                   toggleMinimized={[Function]}
->
+                >
                   <Connect(Connect(Component))
-                                    intl={
-                                                      Object {
-                                                                        "formatMessage": [Function],
-                                                                      }
-                                    }
-                                    saveChallenge={[Function]}
-                                    startChallenge={[Function]}
-                                    unsaveChallenge={[Function]}
-                                    user={
-                                                      Object {
-                                                                        "id": 11,
-                                                                        "savedChallenges": Array [],
-                                                                      }
-                                    }
+                    intl={
+                      Object {
+                        "formatMessage": [MockFunction],
+                      }
+                    }
+                    saveChallenge={[MockFunction]}
+                    startChallenge={[MockFunction]}
+                    unsaveChallenge={[MockFunction]}
+                    user={
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
+                    }
                   />
-</Sidebar>,
+                </Sidebar>,
                 "maxWidth": 900,
                 "values": Object {},
               },
@@ -699,20 +689,20 @@ ShallowWrapper {
                 "props": Object {
                   "children": <Connect(Connect(Component))
                     intl={
-                                        Object {
-                                                            "formatMessage": [Function],
-                                                          }
+                      Object {
+                        "formatMessage": [MockFunction],
+                      }
                     }
-                    saveChallenge={[Function]}
-                    startChallenge={[Function]}
-                    unsaveChallenge={[Function]}
+                    saveChallenge={[MockFunction]}
+                    startChallenge={[MockFunction]}
+                    unsaveChallenge={[MockFunction]}
                     user={
-                                        Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
                     }
-/>,
+                  />,
                   "className": "inline full-screen-height with-shadow challenge-pane__results is-minimized",
                   "isActive": true,
                   "toggleMinimized": [Function],
@@ -724,11 +714,11 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "intl": Object {
-                      "formatMessage": [Function],
+                      "formatMessage": [MockFunction],
                     },
-                    "saveChallenge": [Function],
-                    "startChallenge": [Function],
-                    "unsaveChallenge": [Function],
+                    "saveChallenge": [MockFunction],
+                    "startChallenge": [MockFunction],
+                    "unsaveChallenge": [MockFunction],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -750,24 +740,24 @@ ShallowWrapper {
                 "children": <Sidebar
                   className="inline full-screen-height with-shadow challenge-pane__results"
                   isActive={true}
->
+                >
                   <Connect(Connect(Component))
-                                    intl={
-                                                      Object {
-                                                                        "formatMessage": [Function],
-                                                                      }
-                                    }
-                                    saveChallenge={[Function]}
-                                    startChallenge={[Function]}
-                                    unsaveChallenge={[Function]}
-                                    user={
-                                                      Object {
-                                                                        "id": 11,
-                                                                        "savedChallenges": Array [],
-                                                                      }
-                                    }
+                    intl={
+                      Object {
+                        "formatMessage": [MockFunction],
+                      }
+                    }
+                    saveChallenge={[MockFunction]}
+                    startChallenge={[MockFunction]}
+                    unsaveChallenge={[MockFunction]}
+                    user={
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
+                    }
                   />
-</Sidebar>,
+                </Sidebar>,
                 "minWidth": 901,
                 "values": Object {},
               },
@@ -779,20 +769,20 @@ ShallowWrapper {
                 "props": Object {
                   "children": <Connect(Connect(Component))
                     intl={
-                                        Object {
-                                                            "formatMessage": [Function],
-                                                          }
+                      Object {
+                        "formatMessage": [MockFunction],
+                      }
                     }
-                    saveChallenge={[Function]}
-                    startChallenge={[Function]}
-                    unsaveChallenge={[Function]}
+                    saveChallenge={[MockFunction]}
+                    startChallenge={[MockFunction]}
+                    unsaveChallenge={[MockFunction]}
                     user={
-                                        Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
                     }
-/>,
+                  />,
                   "className": "inline full-screen-height with-shadow challenge-pane__results",
                   "isActive": true,
                 },
@@ -803,11 +793,11 @@ ShallowWrapper {
                   "nodeType": "class",
                   "props": Object {
                     "intl": Object {
-                      "formatMessage": [Function],
+                      "formatMessage": [MockFunction],
                     },
-                    "saveChallenge": [Function],
-                    "startChallenge": [Function],
-                    "unsaveChallenge": [Function],
+                    "saveChallenge": [MockFunction],
+                    "startChallenge": [MockFunction],
+                    "unsaveChallenge": [MockFunction],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -827,23 +817,21 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <Connect(Connect(Connect(Component)))
-                  challenge={undefined}
                   intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
+                    Object {
+                      "formatMessage": [MockFunction],
+                    }
                   }
-                  onTaskClick={undefined}
-                  saveChallenge={[Function]}
-                  startChallenge={[Function]}
-                  unsaveChallenge={[Function]}
+                  saveChallenge={[MockFunction]}
+                  startChallenge={[MockFunction]}
+                  unsaveChallenge={[MockFunction]}
                   user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
                   }
-/>,
+                />,
               },
               "ref": null,
               "rendered": Object {
@@ -853,12 +841,12 @@ ShallowWrapper {
                 "props": Object {
                   "challenge": undefined,
                   "intl": Object {
-                    "formatMessage": [Function],
+                    "formatMessage": [MockFunction],
                   },
                   "onTaskClick": undefined,
-                  "saveChallenge": [Function],
-                  "startChallenge": [Function],
-                  "unsaveChallenge": [Function],
+                  "saveChallenge": [MockFunction],
+                  "startChallenge": [MockFunction],
+                  "unsaveChallenge": [MockFunction],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],

@@ -17,7 +17,7 @@ import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import StartVirtualChallenge from './StartVirtualChallenge'
 import messages from './Messages'
-import './ChallengeResultList.css'
+import './ChallengeResultList.scss'
 
 /**
  * ChallengeResultList applies the current challenge filters and the given

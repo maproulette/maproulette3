@@ -13,7 +13,7 @@ import _reverse from 'lodash/reverse'
 import _each from 'lodash/each'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import messages from './Messages'
-import './CommentList.css'
+import './CommentList.scss'
 
 /**
  * CommentList renders the given comments as a list with some basic formatting,

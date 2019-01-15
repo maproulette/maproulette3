@@ -10,7 +10,7 @@ import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import 'react-tagsinput/react-tagsinput.css'
-import './RJSFFormFieldAdapter.css'
+import './RJSFFormFieldAdapter.scss'
 
 /**
  * CustomFieldTemplate returns an appropriate input field template for the

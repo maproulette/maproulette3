@@ -8,7 +8,7 @@ import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import { layerSourceWithId, OPEN_STREET_MAP }
        from '../../services/VisibleLayer/LayerSources'
 import messages from './Messages'
-import './PageNotFound.css'
+import './PageNotFound.scss'
 
 /**
  * PageNotFound displays a 404 message.

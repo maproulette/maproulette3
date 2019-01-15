@@ -13,7 +13,7 @@ import TaskEditControl from '../ActiveTaskControls/TaskEditControl/TaskEditContr
 import TaskCommentInput from '../ActiveTaskControls/TaskCommentInput/TaskCommentInput'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './ReviewTaskControls.css'
+import './ReviewTaskControls.scss'
 
 /**
  * ReviewTaskControls presents controls used during task review by a challenge

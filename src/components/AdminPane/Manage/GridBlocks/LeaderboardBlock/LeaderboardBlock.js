@@ -8,7 +8,7 @@ import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickBlock from '../QuickBlock'
 import messages from './Messages'
-import './LeaderboardBlock.css'
+import './LeaderboardBlock.scss'
 
 const descriptor = {
   blockKey: 'LeaderboardBlock',
@@ -22,7 +22,7 @@ const descriptor = {
   },
 }
 
-export class LeaderboardBlock extends Component {
+export default class LeaderboardBlock extends Component {
   setMonthsPast = monthsPast => {
     if (this.props.blockConfiguration.monthsPast !== monthsPast) {
       this.props.updateBlockConfiguration({monthsPast})

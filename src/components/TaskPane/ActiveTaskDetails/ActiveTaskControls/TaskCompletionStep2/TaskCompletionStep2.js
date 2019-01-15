@@ -6,7 +6,7 @@ import TaskTooHardControl from '../TaskTooHardControl/TaskTooHardControl'
 import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixedControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEditingControl'
-import './TaskCompletionStep2.css'
+import './TaskCompletionStep2.scss'
 
 /**
  * TaskCompletionStep2 presents controls for finishing up completion of a

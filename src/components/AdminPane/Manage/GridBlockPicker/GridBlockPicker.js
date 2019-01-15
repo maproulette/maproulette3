@@ -7,7 +7,7 @@ import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import DropdownButton from '../../../Bulma/DropdownButton'
 import messages from './Messages'
-import './GridBlockPicker.css'
+import './GridBlockPicker.scss'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
@@ -40,6 +40,7 @@ export class GridBlockPicker extends Component {
                                    className="grid-block-picker"
                                    options={menuOptions}
                                    onSelect={this.blockSelected}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="button is-rounded is-outlined is-secondary">
           <FormattedMessage {...messages.pickerLabel} />
           <div className="basic-dropdown-indicator" />

@@ -18,7 +18,7 @@ import ProjectFilterGroup from '../ProjectFilterGroup/ProjectFilterGroup'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './ProjectsDashboard.css'
+import './ProjectsDashboard.scss'
 
 // The name of this dashboard.
 const DASHBOARD_NAME = "projects"
@@ -55,6 +55,7 @@ export class ProjectsDashboard extends Component {
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   <FormattedMessage {...manageMessages.manageHeader} />
                 </a>

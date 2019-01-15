@@ -7,7 +7,7 @@ import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import DropdownButton from '../Bulma/DropdownButton'
 import messages from './Messages'
-import './PastDurationSelector.css'
+import './PastDurationSelector.scss'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 

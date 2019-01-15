@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Messages from  './Messages'
-import './TaskCommentInput.css'
+import './TaskCommentInput.scss'
 
 /**
  * TaskCommentInput renders an unmanaged input for allowing users to add an

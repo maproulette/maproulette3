@@ -16,7 +16,7 @@ import ProjectDashboard from './Manage/ProjectDashboard/ProjectDashboard'
 import ChallengeDashboard from './Manage/ChallengeDashboard/ChallengeDashboard'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
-import './AdminPane.css'
+import './AdminPane.scss'
 
 // Setup child components with needed HOCs.
 const MetricsSummary = WithChallenges(MetricsOverview)

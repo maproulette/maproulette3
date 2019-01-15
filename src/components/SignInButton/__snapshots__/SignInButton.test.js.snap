@@ -6,13 +6,13 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SignInButton
     history={
-        Object {
-            "location": Object {
-              "pathname": "/some/path",
-            },
-          }
+      Object {
+        "location": Object {
+          "pathname": "/some/path",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -29,7 +29,7 @@ ShallowWrapper {
         defaultMessage="Sign in"
         id="SignIn.control.label"
         values={Object {}}
-/>,
+      />,
       "className": "button is-outlined signin-button",
       "href": "/auth/authenticate?redirect=/mr3/some/path",
       "onClick": [Function],
@@ -60,7 +60,7 @@ ShallowWrapper {
           defaultMessage="Sign in"
           id="SignIn.control.label"
           values={Object {}}
-/>,
+        />,
         "className": "button is-outlined signin-button",
         "href": "/auth/authenticate?redirect=/mr3/some/path",
         "onClick": [Function],
@@ -98,13 +98,13 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <SignInButton
     history={
-        Object {
-            "location": Object {
-              "pathname": "/some/path",
-            },
-          }
+      Object {
+        "location": Object {
+          "pathname": "/some/path",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -121,7 +121,7 @@ ShallowWrapper {
         defaultMessage="Sign in"
         id="SignIn.control.label"
         values={Object {}}
-/>,
+      />,
       "className": "button is-outlined signin-button is-loading",
       "href": "/auth/authenticate?redirect=/mr3/some/path",
       "onClick": [Function],
@@ -152,7 +152,7 @@ ShallowWrapper {
           defaultMessage="Sign in"
           id="SignIn.control.label"
           values={Object {}}
-/>,
+        />,
         "className": "button is-outlined signin-button is-loading",
         "href": "/auth/authenticate?redirect=/mr3/some/path",
         "onClick": [Function],
@@ -191,13 +191,13 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <SignInButton
     checkingLoginStatus={true}
     history={
-        Object {
-            "location": Object {
-              "pathname": "/some/path",
-            },
-          }
+      Object {
+        "location": Object {
+          "pathname": "/some/path",
+        },
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -214,7 +214,7 @@ ShallowWrapper {
         defaultMessage="Sign in"
         id="SignIn.control.label"
         values={Object {}}
-/>,
+      />,
       "className": "button is-outlined signin-button is-loading",
       "href": "/auth/authenticate?redirect=/mr3/some/path",
       "onClick": [Function],
@@ -245,7 +245,7 @@ ShallowWrapper {
           defaultMessage="Sign in"
           id="SignIn.control.label"
           values={Object {}}
-/>,
+        />,
         "className": "button is-outlined signin-button is-loading",
         "href": "/auth/authenticate?redirect=/mr3/some/path",
         "onClick": [Function],

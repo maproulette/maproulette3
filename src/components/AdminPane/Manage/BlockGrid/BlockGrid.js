@@ -8,10 +8,10 @@ import WithGridBlockManagement
        from '../GridBlocks/WithGridBlockManagement/WithGridBlockManagement'
 import GridBlockPicker from '../GridBlockPicker/GridBlockPicker'
 import { blockComponent } from '../GridBlocks/BlockTypes'
-import "../../../../../node_modules/react-grid-layout/css/styles.css"
-import "../../../../../node_modules/react-resizable/css/styles.css"
+import "react-grid-layout/css/styles.css"
+import "react-resizable/css/styles.css"
 import '../GridBlocks/block_registry.js'
-import './BlockGrid.css'
+import './BlockGrid.scss'
 
 const GridLayout = WidthProvider(ReactGridLayout)
 

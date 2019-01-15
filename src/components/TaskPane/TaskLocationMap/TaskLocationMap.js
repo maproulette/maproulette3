@@ -4,7 +4,7 @@ import L from 'leaflet'
 import 'leaflet-vectoricon'
 import InsetMap from '../../InsetMap/InsetMap'
 import WithTaskCenterPoint from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
-import './TaskLocationMap.css'
+import './TaskLocationMap.scss'
 
 const starIconSvg = L.vectorIcon({
   className: 'star-marker-icon',

@@ -21,7 +21,7 @@ import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithMapBoundedTasks from '../HOCs/WithMapBoundedTasks/WithMapBoundedTasks'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
-import './ChallengePane.css'
+import './ChallengePane.scss'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)

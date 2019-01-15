@@ -7,7 +7,7 @@ import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './ShareLink.css'
+import './ShareLink.scss'
 
 /**
  * ShareLink presents a link icon that toggles a small Bulma dropdown

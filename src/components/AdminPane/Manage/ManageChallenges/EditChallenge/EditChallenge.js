@@ -58,7 +58,7 @@ import { jsSchema as step4jsSchema,
          uiSchema as step4uiSchema } from './Step4Schema'
 import manageMessages from '../../Messages'
 import messages from './Messages'
-import './EditChallenge.css'
+import './EditChallenge.scss'
 
 // Workflow steps for creating/editing challenges
 const challengeSteps = [
@@ -503,6 +503,7 @@ export class EditChallenge extends Component {
                     </li>
                   }
                   <li className="is-active">
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a aria-current="page">
                       {
                         this.isCloningChallenge() ?

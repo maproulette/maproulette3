@@ -5,7 +5,7 @@ import _pick from 'lodash/pick'
 import classNames from 'classnames'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './TaskCancelEditingControl.css'
+import './TaskCancelEditingControl.scss'
 
 /**
  * TaskCancelEditingControl displays a control for cancelling the current

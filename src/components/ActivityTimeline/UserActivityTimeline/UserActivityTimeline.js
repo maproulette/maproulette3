@@ -22,7 +22,7 @@ import { actionLabels,
 import { statusLabels,
          keysByStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
-import '../ActivityTimeline.css'
+import '../ActivityTimeline.scss'
 
 /**
  * UserActivityTimeline displays the given user activity in the form of a Bulma

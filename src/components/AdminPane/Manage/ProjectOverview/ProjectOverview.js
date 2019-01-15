@@ -4,7 +4,7 @@ import { FormattedMessage,
          FormattedDate } from 'react-intl'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import messages from './Messages'
-import './ProjectOverview.css'
+import './ProjectOverview.scss'
 
 /**
  * ProjectOverview displays some basic at-a-glance information about a Project

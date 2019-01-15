@@ -5,7 +5,7 @@ import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import TaskEditControl from '../TaskEditControl/TaskEditControl'
 import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
-import './TaskCompletionStep1.css'
+import './TaskCompletionStep1.scss'
 
 
 /**
