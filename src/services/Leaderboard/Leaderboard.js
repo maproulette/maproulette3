@@ -11,15 +11,16 @@ export const DEFAULT_LEADERBOARD_COUNT = 10
  * filters, returning a Promise that resolves to the leaderboard data. Note
  * that leaderboard data is *not* stored in the redux store.
  */
-export const fetchLeaderboard = function(numberMonths=1, onlyEnabled=true,
+export const fetchLeaderboard = function(numberMonths=null, onlyEnabled=true,
                                          forProjects=null, forChallenges=null,
-                                         forUsers=null, limit=DEFAULT_LEADERBOARD_COUNT) {
+                                         forUsers=null, forCountries=null,
+                                         limit=10) {
   const params = {
     limit,
     onlyEnabled
   }
 
-  initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges, forUsers)
+  initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges, forUsers, forCountries)
 
   return new Endpoint(api.users.leaderboard, {params}).execute()
 }
@@ -30,20 +31,21 @@ export const fetchLeaderboard = function(numberMonths=1, onlyEnabled=true,
  * that leaderboard data is *not* stored in the redux store.
  */
 export const fetchLeaderboardForUser = function(userId, bracket=0, numberMonths=1,
-                                         onlyEnabled=true, forProjects=null, forChallenges=null) {
+                                         onlyEnabled=true, forProjects=null, forChallenges=null,
+                                         forUsers=null, forCountries=null) {
   const params = {
     bracket,
     onlyEnabled
   }
-
-  initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges)
+  initializeLeaderboardParams(params, numberMonths, forProjects, forChallenges, null, forCountries)
 
   return new Endpoint(api.users.userLeaderboard, {variables: {id: userId}, params}).execute()
 }
 
 
 const initializeLeaderboardParams = function (params, numberMonths,
-                                              forProjects, forChallenges, forUsers) {
+                                              forProjects, forChallenges,
+                                              forUsers, forCountries) {
   params.monthDuration = numberMonths
 
   if (_isArray(forProjects)) {
@@ -56,5 +58,9 @@ const initializeLeaderboardParams = function (params, numberMonths,
 
   if (_isArray(forUsers)) {
     params.userIds = forUsers.join(',')
+  }
+
+  if (_isArray(forCountries)) {
+    params.countryCodes = forCountries.join(',')
   }
 }

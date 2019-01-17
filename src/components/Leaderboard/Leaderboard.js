@@ -13,8 +13,10 @@ import WithLeaderboard from '../HOCs/WithLeaderboard/WithLeaderboard'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
+import LeaderboardMap from './LeaderboardMap'
 import SimpleDropdown from '../Bulma/SimpleDropdown'
 import PastDurationSelector from '../PastDurationSelector/PastDurationSelector'
+import CountrySelector from '../CountrySelector/CountrySelector'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -133,6 +135,11 @@ export class Leaderboard extends Component {
                                     pastMonthsOptions={[1, 3, 6, 12]}
                                     currentMonthsPast={this.props.monthsPast}
                                     selectDuration={this.props.setMonthsPast} />
+              {this.props.leaderboardOptions.filterCountry &&
+                <CountrySelector className="leaderboard__board__header__country-control"
+                                      currentCountryCode={this.props.countryCode}
+                                      selectCountry={this.props.setCountryCode} />
+              }
              </h1>
 
              <div className="leaderboard__board__header__point-breakdown">
@@ -147,6 +154,10 @@ export class Leaderboard extends Component {
           }
           {this.props.displayName &&
             <h1 className="leaderboard__board__display-name">{this.props.displayName}</h1>
+          }
+
+          {this.props.leaderboardOptions.filterCountry &&
+            <LeaderboardMap {...this.props}/>
           }
 
           {this.props.leaderboard.length === 0 &&
