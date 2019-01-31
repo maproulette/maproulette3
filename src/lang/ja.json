@@ -247,7 +247,7 @@
   "Admin.manageTasks.controls.exportCSV.label": "CSVをエクスポート",
   "Metrics.tasks.evaluatedByUser.label": "ユーザー評価済のタスク",
   "AutosuggestTextBox.labels.noResults": "一致なし",
-  "Form.textUpload.prompt": "Drop GeoJSONファイルをここにドロップするか、クリックしてファイルを選択",
+  "Form.textUpload.prompt": "GeoJSONファイルをここにドロップするか、クリックしてファイルを選択",
   "Form.textUpload.readonly": "既存のファイルが使われます",
   "Form.controls.addPriorityRule.label": "ルールを追加",
   "ChallengeFilterSubnav.filter.difficulty.label": "難易度",
@@ -509,5 +509,6 @@
   "Locale.de.label": "de (Deutsch)",
   "Locale.fr.label": "fr (Français)",
   "Locale.af.label": "af (Afrikaans)",
-  "Locale.ja.label": "ja (日本語)"
+  "Locale.ja.label": "ja (日本語)",
+  "Locale.ko.label": "ko (한국어)"
 }
