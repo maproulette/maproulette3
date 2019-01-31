@@ -143,7 +143,7 @@
   "Admin.EditChallenge.form.defaultBasemap.label": "배경 지도",
   "Admin.EditChallenge.form.defaultBasemap.description": "도전에 적용될 기본 배경 지도입니다. 각 참여자들이 사용자 설정에서 지정한 기본 배경 지도보다 우선시됩니다.",
   "Admin.EditChallenge.form.customBasemap.label": "사용자 설정 배경 지도",
-  "Admin.EditChallenge.form.customBasemap.description": "`https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy} 같은 URL을 입력해서 원하는 배경 지도를 삽입할 수 있습니다.",
+  "Admin.EditChallenge.form.customBasemap.description": "URL을 입력해서 원하는 배경 지도를 삽입할 수 있습니다. 예시: `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy}",
   "Admin.ManageChallenges.header": "도전",
   "Admin.ManageChallenges.help.info": "도전은 오픈스트리트맵 데이터에 있는 특정한 문제나 결함을 지도에 표시하는 데 도움을 주는 수많은 작업들로 이루어져 있습니다. 도전을 처음 만들었을 때, 적어넣은 OverpassQL 쿼리를 통해서 자동으로 작업이 생성됩니다. 그러나 작업은 GeoJSON 지물을 담고 있는 파일이나 URL에서 가져올 수도 있씁니다. 도전은 원하는 대로 만들 수 있습니다.",
   "Admin.ManageChallenges.search.placeholder": "이름",
