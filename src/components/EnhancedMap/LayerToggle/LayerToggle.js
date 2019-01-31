@@ -75,12 +75,28 @@ export class LayerToggle extends Component {
             {this.props.toggleTaskFeatures &&
               <div className="layer-toggle__option-controls">
                 <div className="checkbox"
-                  onClick={e => this.props.toggleTaskFeatures()}>
+                  onClick={this.props.toggleTaskFeatures}>
                   <input type="checkbox"
                          checked={this.props.showTaskFeatures}
                          onChange={_noop}
                   />
                   <label><FormattedMessage {...messages.showTaskFeaturesLabel} /></label>
+                </div>
+              </div>
+            }
+            {this.props.toggleOSMData &&
+              <div className="layer-toggle__option-controls">
+                <div className="checkbox"
+                  onClick={this.props.toggleOSMData}>
+                  <input type="checkbox"
+                         checked={this.props.showOSMData}
+                         onChange={_noop}
+                  />
+                  <label>
+                    <FormattedMessage
+                      {...messages.showOSMDataLabel}
+                    /> {this.props.osmDataLoading && <FormattedMessage {...messages.loading} />}
+                  </label>
                 </div>
               </div>
             }

@@ -15,6 +15,29 @@ ShallowWrapper {
     }
     keyboardShortcutGroups={
         Object {
+            "layers": Object {
+              "layerMapillary": Object {
+                "key": "m",
+                "label": Object {
+                  "defaultMessage": "Toggle Mapillary Layer",
+                  "id": "KeyMapping.layers.layerMapillary",
+                },
+              },
+              "layerOSMData": Object {
+                "key": "o",
+                "label": Object {
+                  "defaultMessage": "Toggle OSM Data Layer",
+                  "id": "KeyMapping.layers.layerOSMData",
+                },
+              },
+              "layerTaskFeatures": Object {
+                "key": "s",
+                "label": Object {
+                  "defaultMessage": "Toggle Features Layer",
+                  "id": "KeyMapping.layers.layerTaskFeatures",
+                },
+              },
+            },
             "openEditor": Object {
               "editId": Object {
                 "key": "e",

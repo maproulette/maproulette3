@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Task Features"
   },
 
+  showOSMDataLabel: {
+    id: "LayerToggle.controls.showOSMData.label",
+    defaultMessage: "OSM Data",
+  },
+
   showMapillaryLabel: {
     id: "LayerToggle.controls.showMapillary.label",
     defaultMessage: "Mapillary"
