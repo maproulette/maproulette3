@@ -27,6 +27,7 @@ import TriStateCheckbox from '../../../Bulma/TriStateCheckbox'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
+import IntervalRender from '../../../IntervalRender/IntervalRender'
 import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import ChallengeTaskMap from '../ChallengeTaskMap/ChallengeTaskMap'
@@ -99,7 +100,7 @@ export class ViewChallengeTasks extends Component {
 
   render() {
     if (this.props.challenge.status === ChallengeStatus.building) {
-      return <TaskBuildProgress {...this.props} />
+      return <IntervalRender><TaskBuildProgress {...this.props} /></IntervalRender>
     }
 
     if (this.props.challenge.status === ChallengeStatus.failed) {
