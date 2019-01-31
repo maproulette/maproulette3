@@ -3,6 +3,8 @@ import RequestStatus from '../Server/RequestStatus'
 import { fetchContent } from '../Server/Server'
 import genericEntityReducer from '../Server/GenericEntityReducer'
 
+import _map from 'lodash/map'
+
 /** normalizr schema for places */
 export const placeSchema = function() {
   return new schema.Entity('places', {}, {idAttribute: 'place_id'})
@@ -40,6 +42,29 @@ export const fetchPlace = function(lat, lng) {
       return normalizedResults
     })
   }
+}
+
+/**
+ * Retrieve a bounding box location of the place given.
+ *
+ * @return boundingBox array
+ */
+export const fetchPlaceLocation = function(place) {
+  const placeURI =
+    `https://nominatim.openstreetmap.org/search?q=${place}&format=json&limit=1`
+
+  return fetchContent(placeURI).then(placeResults => {
+    if (placeResults.length > 0)
+    {
+      const bounds = _map(placeResults[0].boundingbox, (point) => parseFloat(point))
+
+      // (from Nominatim) NSWE => (expected) WSEN
+      return [bounds[2], bounds[1], bounds[3], bounds[0]]
+    }
+    else {
+      return null
+    }
+  })
 }
 
 // redux reducers

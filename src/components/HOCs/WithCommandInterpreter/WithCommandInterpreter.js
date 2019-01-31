@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 import _split from 'lodash/split'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
+import _find from 'lodash/find'
+import _debounce from 'lodash/debounce'
+
+import { fetchPlaceLocation } from '../../../services/Place/Place'
 
 /**
  * WithCommandInterpreter interprets search strings to
@@ -51,25 +55,7 @@ export const executeCommand = (props, commandString) => {
 
   switch(command) {
     case 'm/':
-      let bounds = null
-
-      // If four points are given then we have a bounding box
-      if (_split(query, ',').length === 4) {
-        bounds = _map(_split(query, ','), (point) => parseFloat(point))
-
-      }
-      // If only two points are given then we have a center point
-      else if (_split(query, ',').length === 2) {
-        const centerpoint = _map(_split(query, ','), (point) => parseFloat(point))
-        bounds = determineBoundingBox(...centerpoint)
-      }
-
-      if (bounds) {
-        // We need to clear the search first so that any string searches won't
-        // be hanging around in redux
-        props.clearSearch()
-        props.updateChallengeSearchMapBounds(bounds, true)
-      }
+      debouncedMapSearch(props, query)
       break;
     case 's/':
     default:
@@ -83,10 +69,52 @@ export const executeCommand = (props, commandString) => {
   }
 }
 
+const debouncedMapSearch =
+    _debounce((props, query) => executeMapSearch(props, query), 1000, {leading: false})
+
+/**
+ * Executes the map search
+ */
+export const executeMapSearch = (props, query) => {
+  let bounds = null
+
+  // If four points are given then we have a bounding box
+  if (_split(query, ',').length === 4) {
+    const querySplit = _split(query, ',')
+    const boundsValid = _find(querySplit, (point) => (point === "" || isNaN(point))) === undefined
+    if (boundsValid) {
+      bounds = _map(querySplit, (point) => parseFloat(point))
+    }
+  }
+  // If only two points are given then we have a center point
+  else if (_split(query, ',').length === 2) {
+    const centerpoint = _map(_split(query, ','), (point) => parseFloat(point))
+    bounds = determineBoundingBox(...centerpoint)
+  }
+  // It might be a string place -- let's ask Nominatim for it's location
+  else if (isNaN(query.charAt(0))){
+    fetchPlaceLocation(query).then(boundingBox => {
+        if (boundingBox)
+        {
+          props.updateChallengeSearchMapBounds(boundingBox, true)
+        }
+      })
+  }
+
+  if (bounds) {
+    // We need to clear the search first so that any string searches won't
+    // be hanging around in redux
+    props.clearSearch()
+    props.updateChallengeSearchMapBounds(bounds, true)
+  }
+}
+
 /**
 * Returns the bouding box from the given centerpoint coordinates
 */
 const determineBoundingBox = (centerpointLong, centerpointLat) => {
+  if (isNaN(centerpointLong) || isNaN(centerpointLat)) return null
+
   const bboxWidth = parseFloat(process.env.REACT_APP_NEARBY_LONGITUDE_LENGTH)
   const bboxHeight = parseFloat(process.env.REACT_APP_NEARBY_LATITUDE_LENGTH)
 

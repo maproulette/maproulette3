@@ -16,6 +16,9 @@ import './SearchBox.css'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class SearchBox extends Component {
+  state = {
+    currentSearch: null
+  }
   /**
    * Esc clears search, Enter signals completion.
    *
@@ -23,7 +26,7 @@ export default class SearchBox extends Component {
    */
   checkForSpecialKeys = (e) => {
     if (e.key === "Escape") {
-      this.props.clearSearch()
+      this.clearSearch()
     }
     else if (e.key === "Enter" && _isFunction(this.props.deactivate)) {
       this.props.deactivate()
@@ -31,21 +34,31 @@ export default class SearchBox extends Component {
   }
 
   /**
+   * Clears Search box
+   */
+  clearSearch = () => {
+    this.props.clearSearch()
+    this.setState({currentSearch: null})
+  }
+
+  /**
    * @private
    */
   queryChanged = (e) => {
     this.props.setSearch(e.target.value)
+    this.setState({currentSearch: e.target.value})
   }
 
   render() {
-    const query = (this.props.searchGroup ? 
-      _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
-      _get(this.props, 'searchQuery.query')) || ''
+    const query = this.state.currentSearch ? this.state.currentSearch :
+      (this.props.searchGroup ?
+        _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
+        _get(this.props, 'searchQuery.query')) || ''
 
     const clearButton =
       query.length === 0 ? null :
       <button className="search-box--clear-button delete" aria-label="delete"
-              onClick={this.props.clearSearch} />
+              onClick={this.clearSearch} />
 
     const doneButton =
       (this.props.showDoneButton !== true || query.length === 0) ?
