@@ -7171,6 +7171,11 @@ react-grid-layout@^0.16.6:
     react-draggable "3.x"
     react-resizable "1.x"
 
+react-intl-formatted-duration@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-intl-formatted-duration/-/react-intl-formatted-duration-3.0.0.tgz#ed9d77aeebe40af8eaf5f0ab184e50d43cc898e5"
+  integrity sha512-VjqkOIJANrNtgtNF4hY+riYLR2xjBTKd6IPNuslbVdlMawaukwCZjR+XJGyB9SR6DzsC7YVe/hzFumpdgwLf2g==
+
 react-intl@^2.3.0, react-intl@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.4.0.tgz#66c14dc9df9a73b2fbbfbd6021726e80a613eb15"
