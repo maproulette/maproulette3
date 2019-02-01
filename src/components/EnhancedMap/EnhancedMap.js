@@ -140,7 +140,7 @@ export default class EnhancedMap extends Map {
         },
         style: (feature) => {
           if (!feature.properties)
-            return;
+            return {};
           var res = {}, mapping = this.simpleStyleMapping;
           for (var i = 0; i < mapping.length; ++i)
             res[mapping[i][1]] = feature.properties[mapping[i][0]]
