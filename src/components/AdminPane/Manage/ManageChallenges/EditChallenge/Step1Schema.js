@@ -153,6 +153,9 @@ export const uiSchema = (intl, user, challengeData) => {
     description: {
       "ui:field": "markdown",
     },
+    blurb: {
+      "ui:emptyValue": "",
+    },
     instruction: {
       "ui:field": "markdown",
     },
@@ -164,6 +167,9 @@ export const uiSchema = (intl, user, challengeData) => {
     },
     additionalKeywords: {
       "ui:field": "tags",
+    },
+    checkinComment: {
+      "ui:emptyValue": "",
     },
     includeCheckinHashtag: {
       "ui:widget": "radio",
