@@ -21,17 +21,17 @@ export default defineMessages({
 
   tasksCreatedCount: {
     id: "Admin.Challenge.tasksCreatedCount",
-    defaultMessage: "{count, number} tasks created",
+    defaultMessage: "{count, number} tasks created so far",
   },
 
-  asOf: {
-    id: "Admin.Challenge.status.asOf.label",
-    defaultMessage: "as of",
+  totalElapsedTime: {
+    id: "Admin.Challenge.totalCreationTime",
+    defaultMessage: "Total elapsed time:",
   },
 
   refreshStatusLabel: {
     id: "Admin.Challenge.controls.refreshStatus.label",
-    defaultMessage: "Refresh Status",
+    defaultMessage: "Refreshing status in",
   },
 
   tasksHeader: {

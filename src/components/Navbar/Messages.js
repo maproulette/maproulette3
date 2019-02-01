@@ -16,7 +16,7 @@ export default defineMessages({
 
   adminCreate: {
     id: 'Navbar.links.admin',
-    defaultMessage: "Create",
+    defaultMessage: "Create & Manage",
   },
 
   help: {
