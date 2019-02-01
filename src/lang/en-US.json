@@ -518,5 +518,6 @@
   "Locale.de.label": "de (Deutsch)",
   "Locale.fr.label": "fr (Français)",
   "Locale.af.label": "af (Afrikaans)",
-  "Locale.ja.label": "ja (日本語)"
+  "Locale.ja.label": "ja (日本語)",
+  "Locale.ko.label": "ko (한국어)"
 }
