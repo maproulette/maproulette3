@@ -110,6 +110,14 @@ export default class EnhancedMap extends Map {
     }
   }
 
+  const simpleStyleMapping = [
+    ['stroke', 'color'],
+    ['stroke-width', 'weight'],
+    ['stroke-opacity', 'opacity'],
+    ['fill', 'fillColor'],
+    ['fill-opacity', 'fillOpacity']
+  ];
+
   updateFeatures = (newFeatures) => {
     const hasExistingFeatures = !_isEmpty(this.currentFeatures)
     if (hasExistingFeatures) {
@@ -129,6 +137,14 @@ export default class EnhancedMap extends Map {
               this.scheduleAnimation()
             }
           }
+        },
+        style: (feature) => {
+          if (!feature.properties)
+            return;
+          var res = {}, mapping = this.simpleStyleMapping;
+          for (var i = 0; i < mapping.length; ++i)
+            res[mapping[i][1]] = feature.properties[mapping[i][0]]
+          return res;
         },
       })
 
