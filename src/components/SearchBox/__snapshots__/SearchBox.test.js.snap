@@ -4435,15 +4435,10 @@ ShallowWrapper {
                                 onKeyDown={[Function]}
                                 placeholder={undefined}
                                 type="text"
-                                value="Hello"
+                                value=""
                         />
                 </div>
         </div>
-        <button
-                aria-label="delete"
-                className="search-box--clear-button delete"
-                onClick={[Function]}
-        />
 </div>,
       "className": "search-box",
     },
@@ -4472,16 +4467,12 @@ ShallowWrapper {
                                     onKeyDown={[Function]}
                                     placeholder={undefined}
                                     type="text"
-                                    value="Hello"
+                                    value=""
                         />
             </div>
 </div>,
           null,
-          <button
-            aria-label="delete"
-            className="search-box--clear-button delete"
-            onClick={[Function]}
-/>,
+          null,
         ],
         "className": "search-box__search-field",
       },
@@ -4508,7 +4499,7 @@ ShallowWrapper {
                                 onKeyDown={[Function]}
                                 placeholder={undefined}
                                 type="text"
-                                value="Hello"
+                                value=""
                 />
 </div>,
             ],
@@ -4541,7 +4532,7 @@ ShallowWrapper {
                   onKeyDown={[Function]}
                   placeholder={undefined}
                   type="text"
-                  value="Hello"
+                  value=""
 />,
                 "className": "control is-medium",
               },
@@ -4557,7 +4548,7 @@ ShallowWrapper {
                   "onKeyDown": [Function],
                   "placeholder": undefined,
                   "type": "text",
-                  "value": "Hello",
+                  "value": "",
                 },
                 "ref": null,
                 "rendered": null,
@@ -4569,19 +4560,7 @@ ShallowWrapper {
           "type": "div",
         },
         null,
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "aria-label": "delete",
-            "className": "search-box--clear-button delete",
-            "onClick": [Function],
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "button",
-        },
+        null,
       ],
       "type": "div",
     },
@@ -4614,15 +4593,10 @@ ShallowWrapper {
                                         onKeyDown={[Function]}
                                         placeholder={undefined}
                                         type="text"
-                                        value="Hello"
+                                        value=""
                               />
                     </div>
           </div>
-          <button
-                    aria-label="delete"
-                    className="search-box--clear-button delete"
-                    onClick={[Function]}
-          />
 </div>,
         "className": "search-box",
       },
@@ -4651,16 +4625,12 @@ ShallowWrapper {
                                           onKeyDown={[Function]}
                                           placeholder={undefined}
                                           type="text"
-                                          value="Hello"
+                                          value=""
                             />
               </div>
 </div>,
             null,
-            <button
-              aria-label="delete"
-              className="search-box--clear-button delete"
-              onClick={[Function]}
-/>,
+            null,
           ],
           "className": "search-box__search-field",
         },
@@ -4687,7 +4657,7 @@ ShallowWrapper {
                                     onKeyDown={[Function]}
                                     placeholder={undefined}
                                     type="text"
-                                    value="Hello"
+                                    value=""
                   />
 </div>,
               ],
@@ -4720,7 +4690,7 @@ ShallowWrapper {
                     onKeyDown={[Function]}
                     placeholder={undefined}
                     type="text"
-                    value="Hello"
+                    value=""
 />,
                   "className": "control is-medium",
                 },
@@ -4736,7 +4706,7 @@ ShallowWrapper {
                     "onKeyDown": [Function],
                     "placeholder": undefined,
                     "type": "text",
-                    "value": "Hello",
+                    "value": "",
                   },
                   "ref": null,
                   "rendered": null,
@@ -4748,19 +4718,7 @@ ShallowWrapper {
             "type": "div",
           },
           null,
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "aria-label": "delete",
-              "className": "search-box--clear-button delete",
-              "onClick": [Function],
-            },
-            "ref": null,
-            "rendered": null,
-            "type": "button",
-          },
+          null,
         ],
         "type": "div",
       },
