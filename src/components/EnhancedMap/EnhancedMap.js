@@ -110,13 +110,13 @@ export default class EnhancedMap extends Map {
     }
   }
 
-  const simpleStyleMapping = [
+  simpleStyleMapping = [
     ['stroke', 'color'],
     ['stroke-width', 'weight'],
     ['stroke-opacity', 'opacity'],
     ['fill', 'fillColor'],
     ['fill-opacity', 'fillOpacity']
-  ];
+  ]
 
   updateFeatures = (newFeatures) => {
     const hasExistingFeatures = !_isEmpty(this.currentFeatures)
