@@ -2,7 +2,6 @@ import { schema } from 'normalizr'
 import RequestStatus from '../Server/RequestStatus'
 import { fetchContent } from '../Server/Server'
 import genericEntityReducer from '../Server/GenericEntityReducer'
-
 import _map from 'lodash/map'
 
 /** normalizr schema for places */
@@ -47,15 +46,15 @@ export const fetchPlace = function(lat, lng) {
 /**
  * Retrieve a bounding box location of the place given.
  *
+ * @param placeSearch - place search string
  * @return boundingBox array
  */
-export const fetchPlaceLocation = function(place) {
+export const fetchPlaceLocation = function(placeSearch) {
   const placeURI =
-    `https://nominatim.openstreetmap.org/search?q=${place}&format=json&limit=1`
+    `https://nominatim.openstreetmap.org/search?q=${escape(placeSearch)}&format=json&limit=1`
 
   return fetchContent(placeURI).then(placeResults => {
-    if (placeResults.length > 0)
-    {
+    if (placeResults.length > 0) {
       const bounds = _map(placeResults[0].boundingbox, (point) => parseFloat(point))
 
       // (from Nominatim) NSWE => (expected) WSEN
