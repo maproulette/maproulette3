@@ -6,7 +6,7 @@ import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
 import _omit from 'lodash/omit'
-import { fetchChallenge }
+import { fetchChallenge, fetchChallengeActions }
        from '../../../services/Challenge/Challenge'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
@@ -109,6 +109,10 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
 
             props.loadChallenge(challengeId)
           }
+
+          if (!isVirtual) {
+            props.loadChallengeActions(challengeId)
+          }
         }
       }
       else if (_isObject(this.state.browsedChallenge)) {
@@ -168,7 +172,8 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
                           clusteredTasks={clusteredTasks}
                           {..._omit(this.props, ['entities',
                                                  'clusteredTasks',
-                                                 'loadChallenge'])} />
+                                                 'loadChallenge',
+                                                 'loadChallengeActions'])} />
       )
     }
   }
@@ -203,6 +208,10 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       5000,
       {leading: true},
     ),
+
+    loadChallengeActions: challengeId => {
+      return dispatch(fetchChallengeActions(challengeId))
+    },
   }
 }
 

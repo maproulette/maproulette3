@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import { ResponsiveBar } from '@nivo/bar'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
@@ -107,6 +107,13 @@ export class ChallengeProgress extends Component {
         {taskActions.total > 0 && taskActions.available === 0 &&
           <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
                      className="challenge-task-progress__completed-indicator" />
+        }
+        {taskActions.total > 0 && taskActions.available !== 0 &&
+          <div className="challenge-task-progress__tasks-remaining"
+              title={this.props.intl.formatMessage(messages.tasksRemaining)}>
+            <FormattedMessage {...messages.tasksRemaining} />
+            : {taskActions.available} ({Math.round(taskActions.available/taskActions.total * 1000)/10}%)
+          </div>
         }
       </div>
     )

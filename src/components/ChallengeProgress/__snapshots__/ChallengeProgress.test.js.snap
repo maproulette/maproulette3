@@ -120,6 +120,21 @@ ShallowWrapper {
           tooltipFormat={[Function]}
 />,
         false,
+        <div
+          className="challenge-task-progress__tasks-remaining"
+          title={undefined}
+>
+          <FormattedMessage
+                    defaultMessage="Tasks Remaining"
+                    id="ChallengeProgress.tasks.remaining"
+                    values={Object {}}
+          />
+          : 
+          3
+           (
+          60
+          %)
+</div>,
       ],
       "className": "challenge-task-progress",
     },
@@ -177,6 +192,49 @@ ShallowWrapper {
         "type": [Function],
       },
       false,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <FormattedMessage
+              defaultMessage="Tasks Remaining"
+              id="ChallengeProgress.tasks.remaining"
+              values={Object {}}
+/>,
+            ": ",
+            3,
+            " (",
+            60,
+            "%)",
+          ],
+          "className": "challenge-task-progress__tasks-remaining",
+          "title": undefined,
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": "Tasks Remaining",
+              "id": "ChallengeProgress.tasks.remaining",
+              "values": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          ": ",
+          3,
+          " (",
+          60,
+          "%)",
+        ],
+        "type": "div",
+      },
     ],
     "type": "div",
   },
@@ -241,6 +299,21 @@ ShallowWrapper {
             tooltipFormat={[Function]}
 />,
           false,
+          <div
+            className="challenge-task-progress__tasks-remaining"
+            title={undefined}
+>
+            <FormattedMessage
+                        defaultMessage="Tasks Remaining"
+                        id="ChallengeProgress.tasks.remaining"
+                        values={Object {}}
+            />
+            : 
+            3
+             (
+            60
+            %)
+</div>,
         ],
         "className": "challenge-task-progress",
       },
@@ -298,6 +371,49 @@ ShallowWrapper {
           "type": [Function],
         },
         false,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <FormattedMessage
+                defaultMessage="Tasks Remaining"
+                id="ChallengeProgress.tasks.remaining"
+                values={Object {}}
+/>,
+              ": ",
+              3,
+              " (",
+              60,
+              "%)",
+            ],
+            "className": "challenge-task-progress__tasks-remaining",
+            "title": undefined,
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": "Tasks Remaining",
+                "id": "ChallengeProgress.tasks.remaining",
+                "values": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            ": ",
+            3,
+            " (",
+            60,
+            "%)",
+          ],
+          "type": "div",
+        },
       ],
       "type": "div",
     },

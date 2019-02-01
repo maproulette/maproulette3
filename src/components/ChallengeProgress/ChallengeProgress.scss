@@ -1,7 +1,7 @@
 @import '../../variables.scss';
 
 .challenge-task-progress {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-size: $size-9;
   height: 55px;
   position: relative;
@@ -14,5 +14,9 @@
     stroke: $white;
     height: 20px;
     width: auto;
+  }
+
+  &__tasks-remaining {
+    margin-top: 5px;
   }
 }
