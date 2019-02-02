@@ -150,6 +150,11 @@ export default defineMessages({
     defaultMessage: "Unable to render the map. This may be caused by a problematic custom basemap.",
   },
 
+  placeNotFound: {
+    id: 'Errors.map.placeNotFound',
+    defaultMessage: "No results found by Nominatim.",
+  },
+
   dashboardRenderFailure: {
     id: 'Errors.dashboard.renderFailure',
     defaultMessage: "Unable to render the dashboard. Switching to a working layout.",

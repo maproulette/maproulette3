@@ -68,6 +68,7 @@ export default {
 
   map: {
     renderFailure: messages.mapRenderFailure,
+    placeNotFound: messages.placeNotFound,
   },
 
   dashboard: {
