@@ -29,6 +29,21 @@ export default defineMessages({
     defaultMessage: "Edit in Level0",
   },
 
+  layerOSMData: {
+    id: "KeyMapping.layers.layerOSMData",
+    defaultMessage: "Toggle OSM Data Layer",
+  },
+
+  layerTaskFeatures: {
+    id: "KeyMapping.layers.layerTaskFeatures",
+    defaultMessage: "Toggle Features Layer",
+  },
+
+  layerMapillary: {
+    id: "KeyMapping.layers.layerMapillary",
+    defaultMessage: "Toggle Mapillary Layer",
+  },
+
   cancel: {
     id: "KeyMapping.taskEditing.cancel",
     defaultMessage: "Cancel Editing",

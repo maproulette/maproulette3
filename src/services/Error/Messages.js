@@ -63,6 +63,19 @@ export default defineMessages({
     defaultMessage: "That task does not exist.",
   },
 
+  osmRequestTooLarge: {
+    id: 'Errors.osm.requestTooLarge',
+    defaultMessage: "OpenStreetMap data request too large",
+  },
+  osmBandwidthExceeded: {
+    id: 'Errors.osm.bandwidthExceeded',
+    defaultMessage: "OpenStreetMap allowed bandwidth exceeded",
+  },
+  osmFetchFailure: {
+    id: 'Errors.osm.fetchFailure',
+    defaultMessage: "Unable to fetch data from OpenStreetMap",
+  },
+
   clusteredTaskFetchFailure: {
     id: 'Errors.clusteredTask.fetchFailure',
     defaultMessage: "Unable to fetch task clusters",
@@ -134,7 +147,7 @@ export default defineMessages({
 
   mapRenderFailure: {
     id: 'Errors.map.renderFailure',
-    defaultMessage: "Unable to render the map. This is usally caused by a problematic custom basemap.",
+    defaultMessage: "Unable to render the map. This may be caused by a problematic custom basemap.",
   },
 
   placeNotFound: {

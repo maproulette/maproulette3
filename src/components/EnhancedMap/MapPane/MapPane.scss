@@ -9,10 +9,6 @@
     .leaflet-pane {
       z-index: $layer-map;
 
-      path.leaflet-interactive {
-        opacity: 0; // hide by default so we can control appearance.
-      }
-
       &.leaflet-marker-pane.animated {
         @keyframes marker-bounce {
           0%   { transform: translate3d(0px, 0px, 0px); }
