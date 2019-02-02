@@ -407,6 +407,10 @@
         }
       }
     }
+
+    &__load-more-results {
+        text-align: center;
+    }
   }
 
   &__footer-icon {
@@ -512,4 +516,12 @@
       display: none;
     }
   }
+}
+
+.leaderboard__board__leader.current-user-leader.current-user-leader-bracket {
+  border: 1px solid $red;
+}
+
+.leaderboard__board__leader.current-user-leader-bracket {
+  border: 2px dashed $grey-lightest-less;
 }

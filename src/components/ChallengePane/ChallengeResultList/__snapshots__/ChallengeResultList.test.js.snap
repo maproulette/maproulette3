@@ -208,7 +208,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     browsedChallenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -701,7 +701,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             browsedChallenge={
                         Object {
                                     "blurb": "Challenge 309 blurb",
@@ -974,7 +974,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         browsedChallenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -1467,7 +1467,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               browsedChallenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -1856,7 +1856,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     browsedChallenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -2399,7 +2399,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             browsedChallenge={
                         Object {
                                     "blurb": "Challenge 309 blurb",
@@ -2709,7 +2709,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         browsedChallenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -3252,7 +3252,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               browsedChallenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -3945,7 +3945,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     browsedChallenge={
                               Object {
                                         "blurb": "Challenge 309 blurb",
@@ -5224,7 +5224,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             browsedChallenge={
                         Object {
                                     "blurb": "Challenge 309 blurb",
@@ -5841,7 +5841,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         browsedChallenge={
                                     Object {
                                                 "blurb": "Challenge 309 blurb",
@@ -7120,7 +7120,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               browsedChallenge={
                             Object {
                                           "blurb": "Challenge 309 blurb",
@@ -7805,7 +7805,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     challenges={
                               Array [
                                         Object {
@@ -8930,7 +8930,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             challenges={
                         Array [
                                     Object {
@@ -9469,7 +9469,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         challenges={
                                     Array [
                                                 Object {
@@ -10594,7 +10594,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               challenges={
                             Array [
                                           Object {
@@ -10931,7 +10931,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     challenges={Array []}
                     fetchingChallenges={
                               Array [
@@ -11217,7 +11217,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             challenges={Array []}
             fetchingChallenges={
                         Array [
@@ -11415,7 +11415,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         challenges={Array []}
                         fetchingChallenges={
                                     Array [
@@ -11701,7 +11701,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               challenges={Array []}
               fetchingChallenges={
                             Array [
@@ -11963,7 +11963,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     challenges={Array []}
                     intl={
                               Object {
@@ -12217,7 +12217,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             challenges={Array []}
             intl={
                         Object {
@@ -12368,7 +12368,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         challenges={Array []}
                         intl={
                                     Object {
@@ -12622,7 +12622,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               challenges={Array []}
               intl={
                             Object {
@@ -13161,7 +13161,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     challenges={
                               Array [
                                         Object {
@@ -14242,7 +14242,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             challenges={
                         Array [
                                     Object {
@@ -14758,7 +14758,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         challenges={
                                     Array [
                                                 Object {
@@ -15839,7 +15839,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               challenges={
                             Array [
                                           Object {
@@ -16470,7 +16470,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     challenges={
                               Array [
                                         Object {
@@ -17561,7 +17561,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             challenges={
                         Array [
                                     Object {
@@ -18082,7 +18082,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         challenges={
                                     Array [
                                                 Object {
@@ -19173,7 +19173,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               challenges={
                             Array [
                                           Object {
@@ -19842,7 +19842,7 @@ ShallowWrapper {
         <div
           className="after-results"
 >
-          <LoadMoreButton
+          <PageResultsButton
                     challenges={
                               Array [
                                         Object {
@@ -21019,7 +21019,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <LoadMoreButton
+          "children": <PageResultsButton
             challenges={
                         Array [
                                     Object {
@@ -21582,7 +21582,7 @@ ShallowWrapper {
           <div
             className="after-results"
 >
-            <LoadMoreButton
+            <PageResultsButton
                         challenges={
                                     Array [
                                                 Object {
@@ -22759,7 +22759,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <LoadMoreButton
+            "children": <PageResultsButton
               challenges={
                             Array [
                                           Object {
