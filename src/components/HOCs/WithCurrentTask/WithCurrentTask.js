@@ -18,7 +18,7 @@ import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
-import { fetchOSMUser } from '../../../services/OSMUser/OSMUser'
+import { fetchOSMUser, fetchOSMData } from '../../../services/OSM/OSM'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 import { renewVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
@@ -202,6 +202,11 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     fetchOSMUser,
+    fetchOSMData: bbox => {
+      return fetchOSMData(bbox).catch(error => {
+        dispatch(addError(error))
+      })
+    },
   }
 }
 
