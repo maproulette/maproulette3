@@ -1,11 +1,13 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { Map } from 'react-leaflet'
 import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
 import _isEmpty from 'lodash/isEmpty'
-import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import AsSimpleStyleableFeature
        from '../../interactions/TaskFeature/AsSimpleStyleableFeature'
+import PropertyList from './PropertyList/PropertyList'
 
 /**
  * EnhancedMap is an extension of the react-leaflet Map that provides
@@ -154,34 +156,12 @@ export default class EnhancedMap extends Map {
   }
 
   propertyList = featureProperties => {
-    const tagInfo = process.env.REACT_APP_TAGINFO_SERVER_URL
-
-    if (_isEmpty(featureProperties)) {
-      return "<div className='feature-properties empty'>No Properties</div>"
-    }
-    else {
-      return (
-        "<div class='feature-properties'>" +
-          "<h3>Properties</h3>" +
-          "<table class='property-list table'>" +
-            "<tbody>" +
-              _map(featureProperties, (value, key) =>
-                "<tr class='property'>" +
-                  "<td class='name'>" +
-                    (
-                      !_isEmpty(tagInfo) ?
-                      `<a target='_blank' href='${tagInfo}/keys/${key}'>${key}</a>` :
-                      `<span class='not-linked'>${key}</span>`
-                    ) +
-                  "</td>" +
-                  `<td class='value'>${value}</td>` +
-                "</tr>"
-              ).join('') +
-            "</tbody>" +
-          "</div>" +
-        "</div>"
-      )
-    }
+    const contentElement = document.createElement('div')
+    ReactDOM.render(
+      <PropertyList featureProperties={featureProperties} />,
+      contentElement
+    )
+    return contentElement
   }
 
   componentDidMount() {

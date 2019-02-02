@@ -8,6 +8,7 @@ import es from 'react-intl/locale-data/es'
 import de from 'react-intl/locale-data/de'
 import af from 'react-intl/locale-data/af'
 import ja from 'react-intl/locale-data/ja'
+import ko from 'react-intl/locale-data/ko'
 import { Router } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import PiwikReactRouter from 'piwik-react-router'
@@ -28,7 +29,7 @@ import './index.css'
 import '../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import '../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
 
-addLocaleData([...en, ...fr, ...es, ...de, ...af, ...ja])
+addLocaleData([...en, ...fr, ...es, ...de, ...af, ...ja, ...ko])
 
 /** Attach user's current locale to react-intl IntlProvider */
 const ConnectedIntl = WithUserLocale(props => (

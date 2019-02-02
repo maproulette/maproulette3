@@ -8,11 +8,13 @@ import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
+import _pick from 'lodash/pick'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
 import SourcedTileLayer
        from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
+import OSMDataLayer from '../../EnhancedMap/OSMDataLayer/OSMDataLayer'
 import LayerToggle from '../../EnhancedMap/LayerToggle/LayerToggle'
 import FitBoundsControl
        from '../../EnhancedMap/FitBoundsControl/FitBoundsControl'
@@ -22,6 +24,8 @@ import WithSearch from '../../HOCs/WithSearch/WithSearch'
 import WithIntersectingOverlays
        from '../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
+import WithKeyboardShortcuts
+       from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -37,8 +41,32 @@ import './TaskMap.css'
 export class TaskMap extends Component {
   state = {
     showTaskFeatures: true,
+    showOSMData: false,
+    osmData: null,
+    osmDataLoading: false,
     mapillaryLayerLoading: false,
     mapillaryViewerImage: null,
+  }
+
+  /** Process keyboard shortcuts for the layers */
+  handleKeyboardShortcuts = event => {
+    if (this.props.textInputActive(event)) { // ignore typing in inputs
+      return
+    }
+
+    const layerShortcuts = this.props.keyboardShortcutGroups.layers
+    switch(event.key) {
+      case layerShortcuts.layerOSMData.key:
+        this.toggleOSMDataVisibility()
+        break
+      case layerShortcuts.layerTaskFeatures.key:
+        this.toggleTaskFeatureVisibility()
+        break
+      case layerShortcuts.layerMapillary.key:
+        this.toggleMapillaryVisibility()
+        break
+      default:
+    }
   }
 
   /**
@@ -47,6 +75,20 @@ export class TaskMap extends Component {
    */
   toggleTaskFeatureVisibility = () => {
     this.setState({showTaskFeatures: !this.state.showTaskFeatures})
+  }
+
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * OSM data on or off.
+   */
+  toggleOSMDataVisibility = () => {
+    if (!this.state.showOSMData && !this.state.osmData && !this.state.osmDataLoading) {
+      this.setState({osmDataLoading: true})
+      this.props.fetchOSMData(this.props.mapBounds.bounds.toBBoxString()).then(xmlData => {
+        this.setState({osmData: xmlData, osmDataLoading: false})
+      })
+    }
+    this.setState({showOSMData: !this.state.showOSMData})
   }
 
   /**
@@ -83,6 +125,10 @@ export class TaskMap extends Component {
   }
 
   componentDidMount() {
+    this.props.activateKeyboardShortcutGroup(
+      _pick(this.props.keyboardShortcutGroups, 'layers'),
+      this.handleKeyboardShortcuts)
+
     this.loadMapillaryIfNeeded()
   }
 
@@ -93,8 +139,15 @@ export class TaskMap extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     // We want to avoid constantly re-rendering, so we only re-render if the
     // task or our internal state changes. We care about changes to the task
-    // id, its geometries, and a few settings on the parent challenge.
+    // id, its geometries, layer options, and a few settings on the parent
+    // challenge.
     if (nextState.showTaskFeatures !== this.state.showTaskFeatures) {
+      return true
+    }
+
+    if (nextState.showOSMData !== this.state.showOSMData ||
+        nextState.osmDataLoading !== this.state.osmDataLoading ||
+        nextState.osmData !== this.state.osmData) {
       return true
     }
 
@@ -140,6 +193,11 @@ export class TaskMap extends Component {
     }
 
     return false
+  }
+
+  componentWillUnmount() {
+    this.props.deactivateKeyboardShortcutGroup('layers',
+                                               this.handleKeyboardShortcuts)
   }
 
   updateTaskBounds = (bounds, zoom) => {
@@ -204,6 +262,9 @@ export class TaskMap extends Component {
         <LayerToggle {...this.props}
                      showTaskFeatures={this.state.showTaskFeatures}
                      toggleTaskFeatures={this.toggleTaskFeatureVisibility}
+                     showOSMData={this.state.showOSMData}
+                     toggleOSMData={this.toggleOSMDataVisibility}
+                     osmDataLoading={this.state.osmDataLoading}
                      showMapillary={this.props.showMapillaryLayer}
                      toggleMapillary={this.toggleMapillaryVisibility}
                      mapillaryLoading={this.state.mapillaryLayerLoading}
@@ -220,6 +281,9 @@ export class TaskMap extends Component {
           <FitBoundsControl />
           <SourcedTileLayer maxZoom={maxZoom} {...this.props} zIndex={1} />
           {overlayLayers}
+          {this.state.showOSMData && this.state.osmData &&
+            <OSMDataLayer xmlData={this.state.osmData} />
+          }
           {this.props.showMapillaryLayer && mapillaryMarkers}
         </EnhancedMap>
 
@@ -239,6 +303,8 @@ TaskMap.propTypes = {
   task: PropTypes.object,
   /** Invoked when the bounds of the map are modified by the user */
   setTaskMapBounds: PropTypes.func.isRequired,
+  /** Invoked when user wishes to display OSM data layer on map */
+  fetchOSMData: PropTypes.func.isRequired,
   /**
    * The desired centerpoint of the map in (Lat, Lng).
    * @see See WithTaskCenterpoint HOC
@@ -249,7 +315,10 @@ TaskMap.propTypes = {
 export default WithSearch(
   WithTaskCenterPoint(
     WithVisibleLayer(
-      WithIntersectingOverlays(TaskMap, 'task')
+      WithIntersectingOverlays(
+        WithKeyboardShortcuts(TaskMap),
+        'task'
+      )
     )
   ),
   'task'

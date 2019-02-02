@@ -8,6 +8,7 @@ import frMessages from '../../../lang/fr.json'
 import deMessages from '../../../lang/de.json'
 import afMessages from '../../../lang/af.json'
 import jaMessages from '../../../lang/ja.json'
+import koMessages from '../../../lang/ko.json'
 
 // Supported locales.
 export const Locale = Object.freeze({
@@ -17,6 +18,7 @@ export const Locale = Object.freeze({
   de: 'de',
   af: 'af',
   ja: 'ja',
+  ko: 'ko',
 })
 
 /**
@@ -38,6 +40,7 @@ export const translatedMessages = Object.freeze({
   [Locale.de]: deMessages,
   [Locale.af]: afMessages,
   [Locale.ja]: jaMessages,
+  [Locale.ko]: koMessages,
 })
 
 /**

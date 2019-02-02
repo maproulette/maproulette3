@@ -228,7 +228,7 @@ ShallowWrapper {
                                 }
                         />
                 </MediaQuery>
-                <Component
+                <Connect(Component)
                         challenges={
                                 Array [
                                         Object {
@@ -448,7 +448,7 @@ ShallowWrapper {
                               }
                     />
           </MediaQuery>
-          <Component
+          <Connect(Component)
                     challenges={
                               Array [
                                         Object {
@@ -665,7 +665,7 @@ ShallowWrapper {
                             }
               />
 </MediaQuery>,
-            <Component
+            <Connect(Component)
               challenges={
                             Array [
                                           Object {
@@ -1286,7 +1286,7 @@ ShallowWrapper {
                                         }
                               />
                     </MediaQuery>
-                    <Component
+                    <Connect(Component)
                               challenges={
                                         Array [
                                                   Object {
@@ -1506,7 +1506,7 @@ ShallowWrapper {
                                     }
                         />
             </MediaQuery>
-            <Component
+            <Connect(Component)
                         challenges={
                                     Array [
                                                 Object {
@@ -1723,7 +1723,7 @@ ShallowWrapper {
                                 }
                 />
 </MediaQuery>,
-              <Component
+              <Connect(Component)
                 challenges={
                                 Array [
                                                 Object {

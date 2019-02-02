@@ -14,8 +14,8 @@ import AppErrors from '../../../services/Error/AppErrors'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithChallenge = function(WrappedComponent) {
-  class _WithChallenge extends Component {
+const WithChallenge = function(WrappedComponent) {
+   return class extends Component {
     state = {
       challenge: null,
     }
@@ -36,22 +36,10 @@ export const WithChallenge = function(WrappedComponent) {
      */
     updateChallenge = props => {
       const challengeId = this.parseChallengeId(props)
-
-      if (_get(this.state, 'challenge.id') !== challengeId) {
-        let challenge = _get(props.entities, `challenges.${challengeId}`)
-
-        if (_isObject(challenge)) {
-          this.setState({
-            challenge: challenge
-          })
-        }
-        else {
-          this.props.loadChallenge(challengeId)
-        }
-      }
+      getChallenge(challengeId, props, this)
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this.updateChallenge(this.props)
     }
 
@@ -62,8 +50,6 @@ export const WithChallenge = function(WrappedComponent) {
       )
     }
   }
-
-  return _WithChallenge
 }
 
 const mapStateToProps = state => ({
@@ -82,8 +68,36 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(addError(AppErrors.challenge.doesNotExist))
             ownProps.history.push('/browse/challenges')
           }
+          else {
+            return _get(normalizedResults, `entities.challenges.${normalizedResults.result}`)
+          }
         })
       }
+  }
+}
+
+/**
+ * This method fetches the challenge and calls setState.
+ * It has been externalized from the component to aid in testing.
+ */
+export const getChallenge = (challengeId, props, component) => {
+  if (_get(component.state, 'challenge.id') !== challengeId) {
+    let challenge = _get(props.entities, `challenges.${challengeId}`)
+
+    if (_isObject(challenge)) {
+      component.setState({
+        challenge: challenge
+      })
+    }
+    else {
+      props.loadChallenge(challengeId).then(challenge => {
+        if (challenge) {
+          component.setState({
+            challenge: challenge
+          })
+        }
+      })
+    }
   }
 }
 

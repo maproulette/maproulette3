@@ -12,7 +12,7 @@ import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChal
 import WithPagedChallenges from '../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
 import SortChallengesSelector from './SortChallengesSelector'
-import LoadMoreButton from './LoadMoreButton'
+import PageResultsButton from './PageResultsButton'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import StartVirtualChallenge from './StartVirtualChallenge'
@@ -123,7 +123,7 @@ export class ChallengeResultList extends Component {
         {results}
 
         <div className="after-results">
-          <LoadMoreButton {...this.props} />
+          <PageResultsButton {...this.props} />
         </div>
       </div>
     )
