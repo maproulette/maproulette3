@@ -476,6 +476,7 @@
   "Errors.project.deleteFailure": "Unable to delete project.",
   "Errors.project.notManager": "You must be a manager of that project to proceed.",
   "Errors.map.renderFailure": "Unable to render the map. This is usally caused by a problematic custom basemap.",
+  "Errors.map.placeNotFound": "No results found by Nominatim.",
   "Errors.dashboard.renderFailure": "Unable to render the dashboard. Switching to a working layout.",
   "Errors.josm.noResponse": "OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?",
   "Errors.josm.missingFeatureIds": "This task's features do not include the OSM identifiers required to open them standalone in JOSM. Please choose another editing option.",

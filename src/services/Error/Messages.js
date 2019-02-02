@@ -139,7 +139,7 @@ export default defineMessages({
 
   placeNotFound: {
     id: 'Errors.map.placeNotFound',
-    defaultMessage: "No results found by Nomanitim.",
+    defaultMessage: "No results found by Nominatim.",
   },
 
   dashboardRenderFailure: {

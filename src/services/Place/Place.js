@@ -51,7 +51,7 @@ export const fetchPlace = function(lat, lng) {
  */
 export const fetchPlaceLocation = function(placeSearch) {
   const placeURI =
-    `https://nominatim.openstreetmap.org/search?q=${escape(placeSearch)}&format=json&limit=1`
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(placeSearch)}&format=json&limit=1`
 
   return fetchContent(placeURI).then(placeResults => {
     if (placeResults.length > 0) {
