@@ -5,6 +5,8 @@ import { Map } from 'react-leaflet'
 import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
+import AsSimpleStyleableFeature
+       from '../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import PropertyList from './PropertyList/PropertyList'
 
 /**
@@ -131,7 +133,10 @@ export default class EnhancedMap extends Map {
               this.scheduleAnimation()
             }
           }
-        },
+
+          // Support [simplestyle](https://github.com/mapbox/simplestyle-spec)
+          AsSimpleStyleableFeature(feature).styleLeafletLayer(layer)
+        }
       })
 
       if (!this.props.justFitFeatures) {
