@@ -135,6 +135,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         // Fetch the task comments and location data, but don't wait for them
         dispatch(fetchTaskComments(taskId))
         dispatch(fetchTaskPlace(loadedTask))
+        dispatch(fetchChallengeActions(loadedTask.parent))
 
         return normalizedResults
       })

@@ -19,6 +19,7 @@ let history = null
 let match = null
 let fetchTasks = null
 let loadChallenge = null
+let loadChallengeActions = null
 
 beforeEach(() => {
   challenges = [
@@ -63,6 +64,7 @@ beforeEach(() => {
 
   fetchTasks = jest.fn()
   loadChallenge = jest.fn()
+  loadChallengeActions = jest.fn()
 
   WrappedComponent = WithBrowsedChallenge(() => <div className="child" />)
 })
@@ -72,6 +74,7 @@ test("the browsed challenge from the route match is passed down", () => {
     <WrappedComponent match={match}
                       entities={basicState.entities}
                       loadChallenge={loadChallenge}
+                      loadChallengeActions={loadChallengeActions}
                       fetchClusteredTasks={fetchTasks}
                       history={history} />
   )
@@ -84,6 +87,7 @@ test("clustered task loading is kicked off for a new browsed challenge", async (
     <WrappedComponent match={match}
                       entities={basicState.entities}
                       loadChallenge={loadChallenge}
+                      loadChallengeActions={loadChallengeActions}
                       fetchClusteredTasks={fetchTasks}
                       history={history} />
   )
@@ -99,6 +103,7 @@ test("virtual challenges get virtual=true when fetching tasks", async () => {
     <WrappedComponent match={match}
                       entities={basicState.entities}
                       loadChallenge={loadChallenge}
+                      loadChallengeActions={loadChallengeActions}
                       fetchClusteredTasks={fetchTasks}
                       history={history}
                       virtualChallenge={challenge} />
