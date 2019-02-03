@@ -266,7 +266,7 @@
   "Challenge.controls.loadMore.label": "More Results",
   "Task.fauxStatus.available": "Available",
   "ChallengeProgress.tooltip.label": "Tasks",
-  "ChallengeProgress.tasks.remaining": "Tasks Remaining",
+  "ChallengeProgress.tasks.remaining": "Tasks Remaining: {taskCount, number}",
   "ChallengeSearchMap.controls.startChallenge.label": "Start Challenge",
   "CommentList.controls.viewTask.label": "View Task",
   "ConfirmAction.title": "Please Confirm",

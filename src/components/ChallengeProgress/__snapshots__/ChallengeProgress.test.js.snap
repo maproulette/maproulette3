@@ -122,18 +122,23 @@ ShallowWrapper {
         false,
         <div
           className="challenge-task-progress__tasks-remaining"
-          title={undefined}
 >
           <FormattedMessage
-                    defaultMessage="Tasks Remaining"
+                    defaultMessage="Tasks Remaining: {taskCount, number}"
                     id="ChallengeProgress.tasks.remaining"
-                    values={Object {}}
+                    values={
+                              Object {
+                                        "taskCount": 3,
+                                      }
+                    }
           />
-          : 
-          3
            (
-          60
-          %)
+          <FormattedNumber
+                    minimumFractionDigits={1}
+                    style="percent"
+                    value={0.6}
+          />
+          )
 </div>,
       ],
       "className": "challenge-task-progress",
@@ -199,18 +204,23 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <FormattedMessage
-              defaultMessage="Tasks Remaining"
+              defaultMessage="Tasks Remaining: {taskCount, number}"
               id="ChallengeProgress.tasks.remaining"
-              values={Object {}}
+              values={
+                            Object {
+                                          "taskCount": 3,
+                                        }
+              }
 />,
-            ": ",
-            3,
             " (",
-            60,
-            "%)",
+            <FormattedNumber
+              minimumFractionDigits={1}
+              style="percent"
+              value={0.6}
+/>,
+            ")",
           ],
           "className": "challenge-task-progress__tasks-remaining",
-          "title": undefined,
         },
         "ref": null,
         "rendered": Array [
@@ -219,19 +229,31 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "defaultMessage": "Tasks Remaining",
+              "defaultMessage": "Tasks Remaining: {taskCount, number}",
               "id": "ChallengeProgress.tasks.remaining",
-              "values": Object {},
+              "values": Object {
+                "taskCount": 3,
+              },
             },
             "ref": null,
             "rendered": null,
             "type": [Function],
           },
-          ": ",
-          3,
           " (",
-          60,
-          "%)",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "minimumFractionDigits": 1,
+              "style": "percent",
+              "value": 0.6,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          ")",
         ],
         "type": "div",
       },
@@ -301,18 +323,23 @@ ShallowWrapper {
           false,
           <div
             className="challenge-task-progress__tasks-remaining"
-            title={undefined}
 >
             <FormattedMessage
-                        defaultMessage="Tasks Remaining"
+                        defaultMessage="Tasks Remaining: {taskCount, number}"
                         id="ChallengeProgress.tasks.remaining"
-                        values={Object {}}
+                        values={
+                                    Object {
+                                                "taskCount": 3,
+                                              }
+                        }
             />
-            : 
-            3
              (
-            60
-            %)
+            <FormattedNumber
+                        minimumFractionDigits={1}
+                        style="percent"
+                        value={0.6}
+            />
+            )
 </div>,
         ],
         "className": "challenge-task-progress",
@@ -378,18 +405,23 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <FormattedMessage
-                defaultMessage="Tasks Remaining"
+                defaultMessage="Tasks Remaining: {taskCount, number}"
                 id="ChallengeProgress.tasks.remaining"
-                values={Object {}}
+                values={
+                                Object {
+                                                "taskCount": 3,
+                                              }
+                }
 />,
-              ": ",
-              3,
               " (",
-              60,
-              "%)",
+              <FormattedNumber
+                minimumFractionDigits={1}
+                style="percent"
+                value={0.6}
+/>,
+              ")",
             ],
             "className": "challenge-task-progress__tasks-remaining",
-            "title": undefined,
           },
           "ref": null,
           "rendered": Array [
@@ -398,19 +430,31 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "defaultMessage": "Tasks Remaining",
+                "defaultMessage": "Tasks Remaining: {taskCount, number}",
                 "id": "ChallengeProgress.tasks.remaining",
-                "values": Object {},
+                "values": Object {
+                  "taskCount": 3,
+                },
               },
               "ref": null,
               "rendered": null,
               "type": [Function],
             },
-            ": ",
-            3,
             " (",
-            60,
-            "%)",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "minimumFractionDigits": 1,
+                "style": "percent",
+                "value": 0.6,
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            ")",
           ],
           "type": "div",
         },

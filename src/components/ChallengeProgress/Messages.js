@@ -16,6 +16,6 @@ export default defineMessages({
 
   tasksRemaining: {
     id: "ChallengeProgress.tasks.remaining",
-    defaultMessage: "Tasks Remaining"
+    defaultMessage: "Tasks Remaining: {taskCount, number}"
   },
 })
