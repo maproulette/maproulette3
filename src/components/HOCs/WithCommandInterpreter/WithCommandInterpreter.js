@@ -137,6 +137,12 @@ export const executeMapSearch = (props, query, setLoading) => {
     }
   }
 
+  // If the map is currently showing a browsed challenge, then we need to stop
+  // browsing so map moves as expected.
+  if (props.browsedChallenge) {
+    props.stopBrowsingChallenge()
+  }
+
   // It might be a string place -- let's ask Nominatim for it's location
   if (!bounds) {
     executePlaceSearch(props, query, setLoading)
