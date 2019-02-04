@@ -18,4 +18,9 @@ export default defineMessages({
     id: "ChallengeProgress.tasks.remaining",
     defaultMessage: "Tasks Remaining: {taskCount, number}"
   },
+
+  outOfTotal: {
+    id: "ChallengeProgress.tasks.totalCount",
+    defaultMessage: " of {totalCount, number}"
+  },
 })
