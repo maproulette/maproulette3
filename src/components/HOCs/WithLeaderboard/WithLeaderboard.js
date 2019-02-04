@@ -5,6 +5,7 @@ import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
+import queryString from 'query-string'
 import { fetchLeaderboard, fetchLeaderboardForUser,
          DEFAULT_LEADERBOARD_COUNT } from '../../../services/Leaderboard/Leaderboard'
 
@@ -80,26 +81,45 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
     setMonthsPast = monthsPast => {
       if (monthsPast !== this.state.monthsPast) {
         this.setState({monthsPast})
-        this.updateLeaderboard(monthsPast, this.props.countryCode || this.state.countryCode)
+
+        const countryCode = this.props.countryCode || this.state.countryCode
+        this.updateLeaderboard(monthsPast, countryCode)
+
+        if (countryCode) {
+          this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${monthsPast}` )
+        }
+        else {
+          this.props.history.push(`/leaderboard?monthsPast=${monthsPast}` )
+        }
       }
     }
 
     setCountryCode = countryCode => {
       if (countryCode !== this.state.countryCode) {
-        this.setState({countryCode})
-        this.updateLeaderboard(this.state.monthsPast, countryCode)
-        this.props.history.push(`/country/${countryCode}/leaderboard` )
+        if (countryCode === "ALL") {
+          this.props.history.push(`/leaderboard?monthsPast=${this.monthsPast()}` )
+        }
+        else {
+          this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${this.monthsPast()}` )
+        }
       }
     }
 
     loadMore = () => {
-      this.updateLeaderboard(this.props.monthsPast || this.state.monthsPast,
-                             this.props.countryCode || this.state.countryCode, true)
+      this.updateLeaderboard(this.monthsPast(), this.props.countryCode || this.state.countryCode, true)
+    }
+
+    monthsPast = () => {
+      const urlParams = queryString.parse(_get(this.props, 'location.search'))
+      if (urlParams.monthsPast)
+        return parseInt(urlParams.monthsPast, 10)
+      else
+        return this.props.monthsPast || this.state.monthsPast
+
     }
 
     componentDidMount() {
-      this.updateLeaderboard(this.props.monthsPast || this.state.monthsPast,
-                             this.props.countryCode || this.state.countryCode)
+      this.updateLeaderboard(this.monthsPast(), this.props.countryCode || this.state.countryCode)
     }
 
     componentDidUpdate(prevProps) {
@@ -109,7 +129,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
           this.props.countryCode !== prevProps.countryCode ||
           !_isEqual(this.props.challenges, prevProps.challenges) ||
           !_isEqual(this.props.projects, prevProps.projects)) {
-        this.updateLeaderboard(this.props.monthsPast || this.state.monthsPast,
+        this.updateLeaderboard(this.monthsPast(),
                                this.props.countryCode || this.state.countryCode)
       }
     }
@@ -120,7 +140,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
       return <WrappedComponent leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
                                userLeaderboard={this.state.userLeaderboard}
-                               monthsPast={this.state.monthsPast}
+                               monthsPast={this.monthsPast()}
                                countryCode={this.state.countryCode || this.props.countryCode}
                                setMonthsPast={this.setMonthsPast}
                                setCountryCode={this.setCountryCode}

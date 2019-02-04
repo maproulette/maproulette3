@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
+import _sortBy from 'lodash/sortBy'
 import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import DropdownButton from '../Bulma/DropdownButton'
@@ -24,11 +25,15 @@ export class CountrySelector extends Component {
   }
 
   render() {
-    const dropdownOptions = _map(supportedCountries(), country => ({
+    const countryList = supportedCountries()
+    let dropdownOptions = _map(countryList, country => ({
       key: country.countryCode,
       text: this.props.intl.formatMessage(countryMessages[country.countryCode]),
       value: country.countryCode,
     }))
+
+    dropdownOptions = _sortBy(dropdownOptions, (o) => o.text)
+    dropdownOptions.unshift({key:"ALL", text:"All Countries", value: "ALL"})
 
     return (
       <DeactivatableDropdownButton
@@ -37,7 +42,10 @@ export class CountrySelector extends Component {
         onSelect={this.onSelect}
       >
         <div className="button is-rounded is-outlined">
-          <FormattedMessage {...countryMessages[this.props.currentCountryCode]} />
+          { !this.props.currentCountryCode ?
+            <FormattedMessage {...countryMessages["ALL"]} />:
+            <FormattedMessage {...countryMessages[this.props.currentCountryCode]} />
+          }
           <div className="dropdown-indicator" />
         </div>
       </DeactivatableDropdownButton>
@@ -47,7 +55,7 @@ export class CountrySelector extends Component {
 
 CountrySelector.propTypes = {
   /** Current selection */
-  currentCountryCode: PropTypes.string.isRequired,
+  currentCountryCode: PropTypes.string,
   /** Invoked when the user chooses a new country */
   selectCountry: PropTypes.func.isRequired,
 }
