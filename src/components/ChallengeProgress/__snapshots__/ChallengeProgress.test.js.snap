@@ -134,11 +134,19 @@ ShallowWrapper {
           />
            (
           <FormattedNumber
-                    minimumFractionDigits={1}
                     style="percent"
                     value={0.6}
           />
           )
+          <FormattedMessage
+                    defaultMessage=" of {totalCount, number}"
+                    id="ChallengeProgress.tasks.totalCount"
+                    values={
+                              Object {
+                                        "totalCount": 5,
+                                      }
+                    }
+          />
 </div>,
       ],
       "className": "challenge-task-progress",
@@ -214,11 +222,19 @@ ShallowWrapper {
 />,
             " (",
             <FormattedNumber
-              minimumFractionDigits={1}
               style="percent"
               value={0.6}
 />,
             ")",
+            <FormattedMessage
+              defaultMessage=" of {totalCount, number}"
+              id="ChallengeProgress.tasks.totalCount"
+              values={
+                            Object {
+                                          "totalCount": 5,
+                                        }
+              }
+/>,
           ],
           "className": "challenge-task-progress__tasks-remaining",
         },
@@ -245,7 +261,6 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "class",
             "props": Object {
-              "minimumFractionDigits": 1,
               "style": "percent",
               "value": 0.6,
             },
@@ -254,6 +269,21 @@ ShallowWrapper {
             "type": [Function],
           },
           ")",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": " of {totalCount, number}",
+              "id": "ChallengeProgress.tasks.totalCount",
+              "values": Object {
+                "totalCount": 5,
+              },
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
         ],
         "type": "div",
       },
@@ -335,11 +365,19 @@ ShallowWrapper {
             />
              (
             <FormattedNumber
-                        minimumFractionDigits={1}
                         style="percent"
                         value={0.6}
             />
             )
+            <FormattedMessage
+                        defaultMessage=" of {totalCount, number}"
+                        id="ChallengeProgress.tasks.totalCount"
+                        values={
+                                    Object {
+                                                "totalCount": 5,
+                                              }
+                        }
+            />
 </div>,
         ],
         "className": "challenge-task-progress",
@@ -415,11 +453,19 @@ ShallowWrapper {
 />,
               " (",
               <FormattedNumber
-                minimumFractionDigits={1}
                 style="percent"
                 value={0.6}
 />,
               ")",
+              <FormattedMessage
+                defaultMessage=" of {totalCount, number}"
+                id="ChallengeProgress.tasks.totalCount"
+                values={
+                                Object {
+                                                "totalCount": 5,
+                                              }
+                }
+/>,
             ],
             "className": "challenge-task-progress__tasks-remaining",
           },
@@ -446,7 +492,6 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "class",
               "props": Object {
-                "minimumFractionDigits": 1,
                 "style": "percent",
                 "value": 0.6,
               },
@@ -455,6 +500,21 @@ ShallowWrapper {
               "type": [Function],
             },
             ")",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": " of {totalCount, number}",
+                "id": "ChallengeProgress.tasks.totalCount",
+                "values": Object {
+                  "totalCount": 5,
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
           ],
           "type": "div",
         },
