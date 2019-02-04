@@ -135,11 +135,10 @@ export class Leaderboard extends Component {
                                     pastMonthsOptions={[1, 3, 6, 12]}
                                     currentMonthsPast={this.props.monthsPast}
                                     selectDuration={this.props.setMonthsPast} />
-              {this.props.leaderboardOptions.filterCountry &&
-                <CountrySelector className="leaderboard__board__header__country-control"
-                                      currentCountryCode={this.props.countryCode}
-                                      selectCountry={this.props.setCountryCode} />
-              }
+
+              <CountrySelector className="leaderboard__board__header__country-control"
+                               currentCountryCode={this.props.countryCode}
+                               selectCountry={this.props.setCountryCode} />
              </h1>
 
              <div className="leaderboard__board__header__point-breakdown">
@@ -156,7 +155,7 @@ export class Leaderboard extends Component {
             <h1 className="leaderboard__board__display-name">{this.props.displayName}</h1>
           }
 
-          {this.props.leaderboardOptions.filterCountry &&
+          {_get(this.props, "leaderboardOptions.filterCountry") &&
             <LeaderboardMap {...this.props}/>
           }
 

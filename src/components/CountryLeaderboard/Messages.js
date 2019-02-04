@@ -4,6 +4,7 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for country names by country code.
  */
 export default defineMessages({
+  ALL: {id: "CountryName.ALL", defaultMessage: "All Countries"},
   AF: {id: "CountryName.AF", defaultMessage: "Afghanistan"},
   AO: {id: "CountryName.AO", defaultMessage: "Angola"},
   AL: {id: "CountryName.AL", defaultMessage: "Albania"},
