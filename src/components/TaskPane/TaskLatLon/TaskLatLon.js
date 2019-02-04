@@ -24,11 +24,11 @@ export default class TaskLatLon extends Component {
 
     return (
       <div className={classNames('task-lat-lon', this.props.className)}>
-        <span className='task-lat-lon__label'>Lat/Lon:</span>
-        <span className='task-lat-lon__latitude'>
-          {this.rounded(centerpoint.lat)}
-        </span>, <span className='task-lat-lon__longitude'>
+        <span className='task-lat-lon__label'>Lon/Lat:</span>
+        <span className='task-lat-lon__longitude'>
           {this.rounded(centerpoint.lng)}
+        </span>, <span className='task-lat-lon__latitude'>
+          {this.rounded(centerpoint.lat)}
         </span>
 
         <CopyToClipboard text={`${this.rounded(centerpoint.lat)}, ${this.rounded(centerpoint.lng)}`}>
