@@ -29,6 +29,12 @@ export default {
     doesNotExist: messages.taskDoesNotExist,
   },
 
+  osm: {
+    requestTooLarge: messages.osmRequestTooLarge,
+    bandwidthExceeded: messages.osmBandwidthExceeded,
+    fetchFailure: messages.osmFetchFailure,
+  },
+
   clusteredTask: {
     fetchFailure: messages.clusteredTaskFetchFailure,
   },
@@ -62,6 +68,7 @@ export default {
 
   map: {
     renderFailure: messages.mapRenderFailure,
+    placeNotFound: messages.placeNotFound,
   },
 
   dashboard: {

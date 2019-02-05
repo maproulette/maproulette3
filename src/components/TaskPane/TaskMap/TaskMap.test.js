@@ -23,6 +23,9 @@ let basicProps = null
 beforeEach(() => {
   basicProps = _cloneDeep(propsFixture)
   basicProps.setTaskMapBounds = jest.fn()
+  basicProps.activateKeyboardShortcutGroup = jest.fn()
+  basicProps.deactivateKeyboardShortcutGroup = jest.fn()
+  basicProps.fetchOSMData = jest.fn()
 })
 
 test("renders with props as expected", () => {

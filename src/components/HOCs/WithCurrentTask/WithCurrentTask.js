@@ -18,7 +18,7 @@ import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
-import { fetchOSMUser } from '../../../services/OSMUser/OSMUser'
+import { fetchOSMUser, fetchOSMData } from '../../../services/OSM/OSM'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 import { renewVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
@@ -135,6 +135,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         // Fetch the task comments and location data, but don't wait for them
         dispatch(fetchTaskComments(taskId))
         dispatch(fetchTaskPlace(loadedTask))
+        dispatch(fetchChallengeActions(loadedTask.parent))
 
         return normalizedResults
       })
@@ -202,6 +203,11 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     fetchOSMUser,
+    fetchOSMData: bbox => {
+      return fetchOSMData(bbox).catch(error => {
+        dispatch(addError(error))
+      })
+    },
   }
 }
 

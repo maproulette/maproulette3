@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
 import _omit from 'lodash/omit'
-import { fetchChallenge }
+import { fetchChallenge, fetchChallengeActions, challengeDenormalizationSchema }
        from '../../../services/Challenge/Challenge'
+import { fetchProject }
+       from '../../../services/Project/Project'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -76,8 +79,11 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
         if (_get(this.state, 'browsedChallenge.id') !== challengeId ||
             this.state.isVirtual !== isVirtual ||
             _isFinite(this.state.loadingBrowsedChallenge)) {
-          let challenge = isVirtual ? props.virtualChallenge :
-                            _get(props.entities, `challenges.${challengeId}`)
+          let challenge = isVirtual ?
+                          props.virtualChallenge :
+                          denormalize(_get(this.props.entities, `challenges.${challengeId}`),
+                                      challengeDenormalizationSchema(),
+                                      this.props.entities)
 
           if (_isObject(challenge)) {
             // If our challenge data is stale, refresh it.
@@ -108,6 +114,10 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
             })
 
             props.loadChallenge(challengeId)
+          }
+
+          if (!isVirtual) {
+            props.loadChallengeActions(challengeId)
           }
         }
       }
@@ -168,7 +178,8 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
                           clusteredTasks={clusteredTasks}
                           {..._omit(this.props, ['entities',
                                                  'clusteredTasks',
-                                                 'loadChallenge'])} />
+                                                 'loadChallenge',
+                                                 'loadChallengeActions'])} />
       )
     }
   }
@@ -198,11 +209,22 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(addError(AppErrors.challenge.doesNotExist))
             ownProps.history.push('/browse/challenges')
           }
+          else {
+            const projectId =
+              _get(normalizedResults, `entities.challenges.${normalizedResults.result}.parent`)
+            if (_isFinite(projectId)) {
+              dispatch(fetchProject(projectId))
+            }
+          }
         })
       },
       5000,
       {leading: true},
     ),
+
+    loadChallengeActions: challengeId => {
+      return dispatch(fetchChallengeActions(challengeId))
+    },
   }
 }
 

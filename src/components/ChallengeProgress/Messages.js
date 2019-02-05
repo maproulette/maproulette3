@@ -12,5 +12,15 @@ export default defineMessages({
   tooltipLabel: {
     id: "ChallengeProgress.tooltip.label",
     defaultMessage: "Tasks"
-  }
+  },
+
+  tasksRemaining: {
+    id: "ChallengeProgress.tasks.remaining",
+    defaultMessage: "Tasks Remaining: {taskCount, number}"
+  },
+
+  outOfTotal: {
+    id: "ChallengeProgress.tasks.totalCount",
+    defaultMessage: " of {totalCount, number}"
+  },
 })

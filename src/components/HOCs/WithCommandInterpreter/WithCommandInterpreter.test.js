@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import _findIndex from 'lodash/findIndex'
-import { executeCommand } from './WithCommandInterpreter'
+import { executeCommand, executeMapSearch } from './WithCommandInterpreter'
+import { fetchPlaceLocation } from '../../../services/Place/Place'
+
+jest.mock('../../../services/Place/Place')
+fetchPlaceLocation.mockImplementation((query) => new Promise(() => {}))
 
 let basicProps = {}
 
@@ -12,24 +16,23 @@ beforeEach(() => {
 
 
 test("executeCommand recognizes s/", () => {
-  //const wrapper = new (WithCommandInterpreter(<div />))
-
-  executeCommand(basicProps, "s/hello world")
+  executeCommand(basicProps, "s/hello world", (loading) => {})
   expect(basicProps.setSearch).toHaveBeenCalledWith("hello world")
 })
 
-test("executeCommand recognizes m/ with 4 bounds", () => {
-  //const wrapper = new (WithCommandInterpreter(<div />))
-
-  executeCommand(basicProps, "m/1.1,2.2,3.3,4.4")
+test("executeMapSearch recognizes 4 bounds", () => {
+  executeMapSearch(basicProps, "1.1,2.2,3.3,4.4", (loading) => {})
   expect(basicProps.setSearch).not.toHaveBeenCalled()
   expect(basicProps.updateChallengeSearchMapBounds).toHaveBeenCalledWith([1.1, 2.2, 3.3, 4.4], true)
 })
 
-test("executeCommand recognizes m/ with 2 bounds as centerpoint", () => {
-  //const wrapper = new (WithCommandInterpreter(<div />))
-
-  executeCommand(basicProps, "m/1,4")
+test("executeMapSearch recognizes 2 bounds as centerpoint", () => {
+  executeMapSearch(basicProps, "1,4", (loading) => {})
   expect(basicProps.setSearch).not.toHaveBeenCalled()
   expect(basicProps.updateChallengeSearchMapBounds).toHaveBeenCalledWith([0.625, 3.625, 1.375, 4.375], true)
+})
+
+test("executeMapSearch recognizes string for Nominatim search", () => {
+  executeMapSearch(basicProps, "moscow", (loading) => {})
+  expect(fetchPlaceLocation).toHaveBeenCalledWith("moscow")
 })

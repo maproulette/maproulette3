@@ -120,6 +120,34 @@ ShallowWrapper {
           tooltipFormat={[Function]}
 />,
         false,
+        <div
+          className="challenge-task-progress__tasks-remaining"
+>
+          <FormattedMessage
+                    defaultMessage="Tasks Remaining: {taskCount, number}"
+                    id="ChallengeProgress.tasks.remaining"
+                    values={
+                              Object {
+                                        "taskCount": 3,
+                                      }
+                    }
+          />
+           (
+          <FormattedNumber
+                    style="percent"
+                    value={0.6}
+          />
+          )
+          <FormattedMessage
+                    defaultMessage=" of {totalCount, number}"
+                    id="ChallengeProgress.tasks.totalCount"
+                    values={
+                              Object {
+                                        "totalCount": 5,
+                                      }
+                    }
+          />
+</div>,
       ],
       "className": "challenge-task-progress",
     },
@@ -177,6 +205,88 @@ ShallowWrapper {
         "type": [Function],
       },
       false,
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <FormattedMessage
+              defaultMessage="Tasks Remaining: {taskCount, number}"
+              id="ChallengeProgress.tasks.remaining"
+              values={
+                            Object {
+                                          "taskCount": 3,
+                                        }
+              }
+/>,
+            " (",
+            <FormattedNumber
+              style="percent"
+              value={0.6}
+/>,
+            ")",
+            <FormattedMessage
+              defaultMessage=" of {totalCount, number}"
+              id="ChallengeProgress.tasks.totalCount"
+              values={
+                            Object {
+                                          "totalCount": 5,
+                                        }
+              }
+/>,
+          ],
+          "className": "challenge-task-progress__tasks-remaining",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": "Tasks Remaining: {taskCount, number}",
+              "id": "ChallengeProgress.tasks.remaining",
+              "values": Object {
+                "taskCount": 3,
+              },
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          " (",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "style": "percent",
+              "value": 0.6,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          ")",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "defaultMessage": " of {totalCount, number}",
+              "id": "ChallengeProgress.tasks.totalCount",
+              "values": Object {
+                "totalCount": 5,
+              },
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+        ],
+        "type": "div",
+      },
     ],
     "type": "div",
   },
@@ -241,6 +351,34 @@ ShallowWrapper {
             tooltipFormat={[Function]}
 />,
           false,
+          <div
+            className="challenge-task-progress__tasks-remaining"
+>
+            <FormattedMessage
+                        defaultMessage="Tasks Remaining: {taskCount, number}"
+                        id="ChallengeProgress.tasks.remaining"
+                        values={
+                                    Object {
+                                                "taskCount": 3,
+                                              }
+                        }
+            />
+             (
+            <FormattedNumber
+                        style="percent"
+                        value={0.6}
+            />
+            )
+            <FormattedMessage
+                        defaultMessage=" of {totalCount, number}"
+                        id="ChallengeProgress.tasks.totalCount"
+                        values={
+                                    Object {
+                                                "totalCount": 5,
+                                              }
+                        }
+            />
+</div>,
         ],
         "className": "challenge-task-progress",
       },
@@ -298,6 +436,88 @@ ShallowWrapper {
           "type": [Function],
         },
         false,
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <FormattedMessage
+                defaultMessage="Tasks Remaining: {taskCount, number}"
+                id="ChallengeProgress.tasks.remaining"
+                values={
+                                Object {
+                                                "taskCount": 3,
+                                              }
+                }
+/>,
+              " (",
+              <FormattedNumber
+                style="percent"
+                value={0.6}
+/>,
+              ")",
+              <FormattedMessage
+                defaultMessage=" of {totalCount, number}"
+                id="ChallengeProgress.tasks.totalCount"
+                values={
+                                Object {
+                                                "totalCount": 5,
+                                              }
+                }
+/>,
+            ],
+            "className": "challenge-task-progress__tasks-remaining",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": "Tasks Remaining: {taskCount, number}",
+                "id": "ChallengeProgress.tasks.remaining",
+                "values": Object {
+                  "taskCount": 3,
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            " (",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "style": "percent",
+                "value": 0.6,
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            ")",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "defaultMessage": " of {totalCount, number}",
+                "id": "ChallengeProgress.tasks.totalCount",
+                "values": Object {
+                  "totalCount": 5,
+                },
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+          ],
+          "type": "div",
+        },
       ],
       "type": "div",
     },

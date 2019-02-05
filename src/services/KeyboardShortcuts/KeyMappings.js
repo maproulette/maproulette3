@@ -24,6 +24,11 @@ export default {
     cancel: {key: 'Escape', label: messages.cancel, keyLabel: messages.escapeLabel},
     fitBounds: {key: '0', label: messages.fitBounds},
   },
+  layers: {
+    layerOSMData: {key: 'o', label: messages.layerOSMData},
+    layerTaskFeatures: {key: 's', label: messages.layerTaskFeatures},
+    layerMapillary: {key: 'm', label: messages.layerMapillary},
+  },
   taskCompletion: {
     skip: {key: 'w', label: messages.skip},
     falsePositive: {key: 'q', label: messages.falsePositive},
