@@ -7,6 +7,31 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.1.3] - 2019-02-05
+### Added
+- Support for [simplestyle](https://github.com/mapbox/simplestyle-spec) task-feature styling by @zverik
+- Korean translation by @depth221
+- OSM Data map layer with latest OSM data during task completion
+- New keyboard shortcuts available during task completion: `s` to toggle
+  visibility of the task-features layer and `o` to toggle the new OSM data
+  layer on/off
+- Display of logged-in user's leaderboard ranking even if not in top list
+- Country-specific leaderboards
+- Option to show more users on leaderboard to view further down the rankings
+- Move discovery map with Nominatum search using `m/` search-box short command, e.g. `m/moscow`
+- Display of total elapsed time when challenge tasks are building
+- Display of count and percentage of tasks remaining alongside challenge progress
+
+### Fixed
+- Typo in Japanese translation by @higa4
+- Missing "Manage" option when challenge owner browsing non-visible challenge
+- Inability to remove default changeset comment from existing challenge
+
+### Changed
+- "Create" top-nav link is now "Create & Manage" to improve clarity
+- Show Lon/Lat of task on task completion page instead of Lat/Lon
+
+
 ## [v3.1.2] - 2019-01-10
 ### Added
 - Japanese translation by @higa4
