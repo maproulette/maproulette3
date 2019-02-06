@@ -64,6 +64,18 @@ export const jsSchema = intl => {
         type: "boolean",
         default: false,
       },
+      needsReview: {
+        title: intl.formatMessage(messages.needsReviewLabel),
+        description: intl.formatMessage(messages.needsReviewDescription),
+        type: "boolean",
+        default: false,
+      },
+      isReviewer: {
+        title: intl.formatMessage(messages.isReviewerLabel),
+        description: intl.formatMessage(messages.isReviewerDescription),
+        type: "boolean",
+        default: false,
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {

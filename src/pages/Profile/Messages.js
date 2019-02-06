@@ -81,5 +81,25 @@ export default defineMessages({
     id: "Profile.apiKey.controls.reset.label",
     defaultMessage: "Reset",
   },
+  
+  needsReviewLabel: {
+    id: "Profile.form.needsReview.label",
+    defaultMessage: "Request Review",
+  },
+
+  needsReviewDescription: {
+    id: "Profile.form.needsReview.description",
+    defaultMessage: "If checked, a review will be requested on your work.",
+  },
+
+  isReviewerLabel: {
+    id: "Profile.form.isReviewer.label",
+    defaultMessage: "Are you a Reviewer?",
+  },
+
+  isReviewerDescription: {
+    id: "Profile.form.isReviewer.description",
+    defaultMessage: "If checked, you will be allowed to review other's work.",
+  },
 })
 

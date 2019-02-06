@@ -12,49 +12,50 @@ import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
-import TaskMap from './TaskMap/TaskMap'
-import VirtualChallengeNameLink
-       from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
+import TaskMap from '../TaskPane/TaskMap/TaskMap'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
 import BusySpinner from '../BusySpinner/BusySpinner'
-import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
-import './TaskPane.scss'
+import MobileTaskDetails from '../TaskPane/MobileTaskDetails/MobileTaskDetails'
+import './ReviewTaskPane.scss'
 
 // Setup child components with necessary HOCs
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
 
-const WIDGET_WORKSPACE_NAME = "taskCompletion"
+const WIDGET_WORKSPACE_NAME = "taskReview"
 
 export const defaultWorkspaceSetup = function() {
   return {
     dataModelVersion: 2,
     name: WIDGET_WORKSPACE_NAME,
-    label: "Task Completion",
+    label: "Task Review",
     widgets: [
+      widgetDescriptor('TaskStatusWidget'),
       widgetDescriptor('TaskInstructionsWidget'),
       widgetDescriptor('TaskMapWidget'),
+      widgetDescriptor('TaskReviewWidget'),
+      widgetDescriptor('TaskCommentsWidget'),
       widgetDescriptor('TaskCompletionWidget'),
-      widgetDescriptor('TaskLocationWidget'),
     ],
     layout: [
-      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4},
+      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 3},
+      {i: generateWidgetId(), x: 0, y: 3, w: 4, h: 4},
       {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18},
-      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 11, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 18, w: 3, h: 12},
+      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 14, w: 4, h: 4},
+      {i: generateWidgetId(), x: 0, y: 18, w: 4, h: 7},
     ],
   }
 }
 
 /**
- * TaskPane presents the current task being actively worked upon. It contains
+ * ReviewTaskPane presents the current task being actively worked upon. It contains
  * an WidgetWorkspace with information and controls, including a TaskMap
  * displaying the appropriate map and task geometries.
  *
- * @author [Neil Rotstan](https://github.com/nrotstan)
+ * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export class TaskPane extends Component {
+export class ReviewTaskPane extends Component {
   state = {
     /**
      * id of task once user initiates completion. This is used to help our
@@ -103,7 +104,7 @@ export class TaskPane extends Component {
           <WidgetWorkspace
             {...this.props}
             className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-8 mr-cards-inverse"
-            workspaceEyebrow={<VirtualChallengeNameLink {...this.props} />}
+            workspaceEyebrow={<ChallengeNameLink {...this.props} />}
             workspaceTitle={
               <h1 className="mr-h2 mr-my-2 mr-links-inverse">
                 <ChallengeNameLink {...this.props} />
@@ -138,7 +139,7 @@ export class TaskPane extends Component {
   }
 }
 
-TaskPane.propTypes = {
+ReviewTaskPane.propTypes = {
   /** The task to be worked upon. */
   task: PropTypes.object,
 }
@@ -146,7 +147,7 @@ TaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    TaskPane,
+    ReviewTaskPane,
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup

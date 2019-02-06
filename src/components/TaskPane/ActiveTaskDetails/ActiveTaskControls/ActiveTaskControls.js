@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
+import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from '../../../TaskCommentInput/TaskCommentInput'
@@ -31,6 +32,15 @@ export class ActiveTaskControls extends Component {
 
   setComment = comment => this.setState({comment})
 
+  toggleNeedsReview = () => {
+    this.setState({needsReview: !this.getNeedsReviewSetting()})
+  }
+
+  getNeedsReviewSetting = () => {
+    return !_isUndefined(this.state.needsReview) ? this.state.needsReview :
+      _get(this.props, 'user.settings.needsReview')
+  }
+
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
@@ -48,7 +58,7 @@ export class ActiveTaskControls extends Component {
     this.setState({taskBeingCompleted: this.props.task.id})
     this.props.completeTask(this.props.task.id, this.props.task.parent.id,
                             taskStatus, this.state.comment, this.props.taskLoadBy,
-                            this.props.user.id)
+                            this.props.user.id, this.state.needsReview)
   }
 
   /** Move to the next task without modifying the task status */
@@ -122,11 +132,22 @@ export class ActiveTaskControls extends Component {
 
           {isEditingTask &&
            <TaskCompletionStep2
-             {...this.props} 
+             {...this.props}
              allowedProgressions={allowedProgressions}
              complete={this.complete}
              cancelEditing={this.cancelEditing}
            />
+          }
+
+          {!isComplete &&
+            <div className="field" onClick={() => this.toggleNeedsReview()}>
+              <input type="checkbox" className="switch is-rounded short-and-wide"
+                    onChange={() => {}}
+                    checked={this.getNeedsReviewSetting()} />
+              <label>
+                <FormattedMessage {...messages.requestReview} />
+              </label>
+            </div>
           }
         </div>
       )

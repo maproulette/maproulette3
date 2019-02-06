@@ -13,6 +13,8 @@ export { default as TaskCommentsWidget }
        from './TaskCommentsWidget/TaskCommentsWidget'
 export { default as TaskCompletionWidget }
        from './TaskCompletionWidget/TaskCompletionWidget'
+export { default as TaskReviewWidget }
+      from './TaskReviewWidget/TaskReviewWidget'
 export { default as TaskMoreOptionsWidget }
        from './TaskMoreOptionsWidget/TaskMoreOptionsWidget'
 export { default as KeyboardShortcutsWidget }

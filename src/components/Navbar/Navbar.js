@@ -205,11 +205,21 @@ const Nav = props => (
         <FormattedMessage {...messages.results} />
       </NavLink>
     </li>
+
     <li>
       <NavLink to='/leaderboard' onClick={props.closeMobileMenu}>
         <FormattedMessage {...messages.leaderboard} />
       </NavLink>
     </li>
+
+    <LoggedInUser {...props}>
+      <li>
+        <NavLink to="/review" onClick={props.closeMobileMenu}>
+          <FormattedMessage {...messages.review} />
+        </NavLink>
+      </li>
+    </LoggedInUser>
+
     <li>
       <a
         href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"

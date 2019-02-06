@@ -10,7 +10,10 @@ import ProjectLeaderboard from './pages/Leaderboard/ProjectLeaderboard'
 import CountryLeaderboard from './pages/Leaderboard/CountryLeaderboard'
 import ChallengePane from './components/ChallengePane/ChallengePane'
 import TaskPane from './components/TaskPane/TaskPane'
+import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
+import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
+import ReviewTasksDashboard from './components/ReviewTasksDashboard/ReviewTasksDashboard'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
@@ -35,6 +38,7 @@ import './App.scss'
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
 const CurrentTaskPane = WithCurrentTask(TaskPane)
+const CurrentReviewTaskPane = WithCurrentTask(ReviewTaskPane, true)
 const CurrentVirtualChallengeTaskPane =
   WithVirtualChallenge(WithCurrentTask(TaskPane))
 const VirtualChallengePane = WithVirtualChallenge(ChallengePane)
@@ -85,9 +89,12 @@ export class App extends Component {
             <CachedRoute path='/user/profile' component={Profile} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />
+            <CachedRoute path='/review' component={ReviewTasksDashboard} />
             <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
             <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
             <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />
+            <CachedRoute path='/challenge/:challengeId/task/:taskId/inspect' component={InspectTask} />
+            <CachedRoute path='/challenge/:challengeId/task/:taskId/review' component={CurrentReviewTaskPane} />
             <CachedRoute path='/admin' component={AdminPane} />
             <CachedRoute path='/error' component={ErrorPane} />
             <Route component={PageNotFound} />
