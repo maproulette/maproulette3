@@ -26,8 +26,8 @@ export default class TaskManageControls extends Component {
       <div className="active-task-controls__task-manage-controls">
         <h3><FormattedMessage {...messages.heading} /></h3>
         <div className="active-task-controls__task-manage-controls__options">
-          <Link to={`${manageBasePath}/review`}>
-            <FormattedMessage {...messages.reviewLabel} />
+          <Link to={`${manageBasePath}/inspect`}>
+            <FormattedMessage {...messages.inspectLabel} />
           </Link>
           <Link to={`${manageBasePath}/edit`}>
             <FormattedMessage {...messages.modifyLabel} />

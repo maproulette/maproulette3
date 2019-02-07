@@ -1,23 +1,23 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with ReviewTaskControls
+ * Internationalized messages for use with InspectTaskControls
  */
 export default defineMessages({
   previousTaskLabel: {
-    id: "Admin.TaskReview.controls.previousTask.label",
+    id: "Admin.TaskInspect.controls.previousTask.label",
     defaultMessage: "Prior Task",
   },
   nextTaskLabel: {
-    id: "Admin.TaskReview.controls.nextTask.label",
+    id: "Admin.TaskInspect.controls.nextTask.label",
     defaultMessage: "Next Task",
   },
   editTaskLabel: {
-    id: "Admin.TaskReview.controls.editTask.label",
+    id: "Admin.TaskInspect.controls.editTask.label",
     defaultMessage: "Edit Task",
   },
   modifyTaskLabel: {
-    id: "Admin.TaskReview.controls.modifyTask.label",
+    id: "Admin.TaskInspect.controls.modifyTask.label",
     defaultMessage: "Modify Task",
   },
 })

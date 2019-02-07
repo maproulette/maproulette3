@@ -241,7 +241,7 @@ export const loadRandomTaskFromVirtualChallenge = function(virtualChallengeId,
 
 /**
  * Retrieve the previous sequential task from the given challenge (primarily
- * intended for use during challenge review by challenge owners).
+ * intended for use during challenge inspect by challenge owners).
  */
 export const loadPreviousSequentialTaskFromChallenge = function(challengeId,
                                                                 currentTaskId) {
@@ -258,7 +258,7 @@ export const loadPreviousSequentialTaskFromChallenge = function(challengeId,
 
 /**
  * Retrieve the next sequential task from the given challenge (primarily intended
- * for use during challenge review by challenge owners).
+ * for use during challenge inspect by challenge owners).
  */
 export const loadNextSequentialTaskFromChallenge = function(challengeId,
                                                             currentTaskId) {

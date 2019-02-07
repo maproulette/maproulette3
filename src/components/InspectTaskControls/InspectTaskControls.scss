@@ -1,6 +1,6 @@
 @import 'variables.scss';
 
-.review-task-controls {
+.inspect-task-controls {
   &__control-block {
     display: flex;
     justify-content: space-between;
@@ -10,7 +10,7 @@
     }
   }
 
-  .review-task-controls__task-comment {
+  .inspect-task-controls__task-comment {
     margin-bottom: 20px;
   }
 

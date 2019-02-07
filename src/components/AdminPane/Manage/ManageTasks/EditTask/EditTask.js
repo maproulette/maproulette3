@@ -43,14 +43,14 @@ export class EditTask extends Component {
   changeHandler = ({formData}) => this.setState({formData})
 
   /**
-   * Reroute after challenge owner is done, either to Task Review if we came
+   * Reroute after challenge owner is done, either to Task Inspect if we came
    * from there, or to View Challenge if not.
    */
   rerouteAfterCompletion = () => {
-    if (_get(this.props, 'location.state.fromTaskReview')) {
+    if (_get(this.props, 'location.state.fromTaskInspect')) {
       this.props.history.push(
         `/admin/project/${this.props.projectId}/` +
-        `challenge/${this.props.challengeId}/task/${this.props.task.id}/review`
+        `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`
       )
     }
     else {

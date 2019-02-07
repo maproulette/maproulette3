@@ -14,17 +14,17 @@ import TaskEditControl
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import messages from './Messages'
-import './ReviewTaskControls.scss'
+import './InspectTaskControls.scss'
 
 /**
- * ReviewTaskControls presents controls used during task review by a challenge
+ * InspectTaskControls presents controls used during task inspect by a challenge
  * owner, primarily navigation controls for moving to the next or previous
  * sequential task in the challenge, but also controls for opening the task in
  * an editor or modifying the task data.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export class ReviewTaskControls extends Component {
+export class InspectTaskControls extends Component {
   /** Navigate to the previous sequential task */
   prevTask = () => {
     this.props.previousSequentialTask(this.props.task)
@@ -35,17 +35,17 @@ export class ReviewTaskControls extends Component {
     this.props.nextSequentialTask(this.props.task)
   }
 
-  /** Process keyboard shortcuts for the review controls */
+  /** Process keyboard shortcuts for the inspect controls */
   handleKeyboardShortcuts = (event) => {
     if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 
-    const reviewShortcuts = this.props.keyboardShortcutGroups.taskReview
-    if (event.key === reviewShortcuts.prevTask.key) {
+    const inspectShortcuts = this.props.keyboardShortcutGroups.taskInspect
+    if (event.key === inspectShortcuts.prevTask.key) {
       this.prevTask()
     }
-    else if (event.key === reviewShortcuts.nextTask.key) {
+    else if (event.key === inspectShortcuts.nextTask.key) {
       this.nextTask()
     }
   }
@@ -62,20 +62,20 @@ export class ReviewTaskControls extends Component {
 
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
-      _pick(this.props.keyboardShortcutGroups, 'taskReview'),
+      _pick(this.props.keyboardShortcutGroups, 'taskInspect'),
       this.handleKeyboardShortcuts
     )
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcutGroup('taskReview',
+    this.props.deactivateKeyboardShortcutGroup('taskInspect',
                                                this.handleKeyboardShortcuts)
   }
   render() {
     const manager = AsManager(this.props.user)
 
     return (
-      <div className={classNames("review-task-controls", this.props.className)}>
+      <div className={classNames("inspect-task-controls", this.props.className)}>
         <UserEditorSelector {...this.props} className="mr-mb-4" />
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           <TaskEditControl pickEditor={this.pickEditor}
@@ -84,7 +84,7 @@ export class ReviewTaskControls extends Component {
 
           {manager.canWriteProject(this.props.task.parent.parent) ?
            <Link
-             to={{pathname: this.modifyTaskRoute(), state: {fromTaskReview: true}}}
+             to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
              className="mr-button"
            >
              <FormattedMessage {...messages.modifyTaskLabel} />
@@ -103,8 +103,8 @@ export class ReviewTaskControls extends Component {
   }
 }
 
-ReviewTaskControls.propTypes = {
-  /** The task being reviewed */
+InspectTaskControls.propTypes = {
+  /** The task being inspected */
   task: PropTypes.object,
   /** Invoked when the user clicks the previous-task button */
   previousSequentialTask: PropTypes.func.isRequired,
@@ -112,4 +112,4 @@ ReviewTaskControls.propTypes = {
   nextSequentialTask: PropTypes.func.isRequired,
 }
 
-export default WithSearch(WithKeyboardShortcuts(ReviewTaskControls), 'task')
+export default WithSearch(WithKeyboardShortcuts(InspectTaskControls), 'task')
