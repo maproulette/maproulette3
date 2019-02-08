@@ -38,6 +38,7 @@ async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON, removeUn
   const lineFile = AsLineReadableFile(geoJSON)
   let allLinesRead = false
   let totalTasksCreated = 0
+  let removeUnmatched = removeUnmatchedTasks
 
   while (!allLinesRead) {
     let taskLines = await lineFile.readLines(100)
@@ -47,8 +48,9 @@ async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON, removeUn
     }
 
     await dispatch(
-      uploadChallengeGeoJSON(challenge.id, taskLines.join('\n'), true, removeUnmatchedTasks)
+      uploadChallengeGeoJSON(challenge.id, taskLines.join('\n'), true, removeUnmatched)
     )
+    removeUnmatched = false
     totalTasksCreated += taskLines.length
     ownProps.updateCreatingTasksProgress(true, totalTasksCreated)
   }
