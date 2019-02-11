@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import _clone from 'lodash/clone'
 import _get from 'lodash/get'
+import _merge from 'lodash/merge'
 import queryString from 'query-string'
 import { fetchLeaderboard, fetchLeaderboardForUser,
          DEFAULT_LEADERBOARD_COUNT } from '../../../services/Leaderboard/Leaderboard'
@@ -16,7 +16,7 @@ import { fetchLeaderboard, fetchLeaderboardForUser,
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
+const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialOptions={}) {
   return class extends Component {
     state = {
       monthsPast: initialMonthsPast,
@@ -24,6 +24,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
       leaderboard: null,
       leaderboardLoading: false,
       showingCount: DEFAULT_LEADERBOARD_COUNT,
+      leaderboardOptions: initialOptions,
     }
 
     /** merge the given userLeaderboard in with the main leaderboard */
@@ -41,22 +42,23 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
                               ['forUsers', null],
                               ['forCountries', null]])
 
-      if (_isObject(this.props.leaderboardOptions)) {
-        if (_isBoolean(this.props.leaderboardOptions.onlyEnabled)) {
-          params.set('onlyEnabled', this.props.leaderboardOptions.onlyEnabled)
+      const leaderboardOptions = _merge(this.state.leaderboardOptions, this.props.leaderboardOptions)
+      if (leaderboardOptions) {
+        if (_isBoolean(leaderboardOptions.onlyEnabled)) {
+          params.set('onlyEnabled', leaderboardOptions.onlyEnabled)
         }
 
-        if (this.props.leaderboardOptions.filterChallenges &&
+        if (leaderboardOptions.filterChallenges &&
             _isArray(this.props.challenges)) {
           params.set('forChallenges', [_map(this.props.challenges, 'id')])
         }
 
-        if (this.props.leaderboardOptions.filterProjects &&
+        if (leaderboardOptions.filterProjects &&
             _isArray(this.props.projects)) {
           params.set('forProjects', [_map(this.props.projects, 'id')])
         }
 
-        if (this.props.leaderboardOptions.filterCountry && countryCode) {
+        if (leaderboardOptions.filterCountry && countryCode) {
           params.set('forCountries', [countryCode || this.props.countryCode])
         }
       }
@@ -77,7 +79,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
         this.setState({leaderboard})
 
         const userId = _get(this.props, 'user.id')
-        if (userId) {
+        if (userId && !this.state.leaderboardOptions.ignoreUser) {
           fetchLeaderboardForUser(userId, 1, ...this.leaderboardParams(numberMonths, countryCode)).then(userLeaderboard => {
             this.mergeInUserLeaderboard(userLeaderboard)
             this.setState({leaderboardLoading: false})
