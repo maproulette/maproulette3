@@ -3,7 +3,10 @@ import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
+import _isObject from 'lodash/isObject'
 import QuickTextBox from '../../QuickTextBox/QuickTextBox'
+import SignInButton from '../../SignInButton/SignInButton'
+import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
 
 /**
@@ -39,32 +42,39 @@ export class StartVirtualChallenge extends Component {
 
   render() {
     let creationStep = null
-    if (this.state.editingName) {
-      creationStep =
-        <QuickTextBox text={this.state.challengeName}
-                      setText={this.setChallengeName}
-                      done={this.finishEditing}
-                      cancel={this.cancelEditing}
-                      placeholder={this.props.intl.formatMessage(
-                        messages.virtualChallengeNameLabel
-                      )} />
+    if (this.props.creatingVirtualChallenge) {
+      creationStep = <BusySpinner />
+    }
+    else if (this.state.editingName) {
+      if (!_isObject(this.props.user)) {
+        creationStep = <SignInButton {...this.props} longForm className="mr-w-full" />
+      }
+      else {
+        creationStep =
+          <QuickTextBox text={this.state.challengeName}
+                        setText={this.setChallengeName}
+                        done={this.finishEditing}
+                        cancel={this.cancelEditing}
+                        placeholder={this.props.intl.formatMessage(
+                          messages.virtualChallengeNameLabel
+                        )} />
+      }
     }
     else {
-      creationStep =
-        <button className={classNames(
-                  "button is-outlined is-primary",
-                  {"is-loading": this.props.creatingVirtualChallenge}
-                )}
-                onClick={this.startEditing}>
+      creationStep = (
+        <button
+          className={classNames("mr-button mr-w-full", {
+            "is-loading": this.props.creatingVirtualChallenge
+          })}
+          onClick={this.startEditing}
+        >
           <FormattedMessage {...messages.createVirtualChallenge}
                             values={{taskCount: this.props.taskCount}}/>
         </button>
+      )
     }
-    return (
-      <div className="challenge-result-list__virtual-challenge-option">
-        {creationStep}
-      </div>
-    )
+
+    return <div className="mr-mb-4 mr-w-full">{creationStep}</div>
   }
 }
 

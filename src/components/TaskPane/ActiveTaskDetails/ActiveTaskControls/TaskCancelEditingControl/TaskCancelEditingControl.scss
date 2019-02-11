@@ -1,6 +1,6 @@
-@import '../../../../../variables.scss';
+@import 'variables.scss';
 
-.active-task-details .cancel-control {
+.active-task-controls button.button.cancel-control {
   margin-top: 15px;
   margin-bottom: 15px;
 
@@ -9,5 +9,9 @@
     width: auto;
     vertical-align: middle;
     margin-right: 10px;
+  }
+
+  span {
+    font-weight: $weight-normal;
   }
 }

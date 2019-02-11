@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import Modal from '../Bulma/Modal'
 import messages from './Messages'
-import './ConfirmAction.css'
+import './ConfirmAction.scss'
 
 /**
  * ConfirmAction intercepts the onClick control of the immediate child and
@@ -45,22 +45,22 @@ export default class ConfirmAction extends Component {
         {ControlWithConfirmation}
 
         <Modal className="confirm-action__modal" onClose={this.cancel} isActive={this.state.confirming}>
-          <article className="message is-danger">
-            <div className="message-header">
+          <article className="message">
+            <div className="message-header mr-bg-blue-dark">
               {this.props.title || <FormattedMessage {...messages.title} />}
             </div>
             <div className="message-body">
-              <div className="confirm-action__prompt">
+              <div className="confirm-action__prompt mr-text-blue-dark">
                 {this.props.prompt || <FormattedMessage {...messages.prompt} />}
               </div>
 
               <div className="confirm-action__controls">
-                <button className="button is-secondary is-outlined confirm-action__cancel-control"
+                <button className="mr-button mr-button--blue"
                         onClick={this.cancel}>
                   <FormattedMessage {...messages.cancel} />
                 </button>
 
-                <button className="button is-danger is-outlined confirm-action__proceed-control"
+                <button className="mr-button mr-button--danger mr-ml-4"
                         onClick={this.proceed}>
                   <FormattedMessage {...messages.proceed} />
                 </button>

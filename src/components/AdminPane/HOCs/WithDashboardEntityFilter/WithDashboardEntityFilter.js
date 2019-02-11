@@ -36,7 +36,7 @@ const WithDashboardEntityFilter = function(WrappedComponent,
       const updatedFilters = _clone(this.props.currentConfiguration.filters) || {}
       _set(updatedFilters, `${this.filterFieldName()}.${filterName}`, filterValue)
 
-      this.props.saveDashboardConfiguration(Object.assign(
+      this.props.saveWorkspaceConfiguration(Object.assign(
         {},
         this.props.currentConfiguration,
         {filters: updatedFilters}

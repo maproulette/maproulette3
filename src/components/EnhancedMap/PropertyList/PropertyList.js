@@ -17,7 +17,7 @@ const PropertyList = props => {
   const rows = _map(props.featureProperties, (value, key) => {
     const link =
       !_isEmpty(tagInfo) ?
-      <a target="_blank" rel="noopener" href={`${tagInfo}/keys/${key}`}>{key}</a> :
+      <a target="_blank" rel="noopener noreferrer" href={`${tagInfo}/keys/${key}`}>{key}</a> :
       <span className="not-linked">{key}</span>
 
     return (

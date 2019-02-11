@@ -6,8 +6,8 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
 import AsManager from '../../../../interactions/User/AsManager'
-import { generateDashboardId, DashboardDataTarget }
-       from '../../../../services/Dashboard/Dashboard'
+import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
+       from '../../../../services/Widget/Widget'
 import { ChallengeStatus, isUsableChallengeStatus }
        from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithManageableProjects
@@ -16,25 +16,25 @@ import WithCurrentProject
        from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
        from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
-import WithDashboards from '../../HOCs/WithDashboards/WithDashboards'
+import WithWidgetWorkspaces
+       from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import WithDeactivateOnOutsideClick
        from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import Dashboard from '../Dashboard/Dashboard'
+import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
 import TaskUploadingProgress
        from '../TaskUploadingProgress/TaskUploadingProgress'
-import { blockDescriptor } from '../GridBlocks/BlockTypes'
 import DropdownButton from '../../../Bulma/DropdownButton'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './ChallengeDashboard.css'
+import './ChallengeDashboard.scss'
 
 // Setup child components with needed HOCs.
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
@@ -44,28 +44,28 @@ const DASHBOARD_NAME = "challenge"
 
 export const defaultDashboardSetup = function() {
   return {
-    dataModelVersion: 1,
+    dataModelVersion: 2,
     name: DASHBOARD_NAME,
     label: "View Challenge",
-    blocks: [
-      blockDescriptor('ChallengeOverviewBlock'),
-      blockDescriptor('CompletionProgressBlock'),
-      blockDescriptor('LeaderboardBlock'),
-      blockDescriptor('RecentActivityBlock'),
-      blockDescriptor('CommentsBlock'),
-      blockDescriptor('BurndownChartBlock'),
-      blockDescriptor('StatusRadarBlock'),
-      blockDescriptor('ChallengeTasksBlock'),
+    widgets: [
+      widgetDescriptor('ChallengeOverviewWidget'),
+      widgetDescriptor('CompletionProgressWidget'),
+      widgetDescriptor('LeaderboardWidget'),
+      widgetDescriptor('RecentActivityWidget'),
+      widgetDescriptor('CommentsWidget'),
+      widgetDescriptor('BurndownChartWidget'),
+      widgetDescriptor('StatusRadarWidget'),
+      widgetDescriptor('ChallengeTasksWidget'),
     ],
     layout: [
-      {i: generateDashboardId(), x: 0, y: 0, w: 4, h: 7},
-      {i: generateDashboardId(), x: 0, y: 7, w: 4, h: 5},
-      {i: generateDashboardId(), x: 0, y: 12, w: 4, h: 8},
-      {i: generateDashboardId(), x: 0, y: 20, w: 4, h: 14},
-      {i: generateDashboardId(), x: 0, y: 34, w: 4, h: 12},
-      {i: generateDashboardId(), x: 0, y: 46, w: 4, h: 12},
-      {i: generateDashboardId(), x: 0, y: 58, w: 4, h: 12},
-      {i: generateDashboardId(), x: 4, y: 0, w: 8, h: 49},
+      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 5},
+      {i: generateWidgetId(), x: 0, y: 12, w: 4, h: 8},
+      {i: generateWidgetId(), x: 0, y: 20, w: 4, h: 14},
+      {i: generateWidgetId(), x: 0, y: 34, w: 4, h: 12},
+      {i: generateWidgetId(), x: 0, y: 46, w: 4, h: 12},
+      {i: generateWidgetId(), x: 0, y: 58, w: 4, h: 12},
+      {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 49},
     ],
   }
 }
@@ -131,6 +131,7 @@ export class ChallengeDashboard extends Component {
                 </Link>
               </li>
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   {this.props.challenge.name}
                   {this.props.loadingChallenge && <BusySpinner inline />}
@@ -162,6 +163,7 @@ export class ChallengeDashboard extends Component {
                    <DeactivatableDropdownButton options={managedProjectOptions}
                                                onSelect={this.moveChallenge}
                                                emptyContent={<FormattedMessage {...messages.noProjects} />}>
+                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                      <a>
                        <FormattedMessage {...messages.moveChallengeLabel} />
                        <div className="basic-dropdown-indicator" />
@@ -186,6 +188,7 @@ export class ChallengeDashboard extends Component {
 
                <div className="column is-narrow admin__manage__controls--control">
                  <ConfirmAction>
+                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                    <a className='button is-clear' onClick={this.deleteChallenge}>
                      <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
                    </a>
@@ -196,7 +199,7 @@ export class ChallengeDashboard extends Component {
           </div>
         </div>
 
-        <Dashboard {...this.props} />
+        <WidgetWorkspace {...this.props} />
       </div>
     )
   }
@@ -219,7 +222,7 @@ export default
 WithManageableProjects(
   WithCurrentProject(
     WithCurrentChallenge(
-      WithDashboards(
+      WithWidgetWorkspaces(
         WithFilteredClusteredTasks(
           WithChallengeMetrics(
             injectIntl(ChallengeDashboard),
@@ -227,7 +230,7 @@ WithManageableProjects(
           'clusteredTasks',
           'filteredClusteredTasks',
         ),
-        DashboardDataTarget.challenge,
+        WidgetDataTarget.challenge,
         DASHBOARD_NAME,
         defaultDashboardSetup
       ),

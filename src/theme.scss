@@ -27,6 +27,10 @@ $tablet: 40px;
   }
 }
 
+.modal-content .message-header {
+  background-color: #182841;
+}
+
 .modal.is-active {
   z-index: $layer-modal;
 }
@@ -252,6 +256,10 @@ $tablet: 40px;
       visibility: hidden; // we only want to show the busy spinner
     }
   }
+}
+
+.button.is-primary {
+  @include invert-on-hover($primary, $white);
 }
 
 .button.is-secondary {

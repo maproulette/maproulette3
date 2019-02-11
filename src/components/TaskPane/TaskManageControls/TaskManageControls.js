@@ -5,7 +5,7 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import AsManager from '../../../interactions/User/AsManager'
 import messages from './Messages'
-import './TaskManageControls.css'
+import './TaskManageControls.scss'
 
 export default class TaskManageControls extends Component {
   render() {

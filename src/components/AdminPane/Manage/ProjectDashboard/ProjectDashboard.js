@@ -3,51 +3,51 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import AsManager from '../../../../interactions/User/AsManager'
-import { generateDashboardId, DashboardDataTarget }
-       from '../../../../services/Dashboard/Dashboard'
+import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
+       from '../../../../services/Widget/Widget'
 import { challengePassesFilters, defaultChallengeFilters }
-       from '../../../../services/Dashboard/ChallengeFilter/ChallengeFilter'
+       from '../../../../services/Widget/ChallengeFilter/ChallengeFilter'
 import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject
        from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import WithDashboards from '../../HOCs/WithDashboards/WithDashboards'
+import WithWidgetWorkspaces
+       from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WithDashboardEntityFilter
        from '../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter'
-import Dashboard from '../Dashboard/Dashboard'
-import { blockDescriptor } from '../GridBlocks/BlockTypes'
+import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import ChallengeFilterGroup from '../ChallengeFilterGroup/ChallengeFilterGroup'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './ProjectDashboard.css'
+import './ProjectDashboard.scss'
 
 // The name of this dashboard.
 const DASHBOARD_NAME = "project"
 
 export const defaultDashboardSetup = function() {
   return {
-    dataModelVersion: 1,
+    dataModelVersion: 2,
     name: DASHBOARD_NAME,
     label: "View Project",
     filters: defaultChallengeFilters(),
-    blocks: [
-      blockDescriptor('ProjectOverviewBlock'),
-      blockDescriptor('CompletionProgressBlock'),
-      blockDescriptor('BurndownChartBlock'),
-      blockDescriptor('CommentsBlock'),
-      blockDescriptor('ChallengeListBlock'),
+    widgets: [
+      widgetDescriptor('ProjectOverviewWidget'),
+      widgetDescriptor('CompletionProgressWidget'),
+      widgetDescriptor('BurndownChartWidget'),
+      widgetDescriptor('CommentsWidget'),
+      widgetDescriptor('ChallengeListWidget'),
     ],
     layout: [
-      {i: generateDashboardId(), x: 0, y: 0, w: 4, h: 7},
-      {i: generateDashboardId(), x: 0, y: 7, w: 4, h: 5},
-      {i: generateDashboardId(), x: 0, y: 12, w: 4, h: 12},
-      {i: generateDashboardId(), x: 0, y: 24, w: 4, h: 10},
-      {i: generateDashboardId(), x: 8, y: 0, w: 8, h: 34},
+      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 5},
+      {i: generateWidgetId(), x: 0, y: 12, w: 4, h: 12},
+      {i: generateWidgetId(), x: 0, y: 24, w: 4, h: 10},
+      {i: generateWidgetId(), x: 8, y: 0, w: 8, h: 34},
     ],
   }
 }
@@ -77,6 +77,7 @@ export class ProjectDashboard extends Component {
                 </Link>
               </li>
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   {this.props.project.displayName || this.props.project.name}
                   {this.props.loadingProject && <BusySpinner inline />}
@@ -105,6 +106,7 @@ export class ProjectDashboard extends Component {
             {manager.canAdministrateProject(this.props.project) &&
              <div className="column is-narrow admin__manage__controls--control">
                <ConfirmAction>
+                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                  <a className='button is-clear' onClick={this.deleteProject}>
                    <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
                  </a>
@@ -114,9 +116,11 @@ export class ProjectDashboard extends Component {
           </div>
         </div>
 
-        <Dashboard {...this.props}
-                   filterComponent={ChallengeFilterGroup}
-                   activity={this.props.project.activity} />
+        <WidgetWorkspace
+          {...this.props}
+          filterComponent={ChallengeFilterGroup}
+          activity={this.props.project.activity}
+        />
       </div>
     )
   }
@@ -134,7 +138,7 @@ ProjectDashboard.propTypes = {
 export default
 WithManageableProjects(
   WithCurrentProject(
-    WithDashboards(
+    WithWidgetWorkspaces(
       WithDashboardEntityFilter(
         WithChallengeMetrics(
           injectIntl(ProjectDashboard),
@@ -145,7 +149,7 @@ WithManageableProjects(
         'challenges',
         challengePassesFilters
       ),
-      [DashboardDataTarget.project, DashboardDataTarget.challenges],
+      [WidgetDataTarget.project, WidgetDataTarget.challenges],
       DASHBOARD_NAME,
       defaultDashboardSetup
     ),

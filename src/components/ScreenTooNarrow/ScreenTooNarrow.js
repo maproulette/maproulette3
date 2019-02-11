@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import Sprites from '../Sprites/Sprites'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './ScreenTooNarrow.css'
+import './ScreenTooNarrow.scss'
 
 /**
  * ScreenTooNarrow displays a message indicating that the user's screen/window

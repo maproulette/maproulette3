@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
-import WithDeactivateOnOutsideClick
-       from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import DropdownButton from '../Bulma/DropdownButton'
+import Dropdown from '../Dropdown/Dropdown'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './PastDurationSelector.css'
-
-const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
+import './PastDurationSelector.scss'
 
 /**
  * PastDurationSelector renders an unmanaged dropdown button that can be used
@@ -18,31 +15,42 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class PastDurationSelector extends Component {
-  onSelect = selection => {
-    this.props.selectDuration(selection.value)
-  }
-
   render() {
-    const dropdownOptions = _map(this.props.pastMonthsOptions, months => ({
-      key: months,
-      text: this.props.intl.formatMessage(messages.pastMonthsOption, {months}),
-      value: months,
-    }))
+    const menuItems = _map(this.props.pastMonthsOptions, months => (
+      <li key={months}>
+        <Link to={{}} onClick={() => this.props.selectDuration(months)}>
+          <FormattedMessage {...messages.pastMonthsOption} values={{months}} />
+        </Link>
+      </li>
+    ))
 
     return (
-      <DeactivatableDropdownButton
-        className={classNames("past-duration-selector", this.props.className)}
-        options={dropdownOptions}
-        onSelect={this.onSelect}
+      <Dropdown
+        className={this.props.className}
+        button={<DurationButton  {...this.props} />}
       >
-        <div className="button is-rounded is-outlined">
-          <FormattedMessage {...messages.pastMonthsOption}
-                            values={{months: this.props.currentMonthsPast}} />
-          <div className="dropdown-indicator" />
-        </div>
-      </DeactivatableDropdownButton>
+        <ol className="mr-list-dropdown">
+          {menuItems}
+        </ol>
+      </Dropdown>
     )
   }
+}
+
+const DurationButton = function(props) {
+  return (
+    <span className="mr-flex">
+      <span className="mr-mr-2">
+        <FormattedMessage {...messages.pastMonthsOption}
+                          values={{months: props.currentMonthsPast}} />
+      </span>
+      <SvgSymbol
+        sym="icon-cheveron-down"
+        viewBox="0 0 20 20"
+        className="mr-fill-current mr-w-5 mr-h-5"
+      />
+    </span>
+  )
 }
 
 PastDurationSelector.propTypes = {

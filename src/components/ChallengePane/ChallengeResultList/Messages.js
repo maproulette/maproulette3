@@ -9,11 +9,6 @@ export default defineMessages({
     defaultMessage: "Challenges",
   },
 
-  clearFiltersLabel: {
-    id: "Challenge.controls.clearFilters.label",
-    defaultMessage: "Clear Filters",
-  },
-
   noResults: {
     id: "Challenge.results.noResults",
     defaultMessage: "No Results",

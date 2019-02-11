@@ -14,29 +14,9 @@ export default defineMessages({
     defaultMessage: 'Save',
   },
 
-  difficulty: {
-    id: 'Challenge.fields.difficulty.label',
-    defaultMessage: 'Difficulty',
-  },
-
-  virtualChallengeTooltip: {
-    id: 'Challenge.indicators.virtualChallenge.tooltip',
-    defaultMessage: 'Virtual Challenge',
-  },
-
   start: {
     id: 'Challenge.controls.start.label',
     defaultMessage: 'Start',
-  },
-
-  saved: {
-    id: "Task.fields.saved.label",
-    defaultMessage: "Saved",
-  },
-
-  featured: {
-    id: "Task.fields.featured.label",
-    defaultMessage: "Featured",
   },
 
   manageLabel: {
@@ -44,13 +24,8 @@ export default defineMessages({
     defaultMessage: "Manage",
   },
 
-  lastTaskRefreshLabel: {
-    id: "Challenge.fields.lastTaskRefresh.label",
-    defaultMessage: "Tasks From",
-  },
-
-  viewLeaderboard: {
-    id: "Challenge.fields.viewLeaderboard.label",
-    defaultMessage: "View Leaderboard",
-  },
+  signIn: {
+    id: "Challenge.signIn.label",
+    defaultMessage: "Sign in to get started",
+  }
 })

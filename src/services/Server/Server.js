@@ -3,8 +3,8 @@
  * fetchEndpoint, submitEndpoint, updateEndpoint, and deleteEndpoint functions
  * for retrieving and managing server content.
  *
- * A CORS "credentials: same-origin" header is automatically included with each
- * request so that cookies will be included. Learn more at
+ * A CORS "credentials" header is automatically included with each request so
+ * that cookies will be included. Learn more at
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
  *
  * @see See also Server/Endpoints
@@ -19,6 +19,12 @@ import apiRoutes from './APIRoutes'
 
 const baseURL = process.env.REACT_APP_MAP_ROULETTE_SERVER_URL
 const apiKey = process.env.REACT_APP_SERVER_API_KEY
+
+// In development mode, be less strict about CORS so that the frontend and
+// backend can run on separate servers/ports. Otherwise insist on same-origin
+// policy
+export const credentialsPolicy =
+  process.env.NODE_ENV === 'development' ? 'include' : 'same-origin'
 
 export const serverRouteFactory = new RouteFactory(baseURL)
 export const defaultRoutes = Object.freeze(apiRoutes(serverRouteFactory))
@@ -52,8 +58,13 @@ export const fetchContent = function(url, normalizationSchema, options={}) {
         headers.append('apiKey', apiKey)
       }
 
+      const fetchOptions = {
+        credentials: options.omitCredentials ? "omit" : credentialsPolicy,
+        headers,
+      }
+
       fetch(
-        url, {credentials: 'same-origin', headers}
+        url, fetchOptions
       ).then(checkStatus).then(parseJSON).then(jsonData => {
         let result = jsonData
         if (jsonData && normalizationSchema) {
@@ -111,7 +122,7 @@ export const sendContent = function(method, url, jsonBody, formData, normalizati
 
     fetch(url, {
       method,
-      credentials: 'same-origin',
+      credentials: credentialsPolicy,
       headers,
       body: jsonBody ? JSON.stringify(jsonBody) : formData,
     }).then(checkStatus).then(parseJSON).then(jsonData => {
@@ -142,7 +153,7 @@ export const deleteContent = function(url) {
       headers.append('apiKey', apiKey)
     }
 
-    fetch(url, {method: 'DELETE', credentials: 'same-origin', headers})
+    fetch(url, {method: 'DELETE', credentials: credentialsPolicy, headers})
       .then(checkStatus)
       .then(response => resolve(response))
       .catch(error => reject(error))

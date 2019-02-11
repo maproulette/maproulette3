@@ -6,33 +6,33 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskTrackControls
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
-    saveTask={[Function]}
+    saveTask={[MockFunction]}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 1,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 1,
+      }
     }
-    unsaveTask={[Function]}
+    unsaveTask={[MockFunction]}
     user={
-        Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "savedTasks": Array [
-              Object {
-                "id": 123,
-              },
-            ],
-          }
+      Object {
+        "id": 357,
+        "isLoggedIn": true,
+        "savedTasks": Array [
+          Object {
+            "id": 123,
+          },
+        ],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -47,30 +47,30 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="has-centered-children"
->
+      >
         <div
-                className="switch-backdrop"
+          className="switch-backdrop"
         >
-                <div
-                        className="field"
-                        onClick={[Function]}
-                >
-                        <input
-                                checked={true}
-                                className="switch is-rounded short-and-wide"
-                                onChange={[Function]}
-                                type="checkbox"
-                        />
-                        <label>
-                                <FormattedMessage
-                                        defaultMessage="Track this Task"
-                                        id="Task.controls.track.label"
-                                        values={Object {}}
-                                />
-                        </label>
-                </div>
+          <div
+            className="field"
+            onClick={[Function]}
+          >
+            <input
+              checked={true}
+              className="switch is-rounded short-and-wide"
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <label>
+              <FormattedMessage
+                defaultMessage="Track this Task"
+                id="Task.controls.track.label"
+                values={Object {}}
+              />
+            </label>
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "task-track-controls",
     },
     "ref": null,
@@ -81,26 +81,26 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="switch-backdrop"
->
+        >
           <div
-                    className="field"
-                    onClick={[Function]}
+            className="field"
+            onClick={[Function]}
           >
-                    <input
-                              checked={true}
-                              className="switch is-rounded short-and-wide"
-                              onChange={[Function]}
-                              type="checkbox"
-                    />
-                    <label>
-                              <FormattedMessage
-                                        defaultMessage="Track this Task"
-                                        id="Task.controls.track.label"
-                                        values={Object {}}
-                              />
-                    </label>
+            <input
+              checked={true}
+              className="switch is-rounded short-and-wide"
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <label>
+              <FormattedMessage
+                defaultMessage="Track this Task"
+                id="Task.controls.track.label"
+                values={Object {}}
+              />
+            </label>
           </div>
-</div>,
+        </div>,
         "className": "has-centered-children",
       },
       "ref": null,
@@ -112,21 +112,21 @@ ShallowWrapper {
           "children": <div
             className="field"
             onClick={[Function]}
->
+          >
             <input
-                        checked={true}
-                        className="switch is-rounded short-and-wide"
-                        onChange={[Function]}
-                        type="checkbox"
+              checked={true}
+              className="switch is-rounded short-and-wide"
+              onChange={[Function]}
+              type="checkbox"
             />
             <label>
-                        <FormattedMessage
-                                    defaultMessage="Track this Task"
-                                    id="Task.controls.track.label"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Track this Task"
+                id="Task.controls.track.label"
+                values={Object {}}
+              />
             </label>
-</div>,
+          </div>,
           "className": "switch-backdrop",
         },
         "ref": null,
@@ -141,14 +141,14 @@ ShallowWrapper {
                 className="switch is-rounded short-and-wide"
                 onChange={[Function]}
                 type="checkbox"
-/>,
+              />,
               <label>
                 <FormattedMessage
-                                defaultMessage="Track this Task"
-                                id="Task.controls.track.label"
-                                values={Object {}}
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
                 />
-</label>,
+              </label>,
             ],
             "className": "field",
             "onClick": [Function],
@@ -178,7 +178,7 @@ ShallowWrapper {
                   defaultMessage="Track this Task"
                   id="Task.controls.track.label"
                   values={Object {}}
-/>,
+                />,
               },
               "ref": null,
               "rendered": Object {
@@ -213,30 +213,30 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="has-centered-children"
->
+        >
           <div
-                    className="switch-backdrop"
+            className="switch-backdrop"
           >
-                    <div
-                              className="field"
-                              onClick={[Function]}
-                    >
-                              <input
-                                        checked={true}
-                                        className="switch is-rounded short-and-wide"
-                                        onChange={[Function]}
-                                        type="checkbox"
-                              />
-                              <label>
-                                        <FormattedMessage
-                                                  defaultMessage="Track this Task"
-                                                  id="Task.controls.track.label"
-                                                  values={Object {}}
-                                        />
-                              </label>
-                    </div>
+            <div
+              className="field"
+              onClick={[Function]}
+            >
+              <input
+                checked={true}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
+              />
+              <label>
+                <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+                />
+              </label>
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "task-track-controls",
       },
       "ref": null,
@@ -247,26 +247,26 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="switch-backdrop"
->
+          >
             <div
-                        className="field"
-                        onClick={[Function]}
+              className="field"
+              onClick={[Function]}
             >
-                        <input
-                                    checked={true}
-                                    className="switch is-rounded short-and-wide"
-                                    onChange={[Function]}
-                                    type="checkbox"
-                        />
-                        <label>
-                                    <FormattedMessage
-                                                defaultMessage="Track this Task"
-                                                id="Task.controls.track.label"
-                                                values={Object {}}
-                                    />
-                        </label>
+              <input
+                checked={true}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
+              />
+              <label>
+                <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+                />
+              </label>
             </div>
-</div>,
+          </div>,
           "className": "has-centered-children",
         },
         "ref": null,
@@ -278,21 +278,21 @@ ShallowWrapper {
             "children": <div
               className="field"
               onClick={[Function]}
->
+            >
               <input
-                            checked={true}
-                            className="switch is-rounded short-and-wide"
-                            onChange={[Function]}
-                            type="checkbox"
+                checked={true}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
               />
               <label>
-                            <FormattedMessage
-                                          defaultMessage="Track this Task"
-                                          id="Task.controls.track.label"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+                />
               </label>
-</div>,
+            </div>,
             "className": "switch-backdrop",
           },
           "ref": null,
@@ -307,14 +307,14 @@ ShallowWrapper {
                   className="switch is-rounded short-and-wide"
                   onChange={[Function]}
                   type="checkbox"
-/>,
+                />,
                 <label>
                   <FormattedMessage
-                                    defaultMessage="Track this Task"
-                                    id="Task.controls.track.label"
-                                    values={Object {}}
+                    defaultMessage="Track this Task"
+                    id="Task.controls.track.label"
+                    values={Object {}}
                   />
-</label>,
+                </label>,
               ],
               "className": "field",
               "onClick": [Function],
@@ -344,7 +344,7 @@ ShallowWrapper {
                     defaultMessage="Track this Task"
                     id="Task.controls.track.label"
                     values={Object {}}
-/>,
+                  />,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -388,29 +388,29 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskTrackControls
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction],
+      }
     }
-    saveTask={[Function]}
+    saveTask={[MockFunction]}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 1,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 1,
+      }
     }
-    unsaveTask={[Function]}
+    unsaveTask={[MockFunction]}
     user={
-        Object {
-            "id": 357,
-            "isLoggedIn": true,
-            "savedTasks": Array [],
-          }
+      Object {
+        "id": 357,
+        "isLoggedIn": true,
+        "savedTasks": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -425,30 +425,30 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="has-centered-children"
->
+      >
         <div
-                className="switch-backdrop"
+          className="switch-backdrop"
         >
-                <div
-                        className="field"
-                        onClick={[Function]}
-                >
-                        <input
-                                checked={false}
-                                className="switch is-rounded short-and-wide"
-                                onChange={[Function]}
-                                type="checkbox"
-                        />
-                        <label>
-                                <FormattedMessage
-                                        defaultMessage="Track this Task"
-                                        id="Task.controls.track.label"
-                                        values={Object {}}
-                                />
-                        </label>
-                </div>
+          <div
+            className="field"
+            onClick={[Function]}
+          >
+            <input
+              checked={false}
+              className="switch is-rounded short-and-wide"
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <label>
+              <FormattedMessage
+                defaultMessage="Track this Task"
+                id="Task.controls.track.label"
+                values={Object {}}
+              />
+            </label>
+          </div>
         </div>
-</div>,
+      </div>,
       "className": "task-track-controls",
     },
     "ref": null,
@@ -459,26 +459,26 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="switch-backdrop"
->
+        >
           <div
-                    className="field"
-                    onClick={[Function]}
+            className="field"
+            onClick={[Function]}
           >
-                    <input
-                              checked={false}
-                              className="switch is-rounded short-and-wide"
-                              onChange={[Function]}
-                              type="checkbox"
-                    />
-                    <label>
-                              <FormattedMessage
-                                        defaultMessage="Track this Task"
-                                        id="Task.controls.track.label"
-                                        values={Object {}}
-                              />
-                    </label>
+            <input
+              checked={false}
+              className="switch is-rounded short-and-wide"
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <label>
+              <FormattedMessage
+                defaultMessage="Track this Task"
+                id="Task.controls.track.label"
+                values={Object {}}
+              />
+            </label>
           </div>
-</div>,
+        </div>,
         "className": "has-centered-children",
       },
       "ref": null,
@@ -490,21 +490,21 @@ ShallowWrapper {
           "children": <div
             className="field"
             onClick={[Function]}
->
+          >
             <input
-                        checked={false}
-                        className="switch is-rounded short-and-wide"
-                        onChange={[Function]}
-                        type="checkbox"
+              checked={false}
+              className="switch is-rounded short-and-wide"
+              onChange={[Function]}
+              type="checkbox"
             />
             <label>
-                        <FormattedMessage
-                                    defaultMessage="Track this Task"
-                                    id="Task.controls.track.label"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Track this Task"
+                id="Task.controls.track.label"
+                values={Object {}}
+              />
             </label>
-</div>,
+          </div>,
           "className": "switch-backdrop",
         },
         "ref": null,
@@ -519,14 +519,14 @@ ShallowWrapper {
                 className="switch is-rounded short-and-wide"
                 onChange={[Function]}
                 type="checkbox"
-/>,
+              />,
               <label>
                 <FormattedMessage
-                                defaultMessage="Track this Task"
-                                id="Task.controls.track.label"
-                                values={Object {}}
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
                 />
-</label>,
+              </label>,
             ],
             "className": "field",
             "onClick": [Function],
@@ -556,7 +556,7 @@ ShallowWrapper {
                   defaultMessage="Track this Task"
                   id="Task.controls.track.label"
                   values={Object {}}
-/>,
+                />,
               },
               "ref": null,
               "rendered": Object {
@@ -591,30 +591,30 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="has-centered-children"
->
+        >
           <div
-                    className="switch-backdrop"
+            className="switch-backdrop"
           >
-                    <div
-                              className="field"
-                              onClick={[Function]}
-                    >
-                              <input
-                                        checked={false}
-                                        className="switch is-rounded short-and-wide"
-                                        onChange={[Function]}
-                                        type="checkbox"
-                              />
-                              <label>
-                                        <FormattedMessage
-                                                  defaultMessage="Track this Task"
-                                                  id="Task.controls.track.label"
-                                                  values={Object {}}
-                                        />
-                              </label>
-                    </div>
+            <div
+              className="field"
+              onClick={[Function]}
+            >
+              <input
+                checked={false}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
+              />
+              <label>
+                <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+                />
+              </label>
+            </div>
           </div>
-</div>,
+        </div>,
         "className": "task-track-controls",
       },
       "ref": null,
@@ -625,26 +625,26 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="switch-backdrop"
->
+          >
             <div
-                        className="field"
-                        onClick={[Function]}
+              className="field"
+              onClick={[Function]}
             >
-                        <input
-                                    checked={false}
-                                    className="switch is-rounded short-and-wide"
-                                    onChange={[Function]}
-                                    type="checkbox"
-                        />
-                        <label>
-                                    <FormattedMessage
-                                                defaultMessage="Track this Task"
-                                                id="Task.controls.track.label"
-                                                values={Object {}}
-                                    />
-                        </label>
+              <input
+                checked={false}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
+              />
+              <label>
+                <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+                />
+              </label>
             </div>
-</div>,
+          </div>,
           "className": "has-centered-children",
         },
         "ref": null,
@@ -656,21 +656,21 @@ ShallowWrapper {
             "children": <div
               className="field"
               onClick={[Function]}
->
+            >
               <input
-                            checked={false}
-                            className="switch is-rounded short-and-wide"
-                            onChange={[Function]}
-                            type="checkbox"
+                checked={false}
+                className="switch is-rounded short-and-wide"
+                onChange={[Function]}
+                type="checkbox"
               />
               <label>
-                            <FormattedMessage
-                                          defaultMessage="Track this Task"
-                                          id="Task.controls.track.label"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Track this Task"
+                  id="Task.controls.track.label"
+                  values={Object {}}
+                />
               </label>
-</div>,
+            </div>,
             "className": "switch-backdrop",
           },
           "ref": null,
@@ -685,14 +685,14 @@ ShallowWrapper {
                   className="switch is-rounded short-and-wide"
                   onChange={[Function]}
                   type="checkbox"
-/>,
+                />,
                 <label>
                   <FormattedMessage
-                                    defaultMessage="Track this Task"
-                                    id="Task.controls.track.label"
-                                    values={Object {}}
+                    defaultMessage="Track this Task"
+                    id="Task.controls.track.label"
+                    values={Object {}}
                   />
-</label>,
+                </label>,
               ],
               "className": "field",
               "onClick": [Function],
@@ -722,7 +722,7 @@ ShallowWrapper {
                     defaultMessage="Track this Task"
                     id="Task.controls.track.label"
                     values={Object {}}
-/>,
+                  />,
                 },
                 "ref": null,
                 "rendered": Object {

@@ -5,18 +5,13 @@ import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
-import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
-import classNames from 'classnames'
-import parse from 'date-fns/parse'
-import MarkdownContent from '../../MarkdownContent/MarkdownContent'
-import { messagesByDifficulty }
-       from '../../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import AsManager
        from '../../../interactions/User/AsManager'
-import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
+import CardChallenge from '../../CardChallenge/CardChallenge'
+import SignInButton from '../../SignInButton/SignInButton'
 import messages from './Messages'
-import './ChallengeResultItem.css'
+import './ChallengeResultItem.scss'
 
 /**
  * ChallengeResultItem represents a single challenge result in a ChallengeResultList.
@@ -150,156 +145,82 @@ export class ChallengeResultItem extends Component {
   }
 
   render() {
-    // Setup saved/bookmarked status icon and control based on whether the
-    // user has saved this challenge.
-    let savedIcon = null
-    let unsaveChallengeButton = null
-    let saveChallengeButton = null
-    const isManageable =
-      AsManager(this.props.user).canManageChallenge(this.props.challenge)
+    // Setup saved status and controls based on whether the user has saved this
+    // challenge
+    let isSaved = false
+    let unsaveChallengeControl = null
+    let saveChallengeControl = null
+    let startControl = null
 
     if (_isObject(this.props.user) && !this.props.challenge.isVirtual) {
       if (_findIndex(this.props.user.savedChallenges,
                      {id: this.props.challenge.id}) !== -1) {
-        savedIcon =
-          <SvgSymbol viewBox='0 0 20 20' sym="heart-icon"  />
-
-        unsaveChallengeButton = (
-          <p className="control">
-            <button className="button is-outlined save-challenge-toggle"
-                    onClick={() => this.props.unsaveChallenge(this.props.user.id, this.props.challenge.id)}>
-              <FormattedMessage {...messages.unsave} />
-            </button>
-          </p>
+        isSaved = true
+        unsaveChallengeControl = (
+          <Link
+            to={{}}
+            onClick={() => this.props.unsaveChallenge(this.props.user.id, this.props.challenge.id)}
+            className="mr-button mr-button--small"
+          >
+            <FormattedMessage {...messages.unsave} />
+          </Link>
         )
       }
       else {
-        saveChallengeButton = (
-          <p className="control">
-            <button className="button is-outlined save-challenge-toggle"
-                    onClick={() => this.props.saveChallenge(this.props.user.id, this.props.challenge.id)}>
-              <FormattedMessage {...messages.save} />
-            </button>
-          </p>
+        saveChallengeControl = (
+          <Link
+            to={{}}
+            onClick={() => this.props.saveChallenge(this.props.user.id, this.props.challenge.id)}
+            className="mr-button mr-button--small"
+          >
+            <FormattedMessage {...messages.save} />
+          </Link>
         )
       }
     }
 
-    // Setup the featured status indicator
-    const featuredIndicator =
-      !this.props.challenge.featured ? null :
-      <div className="challenge-list__item--featured-indicator">
-        <FormattedMessage {...messages.featured} />
-      </div>
+    // Users need to be signed in to start a challenge
+    if (!_isObject(this.props.user)) {
+      startControl = <SignInButton {...this.props} longForm className='' />
+    }
+    else {
+      startControl = (
+        <Link
+          to={{}}
+          className="mr-button mr-button--small"
+          onClick={() => this.props.startChallenge(this.props.challenge)}
+        >
+          <FormattedMessage {...messages.start} />
+        </Link>
+      )
+    }
+
+    // Does this user own (or can manage) the current challenge?
+    const isManageable =
+      AsManager(this.props.user).canManageChallenge(this.props.challenge)
+
+    const manageControl = !isManageable ? null : (
+      <Link
+        to={`/admin/project/${this.props.challenge.parent.id}/challenge/${this.props.challenge.id}`}
+        className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
+      >
+        <FormattedMessage {...messages.manageLabel} />
+      </Link>
+    )
 
     return (
-      <div ref={node => this.node = node}
-           className={classNames('card', 'challenge-list__item',
-                                 {'is-active': this.state.isBrowsing})}>
-        {featuredIndicator}
-        <header className="card-header" onClick={this.toggleActive}>
-          <div>
-            <div className="challenge-list__item-title">
-              {!this.props.challenge.isVirtual &&
-              <div className="challenge-list__item-indicator-icon saved"
-                   title={this.props.intl.formatMessage(messages.saved)}>
-                {savedIcon}
-              </div>
-              }
-              {this.props.challenge.isVirtual &&
-               <div className="challenge-list__item-indicator-icon virtual"
-                    title={this.props.intl.formatMessage(messages.virtualChallengeTooltip)}>
-                <SvgSymbol viewBox='0 0 20 20' sym="shuffle-icon" />
-               </div>
-              }
-              <div className="challenge-list__item__name">
-                {this.props.challenge.name}
-              </div>
-            </div>
-            {this.props.challenge.parent && // virtual challenges don't have projects
-             <Link className="challenge-list__item__project-name"
-               onClick={(e) => {e.stopPropagation()}}
-               to={`/project/${this.props.challenge.parent.id}/leaderboard`}>
-               {_get(this.props, 'challenge.parent.displayName')}
-             </Link>
-            }
-          </div>
-          <a className="card-header-icon" aria-label="more options">
-            <span className="icon"></span>
-          </a>
-        </header>
-
-        <div className="card-content">
-          {this.state.isBrowsing &&
-          <React.Fragment>
-            <div className="challenge-list__item__difficulty">
-              <span className="challenge-list__item__field-label">
-                <FormattedMessage {...messages.difficulty} />
-              </span>
-              <span className="challenge-list__item__field-value">
-                <FormattedMessage {...messagesByDifficulty[this.props.challenge.difficulty]} />
-              </span>
-            </div>
-
-            {this.props.challenge.lastTaskRefresh &&
-              <div className="challenge-list__item__last-task-refresh">
-                <span className="challenge-list__item__field-label">
-                  <FormattedMessage {...messages.lastTaskRefreshLabel} />
-                </span>
-                <span className="challenge-list__item__field-value">
-                  <FormattedRelative value={parse(this.props.challenge.lastTaskRefresh)} />
-                </span>
-              </div>
-            }
-
-            {!this.props.challenge.isVirtual &&
-             <div className="challenge-list__item__leaderboard">
-               <span className="challenge-list__item__field-value">
-                 <Link to={
-                   `/challenge/${this.props.challenge.id}/leaderboard`
-                 }>
-                   <FormattedMessage {...messages.viewLeaderboard} />
-                 </Link>
-               </span>
-             </div>
-            }
-
-            <div className="challenge-list__item__blurb">
-              <MarkdownContent markdown={this.props.challenge.description ||
-                                        this.props.challenge.blurb} />
-            </div>
-
-            <ChallengeProgress challenge={this.props.challenge} />
-
-            <div className="challenge-list__item__controls">
-              <div className="field is-grouped">
-                <p className="control">
-                  <button className={classNames("button is-outlined start-challenge",
-                                                {"is-loading": this.props.isStarting})}
-                          onClick={this.startChallenge}>
-                    <FormattedMessage {...messages.start} />
-                  </button>
-                </p>
-
-                <div>
-                  {saveChallengeButton}
-                  {unsaveChallengeButton}
-                </div>
-              </div>
-              {isManageable &&
-               <div className="challenge-list__item__controls__manage">
-                 <Link to={
-                   `/admin/project/${this.props.challenge.parent.id}/challenge/${this.props.challenge.id}`
-                 }>
-                   <FormattedMessage {...messages.manageLabel} />
-                 </Link>
-               </div>
-              }
-            </div>
-          </React.Fragment>
-          }
-        </div>
-      </div>
+      <CardChallenge
+        className="mr-mb-4"
+        challenge={this.props.challenge}
+        isExpanded={this.state.isBrowsing}
+        toggleExpanded={this.toggleActive}
+        isSaved={isSaved}
+        isLoading={this.props.isStarting}
+        saveControl={saveChallengeControl}
+        unsaveControl={unsaveChallengeControl}
+        startControl={startControl}
+        manageControl={manageControl}
+      />
     )
   }
 }

@@ -9,7 +9,7 @@ import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './LayerToggle.css'
+import './LayerToggle.scss'
 
 /**
  * LayerToggle presents a control for selecting the desired map layer/tiles.
@@ -30,6 +30,7 @@ export class LayerToggle extends Component {
     const baseSources = _filter(this.props.layerSources, source => !source.overlay)
 
     const layerButtons = _map(baseSources, layer => (
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <a className={classNames('dropdown-item',
                                {'is-active': this.props.source.id === layer.id})}
          key={layer.id}
@@ -52,10 +53,8 @@ export class LayerToggle extends Component {
     ))
 
     return (
-      <div className={classNames('layer-toggle', 'dropdown',
-                                 'is-hoverable', 'is-right',
-                                 this.props.className)}>
-        <div className='dropdown-trigger'>
+      <div className="layer-toggle dropdown is-hoverable is-right">
+        <div className="dropdown-trigger">
           <button className="button" aria-haspopup="true"
                   aria-controls="dropdown-menu">
             <span className="icon is-small">

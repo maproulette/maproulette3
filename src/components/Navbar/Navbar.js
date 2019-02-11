@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import MediaQuery from 'react-responsive'
+import { screens } from '../../tailwind'
 import MobileMenu from 'react-burger-menu/lib/menus/slide'
-import _startsWith from 'lodash/startsWith'
 import _get from 'lodash/get'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import AccountNavItem from './AccountNavItem/AccountNavItem'
 import SignInButton from '../SignInButton/SignInButton'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import Dropdown from '../Dropdown/Dropdown'
 import messages from './Messages'
-import './Navbar.css'
+import './Navbar.scss'
 
 /**
  * Navbar renders the primary top nav in the application, including the brand,
@@ -22,6 +20,7 @@ import './Navbar.css'
 export default class Navbar extends Component {
   state = {
     mobileMenuOpen: false,
+    dropdownMenuOpen: false,
   }
 
   setMobileMenuState = state => {
@@ -32,6 +31,18 @@ export default class Navbar extends Component {
     this.setState({mobileMenuOpen: false})
   }
 
+  toggleMobileMenu = () => {
+    this.setState({mobileMenuOpen: !this.state.mobileMenuOpen})
+  }
+
+  toggleDropdownMenu = () => {
+    this.setState({dropdownMenuOpen: !this.state.dropdownMenuOpen})
+  }
+
+  closeDropdownMenu = () => {
+    this.setState({dropdownMenuOpen: false})
+  }
+
   signout = () => {
     this.props.logoutUser()
     this.closeMobileMenu()
@@ -39,127 +50,211 @@ export default class Navbar extends Component {
 
   render() {
     return (
-      <nav className="navbar top-nav" aria-label="main navigation">
-				<div className="navbar-brand">
-          <Link to='/' className="navbar-item top-nav__home-link">
-            <SvgSymbol viewBox='0 0 20 20' sym="mr-logo" className="navbar__logo"/>
-            <span className="is-size-4">
-              <span className="has-text-weight-bold">Map</span>Roulette
-            </span>
+      <header className="mr-relative mr-bg-gradient-r-green-blue mr-shadow mr-p-6 mr-flex mr-items-center mr-justify-between">
+        <nav className="mr-flex mr-items-center">
+          <Link to='/' rel="home" className="mr-text-white hover:mr-text-current">
+            <SvgSymbol sym="mr-logo"
+                       viewBox="0 0 174 40"
+                       className="mr-block mr-fill-current mr-w-48 mr-h-auto"
+             />
           </Link>
-				</div>
-
-        <MediaQuery query="(min-width: 1024px)">
-          <div className='navbar-menu'>
-            <div className="navbar-start">
-              <NavbarPrimaryLinks {...this.props} />
+          <MediaQuery minWidth={screens.lg}>
+            <div className="mr-ml-8 xl:mr-ml-12">
+              <ol className="mr-list-nav-primary">
+                <Nav {...this.props} closeMobileMenu={this.closeMobileMenu} />
+              </ol>
             </div>
-
-            <div className="navbar-end">
-              <AccountNavItem {...this.props} />
+          </MediaQuery>
+        </nav>
+        <MediaQuery minWidth={screens.lg}>
+          <LoggedInUser {...this.props}>
+            <div className="mr-flex mr-items-center">
+              <Dropdown
+                className="mr-dropdown--right"
+                button={<ProfileButton {...this.props} />}
+                isVisible={this.state.dropdownMenuOpen}
+                toggleVisible={this.toggleDropdownMenu}
+                close={this.closeDropdownMenu}
+              >
+                <ol className="mr-list-dropdown">
+                  <li>
+                    <NavLink to='/admin/projects' onClick={this.closeDropdownMenu}>
+                      <FormattedMessage {...messages.adminCreate} />
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/user/profile" onClick={this.closeDropdownMenu}>
+                      <FormattedMessage {...messages.profile} />
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={{}} onClick={this.props.logoutUser}>
+                      <FormattedMessage {...messages.signout} />
+                    </NavLink>
+                  </li>
+                </ol>
+              </Dropdown>
             </div>
-          </div>
+          </LoggedInUser>
+
+          <LoggedOutUser {...this.props}>
+            <SignInButton className="white-on-green top-nav__signin-link"
+                          {...this.props} />
+          </LoggedOutUser>
         </MediaQuery>
-
-        <MediaQuery query="(max-width: 1023px)">
-          <MobileMenu right
-                      customBurgerIcon={<SvgSymbol viewBox='0 0 20 20' sym="menu-icon" />}
-                      customCrossIcon={<SvgSymbol viewBox='0 0 20 20' sym="cross-icon" />}
-                      isOpen={this.state.mobileMenuOpen}
-                      onStateChange={this.setMobileMenuState}
-                      styles={{bmOverlay: {background: 'rgb(0,165,146, 0.7)'},
-                               bmMenuWrap: {width: '275px'},
-                               bmCrossButton: {top: '20px', right: '16px'}}}
+        <MediaQuery maxWidth={screens.lg}>
+          <MobileMenu
+            right
+            width={260}
+            isOpen={this.state.mobileMenuOpen}
+            onStateChange={this.setMobileMenuState}
+            customBurgerIcon={false}
+            customCrossIcon={
+              <SvgSymbol
+                sym="icon-close"
+                viewBox="0 0 20 20"
+                className="mr-fill-white mr-w-full mr-h-full"
+              />
+            }
+            styles={{
+              bmCrossButton: {
+                top: 0,
+                right: 0,
+                height: '1.125rem',
+                width: '1.125rem',
+              },
+              bmOverlay: {
+                background: 'rgba(0, 0, 0, 0.5)',
+              },
+            }}
           >
-            {_get(this.props, 'user.isLoggedIn') ?
-              <Link to='/user/profile' onClick={this.closeMobileMenu}>
-                <figure className="navbar__account-nav-item__avatar image is-96x96">
-                  <div className="circular-image"
-                        style={{backgroundImage: `url(${this.props.user.osmProfile.avatarURL})`}} />
-                </figure>
-              </Link>
-            :
-             <SignInButton className="white-on-green top-nav__signin-link"
-                           {...this.props} />
-            }
-
-            <NavbarPrimaryLinks onLinkClick={this.closeMobileMenu}
-                                {...this.props } />
-
-            {_get(this.props, 'user.isLoggedIn') &&
-             <React.Fragment>
-               <Link to='/user/profile' className="navbar-item top-nav__profile-link"
-                     onClick={this.closeMobileMenu}>
-                 <span className={classNames('item-text',
-                       {'is-active': this.props.location.pathname === '/user/profile'})}>
-                   <FormattedMessage {...messages.profile} />
-                 </span>
-               </Link>
-
-               <a className="navbar-item top-nav__signout-link" onClick={this.signout}>
-                 <span className="item-text">
-                   <FormattedMessage {...messages.signout} />
-                 </span>
-               </a>
-             </React.Fragment>
-            }
-
+            <MobileNav
+              {...this.props}
+              signout={this.signout}
+              closeMobileMenu={this.closeMobileMenu}
+            />
           </MobileMenu>
+
+          <button
+            className="mr-text-white"
+            aria-label="Menu"
+            onClick={this.toggleMobileMenu}
+          >
+            <SvgSymbol
+              sym="icon-menu"
+              viewBox="0 0 20 20"
+              className="mr-w-6 mr-h-auto mr-fill-current"
+            />
+          </button>
         </MediaQuery>
-			</nav>
+      </header>
     )
   }
 }
 
-const NavbarPrimaryLinks = function(props) {
+const ProfileButton = function(props) {
   return (
-    <React.Fragment>
-      <Link to='/browse/challenges' className="navbar-item top-nav__browse-link"
-            onClick={props.onLinkClick}>
-        <span className={
-          classNames('item-text',
-                      {'is-active': /\/browse\/challenges/.test(props.location.pathname)})}>
-          <FormattedMessage {...messages.results} />
-        </span>
-      </Link>
+    <span className="mr-flex mr-items-center mr-text-white">
+      <div className="mr-relative">
+        <ProfileImage {...props} />
+      </div>
 
-      {process.env.REACT_APP_FEATURE_LEADERBOARD === 'enabled' &&
-        <Link to='/leaderboard' className="navbar-item top-nav__browse-link"
-              onClick={props.onLinkClick}>
-          <span className={
-            classNames('item-text',
-                      {'is-active': /\/leaderboard/.test(props.location.pathname)})}>
-            <FormattedMessage {...messages.leaderboard} />
-          </span>
-        </Link>
-      }
-
-      {_get(props, 'user.isLoggedIn') &&
-      <Link to='/admin/projects' className='navbar-item top-nav__admin-link'
-            onClick={props.onLinkClick}>
-          <span className={
-            classNames('item-text',
-                      {'is-active': _startsWith(props.location.pathname, '/admin')})
-          }>
-            <FormattedMessage {...messages.adminCreate} />
-          </span>
-        </Link>
-      }
-
-      <a href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"
-         className="navbar-item top-nav__help-link"
-         target="_blank"
-         rel="noopener noreferrer"
-         onClick={props.onLinkClick}>
-        <span className='item-text'>
-          <FormattedMessage {...messages.help} />
-        </span>
-      </a>
-    </React.Fragment>
+      <span className="mr-text-sm mr-mr-1 xl:mr-mr-2">
+        {props.user.osmProfile.displayName}
+      </span>
+      <SvgSymbol
+        sym="icon-cheveron-down"
+        viewBox="0 0 20 20"
+        className="mr-fill-current mr-w-5 mr-h-5"
+      />
+    </span>
   )
 }
 
-Navbar.propTypes = {
-  /** router location object */
-  location: PropTypes.object.isRequired,
+const ProfileImage = props => (
+  <img
+    className="mr-block mr-w-12 mr-h-12 mr-rounded-full mr-mr-2 xl:mr-mr-4"
+    src={props.user.osmProfile.avatarURL}
+    srcSet={`${props.user.osmProfile.avatarURL}?s=48 1x, ${props.user.osmProfile.avatarURL}?s=96 2x"`}
+    alt=''
+  />
+)
+
+const Nav = props => (
+  <React.Fragment>
+    <LoggedInUser {...props}>
+      <li>
+        <NavLink to="/dashboard" onClick={props.closeMobileMenu}>
+          <FormattedMessage {...messages.dashboard} />
+        </NavLink>
+      </li>
+    </LoggedInUser>
+
+    <li>
+      <NavLink to='/browse/challenges' onClick={props.closeMobileMenu}>
+        <FormattedMessage {...messages.results} />
+      </NavLink>
+    </li>
+    <li>
+      <NavLink to='/leaderboard' onClick={props.closeMobileMenu}>
+        <FormattedMessage {...messages.leaderboard} />
+      </NavLink>
+    </li>
+    <li>
+      <a
+        href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={props.closeMobileMenu}>
+        <FormattedMessage {...messages.help} />
+      </a>
+    </li>
+  </React.Fragment>
+)
+
+const MobileNav = props => (
+  <React.Fragment>
+    <LoggedInUser {...props}>
+      <Link to='/user/profile' onClick={props.closeMobileMenu}>
+        <ProfileImage {...props} />
+      </Link>
+    </LoggedInUser>
+
+    <LoggedOutUser {...props}>
+      <SignInButton className="white-on-green top-nav__signin-link"
+                    {...props} />
+    </LoggedOutUser>
+
+    <ol className="mr-list-nav-mobile">
+      <Nav {...props} />
+    </ol>
+
+    <LoggedInUser {...props}>
+      <ol className="mr-list-nav-mobile mr-mt-6 mr-pt-6 mr-border-t mr-border-white-10">
+        <li>
+          <NavLink to='/admin/projects' onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.adminCreate} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to='/user/profile' onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.profile} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to={{}} onClick={props.signout}>
+            <FormattedMessage {...messages.signout} />
+          </NavLink>
+        </li>
+      </ol>
+    </LoggedInUser>
+  </React.Fragment>
+)
+
+const LoggedInUser = props => {
+  return _get(props, 'user.isLoggedIn') ? props.children : null
+}
+
+const LoggedOutUser = props => {
+  return !_get(props, 'user.isLoggedIn') ? props.children : null
 }

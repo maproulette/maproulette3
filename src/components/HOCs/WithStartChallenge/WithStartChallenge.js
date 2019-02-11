@@ -106,6 +106,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(loadRandomTaskFromVirtualChallenge(challenge.id)).then(task => {
         if (task) {
           ownProps.history.push(`/virtual/${challenge.id}/task/${task.id}`)
+          window.scrollTo(0, 0)
         }
         else {
           dispatch(addError(AppErrors.task.none))
@@ -121,13 +122,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
       if (visibleTask) {
         openTask(dispatch, challenge, visibleTask, ownProps.history)
         ownProps.setActive(false)
+        window.scrollTo(0, 0)
       }
       else {
         dispatch(loadRandomTaskFromChallenge(challenge.id)).then(task => {
           openTask(dispatch, challenge, task, ownProps.history)
         }).then(() => {
+          window.scrollTo(0, 0)
           ownProps.setActive(false)
         }).catch(() => {
+          dispatch(addError(AppErrors.task.fetchFailure))
           ownProps.setActive(false)
         })
       }
@@ -142,6 +146,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
     else {
       ownProps.history.push(`/challenge/${challengeId}/task/${taskId}`)
     }
+    window.scrollTo(0, 0)
   }
 })
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import WithErrors from '../../HOCs/WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
-import './MapPane.css'
+import './MapPane.scss'
 
 /**
  * MapPane is a thin wrapper around map components that primarily serves as a
@@ -21,7 +21,7 @@ export class MapPane extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="map-pane container is-fluid">
+        <div className="map-pane">
           <div className="notification">
             <FormattedMessage {...AppErrors.map.renderFailure} />
           </div>

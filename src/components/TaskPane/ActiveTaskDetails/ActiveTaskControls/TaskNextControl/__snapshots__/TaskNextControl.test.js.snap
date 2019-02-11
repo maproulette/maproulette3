@@ -6,22 +6,37 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskNextControl
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Next Task",
+                "id": "Task.controls.next.tooltip",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": "Next Task",
+            },
+          ],
+        },
+      }
     }
     isMinimized={true}
-    nextTask={[Function]}
+    nextTask={[MockFunction]}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 0,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -37,12 +52,12 @@ ShallowWrapper {
       "children": <span
         className="control-icon"
         title="Next Task"
->
+      >
         <SvgSymbol
-                sym="forward-icon"
-                viewBox="0 0 20 20"
+          sym="forward-icon"
+          viewBox="0 0 20 20"
         />
-</span>,
+      </span>,
       "className": "button icon-only next-control",
       "onClick": [Function],
     },
@@ -55,7 +70,7 @@ ShallowWrapper {
         "children": <SvgSymbol
           sym="forward-icon"
           viewBox="0 0 20 20"
-/>,
+        />,
         "className": "control-icon",
         "title": "Next Task",
       },
@@ -85,12 +100,12 @@ ShallowWrapper {
         "children": <span
           className="control-icon"
           title="Next Task"
->
+        >
           <SvgSymbol
-                    sym="forward-icon"
-                    viewBox="0 0 20 20"
+            sym="forward-icon"
+            viewBox="0 0 20 20"
           />
-</span>,
+        </span>,
         "className": "button icon-only next-control",
         "onClick": [Function],
       },
@@ -103,7 +118,7 @@ ShallowWrapper {
           "children": <SvgSymbol
             sym="forward-icon"
             viewBox="0 0 20 20"
-/>,
+          />,
           "className": "control-icon",
           "title": "Next Task",
         },
@@ -141,22 +156,37 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TaskNextControl
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Next Task",
+                "id": "Task.controls.next.tooltip",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": "Next Task",
+            },
+          ],
+        },
+      }
     }
     isMinimized={false}
-    nextTask={[Function]}
+    nextTask={[MockFunction]}
     task={
-        Object {
-            "id": 123,
-            "parent": Object {
-              "id": 321,
-            },
-            "status": 0,
-          }
+      Object {
+        "id": 123,
+        "parent": Object {
+          "id": 321,
+        },
+        "status": 0,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -173,17 +203,17 @@ ShallowWrapper {
         className="button is-green is-outlined next-control"
         onClick={[Function]}
         title="Next Task"
->
+      >
         <FormattedMessage
-                defaultMessage="Next Task"
-                id="Task.controls.next.label"
-                values={Object {}}
+          defaultMessage="Next Task"
+          id="Task.controls.next.label"
+          values={Object {}}
         />
         <SvgSymbol
-                sym="forward-icon"
-                viewBox="0 0 20 20"
+          sym="forward-icon"
+          viewBox="0 0 20 20"
         />
-</button>,
+      </button>,
       "className": "has-centered-children",
     },
     "ref": null,
@@ -197,11 +227,11 @@ ShallowWrapper {
             defaultMessage="Next Task"
             id="Task.controls.next.label"
             values={Object {}}
-/>,
+          />,
           <SvgSymbol
             sym="forward-icon"
             viewBox="0 0 20 20"
-/>,
+          />,
         ],
         "className": "button is-green is-outlined next-control",
         "onClick": [Function],
@@ -249,17 +279,17 @@ ShallowWrapper {
           className="button is-green is-outlined next-control"
           onClick={[Function]}
           title="Next Task"
->
+        >
           <FormattedMessage
-                    defaultMessage="Next Task"
-                    id="Task.controls.next.label"
-                    values={Object {}}
+            defaultMessage="Next Task"
+            id="Task.controls.next.label"
+            values={Object {}}
           />
           <SvgSymbol
-                    sym="forward-icon"
-                    viewBox="0 0 20 20"
+            sym="forward-icon"
+            viewBox="0 0 20 20"
           />
-</button>,
+        </button>,
         "className": "has-centered-children",
       },
       "ref": null,
@@ -273,11 +303,11 @@ ShallowWrapper {
               defaultMessage="Next Task"
               id="Task.controls.next.label"
               values={Object {}}
-/>,
+            />,
             <SvgSymbol
               sym="forward-icon"
               viewBox="0 0 20 20"
-/>,
+            />,
           ],
           "className": "button is-green is-outlined next-control",
           "onClick": [Function],

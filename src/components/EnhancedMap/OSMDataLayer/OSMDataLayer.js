@@ -13,7 +13,7 @@ export default class OSMDataLayer extends FeatureGroup {
   popupContent = layer => {
     const header = (
       <a target="_blank"
-         rel="noopener"
+         rel="noopener noreferrer"
          href={`https://www.openstreetmap.org/${layer.feature.type}/${layer.feature.id}`}
       >
         {layer.feature.type} {layer.feature.id}

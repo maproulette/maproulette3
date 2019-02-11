@@ -94,7 +94,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
 
     setKeywordFilter = (keywords) => {
       this.props.setKeywordFilter(keywords)
-      addSearchCriteriaToRoute(this.props.history, {keywords: keywords.join(',')})
+      addSearchCriteriaToRoute(this.props.history, {keywords: keywords ? keywords.join(',') : keywords})
     }
 
     clearSearchFilters = (clearRoute = true) => {

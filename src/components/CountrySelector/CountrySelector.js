@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
-import WithDeactivateOnOutsideClick
-       from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import DropdownButton from '../Bulma/DropdownButton'
+import _each from 'lodash/each'
+import Dropdown from '../Dropdown/Dropdown'
 import { supportedCountries } from '../../services/Leaderboard/CountryBoundingBoxes'
-import countryMessages from '../CountryLeaderboard/Messages'
-import './CountrySelector.css'
-
-const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import countryMessages from './Messages'
+import './CountrySelector.scss'
 
 /**
  * CountrySelector renders an unmanaged dropdown button that can be used
@@ -20,37 +18,61 @@ const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class CountrySelector extends Component {
-  onSelect = selection => {
-    this.props.selectCountry(selection.value)
-  }
-
   render() {
-    const countryList = supportedCountries()
-    let dropdownOptions = _map(countryList, country => ({
-      key: country.countryCode,
-      text: this.props.intl.formatMessage(countryMessages[country.countryCode]),
-      value: country.countryCode,
-    }))
+    const countryList = _sortBy(
+      _each(supportedCountries(), country => {
+        country.name =
+          this.props.intl.formatMessage(countryMessages[country.countryCode])
+      }),
+      'name'
+    )
 
-    dropdownOptions = _sortBy(dropdownOptions, (o) => o.text)
-    dropdownOptions.unshift({key:"ALL", text:"All Countries", value: "ALL"})
+    const menuItems = _map(countryList, country => (
+      <li key={country.countryCode}>
+        <Link to={{}} onClick={() => this.props.selectCountry(country.countryCode)}>
+          {country.name}
+        </Link>
+      </li>
+    ))
+
+    // Add option for "All Countries" that goes to standard (global) leaderboard
+    menuItems.unshift(
+      <li key="ALL">
+        <Link to={{}} onClick={() => this.props.selectCountry("ALL")}>
+          <FormattedMessage {...countryMessages.ALL} />
+        </Link>
+      </li>
+    )
 
     return (
-      <DeactivatableDropdownButton
-        className={classNames("country-selector", this.props.className)}
-        options={dropdownOptions}
-        onSelect={this.onSelect}
+      <Dropdown
+        className={this.props.className}
+        button={<CountryButton  {...this.props} />}
       >
-        <div className="button is-rounded is-outlined">
-          { !this.props.currentCountryCode ?
-            <FormattedMessage {...countryMessages["ALL"]} />:
-            <FormattedMessage {...countryMessages[this.props.currentCountryCode]} />
-          }
-          <div className="dropdown-indicator" />
-        </div>
-      </DeactivatableDropdownButton>
+        <ol className="mr-list-dropdown">
+          {menuItems}
+        </ol>
+      </Dropdown>
     )
   }
+}
+
+const CountryButton = function(props) {
+  return (
+    <span className="mr-flex">
+      <span className="mr-mr-2">
+        { !props.currentCountryCode ?
+          <FormattedMessage {...countryMessages["ALL"]} /> :
+          <FormattedMessage {...countryMessages[props.currentCountryCode]} />
+        }
+      </span>
+      <SvgSymbol
+        sym="icon-cheveron-down"
+        viewBox="0 0 20 20"
+        className="mr-fill-current mr-w-5 mr-h-5"
+      />
+    </span>
+  )
 }
 
 CountrySelector.propTypes = {

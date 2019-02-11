@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
-import './Steps.css'
+import './Steps.scss'
 
 /**
  * Steps renders a Bulma Steps (extension) component with the given steps. It

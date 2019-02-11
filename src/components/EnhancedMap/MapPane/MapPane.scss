@@ -6,6 +6,7 @@
   width: 100%;
 
   .leaflet-container {
+    height: 100%;
     .leaflet-pane {
       z-index: $layer-map;
 

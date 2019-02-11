@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import remark from 'remark'
 import externalLinks from 'remark-external-links'
 import reactRenderer from 'remark-react'
-import PropTypes from 'prop-types'
 
 /**
  * MarkdownContent normalizes and renders the content of the given markdown
@@ -20,7 +20,7 @@ export default class MarkdownContent extends Component {
     const normalizedMarkdown = this.props.markdown.replace(/\r\n/mg, "\n\n")
 
     return (
-      <div className={this.props.className}>
+      <div>
         {
           remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
                   .use(reactRenderer).processSync(normalizedMarkdown).contents

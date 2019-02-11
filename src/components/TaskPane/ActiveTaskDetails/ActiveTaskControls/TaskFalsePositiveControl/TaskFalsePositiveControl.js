@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
 import _pick from 'lodash/pick'
 import { TaskStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+import Button from '../../../../Button/Button'
 import messages from './Messages'
 
 /**
@@ -34,19 +33,13 @@ export default class TaskFalsePositiveControl extends Component {
 
   render() {
     return (
-      <button className={classNames("button false-positive-control",
-                                    this.props.className,
-                                    {"large-and-wide": !this.props.isMinimized,
-                                    "icon-only": this.props.isMinimized})}
-              title={this.props.intl.formatMessage(messages.falsePositiveTooltip)}
-              onClick={() => this.props.complete(TaskStatus.falsePositive)}>
-        <span className="control-icon">
-          <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
-        </span>
-        <span className="control-label">
-          <FormattedMessage {...messages.falsePositiveLabel} />
-        </span>
-      </button>
+      <Button
+        className="mr-button--blue-fill"
+        title={this.props.intl.formatMessage(messages.falsePositiveTooltip)}
+        onClick={() => this.props.complete(TaskStatus.falsePositive)}
+      >
+        <FormattedMessage {...messages.falsePositiveLabel} />
+      </Button>
     )
   }
 }

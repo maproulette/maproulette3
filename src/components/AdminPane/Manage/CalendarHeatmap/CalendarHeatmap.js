@@ -9,7 +9,7 @@ import _reverse from 'lodash/reverse'
 import format from 'date-fns/format'
 import subMonths from 'date-fns/sub_months'
 import messages from './Messages'
-import './CalendarHeatmap.css'
+import './CalendarHeatmap.scss'
 
 const COLOR_BUCKETS = 6 // total number of color buckets
 const TOP_BUCKET_VALUE = 50 // value that gets into the top color bucket

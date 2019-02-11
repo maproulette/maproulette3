@@ -1,5 +1,57 @@
 @import 'theme.scss';
 
+.form {
+  .array-item-remove::after {
+    content: 'Remove';
+  }
+
+  fieldset fieldset fieldset legend {
+    display: none;
+  }
+
+  .array-field {
+    &__item {
+      margin-top: 1em;
+
+      .inline {
+        .control-label {
+          display: none;
+        }
+
+        .field {
+          display: inline-block;
+          width: auto;
+          margin-right: 1em;
+          margin-bottom: 0;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          input[type='text'] {
+            width: auto;
+          }
+        }
+
+        .array-field__item__control {
+          display: inline-block;
+          .icon {
+            svg {
+              height: 20px;
+              width: auto;
+            }
+          }
+        }
+      }
+    }
+
+    &__block-controls {
+      margin-top: 1em;
+    }
+  }
+}
+
+
 // Customizations for react-jsonschema-form to adapt it to the Bulma
 // framework. While we try to customize the markup, rjsf customization
 // is a bit clunky and requires some fine-tuning here.
@@ -9,18 +61,7 @@ form.rjsf {
   }
 
   fieldset {
-    border: 6px solid $grey-lightest;
-    border-radius: 6px;
-    padding: 25px;
-
-    legend, legend:not(:last-child) {
-      @extend .title;
-      font-size: $size-5;
-      margin-left: 30px;
-      padding: 0 10px;
-      margin-bottom: 10px;
-      font-weight: $weight-medium;
-    }
+    border: none;
 
     fieldset {
       border: 1px solid $grey-lightest;
@@ -70,6 +111,10 @@ form.rjsf {
 
   .form-fields-wrapper {
     margin: 20px 0;
+    .field .control {
+      display: flex;
+      justify-content: space-between;
+    }
 
     .field .control fieldset {
       legend {
@@ -159,10 +204,8 @@ form.rjsf {
     margin-left: 0.25em;
   }
 
-  .field-label label {
-    color: $green;
-    font-size: $size-5;
-    font-weight: $weight-semibold;
+  .field-label {
+    text-align: left;
   }
 
   .field.is-horizontal {
@@ -178,16 +221,20 @@ form.rjsf {
     @include basic-form-element-styling();
   }
 
+  .select, .select:not(.is-multiple) {
+  }
+
   select.form-control {
-    @extend .select;
-    @include basic-form-element-styling();
+    height: auto;
+    padding-right: 2em;
   }
 
   .select:not(.is-multiple)::after {
     border-color: $grey-light-less;
-    width: 0.7em;
-    height: 0.7em;
-    top: 45%;
+    border-width: 1.5px;
+    width: 0.4em;
+    height: 0.4em;
+    top: 70%;
   }
 
   textarea.form-control {
@@ -286,8 +333,9 @@ form.rjsf {
   }
 
   .help {
-    font-size: $size-8;
-    margin-top: 20px;
+    font-size: $size-7;
+    flex-basis: 50%;
+    margin-left: 1em;
   }
 
   .errors {

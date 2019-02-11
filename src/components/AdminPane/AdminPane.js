@@ -16,7 +16,8 @@ import ProjectDashboard from './Manage/ProjectDashboard/ProjectDashboard'
 import ChallengeDashboard from './Manage/ChallengeDashboard/ChallengeDashboard'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
-import './AdminPane.css'
+import './Manage/Widgets/widget_registry.js'
+import './AdminPane.scss'
 
 // Setup child components with needed HOCs.
 const MetricsSummary = WithChallenges(MetricsOverview)
@@ -54,7 +55,7 @@ export class AdminPane extends Component {
         </MediaQuery>
 
         <MediaQuery query="(min-width: 1024px)">
-          <div className="admin">
+          <div className="admin mr-bg-gradient-r-green-dark-blue mr-text-white">
             <div className="admin-pane">
               <Switch>
                 <Route exact path='/admin/metrics'

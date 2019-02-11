@@ -9,7 +9,7 @@ import CommentCountBadge
        from '../../CommentList/CommentCountBadge/CommentCountBadge'
 import CommentList from '../../CommentList/CommentList'
 import ChallengeInfoSummary
-       from '../ChallengeInfoSummary/ChallengeInfoSummary'
+       from '../../ChallengeInfoSummary/ChallengeInfoSummary'
 import TaskLocationMap from '../TaskLocationMap/TaskLocationMap'
 import PlaceDescription from '../PlaceDescription/PlaceDescription'
 import TaskLatLon from '../TaskLatLon/TaskLatLon'
@@ -22,7 +22,7 @@ import ChallengeShareControls
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './MobileTaskDetails.css'
+import './MobileTaskDetails.scss'
 
 /**
  * MobileTaskDetails displays a mobile-compatible bottom tab bar with options

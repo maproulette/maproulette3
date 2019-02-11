@@ -32,11 +32,11 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeShareControls
     challenge={
-        Object {
-            "id": 123,
-          }
+      Object {
+        "id": 123,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -52,73 +52,73 @@ ShallowWrapper {
       "children": Array [
         <div
           className="share-control"
->
+        >
           <CreatedButton
-                    quote="MapRoulette"
-                    url="http://127.0.0.1:3000/browse/challenges/123"
-                    windowHeight={400}
-                    windowWidth={550}
+            quote="MapRoulette"
+            url="http://127.0.0.1:3000/browse/challenges/123"
+            windowHeight={400}
+            windowWidth={550}
           >
-                    <span
-                              className="share-icon"
-                    >
-                              <Icon
-                                        className=""
-                                        logoFillColor="white"
-                                        round={true}
-                                        size={26}
-                              />
-                    </span>
+            <span
+              className="share-icon"
+            >
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
+            </span>
           </CreatedButton>
-</div>,
+        </div>,
         <div
           className="share-control"
->
+        >
           <CreatedButton
-                    hashtags={
-                              Array [
-                                        "maproulette",
-                                      ]
-                    }
-                    title="MapRoulette"
-                    url="http://127.0.0.1:3000/browse/challenges/123"
-                    windowHeight={400}
-                    windowWidth={550}
+            hashtags={
+              Array [
+                "maproulette",
+              ]
+            }
+            title="MapRoulette"
+            url="http://127.0.0.1:3000/browse/challenges/123"
+            windowHeight={400}
+            windowWidth={550}
           >
-                    <span
-                              className="share-icon"
-                    >
-                              <Icon
-                                        className=""
-                                        logoFillColor="white"
-                                        round={true}
-                                        size={26}
-                              />
-                    </span>
+            <span
+              className="share-icon"
+            >
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
+            </span>
           </CreatedButton>
-</div>,
+        </div>,
         <div
           className="share-control"
->
+        >
           <CreatedButton
-                    body="http://127.0.0.1:3000/browse/challenges/123"
-                    onClick={[Function]}
-                    openWindow={false}
-                    subject="MapRoulette"
-                    url="http://127.0.0.1:3000/browse/challenges/123"
+            body="http://127.0.0.1:3000/browse/challenges/123"
+            onClick={[Function]}
+            openWindow={false}
+            subject="MapRoulette"
+            url="http://127.0.0.1:3000/browse/challenges/123"
           >
-                    <span
-                              className="share-icon"
-                    >
-                              <Icon
-                                        className=""
-                                        logoFillColor="white"
-                                        round={true}
-                                        size={26}
-                              />
-                    </span>
+            <span
+              className="share-icon"
+            >
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
+            </span>
           </CreatedButton>
-</div>,
+        </div>,
       ],
       "className": "challenge-share-controls",
     },
@@ -134,18 +134,18 @@ ShallowWrapper {
             url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
->
+          >
             <span
-                        className="share-icon"
+              className="share-icon"
             >
-                        <Icon
-                                    className=""
-                                    logoFillColor="white"
-                                    round={true}
-                                    size={26}
-                        />
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
             </span>
-</CreatedButton>,
+          </CreatedButton>,
           "className": "share-control",
         },
         "ref": null,
@@ -156,14 +156,14 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="share-icon"
->
+            >
               <Icon
-                            className=""
-                            logoFillColor="white"
-                            round={true}
-                            size={26}
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
               />
-</span>,
+            </span>,
             "quote": "MapRoulette",
             "url": "http://127.0.0.1:3000/browse/challenges/123",
             "windowHeight": 400,
@@ -180,7 +180,7 @@ ShallowWrapper {
                 logoFillColor="white"
                 round={true}
                 size={26}
-/>,
+              />,
               "className": "share-icon",
             },
             "ref": null,
@@ -211,26 +211,26 @@ ShallowWrapper {
         "props": Object {
           "children": <CreatedButton
             hashtags={
-                        Array [
-                                    "maproulette",
-                                  ]
+              Array [
+                "maproulette",
+              ]
             }
             title="MapRoulette"
             url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
->
+          >
             <span
-                        className="share-icon"
+              className="share-icon"
             >
-                        <Icon
-                                    className=""
-                                    logoFillColor="white"
-                                    round={true}
-                                    size={26}
-                        />
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
             </span>
-</CreatedButton>,
+          </CreatedButton>,
           "className": "share-control",
         },
         "ref": null,
@@ -241,14 +241,14 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="share-icon"
->
+            >
               <Icon
-                            className=""
-                            logoFillColor="white"
-                            round={true}
-                            size={26}
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
               />
-</span>,
+            </span>,
             "hashtags": Array [
               "maproulette",
             ],
@@ -268,7 +268,7 @@ ShallowWrapper {
                 logoFillColor="white"
                 round={true}
                 size={26}
-/>,
+              />,
               "className": "share-icon",
             },
             "ref": null,
@@ -303,18 +303,18 @@ ShallowWrapper {
             openWindow={false}
             subject="MapRoulette"
             url="http://127.0.0.1:3000/browse/challenges/123"
->
+          >
             <span
-                        className="share-icon"
+              className="share-icon"
             >
-                        <Icon
-                                    className=""
-                                    logoFillColor="white"
-                                    round={true}
-                                    size={26}
-                        />
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
             </span>
-</CreatedButton>,
+          </CreatedButton>,
           "className": "share-control",
         },
         "ref": null,
@@ -326,14 +326,14 @@ ShallowWrapper {
             "body": "http://127.0.0.1:3000/browse/challenges/123",
             "children": <span
               className="share-icon"
->
+            >
               <Icon
-                            className=""
-                            logoFillColor="white"
-                            round={true}
-                            size={26}
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
               />
-</span>,
+            </span>,
             "onClick": [Function],
             "openWindow": false,
             "subject": "MapRoulette",
@@ -350,7 +350,7 @@ ShallowWrapper {
                 logoFillColor="white"
                 round={true}
                 size={26}
-/>,
+              />,
               "className": "share-icon",
             },
             "ref": null,
@@ -386,73 +386,73 @@ ShallowWrapper {
         "children": Array [
           <div
             className="share-control"
->
+          >
             <CreatedButton
-                        quote="MapRoulette"
-                        url="http://127.0.0.1:3000/browse/challenges/123"
-                        windowHeight={400}
-                        windowWidth={550}
+              quote="MapRoulette"
+              url="http://127.0.0.1:3000/browse/challenges/123"
+              windowHeight={400}
+              windowWidth={550}
             >
-                        <span
-                                    className="share-icon"
-                        >
-                                    <Icon
-                                                className=""
-                                                logoFillColor="white"
-                                                round={true}
-                                                size={26}
-                                    />
-                        </span>
+              <span
+                className="share-icon"
+              >
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
+              </span>
             </CreatedButton>
-</div>,
+          </div>,
           <div
             className="share-control"
->
+          >
             <CreatedButton
-                        hashtags={
-                                    Array [
-                                                "maproulette",
-                                              ]
-                        }
-                        title="MapRoulette"
-                        url="http://127.0.0.1:3000/browse/challenges/123"
-                        windowHeight={400}
-                        windowWidth={550}
+              hashtags={
+                Array [
+                  "maproulette",
+                ]
+              }
+              title="MapRoulette"
+              url="http://127.0.0.1:3000/browse/challenges/123"
+              windowHeight={400}
+              windowWidth={550}
             >
-                        <span
-                                    className="share-icon"
-                        >
-                                    <Icon
-                                                className=""
-                                                logoFillColor="white"
-                                                round={true}
-                                                size={26}
-                                    />
-                        </span>
+              <span
+                className="share-icon"
+              >
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
+              </span>
             </CreatedButton>
-</div>,
+          </div>,
           <div
             className="share-control"
->
+          >
             <CreatedButton
-                        body="http://127.0.0.1:3000/browse/challenges/123"
-                        onClick={[Function]}
-                        openWindow={false}
-                        subject="MapRoulette"
-                        url="http://127.0.0.1:3000/browse/challenges/123"
+              body="http://127.0.0.1:3000/browse/challenges/123"
+              onClick={[Function]}
+              openWindow={false}
+              subject="MapRoulette"
+              url="http://127.0.0.1:3000/browse/challenges/123"
             >
-                        <span
-                                    className="share-icon"
-                        >
-                                    <Icon
-                                                className=""
-                                                logoFillColor="white"
-                                                round={true}
-                                                size={26}
-                                    />
-                        </span>
+              <span
+                className="share-icon"
+              >
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
+              </span>
             </CreatedButton>
-</div>,
+          </div>,
         ],
         "className": "challenge-share-controls",
       },
@@ -468,18 +468,18 @@ ShallowWrapper {
               url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
->
+            >
               <span
-                            className="share-icon"
+                className="share-icon"
               >
-                            <Icon
-                                          className=""
-                                          logoFillColor="white"
-                                          round={true}
-                                          size={26}
-                            />
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
               </span>
-</CreatedButton>,
+            </CreatedButton>,
             "className": "share-control",
           },
           "ref": null,
@@ -490,14 +490,14 @@ ShallowWrapper {
             "props": Object {
               "children": <span
                 className="share-icon"
->
+              >
                 <Icon
-                                className=""
-                                logoFillColor="white"
-                                round={true}
-                                size={26}
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
                 />
-</span>,
+              </span>,
               "quote": "MapRoulette",
               "url": "http://127.0.0.1:3000/browse/challenges/123",
               "windowHeight": 400,
@@ -514,7 +514,7 @@ ShallowWrapper {
                   logoFillColor="white"
                   round={true}
                   size={26}
-/>,
+                />,
                 "className": "share-icon",
               },
               "ref": null,
@@ -545,26 +545,26 @@ ShallowWrapper {
           "props": Object {
             "children": <CreatedButton
               hashtags={
-                            Array [
-                                          "maproulette",
-                                        ]
+                Array [
+                  "maproulette",
+                ]
               }
               title="MapRoulette"
               url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
->
+            >
               <span
-                            className="share-icon"
+                className="share-icon"
               >
-                            <Icon
-                                          className=""
-                                          logoFillColor="white"
-                                          round={true}
-                                          size={26}
-                            />
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
               </span>
-</CreatedButton>,
+            </CreatedButton>,
             "className": "share-control",
           },
           "ref": null,
@@ -575,14 +575,14 @@ ShallowWrapper {
             "props": Object {
               "children": <span
                 className="share-icon"
->
+              >
                 <Icon
-                                className=""
-                                logoFillColor="white"
-                                round={true}
-                                size={26}
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
                 />
-</span>,
+              </span>,
               "hashtags": Array [
                 "maproulette",
               ],
@@ -602,7 +602,7 @@ ShallowWrapper {
                   logoFillColor="white"
                   round={true}
                   size={26}
-/>,
+                />,
                 "className": "share-icon",
               },
               "ref": null,
@@ -637,18 +637,18 @@ ShallowWrapper {
               openWindow={false}
               subject="MapRoulette"
               url="http://127.0.0.1:3000/browse/challenges/123"
->
+            >
               <span
-                            className="share-icon"
+                className="share-icon"
               >
-                            <Icon
-                                          className=""
-                                          logoFillColor="white"
-                                          round={true}
-                                          size={26}
-                            />
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
               </span>
-</CreatedButton>,
+            </CreatedButton>,
             "className": "share-control",
           },
           "ref": null,
@@ -660,14 +660,14 @@ ShallowWrapper {
               "body": "http://127.0.0.1:3000/browse/challenges/123",
               "children": <span
                 className="share-icon"
->
+              >
                 <Icon
-                                className=""
-                                logoFillColor="white"
-                                round={true}
-                                size={26}
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
                 />
-</span>,
+              </span>,
               "onClick": [Function],
               "openWindow": false,
               "subject": "MapRoulette",
@@ -684,7 +684,7 @@ ShallowWrapper {
                   logoFillColor="white"
                   round={true}
                   size={26}
-/>,
+                />,
                 "className": "share-icon",
               },
               "ref": null,
@@ -728,12 +728,12 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeShareControls
     challenge={
-        Object {
-            "id": 123,
-          }
+      Object {
+        "id": 123,
+      }
     }
     className="my-test"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -749,73 +749,73 @@ ShallowWrapper {
       "children": Array [
         <div
           className="share-control"
->
+        >
           <CreatedButton
-                    quote="MapRoulette"
-                    url="http://127.0.0.1:3000/browse/challenges/123"
-                    windowHeight={400}
-                    windowWidth={550}
+            quote="MapRoulette"
+            url="http://127.0.0.1:3000/browse/challenges/123"
+            windowHeight={400}
+            windowWidth={550}
           >
-                    <span
-                              className="share-icon"
-                    >
-                              <Icon
-                                        className=""
-                                        logoFillColor="white"
-                                        round={true}
-                                        size={26}
-                              />
-                    </span>
+            <span
+              className="share-icon"
+            >
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
+            </span>
           </CreatedButton>
-</div>,
+        </div>,
         <div
           className="share-control"
->
+        >
           <CreatedButton
-                    hashtags={
-                              Array [
-                                        "maproulette",
-                                      ]
-                    }
-                    title="MapRoulette"
-                    url="http://127.0.0.1:3000/browse/challenges/123"
-                    windowHeight={400}
-                    windowWidth={550}
+            hashtags={
+              Array [
+                "maproulette",
+              ]
+            }
+            title="MapRoulette"
+            url="http://127.0.0.1:3000/browse/challenges/123"
+            windowHeight={400}
+            windowWidth={550}
           >
-                    <span
-                              className="share-icon"
-                    >
-                              <Icon
-                                        className=""
-                                        logoFillColor="white"
-                                        round={true}
-                                        size={26}
-                              />
-                    </span>
+            <span
+              className="share-icon"
+            >
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
+            </span>
           </CreatedButton>
-</div>,
+        </div>,
         <div
           className="share-control"
->
+        >
           <CreatedButton
-                    body="http://127.0.0.1:3000/browse/challenges/123"
-                    onClick={[Function]}
-                    openWindow={false}
-                    subject="MapRoulette"
-                    url="http://127.0.0.1:3000/browse/challenges/123"
+            body="http://127.0.0.1:3000/browse/challenges/123"
+            onClick={[Function]}
+            openWindow={false}
+            subject="MapRoulette"
+            url="http://127.0.0.1:3000/browse/challenges/123"
           >
-                    <span
-                              className="share-icon"
-                    >
-                              <Icon
-                                        className=""
-                                        logoFillColor="white"
-                                        round={true}
-                                        size={26}
-                              />
-                    </span>
+            <span
+              className="share-icon"
+            >
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
+            </span>
           </CreatedButton>
-</div>,
+        </div>,
       ],
       "className": "challenge-share-controls my-test",
     },
@@ -831,18 +831,18 @@ ShallowWrapper {
             url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
->
+          >
             <span
-                        className="share-icon"
+              className="share-icon"
             >
-                        <Icon
-                                    className=""
-                                    logoFillColor="white"
-                                    round={true}
-                                    size={26}
-                        />
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
             </span>
-</CreatedButton>,
+          </CreatedButton>,
           "className": "share-control",
         },
         "ref": null,
@@ -853,14 +853,14 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="share-icon"
->
+            >
               <Icon
-                            className=""
-                            logoFillColor="white"
-                            round={true}
-                            size={26}
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
               />
-</span>,
+            </span>,
             "quote": "MapRoulette",
             "url": "http://127.0.0.1:3000/browse/challenges/123",
             "windowHeight": 400,
@@ -877,7 +877,7 @@ ShallowWrapper {
                 logoFillColor="white"
                 round={true}
                 size={26}
-/>,
+              />,
               "className": "share-icon",
             },
             "ref": null,
@@ -908,26 +908,26 @@ ShallowWrapper {
         "props": Object {
           "children": <CreatedButton
             hashtags={
-                        Array [
-                                    "maproulette",
-                                  ]
+              Array [
+                "maproulette",
+              ]
             }
             title="MapRoulette"
             url="http://127.0.0.1:3000/browse/challenges/123"
             windowHeight={400}
             windowWidth={550}
->
+          >
             <span
-                        className="share-icon"
+              className="share-icon"
             >
-                        <Icon
-                                    className=""
-                                    logoFillColor="white"
-                                    round={true}
-                                    size={26}
-                        />
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
             </span>
-</CreatedButton>,
+          </CreatedButton>,
           "className": "share-control",
         },
         "ref": null,
@@ -938,14 +938,14 @@ ShallowWrapper {
           "props": Object {
             "children": <span
               className="share-icon"
->
+            >
               <Icon
-                            className=""
-                            logoFillColor="white"
-                            round={true}
-                            size={26}
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
               />
-</span>,
+            </span>,
             "hashtags": Array [
               "maproulette",
             ],
@@ -965,7 +965,7 @@ ShallowWrapper {
                 logoFillColor="white"
                 round={true}
                 size={26}
-/>,
+              />,
               "className": "share-icon",
             },
             "ref": null,
@@ -1000,18 +1000,18 @@ ShallowWrapper {
             openWindow={false}
             subject="MapRoulette"
             url="http://127.0.0.1:3000/browse/challenges/123"
->
+          >
             <span
-                        className="share-icon"
+              className="share-icon"
             >
-                        <Icon
-                                    className=""
-                                    logoFillColor="white"
-                                    round={true}
-                                    size={26}
-                        />
+              <Icon
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
+              />
             </span>
-</CreatedButton>,
+          </CreatedButton>,
           "className": "share-control",
         },
         "ref": null,
@@ -1023,14 +1023,14 @@ ShallowWrapper {
             "body": "http://127.0.0.1:3000/browse/challenges/123",
             "children": <span
               className="share-icon"
->
+            >
               <Icon
-                            className=""
-                            logoFillColor="white"
-                            round={true}
-                            size={26}
+                className=""
+                logoFillColor="white"
+                round={true}
+                size={26}
               />
-</span>,
+            </span>,
             "onClick": [Function],
             "openWindow": false,
             "subject": "MapRoulette",
@@ -1047,7 +1047,7 @@ ShallowWrapper {
                 logoFillColor="white"
                 round={true}
                 size={26}
-/>,
+              />,
               "className": "share-icon",
             },
             "ref": null,
@@ -1083,73 +1083,73 @@ ShallowWrapper {
         "children": Array [
           <div
             className="share-control"
->
+          >
             <CreatedButton
-                        quote="MapRoulette"
-                        url="http://127.0.0.1:3000/browse/challenges/123"
-                        windowHeight={400}
-                        windowWidth={550}
+              quote="MapRoulette"
+              url="http://127.0.0.1:3000/browse/challenges/123"
+              windowHeight={400}
+              windowWidth={550}
             >
-                        <span
-                                    className="share-icon"
-                        >
-                                    <Icon
-                                                className=""
-                                                logoFillColor="white"
-                                                round={true}
-                                                size={26}
-                                    />
-                        </span>
+              <span
+                className="share-icon"
+              >
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
+              </span>
             </CreatedButton>
-</div>,
+          </div>,
           <div
             className="share-control"
->
+          >
             <CreatedButton
-                        hashtags={
-                                    Array [
-                                                "maproulette",
-                                              ]
-                        }
-                        title="MapRoulette"
-                        url="http://127.0.0.1:3000/browse/challenges/123"
-                        windowHeight={400}
-                        windowWidth={550}
+              hashtags={
+                Array [
+                  "maproulette",
+                ]
+              }
+              title="MapRoulette"
+              url="http://127.0.0.1:3000/browse/challenges/123"
+              windowHeight={400}
+              windowWidth={550}
             >
-                        <span
-                                    className="share-icon"
-                        >
-                                    <Icon
-                                                className=""
-                                                logoFillColor="white"
-                                                round={true}
-                                                size={26}
-                                    />
-                        </span>
+              <span
+                className="share-icon"
+              >
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
+              </span>
             </CreatedButton>
-</div>,
+          </div>,
           <div
             className="share-control"
->
+          >
             <CreatedButton
-                        body="http://127.0.0.1:3000/browse/challenges/123"
-                        onClick={[Function]}
-                        openWindow={false}
-                        subject="MapRoulette"
-                        url="http://127.0.0.1:3000/browse/challenges/123"
+              body="http://127.0.0.1:3000/browse/challenges/123"
+              onClick={[Function]}
+              openWindow={false}
+              subject="MapRoulette"
+              url="http://127.0.0.1:3000/browse/challenges/123"
             >
-                        <span
-                                    className="share-icon"
-                        >
-                                    <Icon
-                                                className=""
-                                                logoFillColor="white"
-                                                round={true}
-                                                size={26}
-                                    />
-                        </span>
+              <span
+                className="share-icon"
+              >
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
+              </span>
             </CreatedButton>
-</div>,
+          </div>,
         ],
         "className": "challenge-share-controls my-test",
       },
@@ -1165,18 +1165,18 @@ ShallowWrapper {
               url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
->
+            >
               <span
-                            className="share-icon"
+                className="share-icon"
               >
-                            <Icon
-                                          className=""
-                                          logoFillColor="white"
-                                          round={true}
-                                          size={26}
-                            />
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
               </span>
-</CreatedButton>,
+            </CreatedButton>,
             "className": "share-control",
           },
           "ref": null,
@@ -1187,14 +1187,14 @@ ShallowWrapper {
             "props": Object {
               "children": <span
                 className="share-icon"
->
+              >
                 <Icon
-                                className=""
-                                logoFillColor="white"
-                                round={true}
-                                size={26}
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
                 />
-</span>,
+              </span>,
               "quote": "MapRoulette",
               "url": "http://127.0.0.1:3000/browse/challenges/123",
               "windowHeight": 400,
@@ -1211,7 +1211,7 @@ ShallowWrapper {
                   logoFillColor="white"
                   round={true}
                   size={26}
-/>,
+                />,
                 "className": "share-icon",
               },
               "ref": null,
@@ -1242,26 +1242,26 @@ ShallowWrapper {
           "props": Object {
             "children": <CreatedButton
               hashtags={
-                            Array [
-                                          "maproulette",
-                                        ]
+                Array [
+                  "maproulette",
+                ]
               }
               title="MapRoulette"
               url="http://127.0.0.1:3000/browse/challenges/123"
               windowHeight={400}
               windowWidth={550}
->
+            >
               <span
-                            className="share-icon"
+                className="share-icon"
               >
-                            <Icon
-                                          className=""
-                                          logoFillColor="white"
-                                          round={true}
-                                          size={26}
-                            />
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
               </span>
-</CreatedButton>,
+            </CreatedButton>,
             "className": "share-control",
           },
           "ref": null,
@@ -1272,14 +1272,14 @@ ShallowWrapper {
             "props": Object {
               "children": <span
                 className="share-icon"
->
+              >
                 <Icon
-                                className=""
-                                logoFillColor="white"
-                                round={true}
-                                size={26}
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
                 />
-</span>,
+              </span>,
               "hashtags": Array [
                 "maproulette",
               ],
@@ -1299,7 +1299,7 @@ ShallowWrapper {
                   logoFillColor="white"
                   round={true}
                   size={26}
-/>,
+                />,
                 "className": "share-icon",
               },
               "ref": null,
@@ -1334,18 +1334,18 @@ ShallowWrapper {
               openWindow={false}
               subject="MapRoulette"
               url="http://127.0.0.1:3000/browse/challenges/123"
->
+            >
               <span
-                            className="share-icon"
+                className="share-icon"
               >
-                            <Icon
-                                          className=""
-                                          logoFillColor="white"
-                                          round={true}
-                                          size={26}
-                            />
+                <Icon
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
+                />
               </span>
-</CreatedButton>,
+            </CreatedButton>,
             "className": "share-control",
           },
           "ref": null,
@@ -1357,14 +1357,14 @@ ShallowWrapper {
               "body": "http://127.0.0.1:3000/browse/challenges/123",
               "children": <span
                 className="share-icon"
->
+              >
                 <Icon
-                                className=""
-                                logoFillColor="white"
-                                round={true}
-                                size={26}
+                  className=""
+                  logoFillColor="white"
+                  round={true}
+                  size={26}
                 />
-</span>,
+              </span>,
               "onClick": [Function],
               "openWindow": false,
               "subject": "MapRoulette",
@@ -1381,7 +1381,7 @@ ShallowWrapper {
                   logoFillColor="white"
                   round={true}
                   size={26}
-/>,
+                />,
                 "className": "share-icon",
               },
               "ref": null,

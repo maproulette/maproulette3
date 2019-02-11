@@ -1,0 +1,26 @@
+import React, { Component } from 'react'
+import WithCurrentUser
+       from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
+import Hero from './Hero'
+import Highlights from './Highlights'
+import Intro from './Intro'
+import HowItWorks from './HowItWorks'
+import LatestNews from './LatestNews'
+import FeaturedChallenges from './FeaturedChallenges'
+
+export class Home extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        <Hero {...this.props} />
+        <Highlights {...this.props} />
+        <Intro {...this.props} />
+        <HowItWorks {...this.props} />
+        <LatestNews {...this.props} />
+        <FeaturedChallenges {...this.props} />
+      </React.Fragment>
+    )
+  }
+}
+
+export default WithCurrentUser(Home)

@@ -5,7 +5,7 @@ import _isArray from 'lodash/isArray'
 import { errorShape } from '../../services/Error/Error'
 import WithErrors from '../HOCs/WithErrors/WithErrors'
 import Modal from '../Bulma/Modal'
-import './ErrorModal.css'
+import './ErrorModal.scss'
 
 /**
  * ErrorModal presents a modal that displays all of the given errors as individual

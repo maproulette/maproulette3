@@ -172,6 +172,8 @@ export const executePlaceSearch = (props, query, setLoading) => {
     else {
       props.addError(AppErrors.map.placeNotFound)
     }
+  }).catch(error => {
+    console.log(error)
   })
 }
 

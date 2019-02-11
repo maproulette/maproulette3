@@ -5,56 +5,100 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <FilterByLocation
-    asMenuList={false}
     challenges={
-        Array [
-            Object {
-              "blurb": "Challenge 309 blurb",
-              "description": "Challenge 309 description",
-              "id": 309,
-              "name": "Challenge 309",
-              "parent": Object {
-                "displayName": "foo",
-              },
-            },
-            Object {
-              "blurb": "Challenge 311 blurb",
-              "description": "Challenge 311 description",
-              "id": 311,
-              "name": "Challenge 311",
-              "parent": Object {
-                "displayName": "bar",
-              },
-            },
-          ]
+      Array [
+        Object {
+          "blurb": "Challenge 309 blurb",
+          "description": "Challenge 309 description",
+          "id": 309,
+          "name": "Challenge 309",
+          "parent": Object {
+            "displayName": "foo",
+          },
+        },
+        Object {
+          "blurb": "Challenge 311 blurb",
+          "description": "Challenge 311 description",
+          "id": 311,
+          "name": "Challenge 311",
+          "parent": Object {
+            "displayName": "bar",
+          },
+        },
+      ]
     }
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
-    }
-    locateMapToUser={[Function]}
-    mapBounds={
-        Object {
-            "challenges": Object {
-              "bounds": 1,
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Near Me",
+                "id": "Challenge.location.nearMe",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Within Map Bounds",
+                "id": "Challenge.location.withinMapBounds",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Intersecting Map Bounds",
+                "id": "Challenge.location.intersectingMapBounds",
+              },
+            ],
+            Array [
+              Object {
+                "defaultMessage": "Anywhere",
+                "id": "Challenge.location.any",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
             },
-          }
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-    removeSearchFilters={[Function]}
+    locateMapToUser={[MockFunction]}
+    mapBounds={
+      Object {
+        "challenges": Object {
+          "bounds": 1,
+        },
+      }
+    }
+    removeSearchFilters={[MockFunction]}
     searchFilters={
-        Object {
-            "difficulty": 1,
-          }
+      Object {
+        "difficulty": 1,
+      }
     }
-    setSearchFilters={[Function]}
+    setSearchFilters={[MockFunction]}
     user={
-        Object {
-            "id": 11,
-            "savedChallenges": Array [],
-          }
+      Object {
+        "id": 11,
+        "savedChallenges": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -67,47 +111,204 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
-      "eventTypes": Array [
-        "mousedown",
-        "touchstart",
-      ],
-      "excludeScrollbar": false,
-      "label": <FormattedMessage
-        defaultMessage="Location"
-        id="ChallengeFilterSubnav.filter.location.label"
-        values={Object {}}
-/>,
-      "onChange": [Function],
-      "options": Array [
-        Object {
-          "key": "any",
-          "text": undefined,
-          "value": undefined,
-        },
-        Object {
-          "key": "withinMapBounds",
-          "text": undefined,
-          "value": "withinMapBounds",
-        },
-        Object {
-          "key": "intersectingMapBounds",
-          "text": undefined,
-          "value": "intersectingMapBounds",
-        },
-        Object {
-          "key": "nearMe",
-          "text": undefined,
-          "value": "nearMe",
-        },
-      ],
-      "outsideClickIgnoreClass": "ignore-react-onclickoutside",
-      "placeholder": undefined,
-      "preventDefault": false,
-      "stopPropagation": false,
-      "value": undefined,
+      "button": <ButtonFilter
+        type={
+          <FormattedMessage
+            defaultMessage="Location"
+            id="ChallengeFilterSubnav.filter.location.label"
+            values={Object {}}
+          />
+        }
+      />,
+      "children": <ol
+        className="mr-list-dropdown mr-list-dropdown--ruled"
+      >
+        <li>
+          <Link
+            onClick={[Function]}
+            replace={false}
+            to={Object {}}
+          />
+        </li>
+        <li>
+          <Link
+            onClick={[Function]}
+            replace={false}
+            to={Object {}}
+          />
+        </li>
+        <li>
+          <Link
+            onClick={[Function]}
+            replace={false}
+            to={Object {}}
+          />
+        </li>
+        <li>
+          <Link
+            onClick={[Function]}
+            replace={false}
+            to={Object {}}
+          />
+        </li>
+      </ol>,
+      "className": "mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6",
     },
     "ref": null,
-    "rendered": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>,
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>,
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>,
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>,
+        ],
+        "className": "mr-list-dropdown mr-list-dropdown--ruled",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": "any",
+          "nodeType": "host",
+          "props": Object {
+            "children": <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />,
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": undefined,
+              "onClick": [Function],
+              "replace": false,
+              "to": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "li",
+        },
+        Object {
+          "instance": null,
+          "key": "withinMapBounds",
+          "nodeType": "host",
+          "props": Object {
+            "children": <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />,
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": undefined,
+              "onClick": [Function],
+              "replace": false,
+              "to": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "li",
+        },
+        Object {
+          "instance": null,
+          "key": "intersectingMapBounds",
+          "nodeType": "host",
+          "props": Object {
+            "children": <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />,
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": undefined,
+              "onClick": [Function],
+              "replace": false,
+              "to": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "li",
+        },
+        Object {
+          "instance": null,
+          "key": "nearMe",
+          "nodeType": "host",
+          "props": Object {
+            "children": <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />,
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": undefined,
+              "onClick": [Function],
+              "replace": false,
+              "to": Object {},
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "li",
+        },
+      ],
+      "type": "ol",
+    },
     "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
@@ -116,47 +317,204 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
-        "eventTypes": Array [
-          "mousedown",
-          "touchstart",
-        ],
-        "excludeScrollbar": false,
-        "label": <FormattedMessage
-          defaultMessage="Location"
-          id="ChallengeFilterSubnav.filter.location.label"
-          values={Object {}}
-/>,
-        "onChange": [Function],
-        "options": Array [
-          Object {
-            "key": "any",
-            "text": undefined,
-            "value": undefined,
-          },
-          Object {
-            "key": "withinMapBounds",
-            "text": undefined,
-            "value": "withinMapBounds",
-          },
-          Object {
-            "key": "intersectingMapBounds",
-            "text": undefined,
-            "value": "intersectingMapBounds",
-          },
-          Object {
-            "key": "nearMe",
-            "text": undefined,
-            "value": "nearMe",
-          },
-        ],
-        "outsideClickIgnoreClass": "ignore-react-onclickoutside",
-        "placeholder": undefined,
-        "preventDefault": false,
-        "stopPropagation": false,
-        "value": undefined,
+        "button": <ButtonFilter
+          type={
+            <FormattedMessage
+              defaultMessage="Location"
+              id="ChallengeFilterSubnav.filter.location.label"
+              values={Object {}}
+            />
+          }
+        />,
+        "children": <ol
+          className="mr-list-dropdown mr-list-dropdown--ruled"
+        >
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>
+          <li>
+            <Link
+              onClick={[Function]}
+              replace={false}
+              to={Object {}}
+            />
+          </li>
+        </ol>,
+        "className": "mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6",
       },
       "ref": null,
-      "rendered": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <li>
+              <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />
+            </li>,
+            <li>
+              <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />
+            </li>,
+            <li>
+              <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />
+            </li>,
+            <li>
+              <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />
+            </li>,
+          ],
+          "className": "mr-list-dropdown mr-list-dropdown--ruled",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": "any",
+            "nodeType": "host",
+            "props": Object {
+              "children": <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": undefined,
+                "onClick": [Function],
+                "replace": false,
+                "to": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "li",
+          },
+          Object {
+            "instance": null,
+            "key": "withinMapBounds",
+            "nodeType": "host",
+            "props": Object {
+              "children": <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": undefined,
+                "onClick": [Function],
+                "replace": false,
+                "to": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "li",
+          },
+          Object {
+            "instance": null,
+            "key": "intersectingMapBounds",
+            "nodeType": "host",
+            "props": Object {
+              "children": <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": undefined,
+                "onClick": [Function],
+                "replace": false,
+                "to": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "li",
+          },
+          Object {
+            "instance": null,
+            "key": "nearMe",
+            "nodeType": "host",
+            "props": Object {
+              "children": <Link
+                onClick={[Function]}
+                replace={false}
+                to={Object {}}
+              />,
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": undefined,
+                "onClick": [Function],
+                "replace": false,
+                "to": Object {},
+              },
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": "li",
+          },
+        ],
+        "type": "ol",
+      },
       "type": [Function],
     },
   ],

@@ -1,0 +1,60 @@
+@import 'variables.scss';
+
+.active-task-details .task-status {
+  margin: 25px 0;
+  padding-bottom: 25px;
+  box-sizing: border-box;
+
+  .active-task-details--sub-heading {
+    background-color: $blue;
+    color: $white;
+    border-radius: $radius-medium $radius-medium 0 0;
+    padding: 10px 15px;
+    margin-bottom: 0;
+  }
+
+  svg {
+    height: 18px;
+    width: auto;
+    fill: $grey-dark;
+    margin-right: 7px;
+    vertical-align: text-top;
+  }
+
+  .task-status__prompt {
+    font-weight: $weight-medium;
+  }
+
+  .task-status__label {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid rgba($blue, 0.33);
+    border-radius: 0 0 $radius-medium $radius-medium;
+    border-top: none;
+    padding: 10px 15px;
+    font-weight: $weight-semibold;
+    color: $grey;
+  }
+
+  .task-status__view-changeset-link {
+    font-weight: $weight-normal;
+    font-size: $size-7;
+  }
+
+  &.icon-only {
+    .control-icon svg {
+      fill: $yellow;
+    }
+  }
+}
+
+.is-minimized .button.task-status {
+  margin: 0px;
+  margin-bottom: 15px;
+  padding-bottom: 0;
+}
+
+.popout-content__body .task-status__label {
+  color: $grey;
+}

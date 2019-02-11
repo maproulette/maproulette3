@@ -1,0 +1,11 @@
+.mr-section {
+  @apply mr-my-8;
+
+  &--as-header {
+    @apply mr-my-8 mr-p-4 mr-rounded mr-shadow mr-bg-green-dark mr-text-white;
+  }
+
+  &__header {
+    @apply mr-flex mr-items-center mr-justify-between mr-my-8 mr-p-4 mr-rounded mr-shadow mr-bg-green-dark mr-text-white;
+  }
+}

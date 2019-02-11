@@ -5,26 +5,26 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ErrorModal
-    clearErrors={[Function]}
+    clearErrors={[MockFunction]}
     errors={
-        Array [
-            Object {
-              "defaultMessage": "First Error",
-              "id": "first-error",
-            },
-            Object {
-              "defaultMessage": "Second Error",
-              "id": "second-error",
-            },
-            Object {
-              "defaultMessage": "Third Error",
-              "id": "third-error",
-            },
-          ]
+      Array [
+        Object {
+          "defaultMessage": "First Error",
+          "id": "first-error",
+        },
+        Object {
+          "defaultMessage": "Second Error",
+          "id": "second-error",
+        },
+        Object {
+          "defaultMessage": "Third Error",
+          "id": "third-error",
+        },
+      ]
     }
-    formatMessage={[Function]}
-    removeError={[Function]}
-/>,
+    formatMessage={[MockFunction]}
+    removeError={[MockFunction]}
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -39,92 +39,92 @@ ShallowWrapper {
     "props": Object {
       "children": <ul
         className="error-pane__messages"
->
+      >
         <li>
-                <article
-                        className="message is-danger"
-                >
-                        <div
-                                className="message-header"
-                        >
-                                <p>
-                                        Error
-                                </p>
-                                <button
-                                        aria-label="delete"
-                                        className="delete"
-                                        onClick={[Function]}
-                                />
-                        </div>
-                        <div
-                                className="message-body"
-                        >
-                                <FormattedMessage
-                                        defaultMessage="First Error"
-                                        id="first-error"
-                                        values={Object {}}
-                                />
-                        </div>
-                </article>
+          <article
+            className="message is-danger"
+          >
+            <div
+              className="message-header"
+            >
+              <p>
+                Error
+              </p>
+              <button
+                aria-label="delete"
+                className="delete"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="message-body"
+            >
+              <FormattedMessage
+                defaultMessage="First Error"
+                id="first-error"
+                values={Object {}}
+              />
+            </div>
+          </article>
         </li>
         <li>
-                <article
-                        className="message is-danger"
-                >
-                        <div
-                                className="message-header"
-                        >
-                                <p>
-                                        Error
-                                </p>
-                                <button
-                                        aria-label="delete"
-                                        className="delete"
-                                        onClick={[Function]}
-                                />
-                        </div>
-                        <div
-                                className="message-body"
-                        >
-                                <FormattedMessage
-                                        defaultMessage="Second Error"
-                                        id="second-error"
-                                        values={Object {}}
-                                />
-                        </div>
-                </article>
+          <article
+            className="message is-danger"
+          >
+            <div
+              className="message-header"
+            >
+              <p>
+                Error
+              </p>
+              <button
+                aria-label="delete"
+                className="delete"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="message-body"
+            >
+              <FormattedMessage
+                defaultMessage="Second Error"
+                id="second-error"
+                values={Object {}}
+              />
+            </div>
+          </article>
         </li>
         <li>
-                <article
-                        className="message is-danger"
-                >
-                        <div
-                                className="message-header"
-                        >
-                                <p>
-                                        Error
-                                </p>
-                                <button
-                                        aria-label="delete"
-                                        className="delete"
-                                        onClick={[Function]}
-                                />
-                        </div>
-                        <div
-                                className="message-body"
-                        >
-                                <FormattedMessage
-                                        defaultMessage="Third Error"
-                                        id="third-error"
-                                        values={Object {}}
-                                />
-                        </div>
-                </article>
+          <article
+            className="message is-danger"
+          >
+            <div
+              className="message-header"
+            >
+              <p>
+                Error
+              </p>
+              <button
+                aria-label="delete"
+                className="delete"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="message-body"
+            >
+              <FormattedMessage
+                defaultMessage="Third Error"
+                id="third-error"
+                values={Object {}}
+              />
+            </div>
+          </article>
         </li>
-</ul>,
+      </ul>,
       "className": "error-pane",
       "isActive": true,
-      "onClose": [Function],
+      "onClose": [MockFunction],
     },
     "ref": null,
     "rendered": Object {
@@ -135,85 +135,85 @@ ShallowWrapper {
         "children": Array [
           <li>
             <article
-                        className="message is-danger"
+              className="message is-danger"
             >
-                        <div
-                                    className="message-header"
-                        >
-                                    <p>
-                                                Error
-                                    </p>
-                                    <button
-                                                aria-label="delete"
-                                                className="delete"
-                                                onClick={[Function]}
-                                    />
-                        </div>
-                        <div
-                                    className="message-body"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="First Error"
-                                                id="first-error"
-                                                values={Object {}}
-                                    />
-                        </div>
+              <div
+                className="message-header"
+              >
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <FormattedMessage
+                  defaultMessage="First Error"
+                  id="first-error"
+                  values={Object {}}
+                />
+              </div>
             </article>
-</li>,
+          </li>,
           <li>
             <article
-                        className="message is-danger"
+              className="message is-danger"
             >
-                        <div
-                                    className="message-header"
-                        >
-                                    <p>
-                                                Error
-                                    </p>
-                                    <button
-                                                aria-label="delete"
-                                                className="delete"
-                                                onClick={[Function]}
-                                    />
-                        </div>
-                        <div
-                                    className="message-body"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Second Error"
-                                                id="second-error"
-                                                values={Object {}}
-                                    />
-                        </div>
+              <div
+                className="message-header"
+              >
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <FormattedMessage
+                  defaultMessage="Second Error"
+                  id="second-error"
+                  values={Object {}}
+                />
+              </div>
             </article>
-</li>,
+          </li>,
           <li>
             <article
-                        className="message is-danger"
+              className="message is-danger"
             >
-                        <div
-                                    className="message-header"
-                        >
-                                    <p>
-                                                Error
-                                    </p>
-                                    <button
-                                                aria-label="delete"
-                                                className="delete"
-                                                onClick={[Function]}
-                                    />
-                        </div>
-                        <div
-                                    className="message-body"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Third Error"
-                                                id="third-error"
-                                                values={Object {}}
-                                    />
-                        </div>
+              <div
+                className="message-header"
+              >
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <FormattedMessage
+                  defaultMessage="Third Error"
+                  id="third-error"
+                  values={Object {}}
+                />
+              </div>
             </article>
-</li>,
+          </li>,
         ],
         "className": "error-pane__messages",
       },
@@ -226,29 +226,29 @@ ShallowWrapper {
           "props": Object {
             "children": <article
               className="message is-danger"
->
+            >
               <div
-                            className="message-header"
+                className="message-header"
               >
-                            <p>
-                                          Error
-                            </p>
-                            <button
-                                          aria-label="delete"
-                                          className="delete"
-                                          onClick={[Function]}
-                            />
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
               </div>
               <div
-                            className="message-body"
+                className="message-body"
               >
-                            <FormattedMessage
-                                          defaultMessage="First Error"
-                                          id="first-error"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="First Error"
+                  id="first-error"
+                  values={Object {}}
+                />
               </div>
-</article>,
+            </article>,
           },
           "ref": null,
           "rendered": Object {
@@ -259,25 +259,25 @@ ShallowWrapper {
               "children": Array [
                 <div
                   className="message-header"
->
+                >
                   <p>
-                                    Error
+                    Error
                   </p>
                   <button
-                                    aria-label="delete"
-                                    className="delete"
-                                    onClick={[Function]}
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
                   />
-</div>,
+                </div>,
                 <div
                   className="message-body"
->
+                >
                   <FormattedMessage
-                                    defaultMessage="First Error"
-                                    id="first-error"
-                                    values={Object {}}
+                    defaultMessage="First Error"
+                    id="first-error"
+                    values={Object {}}
                   />
-</div>,
+                </div>,
               ],
               "className": "message is-danger",
             },
@@ -291,12 +291,12 @@ ShallowWrapper {
                   "children": Array [
                     <p>
                       Error
-</p>,
+                    </p>,
                     <button
                       aria-label="delete"
                       className="delete"
                       onClick={[Function]}
-/>,
+                    />,
                   ],
                   "className": "message-header",
                 },
@@ -338,7 +338,7 @@ ShallowWrapper {
                     defaultMessage="First Error"
                     id="first-error"
                     values={Object {}}
-/>,
+                  />,
                   "className": "message-body",
                 },
                 "ref": null,
@@ -369,29 +369,29 @@ ShallowWrapper {
           "props": Object {
             "children": <article
               className="message is-danger"
->
+            >
               <div
-                            className="message-header"
+                className="message-header"
               >
-                            <p>
-                                          Error
-                            </p>
-                            <button
-                                          aria-label="delete"
-                                          className="delete"
-                                          onClick={[Function]}
-                            />
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
               </div>
               <div
-                            className="message-body"
+                className="message-body"
               >
-                            <FormattedMessage
-                                          defaultMessage="Second Error"
-                                          id="second-error"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Second Error"
+                  id="second-error"
+                  values={Object {}}
+                />
               </div>
-</article>,
+            </article>,
           },
           "ref": null,
           "rendered": Object {
@@ -402,25 +402,25 @@ ShallowWrapper {
               "children": Array [
                 <div
                   className="message-header"
->
+                >
                   <p>
-                                    Error
+                    Error
                   </p>
                   <button
-                                    aria-label="delete"
-                                    className="delete"
-                                    onClick={[Function]}
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
                   />
-</div>,
+                </div>,
                 <div
                   className="message-body"
->
+                >
                   <FormattedMessage
-                                    defaultMessage="Second Error"
-                                    id="second-error"
-                                    values={Object {}}
+                    defaultMessage="Second Error"
+                    id="second-error"
+                    values={Object {}}
                   />
-</div>,
+                </div>,
               ],
               "className": "message is-danger",
             },
@@ -434,12 +434,12 @@ ShallowWrapper {
                   "children": Array [
                     <p>
                       Error
-</p>,
+                    </p>,
                     <button
                       aria-label="delete"
                       className="delete"
                       onClick={[Function]}
-/>,
+                    />,
                   ],
                   "className": "message-header",
                 },
@@ -481,7 +481,7 @@ ShallowWrapper {
                     defaultMessage="Second Error"
                     id="second-error"
                     values={Object {}}
-/>,
+                  />,
                   "className": "message-body",
                 },
                 "ref": null,
@@ -512,29 +512,29 @@ ShallowWrapper {
           "props": Object {
             "children": <article
               className="message is-danger"
->
+            >
               <div
-                            className="message-header"
+                className="message-header"
               >
-                            <p>
-                                          Error
-                            </p>
-                            <button
-                                          aria-label="delete"
-                                          className="delete"
-                                          onClick={[Function]}
-                            />
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
               </div>
               <div
-                            className="message-body"
+                className="message-body"
               >
-                            <FormattedMessage
-                                          defaultMessage="Third Error"
-                                          id="third-error"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Third Error"
+                  id="third-error"
+                  values={Object {}}
+                />
               </div>
-</article>,
+            </article>,
           },
           "ref": null,
           "rendered": Object {
@@ -545,25 +545,25 @@ ShallowWrapper {
               "children": Array [
                 <div
                   className="message-header"
->
+                >
                   <p>
-                                    Error
+                    Error
                   </p>
                   <button
-                                    aria-label="delete"
-                                    className="delete"
-                                    onClick={[Function]}
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
                   />
-</div>,
+                </div>,
                 <div
                   className="message-body"
->
+                >
                   <FormattedMessage
-                                    defaultMessage="Third Error"
-                                    id="third-error"
-                                    values={Object {}}
+                    defaultMessage="Third Error"
+                    id="third-error"
+                    values={Object {}}
                   />
-</div>,
+                </div>,
               ],
               "className": "message is-danger",
             },
@@ -577,12 +577,12 @@ ShallowWrapper {
                   "children": Array [
                     <p>
                       Error
-</p>,
+                    </p>,
                     <button
                       aria-label="delete"
                       className="delete"
                       onClick={[Function]}
-/>,
+                    />,
                   ],
                   "className": "message-header",
                 },
@@ -624,7 +624,7 @@ ShallowWrapper {
                     defaultMessage="Third Error"
                     id="third-error"
                     values={Object {}}
-/>,
+                  />,
                   "className": "message-body",
                 },
                 "ref": null,
@@ -661,92 +661,92 @@ ShallowWrapper {
       "props": Object {
         "children": <ul
           className="error-pane__messages"
->
+        >
           <li>
-                    <article
-                              className="message is-danger"
-                    >
-                              <div
-                                        className="message-header"
-                              >
-                                        <p>
-                                                  Error
-                                        </p>
-                                        <button
-                                                  aria-label="delete"
-                                                  className="delete"
-                                                  onClick={[Function]}
-                                        />
-                              </div>
-                              <div
-                                        className="message-body"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="First Error"
-                                                  id="first-error"
-                                                  values={Object {}}
-                                        />
-                              </div>
-                    </article>
+            <article
+              className="message is-danger"
+            >
+              <div
+                className="message-header"
+              >
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <FormattedMessage
+                  defaultMessage="First Error"
+                  id="first-error"
+                  values={Object {}}
+                />
+              </div>
+            </article>
           </li>
           <li>
-                    <article
-                              className="message is-danger"
-                    >
-                              <div
-                                        className="message-header"
-                              >
-                                        <p>
-                                                  Error
-                                        </p>
-                                        <button
-                                                  aria-label="delete"
-                                                  className="delete"
-                                                  onClick={[Function]}
-                                        />
-                              </div>
-                              <div
-                                        className="message-body"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Second Error"
-                                                  id="second-error"
-                                                  values={Object {}}
-                                        />
-                              </div>
-                    </article>
+            <article
+              className="message is-danger"
+            >
+              <div
+                className="message-header"
+              >
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <FormattedMessage
+                  defaultMessage="Second Error"
+                  id="second-error"
+                  values={Object {}}
+                />
+              </div>
+            </article>
           </li>
           <li>
-                    <article
-                              className="message is-danger"
-                    >
-                              <div
-                                        className="message-header"
-                              >
-                                        <p>
-                                                  Error
-                                        </p>
-                                        <button
-                                                  aria-label="delete"
-                                                  className="delete"
-                                                  onClick={[Function]}
-                                        />
-                              </div>
-                              <div
-                                        className="message-body"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Third Error"
-                                                  id="third-error"
-                                                  values={Object {}}
-                                        />
-                              </div>
-                    </article>
+            <article
+              className="message is-danger"
+            >
+              <div
+                className="message-header"
+              >
+                <p>
+                  Error
+                </p>
+                <button
+                  aria-label="delete"
+                  className="delete"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <FormattedMessage
+                  defaultMessage="Third Error"
+                  id="third-error"
+                  values={Object {}}
+                />
+              </div>
+            </article>
           </li>
-</ul>,
+        </ul>,
         "className": "error-pane",
         "isActive": true,
-        "onClose": [Function],
+        "onClose": [MockFunction],
       },
       "ref": null,
       "rendered": Object {
@@ -757,85 +757,85 @@ ShallowWrapper {
           "children": Array [
             <li>
               <article
-                            className="message is-danger"
+                className="message is-danger"
               >
-                            <div
-                                          className="message-header"
-                            >
-                                          <p>
-                                                        Error
-                                          </p>
-                                          <button
-                                                        aria-label="delete"
-                                                        className="delete"
-                                                        onClick={[Function]}
-                                          />
-                            </div>
-                            <div
-                                          className="message-body"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="First Error"
-                                                        id="first-error"
-                                                        values={Object {}}
-                                          />
-                            </div>
+                <div
+                  className="message-header"
+                >
+                  <p>
+                    Error
+                  </p>
+                  <button
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="message-body"
+                >
+                  <FormattedMessage
+                    defaultMessage="First Error"
+                    id="first-error"
+                    values={Object {}}
+                  />
+                </div>
               </article>
-</li>,
+            </li>,
             <li>
               <article
-                            className="message is-danger"
+                className="message is-danger"
               >
-                            <div
-                                          className="message-header"
-                            >
-                                          <p>
-                                                        Error
-                                          </p>
-                                          <button
-                                                        aria-label="delete"
-                                                        className="delete"
-                                                        onClick={[Function]}
-                                          />
-                            </div>
-                            <div
-                                          className="message-body"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Second Error"
-                                                        id="second-error"
-                                                        values={Object {}}
-                                          />
-                            </div>
+                <div
+                  className="message-header"
+                >
+                  <p>
+                    Error
+                  </p>
+                  <button
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="message-body"
+                >
+                  <FormattedMessage
+                    defaultMessage="Second Error"
+                    id="second-error"
+                    values={Object {}}
+                  />
+                </div>
               </article>
-</li>,
+            </li>,
             <li>
               <article
-                            className="message is-danger"
+                className="message is-danger"
               >
-                            <div
-                                          className="message-header"
-                            >
-                                          <p>
-                                                        Error
-                                          </p>
-                                          <button
-                                                        aria-label="delete"
-                                                        className="delete"
-                                                        onClick={[Function]}
-                                          />
-                            </div>
-                            <div
-                                          className="message-body"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Third Error"
-                                                        id="third-error"
-                                                        values={Object {}}
-                                          />
-                            </div>
+                <div
+                  className="message-header"
+                >
+                  <p>
+                    Error
+                  </p>
+                  <button
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="message-body"
+                >
+                  <FormattedMessage
+                    defaultMessage="Third Error"
+                    id="third-error"
+                    values={Object {}}
+                  />
+                </div>
               </article>
-</li>,
+            </li>,
           ],
           "className": "error-pane__messages",
         },
@@ -848,29 +848,29 @@ ShallowWrapper {
             "props": Object {
               "children": <article
                 className="message is-danger"
->
+              >
                 <div
-                                className="message-header"
+                  className="message-header"
                 >
-                                <p>
-                                                Error
-                                </p>
-                                <button
-                                                aria-label="delete"
-                                                className="delete"
-                                                onClick={[Function]}
-                                />
+                  <p>
+                    Error
+                  </p>
+                  <button
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
+                  />
                 </div>
                 <div
-                                className="message-body"
+                  className="message-body"
                 >
-                                <FormattedMessage
-                                                defaultMessage="First Error"
-                                                id="first-error"
-                                                values={Object {}}
-                                />
+                  <FormattedMessage
+                    defaultMessage="First Error"
+                    id="first-error"
+                    values={Object {}}
+                  />
                 </div>
-</article>,
+              </article>,
             },
             "ref": null,
             "rendered": Object {
@@ -881,25 +881,25 @@ ShallowWrapper {
                 "children": Array [
                   <div
                     className="message-header"
->
+                  >
                     <p>
-                                        Error
+                      Error
                     </p>
                     <button
-                                        aria-label="delete"
-                                        className="delete"
-                                        onClick={[Function]}
+                      aria-label="delete"
+                      className="delete"
+                      onClick={[Function]}
                     />
-</div>,
+                  </div>,
                   <div
                     className="message-body"
->
+                  >
                     <FormattedMessage
-                                        defaultMessage="First Error"
-                                        id="first-error"
-                                        values={Object {}}
+                      defaultMessage="First Error"
+                      id="first-error"
+                      values={Object {}}
                     />
-</div>,
+                  </div>,
                 ],
                 "className": "message is-danger",
               },
@@ -913,12 +913,12 @@ ShallowWrapper {
                     "children": Array [
                       <p>
                         Error
-</p>,
+                      </p>,
                       <button
                         aria-label="delete"
                         className="delete"
                         onClick={[Function]}
-/>,
+                      />,
                     ],
                     "className": "message-header",
                   },
@@ -960,7 +960,7 @@ ShallowWrapper {
                       defaultMessage="First Error"
                       id="first-error"
                       values={Object {}}
-/>,
+                    />,
                     "className": "message-body",
                   },
                   "ref": null,
@@ -991,29 +991,29 @@ ShallowWrapper {
             "props": Object {
               "children": <article
                 className="message is-danger"
->
+              >
                 <div
-                                className="message-header"
+                  className="message-header"
                 >
-                                <p>
-                                                Error
-                                </p>
-                                <button
-                                                aria-label="delete"
-                                                className="delete"
-                                                onClick={[Function]}
-                                />
+                  <p>
+                    Error
+                  </p>
+                  <button
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
+                  />
                 </div>
                 <div
-                                className="message-body"
+                  className="message-body"
                 >
-                                <FormattedMessage
-                                                defaultMessage="Second Error"
-                                                id="second-error"
-                                                values={Object {}}
-                                />
+                  <FormattedMessage
+                    defaultMessage="Second Error"
+                    id="second-error"
+                    values={Object {}}
+                  />
                 </div>
-</article>,
+              </article>,
             },
             "ref": null,
             "rendered": Object {
@@ -1024,25 +1024,25 @@ ShallowWrapper {
                 "children": Array [
                   <div
                     className="message-header"
->
+                  >
                     <p>
-                                        Error
+                      Error
                     </p>
                     <button
-                                        aria-label="delete"
-                                        className="delete"
-                                        onClick={[Function]}
+                      aria-label="delete"
+                      className="delete"
+                      onClick={[Function]}
                     />
-</div>,
+                  </div>,
                   <div
                     className="message-body"
->
+                  >
                     <FormattedMessage
-                                        defaultMessage="Second Error"
-                                        id="second-error"
-                                        values={Object {}}
+                      defaultMessage="Second Error"
+                      id="second-error"
+                      values={Object {}}
                     />
-</div>,
+                  </div>,
                 ],
                 "className": "message is-danger",
               },
@@ -1056,12 +1056,12 @@ ShallowWrapper {
                     "children": Array [
                       <p>
                         Error
-</p>,
+                      </p>,
                       <button
                         aria-label="delete"
                         className="delete"
                         onClick={[Function]}
-/>,
+                      />,
                     ],
                     "className": "message-header",
                   },
@@ -1103,7 +1103,7 @@ ShallowWrapper {
                       defaultMessage="Second Error"
                       id="second-error"
                       values={Object {}}
-/>,
+                    />,
                     "className": "message-body",
                   },
                   "ref": null,
@@ -1134,29 +1134,29 @@ ShallowWrapper {
             "props": Object {
               "children": <article
                 className="message is-danger"
->
+              >
                 <div
-                                className="message-header"
+                  className="message-header"
                 >
-                                <p>
-                                                Error
-                                </p>
-                                <button
-                                                aria-label="delete"
-                                                className="delete"
-                                                onClick={[Function]}
-                                />
+                  <p>
+                    Error
+                  </p>
+                  <button
+                    aria-label="delete"
+                    className="delete"
+                    onClick={[Function]}
+                  />
                 </div>
                 <div
-                                className="message-body"
+                  className="message-body"
                 >
-                                <FormattedMessage
-                                                defaultMessage="Third Error"
-                                                id="third-error"
-                                                values={Object {}}
-                                />
+                  <FormattedMessage
+                    defaultMessage="Third Error"
+                    id="third-error"
+                    values={Object {}}
+                  />
                 </div>
-</article>,
+              </article>,
             },
             "ref": null,
             "rendered": Object {
@@ -1167,25 +1167,25 @@ ShallowWrapper {
                 "children": Array [
                   <div
                     className="message-header"
->
+                  >
                     <p>
-                                        Error
+                      Error
                     </p>
                     <button
-                                        aria-label="delete"
-                                        className="delete"
-                                        onClick={[Function]}
+                      aria-label="delete"
+                      className="delete"
+                      onClick={[Function]}
                     />
-</div>,
+                  </div>,
                   <div
                     className="message-body"
->
+                  >
                     <FormattedMessage
-                                        defaultMessage="Third Error"
-                                        id="third-error"
-                                        values={Object {}}
+                      defaultMessage="Third Error"
+                      id="third-error"
+                      values={Object {}}
                     />
-</div>,
+                  </div>,
                 ],
                 "className": "message is-danger",
               },
@@ -1199,12 +1199,12 @@ ShallowWrapper {
                     "children": Array [
                       <p>
                         Error
-</p>,
+                      </p>,
                       <button
                         aria-label="delete"
                         className="delete"
                         onClick={[Function]}
-/>,
+                      />,
                     ],
                     "className": "message-header",
                   },
@@ -1246,7 +1246,7 @@ ShallowWrapper {
                       defaultMessage="Third Error"
                       id="third-error"
                       values={Object {}}
-/>,
+                    />,
                     "className": "message-body",
                   },
                   "ref": null,

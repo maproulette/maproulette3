@@ -1,7 +1,0 @@
-@import 'mixins.scss';
-
-.project-about-block {
-  .grid-block__content {
-    @include markdown-content();
-  }
-}

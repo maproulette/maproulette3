@@ -6,11 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   cancelEditingLabel: {
     id: 'Task.controls.cancelEditing.label',
-    defaultMessage: "Go Back",
-  },
-  cancelEditingTooltip: {
-    id: 'Task.controls.cancelEditing.tooltip',
-    defaultMessage: "Go Back",
+    defaultMessage: "Cancel Editing",
   },
 })
 

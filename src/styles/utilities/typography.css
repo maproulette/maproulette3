@@ -1,0 +1,68 @@
+h1,
+.mr-h1 {
+  @apply mr-text-4xl mr-font-light mr-leading-tight;
+
+  @screen md {
+    @apply mr-text-5xl;
+  }
+}
+h2,
+.mr-h2 {
+  @apply mr-text-3xl mr-font-light mr-leading-tight;
+
+  @screen md {
+    @apply mr-text-4xl;
+  }
+}
+
+h3,
+.mr-h3 {
+  @apply mr-text-xl mr-font-normal mr-leading-tight;
+
+  @screen md {
+    @apply mr-text-2xl;
+  }
+}
+
+h4,
+.mr-h4 {
+  @apply mr-text-md mr-font-normal mr-leading-tight;
+
+  @screen md {
+    @apply mr-text-lg;
+  }
+}
+
+.mr-label, form.rjsf label.label {
+  @apply mr-font-medium mr-text-blue-light;
+}
+
+.mr-list-header {
+  @apply mr-text-yellow mr-text-sm mr-font-medium mr-uppercase mr-my-2;
+}
+
+.text-danger {
+  @apply mr-text-red;
+}
+
+.mr-links-inverse a {
+  @apply mr-text-white;
+
+  &:hover,
+  &.active {
+    @apply mr-text-green-lighter;
+  }
+}
+
+.mr-links-green-lighter a {
+  @apply mr-text-green-lighter;
+
+  &:hover,
+  &.active {
+    @apply mr-text-white;
+  }
+}
+
+.mr-overflow-ellipsis {
+  text-overflow: ellipsis;
+}

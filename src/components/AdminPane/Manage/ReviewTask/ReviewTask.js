@@ -10,7 +10,7 @@ import TaskPane from '../../../TaskPane/TaskPane.js'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './ReviewTask.css'
+import './ReviewTask.scss'
 
 // Setup child components with necessary HOCs
 const ReviewTaskPane = WithCurrentTask(WithTaskReview(TaskPane))
@@ -49,6 +49,7 @@ export class ReviewTask extends Component {
                 </li>
               }
               <li className="is-active">
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
                   <FormattedMessage {...messages.reviewTask} />
                 </a>

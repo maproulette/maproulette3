@@ -18,8 +18,8 @@ import AsLineReadableFile
 import Steps from '../../../../Bulma/Steps'
 import StepNavigation
        from '../../StepNavigation/StepNavigation'
-import { CustomFieldTemplate,
-         CustomArrayFieldTemplate,
+import { CustomArrayFieldTemplate,
+         CustomSelectWidget,
          MarkdownDescriptionField,
          MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
@@ -58,7 +58,7 @@ import { jsSchema as step4jsSchema,
          uiSchema as step4uiSchema } from './Step4Schema'
 import manageMessages from '../../Messages'
 import messages from './Messages'
-import './EditChallenge.css'
+import './EditChallenge.scss'
 
 // Workflow steps for creating/editing challenges
 const challengeSteps = [
@@ -107,7 +107,7 @@ const challengeSteps = [
  */
 export class EditChallenge extends Component {
   state = {
-    activeStep: 0,
+    activeStep: 3,
     formData: {},
     formContext: {},
     isSaving: false,
@@ -503,6 +503,7 @@ export class EditChallenge extends Component {
                     </li>
                   }
                   <li className="is-active">
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a aria-current="page">
                       {
                         this.isCloningChallenge() ?
@@ -521,25 +522,28 @@ export class EditChallenge extends Component {
             <Steps steps={challengeSteps} activeStep={this.state.activeStep}
                    onStepClick={AsEditableChallenge(challengeData).isNew() ? undefined : this.jumpToStep}
             />
-            <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
-                  onAsyncValidate={this.validateGeoJSONSource}
-                  uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
-                  FieldTemplate={CustomFieldTemplate}
-                  ArrayFieldTemplate={CustomArrayFieldTemplate}
-                  fields={customFields}
-                  noHtml5Validate
-                  showErrorList={false}
-                  formData={challengeData}
-                  formContext={this.state.formContext}
-                  onChange={this.changeHandler}
-                  onSubmit={this.asyncSubmit}
-                  onError={this.errorHandler}
-            >
-              <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
-                              prevStep={this.prevStep} cancel={this.cancel}
-                              finish={() => this.isFinishing = true}
-                              canFinishEarly={!AsEditableChallenge(challengeData).isNew()} />
-            </Form>
+            <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+              <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
+                    className="form"
+                    onAsyncValidate={this.validateGeoJSONSource}
+                    uiSchema={currentStep.uiSchema(this.props.intl, this.props.user, challengeData)}
+                    widgets={{SelectWidget: CustomSelectWidget}}
+                    ArrayFieldTemplate={CustomArrayFieldTemplate}
+                    fields={customFields}
+                    noHtml5Validate
+                    showErrorList={false}
+                    formData={challengeData}
+                    formContext={this.state.formContext}
+                    onChange={this.changeHandler}
+                    onSubmit={this.asyncSubmit}
+                    onError={this.errorHandler}
+              >
+                <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
+                                prevStep={this.prevStep} cancel={this.cancel}
+                                finish={() => this.isFinishing = true}
+                                canFinishEarly={!AsEditableChallenge(challengeData).isNew()} />
+              </Form>
+            </div>
           </div>
         </div>
       </div>

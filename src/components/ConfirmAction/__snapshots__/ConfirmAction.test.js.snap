@@ -6,12 +6,12 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ConfirmAction>
     <a
-        className="child-control"
-        onClick={[Function]}
+      className="child-control"
+      onClick={[MockFunction]}
     >
-        Child Control
+      Child Control
     </a>
-</ConfirmAction>,
+  </ConfirmAction>,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -28,65 +28,65 @@ ShallowWrapper {
         <a
           className="child-control"
           onClick={[Function]}
->
+        >
           Child Control
-</a>,
+        </a>,
         <Modal
           className="confirm-action__modal"
           isActive={false}
           onClose={[Function]}
->
+        >
           <article
-                    className="message is-danger"
+            className="message is-danger"
           >
-                    <div
-                              className="message-header"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Please Confirm"
-                                        id="ConfirmAction.title"
-                                        values={Object {}}
-                              />
-                    </div>
-                    <div
-                              className="message-body"
-                    >
-                              <div
-                                        className="confirm-action__prompt"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Are you sure? This cannot be undone."
-                                                  id="ConfirmAction.prompt"
-                                                  values={Object {}}
-                                        />
-                              </div>
-                              <div
-                                        className="confirm-action__controls"
-                              >
-                                        <button
-                                                  className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                                        <button
-                                                  className="button is-danger is-outlined confirm-action__proceed-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                              </div>
-                    </div>
+            <div
+              className="message-header"
+            >
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
+            </div>
+            <div
+              className="message-body"
+            >
+              <div
+                className="confirm-action__prompt"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="button is-secondary is-outlined confirm-action__cancel-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="button is-danger is-outlined confirm-action__proceed-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
+            </div>
           </article>
-</Modal>,
+        </Modal>,
       ],
       "className": "confirm-action",
     },
@@ -112,54 +112,54 @@ ShallowWrapper {
         "props": Object {
           "children": <article
             className="message is-danger"
->
+          >
             <div
-                        className="message-header"
+              className="message-header"
             >
-                        <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
             </div>
             <div
-                        className="message-body"
+              className="message-body"
             >
-                        <div
-                                    className="confirm-action__prompt"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="confirm-action__controls"
-                        >
-                                    <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                                    <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                        </div>
+              <div
+                className="confirm-action__prompt"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="button is-secondary is-outlined confirm-action__cancel-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="button is-danger is-outlined confirm-action__proceed-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
             </div>
-</article>,
+          </article>,
           "className": "confirm-action__modal",
           "isActive": false,
           "onClose": [Function],
@@ -173,50 +173,50 @@ ShallowWrapper {
             "children": Array [
               <div
                 className="message-header"
->
+              >
                 <FormattedMessage
-                                defaultMessage="Please Confirm"
-                                id="ConfirmAction.title"
-                                values={Object {}}
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
                 />
-</div>,
+              </div>,
               <div
                 className="message-body"
->
+              >
                 <div
-                                className="confirm-action__prompt"
+                  className="confirm-action__prompt"
                 >
-                                <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                />
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
                 </div>
                 <div
-                                className="confirm-action__controls"
+                  className="confirm-action__controls"
                 >
-                                <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Cancel"
-                                                                id="ConfirmAction.cancel"
-                                                                values={Object {}}
-                                                />
-                                </button>
-                                <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Proceed"
-                                                                id="ConfirmAction.proceed"
-                                                                values={Object {}}
-                                                />
-                                </button>
+                  <button
+                    className="button is-secondary is-outlined confirm-action__cancel-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="button is-danger is-outlined confirm-action__proceed-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
                 </div>
-</div>,
+              </div>,
             ],
             "className": "message is-danger",
           },
@@ -231,7 +231,7 @@ ShallowWrapper {
                   defaultMessage="Please Confirm"
                   id="ConfirmAction.title"
                   values={Object {}}
-/>,
+                />,
                 "className": "message-header",
               },
               "ref": null,
@@ -258,37 +258,37 @@ ShallowWrapper {
                 "children": Array [
                   <div
                     className="confirm-action__prompt"
->
+                  >
                     <FormattedMessage
-                                        defaultMessage="Are you sure? This cannot be undone."
-                                        id="ConfirmAction.prompt"
-                                        values={Object {}}
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
                     />
-</div>,
+                  </div>,
                   <div
                     className="confirm-action__controls"
->
+                  >
                     <button
-                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                        onClick={[Function]}
+                      className="button is-secondary is-outlined confirm-action__cancel-control"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
                     </button>
                     <button
-                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                        onClick={[Function]}
+                      className="button is-danger is-outlined confirm-action__proceed-control"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
                     </button>
-</div>,
+                  </div>,
                 ],
                 "className": "message-body",
               },
@@ -303,7 +303,7 @@ ShallowWrapper {
                       defaultMessage="Are you sure? This cannot be undone."
                       id="ConfirmAction.prompt"
                       values={Object {}}
-/>,
+                    />,
                     "className": "confirm-action__prompt",
                   },
                   "ref": null,
@@ -331,23 +331,23 @@ ShallowWrapper {
                       <button
                         className="button is-secondary is-outlined confirm-action__cancel-control"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Cancel"
-                                                id="ConfirmAction.cancel"
-                                                values={Object {}}
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                       <button
                         className="button is-danger is-outlined confirm-action__proceed-control"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Proceed"
-                                                id="ConfirmAction.proceed"
-                                                values={Object {}}
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                     ],
                     "className": "confirm-action__controls",
                   },
@@ -362,7 +362,7 @@ ShallowWrapper {
                           defaultMessage="Cancel"
                           id="ConfirmAction.cancel"
                           values={Object {}}
-/>,
+                        />,
                         "className": "button is-secondary is-outlined confirm-action__cancel-control",
                         "onClick": [Function],
                       },
@@ -391,7 +391,7 @@ ShallowWrapper {
                           defaultMessage="Proceed"
                           id="ConfirmAction.proceed"
                           values={Object {}}
-/>,
+                        />,
                         "className": "button is-danger is-outlined confirm-action__proceed-control",
                         "onClick": [Function],
                       },
@@ -435,65 +435,65 @@ ShallowWrapper {
           <a
             className="child-control"
             onClick={[Function]}
->
+          >
             Child Control
-</a>,
+          </a>,
           <Modal
             className="confirm-action__modal"
             isActive={false}
             onClose={[Function]}
->
+          >
             <article
-                        className="message is-danger"
+              className="message is-danger"
             >
-                        <div
-                                    className="message-header"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Please Confirm"
-                                                id="ConfirmAction.title"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="message-body"
-                        >
-                                    <div
-                                                className="confirm-action__prompt"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Are you sure? This cannot be undone."
-                                                            id="ConfirmAction.prompt"
-                                                            values={Object {}}
-                                                />
-                                    </div>
-                                    <div
-                                                className="confirm-action__controls"
-                                    >
-                                                <button
-                                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                                <button
-                                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                    </div>
-                        </div>
+              <div
+                className="message-header"
+              >
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <div
+                  className="confirm-action__prompt"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="button is-secondary is-outlined confirm-action__cancel-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="button is-danger is-outlined confirm-action__proceed-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
+              </div>
             </article>
-</Modal>,
+          </Modal>,
         ],
         "className": "confirm-action",
       },
@@ -519,54 +519,54 @@ ShallowWrapper {
           "props": Object {
             "children": <article
               className="message is-danger"
->
+            >
               <div
-                            className="message-header"
+                className="message-header"
               >
-                            <FormattedMessage
-                                          defaultMessage="Please Confirm"
-                                          id="ConfirmAction.title"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
               </div>
               <div
-                            className="message-body"
+                className="message-body"
               >
-                            <div
-                                          className="confirm-action__prompt"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Are you sure? This cannot be undone."
-                                                        id="ConfirmAction.prompt"
-                                                        values={Object {}}
-                                          />
-                            </div>
-                            <div
-                                          className="confirm-action__controls"
-                            >
-                                          <button
-                                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Cancel"
-                                                                      id="ConfirmAction.cancel"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                                          <button
-                                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Proceed"
-                                                                      id="ConfirmAction.proceed"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                            </div>
+                <div
+                  className="confirm-action__prompt"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="button is-secondary is-outlined confirm-action__cancel-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="button is-danger is-outlined confirm-action__proceed-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
               </div>
-</article>,
+            </article>,
             "className": "confirm-action__modal",
             "isActive": false,
             "onClose": [Function],
@@ -580,50 +580,50 @@ ShallowWrapper {
               "children": Array [
                 <div
                   className="message-header"
->
+                >
                   <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
+                    defaultMessage="Please Confirm"
+                    id="ConfirmAction.title"
+                    values={Object {}}
                   />
-</div>,
+                </div>,
                 <div
                   className="message-body"
->
+                >
                   <div
-                                    className="confirm-action__prompt"
+                    className="confirm-action__prompt"
                   >
-                                    <FormattedMessage
-                                                      defaultMessage="Are you sure? This cannot be undone."
-                                                      id="ConfirmAction.prompt"
-                                                      values={Object {}}
-                                    />
+                    <FormattedMessage
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
+                    />
                   </div>
                   <div
-                                    className="confirm-action__controls"
+                    className="confirm-action__controls"
                   >
-                                    <button
-                                                      className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
-                                    <button
-                                                      className="button is-danger is-outlined confirm-action__proceed-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
+                    <button
+                      className="button is-secondary is-outlined confirm-action__cancel-control"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
+                    </button>
+                    <button
+                      className="button is-danger is-outlined confirm-action__proceed-control"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
+                    </button>
                   </div>
-</div>,
+                </div>,
               ],
               "className": "message is-danger",
             },
@@ -638,7 +638,7 @@ ShallowWrapper {
                     defaultMessage="Please Confirm"
                     id="ConfirmAction.title"
                     values={Object {}}
-/>,
+                  />,
                   "className": "message-header",
                 },
                 "ref": null,
@@ -665,37 +665,37 @@ ShallowWrapper {
                   "children": Array [
                     <div
                       className="confirm-action__prompt"
->
+                    >
                       <FormattedMessage
-                                            defaultMessage="Are you sure? This cannot be undone."
-                                            id="ConfirmAction.prompt"
-                                            values={Object {}}
+                        defaultMessage="Are you sure? This cannot be undone."
+                        id="ConfirmAction.prompt"
+                        values={Object {}}
                       />
-</div>,
+                    </div>,
                     <div
                       className="confirm-action__controls"
->
+                    >
                       <button
-                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                            onClick={[Function]}
+                        className="button is-secondary is-outlined confirm-action__cancel-control"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Cancel"
-                                                                  id="ConfirmAction.cancel"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
+                        />
                       </button>
                       <button
-                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                            onClick={[Function]}
+                        className="button is-danger is-outlined confirm-action__proceed-control"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Proceed"
-                                                                  id="ConfirmAction.proceed"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
+                        />
                       </button>
-</div>,
+                    </div>,
                   ],
                   "className": "message-body",
                 },
@@ -710,7 +710,7 @@ ShallowWrapper {
                         defaultMessage="Are you sure? This cannot be undone."
                         id="ConfirmAction.prompt"
                         values={Object {}}
-/>,
+                      />,
                       "className": "confirm-action__prompt",
                     },
                     "ref": null,
@@ -738,23 +738,23 @@ ShallowWrapper {
                         <button
                           className="button is-secondary is-outlined confirm-action__cancel-control"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Cancel"
-                                                    id="ConfirmAction.cancel"
-                                                    values={Object {}}
+                            defaultMessage="Cancel"
+                            id="ConfirmAction.cancel"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                         <button
                           className="button is-danger is-outlined confirm-action__proceed-control"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Proceed"
-                                                    id="ConfirmAction.proceed"
-                                                    values={Object {}}
+                            defaultMessage="Proceed"
+                            id="ConfirmAction.proceed"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                       ],
                       "className": "confirm-action__controls",
                     },
@@ -769,7 +769,7 @@ ShallowWrapper {
                             defaultMessage="Cancel"
                             id="ConfirmAction.cancel"
                             values={Object {}}
-/>,
+                          />,
                           "className": "button is-secondary is-outlined confirm-action__cancel-control",
                           "onClick": [Function],
                         },
@@ -798,7 +798,7 @@ ShallowWrapper {
                             defaultMessage="Proceed"
                             id="ConfirmAction.proceed"
                             values={Object {}}
-/>,
+                          />,
                           "className": "button is-danger is-outlined confirm-action__proceed-control",
                           "onClick": [Function],
                         },
@@ -849,12 +849,26 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ConfirmAction>
     <a
-        className="child-control"
-        onClick={[Function]}
+      className="child-control"
+      onClick={
+        [MockFunction] {
+          "calls": Array [
+            Array [
+              undefined,
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
     >
-        Child Control
+      Child Control
     </a>
-</ConfirmAction>,
+  </ConfirmAction>,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -871,65 +885,65 @@ ShallowWrapper {
         <a
           className="child-control"
           onClick={[Function]}
->
+        >
           Child Control
-</a>,
+        </a>,
         <Modal
           className="confirm-action__modal"
           isActive={false}
           onClose={[Function]}
->
+        >
           <article
-                    className="message is-danger"
+            className="message is-danger"
           >
-                    <div
-                              className="message-header"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Please Confirm"
-                                        id="ConfirmAction.title"
-                                        values={Object {}}
-                              />
-                    </div>
-                    <div
-                              className="message-body"
-                    >
-                              <div
-                                        className="confirm-action__prompt"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Are you sure? This cannot be undone."
-                                                  id="ConfirmAction.prompt"
-                                                  values={Object {}}
-                                        />
-                              </div>
-                              <div
-                                        className="confirm-action__controls"
-                              >
-                                        <button
-                                                  className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                                        <button
-                                                  className="button is-danger is-outlined confirm-action__proceed-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                              </div>
-                    </div>
+            <div
+              className="message-header"
+            >
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
+            </div>
+            <div
+              className="message-body"
+            >
+              <div
+                className="confirm-action__prompt"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="button is-secondary is-outlined confirm-action__cancel-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="button is-danger is-outlined confirm-action__proceed-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
+            </div>
           </article>
-</Modal>,
+        </Modal>,
       ],
       "className": "confirm-action",
     },
@@ -955,54 +969,54 @@ ShallowWrapper {
         "props": Object {
           "children": <article
             className="message is-danger"
->
+          >
             <div
-                        className="message-header"
+              className="message-header"
             >
-                        <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
             </div>
             <div
-                        className="message-body"
+              className="message-body"
             >
-                        <div
-                                    className="confirm-action__prompt"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="confirm-action__controls"
-                        >
-                                    <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                                    <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                        </div>
+              <div
+                className="confirm-action__prompt"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="button is-secondary is-outlined confirm-action__cancel-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="button is-danger is-outlined confirm-action__proceed-control"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
             </div>
-</article>,
+          </article>,
           "className": "confirm-action__modal",
           "isActive": false,
           "onClose": [Function],
@@ -1016,50 +1030,50 @@ ShallowWrapper {
             "children": Array [
               <div
                 className="message-header"
->
+              >
                 <FormattedMessage
-                                defaultMessage="Please Confirm"
-                                id="ConfirmAction.title"
-                                values={Object {}}
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
                 />
-</div>,
+              </div>,
               <div
                 className="message-body"
->
+              >
                 <div
-                                className="confirm-action__prompt"
+                  className="confirm-action__prompt"
                 >
-                                <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                />
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
                 </div>
                 <div
-                                className="confirm-action__controls"
+                  className="confirm-action__controls"
                 >
-                                <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Cancel"
-                                                                id="ConfirmAction.cancel"
-                                                                values={Object {}}
-                                                />
-                                </button>
-                                <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Proceed"
-                                                                id="ConfirmAction.proceed"
-                                                                values={Object {}}
-                                                />
-                                </button>
+                  <button
+                    className="button is-secondary is-outlined confirm-action__cancel-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="button is-danger is-outlined confirm-action__proceed-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
                 </div>
-</div>,
+              </div>,
             ],
             "className": "message is-danger",
           },
@@ -1074,7 +1088,7 @@ ShallowWrapper {
                   defaultMessage="Please Confirm"
                   id="ConfirmAction.title"
                   values={Object {}}
-/>,
+                />,
                 "className": "message-header",
               },
               "ref": null,
@@ -1101,37 +1115,37 @@ ShallowWrapper {
                 "children": Array [
                   <div
                     className="confirm-action__prompt"
->
+                  >
                     <FormattedMessage
-                                        defaultMessage="Are you sure? This cannot be undone."
-                                        id="ConfirmAction.prompt"
-                                        values={Object {}}
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
                     />
-</div>,
+                  </div>,
                   <div
                     className="confirm-action__controls"
->
+                  >
                     <button
-                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                        onClick={[Function]}
+                      className="button is-secondary is-outlined confirm-action__cancel-control"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
                     </button>
                     <button
-                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                        onClick={[Function]}
+                      className="button is-danger is-outlined confirm-action__proceed-control"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
                     </button>
-</div>,
+                  </div>,
                 ],
                 "className": "message-body",
               },
@@ -1146,7 +1160,7 @@ ShallowWrapper {
                       defaultMessage="Are you sure? This cannot be undone."
                       id="ConfirmAction.prompt"
                       values={Object {}}
-/>,
+                    />,
                     "className": "confirm-action__prompt",
                   },
                   "ref": null,
@@ -1174,23 +1188,23 @@ ShallowWrapper {
                       <button
                         className="button is-secondary is-outlined confirm-action__cancel-control"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Cancel"
-                                                id="ConfirmAction.cancel"
-                                                values={Object {}}
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                       <button
                         className="button is-danger is-outlined confirm-action__proceed-control"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Proceed"
-                                                id="ConfirmAction.proceed"
-                                                values={Object {}}
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                     ],
                     "className": "confirm-action__controls",
                   },
@@ -1205,7 +1219,7 @@ ShallowWrapper {
                           defaultMessage="Cancel"
                           id="ConfirmAction.cancel"
                           values={Object {}}
-/>,
+                        />,
                         "className": "button is-secondary is-outlined confirm-action__cancel-control",
                         "onClick": [Function],
                       },
@@ -1234,7 +1248,7 @@ ShallowWrapper {
                           defaultMessage="Proceed"
                           id="ConfirmAction.proceed"
                           values={Object {}}
-/>,
+                        />,
                         "className": "button is-danger is-outlined confirm-action__proceed-control",
                         "onClick": [Function],
                       },
@@ -1278,65 +1292,65 @@ ShallowWrapper {
           <a
             className="child-control"
             onClick={[Function]}
->
+          >
             Child Control
-</a>,
+          </a>,
           <Modal
             className="confirm-action__modal"
             isActive={false}
             onClose={[Function]}
->
+          >
             <article
-                        className="message is-danger"
+              className="message is-danger"
             >
-                        <div
-                                    className="message-header"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Please Confirm"
-                                                id="ConfirmAction.title"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="message-body"
-                        >
-                                    <div
-                                                className="confirm-action__prompt"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Are you sure? This cannot be undone."
-                                                            id="ConfirmAction.prompt"
-                                                            values={Object {}}
-                                                />
-                                    </div>
-                                    <div
-                                                className="confirm-action__controls"
-                                    >
-                                                <button
-                                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                                <button
-                                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                    </div>
-                        </div>
+              <div
+                className="message-header"
+              >
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <div
+                  className="confirm-action__prompt"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="button is-secondary is-outlined confirm-action__cancel-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="button is-danger is-outlined confirm-action__proceed-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
+              </div>
             </article>
-</Modal>,
+          </Modal>,
         ],
         "className": "confirm-action",
       },
@@ -1362,54 +1376,54 @@ ShallowWrapper {
           "props": Object {
             "children": <article
               className="message is-danger"
->
+            >
               <div
-                            className="message-header"
+                className="message-header"
               >
-                            <FormattedMessage
-                                          defaultMessage="Please Confirm"
-                                          id="ConfirmAction.title"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
               </div>
               <div
-                            className="message-body"
+                className="message-body"
               >
-                            <div
-                                          className="confirm-action__prompt"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Are you sure? This cannot be undone."
-                                                        id="ConfirmAction.prompt"
-                                                        values={Object {}}
-                                          />
-                            </div>
-                            <div
-                                          className="confirm-action__controls"
-                            >
-                                          <button
-                                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Cancel"
-                                                                      id="ConfirmAction.cancel"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                                          <button
-                                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Proceed"
-                                                                      id="ConfirmAction.proceed"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                            </div>
+                <div
+                  className="confirm-action__prompt"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="button is-secondary is-outlined confirm-action__cancel-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="button is-danger is-outlined confirm-action__proceed-control"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
               </div>
-</article>,
+            </article>,
             "className": "confirm-action__modal",
             "isActive": false,
             "onClose": [Function],
@@ -1423,50 +1437,50 @@ ShallowWrapper {
               "children": Array [
                 <div
                   className="message-header"
->
+                >
                   <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
+                    defaultMessage="Please Confirm"
+                    id="ConfirmAction.title"
+                    values={Object {}}
                   />
-</div>,
+                </div>,
                 <div
                   className="message-body"
->
+                >
                   <div
-                                    className="confirm-action__prompt"
+                    className="confirm-action__prompt"
                   >
-                                    <FormattedMessage
-                                                      defaultMessage="Are you sure? This cannot be undone."
-                                                      id="ConfirmAction.prompt"
-                                                      values={Object {}}
-                                    />
+                    <FormattedMessage
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
+                    />
                   </div>
                   <div
-                                    className="confirm-action__controls"
+                    className="confirm-action__controls"
                   >
-                                    <button
-                                                      className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
-                                    <button
-                                                      className="button is-danger is-outlined confirm-action__proceed-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
+                    <button
+                      className="button is-secondary is-outlined confirm-action__cancel-control"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
+                    </button>
+                    <button
+                      className="button is-danger is-outlined confirm-action__proceed-control"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
+                    </button>
                   </div>
-</div>,
+                </div>,
               ],
               "className": "message is-danger",
             },
@@ -1481,7 +1495,7 @@ ShallowWrapper {
                     defaultMessage="Please Confirm"
                     id="ConfirmAction.title"
                     values={Object {}}
-/>,
+                  />,
                   "className": "message-header",
                 },
                 "ref": null,
@@ -1508,37 +1522,37 @@ ShallowWrapper {
                   "children": Array [
                     <div
                       className="confirm-action__prompt"
->
+                    >
                       <FormattedMessage
-                                            defaultMessage="Are you sure? This cannot be undone."
-                                            id="ConfirmAction.prompt"
-                                            values={Object {}}
+                        defaultMessage="Are you sure? This cannot be undone."
+                        id="ConfirmAction.prompt"
+                        values={Object {}}
                       />
-</div>,
+                    </div>,
                     <div
                       className="confirm-action__controls"
->
+                    >
                       <button
-                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                            onClick={[Function]}
+                        className="button is-secondary is-outlined confirm-action__cancel-control"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Cancel"
-                                                                  id="ConfirmAction.cancel"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
+                        />
                       </button>
                       <button
-                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                            onClick={[Function]}
+                        className="button is-danger is-outlined confirm-action__proceed-control"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Proceed"
-                                                                  id="ConfirmAction.proceed"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
+                        />
                       </button>
-</div>,
+                    </div>,
                   ],
                   "className": "message-body",
                 },
@@ -1553,7 +1567,7 @@ ShallowWrapper {
                         defaultMessage="Are you sure? This cannot be undone."
                         id="ConfirmAction.prompt"
                         values={Object {}}
-/>,
+                      />,
                       "className": "confirm-action__prompt",
                     },
                     "ref": null,
@@ -1581,23 +1595,23 @@ ShallowWrapper {
                         <button
                           className="button is-secondary is-outlined confirm-action__cancel-control"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Cancel"
-                                                    id="ConfirmAction.cancel"
-                                                    values={Object {}}
+                            defaultMessage="Cancel"
+                            id="ConfirmAction.cancel"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                         <button
                           className="button is-danger is-outlined confirm-action__proceed-control"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Proceed"
-                                                    id="ConfirmAction.proceed"
-                                                    values={Object {}}
+                            defaultMessage="Proceed"
+                            id="ConfirmAction.proceed"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                       ],
                       "className": "confirm-action__controls",
                     },
@@ -1612,7 +1626,7 @@ ShallowWrapper {
                             defaultMessage="Cancel"
                             id="ConfirmAction.cancel"
                             values={Object {}}
-/>,
+                          />,
                           "className": "button is-secondary is-outlined confirm-action__cancel-control",
                           "onClick": [Function],
                         },
@@ -1641,7 +1655,7 @@ ShallowWrapper {
                             defaultMessage="Proceed"
                             id="ConfirmAction.proceed"
                             values={Object {}}
-/>,
+                          />,
                           "className": "button is-danger is-outlined confirm-action__proceed-control",
                           "onClick": [Function],
                         },
@@ -1692,12 +1706,12 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ConfirmAction>
     <a
-        className="child-control"
-        onClick={[Function]}
+      className="child-control"
+      onClick={[MockFunction]}
     >
-        Child Control
+      Child Control
     </a>
-</ConfirmAction>,
+  </ConfirmAction>,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -1714,65 +1728,65 @@ ShallowWrapper {
         <a
           className="child-control"
           onClick={[Function]}
->
+        >
           Child Control
-</a>,
+        </a>,
         <Modal
           className="confirm-action__modal"
           isActive={true}
           onClose={[Function]}
->
+        >
           <article
-                    className="message is-danger"
+            className="message"
           >
-                    <div
-                              className="message-header"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Please Confirm"
-                                        id="ConfirmAction.title"
-                                        values={Object {}}
-                              />
-                    </div>
-                    <div
-                              className="message-body"
-                    >
-                              <div
-                                        className="confirm-action__prompt"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Are you sure? This cannot be undone."
-                                                  id="ConfirmAction.prompt"
-                                                  values={Object {}}
-                                        />
-                              </div>
-                              <div
-                                        className="confirm-action__controls"
-                              >
-                                        <button
-                                                  className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                                        <button
-                                                  className="button is-danger is-outlined confirm-action__proceed-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                              </div>
-                    </div>
+            <div
+              className="message-header mr-bg-blue-dark"
+            >
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
+            </div>
+            <div
+              className="message-body"
+            >
+              <div
+                className="confirm-action__prompt mr-text-blue-dark"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="mr-button mr-button--blue"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="mr-button mr-button--danger mr-ml-4"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
+            </div>
           </article>
-</Modal>,
+        </Modal>,
       ],
       "className": "confirm-action",
     },
@@ -1797,55 +1811,55 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "children": <article
-            className="message is-danger"
->
+            className="message"
+          >
             <div
-                        className="message-header"
+              className="message-header mr-bg-blue-dark"
             >
-                        <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
             </div>
             <div
-                        className="message-body"
+              className="message-body"
             >
-                        <div
-                                    className="confirm-action__prompt"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="confirm-action__controls"
-                        >
-                                    <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                                    <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                        </div>
+              <div
+                className="confirm-action__prompt mr-text-blue-dark"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="mr-button mr-button--blue"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="mr-button mr-button--danger mr-ml-4"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
             </div>
-</article>,
+          </article>,
           "className": "confirm-action__modal",
           "isActive": true,
           "onClose": [Function],
@@ -1858,53 +1872,53 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <div
-                className="message-header"
->
+                className="message-header mr-bg-blue-dark"
+              >
                 <FormattedMessage
-                                defaultMessage="Please Confirm"
-                                id="ConfirmAction.title"
-                                values={Object {}}
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
                 />
-</div>,
+              </div>,
               <div
                 className="message-body"
->
+              >
                 <div
-                                className="confirm-action__prompt"
+                  className="confirm-action__prompt mr-text-blue-dark"
                 >
-                                <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                />
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
                 </div>
                 <div
-                                className="confirm-action__controls"
+                  className="confirm-action__controls"
                 >
-                                <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Cancel"
-                                                                id="ConfirmAction.cancel"
-                                                                values={Object {}}
-                                                />
-                                </button>
-                                <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Proceed"
-                                                                id="ConfirmAction.proceed"
-                                                                values={Object {}}
-                                                />
-                                </button>
+                  <button
+                    className="mr-button mr-button--blue"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="mr-button mr-button--danger mr-ml-4"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
                 </div>
-</div>,
+              </div>,
             ],
-            "className": "message is-danger",
+            "className": "message",
           },
           "ref": null,
           "rendered": Array [
@@ -1917,8 +1931,8 @@ ShallowWrapper {
                   defaultMessage="Please Confirm"
                   id="ConfirmAction.title"
                   values={Object {}}
-/>,
-                "className": "message-header",
+                />,
+                "className": "message-header mr-bg-blue-dark",
               },
               "ref": null,
               "rendered": Object {
@@ -1943,38 +1957,38 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="confirm-action__prompt"
->
+                    className="confirm-action__prompt mr-text-blue-dark"
+                  >
                     <FormattedMessage
-                                        defaultMessage="Are you sure? This cannot be undone."
-                                        id="ConfirmAction.prompt"
-                                        values={Object {}}
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
                     />
-</div>,
+                  </div>,
                   <div
                     className="confirm-action__controls"
->
+                  >
                     <button
-                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                        onClick={[Function]}
+                      className="mr-button mr-button--blue"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
                     </button>
                     <button
-                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                        onClick={[Function]}
+                      className="mr-button mr-button--danger mr-ml-4"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
                     </button>
-</div>,
+                  </div>,
                 ],
                 "className": "message-body",
               },
@@ -1989,8 +2003,8 @@ ShallowWrapper {
                       defaultMessage="Are you sure? This cannot be undone."
                       id="ConfirmAction.prompt"
                       values={Object {}}
-/>,
-                    "className": "confirm-action__prompt",
+                    />,
+                    "className": "confirm-action__prompt mr-text-blue-dark",
                   },
                   "ref": null,
                   "rendered": Object {
@@ -2015,25 +2029,25 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <button
-                        className="button is-secondary is-outlined confirm-action__cancel-control"
+                        className="mr-button mr-button--blue"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Cancel"
-                                                id="ConfirmAction.cancel"
-                                                values={Object {}}
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                       <button
-                        className="button is-danger is-outlined confirm-action__proceed-control"
+                        className="mr-button mr-button--danger mr-ml-4"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Proceed"
-                                                id="ConfirmAction.proceed"
-                                                values={Object {}}
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                     ],
                     "className": "confirm-action__controls",
                   },
@@ -2048,8 +2062,8 @@ ShallowWrapper {
                           defaultMessage="Cancel"
                           id="ConfirmAction.cancel"
                           values={Object {}}
-/>,
-                        "className": "button is-secondary is-outlined confirm-action__cancel-control",
+                        />,
+                        "className": "mr-button mr-button--blue",
                         "onClick": [Function],
                       },
                       "ref": null,
@@ -2077,8 +2091,8 @@ ShallowWrapper {
                           defaultMessage="Proceed"
                           id="ConfirmAction.proceed"
                           values={Object {}}
-/>,
-                        "className": "button is-danger is-outlined confirm-action__proceed-control",
+                        />,
+                        "className": "mr-button mr-button--danger mr-ml-4",
                         "onClick": [Function],
                       },
                       "ref": null,
@@ -2121,65 +2135,65 @@ ShallowWrapper {
           <a
             className="child-control"
             onClick={[Function]}
->
+          >
             Child Control
-</a>,
+          </a>,
           <Modal
             className="confirm-action__modal"
             isActive={true}
             onClose={[Function]}
->
+          >
             <article
-                        className="message is-danger"
+              className="message"
             >
-                        <div
-                                    className="message-header"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Please Confirm"
-                                                id="ConfirmAction.title"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="message-body"
-                        >
-                                    <div
-                                                className="confirm-action__prompt"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Are you sure? This cannot be undone."
-                                                            id="ConfirmAction.prompt"
-                                                            values={Object {}}
-                                                />
-                                    </div>
-                                    <div
-                                                className="confirm-action__controls"
-                                    >
-                                                <button
-                                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                                <button
-                                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                    </div>
-                        </div>
+              <div
+                className="message-header mr-bg-blue-dark"
+              >
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <div
+                  className="confirm-action__prompt mr-text-blue-dark"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="mr-button mr-button--blue"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="mr-button mr-button--danger mr-ml-4"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
+              </div>
             </article>
-</Modal>,
+          </Modal>,
         ],
         "className": "confirm-action",
       },
@@ -2204,55 +2218,55 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "children": <article
-              className="message is-danger"
->
+              className="message"
+            >
               <div
-                            className="message-header"
+                className="message-header mr-bg-blue-dark"
               >
-                            <FormattedMessage
-                                          defaultMessage="Please Confirm"
-                                          id="ConfirmAction.title"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
               </div>
               <div
-                            className="message-body"
+                className="message-body"
               >
-                            <div
-                                          className="confirm-action__prompt"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Are you sure? This cannot be undone."
-                                                        id="ConfirmAction.prompt"
-                                                        values={Object {}}
-                                          />
-                            </div>
-                            <div
-                                          className="confirm-action__controls"
-                            >
-                                          <button
-                                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Cancel"
-                                                                      id="ConfirmAction.cancel"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                                          <button
-                                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Proceed"
-                                                                      id="ConfirmAction.proceed"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                            </div>
+                <div
+                  className="confirm-action__prompt mr-text-blue-dark"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="mr-button mr-button--blue"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="mr-button mr-button--danger mr-ml-4"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
               </div>
-</article>,
+            </article>,
             "className": "confirm-action__modal",
             "isActive": true,
             "onClose": [Function],
@@ -2265,53 +2279,53 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="message-header"
->
+                  className="message-header mr-bg-blue-dark"
+                >
                   <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
+                    defaultMessage="Please Confirm"
+                    id="ConfirmAction.title"
+                    values={Object {}}
                   />
-</div>,
+                </div>,
                 <div
                   className="message-body"
->
+                >
                   <div
-                                    className="confirm-action__prompt"
+                    className="confirm-action__prompt mr-text-blue-dark"
                   >
-                                    <FormattedMessage
-                                                      defaultMessage="Are you sure? This cannot be undone."
-                                                      id="ConfirmAction.prompt"
-                                                      values={Object {}}
-                                    />
+                    <FormattedMessage
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
+                    />
                   </div>
                   <div
-                                    className="confirm-action__controls"
+                    className="confirm-action__controls"
                   >
-                                    <button
-                                                      className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
-                                    <button
-                                                      className="button is-danger is-outlined confirm-action__proceed-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
+                    <button
+                      className="mr-button mr-button--blue"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
+                    </button>
+                    <button
+                      className="mr-button mr-button--danger mr-ml-4"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
+                    </button>
                   </div>
-</div>,
+                </div>,
               ],
-              "className": "message is-danger",
+              "className": "message",
             },
             "ref": null,
             "rendered": Array [
@@ -2324,8 +2338,8 @@ ShallowWrapper {
                     defaultMessage="Please Confirm"
                     id="ConfirmAction.title"
                     values={Object {}}
-/>,
-                  "className": "message-header",
+                  />,
+                  "className": "message-header mr-bg-blue-dark",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -2350,38 +2364,38 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <div
-                      className="confirm-action__prompt"
->
+                      className="confirm-action__prompt mr-text-blue-dark"
+                    >
                       <FormattedMessage
-                                            defaultMessage="Are you sure? This cannot be undone."
-                                            id="ConfirmAction.prompt"
-                                            values={Object {}}
+                        defaultMessage="Are you sure? This cannot be undone."
+                        id="ConfirmAction.prompt"
+                        values={Object {}}
                       />
-</div>,
+                    </div>,
                     <div
                       className="confirm-action__controls"
->
+                    >
                       <button
-                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                            onClick={[Function]}
+                        className="mr-button mr-button--blue"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Cancel"
-                                                                  id="ConfirmAction.cancel"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
+                        />
                       </button>
                       <button
-                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                            onClick={[Function]}
+                        className="mr-button mr-button--danger mr-ml-4"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Proceed"
-                                                                  id="ConfirmAction.proceed"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
+                        />
                       </button>
-</div>,
+                    </div>,
                   ],
                   "className": "message-body",
                 },
@@ -2396,8 +2410,8 @@ ShallowWrapper {
                         defaultMessage="Are you sure? This cannot be undone."
                         id="ConfirmAction.prompt"
                         values={Object {}}
-/>,
-                      "className": "confirm-action__prompt",
+                      />,
+                      "className": "confirm-action__prompt mr-text-blue-dark",
                     },
                     "ref": null,
                     "rendered": Object {
@@ -2422,25 +2436,25 @@ ShallowWrapper {
                     "props": Object {
                       "children": Array [
                         <button
-                          className="button is-secondary is-outlined confirm-action__cancel-control"
+                          className="mr-button mr-button--blue"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Cancel"
-                                                    id="ConfirmAction.cancel"
-                                                    values={Object {}}
+                            defaultMessage="Cancel"
+                            id="ConfirmAction.cancel"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                         <button
-                          className="button is-danger is-outlined confirm-action__proceed-control"
+                          className="mr-button mr-button--danger mr-ml-4"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Proceed"
-                                                    id="ConfirmAction.proceed"
-                                                    values={Object {}}
+                            defaultMessage="Proceed"
+                            id="ConfirmAction.proceed"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                       ],
                       "className": "confirm-action__controls",
                     },
@@ -2455,8 +2469,8 @@ ShallowWrapper {
                             defaultMessage="Cancel"
                             id="ConfirmAction.cancel"
                             values={Object {}}
-/>,
-                          "className": "button is-secondary is-outlined confirm-action__cancel-control",
+                          />,
+                          "className": "mr-button mr-button--blue",
                           "onClick": [Function],
                         },
                         "ref": null,
@@ -2484,8 +2498,8 @@ ShallowWrapper {
                             defaultMessage="Proceed"
                             id="ConfirmAction.proceed"
                             values={Object {}}
-/>,
-                          "className": "button is-danger is-outlined confirm-action__proceed-control",
+                          />,
+                          "className": "mr-button mr-button--danger mr-ml-4",
                           "onClick": [Function],
                         },
                         "ref": null,
@@ -2535,12 +2549,12 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ConfirmAction>
     <a
-        className="child-control"
-        onClick={[Function]}
+      className="child-control"
+      onClick={[MockFunction]}
     >
-        Child Control
+      Child Control
     </a>
-</ConfirmAction>,
+  </ConfirmAction>,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -2557,65 +2571,65 @@ ShallowWrapper {
         <a
           className="child-control"
           onClick={[Function]}
->
+        >
           Child Control
-</a>,
+        </a>,
         <Modal
           className="confirm-action__modal"
           isActive={false}
           onClose={[Function]}
->
+        >
           <article
-                    className="message is-danger"
+            className="message"
           >
-                    <div
-                              className="message-header"
-                    >
-                              <FormattedMessage
-                                        defaultMessage="Please Confirm"
-                                        id="ConfirmAction.title"
-                                        values={Object {}}
-                              />
-                    </div>
-                    <div
-                              className="message-body"
-                    >
-                              <div
-                                        className="confirm-action__prompt"
-                              >
-                                        <FormattedMessage
-                                                  defaultMessage="Are you sure? This cannot be undone."
-                                                  id="ConfirmAction.prompt"
-                                                  values={Object {}}
-                                        />
-                              </div>
-                              <div
-                                        className="confirm-action__controls"
-                              >
-                                        <button
-                                                  className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                                        <button
-                                                  className="button is-danger is-outlined confirm-action__proceed-control"
-                                                  onClick={[Function]}
-                                        >
-                                                  <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                  />
-                                        </button>
-                              </div>
-                    </div>
+            <div
+              className="message-header mr-bg-blue-dark"
+            >
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
+            </div>
+            <div
+              className="message-body"
+            >
+              <div
+                className="confirm-action__prompt mr-text-blue-dark"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="mr-button mr-button--blue"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="mr-button mr-button--danger mr-ml-4"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
+            </div>
           </article>
-</Modal>,
+        </Modal>,
       ],
       "className": "confirm-action",
     },
@@ -2640,55 +2654,55 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "children": <article
-            className="message is-danger"
->
+            className="message"
+          >
             <div
-                        className="message-header"
+              className="message-header mr-bg-blue-dark"
             >
-                        <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
-                        />
+              <FormattedMessage
+                defaultMessage="Please Confirm"
+                id="ConfirmAction.title"
+                values={Object {}}
+              />
             </div>
             <div
-                        className="message-body"
+              className="message-body"
             >
-                        <div
-                                    className="confirm-action__prompt"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="confirm-action__controls"
-                        >
-                                    <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                                    <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                                />
-                                    </button>
-                        </div>
+              <div
+                className="confirm-action__prompt mr-text-blue-dark"
+              >
+                <FormattedMessage
+                  defaultMessage="Are you sure? This cannot be undone."
+                  id="ConfirmAction.prompt"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="confirm-action__controls"
+              >
+                <button
+                  className="mr-button mr-button--blue"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    id="ConfirmAction.cancel"
+                    values={Object {}}
+                  />
+                </button>
+                <button
+                  className="mr-button mr-button--danger mr-ml-4"
+                  onClick={[Function]}
+                >
+                  <FormattedMessage
+                    defaultMessage="Proceed"
+                    id="ConfirmAction.proceed"
+                    values={Object {}}
+                  />
+                </button>
+              </div>
             </div>
-</article>,
+          </article>,
           "className": "confirm-action__modal",
           "isActive": false,
           "onClose": [Function],
@@ -2701,53 +2715,53 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <div
-                className="message-header"
->
+                className="message-header mr-bg-blue-dark"
+              >
                 <FormattedMessage
-                                defaultMessage="Please Confirm"
-                                id="ConfirmAction.title"
-                                values={Object {}}
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
                 />
-</div>,
+              </div>,
               <div
                 className="message-body"
->
+              >
                 <div
-                                className="confirm-action__prompt"
+                  className="confirm-action__prompt mr-text-blue-dark"
                 >
-                                <FormattedMessage
-                                                defaultMessage="Are you sure? This cannot be undone."
-                                                id="ConfirmAction.prompt"
-                                                values={Object {}}
-                                />
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
                 </div>
                 <div
-                                className="confirm-action__controls"
+                  className="confirm-action__controls"
                 >
-                                <button
-                                                className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Cancel"
-                                                                id="ConfirmAction.cancel"
-                                                                values={Object {}}
-                                                />
-                                </button>
-                                <button
-                                                className="button is-danger is-outlined confirm-action__proceed-control"
-                                                onClick={[Function]}
-                                >
-                                                <FormattedMessage
-                                                                defaultMessage="Proceed"
-                                                                id="ConfirmAction.proceed"
-                                                                values={Object {}}
-                                                />
-                                </button>
+                  <button
+                    className="mr-button mr-button--blue"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="mr-button mr-button--danger mr-ml-4"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
                 </div>
-</div>,
+              </div>,
             ],
-            "className": "message is-danger",
+            "className": "message",
           },
           "ref": null,
           "rendered": Array [
@@ -2760,8 +2774,8 @@ ShallowWrapper {
                   defaultMessage="Please Confirm"
                   id="ConfirmAction.title"
                   values={Object {}}
-/>,
-                "className": "message-header",
+                />,
+                "className": "message-header mr-bg-blue-dark",
               },
               "ref": null,
               "rendered": Object {
@@ -2786,38 +2800,38 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="confirm-action__prompt"
->
+                    className="confirm-action__prompt mr-text-blue-dark"
+                  >
                     <FormattedMessage
-                                        defaultMessage="Are you sure? This cannot be undone."
-                                        id="ConfirmAction.prompt"
-                                        values={Object {}}
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
                     />
-</div>,
+                  </div>,
                   <div
                     className="confirm-action__controls"
->
+                  >
                     <button
-                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                        onClick={[Function]}
+                      className="mr-button mr-button--blue"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Cancel"
-                                                            id="ConfirmAction.cancel"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
                     </button>
                     <button
-                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                        onClick={[Function]}
+                      className="mr-button mr-button--danger mr-ml-4"
+                      onClick={[Function]}
                     >
-                                        <FormattedMessage
-                                                            defaultMessage="Proceed"
-                                                            id="ConfirmAction.proceed"
-                                                            values={Object {}}
-                                        />
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
                     </button>
-</div>,
+                  </div>,
                 ],
                 "className": "message-body",
               },
@@ -2832,8 +2846,8 @@ ShallowWrapper {
                       defaultMessage="Are you sure? This cannot be undone."
                       id="ConfirmAction.prompt"
                       values={Object {}}
-/>,
-                    "className": "confirm-action__prompt",
+                    />,
+                    "className": "confirm-action__prompt mr-text-blue-dark",
                   },
                   "ref": null,
                   "rendered": Object {
@@ -2858,25 +2872,25 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <button
-                        className="button is-secondary is-outlined confirm-action__cancel-control"
+                        className="mr-button mr-button--blue"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Cancel"
-                                                id="ConfirmAction.cancel"
-                                                values={Object {}}
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                       <button
-                        className="button is-danger is-outlined confirm-action__proceed-control"
+                        className="mr-button mr-button--danger mr-ml-4"
                         onClick={[Function]}
->
+                      >
                         <FormattedMessage
-                                                defaultMessage="Proceed"
-                                                id="ConfirmAction.proceed"
-                                                values={Object {}}
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
                         />
-</button>,
+                      </button>,
                     ],
                     "className": "confirm-action__controls",
                   },
@@ -2891,8 +2905,8 @@ ShallowWrapper {
                           defaultMessage="Cancel"
                           id="ConfirmAction.cancel"
                           values={Object {}}
-/>,
-                        "className": "button is-secondary is-outlined confirm-action__cancel-control",
+                        />,
+                        "className": "mr-button mr-button--blue",
                         "onClick": [Function],
                       },
                       "ref": null,
@@ -2920,8 +2934,8 @@ ShallowWrapper {
                           defaultMessage="Proceed"
                           id="ConfirmAction.proceed"
                           values={Object {}}
-/>,
-                        "className": "button is-danger is-outlined confirm-action__proceed-control",
+                        />,
+                        "className": "mr-button mr-button--danger mr-ml-4",
                         "onClick": [Function],
                       },
                       "ref": null,
@@ -2964,65 +2978,65 @@ ShallowWrapper {
           <a
             className="child-control"
             onClick={[Function]}
->
+          >
             Child Control
-</a>,
+          </a>,
           <Modal
             className="confirm-action__modal"
             isActive={false}
             onClose={[Function]}
->
+          >
             <article
-                        className="message is-danger"
+              className="message"
             >
-                        <div
-                                    className="message-header"
-                        >
-                                    <FormattedMessage
-                                                defaultMessage="Please Confirm"
-                                                id="ConfirmAction.title"
-                                                values={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="message-body"
-                        >
-                                    <div
-                                                className="confirm-action__prompt"
-                                    >
-                                                <FormattedMessage
-                                                            defaultMessage="Are you sure? This cannot be undone."
-                                                            id="ConfirmAction.prompt"
-                                                            values={Object {}}
-                                                />
-                                    </div>
-                                    <div
-                                                className="confirm-action__controls"
-                                    >
-                                                <button
-                                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                                <button
-                                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                                            onClick={[Function]}
-                                                >
-                                                            <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                            />
-                                                </button>
-                                    </div>
-                        </div>
+              <div
+                className="message-header mr-bg-blue-dark"
+              >
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
+              </div>
+              <div
+                className="message-body"
+              >
+                <div
+                  className="confirm-action__prompt mr-text-blue-dark"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="mr-button mr-button--blue"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="mr-button mr-button--danger mr-ml-4"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
+              </div>
             </article>
-</Modal>,
+          </Modal>,
         ],
         "className": "confirm-action",
       },
@@ -3047,55 +3061,55 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "children": <article
-              className="message is-danger"
->
+              className="message"
+            >
               <div
-                            className="message-header"
+                className="message-header mr-bg-blue-dark"
               >
-                            <FormattedMessage
-                                          defaultMessage="Please Confirm"
-                                          id="ConfirmAction.title"
-                                          values={Object {}}
-                            />
+                <FormattedMessage
+                  defaultMessage="Please Confirm"
+                  id="ConfirmAction.title"
+                  values={Object {}}
+                />
               </div>
               <div
-                            className="message-body"
+                className="message-body"
               >
-                            <div
-                                          className="confirm-action__prompt"
-                            >
-                                          <FormattedMessage
-                                                        defaultMessage="Are you sure? This cannot be undone."
-                                                        id="ConfirmAction.prompt"
-                                                        values={Object {}}
-                                          />
-                            </div>
-                            <div
-                                          className="confirm-action__controls"
-                            >
-                                          <button
-                                                        className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Cancel"
-                                                                      id="ConfirmAction.cancel"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                                          <button
-                                                        className="button is-danger is-outlined confirm-action__proceed-control"
-                                                        onClick={[Function]}
-                                          >
-                                                        <FormattedMessage
-                                                                      defaultMessage="Proceed"
-                                                                      id="ConfirmAction.proceed"
-                                                                      values={Object {}}
-                                                        />
-                                          </button>
-                            </div>
+                <div
+                  className="confirm-action__prompt mr-text-blue-dark"
+                >
+                  <FormattedMessage
+                    defaultMessage="Are you sure? This cannot be undone."
+                    id="ConfirmAction.prompt"
+                    values={Object {}}
+                  />
+                </div>
+                <div
+                  className="confirm-action__controls"
+                >
+                  <button
+                    className="mr-button mr-button--blue"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Cancel"
+                      id="ConfirmAction.cancel"
+                      values={Object {}}
+                    />
+                  </button>
+                  <button
+                    className="mr-button mr-button--danger mr-ml-4"
+                    onClick={[Function]}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Proceed"
+                      id="ConfirmAction.proceed"
+                      values={Object {}}
+                    />
+                  </button>
+                </div>
               </div>
-</article>,
+            </article>,
             "className": "confirm-action__modal",
             "isActive": false,
             "onClose": [Function],
@@ -3108,53 +3122,53 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="message-header"
->
+                  className="message-header mr-bg-blue-dark"
+                >
                   <FormattedMessage
-                                    defaultMessage="Please Confirm"
-                                    id="ConfirmAction.title"
-                                    values={Object {}}
+                    defaultMessage="Please Confirm"
+                    id="ConfirmAction.title"
+                    values={Object {}}
                   />
-</div>,
+                </div>,
                 <div
                   className="message-body"
->
+                >
                   <div
-                                    className="confirm-action__prompt"
+                    className="confirm-action__prompt mr-text-blue-dark"
                   >
-                                    <FormattedMessage
-                                                      defaultMessage="Are you sure? This cannot be undone."
-                                                      id="ConfirmAction.prompt"
-                                                      values={Object {}}
-                                    />
+                    <FormattedMessage
+                      defaultMessage="Are you sure? This cannot be undone."
+                      id="ConfirmAction.prompt"
+                      values={Object {}}
+                    />
                   </div>
                   <div
-                                    className="confirm-action__controls"
+                    className="confirm-action__controls"
                   >
-                                    <button
-                                                      className="button is-secondary is-outlined confirm-action__cancel-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Cancel"
-                                                                        id="ConfirmAction.cancel"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
-                                    <button
-                                                      className="button is-danger is-outlined confirm-action__proceed-control"
-                                                      onClick={[Function]}
-                                    >
-                                                      <FormattedMessage
-                                                                        defaultMessage="Proceed"
-                                                                        id="ConfirmAction.proceed"
-                                                                        values={Object {}}
-                                                      />
-                                    </button>
+                    <button
+                      className="mr-button mr-button--blue"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Cancel"
+                        id="ConfirmAction.cancel"
+                        values={Object {}}
+                      />
+                    </button>
+                    <button
+                      className="mr-button mr-button--danger mr-ml-4"
+                      onClick={[Function]}
+                    >
+                      <FormattedMessage
+                        defaultMessage="Proceed"
+                        id="ConfirmAction.proceed"
+                        values={Object {}}
+                      />
+                    </button>
                   </div>
-</div>,
+                </div>,
               ],
-              "className": "message is-danger",
+              "className": "message",
             },
             "ref": null,
             "rendered": Array [
@@ -3167,8 +3181,8 @@ ShallowWrapper {
                     defaultMessage="Please Confirm"
                     id="ConfirmAction.title"
                     values={Object {}}
-/>,
-                  "className": "message-header",
+                  />,
+                  "className": "message-header mr-bg-blue-dark",
                 },
                 "ref": null,
                 "rendered": Object {
@@ -3193,38 +3207,38 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <div
-                      className="confirm-action__prompt"
->
+                      className="confirm-action__prompt mr-text-blue-dark"
+                    >
                       <FormattedMessage
-                                            defaultMessage="Are you sure? This cannot be undone."
-                                            id="ConfirmAction.prompt"
-                                            values={Object {}}
+                        defaultMessage="Are you sure? This cannot be undone."
+                        id="ConfirmAction.prompt"
+                        values={Object {}}
                       />
-</div>,
+                    </div>,
                     <div
                       className="confirm-action__controls"
->
+                    >
                       <button
-                                            className="button is-secondary is-outlined confirm-action__cancel-control"
-                                            onClick={[Function]}
+                        className="mr-button mr-button--blue"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Cancel"
-                                                                  id="ConfirmAction.cancel"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Cancel"
+                          id="ConfirmAction.cancel"
+                          values={Object {}}
+                        />
                       </button>
                       <button
-                                            className="button is-danger is-outlined confirm-action__proceed-control"
-                                            onClick={[Function]}
+                        className="mr-button mr-button--danger mr-ml-4"
+                        onClick={[Function]}
                       >
-                                            <FormattedMessage
-                                                                  defaultMessage="Proceed"
-                                                                  id="ConfirmAction.proceed"
-                                                                  values={Object {}}
-                                            />
+                        <FormattedMessage
+                          defaultMessage="Proceed"
+                          id="ConfirmAction.proceed"
+                          values={Object {}}
+                        />
                       </button>
-</div>,
+                    </div>,
                   ],
                   "className": "message-body",
                 },
@@ -3239,8 +3253,8 @@ ShallowWrapper {
                         defaultMessage="Are you sure? This cannot be undone."
                         id="ConfirmAction.prompt"
                         values={Object {}}
-/>,
-                      "className": "confirm-action__prompt",
+                      />,
+                      "className": "confirm-action__prompt mr-text-blue-dark",
                     },
                     "ref": null,
                     "rendered": Object {
@@ -3265,25 +3279,25 @@ ShallowWrapper {
                     "props": Object {
                       "children": Array [
                         <button
-                          className="button is-secondary is-outlined confirm-action__cancel-control"
+                          className="mr-button mr-button--blue"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Cancel"
-                                                    id="ConfirmAction.cancel"
-                                                    values={Object {}}
+                            defaultMessage="Cancel"
+                            id="ConfirmAction.cancel"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                         <button
-                          className="button is-danger is-outlined confirm-action__proceed-control"
+                          className="mr-button mr-button--danger mr-ml-4"
                           onClick={[Function]}
->
+                        >
                           <FormattedMessage
-                                                    defaultMessage="Proceed"
-                                                    id="ConfirmAction.proceed"
-                                                    values={Object {}}
+                            defaultMessage="Proceed"
+                            id="ConfirmAction.proceed"
+                            values={Object {}}
                           />
-</button>,
+                        </button>,
                       ],
                       "className": "confirm-action__controls",
                     },
@@ -3298,8 +3312,8 @@ ShallowWrapper {
                             defaultMessage="Cancel"
                             id="ConfirmAction.cancel"
                             values={Object {}}
-/>,
-                          "className": "button is-secondary is-outlined confirm-action__cancel-control",
+                          />,
+                          "className": "mr-button mr-button--blue",
                           "onClick": [Function],
                         },
                         "ref": null,
@@ -3327,8 +3341,8 @@ ShallowWrapper {
                             defaultMessage="Proceed"
                             id="ConfirmAction.proceed"
                             values={Object {}}
-/>,
-                          "className": "button is-danger is-outlined confirm-action__proceed-control",
+                          />,
+                          "className": "mr-button mr-button--danger mr-ml-4",
                           "onClick": [Function],
                         },
                         "ref": null,

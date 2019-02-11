@@ -1,0 +1,58 @@
+.mr-button,
+.btn {
+  @apply mr-appearance-none mr-inline-block mr-text-center mr-text-base mr-font-medium mr-whitespace-no-wrap mr-border-green-lighter mr-text-green-lighter mr-py-2 mr-px-4 mr-rounded-sm mr-border-2 mr-leading-normal mr-transition;
+
+
+  &:hover {
+    @apply mr-border-white mr-text-white;
+  }
+
+  &--small {
+    @apply mr-text-sm mr-py-1 mr-px-4 mr-min-w-auto;
+  }
+
+  &--link {
+    @apply mr-min-w-auto mr-border-none mr-p-0;
+  }
+
+  &--danger {
+    @apply mr-text-red mr-border-red;
+
+    &:hover {
+      @apply mr-text-red-light mr-border-red-light;
+    }
+  }
+
+  &--green {
+    @apply mr-border-green-light mr-text-green-light;
+
+    &:hover {
+      @apply mr-border-green-dark mr-text-green-dark;
+    }
+  }
+
+  &-info,
+  &--blue {
+    @apply mr-border-blue mr-text-blue;
+
+    &:hover {
+      @apply mr-border-green mr-text-green;
+    }
+  }
+
+  &--white {
+    @apply mr-border-white mr-text-white;
+
+    &:hover {
+      @apply mr-border-green-light mr-text-green-lighter;
+    }
+  }
+
+  &--blue-fill {
+    @apply mr-bg-blue mr-border-0 mr-text-white;
+
+    &:hover {
+      @apply mr-bg-blue-dark;
+    }
+  }
+}

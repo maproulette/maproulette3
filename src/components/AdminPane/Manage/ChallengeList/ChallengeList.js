@@ -6,7 +6,7 @@ import _sortBy from 'lodash/sortBy'
 import AsManager from '../../../../interactions/User/AsManager'
 import ChallengeCard from '../ChallengeCard/ChallengeCard'
 import messages from './Messages'
-import './ChallengeList.css'
+import './ChallengeList.scss'
 
 /**
  * ChallengeList renders the given challenges as a list. If a selectedProject
