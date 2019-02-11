@@ -38,4 +38,9 @@ export default defineMessages({
     id: "ChallengeFilterSubnav.controls.sortBy.label",
     defaultMessage: "Sort by",
   },
+
+  otherOption: {
+    id: "ChallengeFilterSubnav.filter.keywords.otherLabel",
+    defaultMessage: "Other:",
+  },
 })

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import _keys from 'lodash/keys'
 import _without from 'lodash/without'
 import _isEmpty from 'lodash/isEmpty'
@@ -15,6 +14,8 @@ import OtherKeywordsOption from './OtherKeywordsOption'
 import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
+
+const MENU_NAME = 'keywords'
 
 /**
  * FilterByKeyword displays a nav dropdown containing options for filtering
@@ -38,6 +39,7 @@ export class FilterByKeyword extends Component {
     else {
       this.props.setKeywordFilter(combinedCategoryKeywords[value])
     }
+    this.props.closeFilterMenu(MENU_NAME)
   }
 
   setOtherKeywords = keywordString => {
@@ -54,18 +56,20 @@ export class FilterByKeyword extends Component {
     const activeCategory = categoryMatchingKeywords(this.props.searchFilters.keywords, true)
     const menuItems = categories.map(keyword => (
       <li key={keyword}>
-        <Link to={{}} onClick={() => this.updateFilter(keyword)}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a onClick={() => this.updateFilter(keyword)}>
           {localizedKeywordLabels[keyword]}
-        </Link>
+        </a>
       </li>
     ))
 
     // Add 'Anything' option to start of dropdown
     menuItems.unshift(
       <li key='any'>
-        <Link to={{}} onClick={() => this.updateFilter(null)}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a onClick={() => this.updateFilter(null)}>
           {localizedKeywordLabels.any}
-        </Link>
+        </a>
       </li>
     )
 
@@ -99,6 +103,9 @@ export class FilterByKeyword extends Component {
             }
           />
         }
+        isVisible={this.props.openFilter === MENU_NAME}
+        toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
+        close={() => this.props.closeFilterMenu(MENU_NAME)}
       >
         <ol className="mr-list-dropdown mr-list-dropdown--ruled">
           {menuItems}

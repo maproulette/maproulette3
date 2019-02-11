@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
 import { sortLabels, SORT_DEFAULT, ALL_SORT_OPTIONS }
@@ -10,6 +9,8 @@ import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
+const MENU_NAME = 'sort'
+
 /**
  * SortChallengesSelector renders an unmanaged dropdown button that can be used
  * to modify the sort order of challenge results.
@@ -17,13 +18,19 @@ import messages from './Messages'
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class SortChallengesSelector extends Component {
+  makeSelection = option => {
+    this.props.setSearchSort({sortBy: option})
+    this.props.closeFilterMenu(MENU_NAME)
+  }
+
   render() {
     const localizedLabels = sortLabels(this.props.intl)
     const menuItems = _map(ALL_SORT_OPTIONS, sortByOption => (
       <li key={sortByOption}>
-        <Link to={{}} onClick={() => this.props.setSearchSort({sortBy: sortByOption})}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a to={{}} onClick={() => this.makeSelection(sortByOption)}>
           {localizedLabels[sortByOption]}
-        </Link>
+        </a>
       </li>
     ))
 
@@ -39,6 +46,9 @@ export class SortChallengesSelector extends Component {
             selection={activeLabel}
           />
         }
+        isVisible={this.props.openFilter === MENU_NAME}
+        toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
+        close={() => this.props.closeFilterMenu(MENU_NAME)}
       >
         <ol className="mr-list-dropdown mr-list-dropdown--ruled">
           {menuItems}

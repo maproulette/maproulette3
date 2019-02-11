@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import { injectIntl, FormattedMessage } from 'react-intl'
@@ -9,6 +8,8 @@ import { ChallengeDifficulty, difficultyLabels, messagesByDifficulty }
 import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
+
+const MENU_NAME = 'difficulty'
 
 /**
  * FilterByDifficulty displays a nav dropdown containing options for filtering
@@ -30,6 +31,7 @@ export class FilterByDifficulty extends Component {
     else {
       this.props.setSearchFilters({difficulty: value})
     }
+    this.props.closeFilterMenu(MENU_NAME)
   }
 
   render() {
@@ -64,6 +66,9 @@ export class FilterByDifficulty extends Component {
               }
             />
           }
+          isVisible={this.props.openFilter === MENU_NAME}
+          toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
+          close={() => this.props.closeFilterMenu(MENU_NAME)}
         >
           {difficultyOptions}
         </Dropdown>
@@ -75,18 +80,20 @@ export class FilterByDifficulty extends Component {
 const ListDifficultyTypes = props => {
   const menuItems = _map(ChallengeDifficulty, (difficulty, name) => (
     <li key={difficulty}>
-      <Link to={{}} onClick={() => props.updateFilter(difficulty)}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(difficulty)}>
         {props.difficultyLabels[name]}
-      </Link>
+      </a>
     </li>
   ))
 
   // Add 'Any' option to start of dropdown
   menuItems.unshift(
     <li key='any'>
-      <Link to={{}} onClick={() => props.updateFilter(null)}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(null)}>
         {props.difficultyLabels.any}
-      </Link>
+      </a>
     </li>
   )
 

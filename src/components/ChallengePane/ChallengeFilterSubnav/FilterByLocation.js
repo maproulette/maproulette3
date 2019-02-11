@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import { injectIntl, FormattedMessage } from 'react-intl'
@@ -10,6 +9,8 @@ import { ChallengeLocation,
 import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
+
+const MENU_NAME = 'location'
 
 /**
  * FilterByLocation displays a nav dropdown containing options for filtering
@@ -41,6 +42,7 @@ export class FilterByLocation extends Component {
         this.props.setSearchFilters({location: value})
       }
     }
+    this.props.closeFilterMenu(MENU_NAME)
   }
 
   render() {
@@ -48,18 +50,20 @@ export class FilterByLocation extends Component {
 
     const menuItems = _map(ChallengeLocation, (location, name) => (
       <li key={location}>
-        <Link to={{}} onClick={() => this.updateFilter(location)}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a onClick={() => this.updateFilter(location)}>
           {localizedLocationLabels[name]}
-        </Link>
+        </a>
       </li>
     ))
 
     // Add 'Any' option to start of dropdown
     menuItems.unshift(
       <li key='any'>
-        <Link to={{}} onClick={() => this.updateFilter(null)}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a onClick={() => this.updateFilter(null)}>
           {localizedLocationLabels.any}
-        </Link>
+        </a>
       </li>
     )
 
@@ -76,6 +80,9 @@ export class FilterByLocation extends Component {
             }
           />
         }
+        isVisible={this.props.openFilter === MENU_NAME}
+        toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
+        close={() => this.props.closeFilterMenu(MENU_NAME)}
       >
         <ol className="mr-list-dropdown mr-list-dropdown--ruled">
           {menuItems}
