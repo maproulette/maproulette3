@@ -27,12 +27,12 @@ import './ReviewTaskControls.scss'
 export class ReviewTaskControls extends Component {
   /** Navigate to the previous sequential task */
   prevTask = () => {
-    this.props.previousSequentialTask(this.props.task, this.state.comment)
+    this.props.previousSequentialTask(this.props.task)
   }
 
   /** Navigate to the next sequential task */
   nextTask = () => {
-    this.props.nextSequentialTask(this.props.task, this.state.comment)
+    this.props.nextSequentialTask(this.props.task)
   }
 
   /** Process keyboard shortcuts for the review controls */
