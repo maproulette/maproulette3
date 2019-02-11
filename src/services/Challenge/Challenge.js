@@ -1,5 +1,6 @@
 import { normalize, schema } from 'normalizr'
 import _get from 'lodash/get'
+import _each from 'lodash/each'
 import _compact from 'lodash/compact'
 import _pick from 'lodash/pick'
 import _map from 'lodash/map'
@@ -116,6 +117,39 @@ export const fetchFeaturedChallenges = function(limit = RESULTS_PER_PAGE) {
     })
   }
 }
+
+/**
+ * Retrieve a listing of challenges (that include featured, popular, and newest)
+ * up to the given limit.
+ *
+ * @param {array} projectIds
+ * @param {number} limit
+ */
+ export const fetchPreferredChallenges = function(limit = RESULTS_PER_PAGE) {
+   return function(dispatch) {
+     return new Endpoint(
+       api.challenges.preferred,
+       {schema: {"popular": [ challengeSchema() ],
+                 "featured": [ challengeSchema() ],
+                 "newest": [ challengeSchema() ]},
+        params: {limit}}
+     ).execute().then(normalizedResults => {
+       const result = normalizedResults.result
+       const challenges = normalizedResults.entities.challenges
+
+       _each(result.popular, (challenge) => challenges[challenge].popular = true)
+       _each(result.newest, (challenge) => challenges[challenge].newest = true)
+       _each(result.featured, (challenge) => challenges[challenge].featured = true)
+
+       dispatch(receiveChallenges(normalizedResults.entities))
+
+       return normalizedResults
+     }).catch((error) => {
+       dispatch(addError(AppErrors.challenge.fetchFailure))
+       console.log(error.response || error)
+     })
+   }
+ }
 
 /**
  * Retrieve a listing of challenges in the given projects, up to the given limit.

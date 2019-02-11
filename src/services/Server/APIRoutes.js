@@ -37,6 +37,7 @@ const apiRoutes = factory => {
     'challenges': {
       'listing': factory.get('/challenges/listing'),
       'featured': factory.get('/challenges/featured'),
+      'preferred': factory.get('/challenges/preferred'),
       'search': factory.get('/challenges/extendedFind'),
       'actions': factory.get('/data/project/summary'),
       'activity': factory.get('/data/status/activity'),
