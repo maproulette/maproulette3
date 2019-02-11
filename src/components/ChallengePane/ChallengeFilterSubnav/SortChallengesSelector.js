@@ -40,7 +40,7 @@ export class SortChallengesSelector extends Component {
           />
         }
       >
-        <ol className="mr-list-dropdown">
+        <ol className="mr-list-dropdown mr-list-dropdown--ruled">
           {menuItems}
         </ol>
       </Dropdown>

@@ -38,6 +38,7 @@ export class FeaturedChallenges extends Component {
         className="mr-mb-4 md:mr-mb-0"
         challenge={challenge}
         isExpanded
+        permanentlyExpanded
         startControl={this.startControl(challenge)}
       />
     )
