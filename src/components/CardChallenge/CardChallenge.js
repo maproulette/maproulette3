@@ -69,14 +69,16 @@ export class CardChallenge extends Component {
              </Link>
             }
           </div>
-          <SvgSymbol
-            sym="icon-cheveron-down"
-            viewBox="0 0 20 20"
-            className={classNames(
-              'mr-transition mr-fill-green-lighter mr-min-w-6 mr-w-6 mr-h-6',
-              { 'mr-rotate-180': !this.props.isExpanded }
-            )}
-          />
+          {!this.props.permanentlyExpanded &&
+           <SvgSymbol
+             sym="icon-cheveron-down"
+             viewBox="0 0 20 20"
+             className={classNames(
+               'mr-transition mr-fill-green-lighter mr-min-w-6 mr-w-6 mr-h-6',
+               { 'mr-rotate-180': !this.props.isExpanded }
+             )}
+           />
+          }
         </header>
 
         <AnimateHeight duration={500} height={this.props.isExpanded ? 'auto' : 0}>
