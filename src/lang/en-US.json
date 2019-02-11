@@ -250,6 +250,7 @@
   "ChallengeFilterSubnav.filter.search.label": "Search for a challenge...",
   "Challenge.controls.clearFilters.label": "Clear Filters",
   "ChallengeFilterSubnav.controls.sortBy.label": "Sort by",
+  "ChallengeFilterSubnav.filter.keywords.otherLabel": "Other:",
   "Challenge.controls.unsave.label": "Unsave",
   "Challenge.controls.save.label": "Save",
   "Challenge.controls.start.label": "Start",

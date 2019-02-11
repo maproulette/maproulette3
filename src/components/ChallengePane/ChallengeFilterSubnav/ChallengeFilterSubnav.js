@@ -29,6 +29,25 @@ const CommandSearchBox = WithCommandInterpreter(SearchBox)
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeFilterSubnav extends Component {
+  state = {
+    openFilter: null,
+  }
+
+  toggleFilterMenu = filter => {
+    if (this.state.openFilter === filter) {
+      this.setState({openFilter: null})
+    }
+    else {
+      this.setState({openFilter: filter})
+    }
+  }
+
+  closeFilterMenu = filter => {
+    if (this.state.openFilter === filter) {
+      this.setState({openFilter: null})
+    }
+  }
+
   clearFilters = () => {
     this.props.clearSearchFilters()
     this.props.clearSearch('challenges')
@@ -48,11 +67,30 @@ export class ChallengeFilterSubnav extends Component {
           </h1>
 
           <div className="mr-hidden lg:mr-flex">
-            <SortChallengesSelector {...this.props} />
-            <FilterByKeyword {...this.props} />
-            <FilterByDifficulty {...this.props} />
-            <LocationFilter {...this.props} />
-
+            <SortChallengesSelector
+              {...this.props}
+              openFilter={this.state.openFilter}
+              toggleFilterMenu={this.toggleFilterMenu}
+              closeFilterMenu={this.closeFilterMenu}
+            />
+            <FilterByKeyword
+              {...this.props}
+              openFilter={this.state.openFilter}
+              toggleFilterMenu={this.toggleFilterMenu}
+              closeFilterMenu={this.closeFilterMenu}
+            />
+            <FilterByDifficulty
+              {...this.props}
+              openFilter={this.state.openFilter}
+              toggleFilterMenu={this.toggleFilterMenu}
+              closeFilterMenu={this.closeFilterMenu}
+            />
+            <LocationFilter
+              {...this.props}
+              openFilter={this.state.openFilter}
+              toggleFilterMenu={this.toggleFilterMenu}
+              closeFilterMenu={this.closeFilterMenu}
+            />
             <CommandSearchBox
               {...this.props}
               placeholder={this.props.intl.formatMessage(messages.searchLabel)}
