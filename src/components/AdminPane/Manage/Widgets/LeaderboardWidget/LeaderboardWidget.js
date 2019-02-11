@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import WithLeaderboard
-from '../../../../../components/HOCs/WithLeaderboard/WithLeaderboard'
+       from '../../../../../components/HOCs/WithLeaderboard/WithLeaderboard'
 import ChallengeOwnerLeaderboard
        from '../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard'
 import PastDurationSelector
@@ -35,6 +35,10 @@ export default class LeaderboardWidget extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.setMonthsPast(this.props.widgetConfiguration.monthsPast, true)
+  }
+
   render() {
     const monthsPast = this.props.widgetConfiguration.monthsPast || 1
 
@@ -58,4 +62,5 @@ export default class LeaderboardWidget extends Component {
   }
 }
 
-registerWidgetType(WithLeaderboard(LeaderboardWidget, INITIAL_MONTHS_PAST), descriptor)
+registerWidgetType(WithLeaderboard(LeaderboardWidget, INITIAL_MONTHS_PAST,
+                                   {ignoreUser: true, filterChallenges: true}), descriptor)

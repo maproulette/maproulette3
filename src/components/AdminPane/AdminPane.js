@@ -32,7 +32,8 @@ const MetricsSummary = WithChallenges(MetricsOverview)
  */
 export class AdminPane extends Component {
   componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) {
+    if (this.props.location.pathname !== prevProps.location.pathname &&
+        this.props.location.search !== prevProps.location.search) {
       window.scrollTo(0, 0)
     }
   }
