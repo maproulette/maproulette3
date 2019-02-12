@@ -131,6 +131,9 @@ ShallowWrapper {
         updateFilter={[Function]}
       />,
       "className": "mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6",
+      "close": [Function],
+      "isVisible": false,
+      "toggleVisible": [Function],
     },
     "ref": null,
     "rendered": Object {
@@ -186,6 +189,9 @@ ShallowWrapper {
           updateFilter={[Function]}
         />,
         "className": "mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6",
+        "close": [Function],
+        "isVisible": false,
+        "toggleVisible": [Function],
       },
       "ref": null,
       "rendered": Object {

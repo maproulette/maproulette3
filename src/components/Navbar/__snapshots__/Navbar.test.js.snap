@@ -102,6 +102,18 @@ ShallowWrapper {
             <div
               className="mr-flex mr-items-center"
             >
+              <PointsTicker
+                className="mr-mr-8"
+                user={
+                  Object {
+                    "id": 357,
+                    "isLoggedIn": false,
+                    "osmProfile": Object {
+                      "avatarURL": "http://example.com/profilepic.jpg",
+                    },
+                  }
+                }
+              />
               <Clickout
                 button={
                   <ProfileButton
@@ -518,6 +530,18 @@ ShallowWrapper {
               <div
                 className="mr-flex mr-items-center"
               >
+                <PointsTicker
+                  className="mr-mr-8"
+                  user={
+                    Object {
+                      "id": 357,
+                      "isLoggedIn": false,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
+                    }
+                  }
+                />
                 <Clickout
                   button={
                     <ProfileButton
@@ -638,6 +662,18 @@ ShallowWrapper {
               "children": <div
                 className="mr-flex mr-items-center"
               >
+                <PointsTicker
+                  className="mr-mr-8"
+                  user={
+                    Object {
+                      "id": 357,
+                      "isLoggedIn": false,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
+                    }
+                  }
+                />
                 <Clickout
                   button={
                     <ProfileButton
@@ -726,9 +762,118 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <Clickout
-                  button={
-                    <ProfileButton
+                "children": Array [
+                  <PointsTicker
+                    className="mr-mr-8"
+                    user={
+                      Object {
+                        "id": 357,
+                        "isLoggedIn": false,
+                        "osmProfile": Object {
+                          "avatarURL": "http://example.com/profilepic.jpg",
+                        },
+                      }
+                    }
+                  />,
+                  <Clickout
+                    button={
+                      <ProfileButton
+                        location={
+                          Object {
+                            "pathname": "/some/path",
+                          }
+                        }
+                        user={
+                          Object {
+                            "id": 357,
+                            "isLoggedIn": false,
+                            "osmProfile": Object {
+                              "avatarURL": "http://example.com/profilepic.jpg",
+                            },
+                          }
+                        }
+                      />
+                    }
+                    className="mr-dropdown--right"
+                    close={[Function]}
+                    isVisible={false}
+                    toggleVisible={[Function]}
+                  >
+                    <ol
+                      className="mr-list-dropdown"
+                    >
+                      <li>
+                        <NavLink
+                          activeClassName="active"
+                          ariaCurrent="true"
+                          onClick={[Function]}
+                          to="/admin/projects"
+                        >
+                          <FormattedMessage
+                            defaultMessage="Create & Manage"
+                            id="Navbar.links.admin"
+                            values={Object {}}
+                          />
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          activeClassName="active"
+                          ariaCurrent="true"
+                          onClick={[Function]}
+                          to="/user/profile"
+                        >
+                          <FormattedMessage
+                            defaultMessage="User Profile"
+                            id="Navbar.links.userProfile"
+                            values={Object {}}
+                          />
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          activeClassName="active"
+                          ariaCurrent="true"
+                          to={Object {}}
+                        >
+                          <FormattedMessage
+                            defaultMessage="Sign out"
+                            id="Navbar.links.signout"
+                            values={Object {}}
+                          />
+                        </NavLink>
+                      </li>
+                    </ol>
+                  </Clickout>,
+                ],
+                "className": "mr-flex mr-items-center",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "className": "mr-mr-8",
+                    "user": Object {
+                      "id": 357,
+                      "isLoggedIn": false,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
+                    },
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "button": <ProfileButton
                       location={
                         Object {
                           "pathname": "/some/path",
@@ -743,140 +888,10 @@ ShallowWrapper {
                           },
                         }
                       }
-                    />
-                  }
-                  className="mr-dropdown--right"
-                  close={[Function]}
-                  isVisible={false}
-                  toggleVisible={[Function]}
-                >
-                  <ol
-                    className="mr-list-dropdown"
-                  >
-                    <li>
-                      <NavLink
-                        activeClassName="active"
-                        ariaCurrent="true"
-                        onClick={[Function]}
-                        to="/admin/projects"
-                      >
-                        <FormattedMessage
-                          defaultMessage="Create & Manage"
-                          id="Navbar.links.admin"
-                          values={Object {}}
-                        />
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        activeClassName="active"
-                        ariaCurrent="true"
-                        onClick={[Function]}
-                        to="/user/profile"
-                      >
-                        <FormattedMessage
-                          defaultMessage="User Profile"
-                          id="Navbar.links.userProfile"
-                          values={Object {}}
-                        />
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        activeClassName="active"
-                        ariaCurrent="true"
-                        to={Object {}}
-                      >
-                        <FormattedMessage
-                          defaultMessage="Sign out"
-                          id="Navbar.links.signout"
-                          values={Object {}}
-                        />
-                      </NavLink>
-                    </li>
-                  </ol>
-                </Clickout>,
-                "className": "mr-flex mr-items-center",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "button": <ProfileButton
-                    location={
-                      Object {
-                        "pathname": "/some/path",
-                      }
-                    }
-                    user={
-                      Object {
-                        "id": 357,
-                        "isLoggedIn": false,
-                        "osmProfile": Object {
-                          "avatarURL": "http://example.com/profilepic.jpg",
-                        },
-                      }
-                    }
-                  />,
-                  "children": <ol
-                    className="mr-list-dropdown"
-                  >
-                    <li>
-                      <NavLink
-                        activeClassName="active"
-                        ariaCurrent="true"
-                        onClick={[Function]}
-                        to="/admin/projects"
-                      >
-                        <FormattedMessage
-                          defaultMessage="Create & Manage"
-                          id="Navbar.links.admin"
-                          values={Object {}}
-                        />
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        activeClassName="active"
-                        ariaCurrent="true"
-                        onClick={[Function]}
-                        to="/user/profile"
-                      >
-                        <FormattedMessage
-                          defaultMessage="User Profile"
-                          id="Navbar.links.userProfile"
-                          values={Object {}}
-                        />
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        activeClassName="active"
-                        ariaCurrent="true"
-                        to={Object {}}
-                      >
-                        <FormattedMessage
-                          defaultMessage="Sign out"
-                          id="Navbar.links.signout"
-                          values={Object {}}
-                        />
-                      </NavLink>
-                    </li>
-                  </ol>,
-                  "className": "mr-dropdown--right",
-                  "close": [Function],
-                  "isVisible": false,
-                  "toggleVisible": [Function],
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": Array [
+                    />,
+                    "children": <ol
+                      className="mr-list-dropdown"
+                    >
                       <li>
                         <NavLink
                           activeClassName="active"
@@ -890,7 +905,7 @@ ShallowWrapper {
                             values={Object {}}
                           />
                         </NavLink>
-                      </li>,
+                      </li>
                       <li>
                         <NavLink
                           activeClassName="active"
@@ -904,7 +919,7 @@ ShallowWrapper {
                             values={Object {}}
                           />
                         </NavLink>
-                      </li>,
+                      </li>
                       <li>
                         <NavLink
                           activeClassName="active"
@@ -917,172 +932,227 @@ ShallowWrapper {
                             values={Object {}}
                           />
                         </NavLink>
-                      </li>,
-                    ],
-                    "className": "mr-list-dropdown",
+                      </li>
+                    </ol>,
+                    "className": "mr-dropdown--right",
+                    "close": [Function],
+                    "isVisible": false,
+                    "toggleVisible": [Function],
                   },
                   "ref": null,
-                  "rendered": Array [
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          onClick={[Function]}
-                          to="/admin/projects"
-                        >
-                          <FormattedMessage
-                            defaultMessage="Create & Manage"
-                            id="Navbar.links.admin"
-                            values={Object {}}
-                          />
-                        </NavLink>,
-                      },
-                      "ref": null,
-                      "rendered": Object {
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": Array [
+                        <li>
+                          <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            onClick={[Function]}
+                            to="/admin/projects"
+                          >
+                            <FormattedMessage
+                              defaultMessage="Create & Manage"
+                              id="Navbar.links.admin"
+                              values={Object {}}
+                            />
+                          </NavLink>
+                        </li>,
+                        <li>
+                          <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            onClick={[Function]}
+                            to="/user/profile"
+                          >
+                            <FormattedMessage
+                              defaultMessage="User Profile"
+                              id="Navbar.links.userProfile"
+                              values={Object {}}
+                            />
+                          </NavLink>
+                        </li>,
+                        <li>
+                          <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            to={Object {}}
+                          >
+                            <FormattedMessage
+                              defaultMessage="Sign out"
+                              id="Navbar.links.signout"
+                              values={Object {}}
+                            />
+                          </NavLink>
+                        </li>,
+                      ],
+                      "className": "mr-list-dropdown",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      Object {
                         "instance": null,
                         "key": undefined,
-                        "nodeType": "function",
+                        "nodeType": "host",
                         "props": Object {
-                          "activeClassName": "active",
-                          "ariaCurrent": "true",
-                          "children": <FormattedMessage
-                            defaultMessage="Create & Manage"
-                            id="Navbar.links.admin"
-                            values={Object {}}
-                          />,
-                          "onClick": [Function],
-                          "to": "/admin/projects",
+                          "children": <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            onClick={[Function]}
+                            to="/admin/projects"
+                          >
+                            <FormattedMessage
+                              defaultMessage="Create & Manage"
+                              id="Navbar.links.admin"
+                              values={Object {}}
+                            />
+                          </NavLink>,
                         },
                         "ref": null,
                         "rendered": Object {
                           "instance": null,
                           "key": undefined,
-                          "nodeType": "class",
+                          "nodeType": "function",
                           "props": Object {
-                            "defaultMessage": "Create & Manage",
-                            "id": "Navbar.links.admin",
-                            "values": Object {},
+                            "activeClassName": "active",
+                            "ariaCurrent": "true",
+                            "children": <FormattedMessage
+                              defaultMessage="Create & Manage"
+                              id="Navbar.links.admin"
+                              values={Object {}}
+                            />,
+                            "onClick": [Function],
+                            "to": "/admin/projects",
                           },
                           "ref": null,
-                          "rendered": null,
+                          "rendered": Object {
+                            "instance": null,
+                            "key": undefined,
+                            "nodeType": "class",
+                            "props": Object {
+                              "defaultMessage": "Create & Manage",
+                              "id": "Navbar.links.admin",
+                              "values": Object {},
+                            },
+                            "ref": null,
+                            "rendered": null,
+                            "type": [Function],
+                          },
                           "type": [Function],
                         },
-                        "type": [Function],
+                        "type": "li",
                       },
-                      "type": "li",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          onClick={[Function]}
-                          to="/user/profile"
-                        >
-                          <FormattedMessage
-                            defaultMessage="User Profile"
-                            id="Navbar.links.userProfile"
-                            values={Object {}}
-                          />
-                        </NavLink>,
-                      },
-                      "ref": null,
-                      "rendered": Object {
+                      Object {
                         "instance": null,
                         "key": undefined,
-                        "nodeType": "function",
+                        "nodeType": "host",
                         "props": Object {
-                          "activeClassName": "active",
-                          "ariaCurrent": "true",
-                          "children": <FormattedMessage
-                            defaultMessage="User Profile"
-                            id="Navbar.links.userProfile"
-                            values={Object {}}
-                          />,
-                          "onClick": [Function],
-                          "to": "/user/profile",
+                          "children": <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            onClick={[Function]}
+                            to="/user/profile"
+                          >
+                            <FormattedMessage
+                              defaultMessage="User Profile"
+                              id="Navbar.links.userProfile"
+                              values={Object {}}
+                            />
+                          </NavLink>,
                         },
                         "ref": null,
                         "rendered": Object {
                           "instance": null,
                           "key": undefined,
-                          "nodeType": "class",
+                          "nodeType": "function",
                           "props": Object {
-                            "defaultMessage": "User Profile",
-                            "id": "Navbar.links.userProfile",
-                            "values": Object {},
+                            "activeClassName": "active",
+                            "ariaCurrent": "true",
+                            "children": <FormattedMessage
+                              defaultMessage="User Profile"
+                              id="Navbar.links.userProfile"
+                              values={Object {}}
+                            />,
+                            "onClick": [Function],
+                            "to": "/user/profile",
                           },
                           "ref": null,
-                          "rendered": null,
+                          "rendered": Object {
+                            "instance": null,
+                            "key": undefined,
+                            "nodeType": "class",
+                            "props": Object {
+                              "defaultMessage": "User Profile",
+                              "id": "Navbar.links.userProfile",
+                              "values": Object {},
+                            },
+                            "ref": null,
+                            "rendered": null,
+                            "type": [Function],
+                          },
                           "type": [Function],
                         },
-                        "type": [Function],
+                        "type": "li",
                       },
-                      "type": "li",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "children": <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          to={Object {}}
-                        >
-                          <FormattedMessage
-                            defaultMessage="Sign out"
-                            id="Navbar.links.signout"
-                            values={Object {}}
-                          />
-                        </NavLink>,
-                      },
-                      "ref": null,
-                      "rendered": Object {
+                      Object {
                         "instance": null,
                         "key": undefined,
-                        "nodeType": "function",
+                        "nodeType": "host",
                         "props": Object {
-                          "activeClassName": "active",
-                          "ariaCurrent": "true",
-                          "children": <FormattedMessage
-                            defaultMessage="Sign out"
-                            id="Navbar.links.signout"
-                            values={Object {}}
-                          />,
-                          "onClick": undefined,
-                          "to": Object {},
+                          "children": <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            to={Object {}}
+                          >
+                            <FormattedMessage
+                              defaultMessage="Sign out"
+                              id="Navbar.links.signout"
+                              values={Object {}}
+                            />
+                          </NavLink>,
                         },
                         "ref": null,
                         "rendered": Object {
                           "instance": null,
                           "key": undefined,
-                          "nodeType": "class",
+                          "nodeType": "function",
                           "props": Object {
-                            "defaultMessage": "Sign out",
-                            "id": "Navbar.links.signout",
-                            "values": Object {},
+                            "activeClassName": "active",
+                            "ariaCurrent": "true",
+                            "children": <FormattedMessage
+                              defaultMessage="Sign out"
+                              id="Navbar.links.signout"
+                              values={Object {}}
+                            />,
+                            "onClick": undefined,
+                            "to": Object {},
                           },
                           "ref": null,
-                          "rendered": null,
+                          "rendered": Object {
+                            "instance": null,
+                            "key": undefined,
+                            "nodeType": "class",
+                            "props": Object {
+                              "defaultMessage": "Sign out",
+                              "id": "Navbar.links.signout",
+                              "values": Object {},
+                            },
+                            "ref": null,
+                            "rendered": null,
+                            "type": [Function],
+                          },
                           "type": [Function],
                         },
-                        "type": [Function],
+                        "type": "li",
                       },
-                      "type": "li",
-                    },
-                  ],
-                  "type": "ol",
+                    ],
+                    "type": "ol",
+                  },
+                  "type": [Function],
                 },
-                "type": [Function],
-              },
+              ],
               "type": "div",
             },
             "type": [Function],
@@ -1428,6 +1498,18 @@ ShallowWrapper {
               <div
                 className="mr-flex mr-items-center"
               >
+                <PointsTicker
+                  className="mr-mr-8"
+                  user={
+                    Object {
+                      "id": 357,
+                      "isLoggedIn": false,
+                      "osmProfile": Object {
+                        "avatarURL": "http://example.com/profilepic.jpg",
+                      },
+                    }
+                  }
+                />
                 <Clickout
                   button={
                     <ProfileButton
@@ -1844,6 +1926,18 @@ ShallowWrapper {
                 <div
                   className="mr-flex mr-items-center"
                 >
+                  <PointsTicker
+                    className="mr-mr-8"
+                    user={
+                      Object {
+                        "id": 357,
+                        "isLoggedIn": false,
+                        "osmProfile": Object {
+                          "avatarURL": "http://example.com/profilepic.jpg",
+                        },
+                      }
+                    }
+                  />
                   <Clickout
                     button={
                       <ProfileButton
@@ -1964,6 +2058,18 @@ ShallowWrapper {
                 "children": <div
                   className="mr-flex mr-items-center"
                 >
+                  <PointsTicker
+                    className="mr-mr-8"
+                    user={
+                      Object {
+                        "id": 357,
+                        "isLoggedIn": false,
+                        "osmProfile": Object {
+                          "avatarURL": "http://example.com/profilepic.jpg",
+                        },
+                      }
+                    }
+                  />
                   <Clickout
                     button={
                       <ProfileButton
@@ -2052,9 +2158,118 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": <Clickout
-                    button={
-                      <ProfileButton
+                  "children": Array [
+                    <PointsTicker
+                      className="mr-mr-8"
+                      user={
+                        Object {
+                          "id": 357,
+                          "isLoggedIn": false,
+                          "osmProfile": Object {
+                            "avatarURL": "http://example.com/profilepic.jpg",
+                          },
+                        }
+                      }
+                    />,
+                    <Clickout
+                      button={
+                        <ProfileButton
+                          location={
+                            Object {
+                              "pathname": "/some/path",
+                            }
+                          }
+                          user={
+                            Object {
+                              "id": 357,
+                              "isLoggedIn": false,
+                              "osmProfile": Object {
+                                "avatarURL": "http://example.com/profilepic.jpg",
+                              },
+                            }
+                          }
+                        />
+                      }
+                      className="mr-dropdown--right"
+                      close={[Function]}
+                      isVisible={false}
+                      toggleVisible={[Function]}
+                    >
+                      <ol
+                        className="mr-list-dropdown"
+                      >
+                        <li>
+                          <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            onClick={[Function]}
+                            to="/admin/projects"
+                          >
+                            <FormattedMessage
+                              defaultMessage="Create & Manage"
+                              id="Navbar.links.admin"
+                              values={Object {}}
+                            />
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            onClick={[Function]}
+                            to="/user/profile"
+                          >
+                            <FormattedMessage
+                              defaultMessage="User Profile"
+                              id="Navbar.links.userProfile"
+                              values={Object {}}
+                            />
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            activeClassName="active"
+                            ariaCurrent="true"
+                            to={Object {}}
+                          >
+                            <FormattedMessage
+                              defaultMessage="Sign out"
+                              id="Navbar.links.signout"
+                              values={Object {}}
+                            />
+                          </NavLink>
+                        </li>
+                      </ol>
+                    </Clickout>,
+                  ],
+                  "className": "mr-flex mr-items-center",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "className": "mr-mr-8",
+                      "user": Object {
+                        "id": 357,
+                        "isLoggedIn": false,
+                        "osmProfile": Object {
+                          "avatarURL": "http://example.com/profilepic.jpg",
+                        },
+                      },
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "button": <ProfileButton
                         location={
                           Object {
                             "pathname": "/some/path",
@@ -2069,140 +2284,10 @@ ShallowWrapper {
                             },
                           }
                         }
-                      />
-                    }
-                    className="mr-dropdown--right"
-                    close={[Function]}
-                    isVisible={false}
-                    toggleVisible={[Function]}
-                  >
-                    <ol
-                      className="mr-list-dropdown"
-                    >
-                      <li>
-                        <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          onClick={[Function]}
-                          to="/admin/projects"
-                        >
-                          <FormattedMessage
-                            defaultMessage="Create & Manage"
-                            id="Navbar.links.admin"
-                            values={Object {}}
-                          />
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          onClick={[Function]}
-                          to="/user/profile"
-                        >
-                          <FormattedMessage
-                            defaultMessage="User Profile"
-                            id="Navbar.links.userProfile"
-                            values={Object {}}
-                          />
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          to={Object {}}
-                        >
-                          <FormattedMessage
-                            defaultMessage="Sign out"
-                            id="Navbar.links.signout"
-                            values={Object {}}
-                          />
-                        </NavLink>
-                      </li>
-                    </ol>
-                  </Clickout>,
-                  "className": "mr-flex mr-items-center",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "button": <ProfileButton
-                      location={
-                        Object {
-                          "pathname": "/some/path",
-                        }
-                      }
-                      user={
-                        Object {
-                          "id": 357,
-                          "isLoggedIn": false,
-                          "osmProfile": Object {
-                            "avatarURL": "http://example.com/profilepic.jpg",
-                          },
-                        }
-                      }
-                    />,
-                    "children": <ol
-                      className="mr-list-dropdown"
-                    >
-                      <li>
-                        <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          onClick={[Function]}
-                          to="/admin/projects"
-                        >
-                          <FormattedMessage
-                            defaultMessage="Create & Manage"
-                            id="Navbar.links.admin"
-                            values={Object {}}
-                          />
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          onClick={[Function]}
-                          to="/user/profile"
-                        >
-                          <FormattedMessage
-                            defaultMessage="User Profile"
-                            id="Navbar.links.userProfile"
-                            values={Object {}}
-                          />
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          activeClassName="active"
-                          ariaCurrent="true"
-                          to={Object {}}
-                        >
-                          <FormattedMessage
-                            defaultMessage="Sign out"
-                            id="Navbar.links.signout"
-                            values={Object {}}
-                          />
-                        </NavLink>
-                      </li>
-                    </ol>,
-                    "className": "mr-dropdown--right",
-                    "close": [Function],
-                    "isVisible": false,
-                    "toggleVisible": [Function],
-                  },
-                  "ref": null,
-                  "rendered": Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": Array [
+                      />,
+                      "children": <ol
+                        className="mr-list-dropdown"
+                      >
                         <li>
                           <NavLink
                             activeClassName="active"
@@ -2216,7 +2301,7 @@ ShallowWrapper {
                               values={Object {}}
                             />
                           </NavLink>
-                        </li>,
+                        </li>
                         <li>
                           <NavLink
                             activeClassName="active"
@@ -2230,7 +2315,7 @@ ShallowWrapper {
                               values={Object {}}
                             />
                           </NavLink>
-                        </li>,
+                        </li>
                         <li>
                           <NavLink
                             activeClassName="active"
@@ -2243,172 +2328,227 @@ ShallowWrapper {
                               values={Object {}}
                             />
                           </NavLink>
-                        </li>,
-                      ],
-                      "className": "mr-list-dropdown",
+                        </li>
+                      </ol>,
+                      "className": "mr-dropdown--right",
+                      "close": [Function],
+                      "isVisible": false,
+                      "toggleVisible": [Function],
                     },
                     "ref": null,
-                    "rendered": Array [
-                      Object {
-                        "instance": null,
-                        "key": undefined,
-                        "nodeType": "host",
-                        "props": Object {
-                          "children": <NavLink
-                            activeClassName="active"
-                            ariaCurrent="true"
-                            onClick={[Function]}
-                            to="/admin/projects"
-                          >
-                            <FormattedMessage
-                              defaultMessage="Create & Manage"
-                              id="Navbar.links.admin"
-                              values={Object {}}
-                            />
-                          </NavLink>,
-                        },
-                        "ref": null,
-                        "rendered": Object {
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": Array [
+                          <li>
+                            <NavLink
+                              activeClassName="active"
+                              ariaCurrent="true"
+                              onClick={[Function]}
+                              to="/admin/projects"
+                            >
+                              <FormattedMessage
+                                defaultMessage="Create & Manage"
+                                id="Navbar.links.admin"
+                                values={Object {}}
+                              />
+                            </NavLink>
+                          </li>,
+                          <li>
+                            <NavLink
+                              activeClassName="active"
+                              ariaCurrent="true"
+                              onClick={[Function]}
+                              to="/user/profile"
+                            >
+                              <FormattedMessage
+                                defaultMessage="User Profile"
+                                id="Navbar.links.userProfile"
+                                values={Object {}}
+                              />
+                            </NavLink>
+                          </li>,
+                          <li>
+                            <NavLink
+                              activeClassName="active"
+                              ariaCurrent="true"
+                              to={Object {}}
+                            >
+                              <FormattedMessage
+                                defaultMessage="Sign out"
+                                id="Navbar.links.signout"
+                                values={Object {}}
+                              />
+                            </NavLink>
+                          </li>,
+                        ],
+                        "className": "mr-list-dropdown",
+                      },
+                      "ref": null,
+                      "rendered": Array [
+                        Object {
                           "instance": null,
                           "key": undefined,
-                          "nodeType": "function",
+                          "nodeType": "host",
                           "props": Object {
-                            "activeClassName": "active",
-                            "ariaCurrent": "true",
-                            "children": <FormattedMessage
-                              defaultMessage="Create & Manage"
-                              id="Navbar.links.admin"
-                              values={Object {}}
-                            />,
-                            "onClick": [Function],
-                            "to": "/admin/projects",
+                            "children": <NavLink
+                              activeClassName="active"
+                              ariaCurrent="true"
+                              onClick={[Function]}
+                              to="/admin/projects"
+                            >
+                              <FormattedMessage
+                                defaultMessage="Create & Manage"
+                                id="Navbar.links.admin"
+                                values={Object {}}
+                              />
+                            </NavLink>,
                           },
                           "ref": null,
                           "rendered": Object {
                             "instance": null,
                             "key": undefined,
-                            "nodeType": "class",
+                            "nodeType": "function",
                             "props": Object {
-                              "defaultMessage": "Create & Manage",
-                              "id": "Navbar.links.admin",
-                              "values": Object {},
+                              "activeClassName": "active",
+                              "ariaCurrent": "true",
+                              "children": <FormattedMessage
+                                defaultMessage="Create & Manage"
+                                id="Navbar.links.admin"
+                                values={Object {}}
+                              />,
+                              "onClick": [Function],
+                              "to": "/admin/projects",
                             },
                             "ref": null,
-                            "rendered": null,
+                            "rendered": Object {
+                              "instance": null,
+                              "key": undefined,
+                              "nodeType": "class",
+                              "props": Object {
+                                "defaultMessage": "Create & Manage",
+                                "id": "Navbar.links.admin",
+                                "values": Object {},
+                              },
+                              "ref": null,
+                              "rendered": null,
+                              "type": [Function],
+                            },
                             "type": [Function],
                           },
-                          "type": [Function],
+                          "type": "li",
                         },
-                        "type": "li",
-                      },
-                      Object {
-                        "instance": null,
-                        "key": undefined,
-                        "nodeType": "host",
-                        "props": Object {
-                          "children": <NavLink
-                            activeClassName="active"
-                            ariaCurrent="true"
-                            onClick={[Function]}
-                            to="/user/profile"
-                          >
-                            <FormattedMessage
-                              defaultMessage="User Profile"
-                              id="Navbar.links.userProfile"
-                              values={Object {}}
-                            />
-                          </NavLink>,
-                        },
-                        "ref": null,
-                        "rendered": Object {
+                        Object {
                           "instance": null,
                           "key": undefined,
-                          "nodeType": "function",
+                          "nodeType": "host",
                           "props": Object {
-                            "activeClassName": "active",
-                            "ariaCurrent": "true",
-                            "children": <FormattedMessage
-                              defaultMessage="User Profile"
-                              id="Navbar.links.userProfile"
-                              values={Object {}}
-                            />,
-                            "onClick": [Function],
-                            "to": "/user/profile",
+                            "children": <NavLink
+                              activeClassName="active"
+                              ariaCurrent="true"
+                              onClick={[Function]}
+                              to="/user/profile"
+                            >
+                              <FormattedMessage
+                                defaultMessage="User Profile"
+                                id="Navbar.links.userProfile"
+                                values={Object {}}
+                              />
+                            </NavLink>,
                           },
                           "ref": null,
                           "rendered": Object {
                             "instance": null,
                             "key": undefined,
-                            "nodeType": "class",
+                            "nodeType": "function",
                             "props": Object {
-                              "defaultMessage": "User Profile",
-                              "id": "Navbar.links.userProfile",
-                              "values": Object {},
+                              "activeClassName": "active",
+                              "ariaCurrent": "true",
+                              "children": <FormattedMessage
+                                defaultMessage="User Profile"
+                                id="Navbar.links.userProfile"
+                                values={Object {}}
+                              />,
+                              "onClick": [Function],
+                              "to": "/user/profile",
                             },
                             "ref": null,
-                            "rendered": null,
+                            "rendered": Object {
+                              "instance": null,
+                              "key": undefined,
+                              "nodeType": "class",
+                              "props": Object {
+                                "defaultMessage": "User Profile",
+                                "id": "Navbar.links.userProfile",
+                                "values": Object {},
+                              },
+                              "ref": null,
+                              "rendered": null,
+                              "type": [Function],
+                            },
                             "type": [Function],
                           },
-                          "type": [Function],
+                          "type": "li",
                         },
-                        "type": "li",
-                      },
-                      Object {
-                        "instance": null,
-                        "key": undefined,
-                        "nodeType": "host",
-                        "props": Object {
-                          "children": <NavLink
-                            activeClassName="active"
-                            ariaCurrent="true"
-                            to={Object {}}
-                          >
-                            <FormattedMessage
-                              defaultMessage="Sign out"
-                              id="Navbar.links.signout"
-                              values={Object {}}
-                            />
-                          </NavLink>,
-                        },
-                        "ref": null,
-                        "rendered": Object {
+                        Object {
                           "instance": null,
                           "key": undefined,
-                          "nodeType": "function",
+                          "nodeType": "host",
                           "props": Object {
-                            "activeClassName": "active",
-                            "ariaCurrent": "true",
-                            "children": <FormattedMessage
-                              defaultMessage="Sign out"
-                              id="Navbar.links.signout"
-                              values={Object {}}
-                            />,
-                            "onClick": undefined,
-                            "to": Object {},
+                            "children": <NavLink
+                              activeClassName="active"
+                              ariaCurrent="true"
+                              to={Object {}}
+                            >
+                              <FormattedMessage
+                                defaultMessage="Sign out"
+                                id="Navbar.links.signout"
+                                values={Object {}}
+                              />
+                            </NavLink>,
                           },
                           "ref": null,
                           "rendered": Object {
                             "instance": null,
                             "key": undefined,
-                            "nodeType": "class",
+                            "nodeType": "function",
                             "props": Object {
-                              "defaultMessage": "Sign out",
-                              "id": "Navbar.links.signout",
-                              "values": Object {},
+                              "activeClassName": "active",
+                              "ariaCurrent": "true",
+                              "children": <FormattedMessage
+                                defaultMessage="Sign out"
+                                id="Navbar.links.signout"
+                                values={Object {}}
+                              />,
+                              "onClick": undefined,
+                              "to": Object {},
                             },
                             "ref": null,
-                            "rendered": null,
+                            "rendered": Object {
+                              "instance": null,
+                              "key": undefined,
+                              "nodeType": "class",
+                              "props": Object {
+                                "defaultMessage": "Sign out",
+                                "id": "Navbar.links.signout",
+                                "values": Object {},
+                              },
+                              "ref": null,
+                              "rendered": null,
+                              "type": [Function],
+                            },
                             "type": [Function],
                           },
-                          "type": [Function],
+                          "type": "li",
                         },
-                        "type": "li",
-                      },
-                    ],
-                    "type": "ol",
+                      ],
+                      "type": "ol",
+                    },
+                    "type": [Function],
                   },
-                  "type": [Function],
-                },
+                ],
                 "type": "div",
               },
               "type": [Function],

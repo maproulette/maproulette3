@@ -107,7 +107,7 @@ const challengeSteps = [
  */
 export class EditChallenge extends Component {
   state = {
-    activeStep: 3,
+    activeStep: 0,
     formData: {},
     formContext: {},
     isSaving: false,
