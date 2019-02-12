@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _map from 'lodash/map'
-import _get from 'lodash/get'
 import messages from './Messages'
 
 class PointsTicker extends Component {

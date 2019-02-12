@@ -18,6 +18,6 @@ export default defineMessages({
   },
   default: {
     id: "Challenge.sort.default",
-    defaultMessage: "Smart",
+    defaultMessage: "Default",
   },
 })

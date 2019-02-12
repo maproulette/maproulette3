@@ -16,6 +16,7 @@ import { taskDenormalizationSchema,
          completeTask } from '../../../services/Task/Task'
 import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
+import { fetchUser } from '../../../services/User/User'
 import { TaskLoadMethod }
        from '../../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { fetchOSMUser, fetchOSMData } from '../../../services/OSM/OSM'
@@ -160,7 +161,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy) => {
+    completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy, userId) => {
       return dispatch(
         completeTask(taskId, challengeId, taskStatus)
       ).then(() => {
@@ -174,6 +175,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         if (_isString(comment) && comment.length > 0) {
           dispatch(addTaskComment(taskId, comment, taskStatus))
         }
+
+        // Update the user in the background to get their latest score
+        setTimeout(() => dispatch(fetchUser(userId)), 100)
 
         // Updating the challenge actions will allow us to show more accurate
         // completion progress, but this can be done in the background

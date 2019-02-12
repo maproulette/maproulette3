@@ -719,7 +719,7 @@
   "Challenge.sort.name": "Name",
   "Challenge.sort.created": "Newest",
   "Challenge.sort.popularity": "Popular",
-  "Challenge.sort.default": "Smart",
+  "Challenge.sort.default": "Default",
   "Task.loadByMethod.random": "Random",
   "Task.loadByMethod.proximity": "Proximity",
   "Task.priority.high": "High",

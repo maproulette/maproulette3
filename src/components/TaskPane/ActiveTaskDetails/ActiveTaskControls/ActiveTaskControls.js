@@ -47,7 +47,8 @@ export class ActiveTaskControls extends Component {
   complete = taskStatus => {
     this.setState({taskBeingCompleted: this.props.task.id})
     this.props.completeTask(this.props.task.id, this.props.task.parent.id,
-                            taskStatus, this.state.comment, this.props.taskLoadBy)
+                            taskStatus, this.state.comment, this.props.taskLoadBy,
+                            this.props.user.id)
   }
 
   /** Move to the next task without modifying the task status */

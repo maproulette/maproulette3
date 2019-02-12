@@ -6,6 +6,7 @@ import _get from 'lodash/get'
 import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
 import SignInButton from '../SignInButton/SignInButton'
+import PointsTicker from '../PointsTicker/PointsTicker'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import Dropdown from '../Dropdown/Dropdown'
 import messages from './Messages'
@@ -69,6 +70,7 @@ export default class Navbar extends Component {
         <MediaQuery minWidth={screens.lg}>
           <LoggedInUser {...this.props}>
             <div className="mr-flex mr-items-center">
+              <PointsTicker user={this.props.user} className="mr-mr-8" />
               <Dropdown
                 className="mr-dropdown--right"
                 button={<ProfileButton {...this.props} />}
@@ -218,6 +220,8 @@ const MobileNav = props => (
       <Link to='/user/profile' onClick={props.closeMobileMenu}>
         <ProfileImage {...props} />
       </Link>
+
+      <PointsTicker user={props.user} className="mr-my-4" />
     </LoggedInUser>
 
     <LoggedOutUser {...props}>
