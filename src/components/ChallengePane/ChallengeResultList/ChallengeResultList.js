@@ -27,6 +27,7 @@ import './ChallengeResultList.scss'
 export class ChallengeResultList extends Component {
   render() {
     const challengeResults = this.props.pagedChallenges
+    const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
 
     // If the user is actively browsing a challenge, include that challenge even if
     // it didn't pass the filters.
@@ -55,9 +56,9 @@ export class ChallengeResultList extends Component {
     if (challengeResults.length === 0) {
       results = (
         <div className="mr-text-white mr-text-lg mr-pt-4">
-          <span><FormattedMessage {...messages.noResults} /></span>
-          {_get(this.props, 'fetchingChallenges', []).length > 0 &&
-           <BusySpinner />
+          {isFetching ?
+           <BusySpinner /> :
+           <span><FormattedMessage {...messages.noResults} /></span>
           }
         </div>
       )
@@ -79,7 +80,10 @@ export class ChallengeResultList extends Component {
         {results}
 
         <div className="after-results">
-          <PageResultsButton {...this.props} />
+          <PageResultsButton
+            {...this.props}
+            isLoading={this.props.isLoading || isFetching}
+          />
         </div>
       </div>
     )

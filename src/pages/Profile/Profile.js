@@ -11,7 +11,9 @@ import _debounce from 'lodash/debounce'
 import { basemapLayerSources }
        from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import AsEditableUser from '../../interactions/User/AsEditableUser'
+import WithStatus from '../../components/HOCs/WithStatus/WithStatus'
 import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
+import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
 import ApiKey from './ApiKey'
@@ -53,6 +55,17 @@ class Profile extends Component {
   }
 
   render() {
+    if (!this.props.user) {
+      return (
+        <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+          {this.props.checkingLoginStatus ?
+           <BusySpinner /> :
+           <SignInButton {...this.props} longForm />
+          }
+        </div>
+      )
+    }
+
     // Setup a saving indicator if needed, which is a busy spinner during
     // saving and then a check-mark once saving is complete
     let saveIndicator = null
@@ -141,4 +154,4 @@ class Profile extends Component {
   }
 }
 
-export default WithCurrentUser(injectIntl(Profile))
+export default WithStatus(WithCurrentUser(injectIntl(Profile)))

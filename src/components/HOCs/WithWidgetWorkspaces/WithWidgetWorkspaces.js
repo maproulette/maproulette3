@@ -227,19 +227,13 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     }
 
     render() {
-      // If we're still fetching user data, show a busy spinner
-      if (this.props.checkingLoginStatus) {
-        return (
-          <div className="pane-loading">
-            <BusySpinner />
-          </div>
-        )
-      }
-
       if (!_get(this.props, 'user.isLoggedIn')) {
         return (
-          <div className="mr-bg-blue mr-py-8 mr-flex mr-justify-center">
-            <SignInButton {...this.props} longForm className='' />
+          <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+            {this.props.checkingLoginStatus ?
+             <BusySpinner /> :
+             <SignInButton {...this.props} longForm className='' />
+            }
           </div>
         )
       }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import MediaQuery from 'react-responsive'
 import AsManager from '../../interactions/User/AsManager'
+import WithStatus from '../HOCs/WithStatus/WithStatus'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import ScreenTooNarrow
@@ -16,6 +17,7 @@ import ProjectDashboard from './Manage/ProjectDashboard/ProjectDashboard'
 import ChallengeDashboard from './Manage/ChallengeDashboard/ChallengeDashboard'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
+import BusySpinner from '../BusySpinner/BusySpinner'
 import './Manage/Widgets/widget_registry.js'
 import './AdminPane.scss'
 
@@ -43,8 +45,11 @@ export class AdminPane extends Component {
     const manager = AsManager(this.props.user)
     if (!manager.isLoggedIn()) {
       return (
-        <div className="admin">
-          <SignInButton {...this.props} />
+        <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+          {this.props.checkingLoginStatus ?
+           <BusySpinner /> :
+           <SignInButton {...this.props} longForm />
+          }
         </div>
       )
     }
@@ -92,4 +97,4 @@ AdminPane.propTypes = {
   location: PropTypes.object.isRequired,
 }
 
-export default WithCurrentUser(withRouter(AdminPane))
+export default WithStatus(WithCurrentUser(withRouter(AdminPane)))

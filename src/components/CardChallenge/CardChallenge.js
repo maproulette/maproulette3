@@ -31,7 +31,7 @@ export class CardChallenge extends Component {
         <header className="mr-card-challenge__header" onClick={this.props.toggleExpanded}>
           <div>
             {(this.props.isSaved || this.props.challenge.featured ||
-              this.props.challenge.popular || this.props.newest) &&
+              this.props.challenge.popular || this.props.challenge.newest) &&
              <ul className="mr-card-challenge__taxonomy">
                {this.props.isSaved &&
                 <li>
