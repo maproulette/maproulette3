@@ -16,7 +16,7 @@ import _isEmpty from 'lodash/isEmpty'
 import App from './App';
 import BusySpinner from './components/BusySpinner/BusySpinner'
 import { initializePersistedStore } from './PersistedStore'
-import { extendedFind } from './services/Challenge/Challenge'
+import { extendedFind, fetchPreferredChallenges } from './services/Challenge/Challenge'
 import { ChallengeStatus } from './services/Challenge/ChallengeStatus/ChallengeStatus'
 import { SortOptions, RESULTS_PER_PAGE } from './services/Search/Search'
 import { ensureUserLoggedIn, fetchSavedChallenges }
@@ -50,6 +50,8 @@ const {store} = initializePersistedStore(function(store) {
     store.dispatch(clearCheckingLoginStatus())
   ).catch(() => store.dispatch(clearCheckingLoginStatus()))
 
+  store.dispatch(fetchPreferredChallenges())
+  
   // Seed our store with some currently popular challenges.
   store.dispatch(
     extendedFind({sortCriteria: {sortBy: SortOptions.popular},
