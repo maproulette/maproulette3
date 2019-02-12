@@ -107,8 +107,8 @@ export class TaskAnalysisTable extends Component {
       minWidth: 110,
       Cell: ({row}) =>
         <div className="row-controls-column">
-          <Link to={`${taskBaseRoute}/${row.id}/review`}>
-            <FormattedMessage {...messages.reviewTaskLabel} />
+          <Link to={`${taskBaseRoute}/${row.id}/inspect`}>
+            <FormattedMessage {...messages.inspectTaskLabel} />
           </Link>
           {manager.canWriteProject(this.props.challenge.parent) &&
            <Link to={`${taskBaseRoute}/${row.id}/edit`}>

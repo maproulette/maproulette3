@@ -11,7 +11,7 @@ import ScreenTooNarrow
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
 import EditProject from './Manage/EditProject/EditProject'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
-import ReviewTask from './Manage/ReviewTask/ReviewTask'
+import InspectTask from './Manage/InspectTask/InspectTask'
 import ProjectsDashboard from './Manage/ProjectsDashboard/ProjectsDashboard'
 import ProjectDashboard from './Manage/ProjectDashboard/ProjectDashboard'
 import ChallengeDashboard from './Manage/ChallengeDashboard/ChallengeDashboard'
@@ -68,8 +68,8 @@ export class AdminPane extends Component {
                        render={props => <MetricsSummary allStatuses={true} {...props} />} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
                        component={EditTask} />
-                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/review'
-                       component={ReviewTask} />
+                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/inspect'
+                       component={InspectTask} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId'
                        component={ChallengeDashboard} />
                 <Route exact path='/admin/project/:projectId/challenges/new'

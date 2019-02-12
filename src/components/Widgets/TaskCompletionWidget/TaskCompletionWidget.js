@@ -6,7 +6,7 @@ import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithEditor from '../../HOCs/WithEditor/WithEditor'
 import ActiveTaskControls
        from '../../TaskPane/ActiveTaskDetails/ActiveTaskControls/ActiveTaskControls'
-import ReviewTaskControls from '../../ReviewTaskControls/ReviewTaskControls'
+import InspectTaskControls from '../../InspectTaskControls/InspectTaskControls'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
 
@@ -23,8 +23,8 @@ const descriptor = {
 export default class TaskCompletionWidget extends Component {
   render() {
     const taskControls =
-      this.props.reviewTask ?
-      <ReviewTaskControls {...this.props} className="mr-px-4" /> :
+      this.props.inspectTask ?
+      <InspectTaskControls {...this.props} className="mr-px-4" /> :
       <ActiveTaskControls {...this.props} className="mr-px-4" />
 
     return (
@@ -32,8 +32,8 @@ export default class TaskCompletionWidget extends Component {
         {...this.props}
         className="task-controls-widget"
         widgetTitle={
-          this.props.reviewTask ?
-          <FormattedMessage {...messages.reviewTitle} /> :
+          this.props.inspectTask ?
+          <FormattedMessage {...messages.inspectTitle} /> :
           <FormattedMessage {...messages.title} />
         }
         noMain

@@ -14,8 +14,8 @@ export default defineMessages({
     defaultMessage: "Completion",
   },
 
-  reviewTitle: {
-    id: "Widgets.TaskCompletionWidget.reviewTitle",
-    defaultMessage: "Review",
+  inspectTitle: {
+    id: "Widgets.TaskCompletionWidget.inspectTitle",
+    defaultMessage: "Inspect",
   },
 })

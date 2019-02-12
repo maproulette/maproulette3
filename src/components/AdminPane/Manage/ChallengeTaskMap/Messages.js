@@ -9,9 +9,9 @@ export default defineMessages({
     defaultMessage: "Group Tasks",
   },
 
-  reviewTaskLabel: {
-    id: "Admin.ChallengeTaskMap.controls.reviewTask.label",
-    defaultMessage: "Review Task",
+  inspectTaskLabel: {
+    id: "Admin.ChallengeTaskMap.controls.inspectTask.label",
+    defaultMessage: "Inspect Task",
   },
 
   editTaskLabel: {

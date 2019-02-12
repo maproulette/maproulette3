@@ -192,8 +192,8 @@ export class ChallengeTaskMap extends Component {
         <div className="marker-popup-content__links">
           <div>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => this.props.history.push(`${taskBaseRoute}/review`)}>
-              {this.props.intl.formatMessage(messages.reviewTaskLabel)}
+            <a onClick={() => this.props.history.push(`${taskBaseRoute}/inspect`)}>
+              {this.props.intl.formatMessage(messages.inspectTaskLabel)}
             </a>
           </div>
 

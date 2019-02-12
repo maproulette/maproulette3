@@ -8,13 +8,12 @@ export default defineMessages({
     id: "Task.management.heading",
     defaultMessage: "Management Options",
   },
-  reviewLabel: {
-    id: "Task.management.controls.review.label",
-    defaultMessage: "Review",
+  inspectLabel: {
+    id: "Task.management.controls.inspect.label",
+    defaultMessage: "Inspect",
   },
   modifyLabel: {
     id: "Task.management.controls.modify.label",
     defaultMessage: "Modify",
   },
 })
-

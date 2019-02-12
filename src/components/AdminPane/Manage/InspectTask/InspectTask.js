@@ -5,28 +5,28 @@ import _isObject from 'lodash/isObject'
 import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge from '../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentTask from '../../../HOCs/WithCurrentTask/WithCurrentTask'
-import WithTaskReview from '../../HOCs/WithTaskReview/WithTaskReview'
+import WithTaskInspect from '../../HOCs/WithTaskInspect/WithTaskInspect'
 import TaskPane from '../../../TaskPane/TaskPane.js'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
 import messages from './Messages'
-import './ReviewTask.scss'
+import './InspectTask.scss'
 
 // Setup child components with necessary HOCs
-const ReviewTaskPane = WithCurrentTask(WithTaskReview(TaskPane))
+const InspectTaskPane = WithCurrentTask(WithTaskInspect(TaskPane))
 
 /**
- * ReviewTask renders a task in review mode for challenge owners who wish to
- * review their tasks.
+ * InspectTask renders a task in inspect mode for challenge owners who wish to
+ * inspect their tasks.
  *
  * @see See TaskPane
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export class ReviewTask extends Component {
+export class InspectTask extends Component {
   render() {
     return (
-      <div className="admin__manage review-task">
+      <div className="admin__manage inspect-task">
         <div className="admin__manage__header">
           <nav className="breadcrumb" aria-label="breadcrumbs">
             <ul>
@@ -51,7 +51,7 @@ export class ReviewTask extends Component {
               <li className="is-active">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a aria-current="page">
-                  <FormattedMessage {...messages.reviewTask} />
+                  <FormattedMessage {...messages.inspectTask} />
                 </a>
                 {this.props.loading && <BusySpinner inline />}
               </li>
@@ -59,7 +59,7 @@ export class ReviewTask extends Component {
           </nav>
         </div>
 
-        <ReviewTaskPane reviewTask {...this.props} />
+        <InspectTaskPane inspectTask {...this.props} />
       </div>
     )
   }
@@ -67,6 +67,6 @@ export class ReviewTask extends Component {
 
 export default WithCurrentProject(
   WithCurrentChallenge(
-    WithCurrentTask(injectIntl(ReviewTask))
+    WithCurrentTask(injectIntl(InspectTask))
   )
 )

@@ -85,12 +85,12 @@ export default defineMessages({
   },
 
   nextTask: {
-    id: "KeyMapping.taskReview.nextTask",
+    id: "KeyMapping.taskInspect.nextTask",
     defaultMessage: "Next Task",
   },
 
   prevTask: {
-    id: "KeyMapping.taskReview.prevTask",
+    id: "KeyMapping.taskInspect.prevTask",
     defaultMessage: "Previous Task",
   },
 })
