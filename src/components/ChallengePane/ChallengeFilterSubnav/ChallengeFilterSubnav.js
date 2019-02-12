@@ -50,7 +50,7 @@ export class ChallengeFilterSubnav extends Component {
 
   clearFilters = () => {
     this.props.clearSearchFilters()
-    this.props.clearSearch('challenges')
+    this.props.clearSearch()
   }
 
   render() {
