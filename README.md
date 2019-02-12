@@ -14,7 +14,7 @@ not use the production server for development purposes.**
 
 ### Basic Dependencies:
 
-* [Node 8 LTS](https://nodejs.org/)
+* [Node 10 LTS](https://nodejs.org/)
 * [yarn](https://yarnpkg.com/)
 * [jq](https://stedolan.github.io/jq/)
 * [curl](https://curl.haxx.se/)
@@ -179,6 +179,9 @@ Unit tests are built with [Jest](https://facebook.github.io/jest/) +
 
 ## End-to-End Tests
 
+> Note: End-to-End tests are temporarily disabled as the Chimp framework is not
+> compatible with Node 10 LTS.
+
 End-to-end tests are built with [Chimp](https://chimp.readme.io/), which
 combines [Webdriver.io](http://webdriver.io/guide.html) for Selenium +
 [Cucumber](https://cucumber.io/docs/reference) and
@@ -197,21 +200,15 @@ access to their cross-browser testing platform.
 
 ## CSS Styling and Naming
 
-The app uses [Sass/scss](http://sass-lang.com/) in combination with the
-[Bulma](https://bulma.io) CSS framework. The [BEM](http://getbem.com/introduction/)
-methodology has been loosely used as a guide for CSS class naming within
-components.
+We are currently in transition between the old styling that used the
+[Bulma](https://bulma.io) framework with SASS and new styling using [Tailwind
+CSS](https://tailwindcss.com) with PostCSS. New CSS classes are prefixed with
+`mr-` to distinguish them from any existing Bulma classes, but during this
+transition there are still situations where a mix of both Tailwind and Bulma
+are in play.
 
-The [node-sass-chokidar](https://www.npmjs.com/package/node-sass-chokidar)
-package is used for compiling the .scss files into .css, which are then imported
-into the components (the .css files are not added to source control). It's
-run automatically as part of the yarn start and build scripts, so there's no need
-to run it separately.
-
-The `src/variables.scss` includes global sass variables (such as colors), some
-Bulma variable overrides, etc.. Reusable mixins are kept in `src/mixins.scss`.
-Everything is pulled together (including Bulma's own Sass) into the
-`src/theme.scss` file.
+Tailwind configuration is controlled with the `src/tailwind.js` file. New CSS
+classes can be found in `src/styles/`
 
 ## Internationalization and Localization
 
