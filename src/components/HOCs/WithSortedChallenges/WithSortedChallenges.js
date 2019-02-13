@@ -31,7 +31,7 @@ export const sortChallenges = function(props, challengesProp='challenges') {
       c => _isFinite(c.popularity) ? c.popularity : 0))
   }
   else {
-    // default "smart" sort. Prioritizes featured and user-saved challenges,
+    // default sort. Prioritizes featured and user-saved challenges,
     // followed by popular challenges
     const savedChallenges = _get(props, 'user.savedChallenges', [])
 

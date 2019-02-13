@@ -10,7 +10,6 @@ import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChal
 import WithPagedChallenges from '../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
 import PageResultsButton from './PageResultsButton'
-import BusySpinner from '../../BusySpinner/BusySpinner'
 import StartVirtualChallenge from './StartVirtualChallenge'
 import messages from './Messages'
 import './ChallengeResultList.scss'
@@ -54,14 +53,13 @@ export class ChallengeResultList extends Component {
 
     let results = null
     if (challengeResults.length === 0) {
-      results = (
-        <div className="mr-text-white mr-text-lg mr-pt-4">
-          {isFetching ?
-           <BusySpinner /> :
-           <span><FormattedMessage {...messages.noResults} /></span>
-          }
-        </div>
-      )
+      if (!isFetching) {
+        results = (
+          <div className="mr-text-white mr-text-lg mr-pt-4">
+            <span><FormattedMessage {...messages.noResults} /></span>
+          </div>
+        )
+      }
     }
     else {
       results = _map(challengeResults, challenge => (

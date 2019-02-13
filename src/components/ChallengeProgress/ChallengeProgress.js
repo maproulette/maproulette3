@@ -111,10 +111,17 @@ export class ChallengeProgress extends Component {
         }
         {taskActions.total > 0 && taskActions.available !== 0 &&
           <div className="challenge-task-progress__tasks-remaining">
-            <FormattedMessage {...messages.tasksRemaining} values={{taskCount: taskActions.available}}/>
-            {// eslint-disable-next-line react/style-prop-object
-            } (<FormattedNumber style="percent" value={taskActions.available/taskActions.total} />)  
-            <FormattedMessage {...messages.outOfTotal} values={{totalCount: taskActions.total}}/>
+            <FormattedMessage
+              {...messages.tasksRemaining}
+              values={{taskCount: taskActions.available}}
+            />
+            {/* eslint-disable-next-line react/style-prop-object */}
+            (<FormattedNumber style="percent"
+                value={taskActions.available/taskActions.total}
+            />) <FormattedMessage
+              {...messages.outOfTotal}
+              values={{totalCount: taskActions.total}}
+            />
           </div>
         }
       </div>
