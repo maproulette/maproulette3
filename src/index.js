@@ -15,9 +15,9 @@ import PiwikReactRouter from 'piwik-react-router'
 import _isEmpty from 'lodash/isEmpty'
 import App from './App';
 import { initializeStore } from './PersistedStore'
-import { extendedFind } from './services/Challenge/Challenge'
-import { ChallengeStatus } from './services/Challenge/ChallengeStatus/ChallengeStatus'
-import { SortOptions, RESULTS_PER_PAGE } from './services/Search/Search'
+import { performChallengeSearch, fetchPreferredChallenges }
+       from './services/Challenge/Challenge'
+import { setCompleteSearch } from './services/Search/Search'
 import { pushFetchChallenges, popFetchChallenges }
       from './services/Status/Status'
 import { ensureUserLoggedIn, fetchSavedChallenges }
@@ -64,23 +64,25 @@ const store = initializeStore()
 store.dispatch(setCheckingLoginStatus())
 store.dispatch(
   ensureUserLoggedIn(true)
-).then(userId => {
-  store.dispatch(fetchSavedChallenges(userId))
-}).then(() =>
-  store.dispatch(clearCheckingLoginStatus())
-).catch(() => store.dispatch(clearCheckingLoginStatus()))
+).then(
+  userId => store.dispatch(fetchSavedChallenges(userId))
+).catch(
+  error => console.log(error)
+).then(() => store.dispatch(clearCheckingLoginStatus()))
 
-// Seed our store with some currently popular challenges.
+// Seed our store with some challenges
 store.dispatch(pushFetchChallenges(-1))
 store.dispatch(
-  extendedFind({sortCriteria: {sortBy: SortOptions.popular},
-                challengeStatus: [ChallengeStatus.ready,
-                  ChallengeStatus.partiallyLoaded,
-                  ChallengeStatus.none,
-                  ChallengeStatus.empty]}, RESULTS_PER_PAGE)
-).then(
-  () => store.dispatch(popFetchChallenges(-1))
-).catch(() => store.dispatch(popFetchChallenges(-1)))
+  fetchPreferredChallenges(5) // 5 each of new, popular, and featured
+).then(() => {
+  // Start with a default challenge search so users can easily 'load more'
+  // results if desired
+  const defaultSearch = {}
+  store.dispatch(setCompleteSearch('challenges', defaultSearch))
+  store.dispatch(performChallengeSearch(defaultSearch))
+}).catch(
+  error => console.log(error)
+).then(() => store.dispatch(popFetchChallenges(-1)))
 
 // Render the app
 ReactDOM.render(

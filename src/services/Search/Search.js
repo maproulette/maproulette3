@@ -12,6 +12,7 @@ import { fromLatLngBounds } from '../MapBounds/MapBounds'
 
 // redux actions
 export const SET_SEARCH = 'SET_SEARCH'
+export const SET_COMPLETE_SEARCH = 'SET_COMPLETE_SEARCH'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
 export const FETCHING_RESULTS = 'FETCHING_RESULTS'
 export const RECEIVED_RESULTS = 'RECEIVED_RESULTS'
@@ -98,6 +99,14 @@ export const parseQueryString = function(rawQueryText) {
 }
 
 // redux action creators
+export const setCompleteSearch = function(searchName, searchObject) {
+  return {
+    type: SET_COMPLETE_SEARCH,
+    searchName,
+    searchObject,
+  }
+}
+
 export const setSearch = function(searchName, query) {
   return {
     type: SET_SEARCH,
@@ -312,6 +321,10 @@ export const currentSearch = function(state={}, action) {
   let mergedState = null
 
   switch(action.type) {
+    case SET_COMPLETE_SEARCH:
+      mergedState = _cloneDeep(state)
+      _set(mergedState, action.searchName, action.searchObject)
+      return mergedState
     case SET_SEARCH:
       mergedState = _cloneDeep(state)
       _set(mergedState, `${action.searchName}.query`, action.query)
