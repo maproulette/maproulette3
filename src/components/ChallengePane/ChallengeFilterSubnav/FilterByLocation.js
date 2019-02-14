@@ -10,8 +10,6 @@ import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
-const MENU_NAME = 'location'
-
 /**
  * FilterByLocation displays a nav dropdown containing options for filtering
  * challenges by geographic location, such as Within Map Bounds and Near Me.
@@ -25,7 +23,7 @@ export class FilterByLocation extends Component {
    *
    * @private
    */
-  updateFilter = value => {
+  updateFilter = (value, closeDropdownMenu) => {
     if (_isEmpty(value)) {
       this.props.removeSearchFilters(['location'])
     }
@@ -42,35 +40,16 @@ export class FilterByLocation extends Component {
         this.props.setSearchFilters({location: value})
       }
     }
-    this.props.closeFilterMenu(MENU_NAME)
+    closeDropdownMenu()
   }
 
   render() {
     const localizedLocationLabels = locationLabels(this.props.intl)
 
-    const menuItems = _map(ChallengeLocation, (location, name) => (
-      <li key={location}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a onClick={() => this.updateFilter(location)}>
-          {localizedLocationLabels[name]}
-        </a>
-      </li>
-    ))
-
-    // Add 'Any' option to start of dropdown
-    menuItems.unshift(
-      <li key='any'>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a onClick={() => this.updateFilter(null)}>
-          {localizedLocationLabels.any}
-        </a>
-      </li>
-    )
-
     return (
       <Dropdown
         className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
-        button={
+        dropdownButton={dropdown =>
           <ButtonFilter
             type={<FormattedMessage {...messages.locationLabel} />}
             selection={
@@ -78,18 +57,46 @@ export class FilterByLocation extends Component {
               localizedLocationLabels.any :
               localizedLocationLabels[this.props.searchFilters.location]
             }
+            onClick={dropdown.toggleDropdownVisible}
           />
         }
-        isVisible={this.props.openFilter === MENU_NAME}
-        toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
-        close={() => this.props.closeFilterMenu(MENU_NAME)}
-      >
-        <ol className="mr-list-dropdown mr-list-dropdown--ruled">
-          {menuItems}
-        </ol>
-      </Dropdown>
+        dropdownContent={dropdown =>
+          <ListLocationItems
+            locationLabels={localizedLocationLabels}
+            updateFilter={this.updateFilter}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
+      />
     )
   }
+}
+
+const ListLocationItems = function(props) {
+  const menuItems = _map(ChallengeLocation, (location, name) => (
+    <li key={location}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(location, props.closeDropdown)}>
+        {props.locationLabels[name]}
+      </a>
+    </li>
+  ))
+
+  // Add 'Any' option to start of dropdown
+  menuItems.unshift(
+    <li key='any'>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
+        {props.locationLabels.any}
+      </a>
+    </li>
+  )
+
+  return (
+    <ol className="mr-list-dropdown mr-list-dropdown--ruled">
+      {menuItems}
+    </ol>
+  )
 }
 
 FilterByLocation.propTypes = {

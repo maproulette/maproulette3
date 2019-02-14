@@ -40,29 +40,37 @@ export class WidgetPicker extends Component {
     return (
       <Dropdown
         {...this.props}
-        className="mr-widget-picker mr-button mr-mr-8"
-        button={<PickerButton />}
-      >
-        <ol className="mr-list-dropdown">
-          {menuItems}
-        </ol>
-      </Dropdown>
+        className="mr-dropdown--right mr-widget-picker mr-button mr-mr-8"
+        dropdownButton={dropdown =>
+          <PickerButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
+        }
+        dropdownContent={dropdown =>
+          <ol className="mr-list-dropdown">
+            {menuItems}
+          </ol>
+        }
+      />
     )
   }
 }
 
 const PickerButton = function(props) {
   return (
-    <span className="mr-flex">
-      <span className="mr-mr-2">
-        <FormattedMessage {...messages.pickerLabel} />
+    <button
+      className="mr-dropdown__button"
+      onClick={props.toggleDropdownVisible}
+    >
+      <span className="mr-flex">
+        <span className="mr-mr-2">
+          <FormattedMessage {...messages.pickerLabel} />
+        </span>
+        <SvgSymbol
+          sym="icon-cheveron-down"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-5 mr-h-5"
+        />
       </span>
-      <SvgSymbol
-        sym="icon-cheveron-down"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-5 mr-h-5"
-      />
-    </span>
+    </button>
   )
 }
 

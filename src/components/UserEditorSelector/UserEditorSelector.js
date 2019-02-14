@@ -22,7 +22,7 @@ export default class UserEditorSelector extends Component {
     return configuredEditor === Editor.none ? DEFAULT_EDITOR : configuredEditor
   }
 
-  chooseEditor = editor => {
+  chooseEditor = (editor, closeDropdown) => {
     const updatedSettings =
       Object.assign({}, this.props.user.settings, {defaultEditor: editor})
 
@@ -30,28 +30,7 @@ export default class UserEditorSelector extends Component {
     this.props.updateUserSettings(this.props.user.id, updatedSettings).then(() =>
       this.setState({isSaving: false})
     )
-  }
-
-  editorItems = editorLabels => {
-    return _compact(_map(editorLabels, (label, key) => {
-      const editor = Editor[key]
-      // Don't offer 'none' option
-      if (editor === Editor.none) {
-        return null
-      }
-
-      return (
-        <li
-          key={editor}
-          className={classNames({
-            "active": editor === this.props.user.settings.defaultEditor
-          })}
-        >
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a onClick={() => this.chooseEditor(editor)}>{label}</a>
-        </li>
-      )
-    }))
+    closeDropdown()
   }
 
   render() {
@@ -65,17 +44,22 @@ export default class UserEditorSelector extends Component {
         {this.state.isSaving ? <BusySpinner /> :
          <Dropdown
            className="mr-dropdown"
-           button={
+           dropdownButton={dropdown =>
              <EditorButton
                editorLabels={localizedEditorLabels}
                userEditor={this.currentEditor()}
+               toggleDropdownVisible={dropdown.toggleDropdownVisible}
              />
            }
-         >
-           <ol className="mr-list-dropdown">
-             {this.editorItems(localizedEditorLabels)}
-           </ol>
-         </Dropdown>
+           dropdownContent={dropdown =>
+              <ListEditorItems
+                editorLabels={localizedEditorLabels}
+                activEditor={this.currentEditor()}
+                chooseEditor={this.chooseEditor}
+                closeDropdown={dropdown.closeDropdown}
+              />
+           }
+         />
         }
       </div>
     )
@@ -84,13 +68,46 @@ export default class UserEditorSelector extends Component {
 
 const EditorButton = function(props) {
   return (
-    <span className="mr-flex">
-      <b className="mr-mr-1">{props.editorLabels[keysByEditor[props.userEditor]]}</b>
-      <SvgSymbol
-        sym="cog-icon"
-        viewBox="0 0 15 15"
-        className="mr-fill-green-lighter mr-w-3 mr-h-3"
-      />
-    </span>
+    <button
+      className="mr-dropdown__button"
+      onClick={props.toggleDropdownVisible}
+    >
+      <span className="mr-flex">
+        <b className="mr-mr-1">{props.editorLabels[keysByEditor[props.userEditor]]}</b>
+        <SvgSymbol
+          sym="cog-icon"
+          viewBox="0 0 15 15"
+          className="mr-fill-green-lighter mr-w-3 mr-h-3"
+        />
+      </span>
+    </button>
+  )
+}
+
+const ListEditorItems = function(props) {
+  const editorItems = _compact(_map(props.editorLabels, (label, key) => {
+    const editor = Editor[key]
+    // Don't offer 'none' option
+    if (editor === Editor.none) {
+      return null
+    }
+
+    return (
+      <li
+        key={editor}
+        className={classNames({"active": editor === props.activeEditor})}
+      >
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a onClick={() => props.chooseEditor(editor, props.closeDropdown)}>
+          {label}
+        </a>
+      </li>
+    )
+  }))
+
+  return (
+    <ol className="mr-list-dropdown">
+      {editorItems}
+    </ol>
   )
 }

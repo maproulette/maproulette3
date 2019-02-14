@@ -9,8 +9,6 @@ import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
-const MENU_NAME = 'difficulty'
-
 /**
  * FilterByDifficulty displays a nav dropdown containing options for filtering
  * challenges by difficulty or suggested experience. The challenge filter in
@@ -24,64 +22,50 @@ export class FilterByDifficulty extends Component {
    *
    * @private
    */
-  updateFilter = value => {
+  updateFilter = (value, closeDropdown) => {
     if (!_isFinite(value)) {
       this.props.removeSearchFilters(['difficulty'])
     }
     else {
       this.props.setSearchFilters({difficulty: value})
     }
-    this.props.closeFilterMenu(MENU_NAME)
+    closeDropdown()
   }
 
   render() {
     const localizedDifficultyLabels = difficultyLabels(this.props.intl)
-    const difficultyOptions =
-      <ListDifficultyTypes 
-        difficultyLabels={localizedDifficultyLabels}
-        updateFilter={this.updateFilter}
-      />
 
-    if (this.props.asMenuList) {
-      return (
-        <React.Fragment>
-          <h3 className="mr-text-yellow mr-text-sm mr-font-medium mr-uppercase mr--mx-4 mr-mt-4 mr-px-4">
-            <FormattedMessage {...messages.difficultyLabel} />
-          </h3>
-          {difficultyOptions}
-        </React.Fragment>
-      )
-    }
-    else {
-      return (
-        <Dropdown
-          className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
-          button={
-            <ButtonFilter
-              type={<FormattedMessage {...messages.difficultyLabel} />}
-              selection={
-                !_isFinite(this.props.searchFilters.difficulty) ?
-                localizedDifficultyLabels.any :
-                <FormattedMessage {...messagesByDifficulty[this.props.searchFilters.difficulty]} />
-              }
-            />
-          }
-          isVisible={this.props.openFilter === MENU_NAME}
-          toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
-          close={() => this.props.closeFilterMenu(MENU_NAME)}
-        >
-          {difficultyOptions}
-        </Dropdown>
-      )
-    }
+    return (
+      <Dropdown
+        className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
+        dropdownButton={dropdown =>
+          <ButtonFilter
+            type={<FormattedMessage {...messages.difficultyLabel} />}
+            selection={
+              !_isFinite(this.props.searchFilters.difficulty) ?
+              localizedDifficultyLabels.any :
+              <FormattedMessage {...messagesByDifficulty[this.props.searchFilters.difficulty]} />
+            }
+            onClick={dropdown.toggleDropdownVisible}
+          />
+        }
+        dropdownContent = {dropdown =>
+          <ListDifficultyTypes
+            difficultyLabels={localizedDifficultyLabels}
+            updateFilter={this.updateFilter}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
+      />
+    )
   }
 }
 
-const ListDifficultyTypes = props => {
+const ListDifficultyTypes = function(props) {
   const menuItems = _map(ChallengeDifficulty, (difficulty, name) => (
     <li key={difficulty}>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a onClick={() => props.updateFilter(difficulty)}>
+      <a onClick={() => props.updateFilter(difficulty, props.closeDropdown)}>
         {props.difficultyLabels[name]}
       </a>
     </li>
@@ -91,7 +75,7 @@ const ListDifficultyTypes = props => {
   menuItems.unshift(
     <li key='any'>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a onClick={() => props.updateFilter(null)}>
+      <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
         {props.difficultyLabels.any}
       </a>
     </li>
