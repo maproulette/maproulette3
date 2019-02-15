@@ -62,6 +62,11 @@ export class WidgetWorkspace extends Component {
     closeDropdown()
   }
 
+  resetConfiguration = closeDropdown => {
+    this.props.resetWorkspaceConfiguration(this.props.currentConfiguration.id)
+    closeDropdown()
+  }
+
   deleteConfiguration = closeDropdown => {
     this.props.deleteWorkspaceConfiguration(this.props.currentConfiguration.id)
     closeDropdown()
@@ -116,6 +121,7 @@ export class WidgetWorkspace extends Component {
                   currentConfiguration={this.props.currentConfiguration}
                   switchConfiguration={this.switchConfiguration}
                   addConfiguration={this.addConfiguration}
+                  resetConfiguration={this.resetConfiguration}
                   deleteConfiguration={this.deleteConfiguration}
                   closeDropdown={dropdown.closeDropdown}
                 />
@@ -212,6 +218,12 @@ const ListLayoutItems = function(props) {
       <hr className="mr-rule-dropdown" />
       <ol className="mr-list-dropdown mr-links-inverse">
         <li>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => props.addConfiguration(props.closeDropdown)}>
+            <FormattedMessage {...messages.addConfigurationLabel} />
+          </a>
+        </li>
+        <li>
           <ConfirmAction>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
@@ -220,10 +232,12 @@ const ListLayoutItems = function(props) {
           </ConfirmAction>
         </li>
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a onClick={() => props.addConfiguration(props.closeDropdown)}>
-            <FormattedMessage {...messages.addConfigurationLabel} />
-          </a>
+          <ConfirmAction>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
+              <FormattedMessage {...messages.resetConfigurationLabel} />
+            </a>
+          </ConfirmAction>
         </li>
       </ol>
     </React.Fragment>
