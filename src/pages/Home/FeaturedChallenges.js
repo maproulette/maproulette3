@@ -45,10 +45,8 @@ export class FeaturedChallenges extends Component {
 
     return (
       <section className="mr-px-4 mr-py-12 md:mr-py-24 mr-bg-off-white mr-bg-no-repeat mr-bg-bottom mr-bg-cover mr-bg-featured-challenges mr-min-h-screen-50">
-        <header className="mr-text-center mr-mb-12">
-          <h2 className="mr-text-white">
-            <FormattedMessage {...messages.improveOSM} />
-          </h2>
+        <header className="mr-text-center mr-mb-12 md:mr-mb-20">
+          <h2 className="md:mr-text-5xl mr-text-white">Featured Challenges</h2>
         </header>
         <div className="mr-max-w-3xl mr-mx-auto mr-grid md:mr-grid-columns-2 lg:mr-grid-columns-3 md:mr-grid-gap-4 xl:mr-grid-gap-8">
           {challengeCards}

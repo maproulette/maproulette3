@@ -4,8 +4,7 @@ import WithCurrentUser
 import Hero from './Hero'
 import Highlights from './Highlights'
 import Intro from './Intro'
-import HowItWorks from './HowItWorks'
-import LatestNews from './LatestNews'
+import Instructions from './Instructions'
 import FeaturedChallenges from './FeaturedChallenges'
 
 export class Home extends Component {
@@ -15,8 +14,7 @@ export class Home extends Component {
         <Hero {...this.props} />
         <Highlights {...this.props} />
         <Intro {...this.props} />
-        <HowItWorks {...this.props} />
-        <LatestNews {...this.props} />
+        <Instructions {...this.props} />
         <FeaturedChallenges {...this.props} />
       </React.Fragment>
     )
