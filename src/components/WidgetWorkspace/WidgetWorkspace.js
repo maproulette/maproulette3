@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
-import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import AppErrors from '../../services/Error/AppErrors'
@@ -57,13 +56,20 @@ export class WidgetWorkspace extends Component {
     this.setState({isEditingId: null})
   }
 
-  addConfiguration = () => {
+  addConfiguration = closeDropdown => {
     const newConf = this.props.addNewWorkspaceConfiguration()
     this.startEditingLayout(newConf)
+    closeDropdown()
   }
 
-  deleteConfiguration = () => {
+  deleteConfiguration = closeDropdown => {
     this.props.deleteWorkspaceConfiguration(this.props.currentConfiguration.id)
+    closeDropdown()
+  }
+
+  switchConfiguration = (configurationId, closeDropdown) => {
+    this.props.switchWorkspaceConfiguration(configurationId)
+    closeDropdown()
   }
 
   componentDidCatch(error, info) {
@@ -72,18 +78,6 @@ export class WidgetWorkspace extends Component {
     // layout (with a fresh one being generated if need be).
     this.props.markWorkspaceConfigurationBroken()
     this.props.addError(AppErrors.widgetWorkspace.renderFailure)
-  }
-
-  configurationItems = () => {
-    return _map(this.props.workspaceConfigurations, conf => (
-      <li key={conf.id}
-          className={classNames({"is-active": conf.id === this.props.currentConfiguration.id})}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a onClick={() => this.props.switchWorkspaceConfiguration(conf.id)}>
-          {conf.label}
-        </a>
-      </li>
-    ))
   }
 
   headerActions = () => {
@@ -110,29 +104,23 @@ export class WidgetWorkspace extends Component {
             </span>
             <Dropdown
               className="mr-dropdown--right"
-              button={<LayoutButton {...this.props} />}
+              dropdownButton={dropdown =>
+                <LayoutButton
+                  {...this.props}
+                  toggleDropdownVisible={dropdown.toggleDropdownVisible}
+                />
+              }
+              dropdownContent={dropdown =>
+                <ListLayoutItems
+                  workspaceConfigurations={this.props.workspaceConfigurations}
+                  currentConfiguration={this.props.currentConfiguration}
+                  switchConfiguration={this.switchConfiguration}
+                  addConfiguration={this.addConfiguration}
+                  deleteConfiguration={this.deleteConfiguration}
+                  closeDropdown={dropdown.closeDropdown}
+                />
+              }
             >
-              <h3 className="mr-text-base mr-font-bold mr-mb-2">
-                <FormattedMessage {...messages.switchTo} />
-              </h3>
-              <ol className="mr-list-dropdown">
-                {this.configurationItems()}
-              </ol>
-              <hr className="mr-rule-dropdown" />
-              <ol className="mr-list-dropdown mr-links-inverse">
-                <li>
-                  <ConfirmAction>
-                    <Link to={{}} onClick={this.deleteConfiguration}>
-                      <FormattedMessage {...messages.deleteConfigurationLabel} />
-                    </Link>
-                  </ConfirmAction>
-                </li>
-                <li>
-                  <Link to={{}} onClick={() => this.addConfiguration()}>
-                    <FormattedMessage {...messages.addConfigurationLabel} />
-                  </Link>
-                </li>
-              </ol>
             </Dropdown>
           </div>
         </React.Fragment>
@@ -182,14 +170,63 @@ export class WidgetWorkspace extends Component {
 
 const LayoutButton = function(props) {
   return (
-    <span className="mr-flex">
-      <b className="mr-mr-1">{props.currentConfiguration.label}</b>
-      <SvgSymbol
-        sym="cog-icon"
-        viewBox="0 0 15 15"
-        className="mr-fill-green-lighter mr-w-3 mr-h-3"
-      />
-    </span>
+    <button
+      className="mr-dropdown__button"
+      onClick={props.toggleDropdownVisible}
+    >
+      <span className="mr-flex">
+        <b className="mr-mr-1">{props.currentConfiguration.label}</b>
+        <SvgSymbol
+          sym="cog-icon"
+          viewBox="0 0 15 15"
+          className="mr-fill-green-lighter mr-w-3 mr-h-3"
+        />
+      </span>
+    </button>
+  )
+}
+
+const ListLayoutItems = function(props) {
+  const configurationItems = _map(props.workspaceConfigurations, conf => (
+    <li
+      key={conf.id}
+      className={classNames(
+        {"active": conf.id === props.currentConfiguration.id}
+      )}
+    >
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.switchConfiguration(conf.id, props.closeDropdown)}>
+        {conf.label}
+      </a>
+    </li>
+  ))
+
+  return (
+    <React.Fragment>
+      <h3 className="mr-text-base mr-font-bold mr-mb-2">
+        <FormattedMessage {...messages.switchTo} />
+      </h3>
+      <ol className="mr-list-dropdown">
+        {configurationItems}
+      </ol>
+      <hr className="mr-rule-dropdown" />
+      <ol className="mr-list-dropdown mr-links-inverse">
+        <li>
+          <ConfirmAction>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
+              <FormattedMessage {...messages.deleteConfigurationLabel} />
+            </a>
+          </ConfirmAction>
+        </li>
+        <li>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => props.addConfiguration(props.closeDropdown)}>
+            <FormattedMessage {...messages.addConfigurationLabel} />
+          </a>
+        </li>
+      </ol>
+    </React.Fragment>
   )
 }
 

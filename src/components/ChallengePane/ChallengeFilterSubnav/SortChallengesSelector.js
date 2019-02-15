@@ -9,8 +9,6 @@ import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
-const MENU_NAME = 'sort'
-
 /**
  * SortChallengesSelector renders an unmanaged dropdown button that can be used
  * to modify the sort order of challenge results.
@@ -18,44 +16,53 @@ const MENU_NAME = 'sort'
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class SortChallengesSelector extends Component {
-  makeSelection = option => {
+  makeSelection = (option, closeDropdownMenu) => {
     this.props.setSearchSort({sortBy: option})
-    this.props.closeFilterMenu(MENU_NAME)
+    closeDropdownMenu()
   }
 
   render() {
     const localizedLabels = sortLabels(this.props.intl)
-    const menuItems = _map(ALL_SORT_OPTIONS, sortByOption => (
-      <li key={sortByOption}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a to={{}} onClick={() => this.makeSelection(sortByOption)}>
-          {localizedLabels[sortByOption]}
-        </a>
-      </li>
-    ))
-
     const currentSortCriteria = _get(this.props, 'searchSort.sortBy')
     const activeLabel = currentSortCriteria ? localizedLabels[currentSortCriteria] :
                         localizedLabels[SORT_DEFAULT]
     return (
       <Dropdown
         className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
-        button={
+        dropdownButton={dropdown =>
           <ButtonFilter
             type={<FormattedMessage {...messages.sortBy} />}
             selection={activeLabel}
+            onClick={dropdown.toggleDropdownVisible}
           />
         }
-        isVisible={this.props.openFilter === MENU_NAME}
-        toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
-        close={() => this.props.closeFilterMenu(MENU_NAME)}
-      >
-        <ol className="mr-list-dropdown mr-list-dropdown--ruled">
-          {menuItems}
-        </ol>
-      </Dropdown>
+        dropdownContent={dropdown =>
+          <ListSortItems
+            sortLabels={localizedLabels}
+            makeSelection={this.makeSelection}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
+      />
     )
   }
+}
+
+const ListSortItems = function(props) {
+  const menuItems = _map(ALL_SORT_OPTIONS, sortByOption => (
+    <li key={sortByOption}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.makeSelection(sortByOption, props.closeDropdown)}>
+        {props.sortLabels[sortByOption]}
+      </a>
+    </li>
+  ))
+
+  return (
+    <ol className="mr-list-dropdown mr-list-dropdown--ruled">
+      {menuItems}
+    </ol>
+  )
 }
 
 SortChallengesSelector.propTypes = {

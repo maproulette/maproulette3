@@ -9,35 +9,32 @@ class Dropdown extends Component {
     isVisible: false,
   }
 
-  toggleVisible = () => {
-    if (this.props.toggleVisible) {
-      this.props.toggleVisible()
-    }
-    else {
-      this.setState({isVisible: !this.state.isVisible})
-    }
+  toggleDropdownVisible = () => {
+    this.setState({isVisible: !this.state.isVisible})
+  }
+
+  closeDropdown = () => {
+    this.setState({isVisible: false})
   }
 
   handleClickout() {
-    if (this.props.close) {
-      this.props.close()
-    }
-    else {
-      this.setState({isVisible: false})
-    }
+    this.closeDropdown()
   }
 
   render() {
-    const isVisible =
+    const isDropdownVisible =
       this.props.toggleVisible ? this.props.isVisible : this.state.isVisible
+
+    const renderFuncArgs = {
+      isDropdownVisible,
+      toggleDropdownVisible: this.toggleDropdownVisible,
+      closeDropdown: this.closeDropdown
+    }
 
     return (
       <div className={classNames('mr-dropdown', this.props.className)}>
-        <button className="mr-dropdown__button" onClick={this.toggleVisible}>
-          {this.props.button}
-        </button>
-
-        {isVisible && (
+        {this.props.dropdownButton(renderFuncArgs)}
+        {isDropdownVisible && (
           <div className="mr-dropdown__wrapper">
             <div className="mr-dropdown__main">
               <div className="mr-dropdown__inner">
@@ -47,7 +44,9 @@ class Dropdown extends Component {
                   className="mr-dropdown__arrow"
                   aria-hidden
                 />
-                <div className="mr-dropdown__content">{this.props.children}</div>
+                <div className="mr-dropdown__content">
+                  {this.props.dropdownContent(renderFuncArgs)}
+                </div>
               </div>
             </div>
           </div>
@@ -58,11 +57,8 @@ class Dropdown extends Component {
 }
 
 Dropdown.propTypes = {
-  className: PropTypes.string,
-  button: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired,
-  toggleVisible: PropTypes.func,
-  close: PropTypes.func,
+  dropdownButton: PropTypes.func.isRequired,
+  dropdownContent: PropTypes.func.isRequired,
 }
 
 export default wrapWithClickout(Dropdown)

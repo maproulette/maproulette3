@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
 import _each from 'lodash/each'
@@ -18,60 +17,88 @@ import './CountrySelector.scss'
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class CountrySelector extends Component {
+  pickCountry = (countryCode, closeDropdown) => {
+    this.props.selectCountry(countryCode)
+    closeDropdown()
+  }
+
   render() {
-    const countryList = _sortBy(
-      _each(supportedCountries(), country => {
-        country.name =
-          this.props.intl.formatMessage(countryMessages[country.countryCode])
-      }),
-      'name'
-    )
-
-    const menuItems = _map(countryList, country => (
-      <li key={country.countryCode}>
-        <Link to={{}} onClick={() => this.props.selectCountry(country.countryCode)}>
-          {country.name}
-        </Link>
-      </li>
-    ))
-
-    // Add option for "All Countries" that goes to standard (global) leaderboard
-    menuItems.unshift(
-      <li key="ALL">
-        <Link to={{}} onClick={() => this.props.selectCountry("ALL")}>
-          <FormattedMessage {...countryMessages.ALL} />
-        </Link>
-      </li>
-    )
-
     return (
       <Dropdown
         className={this.props.className}
-        button={<CountryButton  {...this.props} />}
-      >
-        <ol className="mr-list-dropdown">
-          {menuItems}
-        </ol>
-      </Dropdown>
+        dropdownButton={dropdown =>
+          <CountryButton
+            {...this.props}
+            toggleDropdownVisible={dropdown.toggleDropdownVisible}
+          />
+        }
+        dropdownContent={dropdown =>
+          <ListCountryItems
+            intl={this.props.intl}
+            pickCountry={this.pickCountry}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
+      />
     )
   }
 }
 
 const CountryButton = function(props) {
   return (
-    <span className="mr-flex">
-      <span className="mr-mr-2">
-        { !props.currentCountryCode ?
-          <FormattedMessage {...countryMessages["ALL"]} /> :
-          <FormattedMessage {...countryMessages[props.currentCountryCode]} />
-        }
+    <button
+      className="mr-dropdown__button"
+      onClick={props.toggleDropdownVisible}
+    >
+      <span className="mr-flex">
+        <span className="mr-mr-2">
+          { !props.currentCountryCode ?
+            <FormattedMessage {...countryMessages["ALL"]} /> :
+            <FormattedMessage {...countryMessages[props.currentCountryCode]} />
+          }
+        </span>
+        <SvgSymbol
+          sym="icon-cheveron-down"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-5 mr-h-5"
+        />
       </span>
-      <SvgSymbol
-        sym="icon-cheveron-down"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-5 mr-h-5"
-      />
-    </span>
+    </button>
+  )
+}
+
+const ListCountryItems = function(props) {
+  const countryList = _sortBy(
+    _each(supportedCountries(), country => {
+      country.name =
+        props.intl.formatMessage(countryMessages[country.countryCode])
+    }),
+    'name'
+  )
+
+  const menuItems = _map(countryList, country => (
+    <li key={country.countryCode}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.pickCountry(country.countryCode, props.closeDropdown)}>
+        {country.name}
+      </a>
+    </li>
+  ))
+
+  // Add option for "All Countries" that goes to standard (global) leaderboard
+  menuItems.unshift(
+    <li key="ALL">
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.pickCountry("ALL", props.closeDropdown)}>
+        <FormattedMessage {...countryMessages.ALL} />
+      </a>
+    </li>
+  )
+
+  return (
+    <ol className="mr-list-dropdown">
+      {menuItems}
+    </ol>
   )
 }
 

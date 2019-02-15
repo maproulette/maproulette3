@@ -15,8 +15,6 @@ import Dropdown from '../../Dropdown/Dropdown'
 import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
-const MENU_NAME = 'keywords'
-
 /**
  * FilterByKeyword displays a nav dropdown containing options for filtering
  * challenges by category keyword or a manually-entered keyword. The redux
@@ -32,14 +30,14 @@ export class FilterByKeyword extends Component {
    *
    * @private
    */
-  updateFilter = value => {
+  updateFilter = (value, closeDropdown) => {
     if (value === null) {
       this.props.removeSearchFilters(['keywords'])
     }
     else {
       this.props.setKeywordFilter(combinedCategoryKeywords[value])
     }
-    this.props.closeFilterMenu(MENU_NAME)
+    closeDropdown()
   }
 
   setOtherKeywords = keywordString => {
@@ -54,46 +52,16 @@ export class FilterByKeyword extends Component {
     const localizedKeywordLabels = keywordLabels(this.props.intl, true)
     const categories = _without(_keys(combinedCategoryKeywords), 'other')
     const activeCategory = categoryMatchingKeywords(this.props.searchFilters.keywords, true)
-    const menuItems = categories.map(keyword => (
-      <li key={keyword}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a onClick={() => this.updateFilter(keyword)}>
-          {localizedKeywordLabels[keyword]}
-        </a>
-      </li>
-    ))
-
-    // Add 'Anything' option to start of dropdown
-    menuItems.unshift(
-      <li key='any'>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a onClick={() => this.updateFilter(null)}>
-          {localizedKeywordLabels.any}
-        </a>
-      </li>
-    )
 
     // If the active category doesn't match a known category, then it's a
     // manually entered ("other") keyword
     const otherKeyword = activeCategory === CHALLENGE_CATEGORY_OTHER ?
-                         _first(this.props.searchFilters.keywords) : null
-
-    // Add 'other' box for manually entering other keywords not included in menu.
-    menuItems.push(
-      <li key='other'>
-        <OtherKeywordsOption
-          searchQuery={{query: otherKeyword}}
-          setSearch={this.setOtherKeywords}
-          clearSearch={this.clearOtherKeywords}
-          placeholder=''
-        />
-      </li>
-    )
+                          _first(this.props.searchFilters.keywords) : null
 
     return (
       <Dropdown
         className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
-        button={
+        dropdownButton={dropdown =>
           <ButtonFilter
             type={<FormattedMessage {...messages.keywordLabel} />}
             selection={
@@ -101,18 +69,63 @@ export class FilterByKeyword extends Component {
               localizedKeywordLabels.any :
               localizedKeywordLabels[activeCategory]
             }
+            onClick={dropdown.toggleDropdownVisible}
           />
         }
-        isVisible={this.props.openFilter === MENU_NAME}
-        toggleVisible={() => this.props.toggleFilterMenu(MENU_NAME)}
-        close={() => this.props.closeFilterMenu(MENU_NAME)}
-      >
-        <ol className="mr-list-dropdown mr-list-dropdown--ruled">
-          {menuItems}
-        </ol>
-      </Dropdown>
+        dropdownContent={dropdown =>
+          <ListFilterItems
+            keywordLabels={localizedKeywordLabels}
+            categories={categories}
+            activeCategory={activeCategory}
+            otherKeyword={otherKeyword}
+            setOtherKeywords={this.setOtherKeywords}
+            clearOtherKeywords={this.clearOtherKeywords}
+            updateFilter={this.updateFilter}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
+      />
     )
   }
+}
+
+const ListFilterItems = function(props) {
+  const menuItems = props.categories.map(keyword => (
+    <li key={keyword}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(keyword, props.closeDropdown)}>
+        {props.keywordLabels[keyword]}
+      </a>
+    </li>
+  ))
+
+  // Add 'Anything' option to start of dropdown
+  menuItems.unshift(
+    <li key='any'>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
+        {props.keywordLabels.any}
+      </a>
+    </li>
+  )
+
+  // Add 'other' box for manually entering other keywords not included in menu.
+  menuItems.push(
+    <li key='other'>
+      <OtherKeywordsOption
+        searchQuery={{query: props.otherKeyword}}
+        setSearch={props.setOtherKeywords}
+        clearSearch={props.clearOtherKeywords}
+        placeholder=''
+      />
+    </li>
+  )
+
+  return (
+    <ol className="mr-list-dropdown mr-list-dropdown--ruled">
+      {menuItems}
+    </ol>
+  )
 }
 
 FilterByKeyword.propTypes = {

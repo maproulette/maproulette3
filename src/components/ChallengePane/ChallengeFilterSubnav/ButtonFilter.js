@@ -6,7 +6,7 @@ const ButtonFilter = props => (
     <span className="mr-block mr-text-left mr-mb-1 mr-text-xs mr-uppercase mr-text-white">
       {props.type}
     </span>
-    <span className="mr-flex mr-items-center mr-text-green-lighter">
+    <span className="mr-flex mr-items-center mr-text-green-lighter mr-cursor-pointer" onClick={props.onClick}>
       <span className="mr-w-24 mr-mr-2 mr-overflow-hidden mr-whitespace-no-wrap mr-overflow-ellipsis">
         {props.selection}
       </span>

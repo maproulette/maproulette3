@@ -21,7 +21,6 @@ import './Navbar.scss'
 export default class Navbar extends Component {
   state = {
     mobileMenuOpen: false,
-    dropdownMenuOpen: false,
   }
 
   setMobileMenuState = state => {
@@ -34,14 +33,6 @@ export default class Navbar extends Component {
 
   toggleMobileMenu = () => {
     this.setState({mobileMenuOpen: !this.state.mobileMenuOpen})
-  }
-
-  toggleDropdownMenu = () => {
-    this.setState({dropdownMenuOpen: !this.state.dropdownMenuOpen})
-  }
-
-  closeDropdownMenu = () => {
-    this.setState({dropdownMenuOpen: false})
   }
 
   signout = () => {
@@ -73,29 +64,19 @@ export default class Navbar extends Component {
               <PointsTicker user={this.props.user} className="mr-mr-8" />
               <Dropdown
                 className="mr-dropdown--right"
-                button={<ProfileButton {...this.props} />}
-                isVisible={this.state.dropdownMenuOpen}
-                toggleVisible={this.toggleDropdownMenu}
-                close={this.closeDropdownMenu}
-              >
-                <ol className="mr-list-dropdown">
-                  <li>
-                    <NavLink to='/admin/projects' onClick={this.closeDropdownMenu}>
-                      <FormattedMessage {...messages.adminCreate} />
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/user/profile" onClick={this.closeDropdownMenu}>
-                      <FormattedMessage {...messages.profile} />
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to={{}} onClick={this.props.logoutUser}>
-                      <FormattedMessage {...messages.signout} />
-                    </NavLink>
-                  </li>
-                </ol>
-              </Dropdown>
+                dropdownButton={dropdown =>
+                  <ProfileButton
+                    {...this.props}
+                    toggleDropdownVisible={dropdown.toggleDropdownVisible}
+                  />
+                }
+                dropdownContent={dropdown =>
+                  <ProfileMenu
+                    {...this.props}
+                    closeDropdown={dropdown.closeDropdown}
+                  />
+                }
+              />
             </div>
           </LoggedInUser>
 
@@ -156,20 +137,44 @@ export default class Navbar extends Component {
 
 const ProfileButton = function(props) {
   return (
-    <span className="mr-flex mr-items-center mr-text-white">
-      <div className="mr-relative">
-        <ProfileImage {...props} />
-      </div>
+    <button className="mr-dropdown__button" onClick={props.toggleDropdownVisible}>
+      <span className="mr-flex mr-items-center mr-text-white">
+        <div className="mr-relative">
+          <ProfileImage {...props} />
+        </div>
 
-      <span className="mr-text-sm mr-mr-1 xl:mr-mr-2">
-        {props.user.osmProfile.displayName}
+        <span className="mr-text-sm mr-mr-1 xl:mr-mr-2">
+          {props.user.osmProfile.displayName}
+        </span>
+        <SvgSymbol
+          sym="icon-cheveron-down"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-5 mr-h-5"
+        />
       </span>
-      <SvgSymbol
-        sym="icon-cheveron-down"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-5 mr-h-5"
-      />
-    </span>
+    </button>
+  )
+}
+
+const ProfileMenu = function(props) {
+  return (
+    <ol className="mr-list-dropdown">
+      <li>
+        <NavLink to='/admin/projects' onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.adminCreate} />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/user/profile" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.profile} />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to={{}} onClick={props.logoutUser}>
+          <FormattedMessage {...messages.signout} />
+        </NavLink>
+      </li>
+    </ol>
   )
 }
 

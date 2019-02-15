@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -15,41 +14,68 @@ import './PastDurationSelector.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class PastDurationSelector extends Component {
-  render() {
-    const menuItems = _map(this.props.pastMonthsOptions, months => (
-      <li key={months}>
-        <Link to={{}} onClick={() => this.props.selectDuration(months)}>
-          <FormattedMessage {...messages.pastMonthsOption} values={{months}} />
-        </Link>
-      </li>
-    ))
+  pickDuration = (months, closeDropdown) => {
+    this.props.selectDuration(months)
+    closeDropdown()
+  }
 
+  render() {
     return (
       <Dropdown
         className={this.props.className}
-        button={<DurationButton  {...this.props} />}
-      >
-        <ol className="mr-list-dropdown">
-          {menuItems}
-        </ol>
-      </Dropdown>
+        dropdownButton={dropdown =>
+          <DurationButton
+            {...this.props}
+            toggleDropdownVisible={dropdown.toggleDropdownVisible}
+          />
+        }
+        dropdownContent={dropdown =>
+          <ListDurationItems
+            pastMonthsOptions={this.props.pastMonthsOptions}
+            pickDuration={this.pickDuration}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
+      />
     )
   }
 }
 
 const DurationButton = function(props) {
   return (
-    <span className="mr-flex">
-      <span className="mr-mr-2">
-        <FormattedMessage {...messages.pastMonthsOption}
-                          values={{months: props.currentMonthsPast}} />
+    <button
+      className="mr-dropdown__button"
+      onClick={props.toggleDropdownVisible}
+    >
+      <span className="mr-flex">
+        <span className="mr-mr-2">
+          <FormattedMessage {...messages.pastMonthsOption}
+                            values={{months: props.currentMonthsPast}} />
+        </span>
+        <SvgSymbol
+          sym="icon-cheveron-down"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-5 mr-h-5"
+        />
       </span>
-      <SvgSymbol
-        sym="icon-cheveron-down"
-        viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-5 mr-h-5"
-      />
-    </span>
+    </button>
+  )
+}
+
+const ListDurationItems = function(props) {
+  const menuItems = _map(props.pastMonthsOptions, months => (
+    <li key={months}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.pickDuration(months, props.closeDropdown)}>
+        <FormattedMessage {...messages.pastMonthsOption} values={{months}} />
+      </a>
+    </li>
+  ))
+
+  return (
+    <ol className="mr-list-dropdown">
+      {menuItems}
+    </ol>
   )
 }
 

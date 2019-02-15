@@ -23,6 +23,10 @@ $(self-dropdown) {
     $(self-dropdown)--flush & {
       @apply mr-pt-0;
     }
+
+    $(self-dropdown)--fixed & {
+      @apply mr-fixed;
+    }
   }
 
   &__inner {

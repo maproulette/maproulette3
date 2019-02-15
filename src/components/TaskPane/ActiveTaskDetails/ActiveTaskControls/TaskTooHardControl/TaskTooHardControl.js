@@ -31,14 +31,24 @@ export default class TaskTooHardControl extends Component {
                                           this.handleKeyboardShortcuts)
   }
   render() {
-    return (
-      <Button
-        className="mr-button--blue-fill"
-        onClick={() => this.props.complete(TaskStatus.tooHard)}
-      >
-        <FormattedMessage {...messages.tooHardLabel} />
-      </Button>
-    )
+    if (this.props.asLink) {
+      return (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <a onClick={() => this.props.complete(TaskStatus.tooHard)}>
+          <FormattedMessage {...messages.tooHardLabel} />
+        </a>
+      )
+    }
+    else {
+      return (
+        <Button
+          className="mr-button--blue-fill"
+          onClick={() => this.props.complete(TaskStatus.tooHard)}
+        >
+          <FormattedMessage {...messages.tooHardLabel} />
+        </Button>
+      )
+    }
   }
 }
 
