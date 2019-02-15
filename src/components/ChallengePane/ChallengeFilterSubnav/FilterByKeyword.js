@@ -58,6 +58,8 @@ export class FilterByKeyword extends Component {
     const otherKeyword = activeCategory === CHALLENGE_CATEGORY_OTHER ?
                           _first(this.props.searchFilters.keywords) : null
 
+    const notFiltering = _isEmpty(this.props.searchFilters.keywords)
+
     return (
       <Dropdown
         className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
@@ -65,11 +67,12 @@ export class FilterByKeyword extends Component {
           <ButtonFilter
             type={<FormattedMessage {...messages.keywordLabel} />}
             selection={
-              _isEmpty(this.props.searchFilters.keywords) ?
+              notFiltering ?
               localizedKeywordLabels.any :
               localizedKeywordLabels[activeCategory]
             }
             onClick={dropdown.toggleDropdownVisible}
+            selectionClassName={notFiltering ? null : 'mr-text-yellow'}
           />
         }
         dropdownContent={dropdown =>

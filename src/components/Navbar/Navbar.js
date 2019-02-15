@@ -160,7 +160,7 @@ const ProfileButton = function(props) {
 
 const ProfileMenu = function(props) {
   return (
-    <ol className="mr-list-dropdown">
+    <ol className="mr-list-dropdown mr-list-dropdown--nav">
       <li>
         <NavLink to='/admin/projects' onClick={props.closeDropdown}>
           <FormattedMessage {...messages.adminCreate} />
@@ -172,9 +172,10 @@ const ProfileMenu = function(props) {
         </NavLink>
       </li>
       <li>
-        <NavLink to={{}} onClick={props.logoutUser}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a onClick={props.logoutUser}>
           <FormattedMessage {...messages.signout} />
-        </NavLink>
+        </a>
       </li>
     </ol>
   )

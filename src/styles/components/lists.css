@@ -82,6 +82,17 @@
   }
 }
 
+.mr-list-dropdown--nav {
+  a {
+    @apply mr-text-white;
+
+    &:hover,
+    &.active {
+      @apply mr-text-green-lighter;
+    }
+  }
+}
+
 .mr-list-highlights {
   @apply mr-max-w-xs mr-mx-auto mr-list-reset mr-text-center;
 
