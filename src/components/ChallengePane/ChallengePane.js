@@ -70,9 +70,9 @@ export class ChallengePane extends Component {
         }
         <ChallengeFilterSubnav {...this.props} />
 
-        <div className="mr-p-6 lg:mr-grid lg:mr-grid-columns-12 lg:mr-grid-gap-8 mr-cards-inverse">
+        <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
           <ChallengeResults {...this.props} />
-          <div className="mr-h-content lg:mr-h-full lg:mr-col-span-8">
+          <div className="mr-flex-1">
             <MapPane>
               <Map challenge={this.props.browsedChallenge}
                     onTaskClick={this.props.startChallengeWithTask}
