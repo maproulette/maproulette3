@@ -16,12 +16,17 @@ export default defineMessages({
 
   addConfigurationLabel: {
     id: "WidgetWorkspace.controls.addConfiguration.label",
-    defaultMessage: "Add Layout",
+    defaultMessage: "Add New Layout",
   },
 
   deleteConfigurationLabel: {
     id: "WidgetWorkspace.controls.deleteConfiguration.label",
     defaultMessage: "Delete Layout",
+  },
+
+  resetConfigurationLabel: {
+    id: "WidgetWorkspace.controls.resetConfiguration.label",
+    defaultMessage: "Reset Layout to Default",
   },
 
   currentlyUsing: {

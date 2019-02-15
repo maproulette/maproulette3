@@ -4,7 +4,6 @@ import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import UserEditorSelector
        from '../../../../UserEditorSelector/UserEditorSelector'
 import Dropdown from '../../../../Dropdown/Dropdown'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import TaskEditControl from '../TaskEditControl/TaskEditControl'
 import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'
 import TaskFixedControl from '../TaskFixedControl/TaskFixedControl'
@@ -70,14 +69,10 @@ export default class TaskCompletionStep1 extends Component {
 const MoreOptionsButton = function(props) {
   return (
     <button
-      className="mr-dropdown__button mr-button mr-w-full"
+      className="mr-dropdown__button mr-button mr-text-green-lighter mr-w-full"
       onClick={props.toggleDropdownVisible}
     >
-      <SvgSymbol
-        sym="navigation-more-icon"
-        viewBox="0 0 20 20"
-        className="mr-fill-green-lighter mr-w-4 mr-h-4"
-      />
+      Other&hellip;
     </button>
   )
 }

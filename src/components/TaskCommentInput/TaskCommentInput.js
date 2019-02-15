@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import messages from  './Messages'
 import './TaskCommentInput.scss'
@@ -17,9 +18,9 @@ export class TaskCommentInput extends Component {
 
   render() {
     return (
-      <div className="mr-pr-4 mr-mt-2">
+      <div className="mr-mt-2">
         <textarea
-          className="mr-input mr-input--green-lighter-outline"
+          className={classNames("mr-input mr-input--green-lighter-outline", this.props.className)}
           rows="1"
           cols="1"
           placeholder={this.props.intl.formatMessage(messages.placeholder)}

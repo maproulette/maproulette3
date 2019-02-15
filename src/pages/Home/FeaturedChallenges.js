@@ -35,7 +35,7 @@ export class FeaturedChallenges extends Component {
       <CardChallenge
         key={challenge.id}
         {...this.props}
-        className="mr-mb-4 md:mr-mb-0"
+        className="mr-card-challenge--featured mr-mb-4"
         challenge={challenge}
         isExpanded
         permanentlyExpanded

@@ -40,7 +40,7 @@ export class WidgetPicker extends Component {
     return (
       <Dropdown
         {...this.props}
-        className="mr-dropdown--right mr-widget-picker mr-button mr-mr-8"
+        className="mr-dropdown mr-widget-picker mr-button mr-mr-4"
         dropdownButton={dropdown =>
           <PickerButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
         }

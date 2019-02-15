@@ -180,6 +180,26 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     }
 
     /**
+     * Reset the given workspace back to its default configuration, preserving
+     * its label and id
+     */
+    resetWorkspaceConfiguration = workspaceConfigurationId => {
+      const oldConfiguration = this.workspaceConfigurations()[workspaceConfigurationId]
+
+      if (oldConfiguration) {
+        const newConfiguration = this.setupWorkspace(defaultConfiguration)
+        this.saveWorkspaceConfiguration(
+          Object.assign(
+            {},
+            newConfiguration, {
+              id: workspaceConfigurationId,
+              label: oldConfiguration.label,
+            })
+        )
+      }
+    }
+
+    /**
      * Retrieve the current, active configuration or a default configuration if
      * there is no active configuration
      */
@@ -245,19 +265,21 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
                                       configurations
 
       return <WrappedComponent
-              {...this.props}
-              name={workspaceName}
-              targets={targets}
-              defaultConfiguration={defaultConfiguration}
-              workspaceConfigurations={configurations}
-              currentConfiguration={currentConfiguration}
-              remainingConfigurations={remainingConfigurations}
-              switchWorkspaceConfiguration={this.switchWorkspaceConfiguration}
-              markWorkspaceConfigurationBroken={this.markWorkspaceConfigurationBroken}
-              renameWorkspaceConfiguration={this.renameWorkspaceConfiguration}
-              addNewWorkspaceConfiguration={this.addNewWorkspaceConfiguration}
-              saveWorkspaceConfiguration={this.saveWorkspaceConfiguration}
-              deleteWorkspaceConfiguration={this.deleteWorkspaceConfiguration} />
+               {...this.props}
+               name={workspaceName}
+               targets={targets}
+               defaultConfiguration={defaultConfiguration}
+               workspaceConfigurations={configurations}
+               currentConfiguration={currentConfiguration}
+               remainingConfigurations={remainingConfigurations}
+               switchWorkspaceConfiguration={this.switchWorkspaceConfiguration}
+               markWorkspaceConfigurationBroken={this.markWorkspaceConfigurationBroken}
+               renameWorkspaceConfiguration={this.renameWorkspaceConfiguration}
+               addNewWorkspaceConfiguration={this.addNewWorkspaceConfiguration}
+               saveWorkspaceConfiguration={this.saveWorkspaceConfiguration}
+               resetWorkspaceConfiguration={this.resetWorkspaceConfiguration}
+               deleteWorkspaceConfiguration={this.deleteWorkspaceConfiguration}
+             />
     }
   }
 }

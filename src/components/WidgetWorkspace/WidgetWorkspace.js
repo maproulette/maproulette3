@@ -62,6 +62,11 @@ export class WidgetWorkspace extends Component {
     closeDropdown()
   }
 
+  resetConfiguration = closeDropdown => {
+    this.props.resetWorkspaceConfiguration(this.props.currentConfiguration.id)
+    closeDropdown()
+  }
+
   deleteConfiguration = closeDropdown => {
     this.props.deleteWorkspaceConfiguration(this.props.currentConfiguration.id)
     closeDropdown()
@@ -81,18 +86,7 @@ export class WidgetWorkspace extends Component {
   }
 
   headerActions = () => {
-    if (this.isEditing()) {
-      return (
-        <ul className="mr-list-buttons mr-mb-3">
-          <li>
-            <Button className="mr-button--white" onClick={this.doneEditingLayout}>
-              <FormattedMessage {...messages.saveConfigurationLabel} />
-            </Button>
-          </li>
-        </ul>
-      )
-    }
-    else {
+    if (!this.isEditing()) {
       return (
         <React.Fragment>
           <Button onClick={() => this.startEditingLayout()}>
@@ -116,6 +110,7 @@ export class WidgetWorkspace extends Component {
                   currentConfiguration={this.props.currentConfiguration}
                   switchConfiguration={this.switchConfiguration}
                   addConfiguration={this.addConfiguration}
+                  resetConfiguration={this.resetConfiguration}
                   deleteConfiguration={this.deleteConfiguration}
                   closeDropdown={dropdown.closeDropdown}
                 />
@@ -140,13 +135,13 @@ export class WidgetWorkspace extends Component {
     let editNameBox = null
     if (this.isEditing(this.props.currentConfiguration)) {
       editNameBox = (
-        <div className="mr-flex mr-justify-start mr-items-center">
+        <React.Fragment>
           <label className="mr-text-greener mr-mr-2">Layout Name:</label>
           <QuickTextBox suppressControls
                         text={this.state.newConfigurationName}
                         setText={this.setNewName}
           />
-        </div>
+        </React.Fragment>
       )
     }
 
@@ -162,6 +157,11 @@ export class WidgetWorkspace extends Component {
         <WidgetGrid {...this.props}
                     isEditing={this.isEditing()}
                     editNameControl={editNameBox}
+                    doneEditingControl={
+                      <Button className="mr-button--white" onClick={this.doneEditingLayout}>
+                        <FormattedMessage {...messages.saveConfigurationLabel} />
+                      </Button>
+                    }
                     workspace={this.props.currentConfiguration} />
       </div>
     )
@@ -212,6 +212,12 @@ const ListLayoutItems = function(props) {
       <hr className="mr-rule-dropdown" />
       <ol className="mr-list-dropdown mr-links-inverse">
         <li>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => props.addConfiguration(props.closeDropdown)}>
+            <FormattedMessage {...messages.addConfigurationLabel} />
+          </a>
+        </li>
+        <li>
           <ConfirmAction>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
@@ -220,10 +226,12 @@ const ListLayoutItems = function(props) {
           </ConfirmAction>
         </li>
         <li>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a onClick={() => props.addConfiguration(props.closeDropdown)}>
-            <FormattedMessage {...messages.addConfigurationLabel} />
-          </a>
+          <ConfirmAction>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
+              <FormattedMessage {...messages.resetConfigurationLabel} />
+            </a>
+          </ConfirmAction>
         </li>
       </ol>
     </React.Fragment>
