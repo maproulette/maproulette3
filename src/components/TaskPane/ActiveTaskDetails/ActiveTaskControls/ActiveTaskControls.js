@@ -91,7 +91,7 @@ export class ActiveTaskControls extends Component {
         <div className={this.props.className}>
           <TaskCommentInput
             {...this.props}
-            className="active-task-controls__task-comment"
+            className="mr-border-yellow-75"
             value={this.state.comment}
             commentChanged={this.setComment}
           />

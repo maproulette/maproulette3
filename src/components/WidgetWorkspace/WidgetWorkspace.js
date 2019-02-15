@@ -86,18 +86,7 @@ export class WidgetWorkspace extends Component {
   }
 
   headerActions = () => {
-    if (this.isEditing()) {
-      return (
-        <ul className="mr-list-buttons mr-mb-3">
-          <li>
-            <Button className="mr-button--white" onClick={this.doneEditingLayout}>
-              <FormattedMessage {...messages.saveConfigurationLabel} />
-            </Button>
-          </li>
-        </ul>
-      )
-    }
-    else {
+    if (!this.isEditing()) {
       return (
         <React.Fragment>
           <Button onClick={() => this.startEditingLayout()}>
@@ -146,13 +135,13 @@ export class WidgetWorkspace extends Component {
     let editNameBox = null
     if (this.isEditing(this.props.currentConfiguration)) {
       editNameBox = (
-        <div className="mr-flex mr-justify-start mr-items-center">
+        <React.Fragment>
           <label className="mr-text-greener mr-mr-2">Layout Name:</label>
           <QuickTextBox suppressControls
                         text={this.state.newConfigurationName}
                         setText={this.setNewName}
           />
-        </div>
+        </React.Fragment>
       )
     }
 
@@ -168,6 +157,11 @@ export class WidgetWorkspace extends Component {
         <WidgetGrid {...this.props}
                     isEditing={this.isEditing()}
                     editNameControl={editNameBox}
+                    doneEditingControl={
+                      <Button className="mr-button--white" onClick={this.doneEditingLayout}>
+                        <FormattedMessage {...messages.saveConfigurationLabel} />
+                      </Button>
+                    }
                     workspace={this.props.currentConfiguration} />
       </div>
     )

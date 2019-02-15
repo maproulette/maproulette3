@@ -61,7 +61,9 @@ export default class Navbar extends Component {
         <MediaQuery minWidth={screens.lg}>
           <LoggedInUser {...this.props}>
             <div className="mr-flex mr-items-center">
-              <PointsTicker user={this.props.user} className="mr-mr-8" />
+              <a href="/leaderboard">
+                <PointsTicker user={this.props.user} className="mr-mr-8" />
+              </a>
               <Dropdown
                 className="mr-dropdown--right"
                 dropdownButton={dropdown =>
