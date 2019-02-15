@@ -24,7 +24,6 @@
  * @import "components/buttons";
  * @import "components/forms";
  */
-@import 'components/rich-text';
 @import 'components/buttons';
 @import 'components/dropdown';
 @import 'components/lists';
