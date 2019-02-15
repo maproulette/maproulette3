@@ -73,7 +73,7 @@ export class ChallengeResultList extends Component {
     }
 
     return (
-      <div className="lg:mr-w-sm lg:mr-pr-6 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-content lg:mr-overflow-auto">
+      <div className="lg:mr-w-sm lg:mr-pr-6 lg:mr-mr-2 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-content lg:mr-overflow-auto">
         {virtualChallengeOption}
         {results}
 
