@@ -34,6 +34,7 @@ export class FilterByDifficulty extends Component {
 
   render() {
     const localizedDifficultyLabels = difficultyLabels(this.props.intl)
+    const notFiltering = !_isFinite(this.props.searchFilters.difficulty)
 
     return (
       <Dropdown
@@ -42,10 +43,11 @@ export class FilterByDifficulty extends Component {
           <ButtonFilter
             type={<FormattedMessage {...messages.difficultyLabel} />}
             selection={
-              !_isFinite(this.props.searchFilters.difficulty) ?
+              notFiltering ?
               localizedDifficultyLabels.any :
               <FormattedMessage {...messagesByDifficulty[this.props.searchFilters.difficulty]} />
             }
+            selectionClassName={notFiltering ? null : 'mr-text-yellow'}
             onClick={dropdown.toggleDropdownVisible}
           />
         }
