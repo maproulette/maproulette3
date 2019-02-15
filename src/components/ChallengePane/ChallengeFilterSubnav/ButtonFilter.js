@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 
 const ButtonFilter = props => (
@@ -7,7 +8,10 @@ const ButtonFilter = props => (
       {props.type}
     </span>
     <span className="mr-flex mr-items-center mr-text-green-lighter mr-cursor-pointer" onClick={props.onClick}>
-      <span className="mr-w-24 mr-mr-2 mr-overflow-hidden mr-whitespace-no-wrap mr-overflow-ellipsis">
+      <span className={classNames(
+        "mr-w-24 mr-mr-2 mr-overflow-hidden mr-whitespace-no-wrap mr-overflow-ellipsis",
+        props.selectionClassName)}
+      >
         {props.selection}
       </span>
       <SvgSymbol

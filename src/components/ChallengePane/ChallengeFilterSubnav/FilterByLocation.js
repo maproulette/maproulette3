@@ -45,6 +45,7 @@ export class FilterByLocation extends Component {
 
   render() {
     const localizedLocationLabels = locationLabels(this.props.intl)
+    const notFiltering = _isEmpty(this.props.searchFilters.location)
 
     return (
       <Dropdown
@@ -53,11 +54,12 @@ export class FilterByLocation extends Component {
           <ButtonFilter
             type={<FormattedMessage {...messages.locationLabel} />}
             selection={
-              _isEmpty(this.props.searchFilters.location) ?
+              notFiltering ?
               localizedLocationLabels.any :
               localizedLocationLabels[this.props.searchFilters.location]
             }
             onClick={dropdown.toggleDropdownVisible}
+            selectionClassName={notFiltering ? null : 'mr-text-yellow'}
           />
         }
         dropdownContent={dropdown =>
