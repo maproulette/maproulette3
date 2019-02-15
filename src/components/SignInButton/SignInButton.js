@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import messages from './Messages'
-import './SignInButton.css'
+import './SignInButton.scss'
 
 /**
  * Renders a sign-in button that takes the user to OpenStreetMap oauth
@@ -22,15 +22,17 @@ export class SignInButton extends Component {
 
   render() {
     return (
-      <a className={classNames("button is-outlined signin-button",
+      <a className={classNames("mr-button",
                               {"is-loading": this.state.clicked || this.props.checkingLoginStatus},
                               this.props.className)}
          onClick={() => this.setState({clicked: true})}
          href={`${process.env.REACT_APP_SERVER_OAUTH_URL}${this.props.history.location.pathname}`}
       >
-        {this.props.children ||
-        <FormattedMessage {...messages.control} />
-        }
+        {this.props.children || (
+         this.props.longForm ?
+         <FormattedMessage {...messages.longLabel } /> :
+         <FormattedMessage {...messages.control} />
+        )}
       </a>
     )
   }

@@ -6,16 +6,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeKeywords
     challenge={
-        Object {
-            "id": 123,
-            "tags": Array [
-              "foo",
-              "bar",
-              "baz",
-            ],
-          }
+      Object {
+        "id": 123,
+        "tags": Array [
+          "foo",
+          "bar",
+          "baz",
+        ],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -31,19 +31,19 @@ ShallowWrapper {
       "children": Array [
         <span
           className="tag"
->
+        >
           foo
-</span>,
+        </span>,
         <span
           className="tag"
->
+        >
           bar
-</span>,
+        </span>,
         <span
           className="tag"
->
+        >
           baz
-</span>,
+        </span>,
       ],
       "className": "challenge-keywords",
     },
@@ -97,19 +97,19 @@ ShallowWrapper {
         "children": Array [
           <span
             className="tag"
->
+          >
             foo
-</span>,
+          </span>,
           <span
             className="tag"
->
+          >
             bar
-</span>,
+          </span>,
           <span
             className="tag"
->
+          >
             baz
-</span>,
+          </span>,
         ],
         "className": "challenge-keywords",
       },

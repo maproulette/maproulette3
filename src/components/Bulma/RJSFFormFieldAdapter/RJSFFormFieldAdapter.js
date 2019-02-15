@@ -5,12 +5,14 @@ import _isString from 'lodash/isString'
 import _map from 'lodash/map'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
+import OriginalSelectWidget
+       from 'react-jsonschema-form/lib/components/widgets/SelectWidget'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import 'react-tagsinput/react-tagsinput.css'
-import './RJSFFormFieldAdapter.css'
+import './RJSFFormFieldAdapter.scss'
 
 /**
  * CustomFieldTemplate returns an appropriate input field template for the
@@ -53,11 +55,13 @@ export const CustomFieldTemplate = props => {
 
 export const CustomArrayFieldTemplate = props => {
   const itemFields = _map(props.items, element =>
-    <div key={element.index}
-         className={classNames("array-field__item", _get(props, 'uiSchema.items.classNames'))}>
-      <div className={classNames({
-        inline: _get(props, 'uiSchema.items.ui:options.inline')}
-      )}>
+    <div
+      key={element.index}
+      className={classNames("array-field__item", _get(props, 'uiSchema.items.classNames'))}
+    >
+      <div
+        className={classNames({"inline": _get(props, 'uiSchema.items.ui:options.inline')})}
+      >
         {element.children}
 
         {element.hasRemove &&
@@ -82,6 +86,24 @@ export const CustomArrayFieldTemplate = props => {
          </button>
        </div>
       }
+    </div>
+  )
+}
+
+/**
+ * A custom select widget with the new-ui styling (not Bulma)
+ */
+export const CustomSelectWidget = function(props) {
+  return (
+    <div className={classNames('form-select', props.className)}>
+      <OriginalSelectWidget {...props} />
+      <div className="mr-pointer-events-none mr-absolute mr-pin-y mr-pin-r mr-flex mr-items-center mr-px-2 mr-text-grey">
+        <SvgSymbol
+          sym="icon-cheveron-down"
+          viewBox="0 0 20 20"
+          className="mr-fill-current mr-w-4 mr-h-4"
+        />
+      </div>
     </div>
   )
 }
@@ -114,12 +136,20 @@ export const SelectField = ({id, label, required, rawDescription, children}) => 
 export class MarkdownEditField extends Component {
   render() {
     return (
-      <div className="markdown-edit-field">
-        <textarea className="form-control"
-                  onChange={e => this.props.onChange(e.target.value)}
-                  value={this.props.formData} />
-        <MarkdownContent className="markdown-preview" markdown={this.props.formData} />
-      </div>
+      <React.Fragment>
+        <label className="control-label">
+          {this.props.schema.title}
+          {this.props.required &&
+           <span className="required">*</span>
+          }
+        </label>
+        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-8 mr-text-grey">
+          <textarea className="form-control"
+                    onChange={e => this.props.onChange(e.target.value)}
+                    value={this.props.formData} />
+          <MarkdownContent className="markdown-preview" markdown={this.props.formData} />
+        </div>
+      </React.Fragment>
     )
   }
 }
@@ -207,11 +237,16 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
   }
 
   return (
-    <Dropzone className="dropzone" acceptClassName="active" multiple={false} disablePreview
-              onDrop={files => {
-                formContext[id] = {file: files[0]}
-                onChange(files[0].name)
-              }}>
+    <Dropzone
+      className="dropzone mr-text-grey mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
+      acceptClassName="active"
+      multiple={false}
+      disablePreview
+      onDrop={files => {
+        formContext[id] = {file: files[0]}
+        onChange(files[0].name)
+      }}
+    >
       {({acceptedFiles}) => {
         if (acceptedFiles.length > 0) {
           return <p>{acceptedFiles[0].name}</p>
@@ -219,8 +254,12 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
         else {
           return (
             <div>
+              <SvgSymbol
+                viewBox='0 0 20 20'
+                sym="upload-icon"
+                className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
+              />
               <FormattedMessage {...messages.uploadFilePrompt} />
-              <p><SvgSymbol viewBox='0 0 20 20' sym="upload-icon" /></p>
             </div>
           )
         }

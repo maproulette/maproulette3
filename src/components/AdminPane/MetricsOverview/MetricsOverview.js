@@ -6,7 +6,7 @@ import _round from 'lodash/round'
 import WithComputedMetrics from '../HOCs/WithComputedMetrics/WithComputedMetrics'
 import CompletionMetrics from './CompletionMetrics'
 import CompletionRadar from '../Manage/CompletionRadar/CompletionRadar'
-import './MetricsOverview.css'
+import './MetricsOverview.scss'
 
 
 /**

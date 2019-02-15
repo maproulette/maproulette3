@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _isBoolean from 'lodash/isBoolean'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
+import _clone from 'lodash/clone'
 import _get from 'lodash/get'
+import _merge from 'lodash/merge'
 import queryString from 'query-string'
 import { fetchLeaderboard, fetchLeaderboardForUser,
          DEFAULT_LEADERBOARD_COUNT } from '../../../services/Leaderboard/Leaderboard'
@@ -15,15 +16,22 @@ import { fetchLeaderboard, fetchLeaderboardForUser,
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
+const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialOptions={}) {
   return class extends Component {
     state = {
       monthsPast: initialMonthsPast,
       countryCode: null,
       leaderboard: null,
       leaderboardLoading: false,
-      userLeaderboard: null,
       showingCount: DEFAULT_LEADERBOARD_COUNT,
+      leaderboardOptions: initialOptions,
+    }
+
+    /** merge the given userLeaderboard in with the main leaderboard */
+    mergeInUserLeaderboard = userLeaderboard => {
+      const merged = _clone(this.state.leaderboard)
+      merged.splice(userLeaderboard[0].rank - 1, userLeaderboard.length, ...userLeaderboard)
+      this.setState({leaderboard: merged})
     }
 
     leaderboardParams = (numberMonths, countryCode) => {
@@ -34,22 +42,23 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
                               ['forUsers', null],
                               ['forCountries', null]])
 
-      if (_isObject(this.props.leaderboardOptions)) {
-        if (_isBoolean(this.props.leaderboardOptions.onlyEnabled)) {
-          params.set('onlyEnabled', this.props.leaderboardOptions.onlyEnabled)
+      const leaderboardOptions = _merge(this.state.leaderboardOptions, this.props.leaderboardOptions)
+      if (leaderboardOptions) {
+        if (_isBoolean(leaderboardOptions.onlyEnabled)) {
+          params.set('onlyEnabled', leaderboardOptions.onlyEnabled)
         }
 
-        if (this.props.leaderboardOptions.filterChallenges &&
+        if (leaderboardOptions.filterChallenges &&
             _isArray(this.props.challenges)) {
           params.set('forChallenges', [_map(this.props.challenges, 'id')])
         }
 
-        if (this.props.leaderboardOptions.filterProjects &&
+        if (leaderboardOptions.filterProjects &&
             _isArray(this.props.projects)) {
           params.set('forProjects', [_map(this.props.projects, 'id')])
         }
 
-        if (this.props.leaderboardOptions.filterCountry && countryCode) {
+        if (leaderboardOptions.filterCountry && countryCode) {
           params.set('forCountries', [countryCode || this.props.countryCode])
         }
       }
@@ -67,29 +76,35 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
       this.setState({leaderboardLoading: true, showingCount})
 
       fetchLeaderboard(...this.leaderboardParams(numberMonths, countryCode), showingCount).then(leaderboard => {
-        this.setState({leaderboard, leaderboardLoading: false})
-      })
+        this.setState({leaderboard})
 
-      const userId = _get(this.props, 'user.id')
-      if (userId) {
-        fetchLeaderboardForUser(userId, 1, ...this.leaderboardParams(numberMonths, countryCode)).then(userLeaderboard => {
-          this.setState({userLeaderboard: userLeaderboard})
-        })
-      }
+        const userId = _get(this.props, 'user.id')
+        if (userId && !this.state.leaderboardOptions.ignoreUser) {
+          fetchLeaderboardForUser(userId, 1, ...this.leaderboardParams(numberMonths, countryCode)).then(userLeaderboard => {
+            this.mergeInUserLeaderboard(userLeaderboard)
+            this.setState({leaderboardLoading: false})
+          })
+        }
+        else {
+          this.setState({leaderboardLoading: false})
+        }
+      })
     }
 
-    setMonthsPast = monthsPast => {
+    setMonthsPast = (monthsPast, skipHistory=false) => {
       if (monthsPast !== this.state.monthsPast) {
         this.setState({monthsPast})
 
         const countryCode = this.props.countryCode || this.state.countryCode
         this.updateLeaderboard(monthsPast, countryCode)
 
-        if (countryCode) {
-          this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${monthsPast}` )
-        }
-        else {
-          this.props.history.push(`/leaderboard?monthsPast=${monthsPast}` )
+        if (!skipHistory) {
+          if (countryCode) {
+            this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${monthsPast}` )
+          }
+          else {
+            this.props.history.push(`/leaderboard?monthsPast=${monthsPast}` )
+          }
         }
       }
     }
@@ -139,7 +154,6 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1) {
 
       return <WrappedComponent leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
-                               userLeaderboard={this.state.userLeaderboard}
                                monthsPast={this.monthsPast()}
                                countryCode={this.state.countryCode || this.props.countryCode}
                                setMonthsPast={this.setMonthsPast}

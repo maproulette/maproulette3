@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _pick from 'lodash/pick'
 import classNames from 'classnames'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './TaskCancelEditingControl.css'
+import './TaskCancelEditingControl.scss'
 
 /**
  * TaskCancelEditingControl displays a control for cancelling the current
@@ -39,15 +38,12 @@ export default class TaskCancelEditingControl extends Component {
 
   render() {
     return (
-      <div className="has-centered-children">
-        <button className={classNames("button is-green is-outlined cancel-control",
-                                      this.props.className)}
-                onClick={this.props.cancelEditing}
-                title={this.props.intl.formatMessage(messages.cancelEditingTooltip)}>
-          <SvgSymbol viewBox='0 0 20 20' sym="back-icon" />
-          <FormattedMessage {...messages.cancelEditingLabel} />
-        </button>
-      </div>
+      <button
+        className={classNames("mr-button mr-button--white mr-w-full", this.props.className)}
+        onClick={this.props.cancelEditing}
+      >
+        <FormattedMessage {...messages.cancelEditingLabel} />
+      </button>
     )
   }
 }

@@ -6,41 +6,56 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeFilterSubnav
     challenges={
-        Array [
-            Object {
-              "blurb": "Challenge 309 blurb",
-              "description": "Challenge 309 description",
-              "id": 309,
-              "name": "Challenge 309",
-              "parent": Object {
-                "displayName": "foo",
-              },
-            },
-            Object {
-              "blurb": "Challenge 311 blurb",
-              "description": "Challenge 311 description",
-              "id": 311,
-              "name": "Challenge 311",
-              "parent": Object {
-                "displayName": "bar",
-              },
-            },
-          ]
+      Array [
+        Object {
+          "blurb": "Challenge 309 blurb",
+          "description": "Challenge 309 description",
+          "id": 309,
+          "name": "Challenge 309",
+          "parent": Object {
+            "displayName": "foo",
+          },
+        },
+        Object {
+          "blurb": "Challenge 311 blurb",
+          "description": "Challenge 311 description",
+          "id": 311,
+          "name": "Challenge 311",
+          "parent": Object {
+            "displayName": "bar",
+          },
+        },
+      ]
     }
-    clearSearch={[Function]}
+    clearSearch={[MockFunction]}
     intl={
-        Object {
-            "formatMessage": [Function],
-          }
+      Object {
+        "formatMessage": [MockFunction] {
+          "calls": Array [
+            Array [
+              Object {
+                "defaultMessage": "Search for a challenge...",
+                "id": "ChallengeFilterSubnav.filter.search.label",
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-    setSearch={[Function]}
+    setSearch={[MockFunction]}
     user={
-        Object {
-            "id": 11,
-            "savedChallenges": Array [],
-          }
+      Object {
+        "id": 11,
+        "savedChallenges": Array [],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -56,219 +71,293 @@ ShallowWrapper {
       "aria-label": "challenge filters",
       "children": <div
         className="navbar-menu"
->
+      >
         <div
-                className="navbar-start"
+          className="navbar-start"
         >
-                <MediaQuery
-                        query="(max-width: 1024px)"
-                        values={Object {}}
-                >
-                        <OnClickOutside(WithDeactivateOnOutsideClick)
-                                challenges={
-                                        Array [
-                                                Object {
-                                                  "blurb": "Challenge 309 blurb",
-                                                  "description": "Challenge 309 description",
-                                                  "id": 309,
-                                                  "name": "Challenge 309",
-                                                  "parent": Object {
-                                                    "displayName": "foo",
-                                                  },
-                                                },
-                                                Object {
-                                                  "blurb": "Challenge 311 blurb",
-                                                  "description": "Challenge 311 description",
-                                                  "id": 311,
-                                                  "name": "Challenge 311",
-                                                  "parent": Object {
-                                                    "displayName": "bar",
-                                                  },
-                                                },
-                                              ]
-                                }
-                                clearSearch={[Function]}
-                                eventTypes={
-                                        Array [
-                                                "mousedown",
-                                                "touchstart",
-                                              ]
-                                }
-                                excludeScrollbar={false}
-                                intl={
-                                        Object {
-                                                "formatMessage": [Function],
-                                              }
-                                }
-                                outsideClickIgnoreClass="ignore-react-onclickoutside"
-                                preventDefault={false}
-                                setSearch={[Function]}
-                                stopPropagation={false}
-                                user={
-                                        Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
-                                }
-                        />
-                </MediaQuery>
-                <MediaQuery
-                        query="(min-width: 1024px)"
-                        values={Object {}}
-                >
-                        <InjectIntl(FilterByKeyword)
-                                challenges={
-                                        Array [
-                                                Object {
-                                                  "blurb": "Challenge 309 blurb",
-                                                  "description": "Challenge 309 description",
-                                                  "id": 309,
-                                                  "name": "Challenge 309",
-                                                  "parent": Object {
-                                                    "displayName": "foo",
-                                                  },
-                                                },
-                                                Object {
-                                                  "blurb": "Challenge 311 blurb",
-                                                  "description": "Challenge 311 description",
-                                                  "id": 311,
-                                                  "name": "Challenge 311",
-                                                  "parent": Object {
-                                                    "displayName": "bar",
-                                                  },
-                                                },
-                                              ]
-                                }
-                                clearSearch={[Function]}
-                                intl={
-                                        Object {
-                                                "formatMessage": [Function],
-                                              }
-                                }
-                                setSearch={[Function]}
-                                user={
-                                        Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
-                                }
-                        />
-                        <InjectIntl(FilterByDifficulty)
-                                challenges={
-                                        Array [
-                                                Object {
-                                                  "blurb": "Challenge 309 blurb",
-                                                  "description": "Challenge 309 description",
-                                                  "id": 309,
-                                                  "name": "Challenge 309",
-                                                  "parent": Object {
-                                                    "displayName": "foo",
-                                                  },
-                                                },
-                                                Object {
-                                                  "blurb": "Challenge 311 blurb",
-                                                  "description": "Challenge 311 description",
-                                                  "id": 311,
-                                                  "name": "Challenge 311",
-                                                  "parent": Object {
-                                                    "displayName": "bar",
-                                                  },
-                                                },
-                                              ]
-                                }
-                                clearSearch={[Function]}
-                                intl={
-                                        Object {
-                                                "formatMessage": [Function],
-                                              }
-                                }
-                                setSearch={[Function]}
-                                user={
-                                        Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
-                                }
-                        />
-                        <Connect(InjectIntl(FilterByLocation))
-                                challenges={
-                                        Array [
-                                                Object {
-                                                  "blurb": "Challenge 309 blurb",
-                                                  "description": "Challenge 309 description",
-                                                  "id": 309,
-                                                  "name": "Challenge 309",
-                                                  "parent": Object {
-                                                    "displayName": "foo",
-                                                  },
-                                                },
-                                                Object {
-                                                  "blurb": "Challenge 311 blurb",
-                                                  "description": "Challenge 311 description",
-                                                  "id": 311,
-                                                  "name": "Challenge 311",
-                                                  "parent": Object {
-                                                    "displayName": "bar",
-                                                  },
-                                                },
-                                              ]
-                                }
-                                clearSearch={[Function]}
-                                intl={
-                                        Object {
-                                                "formatMessage": [Function],
-                                              }
-                                }
-                                setSearch={[Function]}
-                                user={
-                                        Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
-                                }
-                        />
-                </MediaQuery>
-                <Connect(Component)
-                        challenges={
-                                Array [
-                                        Object {
-                                          "blurb": "Challenge 309 blurb",
-                                          "description": "Challenge 309 description",
-                                          "id": 309,
-                                          "name": "Challenge 309",
-                                          "parent": Object {
-                                            "displayName": "foo",
-                                          },
-                                        },
-                                        Object {
-                                          "blurb": "Challenge 311 blurb",
-                                          "description": "Challenge 311 description",
-                                          "id": 311,
-                                          "name": "Challenge 311",
-                                          "parent": Object {
-                                            "displayName": "bar",
-                                          },
-                                        },
-                                      ]
-                        }
-                        className="navbar-item"
-                        clearSearch={[Function]}
-                        intl={
-                                Object {
-                                        "formatMessage": [Function],
-                                      }
-                        }
-                        placeholder={undefined}
-                        setSearch={[Function]}
-                        user={
-                                Object {
-                                        "id": 11,
-                                        "savedChallenges": Array [],
-                                      }
-                        }
-                />
+          <MediaQuery
+            query="(max-width: 1024px)"
+            values={Object {}}
+          >
+            <OnClickOutside(WithDeactivateOnOutsideClick)
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              eventTypes={
+                Array [
+                  "mousedown",
+                  "touchstart",
+                ]
+              }
+              excludeScrollbar={false}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              outsideClickIgnoreClass="ignore-react-onclickoutside"
+              preventDefault={false}
+              setSearch={[MockFunction]}
+              stopPropagation={false}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
+          </MediaQuery>
+          <MediaQuery
+            query="(min-width: 1024px)"
+            values={Object {}}
+          >
+            <InjectIntl(FilterByKeyword)
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
+            <InjectIntl(FilterByDifficulty)
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
+            <Connect(InjectIntl(FilterByLocation))
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
+          </MediaQuery>
+          <Connect(Component)
+            challenges={
+              Array [
+                Object {
+                  "blurb": "Challenge 309 blurb",
+                  "description": "Challenge 309 description",
+                  "id": 309,
+                  "name": "Challenge 309",
+                  "parent": Object {
+                    "displayName": "foo",
+                  },
+                },
+                Object {
+                  "blurb": "Challenge 311 blurb",
+                  "description": "Challenge 311 description",
+                  "id": 311,
+                  "name": "Challenge 311",
+                  "parent": Object {
+                    "displayName": "bar",
+                  },
+                },
+              ]
+            }
+            className="navbar-item"
+            clearSearch={[MockFunction]}
+            intl={
+              Object {
+                "formatMessage": [MockFunction] {
+                  "calls": Array [
+                    Array [
+                      Object {
+                        "defaultMessage": "Search for a challenge...",
+                        "id": "ChallengeFilterSubnav.filter.search.label",
+                      },
+                    ],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                },
+              }
+            }
+            setSearch={[MockFunction]}
+            user={
+              Object {
+                "id": 11,
+                "savedChallenges": Array [],
+              }
+            }
+          />
         </div>
-</div>,
+      </div>,
       "className": "challenge-filter-subnav navbar sub-nav",
     },
     "ref": null,
@@ -279,215 +368,289 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="navbar-start"
->
+        >
           <MediaQuery
-                    query="(max-width: 1024px)"
-                    values={Object {}}
+            query="(max-width: 1024px)"
+            values={Object {}}
           >
-                    <OnClickOutside(WithDeactivateOnOutsideClick)
-                              challenges={
-                                        Array [
-                                                  Object {
-                                                    "blurb": "Challenge 309 blurb",
-                                                    "description": "Challenge 309 description",
-                                                    "id": 309,
-                                                    "name": "Challenge 309",
-                                                    "parent": Object {
-                                                      "displayName": "foo",
-                                                    },
-                                                  },
-                                                  Object {
-                                                    "blurb": "Challenge 311 blurb",
-                                                    "description": "Challenge 311 description",
-                                                    "id": 311,
-                                                    "name": "Challenge 311",
-                                                    "parent": Object {
-                                                      "displayName": "bar",
-                                                    },
-                                                  },
-                                                ]
-                              }
-                              clearSearch={[Function]}
-                              eventTypes={
-                                        Array [
-                                                  "mousedown",
-                                                  "touchstart",
-                                                ]
-                              }
-                              excludeScrollbar={false}
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              outsideClickIgnoreClass="ignore-react-onclickoutside"
-                              preventDefault={false}
-                              setSearch={[Function]}
-                              stopPropagation={false}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
+            <OnClickOutside(WithDeactivateOnOutsideClick)
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              eventTypes={
+                Array [
+                  "mousedown",
+                  "touchstart",
+                ]
+              }
+              excludeScrollbar={false}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              outsideClickIgnoreClass="ignore-react-onclickoutside"
+              preventDefault={false}
+              setSearch={[MockFunction]}
+              stopPropagation={false}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
           </MediaQuery>
           <MediaQuery
-                    query="(min-width: 1024px)"
-                    values={Object {}}
+            query="(min-width: 1024px)"
+            values={Object {}}
           >
-                    <InjectIntl(FilterByKeyword)
-                              challenges={
-                                        Array [
-                                                  Object {
-                                                    "blurb": "Challenge 309 blurb",
-                                                    "description": "Challenge 309 description",
-                                                    "id": 309,
-                                                    "name": "Challenge 309",
-                                                    "parent": Object {
-                                                      "displayName": "foo",
-                                                    },
-                                                  },
-                                                  Object {
-                                                    "blurb": "Challenge 311 blurb",
-                                                    "description": "Challenge 311 description",
-                                                    "id": 311,
-                                                    "name": "Challenge 311",
-                                                    "parent": Object {
-                                                      "displayName": "bar",
-                                                    },
-                                                  },
-                                                ]
-                              }
-                              clearSearch={[Function]}
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              setSearch={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
-                    <InjectIntl(FilterByDifficulty)
-                              challenges={
-                                        Array [
-                                                  Object {
-                                                    "blurb": "Challenge 309 blurb",
-                                                    "description": "Challenge 309 description",
-                                                    "id": 309,
-                                                    "name": "Challenge 309",
-                                                    "parent": Object {
-                                                      "displayName": "foo",
-                                                    },
-                                                  },
-                                                  Object {
-                                                    "blurb": "Challenge 311 blurb",
-                                                    "description": "Challenge 311 description",
-                                                    "id": 311,
-                                                    "name": "Challenge 311",
-                                                    "parent": Object {
-                                                      "displayName": "bar",
-                                                    },
-                                                  },
-                                                ]
-                              }
-                              clearSearch={[Function]}
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              setSearch={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
-                    <Connect(InjectIntl(FilterByLocation))
-                              challenges={
-                                        Array [
-                                                  Object {
-                                                    "blurb": "Challenge 309 blurb",
-                                                    "description": "Challenge 309 description",
-                                                    "id": 309,
-                                                    "name": "Challenge 309",
-                                                    "parent": Object {
-                                                      "displayName": "foo",
-                                                    },
-                                                  },
-                                                  Object {
-                                                    "blurb": "Challenge 311 blurb",
-                                                    "description": "Challenge 311 description",
-                                                    "id": 311,
-                                                    "name": "Challenge 311",
-                                                    "parent": Object {
-                                                      "displayName": "bar",
-                                                    },
-                                                  },
-                                                ]
-                              }
-                              clearSearch={[Function]}
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              setSearch={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
+            <InjectIntl(FilterByKeyword)
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
+            <InjectIntl(FilterByDifficulty)
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
+            <Connect(InjectIntl(FilterByLocation))
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
           </MediaQuery>
           <Connect(Component)
-                    challenges={
-                              Array [
-                                        Object {
-                                          "blurb": "Challenge 309 blurb",
-                                          "description": "Challenge 309 description",
-                                          "id": 309,
-                                          "name": "Challenge 309",
-                                          "parent": Object {
-                                            "displayName": "foo",
-                                          },
-                                        },
-                                        Object {
-                                          "blurb": "Challenge 311 blurb",
-                                          "description": "Challenge 311 description",
-                                          "id": 311,
-                                          "name": "Challenge 311",
-                                          "parent": Object {
-                                            "displayName": "bar",
-                                          },
-                                        },
-                                      ]
-                    }
-                    className="navbar-item"
-                    clearSearch={[Function]}
-                    intl={
-                              Object {
-                                        "formatMessage": [Function],
-                                      }
-                    }
-                    placeholder={undefined}
-                    setSearch={[Function]}
-                    user={
-                              Object {
-                                        "id": 11,
-                                        "savedChallenges": Array [],
-                                      }
-                    }
+            challenges={
+              Array [
+                Object {
+                  "blurb": "Challenge 309 blurb",
+                  "description": "Challenge 309 description",
+                  "id": 309,
+                  "name": "Challenge 309",
+                  "parent": Object {
+                    "displayName": "foo",
+                  },
+                },
+                Object {
+                  "blurb": "Challenge 311 blurb",
+                  "description": "Challenge 311 description",
+                  "id": 311,
+                  "name": "Challenge 311",
+                  "parent": Object {
+                    "displayName": "bar",
+                  },
+                },
+              ]
+            }
+            className="navbar-item"
+            clearSearch={[MockFunction]}
+            intl={
+              Object {
+                "formatMessage": [MockFunction] {
+                  "calls": Array [
+                    Array [
+                      Object {
+                        "defaultMessage": "Search for a challenge...",
+                        "id": "ChallengeFilterSubnav.filter.search.label",
+                      },
+                    ],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                },
+              }
+            }
+            setSearch={[MockFunction]}
+            user={
+              Object {
+                "id": 11,
+                "savedChallenges": Array [],
+              }
+            }
           />
-</div>,
+        </div>,
         "className": "navbar-menu",
       },
       "ref": null,
@@ -500,210 +663,284 @@ ShallowWrapper {
             <MediaQuery
               query="(max-width: 1024px)"
               values={Object {}}
->
+            >
               <OnClickOutside(WithDeactivateOnOutsideClick)
-                            challenges={
-                                          Array [
-                                                        Object {
-                                                          "blurb": "Challenge 309 blurb",
-                                                          "description": "Challenge 309 description",
-                                                          "id": 309,
-                                                          "name": "Challenge 309",
-                                                          "parent": Object {
-                                                            "displayName": "foo",
-                                                          },
-                                                        },
-                                                        Object {
-                                                          "blurb": "Challenge 311 blurb",
-                                                          "description": "Challenge 311 description",
-                                                          "id": 311,
-                                                          "name": "Challenge 311",
-                                                          "parent": Object {
-                                                            "displayName": "bar",
-                                                          },
-                                                        },
-                                                      ]
-                            }
-                            clearSearch={[Function]}
-                            eventTypes={
-                                          Array [
-                                                        "mousedown",
-                                                        "touchstart",
-                                                      ]
-                            }
-                            excludeScrollbar={false}
-                            intl={
-                                          Object {
-                                                        "formatMessage": [Function],
-                                                      }
-                            }
-                            outsideClickIgnoreClass="ignore-react-onclickoutside"
-                            preventDefault={false}
-                            setSearch={[Function]}
-                            stopPropagation={false}
-                            user={
-                                          Object {
-                                                        "id": 11,
-                                                        "savedChallenges": Array [],
-                                                      }
-                            }
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                eventTypes={
+                  Array [
+                    "mousedown",
+                    "touchstart",
+                  ]
+                }
+                excludeScrollbar={false}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                outsideClickIgnoreClass="ignore-react-onclickoutside"
+                preventDefault={false}
+                setSearch={[MockFunction]}
+                stopPropagation={false}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
               />
-</MediaQuery>,
+            </MediaQuery>,
             <MediaQuery
               query="(min-width: 1024px)"
               values={Object {}}
->
+            >
               <InjectIntl(FilterByKeyword)
-                            challenges={
-                                          Array [
-                                                        Object {
-                                                          "blurb": "Challenge 309 blurb",
-                                                          "description": "Challenge 309 description",
-                                                          "id": 309,
-                                                          "name": "Challenge 309",
-                                                          "parent": Object {
-                                                            "displayName": "foo",
-                                                          },
-                                                        },
-                                                        Object {
-                                                          "blurb": "Challenge 311 blurb",
-                                                          "description": "Challenge 311 description",
-                                                          "id": 311,
-                                                          "name": "Challenge 311",
-                                                          "parent": Object {
-                                                            "displayName": "bar",
-                                                          },
-                                                        },
-                                                      ]
-                            }
-                            clearSearch={[Function]}
-                            intl={
-                                          Object {
-                                                        "formatMessage": [Function],
-                                                      }
-                            }
-                            setSearch={[Function]}
-                            user={
-                                          Object {
-                                                        "id": 11,
-                                                        "savedChallenges": Array [],
-                                                      }
-                            }
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
               />
               <InjectIntl(FilterByDifficulty)
-                            challenges={
-                                          Array [
-                                                        Object {
-                                                          "blurb": "Challenge 309 blurb",
-                                                          "description": "Challenge 309 description",
-                                                          "id": 309,
-                                                          "name": "Challenge 309",
-                                                          "parent": Object {
-                                                            "displayName": "foo",
-                                                          },
-                                                        },
-                                                        Object {
-                                                          "blurb": "Challenge 311 blurb",
-                                                          "description": "Challenge 311 description",
-                                                          "id": 311,
-                                                          "name": "Challenge 311",
-                                                          "parent": Object {
-                                                            "displayName": "bar",
-                                                          },
-                                                        },
-                                                      ]
-                            }
-                            clearSearch={[Function]}
-                            intl={
-                                          Object {
-                                                        "formatMessage": [Function],
-                                                      }
-                            }
-                            setSearch={[Function]}
-                            user={
-                                          Object {
-                                                        "id": 11,
-                                                        "savedChallenges": Array [],
-                                                      }
-                            }
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
               />
               <Connect(InjectIntl(FilterByLocation))
-                            challenges={
-                                          Array [
-                                                        Object {
-                                                          "blurb": "Challenge 309 blurb",
-                                                          "description": "Challenge 309 description",
-                                                          "id": 309,
-                                                          "name": "Challenge 309",
-                                                          "parent": Object {
-                                                            "displayName": "foo",
-                                                          },
-                                                        },
-                                                        Object {
-                                                          "blurb": "Challenge 311 blurb",
-                                                          "description": "Challenge 311 description",
-                                                          "id": 311,
-                                                          "name": "Challenge 311",
-                                                          "parent": Object {
-                                                            "displayName": "bar",
-                                                          },
-                                                        },
-                                                      ]
-                            }
-                            clearSearch={[Function]}
-                            intl={
-                                          Object {
-                                                        "formatMessage": [Function],
-                                                      }
-                            }
-                            setSearch={[Function]}
-                            user={
-                                          Object {
-                                                        "id": 11,
-                                                        "savedChallenges": Array [],
-                                                      }
-                            }
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
               />
-</MediaQuery>,
+            </MediaQuery>,
             <Connect(Component)
               challenges={
-                            Array [
-                                          Object {
-                                            "blurb": "Challenge 309 blurb",
-                                            "description": "Challenge 309 description",
-                                            "id": 309,
-                                            "name": "Challenge 309",
-                                            "parent": Object {
-                                              "displayName": "foo",
-                                            },
-                                          },
-                                          Object {
-                                            "blurb": "Challenge 311 blurb",
-                                            "description": "Challenge 311 description",
-                                            "id": 311,
-                                            "name": "Challenge 311",
-                                            "parent": Object {
-                                              "displayName": "bar",
-                                            },
-                                          },
-                                        ]
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
               }
               className="navbar-item"
-              clearSearch={[Function]}
+              clearSearch={[MockFunction]}
               intl={
-                            Object {
-                                          "formatMessage": [Function],
-                                        }
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
               }
-              placeholder={undefined}
-              setSearch={[Function]}
+              setSearch={[MockFunction]}
               user={
-                            Object {
-                                          "id": 11,
-                                          "savedChallenges": Array [],
-                                        }
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
               }
-/>,
+            />,
           ],
           "className": "navbar-start",
         },
@@ -716,51 +953,66 @@ ShallowWrapper {
             "props": Object {
               "children": <OnClickOutside(WithDeactivateOnOutsideClick)
                 challenges={
-                                Array [
-                                                Object {
-                                                  "blurb": "Challenge 309 blurb",
-                                                  "description": "Challenge 309 description",
-                                                  "id": 309,
-                                                  "name": "Challenge 309",
-                                                  "parent": Object {
-                                                    "displayName": "foo",
-                                                  },
-                                                },
-                                                Object {
-                                                  "blurb": "Challenge 311 blurb",
-                                                  "description": "Challenge 311 description",
-                                                  "id": 311,
-                                                  "name": "Challenge 311",
-                                                  "parent": Object {
-                                                    "displayName": "bar",
-                                                  },
-                                                },
-                                              ]
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
                 }
-                clearSearch={[Function]}
+                clearSearch={[MockFunction]}
                 eventTypes={
-                                Array [
-                                                "mousedown",
-                                                "touchstart",
-                                              ]
+                  Array [
+                    "mousedown",
+                    "touchstart",
+                  ]
                 }
                 excludeScrollbar={false}
                 intl={
-                                Object {
-                                                "formatMessage": [Function],
-                                              }
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
                 }
                 outsideClickIgnoreClass="ignore-react-onclickoutside"
                 preventDefault={false}
-                setSearch={[Function]}
+                setSearch={[MockFunction]}
                 stopPropagation={false}
                 user={
-                                Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
                 }
-/>,
+              />,
               "query": "(max-width: 1024px)",
               "values": Object {},
             },
@@ -790,18 +1042,33 @@ ShallowWrapper {
                     },
                   },
                 ],
-                "clearSearch": [Function],
+                "clearSearch": [MockFunction],
                 "eventTypes": Array [
                   "mousedown",
                   "touchstart",
                 ],
                 "excludeScrollbar": false,
                 "intl": Object {
-                  "formatMessage": [Function],
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
                 },
                 "outsideClickIgnoreClass": "ignore-react-onclickoutside",
                 "preventDefault": false,
-                "setSearch": [Function],
+                "setSearch": [MockFunction],
                 "stopPropagation": false,
                 "user": Object {
                   "id": 11,
@@ -822,115 +1089,160 @@ ShallowWrapper {
               "children": Array [
                 <InjectIntl(FilterByKeyword)
                   challenges={
-                                    Array [
-                                                      Object {
-                                                        "blurb": "Challenge 309 blurb",
-                                                        "description": "Challenge 309 description",
-                                                        "id": 309,
-                                                        "name": "Challenge 309",
-                                                        "parent": Object {
-                                                          "displayName": "foo",
-                                                        },
-                                                      },
-                                                      Object {
-                                                        "blurb": "Challenge 311 blurb",
-                                                        "description": "Challenge 311 description",
-                                                        "id": 311,
-                                                        "name": "Challenge 311",
-                                                        "parent": Object {
-                                                          "displayName": "bar",
-                                                        },
-                                                      },
-                                                    ]
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
                   }
-                  clearSearch={[Function]}
+                  clearSearch={[MockFunction]}
                   intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
                   }
-                  setSearch={[Function]}
+                  setSearch={[MockFunction]}
                   user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
                   }
-/>,
+                />,
                 <InjectIntl(FilterByDifficulty)
                   challenges={
-                                    Array [
-                                                      Object {
-                                                        "blurb": "Challenge 309 blurb",
-                                                        "description": "Challenge 309 description",
-                                                        "id": 309,
-                                                        "name": "Challenge 309",
-                                                        "parent": Object {
-                                                          "displayName": "foo",
-                                                        },
-                                                      },
-                                                      Object {
-                                                        "blurb": "Challenge 311 blurb",
-                                                        "description": "Challenge 311 description",
-                                                        "id": 311,
-                                                        "name": "Challenge 311",
-                                                        "parent": Object {
-                                                          "displayName": "bar",
-                                                        },
-                                                      },
-                                                    ]
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
                   }
-                  clearSearch={[Function]}
+                  clearSearch={[MockFunction]}
                   intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
                   }
-                  setSearch={[Function]}
+                  setSearch={[MockFunction]}
                   user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
                   }
-/>,
+                />,
                 <Connect(InjectIntl(FilterByLocation))
                   challenges={
-                                    Array [
-                                                      Object {
-                                                        "blurb": "Challenge 309 blurb",
-                                                        "description": "Challenge 309 description",
-                                                        "id": 309,
-                                                        "name": "Challenge 309",
-                                                        "parent": Object {
-                                                          "displayName": "foo",
-                                                        },
-                                                      },
-                                                      Object {
-                                                        "blurb": "Challenge 311 blurb",
-                                                        "description": "Challenge 311 description",
-                                                        "id": 311,
-                                                        "name": "Challenge 311",
-                                                        "parent": Object {
-                                                          "displayName": "bar",
-                                                        },
-                                                      },
-                                                    ]
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
                   }
-                  clearSearch={[Function]}
+                  clearSearch={[MockFunction]}
                   intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
                   }
-                  setSearch={[Function]}
+                  setSearch={[MockFunction]}
                   user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
                   }
-/>,
+                />,
               ],
               "query": "(min-width: 1024px)",
               "values": Object {},
@@ -962,11 +1274,26 @@ ShallowWrapper {
                       },
                     },
                   ],
-                  "clearSearch": [Function],
+                  "clearSearch": [MockFunction],
                   "intl": Object {
-                    "formatMessage": [Function],
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
                   },
-                  "setSearch": [Function],
+                  "setSearch": [MockFunction],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -1001,11 +1328,26 @@ ShallowWrapper {
                       },
                     },
                   ],
-                  "clearSearch": [Function],
+                  "clearSearch": [MockFunction],
                   "intl": Object {
-                    "formatMessage": [Function],
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
                   },
-                  "setSearch": [Function],
+                  "setSearch": [MockFunction],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -1040,11 +1382,26 @@ ShallowWrapper {
                       },
                     },
                   ],
-                  "clearSearch": [Function],
+                  "clearSearch": [MockFunction],
                   "intl": Object {
-                    "formatMessage": [Function],
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
                   },
-                  "setSearch": [Function],
+                  "setSearch": [MockFunction],
                   "user": Object {
                     "id": 11,
                     "savedChallenges": Array [],
@@ -1083,12 +1440,27 @@ ShallowWrapper {
                 },
               ],
               "className": "navbar-item",
-              "clearSearch": [Function],
+              "clearSearch": [MockFunction],
               "intl": Object {
-                "formatMessage": [Function],
+                "formatMessage": [MockFunction] {
+                  "calls": Array [
+                    Array [
+                      Object {
+                        "defaultMessage": "Search for a challenge...",
+                        "id": "ChallengeFilterSubnav.filter.search.label",
+                      },
+                    ],
+                  ],
+                  "results": Array [
+                    Object {
+                      "isThrow": false,
+                      "value": undefined,
+                    },
+                  ],
+                },
               },
               "placeholder": undefined,
-              "setSearch": [Function],
+              "setSearch": [MockFunction],
               "user": Object {
                 "id": 11,
                 "savedChallenges": Array [],
@@ -1114,219 +1486,293 @@ ShallowWrapper {
         "aria-label": "challenge filters",
         "children": <div
           className="navbar-menu"
->
+        >
           <div
-                    className="navbar-start"
+            className="navbar-start"
           >
-                    <MediaQuery
-                              query="(max-width: 1024px)"
-                              values={Object {}}
-                    >
-                              <OnClickOutside(WithDeactivateOnOutsideClick)
-                                        challenges={
-                                                  Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                        }
-                                        clearSearch={[Function]}
-                                        eventTypes={
-                                                  Array [
-                                                            "mousedown",
-                                                            "touchstart",
-                                                          ]
-                                        }
-                                        excludeScrollbar={false}
-                                        intl={
-                                                  Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                        }
-                                        outsideClickIgnoreClass="ignore-react-onclickoutside"
-                                        preventDefault={false}
-                                        setSearch={[Function]}
-                                        stopPropagation={false}
-                                        user={
-                                                  Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                        }
-                              />
-                    </MediaQuery>
-                    <MediaQuery
-                              query="(min-width: 1024px)"
-                              values={Object {}}
-                    >
-                              <InjectIntl(FilterByKeyword)
-                                        challenges={
-                                                  Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                        }
-                                        clearSearch={[Function]}
-                                        intl={
-                                                  Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                        }
-                                        setSearch={[Function]}
-                                        user={
-                                                  Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                        }
-                              />
-                              <InjectIntl(FilterByDifficulty)
-                                        challenges={
-                                                  Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                        }
-                                        clearSearch={[Function]}
-                                        intl={
-                                                  Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                        }
-                                        setSearch={[Function]}
-                                        user={
-                                                  Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                        }
-                              />
-                              <Connect(InjectIntl(FilterByLocation))
-                                        challenges={
-                                                  Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                        }
-                                        clearSearch={[Function]}
-                                        intl={
-                                                  Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                        }
-                                        setSearch={[Function]}
-                                        user={
-                                                  Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                        }
-                              />
-                    </MediaQuery>
-                    <Connect(Component)
-                              challenges={
-                                        Array [
-                                                  Object {
-                                                    "blurb": "Challenge 309 blurb",
-                                                    "description": "Challenge 309 description",
-                                                    "id": 309,
-                                                    "name": "Challenge 309",
-                                                    "parent": Object {
-                                                      "displayName": "foo",
-                                                    },
-                                                  },
-                                                  Object {
-                                                    "blurb": "Challenge 311 blurb",
-                                                    "description": "Challenge 311 description",
-                                                    "id": 311,
-                                                    "name": "Challenge 311",
-                                                    "parent": Object {
-                                                      "displayName": "bar",
-                                                    },
-                                                  },
-                                                ]
-                              }
-                              className="navbar-item"
-                              clearSearch={[Function]}
-                              intl={
-                                        Object {
-                                                  "formatMessage": [Function],
-                                                }
-                              }
-                              placeholder={undefined}
-                              setSearch={[Function]}
-                              user={
-                                        Object {
-                                                  "id": 11,
-                                                  "savedChallenges": Array [],
-                                                }
-                              }
-                    />
+            <MediaQuery
+              query="(max-width: 1024px)"
+              values={Object {}}
+            >
+              <OnClickOutside(WithDeactivateOnOutsideClick)
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                eventTypes={
+                  Array [
+                    "mousedown",
+                    "touchstart",
+                  ]
+                }
+                excludeScrollbar={false}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                outsideClickIgnoreClass="ignore-react-onclickoutside"
+                preventDefault={false}
+                setSearch={[MockFunction]}
+                stopPropagation={false}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+            </MediaQuery>
+            <MediaQuery
+              query="(min-width: 1024px)"
+              values={Object {}}
+            >
+              <InjectIntl(FilterByKeyword)
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+              <InjectIntl(FilterByDifficulty)
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+              <Connect(InjectIntl(FilterByLocation))
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+            </MediaQuery>
+            <Connect(Component)
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              className="navbar-item"
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
+            />
           </div>
-</div>,
+        </div>,
         "className": "challenge-filter-subnav navbar sub-nav",
       },
       "ref": null,
@@ -1337,215 +1783,289 @@ ShallowWrapper {
         "props": Object {
           "children": <div
             className="navbar-start"
->
+          >
             <MediaQuery
-                        query="(max-width: 1024px)"
-                        values={Object {}}
+              query="(max-width: 1024px)"
+              values={Object {}}
             >
-                        <OnClickOutside(WithDeactivateOnOutsideClick)
-                                    challenges={
-                                                Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                    }
-                                    clearSearch={[Function]}
-                                    eventTypes={
-                                                Array [
-                                                            "mousedown",
-                                                            "touchstart",
-                                                          ]
-                                    }
-                                    excludeScrollbar={false}
-                                    intl={
-                                                Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                    }
-                                    outsideClickIgnoreClass="ignore-react-onclickoutside"
-                                    preventDefault={false}
-                                    setSearch={[Function]}
-                                    stopPropagation={false}
-                                    user={
-                                                Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                    }
-                        />
+              <OnClickOutside(WithDeactivateOnOutsideClick)
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                eventTypes={
+                  Array [
+                    "mousedown",
+                    "touchstart",
+                  ]
+                }
+                excludeScrollbar={false}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                outsideClickIgnoreClass="ignore-react-onclickoutside"
+                preventDefault={false}
+                setSearch={[MockFunction]}
+                stopPropagation={false}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
             </MediaQuery>
             <MediaQuery
-                        query="(min-width: 1024px)"
-                        values={Object {}}
+              query="(min-width: 1024px)"
+              values={Object {}}
             >
-                        <InjectIntl(FilterByKeyword)
-                                    challenges={
-                                                Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                    }
-                                    clearSearch={[Function]}
-                                    intl={
-                                                Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                    }
-                                    setSearch={[Function]}
-                                    user={
-                                                Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                    }
-                        />
-                        <InjectIntl(FilterByDifficulty)
-                                    challenges={
-                                                Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                    }
-                                    clearSearch={[Function]}
-                                    intl={
-                                                Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                    }
-                                    setSearch={[Function]}
-                                    user={
-                                                Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                    }
-                        />
-                        <Connect(InjectIntl(FilterByLocation))
-                                    challenges={
-                                                Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
-                                    }
-                                    clearSearch={[Function]}
-                                    intl={
-                                                Object {
-                                                            "formatMessage": [Function],
-                                                          }
-                                    }
-                                    setSearch={[Function]}
-                                    user={
-                                                Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
-                                    }
-                        />
+              <InjectIntl(FilterByKeyword)
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+              <InjectIntl(FilterByDifficulty)
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
+              <Connect(InjectIntl(FilterByLocation))
+                challenges={
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
+                }
+                clearSearch={[MockFunction]}
+                intl={
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
+                }
+                setSearch={[MockFunction]}
+                user={
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
+                }
+              />
             </MediaQuery>
             <Connect(Component)
-                        challenges={
-                                    Array [
-                                                Object {
-                                                  "blurb": "Challenge 309 blurb",
-                                                  "description": "Challenge 309 description",
-                                                  "id": 309,
-                                                  "name": "Challenge 309",
-                                                  "parent": Object {
-                                                    "displayName": "foo",
-                                                  },
-                                                },
-                                                Object {
-                                                  "blurb": "Challenge 311 blurb",
-                                                  "description": "Challenge 311 description",
-                                                  "id": 311,
-                                                  "name": "Challenge 311",
-                                                  "parent": Object {
-                                                    "displayName": "bar",
-                                                  },
-                                                },
-                                              ]
-                        }
-                        className="navbar-item"
-                        clearSearch={[Function]}
-                        intl={
-                                    Object {
-                                                "formatMessage": [Function],
-                                              }
-                        }
-                        placeholder={undefined}
-                        setSearch={[Function]}
-                        user={
-                                    Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
-                        }
+              challenges={
+                Array [
+                  Object {
+                    "blurb": "Challenge 309 blurb",
+                    "description": "Challenge 309 description",
+                    "id": 309,
+                    "name": "Challenge 309",
+                    "parent": Object {
+                      "displayName": "foo",
+                    },
+                  },
+                  Object {
+                    "blurb": "Challenge 311 blurb",
+                    "description": "Challenge 311 description",
+                    "id": 311,
+                    "name": "Challenge 311",
+                    "parent": Object {
+                      "displayName": "bar",
+                    },
+                  },
+                ]
+              }
+              className="navbar-item"
+              clearSearch={[MockFunction]}
+              intl={
+                Object {
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
+                }
+              }
+              setSearch={[MockFunction]}
+              user={
+                Object {
+                  "id": 11,
+                  "savedChallenges": Array [],
+                }
+              }
             />
-</div>,
+          </div>,
           "className": "navbar-menu",
         },
         "ref": null,
@@ -1558,210 +2078,284 @@ ShallowWrapper {
               <MediaQuery
                 query="(max-width: 1024px)"
                 values={Object {}}
->
+              >
                 <OnClickOutside(WithDeactivateOnOutsideClick)
-                                challenges={
-                                                Array [
-                                                                Object {
-                                                                  "blurb": "Challenge 309 blurb",
-                                                                  "description": "Challenge 309 description",
-                                                                  "id": 309,
-                                                                  "name": "Challenge 309",
-                                                                  "parent": Object {
-                                                                    "displayName": "foo",
-                                                                  },
-                                                                },
-                                                                Object {
-                                                                  "blurb": "Challenge 311 blurb",
-                                                                  "description": "Challenge 311 description",
-                                                                  "id": 311,
-                                                                  "name": "Challenge 311",
-                                                                  "parent": Object {
-                                                                    "displayName": "bar",
-                                                                  },
-                                                                },
-                                                              ]
-                                }
-                                clearSearch={[Function]}
-                                eventTypes={
-                                                Array [
-                                                                "mousedown",
-                                                                "touchstart",
-                                                              ]
-                                }
-                                excludeScrollbar={false}
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                outsideClickIgnoreClass="ignore-react-onclickoutside"
-                                preventDefault={false}
-                                setSearch={[Function]}
-                                stopPropagation={false}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
+                  challenges={
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
+                  }
+                  clearSearch={[MockFunction]}
+                  eventTypes={
+                    Array [
+                      "mousedown",
+                      "touchstart",
+                    ]
+                  }
+                  excludeScrollbar={false}
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
+                  }
+                  outsideClickIgnoreClass="ignore-react-onclickoutside"
+                  preventDefault={false}
+                  setSearch={[MockFunction]}
+                  stopPropagation={false}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
                 />
-</MediaQuery>,
+              </MediaQuery>,
               <MediaQuery
                 query="(min-width: 1024px)"
                 values={Object {}}
->
+              >
                 <InjectIntl(FilterByKeyword)
-                                challenges={
-                                                Array [
-                                                                Object {
-                                                                  "blurb": "Challenge 309 blurb",
-                                                                  "description": "Challenge 309 description",
-                                                                  "id": 309,
-                                                                  "name": "Challenge 309",
-                                                                  "parent": Object {
-                                                                    "displayName": "foo",
-                                                                  },
-                                                                },
-                                                                Object {
-                                                                  "blurb": "Challenge 311 blurb",
-                                                                  "description": "Challenge 311 description",
-                                                                  "id": 311,
-                                                                  "name": "Challenge 311",
-                                                                  "parent": Object {
-                                                                    "displayName": "bar",
-                                                                  },
-                                                                },
-                                                              ]
-                                }
-                                clearSearch={[Function]}
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                setSearch={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
+                  challenges={
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
+                  }
+                  clearSearch={[MockFunction]}
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
+                  }
+                  setSearch={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
                 />
                 <InjectIntl(FilterByDifficulty)
-                                challenges={
-                                                Array [
-                                                                Object {
-                                                                  "blurb": "Challenge 309 blurb",
-                                                                  "description": "Challenge 309 description",
-                                                                  "id": 309,
-                                                                  "name": "Challenge 309",
-                                                                  "parent": Object {
-                                                                    "displayName": "foo",
-                                                                  },
-                                                                },
-                                                                Object {
-                                                                  "blurb": "Challenge 311 blurb",
-                                                                  "description": "Challenge 311 description",
-                                                                  "id": 311,
-                                                                  "name": "Challenge 311",
-                                                                  "parent": Object {
-                                                                    "displayName": "bar",
-                                                                  },
-                                                                },
-                                                              ]
-                                }
-                                clearSearch={[Function]}
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                setSearch={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
+                  challenges={
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
+                  }
+                  clearSearch={[MockFunction]}
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
+                  }
+                  setSearch={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
                 />
                 <Connect(InjectIntl(FilterByLocation))
-                                challenges={
-                                                Array [
-                                                                Object {
-                                                                  "blurb": "Challenge 309 blurb",
-                                                                  "description": "Challenge 309 description",
-                                                                  "id": 309,
-                                                                  "name": "Challenge 309",
-                                                                  "parent": Object {
-                                                                    "displayName": "foo",
-                                                                  },
-                                                                },
-                                                                Object {
-                                                                  "blurb": "Challenge 311 blurb",
-                                                                  "description": "Challenge 311 description",
-                                                                  "id": 311,
-                                                                  "name": "Challenge 311",
-                                                                  "parent": Object {
-                                                                    "displayName": "bar",
-                                                                  },
-                                                                },
-                                                              ]
-                                }
-                                clearSearch={[Function]}
-                                intl={
-                                                Object {
-                                                                "formatMessage": [Function],
-                                                              }
-                                }
-                                setSearch={[Function]}
-                                user={
-                                                Object {
-                                                                "id": 11,
-                                                                "savedChallenges": Array [],
-                                                              }
-                                }
+                  challenges={
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
+                  }
+                  clearSearch={[MockFunction]}
+                  intl={
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
+                  }
+                  setSearch={[MockFunction]}
+                  user={
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
+                  }
                 />
-</MediaQuery>,
+              </MediaQuery>,
               <Connect(Component)
                 challenges={
-                                Array [
-                                                Object {
-                                                  "blurb": "Challenge 309 blurb",
-                                                  "description": "Challenge 309 description",
-                                                  "id": 309,
-                                                  "name": "Challenge 309",
-                                                  "parent": Object {
-                                                    "displayName": "foo",
-                                                  },
-                                                },
-                                                Object {
-                                                  "blurb": "Challenge 311 blurb",
-                                                  "description": "Challenge 311 description",
-                                                  "id": 311,
-                                                  "name": "Challenge 311",
-                                                  "parent": Object {
-                                                    "displayName": "bar",
-                                                  },
-                                                },
-                                              ]
+                  Array [
+                    Object {
+                      "blurb": "Challenge 309 blurb",
+                      "description": "Challenge 309 description",
+                      "id": 309,
+                      "name": "Challenge 309",
+                      "parent": Object {
+                        "displayName": "foo",
+                      },
+                    },
+                    Object {
+                      "blurb": "Challenge 311 blurb",
+                      "description": "Challenge 311 description",
+                      "id": 311,
+                      "name": "Challenge 311",
+                      "parent": Object {
+                        "displayName": "bar",
+                      },
+                    },
+                  ]
                 }
                 className="navbar-item"
-                clearSearch={[Function]}
+                clearSearch={[MockFunction]}
                 intl={
-                                Object {
-                                                "formatMessage": [Function],
-                                              }
+                  Object {
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
+                  }
                 }
-                placeholder={undefined}
-                setSearch={[Function]}
+                setSearch={[MockFunction]}
                 user={
-                                Object {
-                                                "id": 11,
-                                                "savedChallenges": Array [],
-                                              }
+                  Object {
+                    "id": 11,
+                    "savedChallenges": Array [],
+                  }
                 }
-/>,
+              />,
             ],
             "className": "navbar-start",
           },
@@ -1774,51 +2368,66 @@ ShallowWrapper {
               "props": Object {
                 "children": <OnClickOutside(WithDeactivateOnOutsideClick)
                   challenges={
-                                    Array [
-                                                      Object {
-                                                        "blurb": "Challenge 309 blurb",
-                                                        "description": "Challenge 309 description",
-                                                        "id": 309,
-                                                        "name": "Challenge 309",
-                                                        "parent": Object {
-                                                          "displayName": "foo",
-                                                        },
-                                                      },
-                                                      Object {
-                                                        "blurb": "Challenge 311 blurb",
-                                                        "description": "Challenge 311 description",
-                                                        "id": 311,
-                                                        "name": "Challenge 311",
-                                                        "parent": Object {
-                                                          "displayName": "bar",
-                                                        },
-                                                      },
-                                                    ]
+                    Array [
+                      Object {
+                        "blurb": "Challenge 309 blurb",
+                        "description": "Challenge 309 description",
+                        "id": 309,
+                        "name": "Challenge 309",
+                        "parent": Object {
+                          "displayName": "foo",
+                        },
+                      },
+                      Object {
+                        "blurb": "Challenge 311 blurb",
+                        "description": "Challenge 311 description",
+                        "id": 311,
+                        "name": "Challenge 311",
+                        "parent": Object {
+                          "displayName": "bar",
+                        },
+                      },
+                    ]
                   }
-                  clearSearch={[Function]}
+                  clearSearch={[MockFunction]}
                   eventTypes={
-                                    Array [
-                                                      "mousedown",
-                                                      "touchstart",
-                                                    ]
+                    Array [
+                      "mousedown",
+                      "touchstart",
+                    ]
                   }
                   excludeScrollbar={false}
                   intl={
-                                    Object {
-                                                      "formatMessage": [Function],
-                                                    }
+                    Object {
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
+                    }
                   }
                   outsideClickIgnoreClass="ignore-react-onclickoutside"
                   preventDefault={false}
-                  setSearch={[Function]}
+                  setSearch={[MockFunction]}
                   stopPropagation={false}
                   user={
-                                    Object {
-                                                      "id": 11,
-                                                      "savedChallenges": Array [],
-                                                    }
+                    Object {
+                      "id": 11,
+                      "savedChallenges": Array [],
+                    }
                   }
-/>,
+                />,
                 "query": "(max-width: 1024px)",
                 "values": Object {},
               },
@@ -1848,18 +2457,33 @@ ShallowWrapper {
                       },
                     },
                   ],
-                  "clearSearch": [Function],
+                  "clearSearch": [MockFunction],
                   "eventTypes": Array [
                     "mousedown",
                     "touchstart",
                   ],
                   "excludeScrollbar": false,
                   "intl": Object {
-                    "formatMessage": [Function],
+                    "formatMessage": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          Object {
+                            "defaultMessage": "Search for a challenge...",
+                            "id": "ChallengeFilterSubnav.filter.search.label",
+                          },
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "isThrow": false,
+                          "value": undefined,
+                        },
+                      ],
+                    },
                   },
                   "outsideClickIgnoreClass": "ignore-react-onclickoutside",
                   "preventDefault": false,
-                  "setSearch": [Function],
+                  "setSearch": [MockFunction],
                   "stopPropagation": false,
                   "user": Object {
                     "id": 11,
@@ -1880,115 +2504,160 @@ ShallowWrapper {
                 "children": Array [
                   <InjectIntl(FilterByKeyword)
                     challenges={
-                                        Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
+                      Array [
+                        Object {
+                          "blurb": "Challenge 309 blurb",
+                          "description": "Challenge 309 description",
+                          "id": 309,
+                          "name": "Challenge 309",
+                          "parent": Object {
+                            "displayName": "foo",
+                          },
+                        },
+                        Object {
+                          "blurb": "Challenge 311 blurb",
+                          "description": "Challenge 311 description",
+                          "id": 311,
+                          "name": "Challenge 311",
+                          "parent": Object {
+                            "displayName": "bar",
+                          },
+                        },
+                      ]
                     }
-                    clearSearch={[Function]}
+                    clearSearch={[MockFunction]}
                     intl={
-                                        Object {
-                                                            "formatMessage": [Function],
-                                                          }
+                      Object {
+                        "formatMessage": [MockFunction] {
+                          "calls": Array [
+                            Array [
+                              Object {
+                                "defaultMessage": "Search for a challenge...",
+                                "id": "ChallengeFilterSubnav.filter.search.label",
+                              },
+                            ],
+                          ],
+                          "results": Array [
+                            Object {
+                              "isThrow": false,
+                              "value": undefined,
+                            },
+                          ],
+                        },
+                      }
                     }
-                    setSearch={[Function]}
+                    setSearch={[MockFunction]}
                     user={
-                                        Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
                     }
-/>,
+                  />,
                   <InjectIntl(FilterByDifficulty)
                     challenges={
-                                        Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
+                      Array [
+                        Object {
+                          "blurb": "Challenge 309 blurb",
+                          "description": "Challenge 309 description",
+                          "id": 309,
+                          "name": "Challenge 309",
+                          "parent": Object {
+                            "displayName": "foo",
+                          },
+                        },
+                        Object {
+                          "blurb": "Challenge 311 blurb",
+                          "description": "Challenge 311 description",
+                          "id": 311,
+                          "name": "Challenge 311",
+                          "parent": Object {
+                            "displayName": "bar",
+                          },
+                        },
+                      ]
                     }
-                    clearSearch={[Function]}
+                    clearSearch={[MockFunction]}
                     intl={
-                                        Object {
-                                                            "formatMessage": [Function],
-                                                          }
+                      Object {
+                        "formatMessage": [MockFunction] {
+                          "calls": Array [
+                            Array [
+                              Object {
+                                "defaultMessage": "Search for a challenge...",
+                                "id": "ChallengeFilterSubnav.filter.search.label",
+                              },
+                            ],
+                          ],
+                          "results": Array [
+                            Object {
+                              "isThrow": false,
+                              "value": undefined,
+                            },
+                          ],
+                        },
+                      }
                     }
-                    setSearch={[Function]}
+                    setSearch={[MockFunction]}
                     user={
-                                        Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
                     }
-/>,
+                  />,
                   <Connect(InjectIntl(FilterByLocation))
                     challenges={
-                                        Array [
-                                                            Object {
-                                                              "blurb": "Challenge 309 blurb",
-                                                              "description": "Challenge 309 description",
-                                                              "id": 309,
-                                                              "name": "Challenge 309",
-                                                              "parent": Object {
-                                                                "displayName": "foo",
-                                                              },
-                                                            },
-                                                            Object {
-                                                              "blurb": "Challenge 311 blurb",
-                                                              "description": "Challenge 311 description",
-                                                              "id": 311,
-                                                              "name": "Challenge 311",
-                                                              "parent": Object {
-                                                                "displayName": "bar",
-                                                              },
-                                                            },
-                                                          ]
+                      Array [
+                        Object {
+                          "blurb": "Challenge 309 blurb",
+                          "description": "Challenge 309 description",
+                          "id": 309,
+                          "name": "Challenge 309",
+                          "parent": Object {
+                            "displayName": "foo",
+                          },
+                        },
+                        Object {
+                          "blurb": "Challenge 311 blurb",
+                          "description": "Challenge 311 description",
+                          "id": 311,
+                          "name": "Challenge 311",
+                          "parent": Object {
+                            "displayName": "bar",
+                          },
+                        },
+                      ]
                     }
-                    clearSearch={[Function]}
+                    clearSearch={[MockFunction]}
                     intl={
-                                        Object {
-                                                            "formatMessage": [Function],
-                                                          }
+                      Object {
+                        "formatMessage": [MockFunction] {
+                          "calls": Array [
+                            Array [
+                              Object {
+                                "defaultMessage": "Search for a challenge...",
+                                "id": "ChallengeFilterSubnav.filter.search.label",
+                              },
+                            ],
+                          ],
+                          "results": Array [
+                            Object {
+                              "isThrow": false,
+                              "value": undefined,
+                            },
+                          ],
+                        },
+                      }
                     }
-                    setSearch={[Function]}
+                    setSearch={[MockFunction]}
                     user={
-                                        Object {
-                                                            "id": 11,
-                                                            "savedChallenges": Array [],
-                                                          }
+                      Object {
+                        "id": 11,
+                        "savedChallenges": Array [],
+                      }
                     }
-/>,
+                  />,
                 ],
                 "query": "(min-width: 1024px)",
                 "values": Object {},
@@ -2020,11 +2689,26 @@ ShallowWrapper {
                         },
                       },
                     ],
-                    "clearSearch": [Function],
+                    "clearSearch": [MockFunction],
                     "intl": Object {
-                      "formatMessage": [Function],
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
                     },
-                    "setSearch": [Function],
+                    "setSearch": [MockFunction],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -2059,11 +2743,26 @@ ShallowWrapper {
                         },
                       },
                     ],
-                    "clearSearch": [Function],
+                    "clearSearch": [MockFunction],
                     "intl": Object {
-                      "formatMessage": [Function],
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
                     },
-                    "setSearch": [Function],
+                    "setSearch": [MockFunction],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -2098,11 +2797,26 @@ ShallowWrapper {
                         },
                       },
                     ],
-                    "clearSearch": [Function],
+                    "clearSearch": [MockFunction],
                     "intl": Object {
-                      "formatMessage": [Function],
+                      "formatMessage": [MockFunction] {
+                        "calls": Array [
+                          Array [
+                            Object {
+                              "defaultMessage": "Search for a challenge...",
+                              "id": "ChallengeFilterSubnav.filter.search.label",
+                            },
+                          ],
+                        ],
+                        "results": Array [
+                          Object {
+                            "isThrow": false,
+                            "value": undefined,
+                          },
+                        ],
+                      },
                     },
-                    "setSearch": [Function],
+                    "setSearch": [MockFunction],
                     "user": Object {
                       "id": 11,
                       "savedChallenges": Array [],
@@ -2141,12 +2855,27 @@ ShallowWrapper {
                   },
                 ],
                 "className": "navbar-item",
-                "clearSearch": [Function],
+                "clearSearch": [MockFunction],
                 "intl": Object {
-                  "formatMessage": [Function],
+                  "formatMessage": [MockFunction] {
+                    "calls": Array [
+                      Array [
+                        Object {
+                          "defaultMessage": "Search for a challenge...",
+                          "id": "ChallengeFilterSubnav.filter.search.label",
+                        },
+                      ],
+                    ],
+                    "results": Array [
+                      Object {
+                        "isThrow": false,
+                        "value": undefined,
+                      },
+                    ],
+                  },
                 },
                 "placeholder": undefined,
-                "setSearch": [Function],
+                "setSearch": [MockFunction],
                 "user": Object {
                   "id": 11,
                   "savedChallenges": Array [],

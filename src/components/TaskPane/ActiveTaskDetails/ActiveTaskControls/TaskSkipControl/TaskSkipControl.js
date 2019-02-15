@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
 import _pick from 'lodash/pick'
 import { TaskStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+import Button from '../../../../Button/Button'
 import messages from './Messages'
 
 /**
@@ -33,21 +32,12 @@ export default class TaskSkipControl extends Component {
 
   render() {
     return (
-      <button className={classNames("button skip-control",
-                                    this.props.className,
-                                    {"large-and-wide": !this.props.isMinimized,
-                                     "icon-only": this.props.isMinimized})}
-              title={this.props.intl.formatMessage(messages.skipTooltip)}
-              onClick={() => this.props.complete(TaskStatus.skipped)}>
-        {!this.props.suppressIcon &&
-         <span className="control-icon">
-           <SvgSymbol viewBox='0 0 20 20' sym="skip-icon" />
-         </span>
-        }
-        <span className="control-label">
-          <FormattedMessage {...messages.skipLabel} />
-        </span>
-      </button>
+      <Button
+        className="mr-button--blue-fill"
+        onClick={() => this.props.complete(TaskStatus.skipped)}
+      >
+        <FormattedMessage {...messages.skipLabel} />
+      </Button>
     )
   }
 }

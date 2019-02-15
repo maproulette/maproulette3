@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { messagesByFilter }
-       from '../../../../services/Dashboard/ProjectFilter/ProjectFilter'
+       from '../../../../services/Widget/ProjectFilter/ProjectFilter'
 import DashboardFilterToggle
        from '../DashboardFilterToggle/DashboardFilterToggle'
 

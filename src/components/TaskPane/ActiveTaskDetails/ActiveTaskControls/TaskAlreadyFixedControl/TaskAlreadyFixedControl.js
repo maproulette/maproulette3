@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
 import _pick from 'lodash/pick'
 import { TaskStatus }
        from '../../../../../services/Task/TaskStatus/TaskStatus'
+import Button from '../../../../Button/Button'
 import messages from './Messages'
 
 /**
@@ -32,13 +32,24 @@ export default class TaskAlreadyFixedControl extends Component {
   }
 
   render() {
-    return (
-      <button className={classNames("button large-and-wide full-width label-only already-fixed-control",
-                                    this.props.className)}
-              onClick={() => this.props.complete(TaskStatus.alreadyFixed)}>
-        <FormattedMessage {...messages.alreadyFixedLabel} />
-      </button>
-    )
+    if (this.props.asLink) {
+      return (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <a onClick={() => this.props.complete(TaskStatus.alreadyFixed)}>
+          <FormattedMessage {...messages.alreadyFixedLabel} />
+        </a>
+      )
+    }
+    else {
+      return (
+        <Button
+          className="mr-button--blue-fill"
+          onClick={() => this.props.complete(TaskStatus.alreadyFixed)}
+        >
+          <FormattedMessage {...messages.alreadyFixedLabel} />
+        </Button>
+      )
+    }
   }
 }
 

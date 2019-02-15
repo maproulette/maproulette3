@@ -1,0 +1,75 @@
+.mr-card-widget {
+  @apply mr-relative mr-bg-white mr-shadow mr-rounded mr-text-black mr-flex mr-flex-col;
+
+  .mr-cards-inverse & {
+    @apply mr-bg-transparent mr-shadow-none mr-rounded-none mr-border-t mr-border-white-10;
+  }
+
+  &--top-row {
+    @apply mr-border-none;
+  }
+
+  &--editing {
+    @apply mr-select-none mr-cursor-move;
+
+    .mr-cards-inverse & {
+      @apply mr-bg-white-10 mr-shadow mr-rounded mr-border-t-0;
+    }
+  }
+
+  &__delete {
+    @apply mr-transition mr-absolute mr-pin-r mr-pin-t mr-text-xs mr-bg-red-light mr-py-1 mr-px-2 mr-rounded-bl mr-rounded-tr mr-text-white;
+
+    &:hover {
+      @apply mr-bg-red;
+    }
+  }
+
+  &__header {
+    @apply mr-px-6 mr-pt-8;
+
+    .mr-cards-inverse & {
+      @apply mr-px-4;
+    }
+  }
+
+  &__title {
+    @apply mr-font-bold mr-text-lg mr-text-blue-light;
+
+    &:after {
+      content: '';
+      @apply mr-block mr-my-1 mr-w-20 mr-h-3px mr-bg-blue-light;
+
+      .mr-cards-inverse & {
+        @apply mr-hidden;
+      }
+    }
+
+    .mr-cards-inverse & {
+      @apply mr-text-yellow mr-text-md mr-font-normal mr-uppercase;
+    }
+  }
+
+  &__main {
+    @apply mr-px-6 mr-py-4 mr-overflow-hidden mr-flex mr-flex-col;
+
+    .mr-cards-inverse & {
+      @apply mr-px-4 mr-text-white;
+    }
+  }
+
+  &__intro {
+    @apply mr-my-2;
+  }
+
+  &__content {
+    @apply mr-text-sm mr-h-full mr-rounded mr-overflow-scroll mr-scrolling-touch;
+
+    p,
+    ol,
+    ul,
+    pre {
+      @apply mr-my-2;
+    }
+  }
+}

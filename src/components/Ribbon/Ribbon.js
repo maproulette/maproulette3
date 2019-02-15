@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import './Ribbon.css'
+import './Ribbon.scss'
 
 export default class Ribbon extends Component {
   render() {

@@ -17,19 +17,16 @@ export const jsSchema = intl => ({
   properties: {
     displayName: {
       title: intl.formatMessage(messages.displayNameLabel),
-      description: intl.formatMessage(messages.displayNameDescription),
       type: "string",
       minLength: 3,
     },
     enabled: {
       title: intl.formatMessage(messages.enabledLabel),
-      description: intl.formatMessage(messages.enabledDescription),
       type: "boolean",
       default: false,
     },
     description: {
       title: intl.formatMessage(messages.descriptionLabel),
-      description: intl.formatMessage(messages.descriptionDescription),
       type: "string",
     },
   },
@@ -46,11 +43,16 @@ export const jsSchema = intl => ({
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = {
+export const uiSchema = intl => ({
+  displayName: {
+    "ui:help": intl.formatMessage(messages.displayNameDescription),
+  },
   enabled: {
     "ui:widget": "radio",
+    "ui:help": intl.formatMessage(messages.enabledDescription),
   },
   description: {
     "ui:widget": "textarea",
+    "ui:help": intl.formatMessage(messages.descriptionDescription),
   },
-}
+})

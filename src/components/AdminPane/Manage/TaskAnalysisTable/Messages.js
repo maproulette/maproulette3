@@ -39,9 +39,9 @@ export default defineMessages({
     defaultMessage: "Priority",
   },
 
-  reviewTaskLabel: {
-    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
-    defaultMessage: "Review",
+  inspectTaskLabel: {
+    id: "Admin.TaskAnalysisTable.controls.inspectTask.label",
+    defaultMessage: "Inspect",
   },
 
   editTaskLabel: {

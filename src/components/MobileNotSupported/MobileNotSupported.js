@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import Sprites from '../Sprites/Sprites'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './MobileNotSupported.css'
+import './MobileNotSupported.scss'
 
 /**
  * MobileNotSupported displays a message indicating that mobile devices are not

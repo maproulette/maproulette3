@@ -13,10 +13,13 @@ import PropTypes from 'prop-types'
 export default class SvgSymbol extends Component {
   render() {
     return (
-      <svg viewBox={this.props.viewBox}
-           className={this.props.className}
-           style={this.props.style}
-           onClick={this.props.onClick}>
+      <svg
+        viewBox={this.props.viewBox}
+        className={this.props.className}
+        style={this.props.style}
+        onClick={this.props.onClick}
+      >
+        {this.props.title && <title>{this.props.title}</title>}
         <use xlinkHref={'#' + this.props.sym} />
       </svg>
     )
@@ -26,4 +29,5 @@ export default class SvgSymbol extends Component {
 SvgSymbol.propTypes = {
   sym: PropTypes.string.isRequired,
   viewBox: PropTypes.string.isRequired,
+  title: PropTypes.string,
 }

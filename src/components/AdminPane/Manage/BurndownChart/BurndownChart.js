@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { ResponsiveLine } from '@nivo/line'
 import _map from 'lodash/map'
@@ -60,7 +61,7 @@ export class BurndownChart extends Component {
       _map(this.distributedDataSamples(burndownMetrics[0].data, 12), 'x')
 
     return (
-      <div className="burndown-chart">
+      <div className={classNames("burndown-chart", this.props.className)}>
         {!this.props.suppressHeading &&
          <p className="subheading">
            <FormattedMessage {...messages.heading}

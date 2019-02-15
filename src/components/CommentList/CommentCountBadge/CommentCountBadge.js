@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import './CommentCountBadge.css'
+import './CommentCountBadge.scss'
 
 /**
  * CommentCountBadge renders an icon with a Bulma badge containing a count of

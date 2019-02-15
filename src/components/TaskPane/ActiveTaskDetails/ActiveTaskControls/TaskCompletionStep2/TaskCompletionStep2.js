@@ -6,7 +6,7 @@ import TaskTooHardControl from '../TaskTooHardControl/TaskTooHardControl'
 import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixedControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEditingControl'
-import './TaskCompletionStep2.css'
+import './TaskCompletionStep2.scss'
 
 /**
  * TaskCompletionStep2 presents controls for finishing up completion of a
@@ -19,22 +19,24 @@ import './TaskCompletionStep2.css'
 export default class TaskCompletionStep2 extends Component {
   render() {
     return (
-      <div className="active-task-controls__step2 active-task-controls__vertical-control-block">
-        {this.props.allowedProgressions.has(TaskStatus.fixed) &&
-          <TaskFixedControl {...this.props} />
-        }
+      <div>
+        <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
+          {this.props.allowedProgressions.has(TaskStatus.fixed) &&
+            <TaskFixedControl {...this.props} />
+          }
 
-        {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
-          <TaskTooHardControl {...this.props} />
-        }
+          {this.props.allowedProgressions.has(TaskStatus.tooHard) &&
+            <TaskTooHardControl {...this.props} />
+          }
 
-        {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
-          <TaskAlreadyFixedControl {...this.props} />
-        }
+          {this.props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
+            <TaskAlreadyFixedControl {...this.props} />
+          }
 
-        {this.props.allowedProgressions.has(TaskStatus.skipped) &&
-          <TaskSkipControl {...this.props} suppressIcon />
-        }
+          {this.props.allowedProgressions.has(TaskStatus.skipped) &&
+            <TaskSkipControl {...this.props} suppressIcon />
+          }
+        </div>
 
         <TaskCancelEditingControl {...this.props} />
       </div>

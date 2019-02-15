@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import { injectIntl, FormattedMessage } from 'react-intl'
-import NavDropdown from '../../Bulma/NavDropdown'
-import MenuList from '../../Bulma/MenuList'
 import { ChallengeLocation,
          locationLabels }
        from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
+import Dropdown from '../../Dropdown/Dropdown'
+import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
 /**
@@ -23,13 +23,11 @@ export class FilterByLocation extends Component {
    *
    * @private
    */
-  updateFilter = ({ value }) => {
+  updateFilter = (value, closeDropdownMenu) => {
     if (_isEmpty(value)) {
       this.props.removeSearchFilters(['location'])
     }
     else {
-      this.props.setSearchFilters({location: value})
-
       // For nearMe, we actually use the withinMapBounds setting -- we just
       // also set the map bounds to be near the user.
       if (value === ChallengeLocation.nearMe) {
@@ -42,35 +40,65 @@ export class FilterByLocation extends Component {
         this.props.setSearchFilters({location: value})
       }
     }
+    closeDropdownMenu()
   }
 
   render() {
     const localizedLocationLabels = locationLabels(this.props.intl)
+    const notFiltering = _isEmpty(this.props.searchFilters.location)
 
-    let selectOptions = _map(ChallengeLocation, (location, name) => ({
-      key: location,
-      text: localizedLocationLabels[name],
-      value: location,
-    }))
-
-    // Add 'Any' option to start of dropdown
-    const anyOption = {
-      key: 'any',
-      text: localizedLocationLabels.any,
-      value: undefined,
-    }
-    selectOptions.unshift(anyOption)
-
-    const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
-      <Selection placeholder={anyOption.text}
-                 label={<FormattedMessage {...messages.locationLabel} />}
-                 options={selectOptions}
-                 value={this.props.searchFilters.location}
-                 onChange={this.updateFilter}
+      <Dropdown
+        className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
+        dropdownButton={dropdown =>
+          <ButtonFilter
+            type={<FormattedMessage {...messages.locationLabel} />}
+            selection={
+              notFiltering ?
+              localizedLocationLabels.any :
+              localizedLocationLabels[this.props.searchFilters.location]
+            }
+            onClick={dropdown.toggleDropdownVisible}
+            selectionClassName={notFiltering ? null : 'mr-text-yellow'}
+          />
+        }
+        dropdownContent={dropdown =>
+          <ListLocationItems
+            locationLabels={localizedLocationLabels}
+            updateFilter={this.updateFilter}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
       />
     )
   }
+}
+
+const ListLocationItems = function(props) {
+  const menuItems = _map(ChallengeLocation, (location, name) => (
+    <li key={location}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(location, props.closeDropdown)}>
+        {props.locationLabels[name]}
+      </a>
+    </li>
+  ))
+
+  // Add 'Any' option to start of dropdown
+  menuItems.unshift(
+    <li key='any'>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
+        {props.locationLabels.any}
+      </a>
+    </li>
+  )
+
+  return (
+    <ol className="mr-list-dropdown mr-list-dropdown--ruled">
+      {menuItems}
+    </ol>
+  )
 }
 
 FilterByLocation.propTypes = {
@@ -86,13 +114,10 @@ FilterByLocation.propTypes = {
   searchFilters: PropTypes.object,
   /** The current logged-in user, if any */
   user: PropTypes.object,
-  /** Set to true to render a MenuList instead of NavDropdown */
-  asMenuList: PropTypes.bool,
 }
 
 FilterByLocation.defaultProps = {
   searchFilters: {},
-  asMenuList: false,
 }
 
 export default injectIntl(FilterByLocation)

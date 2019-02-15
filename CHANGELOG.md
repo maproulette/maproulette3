@@ -7,6 +7,30 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.2] - 2019-02-15
+### Added
+- New user interface
+- Full-fledged home page (#426)
+- New user dashboard page with quick access to challenges of interest (#521)
+- Highlight new challenges (#509)
+- Highlight popular challenges (#447)
+- Task completion page is now widget based
+- Access to all task-completion statuses from step 1 of task completion
+- Points ticker in top-nav to see current score
+- Updated README
+
+### Fixed
+- Require sign-in before naming a new virtual challenge (#579)
+- Multiple trash cans in challenge-administration confusing (#529)
+
+### Changed
+- Create & Manage link has moved to dropdown menu in top nav
+- The term "review" for spot-checking new tasks is now called "inspect"
+- User now needs to be signed in prior to viewing task completion page
+- [internal] redux store is no longer persisted
+- [internal] back-end now treated as pure API server
+
+
 ## [v3.1.3] - 2019-02-05
 ### Added
 - Support for [simplestyle](https://github.com/mapbox/simplestyle-spec) task-feature styling by @zverik

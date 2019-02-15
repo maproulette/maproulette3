@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import _isArray from 'lodash/isArray'
 import WithOptionalManagement
        from '../HOCs/WithOptionalManagement/WithOptionalManagement'
-import './SimpleDropdown.css'
+import './SimpleDropdown.scss'
 
 /**
  * SimpleDropdown is an optionally self-managed component that sets up a Bulma

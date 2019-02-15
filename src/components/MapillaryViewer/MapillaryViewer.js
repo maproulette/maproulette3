@@ -5,7 +5,7 @@ import Modal from '../Bulma/Modal'
 import SvgControl from '../Bulma/SvgControl'
 import WithDeactivateOnOutsideClick
        from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import './MapillaryViewer.css'
+import './MapillaryViewer.scss'
 
 export class MapillaryViewer extends Component {
   state = {

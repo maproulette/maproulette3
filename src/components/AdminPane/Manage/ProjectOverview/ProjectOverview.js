@@ -4,7 +4,7 @@ import { FormattedMessage,
          FormattedDate } from 'react-intl'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import messages from './Messages'
-import './ProjectOverview.css'
+import './ProjectOverview.scss'
 
 /**
  * ProjectOverview displays some basic at-a-glance information about a Project
@@ -32,25 +32,23 @@ export default class ProjectOverview extends Component {
            </div>
           }
 
-          <div className="columns">
-            <div className="column is-one-quarter status-label">
+          <div className="mr-grid mr-grid-columns-2 mr-grid-gap-2">
+            <div>
               <FormattedMessage {...messages.creationDate} />
             </div>
 
-            <div className="column is-narrow">
+            <div>
               <FormattedDate value={new Date(this.props.project.created)}
                             year='numeric'
                             month='long'
                             day='2-digit' />
             </div>
-          </div>
 
-          <div className="columns">
-            <div className="column is-one-quarter status-label">
+            <div>
               <FormattedMessage {...messages.lastModifiedDate} />
             </div>
 
-            <div className="column is-narrow">
+            <div>
               <FormattedDate value={new Date(this.props.project.modified)}
                              year='numeric'
                              month='long'

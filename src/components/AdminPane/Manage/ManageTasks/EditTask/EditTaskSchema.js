@@ -25,27 +25,22 @@ export const jsSchema = (intl, task) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-06/schema#",
     type: "object",
-    title: intl.formatMessage(messages.formTitle),
     properties: {
       name: {
         title: intl.formatMessage(messages.nameLabel),
-        description: intl.formatMessage(messages.nameDescription),
         type: "string",
         minLength: 3,
       },
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
-        description: intl.formatMessage(messages.instructionDescription),
         type: "string",
       },
       geometries: {
         title: intl.formatMessage(messages.geometriesLabel),
-        description: intl.formatMessage(messages.geometriesDescription),
         type: "string",
       },
       status: {
         title: intl.formatMessage(messages.statusLabel),
-        description: intl.formatMessage(messages.statusDescription),
         type: "number",
         enum: allowedStatuses,
         enumNames: allowedStatusLabels,
@@ -68,17 +63,20 @@ export const jsSchema = (intl, task) => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = {
+export const uiSchema = intl => ({
+  name: {
+    "ui:help": intl.formatMessage(messages.nameDescription),
+  },
   instruction: {
     "ui:field": "markdown",
+    "ui:help": intl.formatMessage(messages.instructionDescription),
   },
   geometries: {
     "ui:widget": "textarea",
-  },
-  priority: {
-    "ui:widget": "select",
+    "ui:help": intl.formatMessage(messages.geometriesDescription),
   },
   status: {
     "ui:widget": "select",
+    "ui:help": intl.formatMessage(messages.statusDescription),
   },
-}
+})

@@ -3,29 +3,54 @@ import PropTypes from 'prop-types'
 import MediaQuery from 'react-responsive'
 import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
-import _omit from 'lodash/omit'
-import MapPane from '../EnhancedMap/MapPane/MapPane'
-import TaskMap from './TaskMap/TaskMap'
-import BusySpinner from '../BusySpinner/BusySpinner'
+import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
+       from '../../services/Widget/Widget'
+import WithWidgetWorkspaces
+       from '../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
-import WithEditor from '../HOCs/WithEditor/WithEditor'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
-import ActiveTaskDetails from './ActiveTaskDetails/ActiveTaskDetails'
+import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
+import MapPane from '../EnhancedMap/MapPane/MapPane'
+import TaskMap from './TaskMap/TaskMap'
+import VirtualChallengeNameLink
+       from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
+import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
+import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
+import BusySpinner from '../BusySpinner/BusySpinner'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
-import './TaskPane.css'
+import './TaskPane.scss'
 
 // Setup child components with necessary HOCs
-const TaskDetailsSidebar = WithCurrentUser(WithEditor(ActiveTaskDetails))
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
+
+const WIDGET_WORKSPACE_NAME = "taskCompletion"
+
+export const defaultWorkspaceSetup = function() {
+  return {
+    dataModelVersion: 2,
+    name: WIDGET_WORKSPACE_NAME,
+    label: "Task Completion",
+    widgets: [
+      widgetDescriptor('TaskInstructionsWidget'),
+      widgetDescriptor('TaskMapWidget'),
+      widgetDescriptor('TaskCompletionWidget'),
+      widgetDescriptor('TaskLocationWidget'),
+    ],
+    layout: [
+      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4},
+      {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18},
+      {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 11, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 18, w: 3, h: 12},
+    ],
+  }
+}
 
 /**
  * TaskPane presents the current task being actively worked upon. It contains
- * an ActiveTaskDetails sidebar, which offers information and controls, and a
- * TaskMap displaying the appropriate map and task geometries.
- *
- * @see See ActiveTaskDetails
- * @see See TaskMap
+ * an WidgetWorkspace with information and controls, including a TaskMap
+ * displaying the appropriate map and task geometries.
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -44,9 +69,9 @@ export class TaskPane extends Component {
    * WithCurrentTask, but we intercept the call so that we can manage our
    * transition animation as the task prepares to complete.
    */
-  completeTask = (taskId, challengeId, taskStatus, comment, taskLoadBy) => {
+  completeTask = (taskId, challengeId, taskStatus, comment, taskLoadBy, userId) => {
     this.setState({completingTask: taskId})
-    this.props.completeTask(taskId, challengeId, taskStatus, comment, taskLoadBy)
+    this.props.completeTask(taskId, challengeId, taskStatus, comment, taskLoadBy, userId)
   }
 
   clearCompletingTask = () => {
@@ -54,6 +79,13 @@ export class TaskPane extends Component {
     setTimeout(() => {
       this.setState({completingTask: null})
     }, 0)
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location.pathname !== prevProps.location.pathname &&
+        this.props.location.search !== prevProps.location.search) {
+      window.scrollTo(0, 0)
+    }
   }
 
   render() {
@@ -68,16 +100,37 @@ export class TaskPane extends Component {
     return (
       <div className='task-pane'>
         <MediaQuery query="(min-width: 1024px)">
-          <TaskDetailsSidebar task={this.props.task}
-                              completeTask={this.completeTask}
-                              {..._omit(this.props, 'completeTask')} />
+          <WidgetWorkspace
+            {...this.props}
+            className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-8 mr-cards-inverse"
+            workspaceEyebrow={<VirtualChallengeNameLink {...this.props} />}
+            workspaceTitle={
+              <h1 className="mr-h2 mr-my-2 mr-links-inverse">
+                <ChallengeNameLink {...this.props} />
+              </h1>
+            }
+            workspaceInfo={
+              <ul className="mr-list-ruled mr-text-xs">
+                <li className="mr-links-inverse">
+                  {_get(this.props.task, 'parent.parent.displayName')}
+                </li>
+
+                <li className="mr-links-green-lighter">
+                  <OwnerContactLink {...this.props} />
+                </li>
+              </ul>
+            }
+            completeTask={this.completeTask}
+            completingTask={this.state.completingTask}
+        />
         </MediaQuery>
-        <MapPane completingTask={this.state.completingTask}>
-          <TaskMap task={this.props.task}
-                   challenge={this.props.task.parent}
-                   {...this.props} />
-        </MapPane>
         <MediaQuery query="(max-width: 1023px)">
+          <MapPane completingTask={this.state.completingTask}>
+            <TaskMap isMobile
+                     task={this.props.task}
+                     challenge={this.props.task.parent}
+                     {...this.props} />
+          </MapPane>
           <MobileTabBar {...this.props} />
         </MediaQuery>
       </div>
@@ -90,4 +143,12 @@ TaskPane.propTypes = {
   task: PropTypes.object,
 }
 
-export default WithChallengePreferences(TaskPane)
+export default
+WithChallengePreferences(
+  WithWidgetWorkspaces(
+    TaskPane,
+    WidgetDataTarget.task,
+    WIDGET_WORKSPACE_NAME,
+    defaultWorkspaceSetup
+  )
+)

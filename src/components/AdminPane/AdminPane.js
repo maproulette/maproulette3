@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import MediaQuery from 'react-responsive'
 import AsManager from '../../interactions/User/AsManager'
+import WithStatus from '../HOCs/WithStatus/WithStatus'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import ScreenTooNarrow
@@ -10,13 +11,15 @@ import ScreenTooNarrow
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
 import EditProject from './Manage/EditProject/EditProject'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
-import ReviewTask from './Manage/ReviewTask/ReviewTask'
+import InspectTask from './Manage/InspectTask/InspectTask'
 import ProjectsDashboard from './Manage/ProjectsDashboard/ProjectsDashboard'
 import ProjectDashboard from './Manage/ProjectDashboard/ProjectDashboard'
 import ChallengeDashboard from './Manage/ChallengeDashboard/ChallengeDashboard'
 import MetricsOverview from './MetricsOverview/MetricsOverview'
 import SignInButton from '../SignInButton/SignInButton'
-import './AdminPane.css'
+import BusySpinner from '../BusySpinner/BusySpinner'
+import './Manage/Widgets/widget_registry.js'
+import './AdminPane.scss'
 
 // Setup child components with needed HOCs.
 const MetricsSummary = WithChallenges(MetricsOverview)
@@ -31,7 +34,8 @@ const MetricsSummary = WithChallenges(MetricsOverview)
  */
 export class AdminPane extends Component {
   componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) {
+    if (this.props.location.pathname !== prevProps.location.pathname &&
+        this.props.location.search !== prevProps.location.search) {
       window.scrollTo(0, 0)
     }
   }
@@ -41,8 +45,11 @@ export class AdminPane extends Component {
     const manager = AsManager(this.props.user)
     if (!manager.isLoggedIn()) {
       return (
-        <div className="admin">
-          <SignInButton {...this.props} />
+        <div className="admin mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+          {this.props.checkingLoginStatus ?
+           <BusySpinner /> :
+           <SignInButton {...this.props} longForm />
+          }
         </div>
       )
     }
@@ -54,15 +61,15 @@ export class AdminPane extends Component {
         </MediaQuery>
 
         <MediaQuery query="(min-width: 1024px)">
-          <div className="admin">
+          <div className="admin mr-bg-gradient-r-green-dark-blue mr-text-white">
             <div className="admin-pane">
               <Switch>
                 <Route exact path='/admin/metrics'
                        render={props => <MetricsSummary allStatuses={true} {...props} />} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/edit'
                        component={EditTask} />
-                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/review'
-                       component={ReviewTask} />
+                <Route exact path='/admin/project/:projectId/challenge/:challengeId/task/:taskId/inspect'
+                       component={InspectTask} />
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId'
                        component={ChallengeDashboard} />
                 <Route exact path='/admin/project/:projectId/challenges/new'
@@ -90,4 +97,4 @@ AdminPane.propTypes = {
   location: PropTypes.object.isRequired,
 }
 
-export default WithCurrentUser(withRouter(AdminPane))
+export default WithStatus(WithCurrentUser(withRouter(AdminPane)))

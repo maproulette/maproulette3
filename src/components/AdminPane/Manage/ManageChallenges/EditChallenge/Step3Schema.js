@@ -107,7 +107,6 @@ export const jsSchema = intl => {
     properties: {
       defaultPriority: {
         title: intl.formatMessage(messages.defaultPriorityLabel),
-        description: intl.formatMessage(messages.defaultPriorityDescription),
         type: "number",
         enum: _values(TaskPriority),
         enumNames: _map(TaskPriority, (value, key) => localizedPriorityLabels[key]),
@@ -184,9 +183,10 @@ const priorityRuleGroupUISchema = {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = () => ({
+export const uiSchema = intl => ({
   defaultPriority: {
     "ui:widget": "select",
+    "ui:help": intl.formatMessage(messages.defaultPriorityDescription),
   },
   highPriorityRules: {
     ruleGroup: priorityRuleGroupUISchema,

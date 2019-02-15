@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl'
 import { ResponsiveBar } from '@nivo/bar'
 import _isObject from 'lodash/isObject'
@@ -11,7 +12,7 @@ import { TaskStatus, keysByStatus, statusLabels }
        from '../../services/Task/TaskStatus/TaskStatus'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import './ChallengeProgress.css'
+import './ChallengeProgress.scss'
 
 export class ChallengeProgress extends Component {
   percent = (value, total) => Math.round(value / total * 100)
@@ -79,7 +80,7 @@ export class ChallengeProgress extends Component {
     ).concat([availableLabel])
 
     return (
-      <div className="challenge-task-progress">
+      <div className={classNames("challenge-task-progress", this.props.className)}>
         <ResponsiveBar data={[completionData]}
                        keys={orderedKeys}
                        indexBy="label"
@@ -110,10 +111,17 @@ export class ChallengeProgress extends Component {
         }
         {taskActions.total > 0 && taskActions.available !== 0 &&
           <div className="challenge-task-progress__tasks-remaining">
-            <FormattedMessage {...messages.tasksRemaining} values={{taskCount: taskActions.available}}/>
-            {// eslint-disable-next-line react/style-prop-object
-            } (<FormattedNumber style="percent" value={taskActions.available/taskActions.total} />)  
-            <FormattedMessage {...messages.outOfTotal} values={{totalCount: taskActions.total}}/>
+            <FormattedMessage
+              {...messages.tasksRemaining}
+              values={{taskCount: taskActions.available}}
+            />
+            {/* eslint-disable-next-line react/style-prop-object */}
+            (<FormattedNumber style="percent"
+                value={taskActions.available/taskActions.total}
+            />) <FormattedMessage
+              {...messages.outOfTotal}
+              values={{totalCount: taskActions.total}}
+            />
           </div>
         }
       </div>

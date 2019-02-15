@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
-import HomePane from './components/HomePane/HomePane'
+import Home from './pages/Home/Home'
+import Profile from './pages/Profile/Profile'
+import Dashboard from './pages/Dashboard/Dashboard.js'
+import Leaderboard from './pages/Leaderboard/Leaderboard'
+import ChallengeLeaderboard from './pages/Leaderboard/ChallengeLeaderboard'
+import ProjectLeaderboard from './pages/Leaderboard/ProjectLeaderboard'
+import CountryLeaderboard from './pages/Leaderboard/CountryLeaderboard'
 import ChallengePane from './components/ChallengePane/ChallengePane'
 import TaskPane from './components/TaskPane/TaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
@@ -18,16 +24,13 @@ import LoadRandomChallengeTask
 import LoadRandomVirtualChallengeTask
        from './components/LoadRandomVirtualChallengeTask/LoadRandomVirtualChallengeTask'
 import Navbar from './components/Navbar/Navbar'
-import UserProfile from './components/UserProfile/UserProfile'
-import Leaderboard from './components/Leaderboard/Leaderboard'
-import ChallengeLeaderboard from './components/ChallengeLeaderboard/ChallengeLeaderboard'
-import ProjectLeaderboard from './components/ProjectLeaderboard/ProjectLeaderboard'
-import CountryLeaderboard from './components/CountryLeaderboard/CountryLeaderboard'
+import Footer from './components/Footer/Footer'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
 import MobileNotSupported
        from './components/MobileNotSupported/MobileNotSupported'
-import './App.css'
+import './components/Widgets/widget_registry'
+import './App.scss'
 
 // Setup child components with necessary HOCs
 const TopNav = withRouter(WithCurrentUser(Navbar))
@@ -39,16 +42,8 @@ const ErrorPane = WithExternalError(ChallengePane)
 
 /**
  * App represents the top level component of the application.  It renders a
- * TopNav, the appropriate component pane based on the current route, and some
- * utility components like the Sprites and ErrorModal.
- *
- * @see See TopNav
- * @see See ChallengePane
- * @see See TaskPane
- * @see See AdminPane
- * @see See HomePane
- * @see See ErrorModal
- * @see See Sprites
+ * Navbar, the appropriate page based on the current route, and some utility
+ * components like the Sprites and ErrorModal
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
@@ -72,33 +67,37 @@ export class App extends Component {
     }
 
     return (
-      <div className="App">
+      <React.Fragment>
         <TopNav />
 
-        <Switch>
-          <CachedRoute exact path='/' component={HomePane} />
-          <CachedRoute path='/browse/challenges/:challengeId?' component={ChallengePane} />
-          <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
-          <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
-          <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
-          <CachedRoute exact path='/virtual/:virtualChallengeId/task/:taskId'
-                 component={CurrentVirtualChallengeTaskPane} />
-          <CachedRoute exact path='/virtual/:virtualChallengeId'
-                 component={LoadRandomVirtualChallengeTask} />
-          <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
-          <CachedRoute path='/user/profile' component={UserProfile} />
-          <CachedRoute path='/leaderboard' component={Leaderboard} />
-          <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
-          <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
-          <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />
-          <CachedRoute path='/admin' component={AdminPane} />
-          <CachedRoute path='/error' component={ErrorPane} />
-          <Route component={PageNotFound} />
-        </Switch>
+        <main role="main" className="mr-bg-white mr-text-grey">
+          <Switch>
+            <CachedRoute exact path='/' component={Home} />
+            <CachedRoute path='/browse/challenges/:challengeId?' component={ChallengePane} />
+            <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
+            <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
+            <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
+            <CachedRoute exact path='/virtual/:virtualChallengeId/task/:taskId'
+                  component={CurrentVirtualChallengeTaskPane} />
+            <CachedRoute exact path='/virtual/:virtualChallengeId'
+                  component={LoadRandomVirtualChallengeTask} />
+            <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
+            <CachedRoute path='/user/profile' component={Profile} />
+            <CachedRoute path='/dashboard' component={Dashboard} />
+            <CachedRoute path='/leaderboard' component={Leaderboard} />
+            <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
+            <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
+            <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />
+            <CachedRoute path='/admin' component={AdminPane} />
+            <CachedRoute path='/error' component={ErrorPane} />
+            <Route component={PageNotFound} />
+          </Switch>
+        </main>
 
+        <Footer />
         <ErrorModal />
         <Sprites />
-      </div>
+      </React.Fragment>
     )
   }
 }

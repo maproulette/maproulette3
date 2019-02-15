@@ -1,0 +1,55 @@
+$self-dropdown: .mr-dropdown;
+
+$(self-dropdown) {
+  @apply mr-relative mr-inline-block;
+
+  &__button {
+    @apply mr-text-current mr-font-medium;
+  }
+
+  &__wrapper {
+    @apply mr-absolute mr-z-50 mr-pin-t-100 mr-pin-l;
+
+    @screen md {
+      $(self-dropdown)--right & {
+        @apply mr-pin-none mr-pin-t-100 mr-pin-r;
+      }
+    }
+  }
+
+  &__main {
+    @apply mr-pt-3;
+
+    $(self-dropdown)--flush & {
+      @apply mr-pt-0;
+    }
+
+    $(self-dropdown)--fixed & {
+      @apply mr-fixed;
+    }
+  }
+
+  &__inner {
+    @apply mr-relative mr-rounded-sm mr-shadow mr-bg-blue-dark mr-p-4 mr-text-white mr-font-normal;
+
+    $(self-dropdown)--flush & {
+      @apply mr-rounded-t-none;
+    }
+  }
+
+  &__arrow {
+    @apply mr-absolute mr-pin-b-100 mr-ml-2 mr-pin-l mr-h-2 mr-fill-blue-dark;
+
+    $(self-dropdown)--flush & {
+      @apply mr-hidden;
+    }
+
+    $(self-dropdown)--right & {
+      @apply mr-ml-0 mr-mr-2 mr-pin-none mr-pin-b-100 mr-pin-r;
+    }
+  }
+
+  &__content {
+    @apply mr-min-w-24 mr-max-w-full mr-max-h-115 mr-overflow-y-scroll mr-overflow-x-hidden mr-scrolling-touch mr-whitespace-no-wrap mr-text-left;
+  }
+}

@@ -1,3 +1,8 @@
 .task-map {
   position: relative;
+  height: 100%;
+  
+  .leaflet-container {
+    height: 100%;
+  }
 }

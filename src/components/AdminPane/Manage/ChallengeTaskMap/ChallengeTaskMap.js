@@ -32,7 +32,7 @@ import WithIntersectingOverlays
 import WithStatus from '../../../HOCs/WithStatus/WithStatus'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import messages from './Messages'
-import './ChallengeTaskMap.css'
+import './ChallengeTaskMap.scss'
 
 /**
  * An uncluster option will be offered if no more than this number of tasks
@@ -191,13 +191,15 @@ export class ChallengeTaskMap extends Component {
 
         <div className="marker-popup-content__links">
           <div>
-            <a onClick={() => this.props.history.push(`${taskBaseRoute}/review`)}>
-              {this.props.intl.formatMessage(messages.reviewTaskLabel)}
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => this.props.history.push(`${taskBaseRoute}/inspect`)}>
+              {this.props.intl.formatMessage(messages.inspectTaskLabel)}
             </a>
           </div>
 
           {manager.canWriteProject(this.props.challenge.parent) &&
            <div>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
              <a onClick={() => this.props.history.push(`${taskBaseRoute}/edit`)}>
                {this.props.intl.formatMessage(messages.editTaskLabel)}
              </a>

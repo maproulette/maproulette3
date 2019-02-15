@@ -206,7 +206,7 @@ There are three ways to feed geometries into your challenge: via an Overpass
 query, via a GeoJSON file on your computer, or via a URL pointing to a GeoJSON
 file on the internet.
 
-### Via Overpass
+#### Via Overpass
 
 The Overpass API is a powerful querying interface for OpenStreetMap data. It
 does not work on the live OSM database, but the data you get from Overpass is
@@ -216,7 +216,7 @@ the Overpass Query Language, you can define exactly which OSM objects you want
 to load into your Challenge as Tasks.
 [Learn more](https://github.com/maproulette/maproulette2/wiki/Introducing-New-MapRoulette---Part-1.-Creating-and-Maintaining-Challenges#via-overpass).
 
-### Via Local GeoJSON File
+#### Via Local GeoJSON File
 
 The other option is to use a GeoJSON file you already have. This could be great
 if you have an approved source of external data you would like to manually add
@@ -231,7 +231,7 @@ internally.
 [line-by-line](https://github.com/osmlab/maproulette3/wiki/Line-by-Line-GeoJSON-Format)
 format instead, which is much less memory-intensive to process.
 
-### Via Remote GeoJSON URL
+#### Via Remote GeoJSON URL
 
 The only difference between using a local GeoJSON file and a URL is where you
 tell MapRoulette to get it from. If you use a URL, make sure you point to the

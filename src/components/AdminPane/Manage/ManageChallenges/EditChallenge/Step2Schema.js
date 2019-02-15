@@ -37,7 +37,6 @@ export const jsSchema = (intl, user, challengeData) => {
       source: { enum: ["Overpass Query"] },
       overpassQL: {
         title: intl.formatMessage(messages.overpassQLLabel),
-        description: intl.formatMessage(messages.overpassQLDescription),
         type: "string",
       },
     },
@@ -58,7 +57,6 @@ export const jsSchema = (intl, user, challengeData) => {
       source: { enum: ["Remote URL"] },
       remoteGeoJson: {
         title: intl.formatMessage(messages.remoteGeoJsonLabel),
-        description: intl.formatMessage(messages.remoteGeoJsonDescription),
         type: "string",
       },
     },
@@ -78,7 +76,6 @@ export const jsSchema = (intl, user, challengeData) => {
 
     schema.properties.ignoreSourceErrors = {
       title: intl.formatMessage(messages.ignoreSourceErrorsLabel),
-      description: intl.formatMessage(messages.ignoreSourceErrorsDescription),
       type: "boolean",
       default: false,
     }
@@ -127,6 +124,7 @@ export const uiSchema = (intl, user, challengeData) => {
       "ui:widget": "textarea",
       "ui:placeholder": intl.formatMessage(messages.overpassQLPlaceholder),
       "ui:readonly": sourceReadOnly,
+      "ui:help": intl.formatMessage(messages.overpassQLDescription),
     },
     localGeoJSON: {
       "ui:widget": DropzoneTextUpload,
@@ -135,9 +133,11 @@ export const uiSchema = (intl, user, challengeData) => {
     remoteGeoJson: {
       "ui:placeholder": intl.formatMessage(messages.remoteGeoJsonPlaceholder),
       "ui:readonly": sourceReadOnly,
+      "ui:help": intl.formatMessage(messages.remoteGeoJsonDescription),
     },
     ignoreSourceErrors: {
       "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.ignoreSourceErrorsDescription),
     },
     "ui:order": sourceReadOnly ? undefined : [ "*", "ignoreSourceErrors" ],
   }

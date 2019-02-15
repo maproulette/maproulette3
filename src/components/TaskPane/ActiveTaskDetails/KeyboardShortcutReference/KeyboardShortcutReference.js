@@ -2,14 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import _map from 'lodash/map'
-import _flatten from 'lodash/flatten'
-import _values from 'lodash/values'
 import _omit from 'lodash/omit'
 import Popout from '../../../Bulma/Popout'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import KeyboardShortcutList from './KeyboardShortcutList'
 import messages from './Messages'
-import './KeyboardShortcutReference.css'
+import './KeyboardShortcutReference.scss'
 
 /**
  * KeyboardShortcutReference renders a control that, when clicked, displays a
@@ -19,21 +17,6 @@ import './KeyboardShortcutReference.css'
  */
 export class KeyboardShortcutReference extends Component {
   render() {
-    const flattenedShortcuts =
-      _flatten(_map(this.props.activeKeyboardShortcuts, group => _values(group)))
-
-    const shortcuts = _map(flattenedShortcuts, (value, operation) => [
-      <dt key={`term-${operation}`}>
-        {value.keyLabel ?
-          <FormattedMessage {...value.keyLabel} /> :
-          value.key
-        }
-      </dt>,
-      <dd key={`def-${operation}`}>
-        <FormattedMessage {...value.label} />
-      </dd>
-    ])
-
     const popoutButton = (
       <button className={classNames("button active-task-details__keyboard-reference-control",
                                     {"icon-only": this.props.isMinimized,
@@ -66,7 +49,7 @@ export class KeyboardShortcutReference extends Component {
           </div>
 
           <div className="popout-content__body">
-            <dl className="keyboard-shortcuts">{shortcuts}</dl>
+            <KeyboardShortcutList {...this.props} />
             <div className="is-clearfix" />
           </div>
         </Popout>

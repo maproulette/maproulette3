@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
-import MediaQuery from 'react-responsive'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
-import Sidebar from '../Sidebar/Sidebar'
 import ChallengeSearchMap from '../ChallengeSearchMap/ChallengeSearchMap'
 import ChallengeBrowseMap from '../ChallengeBrowseMap/ChallengeBrowseMap'
 import CongratulateModal from '../CongratulateModal/CongratulateModal'
@@ -21,7 +18,6 @@ import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithMapBoundedTasks from '../HOCs/WithMapBoundedTasks/WithMapBoundedTasks'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
-import './ChallengePane.css'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
@@ -68,35 +64,23 @@ export class ChallengePane extends Component {
   render() {
     const Map = this.props.browsedChallenge ? BrowseMap : SearchMap
     return (
-      <span>
+      <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50">
         {_get(this.props, 'history.location.state.congratulate', false) &&
          <CongratulateModal />
         }
         <ChallengeFilterSubnav {...this.props} />
 
-        <div className="challenge-pane">
-          <MediaQuery maxWidth={900}>
-            <Sidebar className={classNames('inline full-screen-height with-shadow challenge-pane__results',
-                                          {"is-minimized": this.state.sidebarMinimized})}
-                    toggleMinimized={this.toggleSidebarMinimized}
-                    isActive={true}>
-              <ChallengeResults {...this.props} />
-            </Sidebar>
-          </MediaQuery>
-          <MediaQuery minWidth={901}>
-            <Sidebar className='inline full-screen-height with-shadow challenge-pane__results'
-                     isActive={true}>
-              <ChallengeResults {...this.props} />
-            </Sidebar>
-          </MediaQuery>
-
-          <MapPane>
-            <Map challenge={this.props.browsedChallenge}
-                 onTaskClick={this.props.startChallengeWithTask}
-                 {...this.props} />
-          </MapPane>
+        <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
+          <ChallengeResults {...this.props} />
+          <div className="mr-flex-1">
+            <MapPane>
+              <Map challenge={this.props.browsedChallenge}
+                    onTaskClick={this.props.startChallengeWithTask}
+                    {...this.props} />
+            </MapPane>
+          </div>
         </div>
-      </span>
+      </div>
     )
   }
 }

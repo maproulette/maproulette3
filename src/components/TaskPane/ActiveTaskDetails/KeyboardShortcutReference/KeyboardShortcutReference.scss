@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import 'variables.scss';
 
 .active-task-details__keyboard-reference {
   margin-top: 5px;
@@ -26,22 +26,5 @@
 
   .popout-content {
     width: 250px;
-
-    dl {
-      dt {
-        clear: left;
-        float: left;
-        min-width: 40px;
-        margin-right: 15px;
-        color: $primary;
-        font-family: monospace;
-        font-weight: $weight-bold;
-      }
-
-      dd {
-        float: left;
-        font-size: $size-7;
-      }
-    }
   }
 }

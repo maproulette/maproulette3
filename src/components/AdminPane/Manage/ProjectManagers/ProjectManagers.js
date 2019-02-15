@@ -16,7 +16,7 @@ import AutosuggestTextBox from '../../../AutosuggestTextBox/AutosuggestTextBox'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import messages from './Messages'
-import './ProjectManagers.css'
+import './ProjectManagers.scss'
 
 const ChooseOSMUser = WithOSMUserSearch(AutosuggestTextBox)
 
@@ -145,6 +145,7 @@ export default class ProjectManagers extends Component {
             {user.canAdministrateProject(this.props.project) &&
              !isLastAdmin && !isProjectOwner &&
               <ConfirmAction prompt={this.props.intl.formatMessage(messages.removeManagerConfirmation)}>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a className="button is-clear project-managers__manager__remove-control"
                    onClick={() => this.removeManager(manager.osmId)}
                    title={this.props.intl.formatMessage(messages.removeManagerTooltip)}>

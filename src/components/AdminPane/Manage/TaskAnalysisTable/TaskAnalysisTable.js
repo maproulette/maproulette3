@@ -16,8 +16,8 @@ import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
-import '../../../../../node_modules/react-table/react-table.css'
-import './TaskAnalysisTable.css'
+import 'react-table/react-table.css'
+import './TaskAnalysisTable.scss'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
@@ -107,8 +107,8 @@ export class TaskAnalysisTable extends Component {
       minWidth: 110,
       Cell: ({row}) =>
         <div className="row-controls-column">
-          <Link to={`${taskBaseRoute}/${row.id}/review`}>
-            <FormattedMessage {...messages.reviewTaskLabel} />
+          <Link to={`${taskBaseRoute}/${row.id}/inspect`}>
+            <FormattedMessage {...messages.inspectTaskLabel} />
           </Link>
           {manager.canWriteProject(this.props.challenge.parent) &&
            <Link to={`${taskBaseRoute}/${row.id}/edit`}>

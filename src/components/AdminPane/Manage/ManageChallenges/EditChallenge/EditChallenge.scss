@@ -2,18 +2,6 @@
   position: relative;
   min-width: 500px;
 
-  ul.steps {
-    position: absolute;
-    right: -30px;
-
-    @media(max-width: 750px) {
-      position: static;
-      &:not(.is-vertical).is-narrow.is-right {
-        justify-content: center;
-      }
-    }
-  }
-
   .rjsf .array-field .priority-rule {
     input[type=text] {
       max-width: 150px;

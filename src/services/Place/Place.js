@@ -36,7 +36,7 @@ export const fetchPlace = function(lat, lng) {
     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
 
   return function(dispatch) {
-    return fetchContent(placeURI, placeSchema()).then(normalizedResults => {
+    return fetchContent(placeURI, placeSchema(), {omitCredentials: true}).then(normalizedResults => {
       dispatch(receivePlace(normalizedResults.entities))
       return normalizedResults
     })
@@ -53,7 +53,7 @@ export const fetchPlaceLocation = function(placeSearch) {
   const placeURI =
     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(placeSearch)}&format=json&limit=1`
 
-  return fetchContent(placeURI).then(placeResults => {
+  return fetchContent(placeURI, null, {omitCredentials: true}).then(placeResults => {
     if (placeResults.length > 0) {
       const bounds = _map(placeResults[0].boundingbox, (point) => parseFloat(point))
 

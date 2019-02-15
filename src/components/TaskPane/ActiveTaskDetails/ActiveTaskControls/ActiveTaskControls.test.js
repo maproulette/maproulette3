@@ -76,16 +76,6 @@ test("a next-task control is not shown if the task is not in a completed status.
   expect(wrapper).toMatchSnapshot()
 })
 
-test("shows track/untrack controls", () => {
-  const wrapper = shallow(
-    <ActiveTaskControls {...basicProps} />
-  )
-
-  expect(wrapper.find('TaskTrackControls').exists()).toBe(true)
-
-  expect(wrapper).toMatchSnapshot()
-})
-
 test("shows a completion comment field", () => {
   const wrapper = shallow(
     <ActiveTaskControls {...basicProps} />

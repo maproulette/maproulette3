@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import _isFunction from 'lodash/isFunction'
 import _get from 'lodash/get'
-import classNames from 'classnames'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import './SearchBox.css'
+import BusySpinner from '../BusySpinner/BusySpinner'
+import './SearchBox.scss'
 
 /**
  * SearchBox UI component that presents an unmanaged text input for entering
@@ -17,7 +18,7 @@ import './SearchBox.css'
  */
 export default class SearchBox extends Component {
   /**
-   * Esc clears search, Enter signals completion.
+   * Esc clears search, Enter signals completion
    *
    * @private
    */
@@ -41,6 +42,7 @@ export default class SearchBox extends Component {
     const query = (this.props.searchGroup ? 
       _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
       _get(this.props, 'searchQuery.query')) || ''
+    const isLoading = _get(this.props, 'searchQuery.meta.fetchingResults')
 
     const clearButton =
       query.length === 0 ? null :
@@ -57,27 +59,37 @@ export default class SearchBox extends Component {
 
 
     return (
-      <div className={classNames('search-box', this.props.className)}>
-        <div className='search-box__search-field'>
-          <div className='control-wrapper'>
-            {this.props.suppressIcon !== true &&
-             <SvgSymbol viewBox='0 0 20 20' sym="search-icon" className="search-box__icon"/>
-            }
-            <div className={classNames('control', 'is-medium',
-              {'is-loading': _get(this.props, 'searchQuery.meta.fetchingResults')})}
-            >
-              <input type="text"
-                     className="input is-medium search-box__input"
-                     placeholder={this.props.placeholder}
-                     maxLength="63"
-                     onChange={this.queryChanged}
-                     onKeyDown={this.checkForSpecialKeys}
-                     value={query} />
-            </div>
-          </div>
-          {doneButton}
-          {clearButton}
-        </div>
+      <div
+        className={classNames(
+          "mr-flex mr-items-center", {
+            "lg:ml-ml-6 xl:mr-ml-12": !this.props.leftAligned
+          },
+          this.props.className
+        )}
+      >
+        <label htmlFor="input-search">
+          {!isLoading && !this.props.suppressIcon &&
+           <SvgSymbol
+             sym="search-icon"
+             title="Search"
+             viewBox="0 0 20 20"
+             className="mr-fill-current mr-w-5 mr-h-5"
+           />
+          }
+          {isLoading && <BusySpinner inline />}
+        </label>
+        <input
+          type="search"
+          className={classNames("mr-appearance-none mr-w-full mr-bg-transparent mr-outline-none mr-shadow-none mr-rounded-none mr-text-white mr-text-xl mr-leading-normal mr-font-light mr-ml-3", this.props.inputClassName)}
+          placeholder={this.props.placeholder}
+          maxLength="63"
+          onChange={this.queryChanged}
+          onKeyDown={this.checkForSpecialKeys}
+          value={query}
+        />
+
+        {doneButton}
+        {clearButton}
       </div>
     )
   }

@@ -36,7 +36,7 @@ export default {
     tooHard: {key: 'd', label: messages.tooHard},
     alreadyFixed: {key: 'x', label: messages.alreadyFixed},
   },
-  taskReview: {
+  taskInspect: {
     nextTask: {key: 'l', label: messages.nextTask},
     prevTask: {key: 'h', label: messages.prevTask},
   },

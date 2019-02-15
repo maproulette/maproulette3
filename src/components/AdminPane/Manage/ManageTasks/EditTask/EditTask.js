@@ -6,7 +6,7 @@ import _isObject from 'lodash/isObject'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
-import { CustomFieldTemplate,
+import { CustomSelectWidget,
          MarkdownDescriptionField,
          MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
@@ -15,7 +15,6 @@ import WithCurrentProject
 import WithCurrentChallenge
        from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentTask from '../../../HOCs/WithCurrentTask/WithCurrentTask'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import { jsSchema, uiSchema } from './EditTaskSchema'
 import manageMessages from '../../Messages'
@@ -44,14 +43,14 @@ export class EditTask extends Component {
   changeHandler = ({formData}) => this.setState({formData})
 
   /**
-   * Reroute after challenge owner is done, either to Task Review if we came
+   * Reroute after challenge owner is done, either to Task Inspect if we came
    * from there, or to View Challenge if not.
    */
   rerouteAfterCompletion = () => {
-    if (_get(this.props, 'location.state.fromTaskReview')) {
+    if (_get(this.props, 'location.state.fromTaskInspect')) {
       this.props.history.push(
         `/admin/project/${this.props.projectId}/` +
-        `challenge/${this.props.challengeId}/task/${this.props.task.id}/review`
+        `challenge/${this.props.challengeId}/task/${this.props.task.id}/inspect`
       )
     }
     else {
@@ -115,6 +114,7 @@ export class EditTask extends Component {
                     </li>
                   }
                   <li className="is-active">
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a aria-current="page">
                       {
                         _isObject(this.props.task) ?
@@ -128,31 +128,32 @@ export class EditTask extends Component {
               </nav>
             </div>
 
-            <Form schema={jsSchema(this.props.intl, this.props.task)}
-                  uiSchema={uiSchema}
-                  FieldTemplate={CustomFieldTemplate}
-                  fields={customFields}
-                  liveValidate
-                  noHtml5Validate
-                  showErrorList={false}
-                  formData={taskData}
-                  onChange={this.changeHandler}
-                  onSubmit={this.finish}>
-              <div className="form-controls">
-                <button className="button is-secondary is-outlined"
-                        disabled={this.state.isSaving}
-                        onClick={this.cancel}>
-                  <FormattedMessage {...messages.cancel} />
-                </button>
+            <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+              <Form schema={jsSchema(this.props.intl, this.props.task)}
+                    uiSchema={uiSchema(this.props.intl)}
+                    widgets={{SelectWidget: CustomSelectWidget}}
+                    fields={customFields}
+                    liveValidate
+                    noHtml5Validate
+                    showErrorList={false}
+                    formData={taskData}
+                    onChange={this.changeHandler}
+                    onSubmit={this.finish}>
+                <div className="mr-flex mr-justify-end mr-mt-8">
+                  <button className="mr-button mr-button--green"
+                          disabled={this.state.isSaving}
+                          onClick={this.cancel}>
+                    <FormattedMessage {...messages.cancel} />
+                  </button>
 
-                <button className={classNames("button is-primary is-outlined has-svg-icon",
-                                              {"is-loading": this.state.isSaving})}
-                        onClick={this.props.finish}>
-                  <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
-                  <FormattedMessage {...messages.save} />
-                </button>
-              </div>
-            </Form>
+                  <button className={classNames("mr-button mr-button--green mr-ml-4",
+                                                {"is-loading": this.state.isSaving})}
+                          onClick={this.props.finish}>
+                    <FormattedMessage {...messages.save} />
+                  </button>
+                </div>
+              </Form>
+            </div>
           </div>
         </div>
       </div>

@@ -41,7 +41,11 @@ export default class TaskInstructions extends Component {
       return null
     }
 
-    return <MarkdownContent markdown={this.substitutePropertyTags(taskInstructions)} />
+    return (
+      <div className="task-instructions">
+        <MarkdownContent markdown={this.substitutePropertyTags(taskInstructions)} />
+      </div>
+    )
   }
 }
 

@@ -10,9 +10,9 @@ import { CHALLENGE_CATEGORY_OTHER,
          combinedCategoryKeywords,
          keywordLabels }
        from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
-import NavDropdown from '../../Bulma/NavDropdown'
-import MenuList from '../../Bulma/MenuList'
 import OtherKeywordsOption from './OtherKeywordsOption'
+import Dropdown from '../../Dropdown/Dropdown'
+import ButtonFilter from './ButtonFilter'
 import messages from './Messages'
 
 /**
@@ -30,13 +30,14 @@ export class FilterByKeyword extends Component {
    *
    * @private
    */
-  updateFilter = ({ value }) => {
+  updateFilter = (value, closeDropdown) => {
     if (value === null) {
       this.props.removeSearchFilters(['keywords'])
     }
     else {
       this.props.setKeywordFilter(combinedCategoryKeywords[value])
     }
+    closeDropdown()
   }
 
   setOtherKeywords = keywordString => {
@@ -49,53 +50,85 @@ export class FilterByKeyword extends Component {
 
   render() {
     const localizedKeywordLabels = keywordLabels(this.props.intl, true)
-
     const categories = _without(_keys(combinedCategoryKeywords), 'other')
     const activeCategory = categoryMatchingKeywords(this.props.searchFilters.keywords, true)
-    const selectOptions = categories.map(keyword => ({
-      key: keyword,
-      text: localizedKeywordLabels[keyword],
-      value: keyword,
-    }))
-
-    // Add 'Anything' option to start of dropdown
-    const anyOption = {
-      key: 'any',
-      text: localizedKeywordLabels.any,
-      value: null,
-    }
-    selectOptions.unshift(anyOption)
 
     // If the active category doesn't match a known category, then it's a
     // manually entered ("other") keyword
     const otherKeyword = activeCategory === CHALLENGE_CATEGORY_OTHER ?
-                         _first(this.props.searchFilters.keywords) : null
+                          _first(this.props.searchFilters.keywords) : null
 
-    // Add 'other' box for manually entering other keywords not included in menu.
-    selectOptions.push({
-      Renderable: OtherKeywordsOption,
-      ownProps: {
-        searchQuery: {query: otherKeyword},
-        setSearch: this.setOtherKeywords,
-        clearSearch: this.clearOtherKeywords,
-        placeholder: '',
-      },
-      key: 'other',
-      text: localizedKeywordLabels.other,
-      value: 'other',
-    })
+    const notFiltering = _isEmpty(this.props.searchFilters.keywords)
 
-    const Selection = this.props.asMenuList ? MenuList : NavDropdown
     return (
-      <Selection placeholder={anyOption.text}
-                 label={<FormattedMessage {...messages.keywordLabel} />}
-                 options={selectOptions}
-                 value={_isEmpty(this.props.searchFilters.keywords) ?
-                        null : activeCategory}
-                 onChange={this.updateFilter}
-    />
+      <Dropdown
+        className="mr-dropdown--flush xl:mr-border-l xl:mr-border-white-10 mr-p-6 mr-pl-0 xl:mr-pl-6"
+        dropdownButton={dropdown =>
+          <ButtonFilter
+            type={<FormattedMessage {...messages.keywordLabel} />}
+            selection={
+              notFiltering ?
+              localizedKeywordLabels.any :
+              localizedKeywordLabels[activeCategory]
+            }
+            onClick={dropdown.toggleDropdownVisible}
+            selectionClassName={notFiltering ? null : 'mr-text-yellow'}
+          />
+        }
+        dropdownContent={dropdown =>
+          <ListFilterItems
+            keywordLabels={localizedKeywordLabels}
+            categories={categories}
+            activeCategory={activeCategory}
+            otherKeyword={otherKeyword}
+            setOtherKeywords={this.setOtherKeywords}
+            clearOtherKeywords={this.clearOtherKeywords}
+            updateFilter={this.updateFilter}
+            closeDropdown={dropdown.closeDropdown}
+          />
+        }
+      />
     )
   }
+}
+
+const ListFilterItems = function(props) {
+  const menuItems = props.categories.map(keyword => (
+    <li key={keyword}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(keyword, props.closeDropdown)}>
+        {props.keywordLabels[keyword]}
+      </a>
+    </li>
+  ))
+
+  // Add 'Anything' option to start of dropdown
+  menuItems.unshift(
+    <li key='any'>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a onClick={() => props.updateFilter(null, props.closeDropdown)}>
+        {props.keywordLabels.any}
+      </a>
+    </li>
+  )
+
+  // Add 'other' box for manually entering other keywords not included in menu.
+  menuItems.push(
+    <li key='other'>
+      <OtherKeywordsOption
+        searchQuery={{query: props.otherKeyword}}
+        setSearch={props.setOtherKeywords}
+        clearSearch={props.clearOtherKeywords}
+        placeholder=''
+      />
+    </li>
+  )
+
+  return (
+    <ol className="mr-list-dropdown mr-list-dropdown--ruled">
+      {menuItems}
+    </ol>
+  )
 }
 
 FilterByKeyword.propTypes = {
@@ -105,13 +138,10 @@ FilterByKeyword.propTypes = {
   removeSearchFilters: PropTypes.func.isRequired,
   /** The current value of the challenge filter */
   searchFilter: PropTypes.object,
-  /** Set to true to render a MenuList instead of NavDropdown */
-  asMenuList: PropTypes.bool,
 }
 
 FilterByKeyword.defaultProps = {
   searchFilters: {},
-  asMenuList: false,
 }
 
 export default injectIntl(FilterByKeyword)

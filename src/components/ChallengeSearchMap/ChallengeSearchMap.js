@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-import classNames from 'classnames'
 import { ZoomControl } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import _get from 'lodash/get'
@@ -117,6 +116,7 @@ export class ChallengeSearchMap extends Component {
     const content = (
       <div className="marker-popup-content">
         <h3>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => this.props.history.push(
             `/browse/challenges/${marker.options.challengeId}`
           )}>
@@ -126,6 +126,7 @@ export class ChallengeSearchMap extends Component {
 
         <div className="marker-popup-content__links">
           <div>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => {
               this.props.onTaskClick(marker.options.challengeId,
                                      marker.options.isVirtualChallenge,
@@ -159,8 +160,7 @@ export class ChallengeSearchMap extends Component {
     const initialBounds = !this.props.loadedFromRouteDone ? null : _get(this.props, 'mapBounds.bounds')
 
     return (
-      <div key='ChallengeSearchMap'
-           className={classNames('full-screen-map', this.props.className)}>
+      <div key='ChallengeSearchMap' className="mr-h-full">
         <LayerToggle {...this.props} />
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}

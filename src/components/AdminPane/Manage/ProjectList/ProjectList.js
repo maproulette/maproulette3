@@ -6,7 +6,7 @@ import _filter from 'lodash/filter'
 import _differenceBy from 'lodash/differenceBy'
 import ProjectCard from '../ProjectCard/ProjectCard'
 import PageResultsButton from '../../../LoadMoreButton/PageResultsButton'
-import './ProjectList.css'
+import './ProjectList.scss'
 
 /**
  * ProjectList renders the given list of projects. It supports an expanded view

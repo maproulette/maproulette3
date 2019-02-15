@@ -1,22 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
-import _omit from 'lodash/omit'
-import _map from 'lodash/map'
-import _keys from 'lodash/keys'
-import { NONE, Editor, keysByEditor, editorLabels }
+import { DEFAULT_EDITOR, Editor }
        from '../../../../../services/Editor/Editor'
-import DropdownButton from '../../../../Bulma/DropdownButton'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
-import WithDeactivateOnOutsideClick
-       from '../../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
+import Button from '../../../../Button/Button'
 import messages from './Messages'
-
-// Setup child components with needed HOCs.
-const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
 /**
  * TaskEditControl renders a control for initiating the editing process for a
@@ -55,6 +45,12 @@ export default class TaskEditControl extends Component {
     }
   }
 
+  currentEditor = () => {
+    const configuredEditor =
+      _get(this.props, 'user.settings.defaultEditor', Editor.none)
+    return configuredEditor === Editor.none ? DEFAULT_EDITOR : configuredEditor
+  }
+
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
       _pick(this.props.keyboardShortcutGroups, 'openEditor'),
@@ -67,54 +63,15 @@ export default class TaskEditControl extends Component {
   }
 
   render() {
-    const editControlClasses = classNames(
-      "button edit-control", this.props.className,
-      {"large-and-wide full-width": !this.props.isMinimized,
-       "icon-only": this.props.isMinimized})
-
-    const editControlContent = [
-      <span key="control-icon" className="control-icon">
-        <SvgSymbol viewBox='0 0 20 20' sym="edit-icon" />
-      </span>,
-      <span key="control-label" className="control-label">
+    return (
+      <Button
+        className="mr-button--blue-fill"
+        title={this.props.intl.formatMessage(messages.editTooltip)}
+        onClick={() => this.props.pickEditor({value: this.currentEditor()})}
+      >
         <FormattedMessage {...messages.editLabel} />
-      </span>
-    ]
-
-    const defaultEditor = _get(this.props, 'user.settings.defaultEditor', Editor.none)
-    if (defaultEditor !== Editor.none) {
-      // If the user has a favorite editor, open that immediately when they click
-      // the edit control.
-      return (
-        <button className={editControlClasses}
-                title={this.props.intl.formatMessage(messages.editTooltip)}
-                onClick={() => this.props.pickEditor({value: defaultEditor})}>
-          {editControlContent}
-        </button>
-      )
-    }
-    else {
-      // Show a dropdown of editor choices
-      const localizedLabels = editorLabels(this.props.intl)
-      const editorDropdownOptions = _map(_keys(_omit(Editor, keysByEditor[NONE])),
-        editor => ({ key: Editor[editor], text: localizedLabels[editor], value: Editor[editor] })
-      )
-
-      return (
-        <DeactivatableDropdownButton
-          className={classNames('editor-dropdown',
-                                {'full-width': !this.props.isMinimized,
-                                 'popout-right': this.props.isMinimized})}
-          triggerClassName={classNames({'full-width': !this.props.isMinimized})}
-          tooltip={this.props.intl.formatMessage(messages.editTooltip)}
-          options={editorDropdownOptions} onSelect={this.props.pickEditor}
-        >
-          <button className={editControlClasses}>
-            {editControlContent}
-          </button>
-        </DeactivatableDropdownButton>
-      )
-    }
+      </Button>
+    )
   }
 }
 

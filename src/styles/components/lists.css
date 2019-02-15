@@ -1,0 +1,123 @@
+.mr-list-nav-primary {
+  @apply mr-list-reset mr-flex;
+
+  li {
+    &:not(:last-of-type) {
+      @apply mr-mr-6;
+
+      @screen xl {
+        @apply mr-mr-8;
+      }
+    }
+
+    a {
+      @apply mr-text-white;
+
+      &:hover,
+      &.active {
+        @apply mr-text-green-lighter;
+      }
+    }
+  }
+}
+
+.mr-list-nav-mobile {
+  @apply mr-list-reset;
+
+  li {
+    & + li {
+      @apply mr-mt-4;
+    }
+
+    a {
+      @apply mr-text-green-lighter;
+
+      &:hover,
+      &.active {
+        @apply mr-text-white;
+      }
+    }
+  }
+}
+
+@variants responsive {
+  .mr-list-ruled {
+    @apply mr-list-reset mr-leading-tight mr-inline-flex;
+
+    li + li {
+      @apply mr-border-l mr-border-current mr-ml-3 mr-pl-3;
+    }
+  }
+}
+
+.mr-list-dropdown {
+  @apply mr-list-reset mr-text-base;
+
+  li + li {
+    @apply mr-mt-2;
+  }
+
+  &--ruled {
+    li + li {
+      @apply mr-mt-0 mr-border-t mr-border-blue;
+    }
+
+    a {
+      @apply mr-flex mr-items-center mr-py-3;
+
+      &.active::before {
+        content: '•';
+        @apply mr-text-xl mr-leading-none mr-text-yellow mr-mr-1;
+      }
+    }
+  }
+
+  a {
+    @apply mr-text-green-lighter;
+
+    &.active,
+    &:hover {
+      @apply mr-text-white;
+    }
+  }
+}
+
+.mr-list-dropdown--nav {
+  a {
+    @apply mr-text-white;
+
+    &:hover,
+    &.active {
+      @apply mr-text-green-lighter;
+    }
+  }
+}
+
+.mr-list-highlights {
+  @apply mr-max-w-xs mr-mx-auto mr-list-reset mr-text-center;
+
+  @screen md {
+    @apply mr-max-w-full mr-grid mr-grid-columns-3 mr-grid-gap-12;
+  }
+
+  > li {
+    @apply mr-p-12 mr-flex mr-flex-col;
+
+    figure {
+      @apply mr-flex mr-justify-center mr-items-center mr-my-auto mr-mb-12;
+    }
+
+    svg {
+      @apply mr-max-w-full mr-w-40 mr-h-auto;
+    }
+
+    h3 {
+      @apply mr-mt-auto mr-text-green;
+
+      @screen xl {
+        @apply mr-text-3xl;
+      }
+
+    }
+  }
+}

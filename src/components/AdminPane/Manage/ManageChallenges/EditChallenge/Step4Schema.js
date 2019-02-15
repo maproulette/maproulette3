@@ -46,13 +46,11 @@ export const jsSchema = intl => {
     properties: {
       updateTasks: {
         title: intl.formatMessage(messages.updateTasksLabel),
-        description: intl.formatMessage(messages.updateTasksDescription),
         type: "boolean",
         default: false,
       },
       defaultZoom: {
         title: intl.formatMessage(messages.defaultZoomLabel),
-        description: intl.formatMessage(messages.defaultZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
@@ -61,7 +59,6 @@ export const jsSchema = intl => {
       },
       minZoom: {
         title: intl.formatMessage(messages.minZoomLabel),
-        description: intl.formatMessage(messages.minZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
@@ -70,7 +67,6 @@ export const jsSchema = intl => {
       },
       maxZoom: {
         title: intl.formatMessage(messages.maxZoomLabel),
-        description: intl.formatMessage(messages.maxZoomDescription),
         type: "number",
         enum: ZOOM_LEVELS,
         default: numericEnvSetting(
@@ -79,7 +75,6 @@ export const jsSchema = intl => {
       },
       defaultBasemap: {
         title: intl.formatMessage(messages.defaultBasemapLabel),
-        description: intl.formatMessage(messages.defaultBasemapDescription),
         type: "string",
         enum: _map(defaultBasemapChoices, 'id'),
         enumNames: _map(defaultBasemapChoices, 'name'),
@@ -103,7 +98,6 @@ export const jsSchema = intl => {
               },
               customBasemap: {
                 title: intl.formatMessage(messages.customBasemapLabel),
-                description: intl.formatMessage(messages.customBasemapDescription, {dummy: ''}),
                 type: "string",
               },
             },
@@ -125,24 +119,30 @@ export const jsSchema = intl => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = () => ({
+export const uiSchema = intl => ({
   updateTasks: {
     "ui:widget": "radio",
+    "ui:help": intl.formatMessage(messages.updateTasksDescription),
   },
   defaultZoom: {
     "ui:widget": "select",
+    "ui:help": intl.formatMessage(messages.defaultZoomDescription),
   },
   minZoom: {
     "ui:widget": "select",
+    "ui:help": intl.formatMessage(messages.minZoomDescription),
   },
   maxZoom: {
     "ui:widget": "select",
+    "ui:help": intl.formatMessage(messages.maxZoomDescription),
   },
   defaultBasemap: {
     "ui:widget": "select",
+    "ui:help": intl.formatMessage(messages.defaultBasemapDescription),
   },
   customBasemap: {
     "ui:emptyValue": "",
+    "ui:help": intl.formatMessage(messages.customBasemapDescription, {dummy: ''}),
   },
 })
 

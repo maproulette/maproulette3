@@ -57,6 +57,7 @@ export class NavDropdown extends Component {
       }
 
       return (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a key={option.key} className='navbar-item'
            onClick={(e) => this.selectOption(e, option)}>
           {option.text}
@@ -68,6 +69,7 @@ export class NavDropdown extends Component {
       <div className={classNames('nav-dropdown', 'navbar-item', 'has-dropdown',
                                  {'is-active': this.props.isActive},
                                  this.props.className)}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className='navbar-link' onClick={this.props.toggleActive}>
           {this.props.label && <label>{this.props.label}</label>}
           {this.dropdownLabel()}

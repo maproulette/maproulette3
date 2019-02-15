@@ -6,37 +6,37 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeBrowseMap
     browsedChallenge={
-        Object {
-            "id": 123,
-          }
+      Object {
+        "id": 123,
+      }
     }
     mapBounds={
-        Object {
-            "challengeBrowse": Object {
-              "bounds": Object {
-                "_northEast": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-                "_southWest": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-              },
-              "challengeId": 123,
+      Object {
+        "challengeBrowse": Object {
+          "bounds": Object {
+            "_northEast": Object {
+              "lat": 0,
+              "lng": 0,
             },
-          }
+            "_southWest": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+          },
+          "challengeId": 123,
+        },
+      }
     }
-    setChallengeBrowseMapBounds={[Function]}
+    setChallengeBrowseMapBounds={[MockFunction]}
     source={
-        Object {
-            "id": "foo",
-          }
+      Object {
+        "id": "foo",
+      }
     }
     taskMarkers={Array []}
     tasksLoading={true}
     visibleOverlays={Array []}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -52,47 +52,46 @@ ShallowWrapper {
       "children": Array [
         <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
           browsedChallenge={
-                    Object {
-                              "id": 123,
-                            }
+            Object {
+              "id": 123,
+            }
           }
           mapBounds={
-                    Object {
-                              "challengeBrowse": Object {
-                                "bounds": Object {
-                                  "_northEast": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
-                                  "_southWest": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
-                                },
-                                "challengeId": 123,
-                              },
-                            }
+            Object {
+              "challengeBrowse": Object {
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                },
+                "challengeId": 123,
+              },
+            }
           }
-          setChallengeBrowseMapBounds={[Function]}
+          setChallengeBrowseMapBounds={[MockFunction]}
           source={
-                    Object {
-                              "id": "foo",
-                            }
+            Object {
+              "id": "foo",
+            }
           }
           taskMarkers={Array []}
           tasksLoading={true}
           visibleOverlays={Array []}
-/>,
+        />,
         <EnhancedMap
           animate={true}
           animateFeatures={false}
           center={
-                    Object {
-                              "lat": 0,
-                              "lng": 45,
-                            }
+            Object {
+              "lat": 0,
+              "lng": 45,
+            }
           }
-          features={undefined}
           initialBounds={null}
           justFitFeatures={false}
           maxZoom={18}
@@ -102,45 +101,45 @@ ShallowWrapper {
           worldCopyJump={true}
           zoom={3}
           zoomControl={false}
->
+        >
           <ZoomControl
-                    position="topright"
+            position="topright"
           />
           <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                    browsedChallenge={
-                              Object {
-                                        "id": 123,
-                                      }
-                    }
-                    mapBounds={
-                              Object {
-                                        "challengeBrowse": Object {
-                                          "bounds": Object {
-                                            "_northEast": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
-                                            "_southWest": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
-                                          },
-                                          "challengeId": 123,
-                                        },
-                                      }
-                    }
-                    setChallengeBrowseMapBounds={[Function]}
-                    source={
-                              Object {
-                                        "id": "foo",
-                                      }
-                    }
-                    taskMarkers={Array []}
-                    tasksLoading={true}
-                    visibleOverlays={Array []}
-                    zIndex={1}
+            browsedChallenge={
+              Object {
+                "id": 123,
+              }
+            }
+            mapBounds={
+              Object {
+                "challengeBrowse": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              }
+            }
+            setChallengeBrowseMapBounds={[MockFunction]}
+            source={
+              Object {
+                "id": "foo",
+              }
+            }
+            taskMarkers={Array []}
+            tasksLoading={true}
+            visibleOverlays={Array []}
+            zIndex={1}
           />
-</EnhancedMap>,
+        </EnhancedMap>,
         <BusySpinner />,
       ],
       "className": "full-screen-map",
@@ -170,7 +169,7 @@ ShallowWrapper {
               "challengeId": 123,
             },
           },
-          "setChallengeBrowseMapBounds": [Function],
+          "setChallengeBrowseMapBounds": [MockFunction],
           "source": Object {
             "id": "foo",
           },
@@ -196,41 +195,41 @@ ShallowWrapper {
           "children": Array [
             <ZoomControl
               position="topright"
-/>,
+            />,
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
               browsedChallenge={
-                            Object {
-                                          "id": 123,
-                                        }
+                Object {
+                  "id": 123,
+                }
               }
               mapBounds={
-                            Object {
-                                          "challengeBrowse": Object {
-                                            "bounds": Object {
-                                              "_northEast": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
-                                              "_southWest": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
-                                            },
-                                            "challengeId": 123,
-                                          },
-                                        }
+                Object {
+                  "challengeBrowse": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                }
               }
-              setChallengeBrowseMapBounds={[Function]}
+              setChallengeBrowseMapBounds={[MockFunction]}
               source={
-                            Object {
-                                          "id": "foo",
-                                        }
+                Object {
+                  "id": "foo",
+                }
               }
               taskMarkers={Array []}
               tasksLoading={true}
               visibleOverlays={Array []}
               zIndex={1}
-/>,
+            />,
             Array [],
             false,
           ],
@@ -281,7 +280,7 @@ ShallowWrapper {
                   "challengeId": 123,
                 },
               },
-              "setChallengeBrowseMapBounds": [Function],
+              "setChallengeBrowseMapBounds": [MockFunction],
               "source": Object {
                 "id": "foo",
               },
@@ -319,47 +318,46 @@ ShallowWrapper {
         "children": Array [
           <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
             browsedChallenge={
-                        Object {
-                                    "id": 123,
-                                  }
+              Object {
+                "id": 123,
+              }
             }
             mapBounds={
-                        Object {
-                                    "challengeBrowse": Object {
-                                      "bounds": Object {
-                                        "_northEast": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
-                                        "_southWest": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
-                                      },
-                                      "challengeId": 123,
-                                    },
-                                  }
+              Object {
+                "challengeBrowse": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              }
             }
-            setChallengeBrowseMapBounds={[Function]}
+            setChallengeBrowseMapBounds={[MockFunction]}
             source={
-                        Object {
-                                    "id": "foo",
-                                  }
+              Object {
+                "id": "foo",
+              }
             }
             taskMarkers={Array []}
             tasksLoading={true}
             visibleOverlays={Array []}
-/>,
+          />,
           <EnhancedMap
             animate={true}
             animateFeatures={false}
             center={
-                        Object {
-                                    "lat": 0,
-                                    "lng": 45,
-                                  }
+              Object {
+                "lat": 0,
+                "lng": 45,
+              }
             }
-            features={undefined}
             initialBounds={null}
             justFitFeatures={false}
             maxZoom={18}
@@ -369,45 +367,45 @@ ShallowWrapper {
             worldCopyJump={true}
             zoom={3}
             zoomControl={false}
->
+          >
             <ZoomControl
-                        position="topright"
+              position="topright"
             />
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                        browsedChallenge={
-                                    Object {
-                                                "id": 123,
-                                              }
-                        }
-                        mapBounds={
-                                    Object {
-                                                "challengeBrowse": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                  },
-                                                  "challengeId": 123,
-                                                },
-                                              }
-                        }
-                        setChallengeBrowseMapBounds={[Function]}
-                        source={
-                                    Object {
-                                                "id": "foo",
-                                              }
-                        }
-                        taskMarkers={Array []}
-                        tasksLoading={true}
-                        visibleOverlays={Array []}
-                        zIndex={1}
+              browsedChallenge={
+                Object {
+                  "id": 123,
+                }
+              }
+              mapBounds={
+                Object {
+                  "challengeBrowse": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                }
+              }
+              setChallengeBrowseMapBounds={[MockFunction]}
+              source={
+                Object {
+                  "id": "foo",
+                }
+              }
+              taskMarkers={Array []}
+              tasksLoading={true}
+              visibleOverlays={Array []}
+              zIndex={1}
             />
-</EnhancedMap>,
+          </EnhancedMap>,
           <BusySpinner />,
         ],
         "className": "full-screen-map",
@@ -437,7 +435,7 @@ ShallowWrapper {
                 "challengeId": 123,
               },
             },
-            "setChallengeBrowseMapBounds": [Function],
+            "setChallengeBrowseMapBounds": [MockFunction],
             "source": Object {
               "id": "foo",
             },
@@ -463,41 +461,41 @@ ShallowWrapper {
             "children": Array [
               <ZoomControl
                 position="topright"
-/>,
+              />,
               <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                 browsedChallenge={
-                                Object {
-                                                "id": 123,
-                                              }
+                  Object {
+                    "id": 123,
+                  }
                 }
                 mapBounds={
-                                Object {
-                                                "challengeBrowse": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                  },
-                                                  "challengeId": 123,
-                                                },
-                                              }
+                  Object {
+                    "challengeBrowse": Object {
+                      "bounds": Object {
+                        "_northEast": Object {
+                          "lat": 0,
+                          "lng": 0,
+                        },
+                        "_southWest": Object {
+                          "lat": 0,
+                          "lng": 0,
+                        },
+                      },
+                      "challengeId": 123,
+                    },
+                  }
                 }
-                setChallengeBrowseMapBounds={[Function]}
+                setChallengeBrowseMapBounds={[MockFunction]}
                 source={
-                                Object {
-                                                "id": "foo",
-                                              }
+                  Object {
+                    "id": "foo",
+                  }
                 }
                 taskMarkers={Array []}
                 tasksLoading={true}
                 visibleOverlays={Array []}
                 zIndex={1}
-/>,
+              />,
               Array [],
               false,
             ],
@@ -548,7 +546,7 @@ ShallowWrapper {
                     "challengeId": 123,
                   },
                 },
-                "setChallengeBrowseMapBounds": [Function],
+                "setChallengeBrowseMapBounds": [MockFunction],
                 "source": Object {
                   "id": "foo",
                 },
@@ -594,36 +592,36 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeBrowseMap
     browsedChallenge={
-        Object {
-            "id": 123,
-          }
+      Object {
+        "id": 123,
+      }
     }
     mapBounds={
-        Object {
-            "challengeBrowse": Object {
-              "bounds": Object {
-                "_northEast": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-                "_southWest": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-              },
-              "challengeId": 123,
+      Object {
+        "challengeBrowse": Object {
+          "bounds": Object {
+            "_northEast": Object {
+              "lat": 0,
+              "lng": 0,
             },
-          }
+            "_southWest": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+          },
+          "challengeId": 123,
+        },
+      }
     }
-    setChallengeBrowseMapBounds={[Function]}
+    setChallengeBrowseMapBounds={[MockFunction]}
     source={
-        Object {
-            "id": "foo",
-          }
+      Object {
+        "id": "foo",
+      }
     }
     taskMarkers={Array []}
     visibleOverlays={Array []}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -639,46 +637,45 @@ ShallowWrapper {
       "children": Array [
         <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
           browsedChallenge={
-                    Object {
-                              "id": 123,
-                            }
+            Object {
+              "id": 123,
+            }
           }
           mapBounds={
-                    Object {
-                              "challengeBrowse": Object {
-                                "bounds": Object {
-                                  "_northEast": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
-                                  "_southWest": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
-                                },
-                                "challengeId": 123,
-                              },
-                            }
+            Object {
+              "challengeBrowse": Object {
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                },
+                "challengeId": 123,
+              },
+            }
           }
-          setChallengeBrowseMapBounds={[Function]}
+          setChallengeBrowseMapBounds={[MockFunction]}
           source={
-                    Object {
-                              "id": "foo",
-                            }
+            Object {
+              "id": "foo",
+            }
           }
           taskMarkers={Array []}
           visibleOverlays={Array []}
-/>,
+        />,
         <EnhancedMap
           animate={true}
           animateFeatures={false}
           center={
-                    Object {
-                              "lat": 0,
-                              "lng": 45,
-                            }
+            Object {
+              "lat": 0,
+              "lng": 45,
+            }
           }
-          features={undefined}
           initialBounds={null}
           justFitFeatures={false}
           maxZoom={18}
@@ -688,44 +685,44 @@ ShallowWrapper {
           worldCopyJump={true}
           zoom={3}
           zoomControl={false}
->
+        >
           <ZoomControl
-                    position="topright"
+            position="topright"
           />
           <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                    browsedChallenge={
-                              Object {
-                                        "id": 123,
-                                      }
-                    }
-                    mapBounds={
-                              Object {
-                                        "challengeBrowse": Object {
-                                          "bounds": Object {
-                                            "_northEast": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
-                                            "_southWest": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
-                                          },
-                                          "challengeId": 123,
-                                        },
-                                      }
-                    }
-                    setChallengeBrowseMapBounds={[Function]}
-                    source={
-                              Object {
-                                        "id": "foo",
-                                      }
-                    }
-                    taskMarkers={Array []}
-                    visibleOverlays={Array []}
-                    zIndex={1}
+            browsedChallenge={
+              Object {
+                "id": 123,
+              }
+            }
+            mapBounds={
+              Object {
+                "challengeBrowse": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              }
+            }
+            setChallengeBrowseMapBounds={[MockFunction]}
+            source={
+              Object {
+                "id": "foo",
+              }
+            }
+            taskMarkers={Array []}
+            visibleOverlays={Array []}
+            zIndex={1}
           />
-</EnhancedMap>,
+        </EnhancedMap>,
         false,
       ],
       "className": "full-screen-map",
@@ -755,7 +752,7 @@ ShallowWrapper {
               "challengeId": 123,
             },
           },
-          "setChallengeBrowseMapBounds": [Function],
+          "setChallengeBrowseMapBounds": [MockFunction],
           "source": Object {
             "id": "foo",
           },
@@ -780,40 +777,40 @@ ShallowWrapper {
           "children": Array [
             <ZoomControl
               position="topright"
-/>,
+            />,
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
               browsedChallenge={
-                            Object {
-                                          "id": 123,
-                                        }
+                Object {
+                  "id": 123,
+                }
               }
               mapBounds={
-                            Object {
-                                          "challengeBrowse": Object {
-                                            "bounds": Object {
-                                              "_northEast": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
-                                              "_southWest": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
-                                            },
-                                            "challengeId": 123,
-                                          },
-                                        }
+                Object {
+                  "challengeBrowse": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                }
               }
-              setChallengeBrowseMapBounds={[Function]}
+              setChallengeBrowseMapBounds={[MockFunction]}
               source={
-                            Object {
-                                          "id": "foo",
-                                        }
+                Object {
+                  "id": "foo",
+                }
               }
               taskMarkers={Array []}
               visibleOverlays={Array []}
               zIndex={1}
-/>,
+            />,
             Array [],
             false,
           ],
@@ -864,7 +861,7 @@ ShallowWrapper {
                   "challengeId": 123,
                 },
               },
-              "setChallengeBrowseMapBounds": [Function],
+              "setChallengeBrowseMapBounds": [MockFunction],
               "source": Object {
                 "id": "foo",
               },
@@ -893,46 +890,45 @@ ShallowWrapper {
         "children": Array [
           <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
             browsedChallenge={
-                        Object {
-                                    "id": 123,
-                                  }
+              Object {
+                "id": 123,
+              }
             }
             mapBounds={
-                        Object {
-                                    "challengeBrowse": Object {
-                                      "bounds": Object {
-                                        "_northEast": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
-                                        "_southWest": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
-                                      },
-                                      "challengeId": 123,
-                                    },
-                                  }
+              Object {
+                "challengeBrowse": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              }
             }
-            setChallengeBrowseMapBounds={[Function]}
+            setChallengeBrowseMapBounds={[MockFunction]}
             source={
-                        Object {
-                                    "id": "foo",
-                                  }
+              Object {
+                "id": "foo",
+              }
             }
             taskMarkers={Array []}
             visibleOverlays={Array []}
-/>,
+          />,
           <EnhancedMap
             animate={true}
             animateFeatures={false}
             center={
-                        Object {
-                                    "lat": 0,
-                                    "lng": 45,
-                                  }
+              Object {
+                "lat": 0,
+                "lng": 45,
+              }
             }
-            features={undefined}
             initialBounds={null}
             justFitFeatures={false}
             maxZoom={18}
@@ -942,44 +938,44 @@ ShallowWrapper {
             worldCopyJump={true}
             zoom={3}
             zoomControl={false}
->
+          >
             <ZoomControl
-                        position="topright"
+              position="topright"
             />
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                        browsedChallenge={
-                                    Object {
-                                                "id": 123,
-                                              }
-                        }
-                        mapBounds={
-                                    Object {
-                                                "challengeBrowse": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                  },
-                                                  "challengeId": 123,
-                                                },
-                                              }
-                        }
-                        setChallengeBrowseMapBounds={[Function]}
-                        source={
-                                    Object {
-                                                "id": "foo",
-                                              }
-                        }
-                        taskMarkers={Array []}
-                        visibleOverlays={Array []}
-                        zIndex={1}
+              browsedChallenge={
+                Object {
+                  "id": 123,
+                }
+              }
+              mapBounds={
+                Object {
+                  "challengeBrowse": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                }
+              }
+              setChallengeBrowseMapBounds={[MockFunction]}
+              source={
+                Object {
+                  "id": "foo",
+                }
+              }
+              taskMarkers={Array []}
+              visibleOverlays={Array []}
+              zIndex={1}
             />
-</EnhancedMap>,
+          </EnhancedMap>,
           false,
         ],
         "className": "full-screen-map",
@@ -1009,7 +1005,7 @@ ShallowWrapper {
                 "challengeId": 123,
               },
             },
-            "setChallengeBrowseMapBounds": [Function],
+            "setChallengeBrowseMapBounds": [MockFunction],
             "source": Object {
               "id": "foo",
             },
@@ -1034,40 +1030,40 @@ ShallowWrapper {
             "children": Array [
               <ZoomControl
                 position="topright"
-/>,
+              />,
               <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                 browsedChallenge={
-                                Object {
-                                                "id": 123,
-                                              }
+                  Object {
+                    "id": 123,
+                  }
                 }
                 mapBounds={
-                                Object {
-                                                "challengeBrowse": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                  },
-                                                  "challengeId": 123,
-                                                },
-                                              }
+                  Object {
+                    "challengeBrowse": Object {
+                      "bounds": Object {
+                        "_northEast": Object {
+                          "lat": 0,
+                          "lng": 0,
+                        },
+                        "_southWest": Object {
+                          "lat": 0,
+                          "lng": 0,
+                        },
+                      },
+                      "challengeId": 123,
+                    },
+                  }
                 }
-                setChallengeBrowseMapBounds={[Function]}
+                setChallengeBrowseMapBounds={[MockFunction]}
                 source={
-                                Object {
-                                                "id": "foo",
-                                              }
+                  Object {
+                    "id": "foo",
+                  }
                 }
                 taskMarkers={Array []}
                 visibleOverlays={Array []}
                 zIndex={1}
-/>,
+              />,
               Array [],
               false,
             ],
@@ -1118,7 +1114,7 @@ ShallowWrapper {
                     "challengeId": 123,
                   },
                 },
-                "setChallengeBrowseMapBounds": [Function],
+                "setChallengeBrowseMapBounds": [MockFunction],
                 "source": Object {
                   "id": "foo",
                 },
@@ -1155,37 +1151,37 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ChallengeBrowseMap
     browsedChallenge={
-        Object {
-            "id": 123,
-          }
+      Object {
+        "id": 123,
+      }
     }
     mapBounds={
-        Object {
-            "challengeBrowse": Object {
-              "bounds": Object {
-                "_northEast": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-                "_southWest": Object {
-                  "lat": 0,
-                  "lng": 0,
-                },
-              },
-              "challengeId": 123,
+      Object {
+        "challengeBrowse": Object {
+          "bounds": Object {
+            "_northEast": Object {
+              "lat": 0,
+              "lng": 0,
             },
-          }
+            "_southWest": Object {
+              "lat": 0,
+              "lng": 0,
+            },
+          },
+          "challengeId": 123,
+        },
+      }
     }
-    setChallengeBrowseMapBounds={[Function]}
+    setChallengeBrowseMapBounds={[MockFunction]}
     source={
-        Object {
-            "id": "foo",
-          }
+      Object {
+        "id": "foo",
+      }
     }
     taskMarkers={Array []}
     tasksLoading={false}
     visibleOverlays={Array []}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -1201,47 +1197,46 @@ ShallowWrapper {
       "children": Array [
         <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
           browsedChallenge={
-                    Object {
-                              "id": 123,
-                            }
+            Object {
+              "id": 123,
+            }
           }
           mapBounds={
-                    Object {
-                              "challengeBrowse": Object {
-                                "bounds": Object {
-                                  "_northEast": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
-                                  "_southWest": Object {
-                                    "lat": 0,
-                                    "lng": 0,
-                                  },
-                                },
-                                "challengeId": 123,
-                              },
-                            }
+            Object {
+              "challengeBrowse": Object {
+                "bounds": Object {
+                  "_northEast": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                  "_southWest": Object {
+                    "lat": 0,
+                    "lng": 0,
+                  },
+                },
+                "challengeId": 123,
+              },
+            }
           }
-          setChallengeBrowseMapBounds={[Function]}
+          setChallengeBrowseMapBounds={[MockFunction]}
           source={
-                    Object {
-                              "id": "foo",
-                            }
+            Object {
+              "id": "foo",
+            }
           }
           taskMarkers={Array []}
           tasksLoading={false}
           visibleOverlays={Array []}
-/>,
+        />,
         <EnhancedMap
           animate={true}
           animateFeatures={false}
           center={
-                    Object {
-                              "lat": 0,
-                              "lng": 45,
-                            }
+            Object {
+              "lat": 0,
+              "lng": 45,
+            }
           }
-          features={undefined}
           initialBounds={null}
           justFitFeatures={false}
           maxZoom={18}
@@ -1251,45 +1246,45 @@ ShallowWrapper {
           worldCopyJump={true}
           zoom={3}
           zoomControl={false}
->
+        >
           <ZoomControl
-                    position="topright"
+            position="topright"
           />
           <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                    browsedChallenge={
-                              Object {
-                                        "id": 123,
-                                      }
-                    }
-                    mapBounds={
-                              Object {
-                                        "challengeBrowse": Object {
-                                          "bounds": Object {
-                                            "_northEast": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
-                                            "_southWest": Object {
-                                              "lat": 0,
-                                              "lng": 0,
-                                            },
-                                          },
-                                          "challengeId": 123,
-                                        },
-                                      }
-                    }
-                    setChallengeBrowseMapBounds={[Function]}
-                    source={
-                              Object {
-                                        "id": "foo",
-                                      }
-                    }
-                    taskMarkers={Array []}
-                    tasksLoading={false}
-                    visibleOverlays={Array []}
-                    zIndex={1}
+            browsedChallenge={
+              Object {
+                "id": 123,
+              }
+            }
+            mapBounds={
+              Object {
+                "challengeBrowse": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              }
+            }
+            setChallengeBrowseMapBounds={[MockFunction]}
+            source={
+              Object {
+                "id": "foo",
+              }
+            }
+            taskMarkers={Array []}
+            tasksLoading={false}
+            visibleOverlays={Array []}
+            zIndex={1}
           />
-</EnhancedMap>,
+        </EnhancedMap>,
         false,
       ],
       "className": "full-screen-map",
@@ -1319,7 +1314,7 @@ ShallowWrapper {
               "challengeId": 123,
             },
           },
-          "setChallengeBrowseMapBounds": [Function],
+          "setChallengeBrowseMapBounds": [MockFunction],
           "source": Object {
             "id": "foo",
           },
@@ -1345,41 +1340,41 @@ ShallowWrapper {
           "children": Array [
             <ZoomControl
               position="topright"
-/>,
+            />,
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
               browsedChallenge={
-                            Object {
-                                          "id": 123,
-                                        }
+                Object {
+                  "id": 123,
+                }
               }
               mapBounds={
-                            Object {
-                                          "challengeBrowse": Object {
-                                            "bounds": Object {
-                                              "_northEast": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
-                                              "_southWest": Object {
-                                                "lat": 0,
-                                                "lng": 0,
-                                              },
-                                            },
-                                            "challengeId": 123,
-                                          },
-                                        }
+                Object {
+                  "challengeBrowse": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                }
               }
-              setChallengeBrowseMapBounds={[Function]}
+              setChallengeBrowseMapBounds={[MockFunction]}
               source={
-                            Object {
-                                          "id": "foo",
-                                        }
+                Object {
+                  "id": "foo",
+                }
               }
               taskMarkers={Array []}
               tasksLoading={false}
               visibleOverlays={Array []}
               zIndex={1}
-/>,
+            />,
             Array [],
             false,
           ],
@@ -1430,7 +1425,7 @@ ShallowWrapper {
                   "challengeId": 123,
                 },
               },
-              "setChallengeBrowseMapBounds": [Function],
+              "setChallengeBrowseMapBounds": [MockFunction],
               "source": Object {
                 "id": "foo",
               },
@@ -1460,47 +1455,46 @@ ShallowWrapper {
         "children": Array [
           <Connect(Connect(Connect(InjectIntl(_WithLayerSources))))
             browsedChallenge={
-                        Object {
-                                    "id": 123,
-                                  }
+              Object {
+                "id": 123,
+              }
             }
             mapBounds={
-                        Object {
-                                    "challengeBrowse": Object {
-                                      "bounds": Object {
-                                        "_northEast": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
-                                        "_southWest": Object {
-                                          "lat": 0,
-                                          "lng": 0,
-                                        },
-                                      },
-                                      "challengeId": 123,
-                                    },
-                                  }
+              Object {
+                "challengeBrowse": Object {
+                  "bounds": Object {
+                    "_northEast": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                    "_southWest": Object {
+                      "lat": 0,
+                      "lng": 0,
+                    },
+                  },
+                  "challengeId": 123,
+                },
+              }
             }
-            setChallengeBrowseMapBounds={[Function]}
+            setChallengeBrowseMapBounds={[MockFunction]}
             source={
-                        Object {
-                                    "id": "foo",
-                                  }
+              Object {
+                "id": "foo",
+              }
             }
             taskMarkers={Array []}
             tasksLoading={false}
             visibleOverlays={Array []}
-/>,
+          />,
           <EnhancedMap
             animate={true}
             animateFeatures={false}
             center={
-                        Object {
-                                    "lat": 0,
-                                    "lng": 45,
-                                  }
+              Object {
+                "lat": 0,
+                "lng": 45,
+              }
             }
-            features={undefined}
             initialBounds={null}
             justFitFeatures={false}
             maxZoom={18}
@@ -1510,45 +1504,45 @@ ShallowWrapper {
             worldCopyJump={true}
             zoom={3}
             zoomControl={false}
->
+          >
             <ZoomControl
-                        position="topright"
+              position="topright"
             />
             <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
-                        browsedChallenge={
-                                    Object {
-                                                "id": 123,
-                                              }
-                        }
-                        mapBounds={
-                                    Object {
-                                                "challengeBrowse": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                  },
-                                                  "challengeId": 123,
-                                                },
-                                              }
-                        }
-                        setChallengeBrowseMapBounds={[Function]}
-                        source={
-                                    Object {
-                                                "id": "foo",
-                                              }
-                        }
-                        taskMarkers={Array []}
-                        tasksLoading={false}
-                        visibleOverlays={Array []}
-                        zIndex={1}
+              browsedChallenge={
+                Object {
+                  "id": 123,
+                }
+              }
+              mapBounds={
+                Object {
+                  "challengeBrowse": Object {
+                    "bounds": Object {
+                      "_northEast": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                      "_southWest": Object {
+                        "lat": 0,
+                        "lng": 0,
+                      },
+                    },
+                    "challengeId": 123,
+                  },
+                }
+              }
+              setChallengeBrowseMapBounds={[MockFunction]}
+              source={
+                Object {
+                  "id": "foo",
+                }
+              }
+              taskMarkers={Array []}
+              tasksLoading={false}
+              visibleOverlays={Array []}
+              zIndex={1}
             />
-</EnhancedMap>,
+          </EnhancedMap>,
           false,
         ],
         "className": "full-screen-map",
@@ -1578,7 +1572,7 @@ ShallowWrapper {
                 "challengeId": 123,
               },
             },
-            "setChallengeBrowseMapBounds": [Function],
+            "setChallengeBrowseMapBounds": [MockFunction],
             "source": Object {
               "id": "foo",
             },
@@ -1604,41 +1598,41 @@ ShallowWrapper {
             "children": Array [
               <ZoomControl
                 position="topright"
-/>,
+              />,
               <Connect(Connect(Connect(InjectIntl(SourcedTileLayer))))
                 browsedChallenge={
-                                Object {
-                                                "id": 123,
-                                              }
+                  Object {
+                    "id": 123,
+                  }
                 }
                 mapBounds={
-                                Object {
-                                                "challengeBrowse": Object {
-                                                  "bounds": Object {
-                                                    "_northEast": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                    "_southWest": Object {
-                                                      "lat": 0,
-                                                      "lng": 0,
-                                                    },
-                                                  },
-                                                  "challengeId": 123,
-                                                },
-                                              }
+                  Object {
+                    "challengeBrowse": Object {
+                      "bounds": Object {
+                        "_northEast": Object {
+                          "lat": 0,
+                          "lng": 0,
+                        },
+                        "_southWest": Object {
+                          "lat": 0,
+                          "lng": 0,
+                        },
+                      },
+                      "challengeId": 123,
+                    },
+                  }
                 }
-                setChallengeBrowseMapBounds={[Function]}
+                setChallengeBrowseMapBounds={[MockFunction]}
                 source={
-                                Object {
-                                                "id": "foo",
-                                              }
+                  Object {
+                    "id": "foo",
+                  }
                 }
                 taskMarkers={Array []}
                 tasksLoading={false}
                 visibleOverlays={Array []}
                 zIndex={1}
-/>,
+              />,
               Array [],
               false,
             ],
@@ -1689,7 +1683,7 @@ ShallowWrapper {
                     "challengeId": 123,
                   },
                 },
-                "setChallengeBrowseMapBounds": [Function],
+                "setChallengeBrowseMapBounds": [MockFunction],
                 "source": Object {
                   "id": "foo",
                 },

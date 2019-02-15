@@ -4,7 +4,7 @@ import L from 'leaflet'
 import 'leaflet-vectoricon'
 import InsetMap from '../../InsetMap/InsetMap'
 import WithTaskCenterPoint from '../../HOCs/WithTaskCenterPoint/WithTaskCenterPoint'
-import './TaskLocationMap.css'
+import './TaskLocationMap.scss'
 
 const starIconSvg = L.vectorIcon({
   className: 'star-marker-icon',
@@ -23,12 +23,20 @@ export class TaskLocationMap extends Component {
   render() {
     return (
       <div className="task-location-map">
-        <InsetMap className="task-location-map__primary-map"
-                  task={this.props.task} fixedZoom={7} {...this.props} />
+        <InsetMap
+          {...this.props}
+          className="task-location-map__primary-map"
+          task={this.props.task}
+          fixedZoom={7}
+        />
 
-        <InsetMap className="task-location-map__extent-map"
-                  markerIcon={starIconSvg}
-                  task={this.props.task} fixedZoom={1} {...this.props} />
+        <InsetMap
+          {...this.props}
+          className="task-location-map__extent-map"
+          markerIcon={starIconSvg}
+          task={this.props.task}
+          fixedZoom={1}
+        />
       </div>
     )
   }

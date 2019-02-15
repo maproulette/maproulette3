@@ -32,8 +32,13 @@ const WithCommandInterpreter = function(WrappedComponent) {
 
     executeSearch = commandString => {
       if (this.state.searchActive || commandString.length <= 2) {
+        // executeCommmand either runs the command or runs a search. It returns
+        // true if it ran a search, false if it ran a command
         const wasStandardSearch = executeCommand(this.props, commandString)
-        this.setState({commandString, searchActive: wasStandardSearch})
+        this.setState({
+          commandString: wasStandardSearch ? null : commandString,
+          searchActive: wasStandardSearch,
+        })
       }
       else {
         this.setState({commandString})
@@ -172,6 +177,8 @@ export const executePlaceSearch = (props, query, setLoading) => {
     else {
       props.addError(AppErrors.map.placeNotFound)
     }
+  }).catch(error => {
+    console.log(error)
   })
 }
 

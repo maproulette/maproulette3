@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import './LoadMoreButton.css'
+import BusySpinner from '../BusySpinner/BusySpinner'
+import './LoadMoreButton.scss'
 
 
 /**
@@ -12,19 +13,21 @@ import './LoadMoreButton.css'
  */
 export default class LoadMoreButton extends Component {
   render() {
-    if (!this.props.hasMoreResults && !this.props.isLoading) {
+    if (this.props.isLoading) {
+      return <BusySpinner />
+    }
+    else if (!this.props.hasMoreResults) {
       return null
     }
 
     return (
-      <button className={classNames("button is-outlined load-more-button",
-                                    this.props.className,
-                                    {"is-loading": this.props.isLoading,
-                                     "no-focus": !this.props.isLoading})}
-              onClick={(e) => {
-                e.preventDefault()
-                this.props.loadMore()
-              }}>
+      <button
+        className={classNames("mr-button", this.props.className)}
+        onClick={e => {
+          e.preventDefault()
+          this.props.loadMore()
+        }}
+      >
         {this.props.children}
       </button>
     )

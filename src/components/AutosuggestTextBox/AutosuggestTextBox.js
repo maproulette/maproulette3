@@ -6,7 +6,7 @@ import Downshift from 'downshift'
 import _map from 'lodash/map'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
-import './AutosuggestTextBox.css'
+import './AutosuggestTextBox.scss'
 
 /**
  * AutosuggestTextBox combines a text input with a dropdown, executing a search

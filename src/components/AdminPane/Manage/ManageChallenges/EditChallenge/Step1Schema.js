@@ -38,44 +38,36 @@ export const jsSchema = (intl, user, challengeData) => {
     properties: {
       enabled: {
         title: intl.formatMessage(messages.visibleLabel),
-        description: intl.formatMessage(messages.visibleDescription),
         type: "boolean",
         default: false,
       },
       name: {
         title: intl.formatMessage(messages.nameLabel),
-        description: intl.formatMessage(messages.nameDescription),
         type: "string",
         minLength: 3,
       },
       description: {
         title: intl.formatMessage(messages.descriptionLabel),
-        description: intl.formatMessage(messages.descriptionDescription),
         type: "string",
       },
       blurb: {
         title: intl.formatMessage(messages.blurbLabel),
-        description: intl.formatMessage(messages.blurbDescription),
         type: "string",
       },
       instruction: {
         title: intl.formatMessage(messages.instructionLabel),
-        description: intl.formatMessage(messages.instructionDescription),
         type: "string",
       },
       checkinComment: {
         title: intl.formatMessage(messages.checkinCommentLabel),
-        description: intl.formatMessage(messages.checkinCommentDescription),
         type: "string",
       },
       checkinSource: {
         title: intl.formatMessage(messages.checkinSourceLabel),
-        description: intl.formatMessage(messages.checkinSourceDescription),
         type: "string",
       },
       difficulty: {
         title: intl.formatMessage(messages.difficultyLabel),
-        description: intl.formatMessage(messages.difficultyDescription),
         type: "number",
         enum: _values(ChallengeDifficulty),
         enumNames: _map(ChallengeDifficulty, (value, key) => localizedDifficultyLabels[key]),
@@ -83,7 +75,6 @@ export const jsSchema = (intl, user, challengeData) => {
       },
       category: {
         title: intl.formatMessage(messages.categoryLabel),
-        description: intl.formatMessage(messages.categoryDescription),
         type: "string",
         enum: _keys(ChallengeCategoryKeywords),
         enumNames: _map(ChallengeCategoryKeywords, (value, key) => localizedKeywordLabels[key]),
@@ -91,7 +82,6 @@ export const jsSchema = (intl, user, challengeData) => {
       },
       additionalKeywords: {
         title: intl.formatMessage(messages.additionalKeywordsLabel),
-        description: intl.formatMessage(messages.additionalKeywordsDescription),
         type: "string",
       }
     },
@@ -149,27 +139,41 @@ export const uiSchema = (intl, user, challengeData) => {
     },
     enabled: {
       "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.visibleDescription),
+    },
+    name: {
+      "ui:help": intl.formatMessage(messages.nameDescription),
     },
     description: {
       "ui:field": "markdown",
+      "ui:help": intl.formatMessage(messages.descriptionDescription),
     },
     blurb: {
       "ui:emptyValue": "",
+      "ui:help": intl.formatMessage(messages.blurbDescription),
     },
     instruction: {
       "ui:field": "markdown",
+      "ui:help": intl.formatMessage(messages.instructionDescription),
     },
     difficulty: {
       "ui:widget": "select",
+      "ui:help": intl.formatMessage(messages.difficultyDescription),
     },
     category: {
       "ui:widget": "select",
+      "ui:help": intl.formatMessage(messages.categoryDescription),
     },
     additionalKeywords: {
       "ui:field": "tags",
+      "ui:help": intl.formatMessage(messages.additionalKeywordsDescription),
     },
     checkinComment: {
       "ui:emptyValue": "",
+      "ui:help": intl.formatMessage(messages.checkinCommentDescription),
+    },
+    checkinSource: {
+      "ui:help": intl.formatMessage(messages.checkinSourceDescription),
     },
     includeCheckinHashtag: {
       "ui:widget": "radio",

@@ -29,7 +29,7 @@ import WithKeyboardShortcuts
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import BusySpinner from '../../BusySpinner/BusySpinner'
-import './TaskMap.css'
+import './TaskMap.scss'
 
 /**
  * TaskMap renders a map (and controls) appropriate for the given task,
@@ -258,7 +258,7 @@ export class TaskMap extends Component {
     // capabilities of the layer.
 
     return (
-      <div className={classNames("task-map full-screen-map task")}>
+      <div className={classNames("task-map task", {"full-screen-map": this.props.isMobile})}>
         <LayerToggle {...this.props}
                      showTaskFeatures={this.state.showTaskFeatures}
                      toggleTaskFeatures={this.toggleTaskFeatureVisibility}
