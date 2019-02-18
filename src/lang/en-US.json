@@ -505,6 +505,7 @@
   "SignIn.control.longLabel": "Sign in to get started",
   "Task.controls.completionComment.placeholder": "Your comment",
   "Task.comments.comment.controls.submit.label": "Submit",
+  "Task.markedAs.label": "Task marked as",
   "Task.controls.moreOptions.label": "More Options",
   "Task.controls.alreadyFixed.label": "Already fixed",
   "Task.controls.alreadyFixed.tooltip": "Already fixed",
