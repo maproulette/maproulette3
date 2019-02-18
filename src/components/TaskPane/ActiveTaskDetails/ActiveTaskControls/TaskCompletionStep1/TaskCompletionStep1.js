@@ -51,15 +51,19 @@ export default class TaskCompletionStep1 extends Component {
            <TaskSkipControl {...this.props} />
           }
 
-          <Dropdown
-            className="mr-dropdown--fixed mr-w-full"
-            dropdownButton={dropdown =>
-              <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
-            }
-            dropdownContent={dropdown =>
-              <ListMoreOptionsItems {...this.props} />
-            }
-          />
+          {(this.props.allowedProgressions.has(TaskStatus.fixed) ||
+            this.props.allowedProgressions.has(TaskStatus.tooHard) ||
+            this.props.allowedProgressions.has(TaskStatus.alreadyFixed)) &&
+           <Dropdown
+             className="mr-dropdown--fixed mr-w-full"
+             dropdownButton={dropdown =>
+               <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
+             }
+             dropdownContent={dropdown =>
+               <ListMoreOptionsItems {...this.props} />
+             }
+           />
+          }
         </div>
       </div>
     )
@@ -80,15 +84,21 @@ const MoreOptionsButton = function(props) {
 const ListMoreOptionsItems = function(props) {
   return (
     <ol className="mr-list-dropdown">
-      <li>
-        <TaskFixedControl {...props} asLink />
-      </li>
-      <li>
-        <TaskTooHardControl {...props} asLink />
-      </li>
-      <li>
-        <TaskAlreadyFixedControl {...props} asLink />
-      </li>
+      {props.allowedProgressions.has(TaskStatus.fixed) &&
+       <li>
+         <TaskFixedControl {...props} asLink />
+       </li>
+      }
+      {props.allowedProgressions.has(TaskStatus.tooHard) &&
+       <li>
+         <TaskTooHardControl {...props} asLink />
+       </li>
+      }
+      {props.allowedProgressions.has(TaskStatus.alreadyFixed) &&
+       <li>
+         <TaskAlreadyFixedControl {...props} asLink />
+       </li>
+      }
     </ol>
   )
 }
