@@ -90,7 +90,7 @@ $layer-topnav: $layer-top + $intralayer-bump;
 $layer-dropdown: $layer-top;
 $dropdown-content-z: $layer-dropdown;
 $layer-popout: $layer-top;
-$layer-modal: $layer-max;
+$layer-modal: 100;
 
 // Modal
 $modal-background-background-color: rgba($green, 0.7);
