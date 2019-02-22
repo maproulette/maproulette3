@@ -18,6 +18,12 @@
     }
   }
 
+  .dropdown-menu {
+    .dropdown-content--fixed {
+      position: fixed;
+    }
+  }
+
   &__no-results {
     font-size: $size-7;
     margin: 0 1em;

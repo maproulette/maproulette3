@@ -5,7 +5,7 @@
 
   &.is-active {
     width: 390px;
-    height: 500px;
+    height: 425px;
     position: relative;
     overflow: hidden;
     padding-top: 25px;
@@ -27,23 +27,9 @@
 
   &__project-content {
     border-radius: 0px 0px $radius-medium $radius-medium;
-    margin-bottom: 35px;
-    
-    .tabs ul li {
-      a {
-        padding-bottom: 3px;
-      }
-
-      &.is-active a {
-        padding-bottom: 3px;
-      }
-    }
-
-    .tab-content {
-      padding: 5px 20px 20px 20px;
-      max-height: 335px;
-      overflow-y: scroll;
-    }
+    padding: 5px 20px 20px 20px;
+    max-height: 335px;
+    overflow-y: scroll;
   }
 
   &__project-challenge-preview {

@@ -1,9 +1,14 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with ProjectManagers
+ * Internationalized messages for use with ProjectManagersWidget
  */
 export default defineMessages({
+  title: {
+    id: "Widgets.ProjectManagersWidget.label",
+    defaultMessage: "Project Managers",
+  },
+
   noManagers: {
     id: "Admin.ProjectManagers.noManagers",
     defaultMessage: "No Managers"
@@ -39,4 +44,3 @@ export default defineMessages({
     defaultMessage: "OpenStreetMap username"
   },
 })
-

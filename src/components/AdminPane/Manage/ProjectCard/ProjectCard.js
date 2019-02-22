@@ -7,11 +7,8 @@ import _omit from 'lodash/omit'
 import AsManager from '../../../../interactions/User/AsManager'
 import AsManageableProject
        from '../../../../interactions/Project/AsManageableProject'
-import Tabs from '../../../Bulma/Tabs'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import ProjectOverview from '../ProjectOverview/ProjectOverview'
-import ProjectManagers from '../ProjectManagers/ProjectManagers'
 import ChallengeList from '../ChallengeList/ChallengeList'
 import messages from './Messages'
 import './ProjectCard.scss'
@@ -51,20 +48,11 @@ export class ProjectCard extends Component {
       )
     }
     else if (this.props.isExpanded) {
-      const tabs = {
-        [this.props.intl.formatMessage(messages.challengesTabLabel)]:
-          <ChallengeList challenges={project.childChallenges(this.props.challenges)}
-                         suppressControls={!manager.canWriteProject(project)}
-                         {..._omit(this.props, 'challenges')} />,
-        [this.props.intl.formatMessage(messages.detailsTabLabel)]:
-          <ProjectOverview {...this.props} />,
-        [this.props.intl.formatMessage(messages.managersTabLabel)]:
-          <ProjectManagers {...this.props} />,
-      }
-
       projectBody = (
         <div className='project-card__project-content'>
-          <Tabs className='is-centered' tabs={tabs} />
+          <ChallengeList challenges={project.childChallenges(this.props.challenges)}
+                         suppressControls={!manager.canWriteProject(project)}
+                         {..._omit(this.props, 'challenges')} />
         </div>
       )
     }

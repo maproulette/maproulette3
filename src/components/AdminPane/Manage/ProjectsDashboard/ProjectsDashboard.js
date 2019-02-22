@@ -35,9 +35,8 @@ export const defaultDashboardSetup = function() {
       widgetDescriptor('ProjectListWidget'),
     ],
     layout: [
-      {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 10},
-      {i: generateWidgetId(), x: 0, y: 10, w: 4, h: 10},
-      {i: generateWidgetId(), x: 8, y: 4, w: 8, h: 20},
+      {i: generateWidgetId(), x: 0, y: 0, w: 3, h: 18},
+      {i: generateWidgetId(), x: 3, y: 0, w: 9, h: 18},
     ],
   }
 }

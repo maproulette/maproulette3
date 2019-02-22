@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
+import { WidgetDataTarget, registerWidgetType }
+       from '../../../../../services/Widget/Widget'
 import _map from 'lodash/map'
 import _filter from 'lodash/filter'
 import _without from 'lodash/without'
@@ -8,26 +9,29 @@ import _isFinite from 'lodash/isFinite'
 import { GroupType,
          mostPrivilegedGroupType,
          messagesByGroupType }
-       from '../../../../services/Project/GroupType/GroupType'
-import WithOSMUserSearch from '../../HOCs/WithOSMUserSearch/WithOSMUserSearch'
-import AsManager from '../../../../interactions/User/AsManager'
-import BusySpinner from '../../../BusySpinner/BusySpinner'
-import AutosuggestTextBox from '../../../AutosuggestTextBox/AutosuggestTextBox'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
+       from '../../../../../services/Project/GroupType/GroupType'
+import WithOSMUserSearch from '../../../HOCs/WithOSMUserSearch/WithOSMUserSearch'
+import AsManager from '../../../../../interactions/User/AsManager'
+import BusySpinner from '../../../../BusySpinner/BusySpinner'
+import AutosuggestTextBox from '../../../../AutosuggestTextBox/AutosuggestTextBox'
+import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+import ConfirmAction from '../../../../ConfirmAction/ConfirmAction'
+import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
-import './ProjectManagers.scss'
+import './ProjectManagersWidget.scss'
+
+const descriptor = {
+  widgetKey: 'ProjectManagersWidget',
+  label: messages.title,
+  targets: [WidgetDataTarget.project],
+  minWidth: 3,
+  defaultWidth: 4,
+  defaultHeight: 8,
+}
 
 const ChooseOSMUser = WithOSMUserSearch(AutosuggestTextBox)
 
-/**
- * ProjectManagers displays a list of the current managers of the given
- * project, along with options for adding new managers and adjusting
- * role of -- or removing -- existing ones.
- *
- * @author [Neil Rotstan](https://github.com/nrotstan)
- */
-export default class ProjectManagers extends Component {
+export default class ProjectManagersWidget extends Component {
   state = {
     loadingManagers: true,
     updatingManagers: [],
@@ -113,7 +117,7 @@ export default class ProjectManagers extends Component {
       const isLastAdmin = managerRole === GroupType.admin && adminManagers.length < 2
 
       return (
-        <div key={manager.osmId} className="project-managers__manager">
+        <div key={manager.osmId} className="project-managers__manager mr-pr-4">
           <div className="project-managers__manager__about">
             <figure className="image is-24x24 project-managers__manager__profile-pic">
               <img src={manager.avatarURL} alt={manager.displayName} />
@@ -137,7 +141,7 @@ export default class ProjectManagers extends Component {
              <select value={managerRole}
                      disabled={!user.canAdministrateProject(this.props.project)}
                      onChange={e => this.updateManagerRole(manager.osmId, e.target.value)}
-                     className="select project-managers__manager__role">
+                     className="select project-managers__manager__role mr-bg-grey-lighter mr-rounded mr-px-1">
                {groupTypeOptions}
              </select>
             }
@@ -149,7 +153,7 @@ export default class ProjectManagers extends Component {
                 <a className="button is-clear project-managers__manager__remove-control"
                    onClick={() => this.removeManager(manager.osmId)}
                    title={this.props.intl.formatMessage(messages.removeManagerTooltip)}>
-                  <SvgSymbol className='icon is-danger' sym='trash-icon' viewBox='0 0 20 20' />
+                  <SvgSymbol className="mr-fill-blue-dark mr-h-4" sym="trash-icon" viewBox="0 0 20 20" />
                 </a>
               </ConfirmAction>
             }
@@ -166,49 +170,47 @@ export default class ProjectManagers extends Component {
       )
     }
 
-    return (
-      <div className="project-managers">
-        {managers}
+    const widgetIntro = user.canAdministrateProject(this.props.project) && (
+      <div className="project-managers__add-manager mr-mb-4">
+        <h3><FormattedMessage {...messages.addManager} /></h3>
 
-        {user.canAdministrateProject(this.props.project) &&
-          <div className="project-managers__add-manager">
-            <h3><FormattedMessage {...messages.addManager} /></h3>
-
-            <div className="project-managers__add-manager__form">
-              <ChooseOSMUser inputValue={this.state.addManagerUsername}
-                             selectedItem={this.state.addManagerOSMUser}
-                             onInputValueChange={username => this.setState({
-                               addManagerUsername: username
-                             })}
-                             onChange={osmUser => this.setState({
-                               addManagerOSMUser: osmUser
-                             })}
-                             placeholder={this.props.intl.formatMessage(messages.osmUsername)} />
-              {this.state.addingManager && <BusySpinner />}
-              {!this.state.addingManager && this.state.addManagerOSMUser &&
-               <select onChange={e => this.addManager(e.target.value)}
-                       className="select project-managers__add-manager__group-type">
-                       {[<option key='none' value=''>
-                           {this.props.intl.formatMessage(messages.chooseRole)}
-                         </option>
-                        ].concat(groupTypeOptions)}
-               </select>
-              }
-            </div>
-          </div>
-        }
+        <div className="project-managers__add-manager__form">
+          <ChooseOSMUser inputValue={this.state.addManagerUsername}
+                         selectedItem={this.state.addManagerOSMUser}
+                         onInputValueChange={username => this.setState({
+                           addManagerUsername: username
+                         })}
+                         onChange={osmUser => this.setState({
+                           addManagerOSMUser: osmUser
+                         })}
+                         placeholder={this.props.intl.formatMessage(messages.osmUsername)}
+                         fixedMenu />
+          {this.state.addingManager && <BusySpinner />}
+          {!this.state.addingManager && this.state.addManagerOSMUser &&
+            <select onChange={e => this.addManager(e.target.value)}
+                    className="select project-managers__add-manager__group-type mr-min-w-30 mr-bg-grey-lighter mr-rounded mr-px-1">
+                    {[<option key='none' value=''>
+                        {this.props.intl.formatMessage(messages.chooseRole)}
+                      </option>
+                    ].concat(groupTypeOptions)}
+            </select>
+          }
+        </div>
       </div>
+    )
+
+
+    return (
+      <QuickWidget
+        {...this.props}
+        className="project-managers-widget project-managers"
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        intro={widgetIntro}
+      >
+        {managers}
+      </QuickWidget>
     )
   }
 }
 
-
-ProjectManagers.propTypes = {
-  /** The project being managed */
-  project: PropTypes.object,
-  /** Invoked to modify the group type of a manager */
-  setProjectManagerGroupType: PropTypes.func.isRequired,
-  /** Invoked to remove a project manager */
-  removeProjectManager: PropTypes.func.isRequired,
-}
-
+registerWidgetType(ProjectManagersWidget, descriptor)

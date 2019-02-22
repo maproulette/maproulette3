@@ -71,6 +71,10 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
     }
 
     loadProject = props => {
+      if (props.loadingProjects) {
+        return
+      }
+
       const projectId = this.currentProjectId(props)
 
       if (_isFinite(this.routedProjectId(props)) && projectId === null) {
@@ -139,11 +143,16 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       }
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this.loadProject(this.props)
     }
 
     componentWillReceiveProps(nextProps) {
+      if (this.props.loadingProjects && !nextProps.loadingProjects) {
+        this.loadProject(nextProps)
+        return
+      }
+
       const nextProjectId = this.currentProjectId(nextProps)
 
       if ( _isFinite(nextProjectId) &&
