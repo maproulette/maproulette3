@@ -72,7 +72,8 @@ export class RebuildTasksControl extends Component {
     return (
       <div className="rebuild-tasks-control">
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a onClick={this.initiateConfirmation}>
+        <a onClick={this.initiateConfirmation}
+           className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
           <FormattedMessage {...messages.label } />
         </a>
 

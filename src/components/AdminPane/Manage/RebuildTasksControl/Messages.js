@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   label: {
     id: "RebuildTasksControl.label",
-    defaultMessage: "Rebuild",
+    defaultMessage: "Rebuild Tasks",
   },
 
   modalTitle: {

@@ -47,38 +47,40 @@ export class ProjectsDashboard extends Component {
       return <BusySpinner />
     }
 
+    const pageHeader = (
+      <div className="admin__manage__header admin__manage__header--flush">
+        <nav className="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li className="is-active">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a aria-current="page">
+                <FormattedMessage {...manageMessages.manageHeader} />
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="admin__manage__controls mr-flex">
+          <Link to={"/admin/projects/new"}
+                className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+            <FormattedMessage {...messages.newProject } />
+          </Link>
+        </div>
+      </div>
+    )
+
     return (
       <div className="admin__manage projects-dashboard">
-        <div className="admin__manage__header">
-          <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-              <li className="is-active">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a aria-current="page">
-                  <FormattedMessage {...manageMessages.manageHeader} />
-                </a>
-              </li>
-            </ul>
-          </nav>
-
-          <div className="columns admin__manage__controls">
-            <div className="column is-narrow admin__manage__controls--control">
-              <Link to={"/admin/projects/new"}>
-                <FormattedMessage {...messages.newProject } />
-              </Link>
-            </div>
-          </div>
-        </div>
-
         {!this.props.loadingProjects && this.props.projects.length === 0 ?
          <div className="projects-dashboard__no-projects">
            <FormattedMessage {...messages.regenerateHomeProject} />
          </div> :
          <WidgetWorkspace
            {...this.props}
+           className="mr-mt-4"
+           workspaceEyebrow={pageHeader}
            filterComponent={ProjectFilterGroup}
          />
-
         }
       </div>
     )
