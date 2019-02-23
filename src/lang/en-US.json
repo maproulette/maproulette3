@@ -488,7 +488,7 @@
   "Navbar.links.leaderboard": "Leaderboard",
   "Navbar.links.admin": "Create & Manage",
   "Navbar.links.help": "Learn",
-  "Navbar.links.userProfile": "User Profile",
+  "Navbar.links.userProfile": "User Settings",
   "Navbar.links.signout": "Sign out",
   "PageNotFound.message": "Sorry, nothing here but open ocean.",
   "PageNotFound.returnTo": "Return to",

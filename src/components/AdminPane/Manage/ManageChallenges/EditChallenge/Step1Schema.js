@@ -92,7 +92,6 @@ export const jsSchema = (intl, user, challengeData) => {
   if (AsManager(user).isSuperUser()) {
     schemaFields.properties.featured = {
       title: intl.formatMessage(messages.featuredLabel),
-      description: intl.formatMessage(messages.featuredDescription),
       type: "boolean",
       default: false,
     }
@@ -105,7 +104,6 @@ export const jsSchema = (intl, user, challengeData) => {
   if (AsEditableChallenge(challengeData).isNew()) {
     schemaFields.properties.includeCheckinHashtag = {
       title: " ", // blank title
-      description: intl.formatMessage(messages.includeCheckinHashtagDescription),
       type: "boolean",
       enum: [true, false],
       enumNames: [intl.formatMessage(messages.includeCheckinHashtagTrueLabel),
@@ -136,6 +134,7 @@ export const uiSchema = (intl, user, challengeData) => {
     ],
     featured: {
       "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.featuredDescription),
     },
     enabled: {
       "ui:widget": "radio",
@@ -177,6 +176,7 @@ export const uiSchema = (intl, user, challengeData) => {
     },
     includeCheckinHashtag: {
       "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription),
     },
   }
 
