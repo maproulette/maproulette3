@@ -22,7 +22,7 @@
     @apply mr-mb-8;
   }
 
-  &--2-col fieldset {
+  &--2-col .fieldset {
     @screen md {
       @apply mr-grid mr-grid-columns-2 mr-grid-gap-8;
 
