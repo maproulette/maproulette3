@@ -6,7 +6,12 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   editProjectLabel: {
     id: "Admin.ProjectDashboard.controls.edit.label",
-    defaultMessage: "Edit",
+    defaultMessage: "Edit Project",
+  },
+
+  deleteProjectLabel: {
+    id: "Admin.ProjectDashboard.controls.delete.label",
+    defaultMessage: "Delete Project",
   },
 
   addChallengeLabel: {

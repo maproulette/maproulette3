@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
+import _isEmpty from 'lodash/isEmpty'
 import AsManager from '../../../../interactions/User/AsManager'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../../../services/Widget/Widget'
@@ -22,22 +23,17 @@ import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
-import WithDeactivateOnOutsideClick
-       from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
 import TaskUploadingProgress
        from '../TaskUploadingProgress/TaskUploadingProgress'
-import DropdownButton from '../../../Bulma/DropdownButton'
-import BusySpinner from '../../../BusySpinner/BusySpinner'
+import Dropdown from '../../../Dropdown/Dropdown'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import manageMessages from '../Messages'
 import messages from './Messages'
 import './ChallengeDashboard.scss'
-
-// Setup child components with needed HOCs.
-const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
 // The name of this dashboard.
 const DASHBOARD_NAME = "challenge"
@@ -98,111 +94,137 @@ export class ChallengeDashboard extends Component {
 
     const manager = AsManager(this.props.user)
     const projectId = _get(this.props, 'challenge.parent.id')
-
-    const managedProjectOptions = _compact(_map(this.props.projects, project => {
-      if (project.id === projectId || !manager.canWriteProject(project)) {
-        return null
-      }
-
-      return {
-        key: `project-${project.id}`,
-        text: project.displayName ? project.displayName : project.name,
-        projectId: project.id,
-      }
-    }))
-
     const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
     const hasTasks = _get(this.props, 'challenge.actions.total', 0) > 0
 
+    const pageHeader = (
+      <div className="admin__manage__header admin__manage__header--flush">
+        <nav className="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li>
+              <Link to='/admin/projects'>
+                <FormattedMessage {...manageMessages.manageHeader} />
+              </Link>
+            </li>
+            <li>
+              <Link to={`/admin/project/${projectId}`}>
+                {_get(this.props, 'challenge.parent.displayName') ||
+                  _get(this.props, 'challenge.parent.name')}
+              </Link>
+            </li>
+            <li className="is-active">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a aria-current="page">
+                {this.props.challenge.name}
+                {this.props.loadingChallenge && <BusySpinner inline />}
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="admin__manage__controls mr-flex">
+          {hasTasks && isUsableChallengeStatus(status, true) &&
+            <Link to={`/challenge/${this.props.challenge.id}`}
+                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+              <FormattedMessage {...messages.startChallengeLabel} />
+            </Link>
+          }
+
+          {manager.canWriteProject(this.props.challenge.parent) &&
+            <React.Fragment>
+              <Link to={`/admin/project/${projectId}/` +
+                        `challenge/${this.props.challenge.id}/edit`}
+                    className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                <FormattedMessage {...messages.editChallengeLabel } />
+              </Link>
+
+              {_get(this.props, 'projects.length', 0) > 1 &&
+                <Dropdown
+                  className="mr-dropdown--fixed"
+                  dropdownButton={dropdown => (
+                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                    <a onClick={dropdown.toggleDropdownVisible}
+                       className="mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-flex mr-items-center"
+                    >
+                      <FormattedMessage {...messages.moveChallengeLabel} />
+                      <SvgSymbol
+                        sym="icon-cheveron-down"
+                        viewBox="0 0 20 20"
+                        className="mr-fill-current mr-w-5 mr-h-5"
+                      />
+                    </a>
+                  )}
+                  dropdownContent={dropdown =>
+                    <ListManagedProjectItems
+                      {...this.props}
+                      currentProjectId={projectId}
+                      manager={manager}
+                    />
+                  }
+                />
+              }
+
+              {this.props.challenge.isRebuildable() &&
+               <RebuildTasksControl {...this.props} />
+              }
+
+              <Link to={{pathname: `/admin/project/${projectId}/` +
+                                    `challenge/${this.props.challenge.id}/clone`,
+                        state: {cloneChallenge: true}}}
+                    className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                <FormattedMessage {...messages.cloneChallengeLabel } />
+              </Link>
+
+              <ConfirmAction>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a onClick={this.deleteChallenge}
+                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                  <FormattedMessage {...messages.deleteChallengeLabel } />
+                </a>
+              </ConfirmAction>
+          </React.Fragment>
+          }
+        </div>
+      </div>
+    )
+
     return (
       <div className="admin__manage challenge-dashboard">
-        <div className="admin__manage__header">
-          <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-              <li>
-                <Link to='/admin/projects'>
-                  <FormattedMessage {...manageMessages.manageHeader} />
-                </Link>
-              </li>
-              <li>
-                <Link to={`/admin/project/${projectId}`}>
-                  {_get(this.props, 'challenge.parent.displayName') ||
-                   _get(this.props, 'challenge.parent.name')}
-                </Link>
-              </li>
-              <li className="is-active">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a aria-current="page">
-                  {this.props.challenge.name}
-                  {this.props.loadingChallenge && <BusySpinner inline />}
-                </a>
-              </li>
-            </ul>
-          </nav>
-
-          <div className="columns admin__manage__controls">
-            {hasTasks && isUsableChallengeStatus(status, true) &&
-             <div className="column is-narrow admin__manage__controls--control">
-               <Link to={`/challenge/${this.props.challenge.id}`}>
-                 <FormattedMessage {...messages.startChallengeLabel} />
-               </Link>
-             </div>
-            }
-
-            {manager.canWriteProject(this.props.challenge.parent) &&
-             <React.Fragment>
-               <div className="column is-narrow admin__manage__controls--control">
-                 <Link to={`/admin/project/${projectId}/` +
-                           `challenge/${this.props.challenge.id}/edit`}>
-                   <FormattedMessage {...messages.editChallengeLabel } />
-                 </Link>
-               </div>
-
-               {_get(this.props, 'projects.length', 0) > 1 &&
-                 <div className="column is-narrow admin__manage__controls--control">
-                   <DeactivatableDropdownButton options={managedProjectOptions}
-                                               onSelect={this.moveChallenge}
-                                               emptyContent={<FormattedMessage {...messages.noProjects} />}>
-                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                     <a>
-                       <FormattedMessage {...messages.moveChallengeLabel} />
-                       <div className="basic-dropdown-indicator" />
-                     </a>
-                   </DeactivatableDropdownButton>
-                 </div>
-               }
-
-               {this.props.challenge.isRebuildable() &&
-                 <div className="column is-narrow admin__manage__controls--control">
-                   <RebuildTasksControl {...this.props} />
-                 </div>
-               }
-
-               <div className="column is-narrow admin__manage__controls--control">
-                 <Link to={{pathname: `/admin/project/${projectId}/` +
-                                       `challenge/${this.props.challenge.id}/clone`,
-                             state: {cloneChallenge: true}}}>
-                   <FormattedMessage {...messages.cloneChallengeLabel } />
-                 </Link>
-               </div>
-
-               <div className="column is-narrow admin__manage__controls--control">
-                 <ConfirmAction>
-                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                   <a className='button is-clear' onClick={this.deleteChallenge}>
-                     <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
-                   </a>
-                 </ConfirmAction>
-               </div>
-            </React.Fragment>
-           }
-          </div>
-        </div>
-
-        <WidgetWorkspace {...this.props} />
+        <WidgetWorkspace
+          {...this.props}
+          className="mr-mt-4"
+          workspaceEyebrow={pageHeader}
+        />
       </div>
     )
   }
+}
+
+const ListManagedProjectItems = function(props) {
+  const projectItems = _compact(_map(props.projects, project => {
+    if (project.id === props.currentProjectId ||
+        !props.manager.canWriteProject(project)) {
+      return null
+    }
+
+    return (
+      <li key={`project-${project.id}`}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a
+          onClick={() => props.moveChallenge(props.challenge.id, project.id)}
+        >
+          {project.displayName ? project.displayName : project.name}
+        </a>
+      </li>
+    )
+  }))
+
+  return _isEmpty(projectItems) ?
+    <FormattedMessage {...messages.noProjects} /> : (
+    <ol className="mr-list-dropdown">
+      {projectItems}
+    </ol>
+  )
 }
 
 ChallengeDashboard.propTypes = {
