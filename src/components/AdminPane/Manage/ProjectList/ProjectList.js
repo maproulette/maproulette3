@@ -63,7 +63,7 @@ export default class ProjectList extends Component {
           {pinnedCards.concat(unpinnedCards)}
 
           <div className="after-results">
-            <PageResultsButton {...this.props} />
+            <PageResultsButton {...this.props} className="mr-button--green" />
           </div>
         </div>
       )

@@ -8,6 +8,7 @@
 export { default as ProjectAboutWidget } from './ProjectAboutWidget/ProjectAboutWidget'
 export { default as ProjectListWidget } from './ProjectListWidget/ProjectListWidget'
 export { default as ProjectOverviewWidget } from './ProjectOverviewWidget/ProjectOverviewWidget'
+export { default as ProjectManagersWidget } from './ProjectManagersWidget/ProjectManagersWidget'
 export { default as ChallengeOverviewWidget } from './ChallengeOverviewWidget/ChallengeOverviewWidget'
 export { default as ChallengeTasksWidget } from './ChallengeTasksWidget/ChallengeTasksWidget'
 export { default as ChallengeListWidget } from './ChallengeListWidget/ChallengeListWidget'
