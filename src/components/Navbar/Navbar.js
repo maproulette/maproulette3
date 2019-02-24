@@ -162,6 +162,11 @@ const ProfileMenu = function(props) {
   return (
     <ol className="mr-list-dropdown mr-list-dropdown--nav">
       <li>
+        <NavLink to="/review" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.review} />
+        </NavLink>
+      </li>
+      <li>
         <NavLink to='/admin/projects' onClick={props.closeDropdown}>
           <FormattedMessage {...messages.adminCreate} />
         </NavLink>
@@ -212,14 +217,6 @@ const Nav = props => (
       </NavLink>
     </li>
 
-    <LoggedInUser {...props}>
-      <li>
-        <NavLink to="/review" onClick={props.closeMobileMenu}>
-          <FormattedMessage {...messages.review} />
-        </NavLink>
-      </li>
-    </LoggedInUser>
-
     <li>
       <a
         href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"
@@ -261,6 +258,11 @@ const MobileNav = props => (
         <li>
           <NavLink to='/user/profile' onClick={props.closeMobileMenu}>
             <FormattedMessage {...messages.profile} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/review" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.review} />
           </NavLink>
         </li>
         <li>

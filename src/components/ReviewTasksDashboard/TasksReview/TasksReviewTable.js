@@ -93,6 +93,7 @@ export class TaskReviewTable extends Component {
                       minRows={this.props.defaultPageSize}
                       manual
                       multiSort={false}
+                      noDataText={<FormattedMessage {...messages.noTasks} />}
                       pages={totalPages}
                       onFetchData={(state, instance) => this.updateTasks(state, instance)}
           />
@@ -156,7 +157,7 @@ const setupColumnTypes = (props, openComments, data) => {
     filterable: true,
     sortable: false,
     exportable: t => _get(t.parent, 'name'),
-    maxWidth: 500,
+    minWidth: 120,
     Cell: ({row}) => (
       <div className="row-challenge-column">
         <Link
@@ -191,6 +192,7 @@ const setupColumnTypes = (props, openComments, data) => {
     filterable: true,
     sortable: false,
     exportable: t => _get(t.reviewedBy, 'username'),
+    maxWidth: 180,
     Cell: ({row}) =>
       <div className="row-user-column">
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
@@ -203,6 +205,7 @@ const setupColumnTypes = (props, openComments, data) => {
     accessor: 'reviewStatus',
     sortable: true,
     exportable: t => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
+    maxWidth: 180,
     Cell: props => (
       <StatusLabel
         {...props}
@@ -231,7 +234,7 @@ const setupColumnTypes = (props, openComments, data) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    minWidth: 110,
+    maxWidth: 110,
     Cell: ({row}) =>{
       return <div className="row-controls-column">
         <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/inspect`}>
@@ -262,7 +265,7 @@ const setupColumnTypes = (props, openComments, data) => {
     id: 'viewComments',
     Header: () => <FormattedMessage {...messages.commentsColumnHeader} />,
     accessor: 'commentID',
-    maxWidth: 120,
+    maxWidth: 110,
     Cell: props =>
       <ViewCommentsButton onClick={() => openComments(props.row.id)} />,
   }

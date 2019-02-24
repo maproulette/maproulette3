@@ -4,9 +4,9 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with TaskAnalysisTable
  */
 export default defineMessages({
-  tasksNoneToReview: {
-    id: "Review.TaskAnalysisTable.noTasksToReview",
-    defaultMessage: "No tasks to review.",
+  noTasks: {
+    id: "Review.TaskAnalysisTable.noTasks",
+    defaultMessage: "No tasks found",
   },
 
   tasksNoneReviewedByMe: {
