@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
+import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -15,6 +16,8 @@ import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
+import TaskConfirmationModal
+       from '../../../TaskConfirmationModal/TaskConfirmationModal'
 import messages from './Messages'
 import './ActiveTaskControls.scss'
 
@@ -27,6 +30,8 @@ import './ActiveTaskControls.scss'
 export class ActiveTaskControls extends Component {
   state = {
     taskBeingCompleted: null,
+    confirmingTask: null,
+    confirmingStatus: null,
     comment: "",
   }
 
@@ -47,6 +52,13 @@ export class ActiveTaskControls extends Component {
     this.props.editTask(value, this.props.task, this.props.mapBounds)
   }
 
+  chooseLoadBy = loadMethod => {
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    this.props.challengeId
+    this.props.setTaskLoadBy(challengeId, isVirtual, loadMethod)
+  }
+
   /** Indicate the editor has been closed without completing the task */
   cancelEditing = () => {
     this.setState({taskBeingCompleted: null})
@@ -55,10 +67,25 @@ export class ActiveTaskControls extends Component {
 
   /** Mark the task as complete with the given status */
   complete = taskStatus => {
-    this.setState({taskBeingCompleted: this.props.task.id})
     this.props.completeTask(this.props.task.id, this.props.task.parent.id,
                             taskStatus, this.state.comment, this.props.taskLoadBy,
                             this.props.user.id, this.state.needsReview)
+  }
+
+  initiateCompletion = taskStatus => {
+    this.setState({
+      confirmingTask: this.props.task,
+      confirmingStatus: taskStatus,
+    })
+  }
+
+  confirmCompletion = () => {
+    this.complete(this.state.confirmingStatus)
+    this.resetConfirmation()
+  }
+
+  resetConfirmation = () => {
+    this.setState({confirmingTask: null, confirmingStatus: null, comment: ""})
   }
 
   /** Move to the next task without modifying the task status */
@@ -100,19 +127,12 @@ export class ActiveTaskControls extends Component {
 
       return (
         <div className={this.props.className}>
-          <TaskCommentInput
-            {...this.props}
-            className="mr-border-yellow-75"
-            value={this.state.comment}
-            commentChanged={this.setComment}
-          />
-
           {!isEditingTask && !isComplete &&
            <TaskCompletionStep1
              {...this.props}
              allowedProgressions={allowedProgressions}
              pickEditor={this.pickEditor}
-             complete={this.complete}
+             complete={this.initiateCompletion}
              nextTask={this.next}
            />
           }
@@ -134,20 +154,25 @@ export class ActiveTaskControls extends Component {
            <TaskCompletionStep2
              {...this.props}
              allowedProgressions={allowedProgressions}
-             complete={this.complete}
+             complete={this.initiateCompletion}
              cancelEditing={this.cancelEditing}
            />
           }
 
-          {!isComplete &&
-            <div className="field" onClick={() => this.toggleNeedsReview()}>
-              <input type="checkbox" className="switch is-rounded short-and-wide"
-                    onChange={() => {}}
-                    checked={this.getNeedsReviewSetting()} />
-              <label>
-                <FormattedMessage {...messages.requestReview} />
-              </label>
-            </div>
+          {this.state.confirmingTask &&
+            <TaskConfirmationModal
+              {...this.props}
+              task={this.state.taskBeingComfirmed}
+              status={this.state.confirmingStatus}
+              comment={this.state.comment}
+              setComment={this.setComment}
+              needsReview={this.getNeedsReviewSetting()}
+              toggleNeedsReview={this.toggleNeedsReview}
+              loadBy={this.props.taskLoadBy}
+              chooseLoadBy={this.chooseLoadBy}
+              onConfirm={this.confirmCompletion}
+              onCancel={this.resetConfirmation}
+            />
           }
         </div>
       )

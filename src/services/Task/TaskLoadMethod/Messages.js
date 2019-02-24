@@ -11,6 +11,6 @@ export default defineMessages({
 
   proximity: {
     id: 'Task.loadByMethod.proximity',
-    defaultMessage: "Proximity",
+    defaultMessage: "Nearby",
   },
 })
