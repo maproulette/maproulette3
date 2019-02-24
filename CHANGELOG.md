@@ -7,7 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.2] - 2019-02-15
+## [v3.2.1] - 2019-02-25
+### Added
+- Create & Manage widget for managing project managers (#534)
+
+### Fixed
+- Excessive removal of unmatched tasks for line-by-line geojson by @Zverik
+- Error when attempting to display zero points in points ticker
+- Disallowed task status progressions sometimes offered in task completion
+- Dropdown menus extending over widgets sometimes not fully interactive
+- Modals sometimes appear behind widgets instead of in front of them
+- Incorrect rendering of user settings form in Chrome
+
+### Changed
+- Name of User Profile page to User Settings
+
+### Removed
+- Tabs on Create & Manage project cards; only challenges are now shown
+
+
+## [v3.2.0] - 2019-02-15
 ### Added
 - New user interface
 - Full-fledged home page (#426)
