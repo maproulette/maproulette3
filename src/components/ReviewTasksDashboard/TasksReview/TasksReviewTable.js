@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, FormattedDate, FormattedTime }
+       from 'react-intl'
 import _get from 'lodash/get'
 import _each from 'lodash/map'
+import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
 import { keysByStatus,
          messagesByStatus }
@@ -12,8 +14,8 @@ import { TaskReviewStatus,
          keysByReviewStatus,
          messagesByReviewStatus }
       from '../../../services/Task/TaskReview/TaskReviewStatus'
+import TaskCommentsModal from '../../TaskCommentsModal/TaskCommentsModal'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-
 import messages from './Messages'
 
 import { Link } from 'react-router-dom'
@@ -28,6 +30,7 @@ import ReactTable from 'react-table'
  */
 export class TaskReviewTable extends Component {
   state = {
+    openComments: null,
   }
 
   updateTasks(state, instance) {
@@ -48,52 +51,61 @@ export class TaskReviewTable extends Component {
   render() {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'reviewTasks', [])
-    const countShown = data.length
-    const columnTypes = setupColumnTypes(this.props, data)
+    const columnTypes = setupColumnTypes(this.props, taskId => this.setState({openComments: taskId}), data)
 
     var subheader = <FormattedMessage {...messages.myReviewTasks} />
     var columns = [columnTypes.id, columnTypes.status, columnTypes.challenge,
                    columnTypes.modified, columnTypes.reviewedBy,
-                   columnTypes.reviewStatus, columnTypes.mapperControls]
-
+                   columnTypes.reviewStatus, columnTypes.mapperControls,
+                   columnTypes.viewComments]
 
     if (this.props.asReviewer) {
       subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
       columns = [columnTypes.id, columnTypes.status, columnTypes.reviewRequestedBy,
-                 columnTypes.challenge, columnTypes.modified, columnTypes.reviewerControls]
+                 columnTypes.challenge, columnTypes.modified, columnTypes.reviewerControls,
+                 columnTypes.viewComments]
 
       if (this.props.showReviewedByMe) {
         subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
         columns = [columnTypes.id, columnTypes.status, columnTypes.reviewRequestedBy,
                    columnTypes.challenge, columnTypes.modified,
-                   columnTypes.reviewStatus, columnTypes.reviewCompleteControls]
+                   columnTypes.reviewStatus, columnTypes.reviewCompleteControls,
+                   columnTypes.viewComments]
       }
     }
 
     return (
-      <div className="mr-flex-grow mr-w-full mr-mx-auto mr-bg-white mr-text-black mr-rounded mr-p-6 md:mr-p-8 mr-mb-12">
-        <header className="sm:mr-flex sm:mr-items-end sm:mr-justify-between mr-mb-6">
-          <div>
-            <h1 className="mr-h2 mr-text-blue-light mr-mb-2 md:mr-mr-4">
-              {subheader}
-            </h1>
-          </div>
-        </header>
-        <ReactTable data={data} columns={columns}
-                    defaultPageSize={this.props.defaultPageSize}
-                    defaultSorted={[ {id: 'id', desc: false} ]}
-                    minRows={this.props.defaultPageSize}
-                    manual
-                    multiSort={false}
-                    pages={100}
-                    onFetchData={(state, instance) => this.updateTasks(state, instance)}
-        />
-      </div>
+      <React.Fragment>
+        <div className="mr-flex-grow mr-w-full mr-mx-auto mr-bg-white mr-text-black mr-rounded mr-p-6 md:mr-p-8 mr-mb-12">
+          <header className="sm:mr-flex sm:mr-items-end sm:mr-justify-between mr-mb-6">
+            <div>
+              <h1 className="mr-h2 mr-text-blue-light mr-mb-2 md:mr-mr-4">
+                {subheader}
+              </h1>
+            </div>
+          </header>
+          <ReactTable data={data} columns={columns}
+                      defaultPageSize={this.props.defaultPageSize}
+                      defaultSorted={[ {id: 'id', desc: false} ]}
+                      minRows={this.props.defaultPageSize}
+                      manual
+                      multiSort={false}
+                      pages={100}
+                      onFetchData={(state, instance) => this.updateTasks(state, instance)}
+          />
+        </div>
+        {_isFinite(this.state.openComments) &&
+         <TaskCommentsModal
+           taskId={this.state.openComments}
+           onClose={() => this.setState({openComments: null})}
+         />
+        }
+      </React.Fragment>
     )
   }
 }
 
-const setupColumnTypes = (props, data) => {
+const setupColumnTypes = (props, openComments, data) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -110,6 +122,7 @@ const setupColumnTypes = (props, data) => {
     accessor: 'status',
     sortable: true,
     exportable: t => props.intl.formatMessage(messagesByStatus[t.status]),
+    maxWidth: 140,
     Cell: props => (
       <StatusLabel
         {...props}
@@ -126,6 +139,7 @@ const setupColumnTypes = (props, data) => {
     filterable: true,
     sortable: false,
     exportable: t => _get(t.reviewRequestedBy, 'username'),
+    maxWidth: 180,
     Cell: ({row}) =>
       <div className="row-user-column">
         {row._original.reviewRequestedBy.username}
@@ -139,13 +153,17 @@ const setupColumnTypes = (props, data) => {
     filterable: true,
     sortable: false,
     exportable: t => _get(t.parent, 'name'),
-    Cell: ({row}) =>{
-      return <div className="row-challenge-column">
-        <Link to={`/challenge/${row._original.parent.id}`}>
+    maxWidth: 500,
+    Cell: ({row}) => (
+      <div className="row-challenge-column">
+        <Link
+          to={`/challenge/${row._original.parent.id}`}
+          title={row._original.parent.name}
+        >
           {row._original.parent.name}
         </Link>
       </div>
-    }
+    )
   }
 
   columns.modified = {
@@ -155,6 +173,12 @@ const setupColumnTypes = (props, data) => {
     sortable: true,
     defaultSortDesc: true,
     exportable: t => t.modified,
+    maxWidth: 180,
+    Cell: props => (
+      <span>
+        <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+      </span>
+    )
   }
 
   columns.reviewedBy = {
@@ -189,7 +213,7 @@ const setupColumnTypes = (props, data) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    minWidth: 110,
+    maxWidth: 120,
     Cell: ({row}) =>{
       return <div className="row-controls-column">
         <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/review`}>
@@ -218,7 +242,8 @@ const setupColumnTypes = (props, data) => {
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    minWidth: 110,
+    minWidth: 90,
+    maxWidth: 120,
     Cell: ({row}) =>{
       return <div className="row-controls-column">
         <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/inspect`}>
@@ -228,6 +253,15 @@ const setupColumnTypes = (props, data) => {
         </Link>
       </div>
     }
+  }
+
+  columns.viewComments = {
+    id: 'viewComments',
+    Header: () => <FormattedMessage {...messages.commentsColumnHeader} />,
+    accessor: 'commentID',
+    maxWidth: 120,
+    Cell: props =>
+      <ViewCommentsButton onClick={() => openComments(props.row.id)} />,
   }
 
   return columns
@@ -243,5 +277,20 @@ const StatusLabel = props => (
     </span>
   </span>
 )
+
+const ViewCommentsButton = function(props) {
+  return (
+    <button
+      onClick={props.onClick}
+      className="mr-inline-flex mr-items-center mr-transition mr-text-green-light hover:mr-text-green"
+    >
+      <SvgSymbol
+        sym="comments-icon"
+        viewBox="0 0 20 20"
+        className="mr-fill-current mr-w-4 mr-h-4"
+      />
+    </button>
+  )
+}
 
 export default TaskReviewTable

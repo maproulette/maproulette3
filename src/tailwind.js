@@ -55,6 +55,7 @@ let colors = {
   grey: '#737373',
   'grey-light': '#BDB8AE',
   'grey-lighter': '#F2EFE9',
+  'grey-lighter-10': 'rgba(242, 239, 233, .1)',
   green: '#5B937A',
   'green-light': '#7EBC89',
   'green-lighter': '#91F3A2',
@@ -600,6 +601,7 @@ module.exports = {
     screen: '100vh',
     '48': '12rem',
     '115': '28.75rem',
+    'screen40': '40vh',
   },
 
   /*

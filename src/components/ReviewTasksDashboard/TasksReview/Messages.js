@@ -44,6 +44,11 @@ export default defineMessages({
     defaultMessage: "Actions",
   },
 
+  commentsColumnHeader: {
+    id: "Review.TaskAnalysisTable.columnHeaders.comments",
+    defaultMessage: "Comments",
+  },
+
   idLabel: {
     id: "Review.Task.fields.id.label",
     defaultMessage: "Internal Id",
