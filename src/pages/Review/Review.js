@@ -4,12 +4,11 @@ import { injectIntl } from 'react-intl'
 
 import MediaQuery from 'react-responsive'
 import AsEndUser from '../../interactions/User/AsEndUser'
-import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
-import ScreenTooNarrow from '../ScreenTooNarrow/ScreenTooNarrow'
+import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
+import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
+import ScreenTooNarrow from '../../components/ScreenTooNarrow/ScreenTooNarrow'
+import SignInButton from '../../components/SignInButton/SignInButton'
 import TasksReviewTable from './TasksReview/TasksReviewTable'
-import SignInButton from '../SignInButton/SignInButton'
-import WithReviewTasks from '../HOCs/WithReviewTasks/WithReviewTasks'
-import './ReviewTasksDashboard.scss'
 
 
 const TasksTable = WithReviewTasks(TasksReviewTable)
@@ -26,8 +25,8 @@ export class ReviewTasksDashboard extends Component {
     const user = AsEndUser(this.props.user)
     if (!user.isLoggedIn()) {
       return (
-        <div className="review">
-          <SignInButton {...this.props} />
+        <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+          <SignInButton {...this.props} longForm />
         </div>
       )
     }

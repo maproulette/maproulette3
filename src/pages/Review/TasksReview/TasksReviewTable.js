@@ -6,16 +6,13 @@ import _get from 'lodash/get'
 import _each from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
-import { keysByStatus,
-         messagesByStatus }
+import { keysByStatus, messagesByStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
-
-import { TaskReviewStatus,
-         keysByReviewStatus,
-         messagesByReviewStatus }
-      from '../../../services/Task/TaskReview/TaskReviewStatus'
-import TaskCommentsModal from '../../TaskCommentsModal/TaskCommentsModal'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
+import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
+       from '../../../services/Task/TaskReview/TaskReviewStatus'
+import TaskCommentsModal
+       from '../../../components/TaskCommentsModal/TaskCommentsModal'
+import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 import { Link } from 'react-router-dom'
@@ -33,20 +30,19 @@ export class TaskReviewTable extends Component {
     openComments: null,
   }
 
-  updateTasks(state, instance) {
-    this.setState({loading: true})
+  updateTasks(tableState, instance) {
+    this.setState({loading: true, pageSize: tableState.pageSize})
 
     const sortCriteria = {
-      sortBy: state.sorted[0].id,
-      direction: state.sorted[0].desc ? "DESC" : "ASC",
+      sortBy: tableState.sorted[0].id,
+      direction: tableState.sorted[0].desc ? "DESC" : "ASC",
     }
 
     const filters = {}
-    _each(state.filtered, (pair) => {filters[pair.id] = pair.value})
+    _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
-    this.props.updateReviewTasks({sortCriteria, filters, page: state.page},
-                                  state.pageSize)
-    this.setState({pageSize: state.pageSize})
+    this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page},
+                                  tableState.pageSize)
   }
 
   render() {

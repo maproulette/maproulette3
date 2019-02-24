@@ -62,7 +62,6 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
 
   return function(dispatch) {
     const fetchId = _uniqueId()
-    console.log("Dispatching fetchReviewedTasks with fetchId: " + fetchId)
     dispatch(receiveReviewedTasks(null,
       asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS: RECEIVE_REVIEWED_TASKS,
       RequestStatus.inProgress, fetchId))

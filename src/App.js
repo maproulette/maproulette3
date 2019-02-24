@@ -13,7 +13,7 @@ import TaskPane from './components/TaskPane/TaskPane'
 import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
 import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
-import ReviewTasksDashboard from './components/ReviewTasksDashboard/ReviewTasksDashboard'
+import Review from './pages/Review/Review'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
@@ -89,7 +89,7 @@ export class App extends Component {
             <CachedRoute path='/user/profile' component={Profile} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />
-            <CachedRoute path='/review' component={ReviewTasksDashboard} />
+            <CachedRoute path='/review' component={Review} />
             <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
             <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
             <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />
