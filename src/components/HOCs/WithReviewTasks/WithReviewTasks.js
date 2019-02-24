@@ -36,19 +36,23 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
     render() {
       var reviewTasks = this.props.reviewedTasks
       var updateTasks = this.props.updateReviewedTasks
+      var totalCount = this.props.reviewedTasksCount
 
       if ( this.props.asReviewer ) {
         reviewTasks = this.props.reviewNeededTasks
         updateTasks = this.props.updateReviewNeededTasks
+        totalCount = this.props.reviewNeededTasksCount
 
         if (this.props.showReviewedByMe) {
           reviewTasks = this.props.reviewedTasksByMe
           updateTasks = this.props.updateUserReviewedTasks
+          totalCount = this.props.reviewedTasksByMeCount
         }
       }
 
       return (
         <WrappedComponent reviewTasks={reviewTasks}
+                          totalCount={totalCount}
                           updateReviewTasks={_debounce(updateTasks, 1000, {leading: false})}
                           defaultPageSize={DEFAULT_PAGE_SIZE}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
@@ -58,8 +62,13 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
 const mapStateToProps = state => ({
   reviewNeededTasks: _get(state, 'currentReviewNeededTasks.tasks', []),
+  reviewNeededTasksCount: _get(state, 'currentReviewNeededTasks.totalCount', 0),
+
   reviewedTasksByMe: _get(state, 'currentReviewedByUserTasks.tasks', []),
+  reviewedTasksByMeCount: _get(state, 'currentReviewedByUserTasks.totalCount', 0),
+
   reviewedTasks: _get(state, 'currentReviewedTasks.tasks', []),
+  reviewedTasksCount: _get(state, 'currentReviewedTasks.totalCount', 0),
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

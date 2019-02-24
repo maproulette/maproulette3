@@ -22,12 +22,13 @@ const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
  */
 export const receiveReviewNeededTasks = function(tasks,
                                             status=RequestStatus.success,
-                                            fetchId) {
+                                            fetchId, totalCount) {
   return {
     type: RECEIVE_REVIEW_NEEDED_TASKS,
     status,
     tasks,
     fetchId,
+    totalCount,
     receivedAt: Date.now(),
   }
 }
@@ -61,7 +62,7 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
     return new Endpoint(
       api.tasks.review,
       {
-        schema: [ taskSchema() ],
+        schema: {tasks: [taskSchema()]},
         variables: {},
         params: {limit, sort, order, page: (page * limit), ...searchParameters},
       }
@@ -73,7 +74,8 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
           tasks = _reverse(tasks)
         }
       }
-      dispatch(receiveReviewNeededTasks(tasks, RequestStatus.success, fetchId))
+      dispatch(receiveReviewNeededTasks(tasks, RequestStatus.success, fetchId,
+                                        normalizedResults.result.total))
       return tasks
     }).catch((error) => {
       dispatch(receiveReviewNeededTasks([], RequestStatus.error, fetchId))
@@ -100,10 +102,12 @@ export const currentReviewNeededTasks = function(state={}, action) {
         // still at least partially relevant as the user pans/zooms the map.
         updatedTasks.tasks = state.tasks
         updatedTasks.loading = true
+        updatedTasks.totalCount = state.totalCount
       }
       else {
         updatedTasks.tasks = _isArray(action.tasks) ? action.tasks : []
         updatedTasks.loading = false
+        updatedTasks.totalCount = action.totalCount
       }
 
       return updatedTasks

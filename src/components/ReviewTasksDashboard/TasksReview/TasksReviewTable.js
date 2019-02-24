@@ -46,12 +46,15 @@ export class TaskReviewTable extends Component {
 
     this.props.updateReviewTasks({sortCriteria, filters, page: state.page},
                                   state.pageSize)
+    this.setState({pageSize: state.pageSize})
   }
 
   render() {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'reviewTasks', [])
     const columnTypes = setupColumnTypes(this.props, taskId => this.setState({openComments: taskId}), data)
+    const pageSize = this.state.pageSize || this.props.defaultPageSize
+    const totalPages = Math.ceil(_get(this.props, 'totalCount', 0) / pageSize)
 
     var subheader = <FormattedMessage {...messages.myReviewTasks} />
     var columns = [columnTypes.id, columnTypes.status, columnTypes.challenge,
@@ -90,7 +93,7 @@ export class TaskReviewTable extends Component {
                       minRows={this.props.defaultPageSize}
                       manual
                       multiSort={false}
-                      pages={100}
+                      pages={totalPages}
                       onFetchData={(state, instance) => this.updateTasks(state, instance)}
           />
         </div>

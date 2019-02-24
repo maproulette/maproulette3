@@ -24,12 +24,14 @@ const RECEIVE_REVIEWED_BY_USER_TASKS = 'RECEIVE_REVIEWED_BY_USER_TASKS'
 export const receiveReviewedTasks = function(tasks,
                                             type,
                                             status=RequestStatus.success,
-                                            fetchId) {
+                                            fetchId,
+                                            totalCount) {
   return {
     type: type,
     status,
     tasks,
     fetchId,
+    totalCount,
     receivedAt: Date.now(),
   }
 }
@@ -67,7 +69,7 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
     return new Endpoint(
       api.tasks.reviewed,
       {
-        schema: [ taskSchema() ],
+        schema: {tasks: [taskSchema()]},
         params: {asReviewer, limit, sort, order, page: (page * limit), ...searchParameters},
       }
     ).execute().then(normalizedResults => {
@@ -81,7 +83,7 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
 
       dispatch(receiveReviewedTasks(tasks,
         asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS: RECEIVE_REVIEWED_TASKS,
-        RequestStatus.success, fetchId))
+        RequestStatus.success, fetchId, normalizedResults.result.total))
       return tasks
     }).catch((error) => {
       dispatch(receiveReviewedTasks([],
@@ -127,10 +129,12 @@ const updateReduxState = function(state={}, action) {
       // still at least partially relevant as the user pans/zooms the map.
       updatedTasks.tasks = state.tasks
       updatedTasks.loading = true
+      updatedTasks.totalCount = state.totalCount
     }
     else {
       updatedTasks.tasks = _isArray(action.tasks) ? action.tasks : []
       updatedTasks.loading = false
+      updatedTasks.totalCount = action.totalCount
     }
     return updatedTasks
   }
