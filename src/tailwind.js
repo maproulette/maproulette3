@@ -73,6 +73,8 @@ let colors = {
   orange: '#ED9F22',
   red: '#CA484C',
   'red-light': '#E05054',
+  purple: '#8990E5',
+  teal: '#6FB3B8',
 }
 
 module.exports = {

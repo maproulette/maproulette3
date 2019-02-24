@@ -14,10 +14,10 @@ export default defineMessages({
   },
   rejected: {
     id: "Task.reviewStatus.rejected",
-    defaultMessage: "Rejected"
+    defaultMessage: "Needs Revision"
   },
   approvedWithFixes: {
     id: "Task.reviewStatus.approvedWithFixes",
-    defaultMessage: "Approved With Fixes"
+    defaultMessage: "Approved with Fixes"
   },
 })

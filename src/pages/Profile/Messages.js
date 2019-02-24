@@ -84,22 +84,22 @@ export default defineMessages({
   
   needsReviewLabel: {
     id: "Profile.form.needsReview.label",
-    defaultMessage: "Request Review",
+    defaultMessage: "Request Review of all Work",
   },
 
   needsReviewDescription: {
     id: "Profile.form.needsReview.description",
-    defaultMessage: "If checked, a review will be requested on your work.",
+    defaultMessage: "Automatically request a human review of each task you complete",
   },
 
   isReviewerLabel: {
     id: "Profile.form.isReviewer.label",
-    defaultMessage: "Are you a Reviewer?",
+    defaultMessage: "Volunteer as a Reviewer",
   },
 
   isReviewerDescription: {
     id: "Profile.form.isReviewer.description",
-    defaultMessage: "If checked, you will be allowed to review other's work.",
+    defaultMessage: "Volunteer to review tasks for which a review has been requested",
   },
 })
 

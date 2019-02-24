@@ -1,0 +1,39 @@
+.mr-status-created {
+  @apply mr-text-blue-light;
+}
+
+.mr-status-false-positive {
+  @apply mr-text-orange;
+}
+
+.mr-status-skipped {
+  @apply mr-text-pink;
+}
+
+.mr-status-already-fixed {
+  @apply mr-text-green-light;
+}
+
+.mr-status-too-hard {
+  @apply mr-text-red;
+}
+
+.mr-status-fixed {
+  @apply mr-text-teal;
+}
+
+.mr-status-deleted {
+  @apply mr-text-purple;
+}
+
+.mr-review-approved {
+  @apply mr-text-green;
+}
+
+.mr-review-approved-with-fixes {
+  @apply mr-text-green;
+}
+
+.mr-review-rejected {
+  @apply mr-text-orange;
+}

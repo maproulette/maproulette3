@@ -66,13 +66,11 @@ export const jsSchema = intl => {
       },
       needsReview: {
         title: intl.formatMessage(messages.needsReviewLabel),
-        description: intl.formatMessage(messages.needsReviewDescription),
         type: "boolean",
         default: false,
       },
       isReviewer: {
         title: intl.formatMessage(messages.isReviewerLabel),
-        description: intl.formatMessage(messages.isReviewerDescription),
         type: "boolean",
         default: false,
       },
@@ -136,6 +134,14 @@ export const uiSchema = intl => {
     leaderboardOptOut: {
       "ui:widget": "radio",
       "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.leaderboardOptOutDescription)} />,
+    },
+    needsReview: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.needsReviewDescription),
+    },
+    isReviewer: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.isReviewerDescription),
     },
   })
 }

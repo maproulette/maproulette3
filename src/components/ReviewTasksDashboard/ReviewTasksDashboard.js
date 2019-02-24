@@ -39,14 +39,11 @@ export class ReviewTasksDashboard extends Component {
         </MediaQuery>
 
         <MediaQuery query="(min-width: 1024px)">
-          <div className="review mr-bg-gradient-r-green-dark-blue mr-text-white">
-            <div className="review-pane">
-              <h1>Reviewer/Mapper Stuff</h1>
-              {user.needsReview() && <TasksTable {...this.props} />}
-              {user.isReviewer() && <TasksTable {...this.props} asReviewer />}
-              {user.isReviewer() && <TasksTable {...this.props} asReviewer showReviewedByMe />}
-            </div>
-          </div>
+          <section className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 md:mr-py-12 md:mr-px-12 mr-flex mr-flex-col mr-items-center">
+            {user.needsReview() && <TasksTable {...this.props} />}
+            {user.isReviewer() && <TasksTable {...this.props} asReviewer />}
+            {user.isReviewer() && <TasksTable {...this.props} asReviewer showReviewedByMe />}
+          </section>
         </MediaQuery>
       </React.Fragment>
     )

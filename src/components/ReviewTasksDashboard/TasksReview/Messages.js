@@ -21,17 +21,22 @@ export default defineMessages({
 
   tasksToBeReviewed: {
     id: "Review.TaskAnalysisTable.tasksToBeReviewed",
-    defaultMessage: "Tasks to be Reviewed: {countShown}",
+    defaultMessage: "Tasks to be Reviewed",
   },
 
   tasksReviewedByMe: {
     id: "Review.TaskAnalysisTable.tasksReviewedByMe",
-    defaultMessage: "Tasks Reviewed by Me: {countShown}",
+    defaultMessage: "Tasks Reviewed by Me",
   },
 
   myReviewTasks: {
     id: "Review.TaskAnalysisTable.myReviewTasks",
-    defaultMessage: "My Mapped Tasks Reviewed: {countShown}",
+    defaultMessage: "My Mapped Tasks Reviewed",
+  },
+
+  totalTasks: {
+    id: "Review.TaskAnalysisTable.totalTasks",
+    defaultMessage: "Total: {countShown}"
   },
 
   actionsColumnHeader: {
