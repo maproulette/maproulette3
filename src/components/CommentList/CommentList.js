@@ -37,7 +37,7 @@ export default class CommentList extends Component {
 
     const commentItems = _map(sortedComments, comment =>
       !_isObject(comment) ? null : (
-        <article key={comment.id} className="mr-mb-4">
+        <article key={comment.id} className="mr-pr-4 mr-mb-4">
           <div className="mr-list-reset mr-mb-2 mr-text-xs">
             <span className="mr-font-medium">
               <FormattedTime
