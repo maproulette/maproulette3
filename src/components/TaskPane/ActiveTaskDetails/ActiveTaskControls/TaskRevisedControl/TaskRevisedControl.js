@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import _pick from 'lodash/pick'
 import { TaskReviewStatus }
        from '../../../../../services/Task/TaskReview/TaskReviewStatus'
 import Button from '../../../../Button/Button'

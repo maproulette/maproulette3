@@ -8,7 +8,6 @@ import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
-import TaskCommentInput from '../../../TaskCommentInput/TaskCommentInput'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
@@ -149,7 +148,7 @@ export class ActiveTaskControls extends Component {
 
       return (
         <div className={this.props.className}>
-          {(!isEditingTask && !isComplete || needsRevised) &&
+          {(!isEditingTask && (!isComplete || needsRevised)) &&
            <TaskCompletionStep1
              {...this.props}
              allowedProgressions={allowedProgressions}

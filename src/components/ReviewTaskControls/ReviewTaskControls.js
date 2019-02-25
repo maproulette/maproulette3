@@ -96,17 +96,14 @@ export class ReviewTaskControls extends Component {
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
-        <button className="mr-button mr-button--blue-fill mr-button--small"
-                onClick={() => this.stopReviewing()}>
-          <FormattedMessage {...messages.stopReview} />
-        </button>
-        <div className="mr-text-xs mr-text-white mr-flex mr-pt-2 mr-whitespace-no-wrap">
-          <h5>
-            <FormattedMessage {...messages.currentReviewStatus} />
-            <FormattedMessage {...messagesByReviewStatus[this.props.task.reviewStatus]} />
-          </h5>
+        <div className="mr-text-sm mr-text-white mr-mt-2 mr-whitespace-no-wrap">
+          <FormattedMessage
+            {...messages.currentReviewStatus}
+          /> <FormattedMessage
+            {...messagesByReviewStatus[this.props.task.reviewStatus]}
+          />
         </div>
-        <div className="mr-pr-4 mr-mt-2">
+        <div className="mr-mt-4">
           <TaskCommentInput
             {...this.props}
             className="review-task-controls__task-comment"
@@ -114,7 +111,7 @@ export class ReviewTaskControls extends Component {
             commentChanged={this.setComment}
           />
         </div>
-        <div className="mr-my-4 mr-grid mr-grid-columns-1 mr-grid-gap-4">
+        <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           <button className="mr-button mr-button--blue-fill"
                   onClick={() => this.updateReviewStatus(TaskReviewStatus.approved)}>
             <FormattedMessage {...messages.approved} />
@@ -126,6 +123,10 @@ export class ReviewTaskControls extends Component {
           <button className="mr-button mr-button--blue-fill"
                   onClick={() => this.updateReviewStatus(TaskReviewStatus.approvedWithFixes)}>
             <FormattedMessage {...messages.approvedWithFixes} />
+          </button>
+          <button className="mr-button mr-button--white"
+                  onClick={() => this.stopReviewing()}>
+            <FormattedMessage {...messages.stopReview} />
           </button>
         </div>
       </div>

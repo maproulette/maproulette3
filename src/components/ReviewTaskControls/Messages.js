@@ -37,17 +37,17 @@ export default defineMessages({
 
   approved: {
     id: "Admin.TaskReview.controls.approved",
-    defaultMessage: "Approved",
+    defaultMessage: "Approve",
   },
 
   rejected: {
     id: "Admin.TaskReview.controls.rejected",
-    defaultMessage: "Rejected",
+    defaultMessage: "Reject",
   },
 
   approvedWithFixes: {
     id: "Admin.TaskReview.controls.approvedWithFixes",
-    defaultMessage: "Approved (with fixes)",
+    defaultMessage: "Approve (with fixes)",
   },
 
   startReview: {
@@ -57,7 +57,7 @@ export default defineMessages({
 
   stopReview: {
     id: "Admin.TaskReview.controls.stopReview",
-    defaultMessage: "Stop Reviewing",
+    defaultMessage: "Cancel Review",
   },
 
   resubmit: {
