@@ -95,6 +95,16 @@ export const isCompletionStatus = function(status) {
 }
 
 /**
+ * Returns true if the given status represents a status that is
+ * valid for reviewing. (ie. not skipped and not created)
+ */
+export const isReviewableStatus = function(status) {
+  return status !== TaskStatus.created &&
+         status !== TaskStatus.skipped &&
+         status !== TaskStatus.deleted
+}
+
+/**
  * Returns a "machine name" for the status, which is start-cased and snake-cased
  * (e.g., "Already_Fixed" or "Created").
  */

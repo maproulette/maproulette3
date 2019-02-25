@@ -59,6 +59,9 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
   if (filters.challenge) {
     searchParameters.cs = filters.challenge
   }
+  if (filters.status && filters.status !== "all") {
+    searchParameters.tStatus = filters.status
+  }
 
   return function(dispatch) {
     const fetchId = _uniqueId()

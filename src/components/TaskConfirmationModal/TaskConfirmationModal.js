@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatus, messagesByReviewStatus, keysByReviewStatus }
+import { messagesByReviewStatus, keysByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskLoadMethod, messagesByLoadMethod }
        from '../../services/Task/TaskLoadMethod/TaskLoadMethod'

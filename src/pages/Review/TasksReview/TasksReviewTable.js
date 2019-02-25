@@ -6,7 +6,7 @@ import _get from 'lodash/get'
 import _each from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
-import { keysByStatus, messagesByStatus }
+import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
@@ -121,6 +121,7 @@ const setupColumnTypes = (props, openComments, data) => {
     Header: props.intl.formatMessage(messages.statusLabel),
     accessor: 'status',
     sortable: true,
+    filterable: true,
     exportable: t => props.intl.formatMessage(messagesByStatus[t.status]),
     maxWidth: 140,
     Cell: props => (
@@ -130,6 +131,31 @@ const setupColumnTypes = (props, openComments, data) => {
         className={`mr-status-${_kebabCase(keysByStatus[props.value])}`}
       />
     ),
+    Filter: ({ filter, onChange }) => {
+      const options = [
+        <option key="all" value="all">All</option>
+      ]
+
+      _each(TaskStatus, (status) => {
+        if (isReviewableStatus(status)) {
+          options.push(
+            <option key={keysByStatus[status]} value={status}>
+              {props.intl.formatMessage(messagesByStatus[status])}
+            </option>
+          )
+        }
+      })
+
+      return (
+        <select
+          onChange={event => onChange(event.target.value)}
+          style={{ width: '100%' }}
+          value={filter ? filter.value : 'all'}
+        >
+          {options}
+        </select>
+      )
+    },
   }
 
   columns.reviewRequestedBy = {
