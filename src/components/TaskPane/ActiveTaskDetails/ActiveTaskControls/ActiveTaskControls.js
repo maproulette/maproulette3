@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
-import { allowedStatusProgressions,
-         isFinalStatus }
+import { allowedStatusProgressions, isCompletionStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import TaskCommentInput from '../../../TaskCommentInput/TaskCommentInput'
 import SignInButton from '../../../SignInButton/SignInButton'
@@ -15,6 +14,7 @@ import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
+import messages from './Messages'
 import './ActiveTaskControls.scss'
 
 /**
@@ -86,6 +86,7 @@ export class ActiveTaskControls extends Component {
     else {
       const allowedProgressions =
         allowedStatusProgressions(this.props.task.status)
+      const isComplete = isCompletionStatus(this.props.task.status)
 
       return (
         <div className={this.props.className}>
@@ -96,7 +97,7 @@ export class ActiveTaskControls extends Component {
             commentChanged={this.setComment}
           />
 
-          {!isEditingTask &&
+          {!isEditingTask && !isComplete &&
            <TaskCompletionStep1
              {...this.props}
              allowedProgressions={allowedProgressions}
@@ -106,8 +107,17 @@ export class ActiveTaskControls extends Component {
            />
           }
 
-          {(!isEditingTask && isFinalStatus(this.props.task.status)) &&
-           <TaskNextControl {...this.props} nextTask={this.next} />
+          {(!isEditingTask && isComplete) &&
+           <div className="mr-text-white mr-text-md mr-mt-4">
+             <div className="mr-mb-2">
+               <FormattedMessage
+                 {...messages.markedAs}
+               /> <FormattedMessage
+                 {...messagesByStatus[this.props.task.status]}
+               />
+             </div>
+             <TaskNextControl {...this.props} nextTask={this.next} />
+           </div>
           }
 
           {isEditingTask &&

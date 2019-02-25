@@ -508,6 +508,8 @@ module.exports = {
     '5': '1.25rem',
     '6': '2rem',
     '24': '6rem',
+    '28': '7rem',
+    '30': '7.5rem',
     '48': '12rem',
     '60': '15rem',
     auto: 'auto',
@@ -747,6 +749,7 @@ module.exports = {
     '30': 30,
     '40': 40,
     '50': 50,
+    '90': 90,
   },
 
   /*
@@ -788,6 +791,7 @@ module.exports = {
     current: 'currentColor',
     white: colors['white'],
     'blue-dark': colors['blue-dark'],
+    'green-light': colors['green-light'],
     'green-lighter': colors['green-lighter'],
     twitter: colors['twitter'],
   },

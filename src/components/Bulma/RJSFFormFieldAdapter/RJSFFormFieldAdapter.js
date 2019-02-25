@@ -53,6 +53,42 @@ export const CustomFieldTemplate = props => {
   }
 }
 
+/**
+ * fieldset tags can't be styled using flexbox or grid in Chrome, so this
+ * template attempts to render the fields the same way as the default but using
+ * a div with class "fieldset" instead of a fieldset. To use it, set
+ * `ObjectFieldTemplate={NoFieldsetObjectFieldTemplate}` in your Form
+ *
+ * > CAUTION: Support for expandable fields that would normally be rendered
+ * > with an Add button has been removed, but it could be added back with a
+ * > little work
+ *
+ * See: https://github.com/mozilla-services/react-jsonschema-form/issues/762
+ */
+export const NoFieldsetObjectFieldTemplate = function(props) {
+  const { TitleField, DescriptionField } = props
+  return (
+    <div className="fieldset" id={props.idSchema.$id}>
+      {(props.uiSchema['ui:title'] || props.title) && (
+        <TitleField
+          id={`${props.idSchema.$id}__title`}
+          title={props.title || props.uiSchema['ui:title']}
+          required={props.required}
+          formContext={props.formContext}
+        />
+      )}
+      {props.description && (
+        <DescriptionField
+          id={`${props.idSchema.$id}__description`}
+          description={props.description}
+          formContext={props.formContext}
+        />
+      )}
+      {props.properties.map(prop => prop.content)}
+    </div>
+  )
+}
+
 export const CustomArrayFieldTemplate = props => {
   const itemFields = _map(props.items, element =>
     <div

@@ -17,7 +17,7 @@ import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
 import ApiKey from './ApiKey'
-import { CustomSelectWidget }
+import { CustomSelectWidget, NoFieldsetObjectFieldTemplate }
        from '../../components/Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import { jsSchema, uiSchema } from './ProfileSchema'
 import messages from './Messages'
@@ -134,15 +134,18 @@ class Profile extends Component {
               {saveIndicator}
             </header>
 
-            <Form schema={jsSchema(this.props.intl)}
-                  uiSchema={uiSchema(this.props.intl)}
-                  widgets={{SelectWidget: CustomSelectWidget}}
-                  className="form form--2-col"
-                  liveValidate
-                  noHtml5Validate
-                  showErrorList={false}
-                  formData={userSettings}
-                  onChange={this.changeHandler}>
+            <Form
+              schema={jsSchema(this.props.intl)}
+              uiSchema={uiSchema(this.props.intl)}
+              widgets={{SelectWidget: CustomSelectWidget}}
+              className="form form--2-col"
+              liveValidate
+              noHtml5Validate
+              showErrorList={false}
+              formData={userSettings}
+              onChange={this.changeHandler}
+              ObjectFieldTemplate={NoFieldsetObjectFieldTemplate}
+            >
               <div className="form-controls" />
             </Form>
           </section>

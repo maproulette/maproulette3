@@ -6,17 +6,17 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   startChallengeLabel: {
     id: "Admin.Challenge.controls.start.label",
-    defaultMessage: "Start",
+    defaultMessage: "Start Challenge",
   },
 
   editChallengeLabel: {
     id: "Admin.Challenge.controls.edit.label",
-    defaultMessage: "Edit",
+    defaultMessage: "Edit Challenge",
   },
 
   moveChallengeLabel: {
     id: "Admin.Challenge.controls.move.label",
-    defaultMessage: "Move",
+    defaultMessage: "Move Challenge",
   },
 
   noProjects: {
@@ -24,13 +24,13 @@ export default defineMessages({
     defaultMessage: "No permitted projects",
   },
 
-  rebuildChallengeLabel: {
-    id: "Admin.Challenge.controls.rebuild.label",
-    defaultMessage: "Rebuild",
-  },
-
   cloneChallengeLabel: {
     id: "Admin.Challenge.controls.clone.label",
-    defaultMessage: "Clone",
+    defaultMessage: "Clone Challenge",
+  },
+
+  deleteChallengeLabel: {
+    id: "Admin.Challenge.controls.delete.label",
+    defaultMessage: "Delete Challenge",
   },
 })

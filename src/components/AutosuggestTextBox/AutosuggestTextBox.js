@@ -62,7 +62,9 @@ export default class AutosuggestTextBox extends Component {
                 {this.props.isSearching && <BusySpinner inline />}
               </div>
               <div className="dropdown-menu">
-                <div {...getMenuProps({className: "dropdown-content"})}>
+                <div {...getMenuProps({
+                  className: classNames("dropdown-content", {"dropdown-content--fixed": this.props.fixedMenu}),
+                })}>
                   {resultItems}
                   {(resultItems.length === 0 || this.props.showNoResults) &&
                   <div className="autosuggest-text-box__no-results">

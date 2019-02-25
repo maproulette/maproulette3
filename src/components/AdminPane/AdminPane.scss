@@ -70,11 +70,15 @@
   &__manage {
     &__header {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       align-items: flex-start;
-      justify-content: space-between;
+      justify-content: flex-start;
       margin-top: 0;
       margin-bottom: 20px;
+    }
+
+    &__header--flush {
+      margin-bottom: 0;
     }
 
     .subtitle, .subtitle:not(:last-child) {
@@ -107,9 +111,16 @@
       font-size: $size-5;
       margin-bottom: 0;
       color: $white;
+      margin-bottom: 0.5em;
+
+      ul {
+        flex-wrap: wrap;
+        max-width: 75vw;
+      }
 
       li a {
         color: $white;
+        line-height: 16px;
       }
 
       li.is-active a {

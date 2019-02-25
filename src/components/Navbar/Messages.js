@@ -31,7 +31,7 @@ export default defineMessages({
 
   profile: {
     id: 'Navbar.links.userProfile',
-    defaultMessage: "User Profile",
+    defaultMessage: "User Settings",
   },
 
   signout: {

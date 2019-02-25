@@ -19,7 +19,6 @@ import WithDashboardEntityFilter
        from '../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import ChallengeFilterGroup from '../ChallengeFilterGroup/ChallengeFilterGroup'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import manageMessages from '../Messages'
@@ -40,6 +39,7 @@ export const defaultDashboardSetup = function() {
       widgetDescriptor('CompletionProgressWidget'),
       widgetDescriptor('BurndownChartWidget'),
       widgetDescriptor('CommentsWidget'),
+      widgetDescriptor('ProjectManagersWidget'),
       widgetDescriptor('ChallengeListWidget'),
     ],
     layout: [
@@ -47,6 +47,7 @@ export const defaultDashboardSetup = function() {
       {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 5},
       {i: generateWidgetId(), x: 0, y: 12, w: 4, h: 12},
       {i: generateWidgetId(), x: 0, y: 24, w: 4, h: 10},
+      {i: generateWidgetId(), x: 0, y: 34, w: 4, h: 8},
       {i: generateWidgetId(), x: 8, y: 0, w: 8, h: 34},
     ],
   }
@@ -65,59 +66,59 @@ export class ProjectDashboard extends Component {
     }
 
     const manager = AsManager(this.props.user)
+    const pageHeader = (
+      <div className="admin__manage__header admin__manage__header--flush">
+        <nav className="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li>
+              <Link to='/admin/projects'>
+                <FormattedMessage {...manageMessages.manageHeader} />
+              </Link>
+            </li>
+            <li className="is-active">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a aria-current="page">
+                {this.props.project.displayName || this.props.project.name}
+                {this.props.loadingProject && <BusySpinner inline />}
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="admin__manage__controls mr-flex">
+          {manager.canWriteProject(this.props.project) &&
+            <Link to={`/admin/project/${this.props.project.id}/challenges/new`}
+                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+              <FormattedMessage {...messages.addChallengeLabel } />
+            </Link>
+          }
+
+          {manager.canWriteProject(this.props.project) &&
+            <Link to={`/admin/project/${this.props.project.id}/edit`}
+                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+              <FormattedMessage {...messages.editProjectLabel } />
+            </Link>
+          }
+
+          {manager.canAdministrateProject(this.props.project) &&
+            <ConfirmAction>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a onClick={this.deleteProject}
+                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                <FormattedMessage {...messages.deleteProjectLabel } />
+              </a>
+            </ConfirmAction>
+          }
+        </div>
+      </div>
+    )
 
     return (
       <div className="admin__manage project-dashboard">
-        <div className="admin__manage__header">
-          <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-              <li>
-                <Link to='/admin/projects'>
-                  <FormattedMessage {...manageMessages.manageHeader} />
-                </Link>
-              </li>
-              <li className="is-active">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a aria-current="page">
-                  {this.props.project.displayName || this.props.project.name}
-                  {this.props.loadingProject && <BusySpinner inline />}
-                </a>
-              </li>
-            </ul>
-          </nav>
-
-          <div className="columns admin__manage__controls">
-            {manager.canWriteProject(this.props.project) &&
-             <div className="column is-narrow admin__manage__controls--control">
-               <Link to={`/admin/project/${this.props.project.id}/challenges/new`}>
-                 <FormattedMessage {...messages.addChallengeLabel } />
-               </Link>
-             </div>
-            }
-
-            {manager.canWriteProject(this.props.project) &&
-             <div className="column is-narrow admin__manage__controls--control">
-               <Link to={`/admin/project/${this.props.project.id}/edit`}>
-                 <FormattedMessage {...messages.editProjectLabel } />
-               </Link>
-             </div>
-            }
-
-            {manager.canAdministrateProject(this.props.project) &&
-             <div className="column is-narrow admin__manage__controls--control">
-               <ConfirmAction>
-                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                 <a className='button is-clear' onClick={this.deleteProject}>
-                   <SvgSymbol sym='trash-icon' className='icon' viewBox='0 0 20 20' />
-                 </a>
-               </ConfirmAction>
-             </div>
-            }
-          </div>
-        </div>
-
         <WidgetWorkspace
           {...this.props}
+          className="mr-mt-4"
+          workspaceEyebrow={pageHeader}
           filterComponent={ChallengeFilterGroup}
           activity={this.props.project.activity}
         />
