@@ -63,7 +63,7 @@
   }
 
   &__content {
-    @apply mr-text-sm mr-h-full mr-rounded mr-overflow-scroll mr-scrolling-touch mr-pr-4;
+    @apply mr-text-sm mr-h-full mr-rounded mr-overflow-scroll mr-scrolling-touch;
 
     p,
     ol,
