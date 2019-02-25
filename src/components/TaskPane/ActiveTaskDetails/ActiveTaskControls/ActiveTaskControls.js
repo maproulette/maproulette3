@@ -7,9 +7,11 @@ import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import TaskCommentInput from '../../../TaskCommentInput/TaskCommentInput'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
+import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -42,6 +44,11 @@ export class ActiveTaskControls extends Component {
   }
 
   getNeedsReviewSetting = () => {
+    // We always need review if we are revising this task after it was rejected.
+    if (this.props.task.reviewStatus === TaskReviewStatus.rejected) {
+      return true
+    }
+
     return !_isUndefined(this.state.needsReview) ? this.state.needsReview :
       _get(this.props, 'user.settings.needsReview')
   }
@@ -67,15 +74,28 @@ export class ActiveTaskControls extends Component {
 
   /** Mark the task as complete with the given status */
   complete = taskStatus => {
-    this.props.completeTask(this.props.task.id, this.props.task.parent.id,
-                            taskStatus, this.state.comment, this.props.taskLoadBy,
-                            this.props.user.id, this.state.needsReview)
+    const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
+
+    if (this.state.submitRevision) {
+      this.props.updateTaskReviewStatus(this.props.task, TaskReviewStatus.needed, this.state.comment)
+      this.props.history.push('/review')
+    }
+    else {
+      this.props.completeTask(this.props.task.id, this.props.task.parent.id,
+                              taskStatus, this.state.comment,
+                              revisionSubmission? null : this.props.taskLoadBy,
+                              this.props.user.id, this.state.needsReview)
+      if (revisionSubmission) {
+        this.props.history.push('/review')
+      }
+    }
   }
 
-  initiateCompletion = taskStatus => {
+  initiateCompletion = (taskStatus, submitRevision) => {
     this.setState({
       confirmingTask: this.props.task,
       confirmingStatus: taskStatus,
+      submitRevision,
     })
   }
 
@@ -109,6 +129,8 @@ export class ActiveTaskControls extends Component {
       return null
     }
 
+    const needsRevised = this.props.task.reviewStatus === TaskReviewStatus.rejected
+
     const isEditingTask =
       _get(this.props, 'editor.taskId') === this.props.task.id &&
       _get(this.props, 'editor.success') === true
@@ -127,17 +149,18 @@ export class ActiveTaskControls extends Component {
 
       return (
         <div className={this.props.className}>
-          {!isEditingTask && !isComplete &&
+          {(!isEditingTask && !isComplete || needsRevised) &&
            <TaskCompletionStep1
              {...this.props}
              allowedProgressions={allowedProgressions}
              pickEditor={this.pickEditor}
              complete={this.initiateCompletion}
              nextTask={this.next}
+             needsRevised={needsRevised}
            />
           }
 
-          {(!isEditingTask && isComplete) &&
+          {(!isEditingTask && isComplete && !needsRevised) &&
            <div className="mr-text-white mr-text-md mr-mt-4">
              <div className="mr-mb-2">
                <FormattedMessage
@@ -150,7 +173,7 @@ export class ActiveTaskControls extends Component {
            </div>
           }
 
-          {isEditingTask &&
+          {isEditingTask && !needsRevised &&
            <TaskCompletionStep2
              {...this.props}
              allowedProgressions={allowedProgressions}
@@ -172,6 +195,7 @@ export class ActiveTaskControls extends Component {
               chooseLoadBy={this.chooseLoadBy}
               onConfirm={this.confirmCompletion}
               onCancel={this.resetConfirmation}
+              needsRevised={needsRevised}
             />
           }
         </div>
@@ -194,8 +218,9 @@ ActiveTaskControls.defaultProps = {
 }
 
 export default WithSearch(
-  WithKeyboardShortcuts(
-    injectIntl(ActiveTaskControls)
-  ),
+  WithTaskReview(
+    WithKeyboardShortcuts(
+      injectIntl(ActiveTaskControls)
+    )),
   'task'
 )

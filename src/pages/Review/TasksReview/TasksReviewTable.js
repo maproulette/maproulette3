@@ -233,7 +233,7 @@ const setupColumnTypes = (props, openComments, data) => {
     maxWidth: 110,
     Cell: ({row}) =>{
       return <div className="row-controls-column">
-        <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/inspect`}>
+        <Link to={`/challenge/${row._original.parent.id}/task/${row.id}`}>
           <FormattedMessage {...messages.viewTaskLabel} />
         </Link>
       </div>
@@ -248,7 +248,7 @@ const setupColumnTypes = (props, openComments, data) => {
     maxWidth: 120,
     Cell: ({row}) =>{
       return <div className="row-controls-column">
-        <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/inspect`}>
+        <Link to={`/challenge/${row._original.parent.id}/task/${row.id}`}>
           {row._original.reviewStatus === 2 ?
               <FormattedMessage {...messages.fixTaskLabel} /> :
               <FormattedMessage {...messages.viewTaskLabel} /> }

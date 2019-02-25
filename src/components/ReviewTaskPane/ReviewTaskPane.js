@@ -57,29 +57,6 @@ export const defaultWorkspaceSetup = function() {
  */
 export class ReviewTaskPane extends Component {
   state = {
-    /**
-     * id of task once user initiates completion. This is used to help our
-     * animation transitions.
-     */
-    completingTask: null,
-  }
-
-  /**
-   * Invoked by various completion controls to signal the user is completing
-   * the task with a specific status. Normally this would just go straight to
-   * WithCurrentTask, but we intercept the call so that we can manage our
-   * transition animation as the task prepares to complete.
-   */
-  completeTask = (taskId, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
-    this.setState({completingTask: taskId})
-    this.props.completeTask(taskId, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview)
-  }
-
-  clearCompletingTask = () => {
-    // Clear on next tick to give our animation transition a chance to clean up.
-    setTimeout(() => {
-      this.setState({completingTask: null})
-    }, 0)
   }
 
   componentDidUpdate(prevProps) {
@@ -121,8 +98,6 @@ export class ReviewTaskPane extends Component {
                 </li>
               </ul>
             }
-            completeTask={this.completeTask}
-            completingTask={this.state.completingTask}
         />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">

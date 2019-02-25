@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm",
   },
 
+  submitRevisionHeader: {
+    id: 'TaskConfirmationModal.submitRevisionHeader',
+    defaultMessage: "Please Confirm Revision",
+  },
+
   commentLabel: {
     id: 'TaskConfirmationModal.comment.label',
     defaultMessage: "Leave optional comment",

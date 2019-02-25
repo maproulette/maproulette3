@@ -27,14 +27,7 @@ export default defineMessages({
   userNotReviewer: {
     id: "Admin.TaskReview.controls.userNotReviewer",
     defaultMessage: "You are not currently setup as a reviewer. To become " +
-                    "a reviewer you can do so by visiting your Profile.",
-  },
-
-  doesTaskNeedReviewAgain: {
-    id: "Admin.TaskReview.controls.doesTaskNeedReviewAgain",
-    defaultMessage: "This task was rejected by the reviewer. Has the " +
-                    "issue with this task been addressed and it needs " +
-                    "to be reviewed again?",
+                    "a reviewer you can do so by visiting your user settings.",
   },
 
   taskNotCompleted: {

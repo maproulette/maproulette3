@@ -18,7 +18,11 @@ export class TaskConfirmationModal extends Component {
           <div>
             <div>
               <h1 className="mr-text-yellow mr-mb-4">
-                <FormattedMessage {...messages.header} />
+                {this.props.needsRevised ?
+                  <FormattedMessage {...messages.submitRevisionHeader} /> :
+                  <FormattedMessage {...messages.header} />
+                }
+
               </h1>
               <div
                 className={classNames(
@@ -42,7 +46,7 @@ export class TaskConfirmationModal extends Component {
                 />
               </div>
 
-              {this.props.status !== TaskStatus.skipped &&
+              {this.props.status !== TaskStatus.skipped && !this.props.needsRevised &&
               <div className="form mr-mt-2">
                 <input
                   type="checkbox"
@@ -55,33 +59,34 @@ export class TaskConfirmationModal extends Component {
                 </label>
               </div>
               }
+              { !this.props.needsRevised &&
+                <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
+                  <span className="mr-mr-4">
+                    <FormattedMessage {...messages.loadByLabel} />
+                  </span>
+                  <input
+                    type="radio"
+                    name="randomnessPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskLoadMethod.random}
+                    onChange={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
+                  />
+                  <label className="mr-mr-4">
+                    <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
+                  </label>
 
-              <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
-                <span className="mr-mr-4">
-                  <FormattedMessage {...messages.loadByLabel} />
-                </span>
-                <input
-                  type="radio"
-                  name="randomnessPreference"
-                  className="mr-mr-1"
-                  checked={this.props.loadBy === TaskLoadMethod.random}
-                  onChange={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
-                />
-                <label className="mr-mr-4">
-                  <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
-                </label>
-
-                <input
-                  type="radio"
-                  name="randomnessPreference"
-                  className="mr-mr-1"
-                  checked={this.props.loadBy === TaskLoadMethod.proximity}
-                  onChange={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
-                />
-                <label>
-                  <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
-                </label>
-              </div>
+                  <input
+                    type="radio"
+                    name="randomnessPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskLoadMethod.proximity}
+                    onChange={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
+                  />
+                  <label>
+                    <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
+                  </label>
+                </div>
+              }
 
               <div className="mr-flex mr-justify-between mr-items-center mr-mt-8">
                 <button

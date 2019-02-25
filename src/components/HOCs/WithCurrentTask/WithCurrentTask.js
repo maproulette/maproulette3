@@ -173,12 +173,14 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       return dispatch(
         completeTask(taskId, challengeId, taskStatus, needsReview)
       ).then(() => {
-        // Start loading the next task from the challenge.
-        nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
-          visitNewTask(ownProps, taskId, newTask)
-        ).catch(error => {
-          ownProps.history.push(`/browse/challenges/${challengeId}`)
-        })
+        if (taskLoadBy) {
+          // Start loading the next task from the challenge.
+          nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+            visitNewTask(ownProps, taskId, newTask)
+          ).catch(error => {
+            ownProps.history.push(`/browse/challenges/${challengeId}`)
+          })
+        }
 
         if (_isString(comment) && comment.length > 0) {
           dispatch(addTaskComment(taskId, comment, taskStatus))

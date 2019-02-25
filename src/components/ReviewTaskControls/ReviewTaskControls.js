@@ -42,28 +42,11 @@ export class ReviewTaskControls extends Component {
   render() {
     const user = this.props.user
 
-    // This task was rejected. It needs to be resubmitted for review
-    if (this.props.task.reviewStatus === TaskReviewStatus.rejected) {
-      return (
-        <div className={classNames("review-task-controls", this.props.className)}>
-          <h5>
-            <FormattedMessage {...messages.doesTaskNeedReviewAgain} />
-            <button className="mr-button mr-button--blue-fill"
-                    onClick={() => this.updateReviewStatus(TaskReviewStatus.needed)}>
-                <FormattedMessage {...messages.resubmit} />
-            </button>
-          </h5>
-        </div>
-      )
-    }
-
     // This task has not been completed yet.
     if (this.props.task.status === TaskStatus.created) {
       return (
-        <div className={classNames("review-task-controls", this.props.className)}>
-          <h5>
-            <FormattedMessage {...messages.taskNotCompleted} />
-          </h5>
+        <div className="mr-text-white mr-text-md mr-mt-4 mr-mx-4">
+          <FormattedMessage {...messages.taskNotCompleted} />
         </div>
       )
     }
@@ -71,10 +54,8 @@ export class ReviewTaskControls extends Component {
     // The user is not a reviewer
     if (!user.settings.isReviewer) {
       return (
-        <div className={classNames("review-task-controls", this.props.className)}>
-          <h5>
-            <FormattedMessage {...messages.userNotReviewer} />
-          </h5>
+        <div className="mr-text-white mr-text-md mr-mt-4 mr-mx-4">
+          <FormattedMessage {...messages.userNotReviewer} />
         </div>
       )
     }
@@ -82,10 +63,8 @@ export class ReviewTaskControls extends Component {
     // A review has not been requested on this task.
     if (this.props.task.reviewStatus === undefined) {
       return (
-        <div className={classNames("review-task-controls", this.props.className)}>
-          <h5>
-            <FormattedMessage {...messages.reviewNotRequested} />
-          </h5>
+        <div className="mr-text-white mr-text-md mr-mt-4 mr-mx-4">
+          <FormattedMessage {...messages.reviewNotRequested} />
         </div>
       )
     }

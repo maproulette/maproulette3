@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
 import { TaskStatus } from '../../../../../services/Task/TaskStatus/TaskStatus'
 import UserEditorSelector
        from '../../../../UserEditorSelector/UserEditorSelector'
@@ -10,7 +11,9 @@ import TaskFixedControl from '../TaskFixedControl/TaskFixedControl'
 import TaskTooHardControl from '../TaskTooHardControl/TaskTooHardControl'
 import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixedControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
+import TaskRevisedControl from '../TaskRevisedControl/TaskRevisedControl'
 import './TaskCompletionStep1.scss'
+import messages from './Messages'
 
 
 /**
@@ -37,9 +40,18 @@ export default class TaskCompletionStep1 extends Component {
   render() {
     return (
       <div>
+        {this.props.needsRevised &&
+          <div className="mr-text-white mr-text-md mr-mt-4">
+            <div>
+              <FormattedMessage {...messages.revisionNeeded} />
+
+            </div>
+          </div>
+        }
+
         <UserEditorSelector {...this.props} className="mr-mb-4" />
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          {this.props.allowedProgressions.has(TaskStatus.fixed) &&
+          {(this.props.allowedProgressions.has(TaskStatus.fixed) || this.props.needsRevised) &&
            <TaskEditControl {...this.props} />
           }
 
@@ -63,6 +75,10 @@ export default class TaskCompletionStep1 extends Component {
                <ListMoreOptionsItems {...this.props} />
              }
            />
+          }
+
+          {this.props.needsRevised &&
+            <TaskRevisedControl {...this.props} />
           }
         </div>
       </div>
