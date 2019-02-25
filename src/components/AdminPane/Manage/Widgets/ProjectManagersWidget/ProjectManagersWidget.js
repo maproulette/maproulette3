@@ -117,7 +117,7 @@ export default class ProjectManagersWidget extends Component {
       const isLastAdmin = managerRole === GroupType.admin && adminManagers.length < 2
 
       return (
-        <div key={manager.osmId} className="project-managers__manager mr-pr-4">
+        <div key={manager.osmId} className="project-managers__manager">
           <div className="project-managers__manager__about">
             <figure className="image is-24x24 project-managers__manager__profile-pic">
               <img src={manager.avatarURL} alt={manager.displayName} />
