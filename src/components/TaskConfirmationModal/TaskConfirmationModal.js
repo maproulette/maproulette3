@@ -4,6 +4,8 @@ import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatus, messagesByReviewStatus, keysByReviewStatus }
+      from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskLoadMethod, messagesByLoadMethod }
        from '../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import External from '../External/External'
@@ -12,26 +14,40 @@ import messages from './Messages'
 
 export class TaskConfirmationModal extends Component {
   render() {
+    const minimalConfirmation = this.props.inReview || this.props.needsRevised
+
     return (
       <External>
         <Modal isActive={true} onClose={this.props.onCancel}>
           <div>
             <div>
               <h1 className="mr-text-yellow mr-mb-4">
-                {this.props.needsRevised ?
-                  <FormattedMessage {...messages.submitRevisionHeader} /> :
-                  <FormattedMessage {...messages.header} />
+                {this.props.inReview ?
+                  <FormattedMessage {...messages.inReviewHeader} /> :
+                  this.props.needsRevised ?
+                    <FormattedMessage {...messages.submitRevisionHeader} /> :
+                    <FormattedMessage {...messages.header} />
                 }
 
               </h1>
-              <div
-                className={classNames(
-                  "mr-uppercase mr-tracking-wide",
-                  `mr-status-${_kebabCase(keysByStatus[this.props.status])}`
-                )}
-              >
-                <FormattedMessage {...messagesByStatus[this.props.status]} />
-              </div>
+              {this.props.inReview ?
+                <div
+                  className={classNames(
+                    "mr-uppercase mr-tracking-wide",
+                    `mr-status-${_kebabCase(keysByReviewStatus[this.props.status])}`
+                  )}
+                >
+                  <FormattedMessage {...messagesByReviewStatus[this.props.status]} />
+                </div> :
+                <div
+                  className={classNames(
+                    "mr-uppercase mr-tracking-wide",
+                    `mr-status-${_kebabCase(keysByStatus[this.props.status])}`
+                  )}
+                >
+                  <FormattedMessage {...messagesByStatus[this.props.status]} />
+                </div>
+              }
 
               <div className="mr-mt-6">
                 <p>
@@ -46,7 +62,7 @@ export class TaskConfirmationModal extends Component {
                 />
               </div>
 
-              {this.props.status !== TaskStatus.skipped && !this.props.needsRevised &&
+              {this.props.status !== TaskStatus.skipped && !minimalConfirmation &&
               <div className="form mr-mt-2">
                 <input
                   type="checkbox"
@@ -59,7 +75,7 @@ export class TaskConfirmationModal extends Component {
                 </label>
               </div>
               }
-              { !this.props.needsRevised &&
+              { !minimalConfirmation &&
                 <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
                   <span className="mr-mr-4">
                     <FormattedMessage {...messages.loadByLabel} />

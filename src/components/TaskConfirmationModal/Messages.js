@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm Revision",
   },
 
+  inReviewHeader: {
+    id: 'TaskConfirmationModal.inReviewHeader',
+    defaultMessage: "Please Confirm Review",
+  },
+
   commentLabel: {
     id: 'TaskConfirmationModal.comment.label',
     defaultMessage: "Leave optional comment",

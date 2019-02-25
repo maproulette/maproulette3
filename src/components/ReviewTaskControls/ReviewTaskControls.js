@@ -9,6 +9,7 @@ import WithEditor from '../HOCs/WithEditor/WithEditor'
 import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
+import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
@@ -27,10 +28,19 @@ export class ReviewTaskControls extends Component {
 
   setComment = comment => this.setState({comment})
 
+  onConfirm = () => {
+    this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
+                                      this.state.comment)
+    this.props.history.push('/review')
+  }
+
+  onCancel = () => {
+    this.setState({confirmingTask: false})
+  }
+
   /** Save Review Status */
   updateReviewStatus = (reviewStatus) => {
-    this.props.updateTaskReviewStatus(this.props.task, reviewStatus, this.state.comment)
-    this.props.history.push('/review')
+    this.setState({reviewStatus, confirmingTask: true})
   }
 
   /** Stop Reviewing (release claim) */
@@ -114,14 +124,6 @@ export class ReviewTaskControls extends Component {
             {...messagesByReviewStatus[this.props.task.reviewStatus]}
           />
         </div>
-        <div className="mr-mt-4">
-          <TaskCommentInput
-            {...this.props}
-            className="review-task-controls__task-comment"
-            value={this.state.comment}
-            commentChanged={this.setComment}
-          />
-        </div>
 
         <div>
           <UserEditorSelector {...this.props} className="mr-mb-4" />
@@ -148,6 +150,19 @@ export class ReviewTaskControls extends Component {
             <FormattedMessage {...messages.stopReview} />
           </button>
         </div>
+
+        {this.state.confirmingTask &&
+          <TaskConfirmationModal
+            {...this.props}
+            task={this.props.task}
+            status={this.state.reviewStatus}
+            comment={this.state.comment}
+            setComment={this.setComment}
+            onConfirm={this.onConfirm}
+            onCancel={this.onCancel}
+            inReview={true}
+          />
+        }
       </div>
     )
   }

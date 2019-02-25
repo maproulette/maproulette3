@@ -40,8 +40,8 @@ export const defaultWorkspaceSetup = function() {
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 3},
       {i: generateWidgetId(), x: 0, y: 3, w: 4, h: 4},
       {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18},
-      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 10},
-      {i: generateWidgetId(), x: 0, y: 17, w: 4, h: 6},
+      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 8},
+      {i: generateWidgetId(), x: 0, y: 15, w: 4, h: 6},
     ],
   }
 }
