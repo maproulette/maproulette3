@@ -24,7 +24,8 @@ const WithWidgetManagement = function(WrappedComponent) {
      */
     availableWidgets = () => {
       const compatibleWidgets = compatibleWidgetTypes(this.props.workspace.targets)
-      return _differenceBy(compatibleWidgets, this.props.workspace.widgets, 'widgetKey')
+      const unusedWidgets = _differenceBy(compatibleWidgets, this.props.workspace.widgets, 'widgetKey')
+      return _differenceBy(unusedWidgets, this.props.workspace.excludeWidgets, 'widgetKey')
     }
 
     /**

@@ -43,6 +43,9 @@ export const defaultWorkspaceSetup = function() {
       {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 8},
       {i: generateWidgetId(), x: 0, y: 15, w: 4, h: 6},
     ],
+    excludeWidgets: [
+      widgetDescriptor('TaskCompletionWidget'),
+    ]
   }
 }
 
