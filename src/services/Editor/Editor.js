@@ -137,7 +137,7 @@ export const isJosmEditor = function(editor) {
  */
 export const taskCenterPoint = function(mapBounds, task) {
   // If the mapbounds don't match the task, compute our own centerpoint.
-  return mapBounds.taskId === task.id ?
+  return (mapBounds && mapBounds.taskId === task.id) ?
          mapBounds.bounds.getCenter() :
          AsMappableTask(task).calculateCenterPoint()
 }

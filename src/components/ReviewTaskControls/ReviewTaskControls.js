@@ -4,6 +4,11 @@ import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
+import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import WithEditor from '../HOCs/WithEditor/WithEditor'
+import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
+import UserEditorSelector
+       from '../UserEditorSelector/UserEditorSelector'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
@@ -37,6 +42,12 @@ export class ReviewTaskControls extends Component {
   /** Start Reviewing (claim this task) */
   startReviewing = () => {
     this.props.startReviewing(this.props.task)
+  }
+
+  /** Choose which editor to launch for fixing a task */
+  pickEditor = ({ value }) => {
+    this.setState({taskBeingCompleted: this.props.task.id})
+    this.props.editTask(value, this.props.task, {zoom: 20})
   }
 
   render() {
@@ -111,6 +122,14 @@ export class ReviewTaskControls extends Component {
             commentChanged={this.setComment}
           />
         </div>
+
+        <div>
+          <UserEditorSelector {...this.props} className="mr-mb-4" />
+          <div className="mr-mt-4 mr-mb-12 mr-grid mr-grid-columns-2 mr-grid-gap-4">
+            <TaskEditControl {...this.props} pickEditor={this.pickEditor} />
+          </div>
+        </div>
+
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           <button className="mr-button mr-button--blue-fill"
                   onClick={() => this.updateReviewStatus(TaskReviewStatus.approved)}>
@@ -139,4 +158,4 @@ ReviewTaskControls.propTypes = {
   task: PropTypes.object,
 }
 
-export default WithTaskReview(ReviewTaskControls)
+export default WithTaskReview(WithEditor(WithKeyboardShortcuts(ReviewTaskControls)))
