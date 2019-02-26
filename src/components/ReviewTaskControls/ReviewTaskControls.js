@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
+import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
+import { TaskStatus, messagesByStatus }
+       from '../../services/Task/TaskStatus/TaskStatus'
+import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
 import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithEditor from '../HOCs/WithEditor/WithEditor'
@@ -9,9 +13,6 @@ import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/Ta
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
-import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
-import { TaskStatus } from '../../services/Task/TaskStatus/TaskStatus'
-import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import messages from './Messages'
 import './ReviewTaskControls.scss'
 
@@ -116,7 +117,15 @@ export class ReviewTaskControls extends Component {
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
-        <div className="mr-text-sm mr-text-white mr-mt-2 mr-whitespace-no-wrap">
+        <div className="mr-text-sm mr-text-white mr-mt-4 mr-whitespace-no-wrap">
+          <FormattedMessage
+            {...messages.currentTaskStatus}
+          /> <FormattedMessage
+            {...messagesByStatus[this.props.task.status]}
+          />
+        </div>
+
+        <div className="mr-text-sm mr-text-white mr-whitespace-no-wrap">
           <FormattedMessage
             {...messages.currentReviewStatus}
           /> <FormattedMessage
@@ -124,8 +133,8 @@ export class ReviewTaskControls extends Component {
           />
         </div>
 
-        <div>
-          <UserEditorSelector {...this.props} className="mr-mb-4" />
+        <div className="mr-my-4">
+          <UserEditorSelector {...this.props} />
           <div className="mr-mt-4 mr-mb-12 mr-grid mr-grid-columns-2 mr-grid-gap-4">
             <TaskEditControl {...this.props} pickEditor={this.pickEditor} />
           </div>

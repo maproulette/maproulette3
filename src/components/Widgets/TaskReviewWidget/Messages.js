@@ -11,6 +11,6 @@ export default defineMessages({
 
   reviewTaskTitle: {
     id: "Widgets.TaskReviewWidget.reviewTaskTitle",
-    defaultMessage: "Review Status",
+    defaultMessage: "Review",
   },
 })

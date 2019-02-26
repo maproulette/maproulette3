@@ -9,9 +9,14 @@ export default defineMessages({
     defaultMessage: "Update Review Status",
   },
 
+  currentTaskStatus: {
+    id: "Admin.TaskReview.controls.currentTaskStatus.label",
+    defaultMessage: "Task Status:",
+  },
+
   currentReviewStatus: {
     id: "Admin.TaskReview.controls.currentReviewStatus.label",
-    defaultMessage: "Current Review Status:",
+    defaultMessage: "Review Status:",
   },
 
   reviewNotRequested: {

@@ -8,6 +8,7 @@ import { messagesByReviewStatus, keysByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskLoadMethod, messagesByLoadMethod }
        from '../../services/Task/TaskLoadMethod/TaskLoadMethod'
+import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import messages from './Messages'
@@ -49,18 +50,12 @@ export class TaskConfirmationModal extends Component {
                 </div>
               }
 
-              <div className="mr-mt-6">
-                <p>
-                  <FormattedMessage {...messages.commentLabel} />
-                </p>
-                <textarea
-                  className="mr-input"
-                  rows={3}
-                  cols="1"
-                  value={this.props.comment}
-                  onChange={e => this.props.setComment(e.target.value)}
-                />
-              </div>
+              <TaskCommentInput
+                className="mr-mt-6"
+                rows={3}
+                value={this.props.comment}
+                commentChanged={this.props.setComment}
+              />
 
               {this.props.status !== TaskStatus.skipped && !minimalConfirmation &&
               <div className="form mr-mt-2">

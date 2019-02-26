@@ -53,23 +53,21 @@ export class TaskReviewTable extends Component {
     const totalPages = Math.ceil(_get(this.props, 'totalCount', 0) / pageSize)
 
     var subheader = <FormattedMessage {...messages.myReviewTasks} />
-    var columns = [columnTypes.id, columnTypes.status, columnTypes.challenge,
-                   columnTypes.modified, columnTypes.reviewedBy,
-                   columnTypes.reviewStatus, columnTypes.mapperControls,
-                   columnTypes.viewComments]
+    var columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge,
+                   columnTypes.modified, columnTypes.reviewedBy, columnTypes.status,
+                   columnTypes.mapperControls, columnTypes.viewComments]
 
     if (this.props.asReviewer) {
       subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
-      columns = [columnTypes.id, columnTypes.status, columnTypes.reviewRequestedBy,
-                 columnTypes.challenge, columnTypes.modified, columnTypes.reviewerControls,
-                 columnTypes.viewComments]
+      columns = [columnTypes.id, columnTypes.reviewRequestedBy,
+                 columnTypes.challenge, columnTypes.modified, columnTypes.status,
+                 columnTypes.reviewerControls, columnTypes.viewComments]
 
       if (this.props.showReviewedByMe) {
         subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
-        columns = [columnTypes.id, columnTypes.status, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.modified,
-                   columnTypes.reviewStatus, columnTypes.reviewCompleteControls,
-                   columnTypes.viewComments]
+        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
+                   columnTypes.challenge, columnTypes.modified, columnTypes.status,
+                   columnTypes.reviewCompleteControls, columnTypes.viewComments]
       }
     }
 
@@ -86,7 +84,7 @@ export class TaskReviewTable extends Component {
           <ReactTable data={data} columns={columns}
                       defaultPageSize={this.props.defaultPageSize}
                       defaultSorted={[ {id: 'id', desc: false} ]}
-                      minRows={this.props.defaultPageSize}
+                      minRows={1}
                       manual
                       multiSort={false}
                       noDataText={<FormattedMessage {...messages.noTasks} />}
