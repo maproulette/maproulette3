@@ -83,7 +83,8 @@ export class ActiveTaskControls extends Component {
       this.props.completeTask(this.props.task.id, this.props.task.parent.id,
                               taskStatus, this.state.comment,
                               revisionSubmission? null : this.props.taskLoadBy,
-                              this.props.user.id, this.state.needsReview)
+                              this.props.user.id,
+                              revisionSubmission || this.state.needsReview)
       if (revisionSubmission) {
         this.props.history.push('/review')
       }
