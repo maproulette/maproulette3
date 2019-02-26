@@ -6,6 +6,7 @@ import _get from 'lodash/get'
 import _each from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
+import _debounce from 'lodash/debounce'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
@@ -30,6 +31,8 @@ export class TaskReviewTable extends Component {
     openComments: null,
   }
 
+  debouncedUpdateTasks = _debounce(this.updateTasks, 100)
+
   updateTasks(tableState, instance) {
     this.setState({loading: true, pageSize: tableState.pageSize})
 
@@ -42,7 +45,9 @@ export class TaskReviewTable extends Component {
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page},
-                                  tableState.pageSize)
+                                  tableState.pageSize).then(() => {
+      this.setState({loading: false})
+    })
   }
 
   render() {
@@ -89,7 +94,8 @@ export class TaskReviewTable extends Component {
                       multiSort={false}
                       noDataText={<FormattedMessage {...messages.noTasks} />}
                       pages={totalPages}
-                      onFetchData={(state, instance) => this.updateTasks(state, instance)}
+                      onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+                      loading={this.state.loading}
           />
         </div>
         {_isFinite(this.state.openComments) &&

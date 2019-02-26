@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
-import _debounce from 'lodash/debounce'
 import { fetchReviewNeededTasks }
        from '../../../services/Task/TaskReview/TaskReviewNeeded'
 import { fetchReviewedTasks }
@@ -55,7 +54,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       return (
         <WrappedComponent reviewTasks={reviewTasks}
                           totalCount={totalCount}
-                          updateReviewTasks={_debounce(updateTasks, 1000, {leading: false})}
+                          updateReviewTasks={updateTasks}
                           defaultPageSize={DEFAULT_PAGE_SIZE}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
     }
