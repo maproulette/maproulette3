@@ -17,10 +17,10 @@ class Modal extends Component {
           className="mr-fixed mr-pin mr-z-40 mr-bg-blue-dark-75"
           onClick={this.props.onClose}
         />
-        <div className="mr-z-50 mr-fixed mr-pin-t mr-pin-l mr-w-full lg:mr-w-auto lg:mr-pin-t-50 lg:mr-pin-l-50 lg:mr--translate-1/2">
+        <div className="mr-z-50 mr-fixed mr-pin-t mr-pin-l md:mr-w-2/3 md:mr-pin-t-20 md:mr-pin-l-16">
           <div
             className={classNames(
-              'mr-relative mr-bg-blue-dark mr-p-8 mr-rounded mr-shadow mr-max-w-full mr-w-md mr-mx-auto',
+              'mr-relative mr-bg-blue-dark mr-p-8 mr-rounded mr-shadow mr-w-full mr-w-md mr-mx-auto',
               this.props.contentClassName
             )}
           >

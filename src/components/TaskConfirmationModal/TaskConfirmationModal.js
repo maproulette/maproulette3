@@ -9,6 +9,7 @@ import { messagesByReviewStatus, keysByReviewStatus }
 import { TaskLoadMethod, messagesByLoadMethod }
        from '../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import messages from './Messages'
@@ -20,9 +21,16 @@ export class TaskConfirmationModal extends Component {
     return (
       <External>
         <Modal isActive={true} onClose={this.props.onCancel}>
-          <div>
-            <div>
-              <h1 className="mr-text-yellow mr-mb-4">
+          <div className="mr-flex mr-justify-between">
+            <div className="mr-pt-12">
+              <SvgSymbol
+                sym="illustration-choose"
+                viewBox="0 0 147 200"
+                className="mr-h-64 mr-mr-12 mr-max-w-40"
+              />
+            </div>
+            <div className="mr-w-full">
+              <h2 className="mr-text-yellow mr-text-4xl mr-mb-4">
                 {this.props.inReview ?
                   <FormattedMessage {...messages.inReviewHeader} /> :
                   this.props.needsRevised ?
@@ -30,7 +38,7 @@ export class TaskConfirmationModal extends Component {
                     <FormattedMessage {...messages.header} />
                 }
 
-              </h1>
+              </h2>
               {this.props.inReview ?
                 <div
                   className={classNames(
@@ -99,7 +107,7 @@ export class TaskConfirmationModal extends Component {
                 </div>
               }
 
-              <div className="mr-flex mr-justify-between mr-items-center mr-mt-8">
+              <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
                 <button
                   className="mr-button mr-button--white mr-mr-4"
                   onClick={this.props.onCancel}

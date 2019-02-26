@@ -15,8 +15,16 @@
     left: -50%;
   }
 
+  .mr-pin-l-16 {
+    left: 16%;
+  }
+
   .mr-pin-t-50 {
     top: 50%;
+  }
+
+  .mr-pin-t-20 {
+    top: 20%;
   }
 
   .mr--translate-1\/2 {
