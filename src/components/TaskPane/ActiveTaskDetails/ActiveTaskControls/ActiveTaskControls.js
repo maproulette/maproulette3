@@ -149,7 +149,7 @@ export class ActiveTaskControls extends Component {
 
       return (
         <div className={this.props.className}>
-          {(!isEditingTask && (!isComplete || needsRevised)) &&
+          {(!isEditingTask && !isComplete || needsRevised) &&
            <TaskCompletionStep1
              {...this.props}
              allowedProgressions={allowedProgressions}
