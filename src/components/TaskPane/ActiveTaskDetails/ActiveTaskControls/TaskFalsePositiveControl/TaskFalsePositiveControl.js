@@ -32,6 +32,15 @@ export default class TaskFalsePositiveControl extends Component {
   }
 
   render() {
+    if (this.props.asLink) {
+      return (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <a onClick={() => this.props.complete(TaskStatus.falsePositive)}>
+          <FormattedMessage {...messages.falsePositiveLabel} />
+        </a>
+      )
+    }
+
     return (
       <Button
         className="mr-button--blue-fill"
