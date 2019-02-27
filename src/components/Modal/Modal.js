@@ -17,7 +17,13 @@ class Modal extends Component {
           className="mr-fixed mr-pin mr-z-40 mr-bg-blue-dark-75"
           onClick={this.props.onClose}
         />
-        <div className="mr-z-90 mr-fixed mr-pin-t mr-pin-l md:mr-w-2/3 md:mr-pin-t-20 md:mr-pin-l-16">
+        <div
+          className={classNames(
+            "mr-z-90 mr-fixed mr-pin-t mr-pin-l md:mr-min-w-1/2", {
+            "md:mr-w-2/3 md:mr-pin-t-20 md:mr-pin-l-16": this.props.wide,
+            "mr-w-full lg:mr-w-auto lg:mr-pin-t-50 lg:mr-pin-l-50 lg:mr--translate-1/2": !this.props.wide
+          })}
+        >
           <div
             className={classNames(
               'mr-relative mr-bg-blue-dark mr-p-8 mr-rounded mr-shadow mr-w-full mr-w-md mr-mx-auto',
@@ -47,6 +53,11 @@ Modal.propTypes = {
   isActive: PropTypes.bool.isRequired,
   className: PropTypes.string,
   contentClassName: PropTypes.string,
+  wide: PropTypes.bool,
+}
+
+Modal.defaultProps = {
+  wide: false,
 }
 
 export default Modal
