@@ -40,23 +40,28 @@ export default defineMessages({
   },
 
   reviewStatusLabel: {
-    id: "Review.fields.reviewStatus.label",
+    id: "Task.fields.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 
   mappedByLabel: {
-    id: "Review.fields.requestedBy.label",
+    id: "Task.fields.requestedBy.label",
     defaultMessage: "Mapper",
   },
 
   reviewedByLabel: {
-    id: "Review.fields.reviewedBy.label",
+    id: "Task.fields.reviewedBy.label",
     defaultMessage: "Reviewer",
   },
 
   reviewedAtLabel: {
-    id: "Review.fields.reviewedAt.label",
+    id: "Admin.fields.reviewedAt.label",
     defaultMessage: "Reviewed On",
+  },
+
+  commentsColumnLabel: {
+    id: "Admin.TaskAnalysisTable.columnHeaders.comments",
+    defaultMessage: "Comments",
   },
 
   inspectTaskLabel: {

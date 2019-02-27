@@ -9,6 +9,7 @@ import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
+import _isFinite from 'lodash/isFinite'
 import { messagesByStatus,
          keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -21,6 +22,8 @@ import AsManager from '../../../../interactions/User/AsManager'
 import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import TaskCommentsModal
+       from '../../../../components/TaskCommentsModal/TaskCommentsModal'
 import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
@@ -42,21 +45,24 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
  */
 export class TaskAnalysisTable extends Component {
   state = {
-    withReviewColumns: false
+    withReviewColumns: false,
+    openComments: null,
   }
 
   getColumns = (manager, taskBaseRoute, data) => {
-    const columnTypes = setupColumnTypes(this.props, taskBaseRoute, manager, data)
+    const columnTypes = setupColumnTypes(this.props, taskBaseRoute, manager, data, taskId => this.setState({openComments: taskId}))
 
     if (this.state.withReviewColumns) {
        return [columnTypes.selected, columnTypes.featuredId, columnTypes.id,
                columnTypes.status, columnTypes.priority,
                columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-               columnTypes.reviewedBy, columnTypes.reviewedAt, columnTypes.controls]
+               columnTypes.reviewedBy, columnTypes.reviewedAt,
+               columnTypes.controls, columnTypes.viewComments]
     }
     else {
       return [columnTypes.selected, columnTypes.featuredId, columnTypes.id,
-       columnTypes.status, columnTypes.priority, columnTypes.controls]
+              columnTypes.status, columnTypes.priority,
+              columnTypes.controls, columnTypes.viewComments]
     }
 
   }
@@ -94,8 +100,8 @@ export class TaskAnalysisTable extends Component {
           Math.round(data.length / this.props.totalTaskCount * 100.0)
 
         return (
-          <div className="table-status-bar mr-text-white">
-            <div className="">
+          <div className="mr-flex mr-justify-between">
+            <div>
               <FormattedMessage {...messages.taskPercentShownStatus}
                                     values={{
                                       percentShown,
@@ -105,7 +111,7 @@ export class TaskAnalysisTable extends Component {
 
               {this.props.totalTaskCount !== countShown ? this.props.clearFiltersControl : null}
             </div>
-            <div className="">
+            <div>
               <button onClick={() => this.setState({withReviewColumns: !this.state.withReviewColumns})}>
               {this.state.withReviewColumns ? "Hide Review Columns" : "Show Review Columns"}
               </button>
@@ -117,20 +123,28 @@ export class TaskAnalysisTable extends Component {
     }]
 
     return (
-      <div className="task-analysis-table">
-        <ReactTable data={data} columns={taskCountWrapper}
-                    SubComponent={props =>
-                      <ViewTaskSubComponent taskId={props.original.id} />
-                    }
-                    collapseOnDataChange={false}
-                    defaultSorted={[ {id: 'featureId', desc: false} ]}
-        />
-      </div>
+      <React.Fragment>
+        <div className="mr-flex-grow mr-w-full mr-mx-auto mr-bg-white mr-text-black mr-rounded mr-p-6 md:mr-p-8 mr-mb-12">
+          <ReactTable data={data} columns={taskCountWrapper}
+                      SubComponent={props =>
+                        <ViewTaskSubComponent taskId={props.original.id} />
+                      }
+                      collapseOnDataChange={false}
+                      defaultSorted={[ {id: 'featureId', desc: false} ]}
+          />
+        </div>
+        {_isFinite(this.state.openComments) &&
+         <TaskCommentsModal
+           taskId={this.state.openComments}
+           onClose={() => this.setState({openComments: null})}
+         />
+        }
+      </React.Fragment>
     )
   }
 }
 
-const setupColumnTypes = (props, taskBaseRoute, manager, data) => {
+const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => {
   const columns = {}
 
   columns.selected = {id: 'selected',
@@ -171,11 +185,11 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data) => {
     exportable: t => props.intl.formatMessage(messagesByStatus[t.status]),
     Cell: ({value}) => (
       <div>
-        <SvgSymbol sym='circle-icon'
-                   viewBox='0 0 20 20'
-                   className={classNames("status-icon",
-                                         keysByStatus[value])} />
-        <FormattedMessage {...messagesByStatus[value]} />
+        <StatusLabel
+          {...props}
+          intlMessage={messagesByStatus[value]}
+          className={`mr-status-${_kebabCase(keysByStatus[value])}`}
+        />
       </div>
     ),
   }
@@ -241,12 +255,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data) => {
   columns.reviewStatus = {
     id: 'reviewStatus',
     Header: props.intl.formatMessage(messages.reviewStatusLabel),
-    accessor: 'reviewStatus',
+    accessor: x => _isUndefined(x.reviewStatus) ? -1 : x.reviewStatus,
     sortable: true,
     exportable: t => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
     maxWidth: 180,
+    defaultSortDesc: true,
     Cell: props => (
-      !_isUndefined(props.value) &&
+      (!_isUndefined(props.value) && props.value !== -1) &&
         <StatusLabel
           {...props}
           intlMessage={messagesByReviewStatus[props.value]}
@@ -262,16 +277,16 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data) => {
     minWidth: 110,
     Cell: ({row}) =>
       <div className="row-controls-column">
-        <Link to={`${taskBaseRoute}/${row.id}/inspect`}>
+        <Link to={`${taskBaseRoute}/${row.id}/inspect`} className="mr-mr-2">
           <FormattedMessage {...messages.inspectTaskLabel} />
         </Link>
         {manager.canWriteProject(props.challenge.parent) &&
-         <Link to={`${taskBaseRoute}/${row.id}/edit`}>
+         <Link to={`${taskBaseRoute}/${row.id}/edit`} className="mr-mr-2">
            <FormattedMessage {...messages.editTaskLabel} />
          </Link>
         }
         {(!_isUndefined(row._original.reviewStatus)) &&
-         <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/review`}>
+         <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/review`} className="mr-mr-2">
            <FormattedMessage {...messages.reviewTaskLabel} />
          </Link>
         }
@@ -280,6 +295,16 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data) => {
         </Link>
       </div>
   }
+
+  columns.viewComments = {
+    id: 'viewComments',
+    Header: () => <FormattedMessage {...messages.commentsColumnLabel} />,
+    accessor: 'commentID',
+    maxWidth: 110,
+    Cell: props =>
+      <ViewCommentsButton onClick={() => openComments(props.row.id)} />,
+  }
+
   return columns
 }
 
@@ -293,6 +318,21 @@ const StatusLabel = props => (
     </span>
   </span>
 )
+
+const ViewCommentsButton = function(props) {
+  return (
+    <button
+      onClick={props.onClick}
+      className="mr-inline-flex mr-items-center mr-transition mr-text-green-light hover:mr-text-green"
+    >
+      <SvgSymbol
+        sym="comments-icon"
+        viewBox="0 0 20 20"
+        className="mr-fill-current mr-w-4 mr-h-4"
+      />
+    </button>
+  )
+}
 
 TaskAnalysisTable.propTypes = {
   /** The tasks to display */
