@@ -43,7 +43,7 @@ export default class UserEditorSelector extends Component {
         </span>
         {this.state.isSaving ? <BusySpinner /> :
          <Dropdown
-           className="mr-dropdown"
+           className="mr-dropdown mr-dropdown--fixed"
            dropdownButton={dropdown =>
              <EditorButton
                editorLabels={localizedEditorLabels}
