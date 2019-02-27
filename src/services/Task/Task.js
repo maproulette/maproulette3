@@ -199,17 +199,25 @@ export const loadRandomTaskFromChallenge = function(challengeId,
                                                     priorTaskId,
                                                     includeMapillary=false) {
   return function(dispatch) {
-    return retrieveChallengeTask(dispatch, new Endpoint(
-      api.challenge.randomTask,
-      {
+    // We use different API endpoints depending on whether a priorTaskId is
+    // given (indicating that a proximate/nearby task is desired)
+    let endpoint = null
+    if (_isFinite(priorTaskId)) {
+      endpoint = new Endpoint(api.challenge.randomTask, {
         schema: [ taskSchema() ],
         variables: {id: challengeId},
-        params: {
-          proximity: _isFinite(priorTaskId) ? priorTaskId : undefined,
-          mapillary: includeMapillary,
-        }
-      }
-    ))
+        params: {proximity: priorTaskId, mapillary: includeMapillary},
+      })
+    }
+    else {
+      endpoint = new Endpoint(api.challenge.prioritizedTask, {
+        schema: [ taskSchema() ],
+        variables: {id: challengeId},
+        params: {mapillary: includeMapillary},
+      })
+    }
+
+    return retrieveChallengeTask(dispatch, endpoint)
   }
 }
 

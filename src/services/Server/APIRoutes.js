@@ -48,6 +48,7 @@ const apiRoutes = factory => {
       'tasks': factory.get('/challenge/:id/tasks'),
       'clusteredTasks': factory.get('/challenge/clustered/:id'),
       'randomTask': factory.get('/challenge/:id/tasks/randomTasks', {noCache: true}),
+      'prioritizedTask': factory.get('/challenge/:id/tasks/prioritizedTasks', {noCache: true}),
       'previousSequentialTask': factory.get('/challenge/:challengeId/previousTask/:taskId'),
       'nextSequentialTask': factory.get('/challenge/:challengeId/nextTask/:taskId'),
       'actions': factory.get('/data/challenge/:id'),
