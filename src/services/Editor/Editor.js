@@ -82,10 +82,21 @@ export const editTask = function(editor, task, mapBounds) {
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
     }
     else if (isJosmEditor(editor)) {
-      const josmURIFunction =
-        editor === JOSM_FEATURES ? josmLoadObjectURI : josmLoadAndZoomURI
-
-      openJOSM(dispatch, editor, task, mapBounds, josmURIFunction)
+      if (editor === JOSM_FEATURES) {
+        // Load the features, then zoom JOSM to the task map's bounding box.
+        // Otherwise if there are long features like a highway, the user could
+        // end up zoomed way out by default. We have to do this as two separate
+        // calls to JOSM, with a bit of a delay to give JOSM the chance to load
+        // the object before we try to zoom
+        openJOSM(
+          dispatch, editor, task, mapBounds, josmLoadObjectURI
+        ).then(
+          () => setTimeout(() => sendJOSMCommand(josmZoomURI(task, mapBounds)), 1000)
+        )
+      }
+      else {
+        openJOSM(dispatch, editor, task, mapBounds, josmLoadAndZoomURI)
+      }
     }
   }
 }
@@ -269,6 +280,15 @@ export const josmLoadAndZoomURI = function(dispatch, editor, task, mapBounds) {
 }
 
 /*
+ * Builds a URI for the JOSM zoom remote control command
+ *
+ * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#zoom
+ */
+export const josmZoomURI = function(task, mapBounds) {
+  return josmHost() + 'zoom?' + josmBoundsParams(task, mapBounds)
+}
+
+/*
  * Builds a URI for the JOSM load_object remote control command, useful for loading
  * just a task's features. If the task contains no features with OSM identifiers
  * then an error is dispatched and null is returned
@@ -295,28 +315,36 @@ export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds) {
 }
 
 /**
+ * Sends a command to JOSM and returns a promise that resolves to true on
+ * success, false on failure
+ */
+const sendJOSMCommand = function(uri) {
+  return fetch(uri).then(
+    response => response.status === 200
+  ).catch(error => {
+    console.log(error)
+    return false
+  })
+}
+
+/**
  * Execute an ajax request to open the JOSM editor. The given josmURIFunction
  * will be invoked to generate the remote-control command URI
  */
 const openJOSM = function(dispatch, editor, task, mapBounds, josmURIFunction) {
   const uri = josmURIFunction(dispatch, editor, task, mapBounds)
   if (!uri) {
-    return
+    return Promise.resolve()
   }
 
-  fetch(uri).then(response => {
-    if (response.status === 200) {
-      dispatch(editorOpened(editor, task.id, RequestStatus.success))
+  return sendJOSMCommand(uri).then(success => {
+    if (success) {
+      return dispatch(editorOpened(editor, task.id, RequestStatus.success))
     }
     else {
       dispatch(addError(AppErrors.josm.noResponse))
-      dispatch(editorOpened(editor, task.id, RequestStatus.error))
+      return dispatch(editorOpened(editor, task.id, RequestStatus.error))
     }
-  }).catch(error => {
-    // Could be no response, but could also be download too large or some other
-    // JOSM error
-    dispatch(addError(AppErrors.josm.noResponse))
-    dispatch(editorOpened(editor, task.id, RequestStatus.error))
   })
 }
 
