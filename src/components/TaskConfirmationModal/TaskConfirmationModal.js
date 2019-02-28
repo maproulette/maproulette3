@@ -20,7 +20,7 @@ export class TaskConfirmationModal extends Component {
 
     return (
       <External>
-        <Modal isActive={true} onClose={this.props.onCancel}>
+        <Modal wide isActive onClose={this.props.onCancel}>
           <div className="mr-flex mr-justify-between">
             <div className="mr-pt-12">
               <SvgSymbol

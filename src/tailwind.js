@@ -517,6 +517,7 @@ module.exports = {
     '60': '15rem',
     auto: 'auto',
     full: '100%',
+    '1/2': '50vw',
     button: '7.8125rem',
   },
 
