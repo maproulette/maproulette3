@@ -20,6 +20,7 @@ import _isString from 'lodash/isString'
 import _isFinite from 'lodash/isFinite'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
+import _values from 'lodash/values'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -269,6 +270,32 @@ export const fetchTaskComments = function(taskId) {
       }
 
       return normalizedComments
+    })
+  }
+}
+
+/**
+ * Fetch history for the given task
+ */
+export const fetchTaskHistory = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.history,
+      {schema: {}, variables: {id: taskId}}
+    ).execute().then(normalizedHistory => {
+      if (_isObject(normalizedHistory.result)) {
+        // Inject history into task.
+        dispatch(receiveTasks({
+          tasks: {
+            [taskId]: {
+              id: taskId,
+              history: _values(normalizedHistory.result),
+            }
+          }
+        }))
+      }
+
+      return normalizedHistory
     })
   }
 }

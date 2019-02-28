@@ -32,13 +32,15 @@ export const defaultWorkspaceSetup = function() {
     widgets: [
       widgetDescriptor('TaskReviewWidget'),
       widgetDescriptor('TaskCommentsWidget'),
+      widgetDescriptor('TaskHistoryWidget'),
       widgetDescriptor('TaskInstructionsWidget'),
       widgetDescriptor('TaskMapWidget'),
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9},
       {i: generateWidgetId(), x: 0, y: 9, w: 4, h: 6},
-      {i: generateWidgetId(), x: 0, y: 15, w: 4, h: 4},
+      {i: generateWidgetId(), x: 0, y: 15, w: 4, h: 8},
+      {i: generateWidgetId(), x: 0, y: 23, w: 4, h: 4},
       {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18},
     ],
     excludeWidgets: [
