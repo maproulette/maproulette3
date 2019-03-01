@@ -5,12 +5,12 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   statusLabel: {
-    id: "Review.fields.status.label",
+    id: "TaskHistory.fields.status.label",
     defaultMessage: "Status",
   },
 
   reviewStatusLabel: {
-    id: "Review.fields.reviewStatus.label",
+    id: "TaskHistory.fields.reviewStatus.label",
     defaultMessage: "Review Status",
   },
 })
