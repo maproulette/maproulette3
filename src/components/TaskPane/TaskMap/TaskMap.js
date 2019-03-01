@@ -92,6 +92,13 @@ export class TaskMap extends Component {
   }
 
   /**
+   * Ensures the OSM Data Layer is deactivated
+   */
+  deactivateOSMDataLayer = () => {
+    this.setState({showOSMData: false, osmData: null, osmDataLoading: false})
+  }
+
+  /**
    * Invoked by LayerToggle when the user wishes to toggle visibility of
    * Mapillary markers on or off.
    */
@@ -132,8 +139,12 @@ export class TaskMap extends Component {
     this.loadMapillaryIfNeeded()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.loadMapillaryIfNeeded()
+
+    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+      this.deactivateOSMDataLayer()
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {

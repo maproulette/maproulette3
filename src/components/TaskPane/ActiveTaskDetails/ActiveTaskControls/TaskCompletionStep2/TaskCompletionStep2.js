@@ -5,7 +5,9 @@ import TaskFixedControl from '../TaskFixedControl/TaskFixedControl'
 import TaskTooHardControl from '../TaskTooHardControl/TaskTooHardControl'
 import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixedControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
+import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'
 import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEditingControl'
+import Dropdown from '../../../../Dropdown/Dropdown'
 import './TaskCompletionStep2.scss'
 
 /**
@@ -17,6 +19,10 @@ import './TaskCompletionStep2.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class TaskCompletionStep2 extends Component {
+  state = {
+    moreOptionsOpen: false,
+  }
+
   render() {
     return (
       <div>
@@ -33,8 +39,17 @@ export default class TaskCompletionStep2 extends Component {
             <TaskAlreadyFixedControl {...this.props} />
           }
 
-          {this.props.allowedProgressions.has(TaskStatus.skipped) &&
-            <TaskSkipControl {...this.props} suppressIcon />
+          {(this.props.allowedProgressions.has(TaskStatus.skipped) ||
+            this.props.allowedProgressions.has(TaskStatus.falsePositive)) &&
+           <Dropdown
+             className="mr-dropdown--fixed mr-w-full"
+             dropdownButton={dropdown =>
+               <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} />
+             }
+             dropdownContent={dropdown =>
+               <ListMoreOptionsItems {...this.props} />
+             }
+           />
           }
         </div>
 
@@ -42,6 +57,34 @@ export default class TaskCompletionStep2 extends Component {
       </div>
     )
   }
+}
+
+const MoreOptionsButton = function(props) {
+  return (
+    <button
+      className="mr-dropdown__button mr-button mr-text-green-lighter mr-w-full"
+      onClick={props.toggleDropdownVisible}
+    >
+      Other&hellip;
+    </button>
+  )
+}
+
+const ListMoreOptionsItems = function(props) {
+  return (
+    <ol className="mr-list-dropdown">
+      {props.allowedProgressions.has(TaskStatus.skipped) &&
+       <li>
+         <TaskSkipControl {...props} asLink />
+       </li>
+      }
+      {props.allowedProgressions.has(TaskStatus.falsePositive) &&
+       <li>
+         <TaskFalsePositiveControl {...props} asLink />
+       </li>
+      }
+    </ol>
+  )
 }
 
 TaskCompletionStep2.propTypes = {
