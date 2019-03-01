@@ -7,6 +7,16 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.2.2] - 2019-02-28
+### Added
+- Offer "Not an Issue" on step 2 of task completion
+- Zoom JOSM to task map bounding box after loading just features
+
+### Fixed
+- Ensure OSM Data Layer is deactivated after completing a task
+- Honor task priorities when loading the next random task
+
+
 ## [v3.2.1] - 2019-02-25
 ### Added
 - Create & Manage widget for managing project managers (#534)
