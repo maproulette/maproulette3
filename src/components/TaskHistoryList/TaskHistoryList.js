@@ -107,7 +107,7 @@ const reviewEntry = (entry, props) => {
       <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
                                  {"mr-bg-grey-lighter": props.lightMode,
                                   "mr-bg-grey-lighter-10": !props.lightMode})}>
-        <div>{entry.reviewRequestedBy.username} requested a review</div>
+        <div>{_get(entry, 'reviewRequestedBy.username')} requested a review</div>
       </div>
     )
   }
@@ -116,7 +116,7 @@ const reviewEntry = (entry, props) => {
       <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
                                  {"mr-bg-grey-lighter": props.lightMode,
                                   "mr-bg-grey-lighter-10": !props.lightMode})}>
-        <div>{entry.reviewedBy.username} reviewed this task</div>
+        <div>{_get(entry, 'reviewedBy.username')} reviewed this task</div>
         <div>
           <StatusLabel
             {...props}
@@ -145,7 +145,7 @@ const statusEntry = (entry, props) => {
     <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
                                {"mr-bg-grey-lighter": props.lightMode,
                                 "mr-bg-grey-lighter-10": !props.lightMode})}>
-      <div>{entry.user.username} updated the status of this task. From:</div>
+      <div>{_get(entry, 'user.username')} updated the status of this task. From:</div>
       <div><StatusLabel
         {...props}
         intlMessage={messagesByStatus[entry.oldStatus]}
