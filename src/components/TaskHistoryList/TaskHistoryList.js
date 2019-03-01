@@ -8,6 +8,7 @@ import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _kebabCase from 'lodash/kebabCase'
 import _each from 'lodash/each'
+import _isUndefined from 'lodash/isUndefined'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import { keysByStatus, messagesByStatus }
       from '../../services/Task/TaskStatus/TaskStatus'
@@ -118,11 +119,13 @@ const reviewEntry = (entry, props) => {
                                   "mr-bg-grey-lighter-10": !props.lightMode})}>
         <div>{_get(entry, 'reviewedBy.username')} reviewed this task</div>
         <div>
-          <StatusLabel
-            {...props}
-            intlMessage={messagesByReviewStatus[entry.reviewStatus]}
-            className={`mr-review-${_kebabCase(keysByReviewStatus[entry.reviewStatus])}`}
-          />
+          {!_isUndefined(entry.reviewStatus) &&
+            <StatusLabel
+              {...props}
+              intlMessage={messagesByReviewStatus[entry.reviewStatus]}
+              className={`mr-review-${_kebabCase(keysByReviewStatus[entry.reviewStatus])}`}
+            />
+          }
         </div>
       </div>
     )
@@ -146,17 +149,25 @@ const statusEntry = (entry, props) => {
                                {"mr-bg-grey-lighter": props.lightMode,
                                 "mr-bg-grey-lighter-10": !props.lightMode})}>
       <div>{_get(entry, 'user.username')} updated the status of this task. From:</div>
-      <div><StatusLabel
-        {...props}
-        intlMessage={messagesByStatus[entry.oldStatus]}
-        className={`mr-status-${_kebabCase(keysByStatus[entry.oldStatus])}`}
-      /></div>
+      <div>
+        {!_isUndefined(entry.oldStatus) &&
+          <StatusLabel
+            {...props}
+            intlMessage={messagesByStatus[entry.oldStatus]}
+            className={`mr-status-${_kebabCase(keysByStatus[entry.oldStatus])}`}
+          />
+        }
+      </div>
       <div>to: </div>
-      <div><StatusLabel
-        {...props}
-        intlMessage={messagesByStatus[entry.status]}
-        className={`mr-status-${_kebabCase(keysByStatus[entry.status])}`}
-      /></div>
+      <div>
+        {!_isUndefined(entry.status) &&
+          <StatusLabel
+            {...props}
+            intlMessage={messagesByStatus[entry.status]}
+            className={`mr-status-${_kebabCase(keysByStatus[entry.status])}`}
+          />
+        }
+      </div>
     </div>
   )
 }
