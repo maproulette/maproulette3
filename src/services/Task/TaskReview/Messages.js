@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   needed: {
     id: "Task.reviewStatus.needed",
-    defaultMessage: "Needed"
+    defaultMessage: "Review Requested"
   },
   approved: {
     id: "Task.reviewStatus.approved",

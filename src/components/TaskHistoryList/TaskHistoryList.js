@@ -10,11 +10,13 @@ import _kebabCase from 'lodash/kebabCase'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus }
       from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskHistoryAction } from '../../services/Task/TaskHistory/TaskHistory'
+import { viewAtticOverpass } from '../../services/Overpass/Overpass'
 
 //import messages from './Messages'
 //import './TaskHistoryList.scss'
@@ -35,63 +37,94 @@ export default class TaskHistoryList extends Component {
     var entries = []
     var logEntry = null
     var lastTimestamp = null
+    var username = null
+    var updatedStatus = null
 
     _each(this.props.taskHistory, (log, index) => {
       if (lastTimestamp !== null && entries.length > 0 &&
-          new Date(log.timestamp) - lastTimestamp > 100) {
-        combinedLogs.push({timestamp: new Date(log.timestamp), entry: entries})
+          new Date(log.timestamp) - lastTimestamp < -100) {
+        combinedLogs.push({timestamp: new Date(log.timestamp),
+                           entry: entries,
+                           username: username,
+                           status: updatedStatus})
         entries = []
+        updatedStatus = null
       }
       lastTimestamp = new Date(log.timestamp)
 
 
       switch(log.actionType) {
         case TaskHistoryAction.comment:
-          logEntry =
-            <div key={index}>
-              {commentEntry(log, this.props)}
-            </div>
+          logEntry = commentEntry(log, this.props, index)
+          username = _get(log, 'user.username')
           break
         case TaskHistoryAction.review:
-          logEntry =
-            <div key={index}>
-              {reviewEntry(log, this.props)}
-            </div>
+          if (log.reviewStatus === TaskReviewStatus.needed) {
+            username = _get(log, 'reviewRequestedBy.username')
+            logEntry = reviewEntry(log, this.props, index)
+          }
+          else {
+            logEntry = null
+            updatedStatus =
+                <ReviewStatusLabel
+                  {...this.props}
+                  intlMessage={messagesByReviewStatus[log.reviewStatus]}
+                  className={`mr-review-${_kebabCase(keysByReviewStatus[log.reviewStatus])}`}
+                  showDot
+                />
+            username = _get(log, 'reviewedBy.username')
+          }
           break
         case TaskHistoryAction.status:
         default:
-          logEntry =
-            <div key={index}>
-              {statusEntry(log, this.props)}
-            </div>
+          logEntry = null
+          username = _get(log, 'user.username')
+          updatedStatus = statusEntry(log, this.props, index)
           break
 
       }
-      entries.push(logEntry)
+      entries.unshift(logEntry)
     })
 
     if (entries.length > 0) {
-      combinedLogs.push({timestamp: lastTimestamp, entry: entries})
+      combinedLogs.push({timestamp: lastTimestamp,
+                         entry: entries,
+                         username: username,
+                         status: updatedStatus})
     }
 
     const historyEntries = _map(combinedLogs, (log, index) => {
       return (
-        <article key={'entry-' + index} className="mr-pr-4 mr-mb-4">
+        <article key={'entry-' + index} className="mr-pr-4 mr-mb-8">
           <div className="mr-list-reset mr-mb-2 mr-text-xs">
-            <span className="mr-font-medium">
-              <FormattedTime
-                value={log.timestamp}
-                hour='2-digit'
-                minute='2-digit'
-              />, <FormattedDate
-                value={log.timestamp}
-                year='numeric'
-                month='long'
-                day='2-digit'
-              />
-            </span>
+            <div className="mr-flex mr-justify-between">
+              <div className="mr-font-medium">
+                <FormattedTime
+                  value={log.timestamp}
+                  hour='2-digit'
+                  minute='2-digit'
+                />, <FormattedDate
+                  value={log.timestamp}
+                  year='numeric'
+                  month='long'
+                  day='2-digit'
+                />
+              </div>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.task.calculateBBox())}>
+                View Attic
+              </a>
+            </div>
           </div>
-          {log.entry}
+          <ol className="mr-list-reset mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">
+            <li className="mr-mb-4">
+              <div className="mr-flex mr-justify-between">
+                <span className="mr-text-yellow">{log.username}</span>
+                {log.status}
+              </div>
+            </li>
+            {log.entry}
+          </ol>
         </article>
       )}
     )
@@ -102,82 +135,59 @@ export default class TaskHistoryList extends Component {
   }
 }
 
-const reviewEntry = (entry, props) => {
-  if (entry.reviewStatus === TaskReviewStatus.needed) {
-    return (
-      <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
-                                 {"mr-bg-grey-lighter": props.lightMode,
-                                  "mr-bg-grey-lighter-10": !props.lightMode})}>
-        <div>{_get(entry, 'reviewRequestedBy.username')} requested a review</div>
-      </div>
-    )
-  }
-  else {
-    return (
-      <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
-                                 {"mr-bg-grey-lighter": props.lightMode,
-                                  "mr-bg-grey-lighter-10": !props.lightMode})}>
-        <div>{_get(entry, 'reviewedBy.username')} reviewed this task</div>
-        <div>
-          {!_isUndefined(entry.reviewStatus) &&
-            <StatusLabel
-              {...props}
-              intlMessage={messagesByReviewStatus[entry.reviewStatus]}
-              className={`mr-review-${_kebabCase(keysByReviewStatus[entry.reviewStatus])}`}
-            />
-          }
-        </div>
-      </div>
-    )
-  }
+const reviewEntry = (entry, props, index) => {
+  return (
+    <li key={index}>
+      {!_isUndefined(entry.reviewStatus) &&
+        <ReviewStatusLabel
+          {...props}
+          intlMessage={messagesByReviewStatus[entry.reviewStatus]}
+          className={`mr-review-${_kebabCase(keysByReviewStatus[entry.reviewStatus])}`}
+        />
+      }
+    </li>
+  )
 }
 
-const commentEntry = (entry, props) => {
+const commentEntry = (entry, props, index) => {
   return (
-    <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
-                               {"mr-bg-grey-lighter": props.lightMode,
-                                "mr-bg-grey-lighter-10": !props.lightMode})}>
-      <span> {_get(entry, 'user.username')} commented: </span>
+    <li key={index} className="mr-flex">
+      <SvgSymbol
+        sym="comments-icon"
+        viewBox="0 0 20 20"
+        className="mr-fill-current mr-flex-no-shrink mr-w-4 mr-h-4 mr-mt-3 mr-mr-2"
+      />
       <MarkdownContent markdown={entry.comment} />
-    </div>
+    </li>
   )
 }
 
-const statusEntry = (entry, props) => {
+const statusEntry = (entry, props, index) => {
   return (
-    <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
-                               {"mr-bg-grey-lighter": props.lightMode,
-                                "mr-bg-grey-lighter-10": !props.lightMode})}>
-      <div>{_get(entry, 'user.username')} updated the status of this task. From:</div>
-      <div>
-        {!_isUndefined(entry.oldStatus) &&
-          <StatusLabel
-            {...props}
-            intlMessage={messagesByStatus[entry.oldStatus]}
-            className={`mr-status-${_kebabCase(keysByStatus[entry.oldStatus])}`}
-          />
-        }
-      </div>
-      <div>to: </div>
-      <div>
-        {!_isUndefined(entry.status) &&
-          <StatusLabel
-            {...props}
-            intlMessage={messagesByStatus[entry.status]}
-            className={`mr-status-${_kebabCase(keysByStatus[entry.status])}`}
-          />
-        }
-      </div>
-    </div>
+    <TaskStatusLabel
+      {...props}
+      intlMessage={messagesByStatus[entry.status]}
+      className={`mr-status-${_kebabCase(keysByStatus[entry.status])}`}
+    />
   )
 }
 
-const StatusLabel = props => (
-  <span
-    className={classNames('mr-inline-flex mr-items-center', props.className)}
-  >
-    <span className="mr-w-2 mr-h-2 mr-rounded-full mr-bg-current" />
-    <span className="mr-ml-2 mr-text-xs mr-uppercase mr-tracking-wide">
+const TaskStatusLabel = props => (
+  <span className='mr-inline-flex mr-items-center'>
+    <span className={classNames("mr-w-2 mr-h-2 mr-rounded-full mr-bg-current", props.className)} />
+    <span className="mr-ml-2 mr-text-sm mr-tracking-wide">
+      <FormattedMessage {...props.intlMessage} />
+    </span>
+  </span>
+)
+
+const ReviewStatusLabel = props => (
+  <span className='mr-inline-flex mr-items-center'>
+    {props.showDot &&
+      <span className={classNames("mr-w-2 mr-h-2 mr-rounded-full mr-bg-current",
+                       props.className)} />}
+    <span className={classNames("mr-text-sm mr-tracking-wide",
+                                props.showDot ? "mr-ml-2": null)}>
       <FormattedMessage {...props.intlMessage} />
     </span>
   </span>

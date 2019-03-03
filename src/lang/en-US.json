@@ -794,7 +794,7 @@
   "Task.priority.high": "High",
   "Task.priority.medium": "Medium",
   "Task.priority.low": "Low",
-  "Task.reviewStatus.needed": "Needed",
+  "Task.reviewStatus.needed": "Review Requested",
   "Task.reviewStatus.approved": "Approved",
   "Task.reviewStatus.rejected": "Needs Revision",
   "Task.reviewStatus.approvedWithFixes": "Approved with Fixes",

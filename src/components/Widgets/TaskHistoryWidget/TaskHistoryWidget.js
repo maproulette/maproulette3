@@ -4,8 +4,10 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import TaskHistoryList from '../../TaskHistoryList/TaskHistoryList'
 import WithTaskHistory from '../../HOCs/WithTaskHistory/WithTaskHistory'
+import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
+import _get from 'lodash/get'
 
 const descriptor = {
   widgetKey: 'TaskHistoryWidget',
@@ -28,6 +30,8 @@ export default class TaskHistoryWidget extends Component {
         <TaskHistoryList
           className="mr-px-4"
           taskHistory={this.props.task.history}
+          task={AsMappableTask(this.props.task)}
+          editor={_get(this.props, 'user.settings.defaultEditor')}
         />
       </QuickWidget>
     )
