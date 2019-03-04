@@ -17,9 +17,8 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskHistoryAction } from '../../services/Task/TaskHistory/TaskHistory'
 import { viewAtticOverpass } from '../../services/Overpass/Overpass'
+import messages from './Messages'
 
-//import messages from './Messages'
-//import './TaskHistoryList.scss'
 
 /**
  * TaskHistoryList renders the given history as a list with some basic formatting,
@@ -39,14 +38,19 @@ export default class TaskHistoryList extends Component {
     var lastTimestamp = null
     var username = null
     var updatedStatus = null
+    var startedAtEntry = null
 
     _each(this.props.taskHistory, (log, index) => {
       if (lastTimestamp !== null && entries.length > 0 &&
-          new Date(log.timestamp) - lastTimestamp < -100) {
+          new Date(log.timestamp) - lastTimestamp < -1000) {
         combinedLogs.push({timestamp: new Date(log.timestamp),
                            entry: entries,
                            username: username,
                            status: updatedStatus})
+        if (startedAtEntry) {
+          combinedLogs.push(startedAtEntry)
+          startedAtEntry = null
+        }
         entries = []
         updatedStatus = null
       }
@@ -80,6 +84,20 @@ export default class TaskHistoryList extends Component {
           logEntry = null
           username = _get(log, 'user.username')
           updatedStatus = statusEntry(log, this.props, index)
+
+          if (log.startedAt) {
+            startedAtEntry = {timestamp: log.startedAt,
+                              entry: [
+                                <li className="mr-mb-4" key={"start-" + index}>
+                                  <div>
+                                    <span className="mr-text-yellow mr-mr-2">
+                                      {username}
+                                    </span> <FormattedMessage {...messages.startedOnLabel} />
+                                  </div>
+                                </li>
+                              ]}
+          }
+
           break
 
       }
@@ -91,6 +109,10 @@ export default class TaskHistoryList extends Component {
                          entry: entries,
                          username: username,
                          status: updatedStatus})
+      if (startedAtEntry) {
+        combinedLogs.push(startedAtEntry)
+        startedAtEntry = null
+      }
     }
 
     const historyEntries = _map(combinedLogs, (log, index) => {
@@ -117,12 +139,14 @@ export default class TaskHistoryList extends Component {
             </div>
           </div>
           <ol className="mr-list-reset mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">
-            <li className="mr-mb-4">
-              <div className="mr-flex mr-justify-between">
-                <span className="mr-text-yellow">{log.username}</span>
-                {log.status}
-              </div>
-            </li>
+            {(log.username || log.status) &&
+              <li className="mr-mb-4">
+                <div className="mr-flex mr-justify-between">
+                  <span className="mr-text-yellow">{log.username}</span>
+                  {log.status}
+                </div>
+              </li>
+            }
             {log.entry}
           </ol>
         </article>
