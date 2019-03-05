@@ -20,4 +20,14 @@ export default defineMessages({
     id: "Task.reviewStatus.approvedWithFixes",
     defaultMessage: "Approved with Fixes"
   },
+
+  next: {
+    id: 'Task.review.loadByMethod.next',
+    defaultMessage: "Next Task",
+  },
+
+  all: {
+    id: 'Task.review.loadByMethod.all',
+    defaultMessage: "Back to Review All",
+  },
 })

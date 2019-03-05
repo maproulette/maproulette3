@@ -21,6 +21,7 @@ import _isFinite from 'lodash/isFinite'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
+import _snakeCase from 'lodash/snakeCase'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -389,6 +390,41 @@ export const loadNextSequentialTaskFromChallenge = function(challengeId,
       {
         schema: taskSchema(),
         variables: {challengeId: challengeId, taskId: currentTaskId},
+      }
+    ))
+  }
+}
+
+/**
+ * Retrieve the next task to review with the given sort and filter criteria
+ */
+export const loadNextReviewTask = function(criteria={}) {
+  const sortBy = _get(criteria, 'sortCriteria.sortBy')
+  const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
+  const sort = sortBy ? `${_snakeCase(sortBy)}` : null
+  const filters = _get(criteria, 'filters', {})
+
+  const searchParameters = {}
+  if (filters.reviewRequestedBy) {
+    searchParameters.o = filters.reviewRequestedBy
+  }
+  if (filters.reviewedBy) {
+    searchParameters.r = filters.reviewedBy
+  }
+  if (filters.challenge) {
+    searchParameters.cs = filters.challenge
+  }
+  if (filters.status && filters.status !== "all") {
+    searchParameters.tStatus = filters.status
+  }
+
+  return function(dispatch) {
+    return retrieveChallengeTask(dispatch, new Endpoint(
+      api.tasks.reviewNext,
+      {
+        schema: taskSchema(),
+        variables: {},
+        params: {sort, order, ...searchParameters},
       }
     ))
   }

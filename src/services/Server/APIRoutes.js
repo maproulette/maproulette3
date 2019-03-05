@@ -75,6 +75,7 @@ const apiRoutes = factory => {
       'bulkUpdate': factory.put('/tasks'),
       'review': factory.get('/tasks/review'),
       'reviewed': factory.get('/tasks/reviewed'),
+      'reviewNext': factory.get('/tasks/review/next'),
     },
     'task': {
       'single': factory.get('/task/:id'),

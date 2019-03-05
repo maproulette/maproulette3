@@ -29,6 +29,7 @@ import ReactTable from 'react-table'
 export class TaskReviewTable extends Component {
   state = {
     openComments: null,
+    tableState: {},
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -46,32 +47,35 @@ export class TaskReviewTable extends Component {
 
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page},
                                   tableState.pageSize).then(() => {
-      this.setState({loading: false})
+      this.setState({loading: false,
+        tableState: {sortBy: sortCriteria.sortBy,
+                     direction: sortCriteria.direction,
+                     filters: filters}})
     })
   }
 
   render() {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'reviewTasks', [])
-    const columnTypes = setupColumnTypes(this.props, taskId => this.setState({openComments: taskId}), data)
+    const columnTypes = setupColumnTypes(this.props, taskId => this.setState({openComments: taskId}), data, this.state.tableState)
     const pageSize = this.state.pageSize || this.props.defaultPageSize
     const totalPages = Math.ceil(_get(this.props, 'totalCount', 0) / pageSize)
 
     var subheader = <FormattedMessage {...messages.myReviewTasks} />
     var columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge,
-                   columnTypes.modified, columnTypes.reviewedBy, columnTypes.status,
+                   columnTypes.mappedOn, columnTypes.reviewedBy, columnTypes.status,
                    columnTypes.mapperControls, columnTypes.viewComments]
 
     if (this.props.asReviewer) {
       subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
       columns = [columnTypes.id, columnTypes.reviewRequestedBy,
-                 columnTypes.challenge, columnTypes.modified, columnTypes.status,
+                 columnTypes.challenge, columnTypes.mappedOn, columnTypes.status,
                  columnTypes.reviewerControls, columnTypes.viewComments]
 
       if (this.props.showReviewedByMe) {
         subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
         columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.modified, columnTypes.status,
+                   columnTypes.challenge, columnTypes.mappedOn, columnTypes.status,
                    columnTypes.reviewCompleteControls, columnTypes.viewComments]
       }
     }
@@ -88,7 +92,7 @@ export class TaskReviewTable extends Component {
           </header>
           <ReactTable data={data} columns={columns}
                       defaultPageSize={this.props.defaultPageSize}
-                      defaultSorted={[ {id: 'id', desc: false} ]}
+                      defaultSorted={[ {id: 'mappedOn', desc: false} ]}
                       minRows={1}
                       manual
                       multiSort={false}
@@ -109,7 +113,7 @@ export class TaskReviewTable extends Component {
   }
 }
 
-const setupColumnTypes = (props, openComments, data) => {
+const setupColumnTypes = (props, openComments, data, tableState) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -196,18 +200,20 @@ const setupColumnTypes = (props, openComments, data) => {
     )
   }
 
-  columns.modified = {
-    id: 'modified',
-    Header: props.intl.formatMessage(messages.modifiedLabel),
-    accessor: 'modified',
+  columns.mappedOn = {
+    id: 'mappedOn',
+    Header: props.intl.formatMessage(messages.mappedOnLabel),
+    accessor: 'mappedOn',
     sortable: true,
-    defaultSortDesc: true,
-    exportable: t => t.modified,
+    defaultSortDesc: false,
+    exportable: t => t.mappedOn,
     maxWidth: 180,
     Cell: props => (
-      <span>
-        <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
-      </span>
+      props.value &&
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+      
     )
   }
 
@@ -247,8 +253,17 @@ const setupColumnTypes = (props, openComments, data) => {
     sortable: false,
     maxWidth: 120,
     Cell: ({row}) =>{
+      var linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
+      if (tableState.sortBy) {
+        linkTo += `sortBy=${tableState.sortBy}&direction=${tableState.direction}&`
+      }
+
+      if (tableState.filters) {
+        linkTo += `filters=${encodeURIComponent(JSON.stringify(tableState.filters))}`
+      }
+
       return <div className="row-controls-column">
-        <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/review`}>
+        <Link to={linkTo}>
           <FormattedMessage {...messages.reviewTaskLabel} />
           { row._original.reviewedBy && row._original.reviewStatus === TaskReviewStatus.needed && " (again)" }
         </Link>

@@ -8,6 +8,8 @@ import { messagesByReviewStatus, keysByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskLoadMethod, messagesByLoadMethod }
        from '../../services/Task/TaskLoadMethod/TaskLoadMethod'
+import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
+       from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
@@ -16,7 +18,7 @@ import messages from './Messages'
 
 export class TaskConfirmationModal extends Component {
   render() {
-    const minimalConfirmation = this.props.inReview || this.props.needsRevised
+    const reviewConfirmation = this.props.inReview || this.props.needsRevised
 
     return (
       <External>
@@ -65,7 +67,7 @@ export class TaskConfirmationModal extends Component {
                 commentChanged={this.props.setComment}
               />
 
-              {this.props.status !== TaskStatus.skipped && !minimalConfirmation &&
+              {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&
               <div className="form mr-mt-2">
                 <input
                   type="checkbox"
@@ -78,7 +80,7 @@ export class TaskConfirmationModal extends Component {
                 </label>
               </div>
               }
-              { !minimalConfirmation &&
+              { !reviewConfirmation &&
                 <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
                   <span className="mr-mr-4">
                     <FormattedMessage {...messages.loadByLabel} />
@@ -103,6 +105,35 @@ export class TaskConfirmationModal extends Component {
                   />
                   <label>
                     <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
+                  </label>
+                </div>
+              }
+
+              { reviewConfirmation &&
+                <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
+                  <span className="mr-mr-4">
+                    <FormattedMessage {...messages.loadNextReviewLabel} />
+                  </span>
+                  <input
+                    type="radio"
+                    name="loadReviewPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskReviewLoadMethod.next}
+                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
+                  />
+                  <label className="mr-mr-4">
+                    <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
+                  </label>
+
+                  <input
+                    type="radio"
+                    name="loadReviewPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                  />
+                  <label>
+                    <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
                   </label>
                 </div>
               }

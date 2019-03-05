@@ -1,7 +1,9 @@
 import { connect } from 'react-redux'
 import { completeReview,
          cancelReviewClaim,
-         fetchTaskForReview } from '../../../services/Task/Task'
+         fetchTaskForReview,
+         loadNextReviewTask } from '../../../services/Task/Task'
+import { TaskReviewLoadMethod } from '../../../services/Task/TaskReview/TaskReviewLoadMethod'         
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -16,8 +18,28 @@ const WithTaskReview = WrappedComponent =>
 
 export const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateTaskReviewStatus: (task, status, comment) => {
-      dispatch(completeReview(task.id, status, comment))
+    updateTaskReviewStatus: (task, status, comment, loadBy, url) => {
+      dispatch(completeReview(task.id, status, comment)).then(() => {
+        const searchParams = new URLSearchParams(url.location.search)
+        const sortBy = searchParams.get('sortBy')
+        const direction = searchParams.get('direction')
+        const filters = searchParams.get('filters') ? JSON.parse(searchParams.get('filters')) : null
+
+        dispatch(loadNextReviewTask({sortCriteria: {sortBy, direction}, filters})).then((task) => {
+          if (loadBy === TaskReviewLoadMethod.next) {
+            url.push(`/challenge/${task.parentId}/task/${task.id}/review`)
+          }
+          else {
+            url.push('/review')
+          }
+        }).catch(error => {
+          console.log(error)
+          url.push('/review')
+        })
+      }).catch(error => {
+        console.log(error)
+        url.push('/review')
+      })
     },
 
     stopReviewing: (task) => {

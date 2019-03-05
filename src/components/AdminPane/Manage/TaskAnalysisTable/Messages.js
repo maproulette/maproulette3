@@ -39,6 +39,11 @@ export default defineMessages({
     defaultMessage: "Priority",
   },
 
+  mappedOnLabel: {
+    id: "Task.fields.mappedOn.label",
+    defaultMessage: "Mapped On",
+  },
+
   reviewStatusLabel: {
     id: "Task.fields.reviewStatus.label",
     defaultMessage: "Review Status",

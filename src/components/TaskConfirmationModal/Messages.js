@@ -34,6 +34,11 @@ export default defineMessages({
     defaultMessage: "Next task:",
   },
 
+  loadNextReviewLabel: {
+    id: 'TaskConfirmationModal.loadNextReview.label',
+    defaultMessage: "Proceed With:",
+  },
+
   cancelLabel: {
     id: 'TaskConfirmationModal.cancel.label',
     defaultMessage: "Cancel",

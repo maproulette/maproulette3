@@ -54,7 +54,7 @@ export class TaskAnalysisTable extends Component {
 
     if (this.state.withReviewColumns) {
        return [columnTypes.selected, columnTypes.featuredId, columnTypes.id,
-               columnTypes.status, columnTypes.priority,
+               columnTypes.status, columnTypes.priority, columnTypes.mappedOn,
                columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
                columnTypes.reviewedBy, columnTypes.reviewedAt,
                columnTypes.controls, columnTypes.viewComments]
@@ -183,6 +183,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Header: props.intl.formatMessage(messages.statusLabel),
     accessor: 'status',
     exportable: t => props.intl.formatMessage(messagesByStatus[t.status]),
+    minWidth: 110,
     Cell: ({value}) => (
       <div>
         <StatusLabel
@@ -207,6 +208,23 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     ),
   }
 
+  columns.mappedOn = {
+    id: 'mappedOn',
+    Header: props.intl.formatMessage(messages.mappedOnLabel),
+    accessor: 'mappedOn',
+    sortable: true,
+    defaultSortDesc: false,
+    exportable: t => t.mappedOn,
+    maxWidth: 180,
+    minWidth: 150,
+    Cell: props => (
+      props.value &&
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+    )
+  }
+
   columns.reviewRequestedBy = {
     id: 'reviewRequestedBy',
     Header: props.intl.formatMessage(messages.mappedByLabel),
@@ -228,6 +246,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     defaultSortDesc: true,
     exportable: t => t.reviewedAt,
     maxWidth: 180,
+    minWidth: 150,
     Cell: props => (
       props.value &&
         <span>
@@ -259,6 +278,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     sortable: true,
     exportable: t => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
     maxWidth: 180,
+    minWidth: 155,
     defaultSortDesc: true,
     Cell: props => (
       (!_isUndefined(props.value) && props.value !== -1) &&
@@ -274,7 +294,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'controls',
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
-    minWidth: 110,
+    minWidth: 150,
     Cell: ({row}) =>
       <div className="row-controls-column">
         <Link to={`${taskBaseRoute}/${row.id}/inspect`} className="mr-mr-2">

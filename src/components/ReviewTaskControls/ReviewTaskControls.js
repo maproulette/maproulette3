@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus, messagesByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewLoadMethod } from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
 import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
@@ -24,18 +25,24 @@ import './ReviewTaskControls.scss'
 export class ReviewTaskControls extends Component {
   state = {
     comment: "",
+    loadBy: TaskReviewLoadMethod.next,
   }
 
   setComment = comment => this.setState({comment})
 
   onConfirm = () => {
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
-                                      this.state.comment)
-    this.props.history.push('/review')
+                                     this.state.comment, this.state.loadBy,
+                                     this.props.history)
+    this.setState({confirmingTask: false})
   }
 
   onCancel = () => {
     this.setState({confirmingTask: false})
+  }
+
+  chooseLoadBy = (loadBy) => {
+    this.setState({loadBy})
   }
 
   /** Save Review Status */
@@ -168,6 +175,8 @@ export class ReviewTaskControls extends Component {
             setComment={this.setComment}
             onConfirm={this.onConfirm}
             onCancel={this.onCancel}
+            chooseLoadBy={this.chooseLoadBy}
+            loadBy={this.state.loadBy}
             inReview={true}
           />
         }

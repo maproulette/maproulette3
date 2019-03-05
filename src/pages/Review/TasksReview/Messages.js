@@ -74,8 +74,8 @@ export default defineMessages({
     defaultMessage: "Reviewer",
   },
 
-  modifiedLabel: {
-    id: "Review.fields.modifiedBy.label",
+  mappedOnLabel: {
+    id: "Review.fields.mappedOn.label",
     defaultMessage: "Mapped On",
   },
 
