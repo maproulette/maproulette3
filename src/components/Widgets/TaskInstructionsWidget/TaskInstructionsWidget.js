@@ -9,6 +9,7 @@ import { WidgetDataTarget, registerWidgetType }
 import TaskInstructions from '../../TaskPane/TaskInstructions/TaskInstructions'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
+import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 
 const descriptor = {
   widgetKey: 'TaskInstructionsWidget',
@@ -56,11 +57,20 @@ export default class TaskInstructionsWidget extends Component {
 
   render() {
     const minimizeControl = (
+      /*
       // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <a className="collapsible-icon" aria-label="more options"
          onClick={this.toggleMinimized}>
         <span className="icon"></span>
       </a>
+      */
+      <button className="mr-text-green-lighter" onClick={this.toggleMinimized}>
+        <SvgSymbol
+          sym="icon-cheveron-down"
+          viewBox="0 0 20 20"
+          className="mr-transition mr-fill-current mr-min-w-6 mr-w-6 mr-h-6"
+        />
+      </button>
     )
 
     return (

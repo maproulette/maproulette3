@@ -4,6 +4,7 @@
   .leaflet-container {
     height: 200px;
     border-radius: $radius-medium;
+    border: none;
 
     .leaflet-pane {
       z-index: $intralayer-bump;

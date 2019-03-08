@@ -29,7 +29,7 @@ export default class CompletionProgressWidget extends Component {
       <QuickWidget {...this.props}
                   className="completion-progress-widget"
                   widgetTitle={<FormattedMessage {...messages.title} />}>
-         <ChallengeProgress {...this.props} challenge={challenge} />
+         <ChallengeProgress {...this.props} className="" challenge={challenge} />
       </QuickWidget>
     )
   }

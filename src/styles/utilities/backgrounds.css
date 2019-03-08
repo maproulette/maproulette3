@@ -25,3 +25,9 @@
 .mr-bg-featured-challenges {
   background-image: url('./static/images/bg-featured-challenges.svg');
 }
+
+.mr-bg-fireworks {
+  background-image: url('./static/images/bg-fireworks-left.svg'), url('./static/images/bg-fireworks-right.svg');
+  background-position: left top, right top;
+  background-repeat: no-repeat;
+}

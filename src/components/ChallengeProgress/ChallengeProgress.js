@@ -13,6 +13,33 @@ import { TaskStatus, keysByStatus, statusLabels }
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './ChallengeProgress.scss'
+import { colors } from '../../tailwind'
+
+const theme = {
+  // background: "#222222",
+  axis: {
+    fontSize: ".75rem",
+    tickColor: colors.white,
+    ticks: {
+      line: {
+        stroke: colors.white
+      },
+      text: {
+        fill: colors.white
+      }
+    },
+    legend: {
+      text: {
+        fill: colors.white
+      }
+    }
+  },
+  grid: {
+    line: {
+      stroke: "#555555"
+    }
+  }
+};
 
 export class ChallengeProgress extends Component {
   percent = (value, total) => Math.round(value / total * 100)
@@ -53,7 +80,7 @@ export class ChallengeProgress extends Component {
       [localizedStatuses.falsePositive]: '#F1E15B',
       [localizedStatuses.skipped]: '#E8A838',
       [localizedStatuses.tooHard]: '#F47560',
-      [availableLabel]: '#CCCCCC'
+      [availableLabel]: 'rgba(0, 0, 0, .25)'
     }
 
     const completionData = {
@@ -104,6 +131,7 @@ export class ChallengeProgress extends Component {
                        axisLeft={{tickCount: 0, tickValues: []}}
                        axisBottom={{format: v => `${v}%`, tickCount: 5}}
                        tooltipFormat={v => `${v}%`}
+                       theme={theme}
         />
         {taskActions.total > 0 && taskActions.available === 0 &&
           <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
