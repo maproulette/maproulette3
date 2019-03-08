@@ -2,9 +2,13 @@
 
 .task-location-map {
   position: relative;
-  border: 2px solid $grey-lighter;
-  border-radius: $radius;
   margin-right: 15px;
+  //box-shadow: -4px 5px 20px -6px $grey-darkest;
+
+  &__primary-map {
+    border-radius: $radius;
+    overflow: hidden;
+  }
 
   &__extent-map {
     position: absolute;
@@ -14,7 +18,7 @@
     width: 90px;
     box-shadow: -4px 5px 20px -6px $grey-darkest;
     z-index: $intralayer-bump;
-    border: 2px solid $grey-lighter;
+    // border: 2px solid $grey-lighter;
     border-radius: $radius;
 
     .leaflet-container {

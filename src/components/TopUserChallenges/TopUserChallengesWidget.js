@@ -42,9 +42,9 @@ export default class TopUserChallengesWidget extends Component {
         {...this.props}
         className="top-user-challenges-widget"
         widgetTitle={<FormattedMessage {...messages.header} />}
-        headerControls={
+        rightHeaderControls={
           <PastDurationSelector
-            className="mr-button mr-button--green mr-mr-8"
+            className="mr-button mr-button--small mr-button--green"
             pastMonthsOptions={[1, 3, 6, 12]}
             currentMonthsPast={monthsPast}
             selectDuration={this.setMonthsPast}
