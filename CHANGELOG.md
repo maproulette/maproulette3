@@ -7,6 +7,16 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.2.3] - 2019-03-11
+### Fixed
+- Honor task priorities when loading the next random task
+- Allow task completion for non-final task statuses (e.g. Skipped)
+- Scroll browsed challenge into view when navigating directly to it (#668)
+- Incorrect security error when navigating directly to project admin (#665)
+- Missing busy spinner on sign-in buttons while determining login status
+- "Owned" filter in admin projects not always showing owned projects
+
+
 ## [v3.2.2] - 2019-02-28
 ### Added
 - Offer "Not an Issue" on step 2 of task completion
@@ -14,7 +24,6 @@ This project adheres to
 
 ### Fixed
 - Ensure OSM Data Layer is deactivated after completing a task
-- Honor task priorities when loading the next random task
 
 
 ## [v3.2.1] - 2019-02-25
