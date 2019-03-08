@@ -75,12 +75,15 @@ export const fetchProjects = function(limit=50) {
  * Fetch data on projects the current user has permission to manage (up to the
  * given limit).
  */
-export const fetchManageableProjects = function(page = null, limit = RESULTS_PER_PAGE) {
+export const fetchManageableProjects = function(page = null, limit = RESULTS_PER_PAGE, onlyOwned = false, onlyEnabled = false) {
   const pageToFetch = _isFinite(page) ? page : 0
 
   return function(dispatch) {
     return new Endpoint(
-      api.projects.managed, {schema: [ projectSchema() ], params: {limit: limit, page: (pageToFetch * limit)}}
+      api.projects.managed, {
+        schema: [ projectSchema() ],
+        params: {limit: limit, page: (pageToFetch * limit), onlyOwned, onlyEnabled}
+      }
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults

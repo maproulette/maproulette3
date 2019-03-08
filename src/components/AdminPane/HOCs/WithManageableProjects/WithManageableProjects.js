@@ -5,6 +5,8 @@ import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _omit from 'lodash/omit'
 import _each from 'lodash/each'
+import _isEqual from 'lodash/isEqual'
+import { RESULTS_PER_PAGE } from '../../../../services/Search/Search'
 import { fetchManageableProjects,
          fetchProject,
          fetchProjectsById,
@@ -34,8 +36,14 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
       loadingChallenges: includeChallenges,
     }
 
-    componentWillMount() {
-      this.props.fetchManageableProjects().then(({result}) => {
+    getProjectFilters(props) {
+      return _get(props, 'currentConfiguration.filters.projectFilters')
+    }
+
+    loadProjects() {
+      const filters = this.getProjectFilters(this.props)
+
+      this.props.fetchManageableProjects(null, RESULTS_PER_PAGE, filters.owner, filters.visible).then(({result}) => {
         if (includeChallenges) {
           this.props.fetchProjectChallengeListing(result).then(() => {
             this.setState({loadingChallenges: false})
@@ -56,6 +64,17 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
 
         this.setState({loadingProjects: false})
       })
+    }
+
+    componentDidMount() {
+      this.loadProjects()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if (!_isEqual(this.getProjectFilters(this.props),
+                    this.getProjectFilters(prevProps))) {
+        this.loadProjects()
+      }
     }
 
     render() {

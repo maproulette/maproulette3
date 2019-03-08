@@ -101,21 +101,19 @@ ProjectsDashboard.defaultProps = {
 }
 
 export default
-WithManageableProjects(
-  WithPinned(
-    WithWidgetWorkspaces(
-      WithDashboardEntityFilter(
-        ProjectsDashboard,
-        'project',
-        'projects',
-        'pinnedProjects',
-        'filteredProjects',
-        projectPassesFilters
-      ),
-      WidgetDataTarget.projects,
-      DASHBOARD_NAME,
-      defaultDashboardSetup
-    )
+WithWidgetWorkspaces(
+  WithManageableProjects(
+    WithDashboardEntityFilter(
+      WithPinned(ProjectsDashboard),
+      'project',
+      'projects',
+      'pinnedProjects',
+      'filteredProjects',
+      projectPassesFilters
+    ),
+    true // include challenges
   ),
-  true // include challenges
+  WidgetDataTarget.projects,
+  DASHBOARD_NAME,
+  defaultDashboardSetup
 )
