@@ -36,7 +36,7 @@ export default class CommentsWidget extends Component {
       exportControl = (
         <a target="_blank"
            rel="noopener noreferrer"
-           href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
+           href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
            className="button is-outlined is-green has-svg-icon export-control">
           <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
           <FormattedMessage {...messages.exportLabel} />
