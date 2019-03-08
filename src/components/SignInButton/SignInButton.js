@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
+import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 import './SignInButton.scss'
 
@@ -21,10 +22,16 @@ export class SignInButton extends Component {
   }
 
   render() {
+    if (this.props.checkingLoginStatus || this.state.clicked) {
+      return (
+        <BusySpinner
+          className={classNames("mr-mx-8", {"mr-mx-20": this.props.longForm})}
+        />
+      )
+    }
+
     return (
-      <a className={classNames("mr-button",
-                              {"is-loading": this.state.clicked || this.props.checkingLoginStatus},
-                              this.props.className)}
+      <a className={classNames("mr-button", this.props.className)}
          onClick={() => this.setState({clicked: true})}
          href={`${process.env.REACT_APP_SERVER_OAUTH_URL}${this.props.history.location.pathname}`}
       >
