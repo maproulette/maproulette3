@@ -15,6 +15,7 @@ This project adheres to
 - Incorrect security error when navigating directly to project admin (#665)
 - Missing busy spinner on sign-in buttons while determining login status
 - "Owned" filter in admin projects not always showing owned projects
+- CSV export URLs that could be incorrect for some server configurations
 
 
 ## [v3.2.2] - 2019-02-28
