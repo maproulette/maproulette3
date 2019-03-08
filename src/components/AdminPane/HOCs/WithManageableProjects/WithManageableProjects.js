@@ -37,7 +37,7 @@ const WithManageableProjects = function(WrappedComponent, includeChallenges=fals
     }
 
     getProjectFilters(props) {
-      return _get(props, 'currentConfiguration.filters.projectFilters')
+      return _get(props, 'currentConfiguration.filters.projectFilters', {})
     }
 
     loadProjects() {
