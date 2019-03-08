@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import messages from './Messages'
 
@@ -15,7 +16,7 @@ export default class TaskNextControl extends Component {
   render() {
     return (
       <button
-        className="mr-button mr-button--white mr-w-full"
+        className={classNames("mr-button mr-button--white mr-w-full", this.props.className)}
         onClick={() => this.props.nextTask(this.props.task.parent.id, this.props.task.id)}
         title={this.props.intl.formatMessage(messages.nextTooltip)}
       >
