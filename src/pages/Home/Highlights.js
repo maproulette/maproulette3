@@ -5,7 +5,7 @@ class Highlights extends Component {
   render() {
     return (
       <section className="md:mr-px-4">
-        <div className="mr-max-w-4xl mr-mx-auto md:mr--mt-24 lg:mr--mt-40 mr-bg-off-white md:mr-bg-white md:mr-rounded-sm md:mr-shadow-md">
+        <div className="mr-max-w-3xl mr-mx-auto md:mr--mt-24 lg:mr--mt-40 mr-bg-off-white md:mr-bg-white md:mr-rounded-sm md:mr-shadow-md">
           <ul className="mr-list-highlights">
             <li>
               <figure>

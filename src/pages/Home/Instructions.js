@@ -7,7 +7,7 @@ class Instructions extends Component {
       <section className="mr-px-4 mr-py-12 md:mr-py-24 mr-bg-green-dark mr-text-white mr-bg-cover mr-bg-road">
         <div className="mr-max-w-3xl mr-mx-auto">
           <div className="mr-max-w-lg">
-            <h2 className="md:mr-text-5xl mr-font-medium mr-text-white">
+            <h2 className="md:mr-text-5xl mr-font-normal mr-text-white">
               Find Your Challenge
             </h2>
             <p className="md:mr-text-md mr-my-6">
