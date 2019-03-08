@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import _filter from 'lodash/filter'
-import _clone from 'lodash/clone'
+import _cloneDeep from 'lodash/cloneDeep'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _camelCase from 'lodash/camelCase'
@@ -33,7 +33,7 @@ const WithDashboardEntityFilter = function(WrappedComponent,
      * the dashboard configuration.
      */
     setDashboardEntityFilter = (filterName, filterValue) => {
-      const updatedFilters = _clone(this.props.currentConfiguration.filters) || {}
+      const updatedFilters = _cloneDeep(this.props.currentConfiguration.filters) || {}
       _set(updatedFilters, `${this.filterFieldName()}.${filterName}`, filterValue)
 
       this.props.saveWorkspaceConfiguration(Object.assign(
