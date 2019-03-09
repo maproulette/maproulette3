@@ -12,11 +12,12 @@ This project adheres to
 - Honor task priorities when loading the next random task
 - Allow task completion for non-final task statuses (e.g. Skipped)
 - Scroll browsed challenge into view when navigating directly to it (#668)
-- Incorrect security error when navigating directly to project admin (#665)
+- Permission error when navigating directly to project admin (#665)
 - Missing busy spinner on sign-in buttons while determining login status
 - "Owned" filter in admin projects not always showing owned projects
 - CSV export URLs that could be incorrect for some server configurations
 - Removed extraneous scrollbars
+- Error when viewing an empty leaderboard
 - Various minor visual fixes
 
 
