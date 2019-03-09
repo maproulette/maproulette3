@@ -3,11 +3,12 @@
 .task-location-map {
   position: relative;
   margin-right: 15px;
-  //box-shadow: -4px 5px 20px -6px $grey-darkest;
 
   &__primary-map {
     border-radius: $radius;
-    overflow: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
+    -webkit-backface-visibility: hidden;
   }
 
   &__extent-map {
@@ -16,14 +17,12 @@
     right: -15px;
     height:90px;
     width: 90px;
-    box-shadow: -4px 5px 20px -6px $grey-darkest;
     z-index: $intralayer-bump;
-    // border: 2px solid $grey-lighter;
-    border-radius: $radius;
 
     .leaflet-container {
       height: 100%;
-      border-radius: 0 0 $radius-medium 0;
+      border-radius: $radius;
+
     }
   }
 }
