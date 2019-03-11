@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.2.3] - 2019-03-11
+## [v3.2.3] - 2019-03-12
 ### Fixed
 - Honor task priorities when loading the next random task
 - Allow task completion for non-final task statuses (e.g. Skipped)
@@ -18,6 +18,7 @@ This project adheres to
 - CSV export URLs that could be incorrect for some server configurations
 - Removed extraneous scrollbars
 - Error when viewing an empty leaderboard
+- Unreadable challenge-progress labels on hover
 - Various minor visual fixes
 
 
