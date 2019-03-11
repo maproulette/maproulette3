@@ -38,7 +38,8 @@ const theme = {
     line: {
       stroke: "#555555"
     }
-  }
+  },
+  tooltip: {container: {color: colors.black, background: colors.white}}
 };
 
 export class ChallengeProgress extends Component {
