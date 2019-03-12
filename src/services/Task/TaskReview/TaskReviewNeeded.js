@@ -41,7 +41,7 @@ export const receiveReviewNeededTasks = function(tasks,
 export const fetchReviewNeededTasks = function(criteria, limit=50) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
-  const sort = sortBy ? `${_snakeCase(sortBy)}` : null
+  const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
   const filters = _get(criteria, 'filters', {})
 

@@ -9,6 +9,7 @@ import _get from 'lodash/get'
 import _kebabCase from 'lodash/kebabCase'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
+import _indexOf from 'lodash/indexOf'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus }
@@ -133,9 +134,18 @@ export default class TaskHistoryList extends Component {
                 />
               </div>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.task.calculateBBox())}>
-                View Attic
-              </a>
+              {!this.props.selectDiffs &&
+                <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.task.calculateBBox())}>
+                  <FormattedMessage {...messages.viewAtticLabel} />
+                </a>
+              }
+              {this.props.selectDiffs &&
+                <label className="checkbox">
+                  <input type="checkbox"
+                         checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
+                         onChange={() => this.props.toggleSelection(log.timestamp)} />
+                </label>
+              }
             </div>
           </div>
           <ol className="mr-list-reset mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">

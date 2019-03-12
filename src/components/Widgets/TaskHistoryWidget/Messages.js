@@ -13,4 +13,14 @@ export default defineMessages({
     id: "Widgets.TaskHistoryWidget.title",
     defaultMessage: "History",
   },
+
+  startDiff: {
+    id: "Widgets.TaskHistoryWidget.control.startDiff",
+    defaultMessage: "Start Diff",
+  },
+
+  cancelDiff: {
+    id: "Widgets.TaskHistoryWidget.control.cancelDiff",
+    defaultMessage: "Cancel Diff",
+  },
 })

@@ -8,4 +8,9 @@ export default defineMessages({
     id: "TaskHistory.fields.startedOn.label",
     defaultMessage: "Started on task",
   },
+
+  viewAtticLabel: {
+    id: "TaskHistory.controls.viewAttic.label",
+    defaultMessage: "View Attic",
+  },
 })

@@ -1,4 +1,5 @@
 import addMinutes from 'date-fns/add_minutes'
+import isAfter from 'date-fns/is_after'
 import { JOSM, sendJOSMCommand } from '../Editor/Editor'
 import _get from 'lodash/get'
 
@@ -7,7 +8,7 @@ import _get from 'lodash/get'
  * @param atticDate
  */
 export const viewAtticOverpass = (selectedEditor, actionDate, actionBBox) => {
-  const adjustedDateString = offsetAtticDateMoment(actionDate).toISOString();
+  const adjustedDateString = offsetAtticDateMoment(actionDate).toISOString()
   const bbox = overpassBBox(actionBBox).join(',');
   const query =
     '[out:xml][timeout:25][bbox:' + bbox + '][date:"' + adjustedDateString + '"];' +
@@ -29,6 +30,38 @@ export const viewAtticOverpass = (selectedEditor, actionDate, actionBBox) => {
 }
 
 /**
+ * View augmented diff in achavi of the task AOI for the two given items
+ * @param selectedEditor
+ * @param actionBBox
+ * @param firstItem
+ * @param secondItem
+ */
+ export const viewDiffOverpass = (actionBBox, firstDate, secondDate) => {
+   // order firstItem and secondItem into earlierItem and laterItem
+   let earlierDate = new Date(firstDate)
+   let laterDate = new Date(secondDate)
+
+   if (isAfter(earlierDate, laterDate)) {
+     earlierDate = new Date(secondDate)
+     laterDate = new Date(firstDate)
+   }
+
+   const bbox = overpassBBox(actionBBox).join(',');
+   let query =
+     '[out:xml][timeout:25][bbox:' + bbox + ']' +
+     '[adiff:"' + earlierDate.toISOString() + '","' +
+                  offsetAtticDateMoment(laterDate).toISOString() + '"];' +
+     '( node(' + bbox + '); <; >; );' +
+     'out meta geom qt;';
+
+
+   // Send users to achavi for visualization of augmented diff
+   let overpassURL = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+   let achaviURL = 'https://overpass-api.de/achavi/?url=' + encodeURIComponent(overpassURL);
+   window.open(achaviURL)
+ }
+
+/**
  * Returns a Moment instance representing the action date of the given
  * item. The timestamp is offset by the configured `atticQueryOffsetMinutes`
  * number of minutes.
@@ -36,8 +69,6 @@ export const viewAtticOverpass = (selectedEditor, actionDate, actionBBox) => {
  * @param actionDate
  */
 const offsetAtticDateMoment = (actionDate) => {
-  console.log("ActionDate is: " + actionDate)
-  console.log("OFfset is: " + process.env.REACT_APP_ATTIC_QUERY_OFFSET_MINUTES)
   return addMinutes(actionDate,
     _get(process.env, 'REACT_APP_ATTIC_QUERY_OFFSET_MINUTES', 10))
 }
