@@ -109,7 +109,7 @@ export class TaskConfirmationModal extends Component {
                 </div>
               }
 
-              { reviewConfirmation &&
+              { reviewConfirmation && !this.props.needsRevised &&
                 <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
                   <span className="mr-mr-4">
                     <FormattedMessage {...messages.loadNextReviewLabel} />

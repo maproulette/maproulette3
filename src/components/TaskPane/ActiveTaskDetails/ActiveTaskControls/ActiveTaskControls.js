@@ -76,8 +76,8 @@ export class ActiveTaskControls extends Component {
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
     if (this.state.submitRevision) {
-      this.props.updateTaskReviewStatus(this.props.task, TaskReviewStatus.needed, this.state.comment)
-      this.props.history.push('/review')
+      this.props.updateTaskReviewStatus(this.props.task, TaskReviewStatus.needed,
+                                        this.state.comment, null, this.props.history)
     }
     else {
       this.props.completeTask(this.props.task.id, this.props.task.parent.id,

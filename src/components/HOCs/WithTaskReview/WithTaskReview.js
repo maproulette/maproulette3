@@ -3,7 +3,7 @@ import { completeReview,
          cancelReviewClaim,
          fetchTaskForReview,
          loadNextReviewTask } from '../../../services/Task/Task'
-import { TaskReviewLoadMethod } from '../../../services/Task/TaskReview/TaskReviewLoadMethod'         
+import { TaskReviewLoadMethod } from '../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -23,7 +23,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         const searchParams = new URLSearchParams(url.location.search)
         const sortBy = searchParams.get('sortBy')
         const direction = searchParams.get('direction')
-        const filters = searchParams.get('filters') ? JSON.parse(searchParams.get('filters')) : null
+        const filters = searchParams.get('filters') ? JSON.parse(searchParams.get('filters')) : {}
 
         dispatch(loadNextReviewTask({sortCriteria: {sortBy, direction}, filters})).then((task) => {
           if (loadBy === TaskReviewLoadMethod.next) {
