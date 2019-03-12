@@ -72,7 +72,8 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
       api.tasks.reviewed,
       {
         schema: {tasks: [taskSchema()]},
-        params: {asReviewer, limit, sort, order, page: (page * limit), ...searchParameters},
+        params: {asReviewer, limit, sort, order, page: (page * limit),
+                 allowReviewNeeded: (asReviewer ? false : true), ...searchParameters},
       }
     ).execute().then(normalizedResults => {
       var tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
