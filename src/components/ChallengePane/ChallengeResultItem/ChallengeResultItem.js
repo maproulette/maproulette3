@@ -28,6 +28,11 @@ import './ChallengeResultItem.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeResultItem extends Component {
+  constructor(props) {
+    super(props)
+    this.itemRef = React.createRef()
+  }
+
   state = {
     /**
      * Keep track of browsing locally, making UI more responsive. isBrowsing is based
@@ -41,11 +46,27 @@ export class ChallengeResultItem extends Component {
     isBrowsing: _get(this.props, 'browsedChallenge.id') === this.props.challenge.id,
   }
 
+  reposition = (delay=0) => {
+    if (this.itemRef.current && this.props.listRef.current) {
+      setTimeout(() => {
+        window.scrollTo(0, 0)
+        this.props.listRef.current.scrollTop = this.itemRef.current.offsetTop
+      }, delay)
+    }
+  }
+
   componentDidMount() {
     if (_get(this.props, 'browsedChallenge.id') === this.props.challenge.id) {
-      if (this.node) {
-        this.node.scrollIntoView()
-      }
+      // Scroll this item into view. Wait a second so that other items have a chance
+      // to load, or else they may push us back out of view again
+      this.reposition(1000)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (_get(this.props, 'browsedChallenge.id') === this.props.challenge.id &&
+        _get(prevProps, 'browsedChallenge.id') !== this.props.challenge.id) {
+      this.reposition()
     }
   }
 
@@ -209,18 +230,20 @@ export class ChallengeResultItem extends Component {
     )
 
     return (
-      <CardChallenge
-        className="mr-mb-4"
-        challenge={this.props.challenge}
-        isExpanded={this.state.isBrowsing}
-        toggleExpanded={this.toggleActive}
-        isSaved={isSaved}
-        isLoading={this.props.isStarting}
-        saveControl={saveChallengeControl}
-        unsaveControl={unsaveChallengeControl}
-        startControl={startControl}
-        manageControl={manageControl}
-      />
+      <div ref={this.itemRef}>
+        <CardChallenge
+          className="mr-mb-4"
+          challenge={this.props.challenge}
+          isExpanded={this.state.isBrowsing}
+          toggleExpanded={this.toggleActive}
+          isSaved={isSaved}
+          isLoading={this.props.isStarting}
+          saveControl={saveChallengeControl}
+          unsaveControl={unsaveChallengeControl}
+          startControl={startControl}
+          manageControl={manageControl}
+        />
+      </div>
     )
   }
 }

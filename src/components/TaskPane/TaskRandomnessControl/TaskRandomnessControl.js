@@ -22,7 +22,7 @@ export default class TaskRandomnessControl extends Component {
   }
 
   render() {
-    if (!this.props.user || !this.props.task) {
+    if (!this.props.user || !this.props.task || !_isFinite(this.props.challengeId)) {
       return null
     }
 
@@ -59,9 +59,9 @@ TaskRandomnessControl.propTypes = {
   /** The current user */
   user: PropTypes.object,
   /** The current active challenge */
-  challengeId: PropTypes.number.isRequired,
+  challengeId: PropTypes.number,
   /** Current setting of whether to load tasks randomly or by proximity */
-  taskLoadBy: PropTypes.string.isRequired,
+  taskLoadBy: PropTypes.string,
   /** Invoked if the user alters the load-by setting  */
   setTaskLoadBy: PropTypes.func.isRequired,
 }

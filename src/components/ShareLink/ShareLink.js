@@ -24,24 +24,24 @@ export class ShareLink extends Component {
     return (
       <div className={classNames('share-link dropdown', {'is-active': this.props.isActive},
                                  this.props.className)}>
-        <div className='dropdown-trigger' onClick={this.props.toggleActive}>
+        <button className='mr-text-white hover:mr-text-green-lighter' onClick={this.props.toggleActive}>
           <SvgSymbol
             viewBox="0 0 20 14"
             sym="link-icon"
-            className="mr-fill-current mr-w-4 mr-h-4"
+            className="mr-fill-current mr-w-5 mr-h-auto"
           />
-        </div>
+        </button>
 
         {this.props.isActive &&
          <div className='menu-wrapper'>
            <div className='dropdown-menu' role='menu'>
-             <div className='dropdown-content'>
+             <div className='mr--mt-2 mr-flex mr-items-center mr-justify-between mr-p-2 mr-bg-blue-dark mr-text-white mr-rounded mr-shadow mr-text-sm'>
                <span className="share-link__text">{absoluteLink}</span>
 
                <CopyToClipboard text={absoluteLink} onCopy={this.props.deactivate}>
-                 <button className="button is-clear has-svg-icon share-link__copy-button">
-                   <SvgSymbol viewBox='0 0 20 20' sym="clipboard-icon" />
+                 <button className="mr-button mr-button--small mr-ml-2 mr-flex mr-items-center">
                    <FormattedMessage {...messages.copy} />
+                   <SvgSymbol viewBox='0 0 20 20' className="mr-ml-2 mr-w-3 mr-h-3 mr-fill-current" sym="clipboard-icon" />
                  </button>
                </CopyToClipboard>
              </div>

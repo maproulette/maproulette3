@@ -23,7 +23,7 @@ export default class TaskLatLon extends Component {
     }
 
     return (
-      <div className={classNames('task-lat-lon', this.props.className)}>
+      <div className={classNames('task-lat-lon mr-flex mr-items-center', this.props.className)}>
         <span className='task-lat-lon__label'>Lon/Lat:</span>
         <span className='task-lat-lon__longitude'>
           {this.rounded(centerpoint.lng)}
@@ -32,8 +32,8 @@ export default class TaskLatLon extends Component {
         </span>
 
         <CopyToClipboard text={`${this.rounded(centerpoint.lat)}, ${this.rounded(centerpoint.lng)}`}>
-          <button className="button is-clear has-svg-icon task-lat-lon__copy-button">
-            <SvgSymbol viewBox='0 0 20 20' sym="clipboard-icon" />
+          <button className="mr-text-green-lighter hover:mr-text-white mr-ml-1">
+            <SvgSymbol viewBox='0 0 20 20' className="mr-fill-current mr-w-4 mr-h-4" sym="clipboard-icon" />
           </button>
         </CopyToClipboard>
       </div>

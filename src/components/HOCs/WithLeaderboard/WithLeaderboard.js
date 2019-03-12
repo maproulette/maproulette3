@@ -29,9 +29,11 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
 
     /** merge the given userLeaderboard in with the main leaderboard */
     mergeInUserLeaderboard = userLeaderboard => {
-      const merged = _clone(this.state.leaderboard)
-      merged.splice(userLeaderboard[0].rank - 1, userLeaderboard.length, ...userLeaderboard)
-      this.setState({leaderboard: merged})
+      if (userLeaderboard && userLeaderboard.length > 0) {
+        const merged = _clone(this.state.leaderboard)
+        merged.splice(userLeaderboard[0].rank - 1, userLeaderboard.length, ...userLeaderboard)
+        this.setState({leaderboard: merged})
+      }
     }
 
     leaderboardParams = (numberMonths, countryCode) => {

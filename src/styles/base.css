@@ -25,7 +25,7 @@ code {
 }
 
 pre {
-  @apply mr-block mr-py-2 mr-px-3 mr-my-4 mr-bg-black mr-rounded mr-overflow-scroll;
+  @apply mr-block mr-py-2 mr-px-3 mr-my-4 mr-bg-black mr-rounded mr-whitespace-pre-wrap;
 }
 
 ::placeholder,
