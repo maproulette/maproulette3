@@ -23,4 +23,9 @@ export default defineMessages({
     id: "Widgets.TaskHistoryWidget.control.cancelDiff",
     defaultMessage: "Cancel Diff",
   },
+
+  viewOSMCha: {
+    id: "Widgets.TaskHistoryWidget.control.viewOSMCha",
+    defaultMessage: "View OSM Cha",
+  },
 })

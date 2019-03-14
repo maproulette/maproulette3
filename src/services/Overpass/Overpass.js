@@ -1,5 +1,6 @@
 import addMinutes from 'date-fns/add_minutes'
 import isAfter from 'date-fns/is_after'
+import format from 'date-fns/format'
 import { JOSM, sendJOSMCommand } from '../Editor/Editor'
 import _get from 'lodash/get'
 
@@ -31,7 +32,6 @@ export const viewAtticOverpass = (selectedEditor, actionDate, actionBBox) => {
 
 /**
  * View augmented diff in achavi of the task AOI for the two given items
- * @param selectedEditor
  * @param actionBBox
  * @param firstItem
  * @param secondItem
@@ -60,6 +60,34 @@ export const viewAtticOverpass = (selectedEditor, actionDate, actionBBox) => {
    let achaviURL = 'https://overpass-api.de/achavi/?url=' + encodeURIComponent(overpassURL);
    window.open(achaviURL)
  }
+
+/**
+ * View changesets in OSM Cha. Sets up filters for task bbox, start date of
+ * first edit, and participating usernames.
+ **/
+export const viewOSMCha = (actionBBox, earliestDate, participantUsernames) => {
+  const filterParams = []
+  // Setup bbox filter
+  const bbox = actionBBox.join(',')
+  filterParams.push('"in_bbox":[{"label":"' + bbox + '","value":"' + bbox + '"}]')
+
+  if (earliestDate) {
+    // Setup start-date filter
+    const startDate = format(earliestDate, "YYYY-MM-DD")
+    filterParams.push('"date__gte":[{"label":"' + startDate + '","value":"' + startDate + '"}]')
+  }
+
+  // Setup user filter
+  if (participantUsernames && participantUsernames.length > 0) {
+    const userList = participantUsernames.map((username) => {
+       return '{"label":"' + username + '","value":"' + username + '"}'
+      })
+    filterParams.push('"users":[' + userList.join(',') + ']')
+  }
+
+  window.open('https://osmcha.mapbox.com/?filters=' +
+          encodeURIComponent('{' + filterParams.join(',') + '}'))
+}
 
 /**
  * Returns a Moment instance representing the action date of the given

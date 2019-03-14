@@ -6,18 +6,18 @@ import TaskHistoryList from '../../TaskHistoryList/TaskHistoryList'
 import WithTaskHistory from '../../HOCs/WithTaskHistory/WithTaskHistory'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import QuickWidget from '../../QuickWidget/QuickWidget'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
-import { viewDiffOverpass } from '../../../services/Overpass/Overpass'
+import { viewDiffOverpass, viewOSMCha } from '../../../services/Overpass/Overpass'
 import messages from './Messages'
 import _get from 'lodash/get'
 import _remove from 'lodash/remove'
 import _indexOf from 'lodash/indexOf'
+import _each from 'lodash/each'
 
 const descriptor = {
   widgetKey: 'TaskHistoryWidget',
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 3,
+  minWidth: 4,
   defaultWidth: 3,
   minHeight: 3,
   defaultHeight: 6,
@@ -53,6 +53,25 @@ export default class TaskHistoryWidget extends Component {
                      ...this.state.selectedTimestamps)
   }
 
+  viewOSMCha = () => {
+    let earliestDate = null
+    const usernames = []
+
+    _each(this.props.task.history, (log) => {
+      if (!earliestDate || log.timestamp < earliestDate) {
+        earliestDate = log.timestamp
+      }
+
+      const username = _get(log, 'user.username')
+      if (username && usernames.indexOf(username) === -1) {
+        usernames.push(username)
+      }
+    })
+
+    viewOSMCha(AsMappableTask(this.props.task).calculateBBox(),
+               earliestDate, usernames)
+  }
+
   getEditor = () => {
     return _get(this.props, 'user.settings.defaultEditor')
   }
@@ -67,6 +86,10 @@ export default class TaskHistoryWidget extends Component {
         }
         rightHeaderControls={
           <div className="mr-flex mr-justify-between">
+            <button className="mr-button mr-button--small mr-mr-2"
+                    onClick={this.viewOSMCha}>
+              <FormattedMessage {...messages.viewOSMCha} />
+            </button>
             {this.state.diffSelectionActive ?
               <button className="mr-button mr-button--small"
                       onClick={() => {

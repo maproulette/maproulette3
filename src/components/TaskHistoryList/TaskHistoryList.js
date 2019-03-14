@@ -133,8 +133,8 @@ export default class TaskHistoryList extends Component {
                   day='2-digit'
                 />
               </div>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               {!this.props.selectDiffs &&
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
                 <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.task.calculateBBox())}>
                   <FormattedMessage {...messages.viewAtticLabel} />
                 </a>
