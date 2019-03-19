@@ -1,9 +1,3 @@
-import { defaultRoutes as api } from '../../Server/Server'
-import Endpoint from '../../Server/Endpoint'
-import RequestStatus from '../../Server/RequestStatus'
-import { taskSchema } from '.././Task'
-import { addError } from '../../Error/Error'
-import AppErrors from '../../Error/AppErrors'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
 import _uniqueId from 'lodash/uniqueId'
@@ -11,6 +5,12 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
 import format from 'date-fns/format'
+import { defaultRoutes as api } from '../../Server/Server'
+import Endpoint from '../../Server/Endpoint'
+import RequestStatus from '../../Server/RequestStatus'
+import { taskSchema } from '.././Task'
+import { addError } from '../../Error/Error'
+import AppErrors from '../../Error/AppErrors'
 
 // redux actions
 export const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
@@ -21,8 +21,8 @@ export const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
  * Add or replace the review needed tasks in the redux store
  */
 export const receiveReviewNeededTasks = function(tasks,
-                                            status=RequestStatus.success,
-                                            fetchId, totalCount) {
+                                                 status=RequestStatus.success,
+                                                 fetchId, totalCount) {
   return {
     type: RECEIVE_REVIEW_NEEDED_TASKS,
     status,

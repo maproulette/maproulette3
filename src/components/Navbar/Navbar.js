@@ -37,7 +37,7 @@ export default class Navbar extends Component {
   }
 
   signout = () => {
-    this.props.logoutUser()
+    this.props.logoutUser(_get(this.props, 'user.id'))
     this.closeMobileMenu()
   }
 

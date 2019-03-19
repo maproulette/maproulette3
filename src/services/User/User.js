@@ -1,7 +1,7 @@
 import { schema } from 'normalizr'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -14,7 +14,7 @@ import _omit from 'lodash/omit'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
-import { defaultRoutes as api, isSecurityError, credentialsPolicy }
+import { defaultRoutes as api, isSecurityError, credentialsPolicy, websocketClient }
        from '../Server/Server'
 import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
@@ -56,6 +56,30 @@ export const userDenormalizationSchema = function() {
     topChallenges: [ challengeSchema() ],
     savedTasks: [ taskDenormalizationSchema() ],
   })
+}
+
+export const subscribeToUserUpdates = function(dispatch, userId) {
+  websocketClient.addServerSubscription(
+    "user", userId, `newNotificationHandler_${userId}`,
+    messageObject => onNewNotification(dispatch, userId, messageObject)
+  )
+}
+
+export const unsubscribeFromUserUpdates = function(userId) {
+  websocketClient.removeServerSubscription("user", userId, `newNotificationHandler_${userId}`)
+}
+
+const onNewNotification = function(dispatch, userId, messageObject) {
+  switch(messageObject.messageType) {
+    case "notification-new":
+      if (_get(messageObject, 'data.userId') === userId) {
+        // Refresh user's notifications from server
+        dispatch(fetchUserNotifications(userId))
+      }
+      break
+    default:
+      break // Ignore
+  }
 }
 
 // redux actions
@@ -364,7 +388,7 @@ export const fetchUserActivity = function(userId, limit=50) {
  */
 export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedTasksLimit=50) {
   return function(dispatch) {
-    if (!_isNumber(userId) || userId === GUEST_USER_ID) {
+    if (!_isFinite(userId) || userId === GUEST_USER_ID) {
       return null
     }
 
@@ -561,8 +585,12 @@ export const unsaveTask = function(userId, taskId) {
 /**
  * Logout the current user on both the client and server.
  */
-export const logoutUser = function() {
+export const logoutUser = function(userId) {
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
+
+  if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+    unsubscribeFromUserUpdates(userId)
+  }
 
   return function(dispatch) {
     dispatch(setCurrentUser(GUEST_USER_ID))

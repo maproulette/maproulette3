@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-
 import MediaQuery from 'react-responsive'
 import AsEndUser from '../../interactions/User/AsEndUser'
 import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
+import WithWebSocketSubscriptions
+       from '../../components/HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import ScreenTooNarrow from '../../components/ScreenTooNarrow/ScreenTooNarrow'
 import SignInButton from '../../components/SignInButton/SignInButton'
 import TasksReviewTable from './TasksReview/TasksReviewTable'
@@ -20,6 +21,14 @@ const TasksTable = WithReviewTasks(TasksReviewTable)
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class ReviewTasksDashboard extends Component {
+  componentDidMount() {
+    this.props.subscribeToReviewMessages()
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeFromReviewMessages()
+  }
+
   render() {
     // The user needs to be logged in.
     const user = AsEndUser(this.props.user)
@@ -54,4 +63,4 @@ ReviewTasksDashboard.propTypes = {
   location: PropTypes.object.isRequired,
 }
 
-export default WithCurrentUser(injectIntl(ReviewTasksDashboard))
+export default WithCurrentUser(WithWebSocketSubscriptions(injectIntl(ReviewTasksDashboard)))

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
-import _get from 'lodash/get'
 import { fetchReviewNeededTasks }
        from '../../../services/Task/TaskReview/TaskReviewNeeded'
 import { fetchReviewedTasks }
@@ -46,25 +45,21 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
     }
 
     render() {
-      var reviewTasks = this.props.reviewedTasks
-      var updateTasks = this.props.updateReviewedTasks
-      var totalCount = this.props.reviewedTasksCount
+      let reviewData = this.props.currentReviewTasks.reviewed
+      let updateTasks = this.props.updateReviewedTasks
 
-      if ( this.props.asReviewer ) {
-        reviewTasks = this.props.reviewNeededTasks
+      if (this.props.asReviewer) {
+        reviewData = this.props.currentReviewTasks.reviewNeeded
         updateTasks = this.props.updateReviewNeededTasks
-        totalCount = this.props.reviewNeededTasksCount
 
         if (this.props.showReviewedByMe) {
-          reviewTasks = this.props.reviewedTasksByMe
+          reviewData = this.props.currentReviewTasks.reviewedByUser
           updateTasks = this.props.updateUserReviewedTasks
-          totalCount = this.props.reviewedTasksByMeCount
         }
       }
 
       return (
-        <WrappedComponent reviewTasks={reviewTasks}
-                          totalCount={totalCount}
+        <WrappedComponent reviewData = {reviewData}
                           updateReviewTasks={updateTasks}
                           defaultPageSize={DEFAULT_PAGE_SIZE}
                           refresh={this.refresh}
@@ -74,16 +69,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
   }
 }
 
-const mapStateToProps = state => ({
-  reviewNeededTasks: _get(state, 'currentReviewTasks.reviewNeeded.tasks', []),
-  reviewNeededTasksCount: _get(state, 'currentReviewTasks.reviewNeeded.totalCount', 0),
-
-  reviewedTasksByMe: _get(state, 'currentReviewTasks.reviewedByUser.tasks', []),
-  reviewedTasksByMeCount: _get(state, 'currentReviewTasks.reviewedByUser.totalCount', 0),
-
-  reviewedTasks: _get(state, 'currentReviewTasks.reviewed.tasks', []),
-  reviewedTasksCount: _get(state, 'currentReviewTasks.reviewed.totalCount', 0),
-})
+const mapStateToProps = state => ({ currentReviewTasks: state.currentReviewTasks })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateReviewNeededTasks: (searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {

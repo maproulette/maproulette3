@@ -12,6 +12,7 @@
 
 import { normalize } from 'normalizr'
 import { cache, resetCache } from './RequestCache'
+import WebSocketClient from './WebSocketClient'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
 import RouteFactory from './RouteFactory'
@@ -28,6 +29,7 @@ export const credentialsPolicy =
 
 export const serverRouteFactory = new RouteFactory(baseURL)
 export const defaultRoutes = Object.freeze(apiRoutes(serverRouteFactory))
+export const websocketClient = new WebSocketClient()
 
 const dataAtUrl = function(url, fetchFunction) {
   const cachedData = cache.get(url)
