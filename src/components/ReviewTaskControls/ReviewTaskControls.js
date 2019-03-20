@@ -34,7 +34,7 @@ export class ReviewTaskControls extends Component {
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.loadBy,
                                      this.props.history)
-    this.setState({confirmingTask: false})
+    this.setState({confirmingTask: false, comment: ""})
   }
 
   onCancel = () => {
