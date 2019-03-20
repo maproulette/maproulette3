@@ -50,7 +50,7 @@ export default function(WrappedComponent,
          // challenges (and their project parents) up toward the top of the results.
         _each(this.props.filteredChallenges, (c) => {
           const parent = _find(pagedProjects, (p) => p.id === (_isObject(c.parent) ? c.parent.id : c.parent))
-          if (!parent.score || c.score < parent.score) {
+          if (parent && (!parent.score || c.score < parent.score)) {
             parent.score = c.score
           }
         })

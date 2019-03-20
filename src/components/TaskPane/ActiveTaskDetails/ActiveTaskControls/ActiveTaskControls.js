@@ -5,7 +5,8 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
-import { allowedStatusProgressions, isCompletionStatus, messagesByStatus }
+import { allowedStatusProgressions, isCompletionStatus,
+         isFinalStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import SignInButton from '../../../SignInButton/SignInButton'
@@ -146,10 +147,21 @@ export class ActiveTaskControls extends Component {
       const allowedProgressions =
         allowedStatusProgressions(this.props.task.status)
       const isComplete = isCompletionStatus(this.props.task.status)
+      const isFinal = isFinalStatus(this.props.task.status)
 
       return (
         <div className={this.props.className}>
-          {((!isEditingTask && !isComplete) || needsRevised) &&
+          {!isEditingTask && isComplete &&
+           <div className="mr-text-white mr-text-md mr-my-4">
+             <FormattedMessage
+               {...messages.markedAs}
+             /> <FormattedMessage
+               {...messagesByStatus[this.props.task.status]}
+             />
+           </div>
+          }
+
+          {!isEditingTask && (!isFinal || needsRevised) &&
            <TaskCompletionStep1
              {...this.props}
              allowedProgressions={allowedProgressions}
@@ -160,25 +172,20 @@ export class ActiveTaskControls extends Component {
            />
           }
 
-          {(!isEditingTask && isComplete && !needsRevised) &&
-           <div className="mr-text-white mr-text-md mr-mt-4">
-             <div className="mr-mb-2">
-               <FormattedMessage
-                 {...messages.markedAs}
-               /> <FormattedMessage
-                 {...messagesByStatus[this.props.task.status]}
-               />
-             </div>
-             <TaskNextControl {...this.props} nextTask={this.next} />
-           </div>
-          }
-
           {isEditingTask && !needsRevised &&
            <TaskCompletionStep2
              {...this.props}
              allowedProgressions={allowedProgressions}
              complete={this.initiateCompletion}
              cancelEditing={this.cancelEditing}
+           />
+          }
+
+          {!isEditingTask && isComplete && !needsRevised
+           <TaskNextControl
+             {...this.props}
+             className="mr-mt-1"
+             nextTask={this.next}
            />
           }
 

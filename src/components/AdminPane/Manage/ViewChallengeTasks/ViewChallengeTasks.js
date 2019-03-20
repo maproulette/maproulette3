@@ -272,7 +272,7 @@ export class ViewChallengeTasks extends Component {
              }
              <a target="_blank"
                 rel="noopener noreferrer"
-                href={`/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
+                href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
                 className="button is-outlined is-primary has-svg-icon csv-export"
              >
                <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />

@@ -30,7 +30,7 @@ $(self-dropdown) {
   }
 
   &__inner {
-    @apply mr-relative mr-rounded-sm mr-shadow mr-bg-blue-dark mr-p-4 mr-text-white mr-font-normal;
+    @apply mr-relative mr-rounded-sm mr-shadow mr-bg-blue-dark mr-pl-4 mr-pr-0 mr-py-4 mr-text-white mr-font-normal;
 
     $(self-dropdown)--flush & {
       @apply mr-rounded-t-none;
@@ -50,6 +50,6 @@ $(self-dropdown) {
   }
 
   &__content {
-    @apply mr-min-w-24 mr-max-w-full mr-max-h-115 mr-overflow-y-scroll mr-overflow-x-hidden mr-scrolling-touch mr-whitespace-no-wrap mr-text-left;
+    @apply mr-min-w-24 mr-max-w-full mr-max-h-115 mr-overflow-auto mr-scrolling-touch mr-pr-4 mr-whitespace-no-wrap mr-text-left;
   }
 }

@@ -24,6 +24,11 @@ import './ChallengeResultList.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeResultList extends Component {
+  constructor(props) {
+    super(props)
+    this.listRef = React.createRef()
+  }
+
   render() {
     const challengeResults = this.props.pagedChallenges
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
@@ -68,12 +73,15 @@ export class ChallengeResultList extends Component {
           {...this.props}
           className="mr-mb-4"
           challenge={challenge}
+          listRef={this.listRef}
         />
       ))
     }
 
     return (
-      <div className="lg:mr-w-sm lg:mr-pr-6 lg:mr-mr-2 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-content lg:mr-overflow-auto">
+      <div
+        ref={this.listRef}
+        className="mr-relative lg:mr-w-sm lg:mr-pr-6 lg:mr-mr-2 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-content lg:mr-overflow-auto">
         {virtualChallengeOption}
         {results}
 
