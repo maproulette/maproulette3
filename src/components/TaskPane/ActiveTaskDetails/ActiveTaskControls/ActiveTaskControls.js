@@ -181,7 +181,7 @@ export class ActiveTaskControls extends Component {
            />
           }
 
-          {!isEditingTask && isComplete && !needsRevised
+          {!isEditingTask && isComplete && !needsRevised &&
            <TaskNextControl
              {...this.props}
              className="mr-mt-1"
