@@ -7,6 +7,7 @@ import _each from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
 import _debounce from 'lodash/debounce'
+import BusySpinner from '../../../components/BusySpinner/BusySpinner'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
@@ -83,24 +84,34 @@ export class TaskReviewTable extends Component {
     return (
       <React.Fragment>
         <div className="mr-flex-grow mr-w-full mr-mx-auto mr-bg-white mr-text-black mr-rounded mr-p-6 md:mr-p-8 mr-mb-12">
-          <header className="sm:mr-flex sm:mr-items-end sm:mr-justify-between mr-mb-6">
+          <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
             <div>
-              <h1 className="mr-h2 mr-text-blue-light mr-mb-2 md:mr-mr-4">
+              <h1 className="mr-h2 mr-text-blue-light md:mr-mr-4">
                 {subheader}
               </h1>
             </div>
+            <div>
+              {this.props.loading ?
+                <BusySpinner/> :
+                <button className="mr-button mr-button-small mr-button--green" onClick={this.props.refresh}>
+                  <FormattedMessage {...messages.refresh} />
+                </button>
+              }
+            </div>
           </header>
-          <ReactTable data={data} columns={columns}
-                      defaultPageSize={this.props.defaultPageSize}
-                      defaultSorted={[ {id: 'mappedOn', desc: false} ]}
-                      minRows={1}
-                      manual
-                      multiSort={false}
-                      noDataText={<FormattedMessage {...messages.noTasks} />}
-                      pages={totalPages}
-                      onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
-                      loading={this.state.loading}
-          />
+          <div className="mr-mt-6">
+            <ReactTable data={data} columns={columns}
+                        defaultPageSize={this.props.defaultPageSize}
+                        defaultSorted={[ {id: 'mappedOn', desc: false} ]}
+                        minRows={1}
+                        manual
+                        multiSort={false}
+                        noDataText={<FormattedMessage {...messages.noTasks} />}
+                        pages={totalPages}
+                        onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+                        loading={this.props.loading}
+            />
+          </div>
         </div>
         {_isFinite(this.state.openComments) &&
          <TaskCommentsModal
@@ -213,7 +224,7 @@ const setupColumnTypes = (props, openComments, data, tableState) => {
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-      
+
     )
   }
 
