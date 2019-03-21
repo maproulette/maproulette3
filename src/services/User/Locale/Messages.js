@@ -32,4 +32,8 @@ export default defineMessages({
     id: "Locale.ko.label",
     defaultMessage: "ko (한국어)",
   },
+  'pt-BR': {
+    id: "Locale.pt-BR.label",
+    defaultMessage: "pt (Português Brasileiro)",
+  },
 })
