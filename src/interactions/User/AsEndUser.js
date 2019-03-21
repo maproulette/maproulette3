@@ -28,6 +28,20 @@ export class AsEndUser {
     return this.isLoggedIn() &&
            !!_find(this.user.groups, {groupType: GROUP_TYPE_SUPERUSER})
   }
+
+  /**
+   * Returns true if the user is a reviewer.
+   */
+  isReviewer() {
+    return this.isLoggedIn() && this.user.settings.isReviewer
+  }
+
+  /**
+   * Returns true if the user's work needs to be reviewed.
+   */
+  needsReview() {
+    return this.isLoggedIn() && this.user.settings.needsReview
+  }
 }
 
 export default user => new AsEndUser(user)

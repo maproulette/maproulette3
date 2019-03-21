@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Leaderboard",
   },
 
+  review: {
+    id: 'Navbar.links.review',
+    defaultMessage: "Review",
+  },
+
   adminCreate: {
     id: 'Navbar.links.admin',
     defaultMessage: "Create & Manage",

@@ -148,7 +148,7 @@ export const isJosmEditor = function(editor) {
  */
 export const taskCenterPoint = function(mapBounds, task) {
   // If the mapbounds don't match the task, compute our own centerpoint.
-  return mapBounds.taskId === task.id ?
+  return (mapBounds && mapBounds.taskId === task.id) ?
          mapBounds.bounds.getCenter() :
          AsMappableTask(task).calculateCenterPoint()
 }
@@ -318,7 +318,7 @@ export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds) {
  * Sends a command to JOSM and returns a promise that resolves to true on
  * success, false on failure
  */
-const sendJOSMCommand = function(uri) {
+export const sendJOSMCommand = function(uri) {
   return fetch(uri).then(
     response => response.status === 200
   ).catch(error => {

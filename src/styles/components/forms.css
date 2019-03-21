@@ -37,7 +37,7 @@
   }
 }
 
-.control-label {
+.control-label, .form-group.field-boolean label span {
   @apply mr-cursor-pointer mr-inline-block mr-mb-2 mr-font-medium mr-text-blue;
 
   .field-hide-label & {

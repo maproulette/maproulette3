@@ -81,5 +81,25 @@ export default defineMessages({
     id: "Profile.apiKey.controls.reset.label",
     defaultMessage: "Reset",
   },
+  
+  needsReviewLabel: {
+    id: "Profile.form.needsReview.label",
+    defaultMessage: "Request Review of all Work",
+  },
+
+  needsReviewDescription: {
+    id: "Profile.form.needsReview.description",
+    defaultMessage: "Automatically request a human review of each task you complete",
+  },
+
+  isReviewerLabel: {
+    id: "Profile.form.isReviewer.label",
+    defaultMessage: "Volunteer as a Reviewer",
+  },
+
+  isReviewerDescription: {
+    id: "Profile.form.isReviewer.description",
+    defaultMessage: "Volunteer to review tasks for which a review has been requested",
+  },
 })
 

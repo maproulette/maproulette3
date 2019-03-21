@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage,
          FormattedDate,
          FormattedTime } from 'react-intl'
@@ -52,7 +53,9 @@ export default class CommentList extends Component {
               />
             </span> &mdash; {comment.osm_username}
           </div>
-          <div className="mr-text-sm mr-rounded-sm mr-bg-black-10 mr-p-2">
+          <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
+                                     {"mr-bg-grey-lighter": this.props.lightMode,
+                                      "mr-bg-grey-lighter-10": !this.props.lightMode})}>
             <MarkdownContent markdown={comment.comment} />
           </div>
 

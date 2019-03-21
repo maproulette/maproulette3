@@ -27,37 +27,39 @@ export class InspectTask extends Component {
   render() {
     return (
       <div className="admin__manage inspect-task">
-        <div className="admin__manage__header">
-          <nav className="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-              <li>
-                <Link to='/admin/projects'>
-                  <FormattedMessage {...manageMessages.manageHeader} />
-                </Link>
-              </li>
-              <li>
-                <Link to={`/admin/project/${this.props.project.id}`}>
-                  {this.props.project.displayName ||
-                  this.props.project.name}
-                </Link>
-              </li>
-              {_isObject(this.props.challenge) &&
+        {this.props.project &&
+          <div className="admin__manage__header">
+            <nav className="breadcrumb" aria-label="breadcrumbs">
+              <ul>
                 <li>
-                  <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
-                    {this.props.challenge.name}
+                  <Link to='/admin/projects'>
+                    <FormattedMessage {...manageMessages.manageHeader} />
                   </Link>
                 </li>
-              }
-              <li className="is-active">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a aria-current="page">
-                  <FormattedMessage {...messages.inspectTask} />
-                </a>
-                {this.props.loading && <BusySpinner inline />}
-              </li>
-            </ul>
-          </nav>
-        </div>
+                <li>
+                  <Link to={`/admin/project/${this.props.project.id}`}>
+                    {this.props.project.displayName ||
+                    this.props.project.name}
+                  </Link>
+                </li>
+                {_isObject(this.props.challenge) &&
+                  <li>
+                    <Link to={`/admin/project/${this.props.project.id}/challenge/${this.props.challenge.id}`}>
+                      {this.props.challenge.name}
+                    </Link>
+                  </li>
+                }
+                <li className="is-active">
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a aria-current="page">
+                    <FormattedMessage {...messages.inspectTask} />
+                  </a>
+                  {this.props.loading && <BusySpinner inline />}
+                </li>
+              </ul>
+            </nav>
+          </div>
+        }
 
         <InspectTaskPane inspectTask {...this.props} />
       </div>

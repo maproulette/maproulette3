@@ -10,6 +10,9 @@ import { virtualChallengeEntities }
 import { taskEntities } from './services/Task/Task'
 import { currentClusteredTasks } from './services/Task/ClusteredTask'
 import { currentBoundedTasks } from './services/Task/BoundedTask'
+import { currentReviewNeededTasks } from './services/Task/TaskReview/TaskReviewNeeded'
+import { currentReviewedTasks } from './services/Task/TaskReview/TaskReviewed'
+import { currentReviewedByUserTasks } from './services/Task/TaskReview/TaskReviewed'
 import { commentEntities } from './services/Comment/Comment'
 import { placeEntities } from './services/Place/Place'
 import { currentSearch } from './services/Search/Search'
@@ -55,6 +58,9 @@ export const initializeStore = function() {
       currentPreferences,
       currentClusteredTasks,
       currentBoundedTasks,
+      currentReviewNeededTasks,
+      currentReviewedTasks,
+      currentReviewedByUserTasks,
       entities,
   })
 

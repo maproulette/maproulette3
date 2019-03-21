@@ -39,9 +39,44 @@ export default defineMessages({
     defaultMessage: "Priority",
   },
 
+  mappedOnLabel: {
+    id: "Task.fields.mappedOn.label",
+    defaultMessage: "Mapped On",
+  },
+
+  reviewStatusLabel: {
+    id: "Task.fields.reviewStatus.label",
+    defaultMessage: "Review Status",
+  },
+
+  mappedByLabel: {
+    id: "Task.fields.requestedBy.label",
+    defaultMessage: "Mapper",
+  },
+
+  reviewedByLabel: {
+    id: "Task.fields.reviewedBy.label",
+    defaultMessage: "Reviewer",
+  },
+
+  reviewedAtLabel: {
+    id: "Admin.fields.reviewedAt.label",
+    defaultMessage: "Reviewed On",
+  },
+
+  commentsColumnLabel: {
+    id: "Admin.TaskAnalysisTable.columnHeaders.comments",
+    defaultMessage: "Comments",
+  },
+
   inspectTaskLabel: {
     id: "Admin.TaskAnalysisTable.controls.inspectTask.label",
     defaultMessage: "Inspect",
+  },
+
+  reviewTaskLabel: {
+    id: "Admin.TaskAnalysisTable.controls.reviewTask.label",
+    defaultMessage: "Review",
   },
 
   editTaskLabel: {

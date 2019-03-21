@@ -21,7 +21,7 @@ export class TaskCommentInput extends Component {
       <div className="mr-mt-2">
         <textarea
           className={classNames("mr-input mr-input--green-lighter-outline", this.props.className)}
-          rows="1"
+          rows={this.props.rows}
           cols="1"
           placeholder={this.props.intl.formatMessage(messages.placeholder)}
           value={this.props.value}
@@ -50,6 +50,7 @@ TaskCommentInput.propTypes = {
 
 TaskCommentInput.defaultProps = {
   value: "",
+  rows: 1,
 }
 
 export default injectIntl(TaskCommentInput)

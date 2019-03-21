@@ -44,6 +44,9 @@ export const defaultWorkspaceSetup = function() {
       {i: generateWidgetId(), x: 0, y: 11, w: 4, h: 7},
       {i: generateWidgetId(), x: 0, y: 18, w: 3, h: 12},
     ],
+    excludeWidgets: [
+      widgetDescriptor('TaskReviewWidget'),
+    ]
   }
 }
 
@@ -69,9 +72,9 @@ export class TaskPane extends Component {
    * WithCurrentTask, but we intercept the call so that we can manage our
    * transition animation as the task prepares to complete.
    */
-  completeTask = (taskId, challengeId, taskStatus, comment, taskLoadBy, userId) => {
+  completeTask = (taskId, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
     this.setState({completingTask: taskId})
-    this.props.completeTask(taskId, challengeId, taskStatus, comment, taskLoadBy, userId)
+    this.props.completeTask(taskId, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview)
   }
 
   clearCompletingTask = () => {

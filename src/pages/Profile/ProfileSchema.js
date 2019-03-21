@@ -64,6 +64,16 @@ export const jsSchema = intl => {
         type: "boolean",
         default: false,
       },
+      needsReview: {
+        title: intl.formatMessage(messages.needsReviewLabel),
+        type: "boolean",
+        default: false,
+      },
+      isReviewer: {
+        title: intl.formatMessage(messages.isReviewerLabel),
+        type: "boolean",
+        default: false,
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -124,6 +134,14 @@ export const uiSchema = intl => {
     leaderboardOptOut: {
       "ui:widget": "radio",
       "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.leaderboardOptOutDescription)} />,
+    },
+    needsReview: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.needsReviewDescription),
+    },
+    isReviewer: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.isReviewerDescription),
     },
   })
 }

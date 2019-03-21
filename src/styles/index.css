@@ -40,6 +40,7 @@
  * Vendor styles
  */
 @import 'vendor/react-burger-menu';
+@import 'vendor/react-table';
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your
@@ -56,6 +57,7 @@
 @import 'utilities/positions';
 @import 'utilities/backgrounds';
 @import 'utilities/rules';
+@import 'utilities/statuses';
 
 /**
  * Base styles to setup your application. These are typically the lowest level 
