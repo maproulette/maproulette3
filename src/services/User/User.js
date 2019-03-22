@@ -29,6 +29,17 @@ import AppErrors from '../Error/AppErrors'
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
 
+// constants defined on the Server
+export const REVIEW_NOT_NEEDED = 0
+export const REVIEW_NEEDED = 1
+export const REVIEW_MANDATORY = 2
+
+export const needsReviewType = Object.freeze({
+  notNeeded: REVIEW_NOT_NEEDED,
+  needed: REVIEW_NEEDED,
+  mandatory: REVIEW_MANDATORY,
+})
+
 /** normalizr schema for users */
 export const userSchema = function() {
   return new schema.Entity('users')

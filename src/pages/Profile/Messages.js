@@ -81,7 +81,7 @@ export default defineMessages({
     id: "Profile.apiKey.controls.reset.label",
     defaultMessage: "Reset",
   },
-  
+
   needsReviewLabel: {
     id: "Profile.form.needsReview.label",
     defaultMessage: "Request Review of all Work",
@@ -101,5 +101,14 @@ export default defineMessages({
     id: "Profile.form.isReviewer.description",
     defaultMessage: "Volunteer to review tasks for which a review has been requested",
   },
-})
 
+  yesLabel: {
+    id: "Profile.form.yes.label",
+    defaultMessage: "Yes",
+  },
+
+  noLabel: {
+    id: "Profile.form.no.label",
+    defaultMessage: "No",
+  },
+})
