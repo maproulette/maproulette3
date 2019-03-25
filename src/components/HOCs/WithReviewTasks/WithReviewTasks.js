@@ -6,8 +6,12 @@ import { fetchReviewNeededTasks }
        from '../../../services/Task/TaskReview/TaskReviewNeeded'
 import { fetchReviewedTasks }
        from '../../../services/Task/TaskReview/TaskReviewed'
+import { loadNextReviewTask } from '../../../services/Task/Task'
+import { addError } from '../../../services/Error/Error'
+import AppErrors from '../../../services/Error/AppErrors'
 
-const DEFAULT_PAGE_SIZE = 5
+
+const DEFAULT_PAGE_SIZE = 20
 
 /**
  * WithReviewTasks retrieves tasks that need to be Reviewed
@@ -20,26 +24,26 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       loading: false
     }
 
-    refresh = () => {
-      this.update(this.props)
+    refresh = (sortBy, direction, filters) => {
+      this.update(this.props, sortBy, direction, filters)
     }
 
-    update(props) {
+    update(props, sortBy, direction, filters) {
       this.setState({loading: true})
       if (props.asReviewer) {
         if (props.showReviewedByMe) {
-          props.updateUserReviewedTasks().then(() => {
+          props.updateUserReviewedTasks({sortCriteria: {sortBy, direction}, filters}).then(() => {
             this.setState({loading: false})
           })
         }
         else {
-          props.updateReviewNeededTasks().then(() => {
+          props.updateReviewNeededTasks({sortCriteria: {sortBy, direction}, filters}).then(() => {
             this.setState({loading: false})
           })
         }
       }
       else {
-        props.updateReviewedTasks().then(() => {
+        props.updateReviewedTasks({sortCriteria: {sortBy, direction}, filters}).then(() => {
           this.setState({loading: false})
         })
       }
@@ -72,6 +76,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                           updateReviewTasks={updateTasks}
                           defaultPageSize={DEFAULT_PAGE_SIZE}
                           refresh={this.refresh}
+                          startReviewing={this.props.startNextReviewTask}
                           loading={this.state.loading}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
     }
@@ -99,6 +104,17 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   updateUserReviewedTasks: (searchCriteria={}, pageSize=DEFAULT_PAGE_SIZE) => {
     return dispatch(fetchReviewedTasks(searchCriteria, true, pageSize))
   },
+
+  startNextReviewTask: (sortBy, direction, filters, url) => {
+    dispatch(loadNextReviewTask({sortCriteria: {sortBy, direction}, filters})).then((task) => {
+      url.push(`/challenge/${task.parentId}/task/${task.id}/review`)
+    }).catch(error => {
+      console.log(error)
+      dispatch(addError(AppErrors.reviewTask.fetchFailure))
+      url.push('/review')
+    })
+  }
+
 })
 
 export default WrappedComponent =>

@@ -30,7 +30,8 @@ import ReactTable from 'react-table'
 export class TaskReviewTable extends Component {
   state = {
     openComments: null,
-    tableState: {},
+    tableState: {sortBy: 'mapped_on',
+                 direction: 'ASC'},
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -53,6 +54,20 @@ export class TaskReviewTable extends Component {
                      direction: sortCriteria.direction,
                      filters: filters}})
     })
+  }
+
+  startReviewing() {
+    this.props.startReviewing(this.state.tableState.sortBy,
+                              this.state.tableState.direction,
+                              this.state.tableState.filters,
+                              this.props.history)
+  }
+
+  refresh() {
+    this.props.refresh(this.state.tableState.sortBy,
+                       this.state.tableState.direction,
+                       this.state.tableState.filters,
+                       this.props.history)
   }
 
   render() {
@@ -91,9 +106,14 @@ export class TaskReviewTable extends Component {
               </h1>
             </div>
             <div>
+              {!this.props.loading && this.props.asReviewer && !this.props.showReviewedByMe && data.length > 0 &&
+                <button className="mr-button mr-button-small mr-button--green mr-mr-4" onClick={() => this.startReviewing()}>
+                  <FormattedMessage {...messages.startReviewing} />
+                </button>
+              }
               {this.props.loading ?
                 <BusySpinner/> :
-                <button className="mr-button mr-button-small mr-button--green" onClick={this.props.refresh}>
+                <button className="mr-button mr-button-small mr-button--green" onClick={() => this.refresh()}>
                   <FormattedMessage {...messages.refresh} />
                 </button>
               }
@@ -101,7 +121,7 @@ export class TaskReviewTable extends Component {
           </header>
           <div className="mr-mt-6">
             <ReactTable data={data} columns={columns}
-                        defaultPageSize={this.props.defaultPageSize}
+                        defaultPageSize={pageSize}
                         defaultSorted={[ {id: 'mappedOn', desc: false} ]}
                         minRows={1}
                         manual
