@@ -79,14 +79,14 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 }
 
 const mapStateToProps = state => ({
-  reviewNeededTasks: _get(state, 'currentReviewNeededTasks.tasks', []),
-  reviewNeededTasksCount: _get(state, 'currentReviewNeededTasks.totalCount', 0),
+  reviewNeededTasks: _get(state, 'currentReviewTasks.reviewNeeded.tasks', []),
+  reviewNeededTasksCount: _get(state, 'currentReviewTasks.reviewNeeded.totalCount', 0),
 
-  reviewedTasksByMe: _get(state, 'currentReviewedByUserTasks.tasks', []),
-  reviewedTasksByMeCount: _get(state, 'currentReviewedByUserTasks.totalCount', 0),
+  reviewedTasksByMe: _get(state, 'currentReviewTasks.reviewedByUser.tasks', []),
+  reviewedTasksByMeCount: _get(state, 'currentReviewTasks.reviewedByUser.totalCount', 0),
 
-  reviewedTasks: _get(state, 'currentReviewedTasks.tasks', []),
-  reviewedTasksCount: _get(state, 'currentReviewedTasks.totalCount', 0),
+  reviewedTasks: _get(state, 'currentReviewTasks.reviewed.tasks', []),
+  reviewedTasksCount: _get(state, 'currentReviewTasks.reviewed.totalCount', 0),
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
