@@ -101,5 +101,34 @@ export default defineMessages({
     id: "Profile.form.isReviewer.description",
     defaultMessage: "Volunteer to review tasks for which a review has been requested",
   },
+
+  emailLabel: {
+    id: "Profile.form.email.label",
+    defaultMessage: "Email address",
+  },
+
+  emailDescription: {
+    id: "Profile.form.email.description",
+    defaultMessage: "If you request emails in your Notification Subscriptions, they " +
+                    "will be sent here"
+  },
+
+  notificationLabel: {
+    id: "Profile.form.notification.label",
+    defaultMessage: "Notification",
+  },
+
+  notificationSubscriptionsLabel: {
+    id: "Profile.form.notificationSubscriptions.label",
+    defaultMessage: "Notification Subscriptions",
+  },
+
+  notificationSubscriptionsDescription: {
+    id: "Profile.form.notificationSubscriptions.description",
+    defaultMessage: "Decide which MapRoulette notifications you would like to " +
+                    "receive, along with whether you would like to be sent " +
+                    "an email informing you of the notification (either immediately " +
+                    "or as a daily digest)"
+  },
 })
 

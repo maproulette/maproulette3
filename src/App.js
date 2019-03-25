@@ -14,6 +14,7 @@ import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
 import InspectTask from './components/AdminPane/Manage/InspectTask/InspectTask'
 import Review from './pages/Review/Review'
+import Inbox from './pages/Inbox/Inbox'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import { resetCache } from './services/Server/RequestCache'
 import WithCurrentUser from './components/HOCs/WithCurrentUser/WithCurrentUser'
@@ -90,6 +91,7 @@ export class App extends Component {
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />
             <CachedRoute path='/review' component={Review} />
+            <CachedRoute path='/inbox' component={Inbox} />
             <CachedRoute path='/challenge/:challengeId/leaderboard' component={ChallengeLeaderboard} />
             <CachedRoute path='/project/:projectId/leaderboard' component={ProjectLeaderboard} />
             <CachedRoute path='/country/:countryCode/leaderboard' component={CountryLeaderboard} />

@@ -42,6 +42,15 @@ export class AsEndUser {
   needsReview() {
     return this.isLoggedIn() && this.user.settings.needsReview
   }
+
+  /**
+   * Returns true if the user has at least one notification that is not marked
+   * as read
+   */
+  hasUnreadNotifications() {
+    return this.isLoggedIn() &&
+           !!_find(this.user.notifications, {isRead: false})
+  }
 }
 
 export default user => new AsEndUser(user)
