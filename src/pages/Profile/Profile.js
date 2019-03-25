@@ -178,7 +178,7 @@ class Profile extends Component {
             </header>
 
             <Form
-              schema={jsSchema(this.props.intl)}
+              schema={jsSchema(this.props.intl, this.props.user)}
               uiSchema={uiSchema(this.props.intl)}
               widgets={{SelectWidget: CustomSelectWidget}}
               className="form form--2-col"

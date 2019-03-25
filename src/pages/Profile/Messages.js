@@ -81,7 +81,7 @@ export default defineMessages({
     id: "Profile.apiKey.controls.reset.label",
     defaultMessage: "Reset",
   },
-  
+
   needsReviewLabel: {
     id: "Profile.form.needsReview.label",
     defaultMessage: "Request Review of all Work",
@@ -130,5 +130,14 @@ export default defineMessages({
                     "an email informing you of the notification (either immediately " +
                     "or as a daily digest)"
   },
-})
+  
+  yesLabel: {
+    id: "Profile.form.yes.label",
+    defaultMessage: "Yes",
+  },
 
+  noLabel: {
+    id: "Profile.form.no.label",
+    defaultMessage: "No",
+  },
+})

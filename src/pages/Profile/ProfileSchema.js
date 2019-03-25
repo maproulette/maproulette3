@@ -3,6 +3,7 @@ import _map from 'lodash/map'
 import _values from 'lodash/values'
 import _without from 'lodash/without'
 import _filter from 'lodash/filter'
+import AsManager from '../../interactions/User/AsManager'
 import { Locale, localeLabels, defaultLocale }
        from '../../services/User/Locale/Locale'
 import { NotificationType, notificationTypeLabels }
@@ -14,6 +15,7 @@ import { ChallengeBasemap, basemapLayerLabels }
        from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
 import { LayerSources } from '../../services/VisibleLayer/LayerSources'
 import MarkdownContent from '../../components/MarkdownContent/MarkdownContent'
+import { needsReviewType } from '../../services/User/User'
 import messages from './Messages'
 
 /**
@@ -27,7 +29,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = intl => {
+export const jsSchema = (intl, user) => {
   const localizedLocaleLabels = localeLabels(intl)
   const localizedEditorLabels = editorLabels(intl)
   const localizedBasemapLabels = basemapLayerLabels(intl)
@@ -41,7 +43,7 @@ export const jsSchema = intl => {
     { id: ChallengeBasemap.custom.toString(), name: localizedBasemapLabels.custom }
   ])
 
-  return {
+  const schemaFields = {
     "$schema": "http://json-schema.org/draft-06/schema#",
     type: "object",
     properties: {
@@ -68,11 +70,6 @@ export const jsSchema = intl => {
       },
       leaderboardOptOut: {
         title: intl.formatMessage(messages.leaderboardOptOutLabel),
-        type: "boolean",
-        default: false,
-      },
-      needsReview: {
-        title: intl.formatMessage(messages.needsReviewLabel),
         type: "boolean",
         default: false,
       },
@@ -124,6 +121,19 @@ export const jsSchema = intl => {
       }
     }
   }
+
+  // Show 'needsReview' option if value is not REVIEW_MANDATORY or to superusers
+  if (AsManager(user).isSuperUser() || user.settings.needsReview !== needsReviewType.mandatory) {
+    schemaFields.properties.needsReview = {
+      title: intl.formatMessage(messages.needsReviewLabel),
+      type: "number",
+      enum: [needsReviewType.needed, needsReviewType.notNeeded],
+      enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel)],
+      default: needsReviewType.notNeeded,
+    }
+  }
+
+  return schemaFields
 }
 
 /**

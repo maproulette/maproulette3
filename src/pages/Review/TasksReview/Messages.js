@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Refresh",
   },
 
+  startReviewing: {
+    id: "Review.TaskAnalysisTable.startReviewing",
+    defaultMessage: "Review these Tasks",
+  },
+
   tasksNoneReviewedByMe: {
     id: "Review.TaskAnalysisTable.noTasksReviewedByMe",
     defaultMessage: "You have not reviewed any tasks.",
