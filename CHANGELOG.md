@@ -7,6 +7,19 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.2.4] - 2019-04-09
+### Added
+- Brazilian Portuguese translation by @raphaelpe
+- Task reviews
+- In-app notifications with optional emails
+- Confirmation step when completing a task
+- Comment mentions with @[user name] (spaces) or @username (no spaces)
+
+### Changed
+- Task completion comment now requested at confirmation step
+- Random vs Nearby task loading setting moved to confirmation step
+
+
 ## [v3.2.3] - 2019-03-12
 ### Fixed
 - Honor task priorities when loading the next random task
