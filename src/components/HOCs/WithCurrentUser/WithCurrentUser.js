@@ -9,6 +9,7 @@ import { logoutUser,
          saveTask, unsaveTask,
          updateUserSettings,
          updateUserAppSetting,
+         updateNotificationSubscriptions,
          fetchTopChallenges,
          fetchSavedChallenges,
          fetchSavedTasks,
@@ -44,6 +45,7 @@ export const mapStateToProps = state => {
       const endUser = AsEndUser(props.user)
       props.user.isLoggedIn = endUser.isLoggedIn()
       props.user.isSuperUser = endUser.isSuperUser()
+      props.user.hasUnreadNotifications = endUser.hasUnreadNotifications()
     }
   }
 
@@ -61,6 +63,7 @@ export const mapDispatchToProps = dispatch => {
     saveTask,
     unsaveTask,
     updateUserSettings,
+    updateNotificationSubscriptions,
     fetchTopChallenges,
     fetchUserActivity,
     resetAPIKey,

@@ -109,6 +109,11 @@ const apiRoutes = factory => {
       'saveTask': factory.post('/user/:userId/saveTask/:taskId'),
       'unsaveTask': factory.delete('/user/:userId/unsaveTask/:taskId'),
       'updateSettings': factory.put('/user/:userId'),
+      'notificationSubscriptions': factory.get('/user/:userId/notificationSubscriptions'),
+      'updateNotificationSubscriptions': factory.put('/user/:userId/notificationSubscriptions'),
+      'notifications': factory.get('/user/:userId/notifications'),
+      'markNotificationsRead': factory.put('/user/:userId/notifications'),
+      'deleteNotifications': factory.delete('/user/:userId/notifications'),
     },
   }
 }

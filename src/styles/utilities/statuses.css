@@ -37,3 +37,15 @@
 .mr-review-rejected {
   @apply mr-text-orange;
 }
+
+.mr-notification-type-mention {
+  @apply mr-text-pink;
+}
+
+.mr-notification-type-review-approved {
+  @apply mr-text-green-light;
+}
+
+.mr-notification-type-review-rejected {
+  @apply mr-text-red;
+}
