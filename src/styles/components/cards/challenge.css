@@ -6,7 +6,7 @@
   }
 
   &__taxonomy {
-    @apply mr-list-reset mr-mb-1 mr-inline-flex mr-text-xs mr-leading-none mr-uppercase mr-font-medium;
+    @apply mr-list-reset mr-mb-1 mr-inline-flex mr-text-sm mr-leading-none mr-uppercase mr-font-medium;
 
     li + li {
       @apply mr-ml-2 mr-border-l mr-border-white-40 mr-pl-2;
@@ -42,7 +42,7 @@
   }
 
   &__content {
-    @apply mr-mt-4 mr-pt-4 mr-border-t mr-border-white-40;
+    @apply mr-mt-4 mr-pt-4 mr-border-t mr-border-white-10;
   }
 
   &__meta {

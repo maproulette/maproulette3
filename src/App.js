@@ -9,6 +9,7 @@ import ChallengeLeaderboard from './pages/Leaderboard/ChallengeLeaderboard'
 import ProjectLeaderboard from './pages/Leaderboard/ProjectLeaderboard'
 import CountryLeaderboard from './pages/Leaderboard/CountryLeaderboard'
 import ChallengePane from './components/ChallengePane/ChallengePane'
+import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail'
 import TaskPane from './components/TaskPane/TaskPane'
 import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
@@ -79,6 +80,7 @@ export class App extends Component {
           <Switch>
             <CachedRoute exact path='/' component={Home} />
             <CachedRoute path='/browse/challenges/:challengeId?' component={ChallengePane} />
+            <CachedRoute path='/browse/challenge/:challengeId?' component={ChallengeDetail} />
             <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
             <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />

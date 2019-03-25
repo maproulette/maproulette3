@@ -1,6 +1,6 @@
 h1,
 .mr-h1 {
-  @apply mr-text-4xl mr-font-light mr-leading-tight;
+  @apply mr-text-4xl mr-font-normal mr-leading-tight;
 
   @screen md {
     @apply mr-text-5xl;
@@ -8,7 +8,7 @@ h1,
 }
 h2,
 .mr-h2 {
-  @apply mr-text-3xl mr-font-light mr-leading-tight mr-font-normal;
+  @apply mr-text-3xl mr-font-normal mr-leading-tight;
 
   @screen md {
     @apply mr-text-4xl;
