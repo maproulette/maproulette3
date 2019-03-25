@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
+import { needsReviewType } from '../../services/User/User'
 import { messagesByReviewStatus, keysByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskLoadMethod, messagesByLoadMethod }
@@ -68,6 +69,7 @@ export class TaskConfirmationModal extends Component {
               />
 
               {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&
+                this.props.user.settings.needsReview !== needsReviewType.mandatory &&
               <div className="form mr-mt-2">
                 <input
                   type="checkbox"
