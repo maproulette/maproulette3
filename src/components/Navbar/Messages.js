@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Leaderboard",
   },
 
+  inbox: {
+    id: 'Navbar.links.inbox',
+    defaultMessage: "Inbox",
+  },
+
   review: {
     id: 'Navbar.links.review',
     defaultMessage: "Review",

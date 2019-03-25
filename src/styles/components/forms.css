@@ -16,6 +16,10 @@
     .field-radio-group {
       @apply mr-text-grey;
     }
+
+    .array-item-list .array-item {
+      @apply mr-mb-4;
+    }
   }
 
   .field {

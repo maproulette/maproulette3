@@ -4,7 +4,12 @@ import _values from 'lodash/values'
 import _without from 'lodash/without'
 import _filter from 'lodash/filter'
 import AsManager from '../../interactions/User/AsManager'
-import { Locale, localeLabels, defaultLocale } from '../../services/User/Locale/Locale'
+import { Locale, localeLabels, defaultLocale }
+       from '../../services/User/Locale/Locale'
+import { NotificationType, notificationTypeLabels }
+       from '../../services/Notification/NotificationType/NotificationType'
+import { SubscriptionType, subscriptionTypeLabels }
+       from '../../services/Notification/NotificationSubscription/NotificationSubscription'
 import { Editor, editorLabels } from '../../services/Editor/Editor'
 import { ChallengeBasemap, basemapLayerLabels }
        from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
@@ -28,6 +33,8 @@ export const jsSchema = (intl, user) => {
   const localizedLocaleLabels = localeLabels(intl)
   const localizedEditorLabels = editorLabels(intl)
   const localizedBasemapLabels = basemapLayerLabels(intl)
+  const localizedNotificationLabels = notificationTypeLabels(intl)
+  const localizedSubscriptionLabels = subscriptionTypeLabels(intl)
 
   const defaultBasemapChoices = [
     { id: ChallengeBasemap.none.toString(), name: localizedBasemapLabels.none }
@@ -70,6 +77,22 @@ export const jsSchema = (intl, user) => {
         title: intl.formatMessage(messages.isReviewerLabel),
         type: "boolean",
         default: false,
+      },
+      notificationSubscriptions: {
+        title: intl.formatMessage(messages.notificationSubscriptionsLabel),
+        type: "array",
+        items: _map(NotificationType, (type, name) => ({
+          title: `${localizedNotificationLabels[name]} ${intl.formatMessage(messages.notificationLabel)}`,
+          type: "number",
+          enum: _values(SubscriptionType),
+          enumNames: _map(SubscriptionType, (value, key) => localizedSubscriptionLabels[key]),
+          default: SubscriptionType.noEmail,
+        })),
+      },
+      email: {
+        title: intl.formatMessage(messages.emailLabel),
+        type: "string",
+        format: "email",
       },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
@@ -144,6 +167,12 @@ export const uiSchema = intl => {
     leaderboardOptOut: {
       "ui:widget": "radio",
       "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.leaderboardOptOutDescription)} />,
+    },
+    email: {
+      "ui:help": intl.formatMessage(messages.emailDescription),
+    },
+    notificationSubscriptions: {
+      "ui:help": intl.formatMessage(messages.notificationSubscriptionsDescription),
     },
     needsReview: {
       "ui:widget": "radio",

@@ -2,14 +2,20 @@ import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate, injectIntl }
        from 'react-intl'
 import Form from 'react-jsonschema-form'
+import _each from 'lodash/each'
 import _get from 'lodash/get'
+import _omit from 'lodash/omit'
 import _merge from 'lodash/merge'
+import _map from 'lodash/map'
+import _fromPairs from 'lodash/fromPairs'
 import _isUndefined from 'lodash/isUndefined'
 import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import _debounce from 'lodash/debounce'
 import { basemapLayerSources }
        from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import { NotificationType, keysByNotificationType }
+       from '../../services/Notification/NotificationType/NotificationType'
 import AsEditableUser from '../../interactions/User/AsEditableUser'
 import WithStatus from '../../components/HOCs/WithStatus/WithStatus'
 import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
@@ -30,27 +36,61 @@ class Profile extends Component {
   }
 
   /** Save the latest settings modified by the user */
-  saveLatestSettings = _debounce(settings => {
+  saveLatestSettings = _debounce((settings, subscriptions) => {
     this.setState({isSaving: true, saveComplete: false})
 
     const editableUser = AsEditableUser(settings)
     editableUser.normalizeDefaultBasemap()
 
-    this.props.updateUserSettings(this.props.user.id, editableUser).then(() =>
+    Promise.all([
+      this.props.updateUserSettings(this.props.user.id, editableUser),
+      this.props.updateNotificationSubscriptions(this.props.user.id, subscriptions),
+    ]).then(() =>
       this.setState({isSaving: false, saveComplete: true})
     )
-  }, 750, {leading: true})
+  }, 750)
 
   /** Invoked when the form data is modified */
   changeHandler = ({formData}) => {
     this.setState({formData, saveComplete: false})
-    this.saveLatestSettings(formData)
+    const preparedData = this.prepareDataForSaving(formData)
+    this.saveLatestSettings(_omit(preparedData, ['notificationSubscriptions']),
+                            preparedData.notificationSubscriptions)
+  }
+
+  prepareDataForForm = userData => {
+    if (!userData.notificationSubscriptions) {
+      return userData
+    }
+
+    const subscriptionsArray = []
+    _each(NotificationType, (constantValue, key) => {
+      subscriptionsArray[constantValue] = userData.notificationSubscriptions[key]
+    })
+
+    return {...userData, notificationSubscriptions: subscriptionsArray}
+  }
+
+  prepareDataForSaving = formData => {
+    const subscriptionsObject =
+      _fromPairs(_map(formData.notificationSubscriptions, (setting, index) =>
+        [keysByNotificationType[index], parseInt(setting, 10)]
+    ))
+    return {...formData, notificationSubscriptions: subscriptionsObject}
   }
 
   componentDidMount() {
     // Make sure our user info is current
     if (_get(this.props, 'user.isLoggedIn')) {
       this.props.loadCompleteUser(this.props.user.id)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.user && this.props.user.id !== _get(prevProps, 'user.id')) {
+      if (this.props.user.isLoggedIn) {
+        this.props.loadCompleteUser(this.props.user.id)
+      }
     }
   }
 
@@ -81,7 +121,10 @@ class Profile extends Component {
         />
     }
 
-    const userSettings = _merge({}, this.props.user.settings, this.state.formData)
+    const userSettings = _merge(this.prepareDataForForm({
+      ...this.props.user.settings,
+      notificationSubscriptions: this.props.user.notificationSubscriptions,
+    }), this.state.formData)
 
     // The server uses two fields to represent the default basemap: a legacy
     // numeric identifier and a new optional string identifier for layers from
