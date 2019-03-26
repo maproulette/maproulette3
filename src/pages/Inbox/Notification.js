@@ -148,7 +148,7 @@ const ViewTask = function(props) {
   return (
     <div className="mr-mt-8">
       <Link to={
-        `challenge/${props.notification.challengeId}/task/${props.notification.taskId}${props.review ? '/review' : ''}`
+        `challenge/${props.notification.challengeId}/task/${props.notification.taskId}${props.review ? '/review' : ''}?fromInbox=true`
       }>
         <FormattedMessage {...messages.viewTaskLabel} />
       </Link>

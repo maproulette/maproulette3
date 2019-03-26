@@ -8,9 +8,13 @@ export const NEXT_LOAD_METHOD = 'next'
 /** Load review page with all review tasks */
 export const ALL_LOAD_METHOD = 'all'
 
+/** Load inbox */
+export const LOAD_INBOX_METHOD = 'inbox'
+
 export const TaskReviewLoadMethod = Object.freeze({
   next: NEXT_LOAD_METHOD,
   all: ALL_LOAD_METHOD,
+  inbox: LOAD_INBOX_METHOD,
 })
 
 /**

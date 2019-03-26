@@ -14,6 +14,7 @@ import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/Ta
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
+import queryString from 'query-string'
 import messages from './Messages'
 import './ReviewTaskControls.scss'
 
@@ -122,6 +123,8 @@ export class ReviewTaskControls extends Component {
       )
     }
 
+    const fromInbox = queryString.parse(this.props.history.location.search)["fromInbox"]
+
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
         <div className="mr-text-sm mr-text-white mr-mt-4 mr-whitespace-no-wrap">
@@ -178,6 +181,7 @@ export class ReviewTaskControls extends Component {
             chooseLoadBy={this.chooseLoadBy}
             loadBy={this.state.loadBy}
             inReview={true}
+            fromInbox={fromInbox}
           />
         }
       </div>

@@ -29,6 +29,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           if (loadBy === TaskReviewLoadMethod.next) {
             url.push(`/challenge/${task.parentId}/task/${task.id}/review`)
           }
+          else if (loadBy === TaskReviewLoadMethod.inbox) {
+            url.push('/inbox')
+          }
           else {
             url.push('/review')
           }

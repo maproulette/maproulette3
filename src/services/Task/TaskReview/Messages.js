@@ -30,4 +30,9 @@ export default defineMessages({
     id: 'Task.review.loadByMethod.all',
     defaultMessage: "Back to Review All",
   },
+
+  inbox: {
+    id: 'Task.review.loadByMethod.inbox',
+    defaultMessage: "Back to Inbox",
+  },
 })

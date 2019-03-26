@@ -5,10 +5,12 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
+import queryString from 'query-string'
 import { allowedStatusProgressions, isCompletionStatus,
          isFinalStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
+import { TaskReviewLoadMethod } from '../../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
@@ -35,6 +37,7 @@ export class ActiveTaskControls extends Component {
     confirmingTask: null,
     confirmingStatus: null,
     comment: "",
+    revisionLoadBy: TaskReviewLoadMethod.inbox,
   }
 
   setComment = comment => this.setState({comment})
@@ -66,6 +69,10 @@ export class ActiveTaskControls extends Component {
     this.props.setTaskLoadBy(challengeId, isVirtual, loadMethod)
   }
 
+  chooseRevisionLoadBy = loadMethod => {
+    this.setState({revisionLoadBy: loadMethod})
+  }
+
   /** Indicate the editor has been closed without completing the task */
   cancelEditing = () => {
     this.setState({taskBeingCompleted: null})
@@ -78,7 +85,8 @@ export class ActiveTaskControls extends Component {
 
     if (this.state.submitRevision) {
       this.props.updateTaskReviewStatus(this.props.task, TaskReviewStatus.needed,
-                                        this.state.comment, null, this.props.history)
+                                        this.state.comment, this.state.revisionLoadBy,
+                                        this.props.history)
     }
     else {
       this.props.completeTask(this.props.task.id, this.props.task.parent.id,
@@ -87,7 +95,12 @@ export class ActiveTaskControls extends Component {
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview)
       if (revisionSubmission) {
-        this.props.history.push('/review')
+        if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
+          this.props.history.push('/inbox')
+        }
+        else {
+          this.props.history.push('/review')
+        }
       }
     }
   }
@@ -139,6 +152,8 @@ export class ActiveTaskControls extends Component {
     const editorLoading =
       _get(this.props, 'editor.taskId') !== this.props.task.id &&
            this.state.taskBeingCompleted === this.props.task.id
+
+    const fromInbox = queryString.parse(this.props.history.location.search)["fromInbox"]
 
     if (editorLoading) {
       return <BusySpinner />
@@ -198,11 +213,13 @@ export class ActiveTaskControls extends Component {
               setComment={this.setComment}
               needsReview={this.getNeedsReviewSetting()}
               toggleNeedsReview={this.toggleNeedsReview}
-              loadBy={this.props.taskLoadBy}
-              chooseLoadBy={this.chooseLoadBy}
+              loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
+              chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
+                                                 this.chooseLoadBy(load)}
               onConfirm={this.confirmCompletion}
               onCancel={this.resetConfirmation}
               needsRevised={needsRevised}
+              fromInbox={fromInbox}
             />
           }
         </div>
