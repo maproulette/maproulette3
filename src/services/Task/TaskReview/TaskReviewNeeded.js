@@ -13,7 +13,7 @@ import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
 
 // redux actions
-const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
+export const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
 
 // redux action creators
 
@@ -91,18 +91,14 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
 // redux reducers
 export const currentReviewNeededTasks = function(state={}, action) {
   if (action.type === RECEIVE_REVIEW_NEEDED_TASKS) {
-    // Only update the state if this represents either a later fetch
-    // of data or an update to the current data in the store.
     const currentFetch = parseInt(_get(state, 'fetchId', 0), 10)
 
     if (parseInt(action.fetchId, 10) >= currentFetch) {
       const updatedTasks = {
-        fetchId: action.fetchId,
+        fetchId: action.fetchId
       }
 
       if (action.status === RequestStatus.inProgress) {
-        // Don't overwrite old tasks for in-progress fetches, as they're probably
-        // still at least partially relevant as the user pans/zooms the map.
         updatedTasks.tasks = state.tasks
         updatedTasks.loading = true
         updatedTasks.totalCount = state.totalCount
@@ -113,7 +109,8 @@ export const currentReviewNeededTasks = function(state={}, action) {
         updatedTasks.totalCount = action.totalCount
       }
 
-      return updatedTasks
+      state.reviewNeeded = updatedTasks
+      return state
     }
     else {
       return state

@@ -13,8 +13,8 @@ import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
 
 // redux actions
-const RECEIVE_REVIEWED_TASKS = 'RECEIVE_REVIEWED_TASKS'
-const RECEIVE_REVIEWED_BY_USER_TASKS = 'RECEIVE_REVIEWED_BY_USER_TASKS'
+export const RECEIVE_REVIEWED_TASKS = 'RECEIVE_REVIEWED_TASKS'
+export const RECEIVE_REVIEWED_BY_USER_TASKS = 'RECEIVE_REVIEWED_BY_USER_TASKS'
 
 // redux action creators
 
@@ -101,7 +101,7 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
 // redux reducers
 export const currentReviewedByUserTasks = function(state={}, action) {
   if (action.type === RECEIVE_REVIEWED_BY_USER_TASKS) {
-    return updateReduxState(state, action)
+    return updateReduxState(state, action, "reviewed")
   }
   else {
     return state
@@ -110,26 +110,22 @@ export const currentReviewedByUserTasks = function(state={}, action) {
 
 export const currentReviewedTasks = function(state={}, action) {
   if (action.type === RECEIVE_REVIEWED_TASKS) {
-    return updateReduxState(state, action)
+    return updateReduxState(state, action, "reviewedByUser")
   }
   else {
     return state
   }
 }
 
-const updateReduxState = function(state={}, action) {
-  // Only update the state if this represents either a later fetch
-  // of data or an update to the current data in the store.
+const updateReduxState = function(state={}, action, listName) {
   const currentFetch = parseInt(_get(state, 'fetchId', 0), 10)
 
   if (parseInt(action.fetchId, 10) >= currentFetch) {
     const updatedTasks = {
-      fetchId: action.fetchId,
+      fetchId: action.fetchId
     }
 
     if (action.status === RequestStatus.inProgress) {
-      // Don't overwrite old tasks for in-progress fetches, as they're probably
-      // still at least partially relevant as the user pans/zooms the map.
       updatedTasks.tasks = state.tasks
       updatedTasks.loading = true
       updatedTasks.totalCount = state.totalCount
@@ -139,7 +135,9 @@ const updateReduxState = function(state={}, action) {
       updatedTasks.loading = false
       updatedTasks.totalCount = action.totalCount
     }
-    return updatedTasks
+
+    state[listName] = updatedTasks
+    return state
   }
   else {
     return state
