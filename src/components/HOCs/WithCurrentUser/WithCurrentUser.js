@@ -4,7 +4,9 @@ import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
 import { logoutUser,
+         fetchUser,
          loadCompleteUser,
+         loadUserSettings,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,
          updateUserSettings,
@@ -33,7 +35,7 @@ const WithCurrentUser =
   WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
 export const mapStateToProps = state => {
-  const props = {user: null}
+  const props = {user: null, allUsers: null}
 
   const userId = _get(state, 'currentUser.userId')
   const userEntity = _get(state, `entities.users.${userId}`)
@@ -49,12 +51,15 @@ export const mapStateToProps = state => {
     }
   }
 
+  props.allUsers = _get(state, "entities.users")
   return props
 }
 
 export const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
+    fetchUser,
     loadCompleteUser,
+    loadUserSettings,
     logoutUser,
     fetchSavedChallenges,
     saveChallenge,
