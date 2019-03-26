@@ -179,7 +179,7 @@ class Profile extends Component {
 
             <Form
               schema={jsSchema(this.props.intl, this.props.user)}
-              uiSchema={uiSchema(this.props.intl)}
+              uiSchema={uiSchema(this.props.intl, this.props.user)}
               widgets={{SelectWidget: CustomSelectWidget}}
               className="form form--2-col"
               liveValidate

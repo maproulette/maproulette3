@@ -146,8 +146,8 @@ export const jsSchema = (intl, user) => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = intl => {
-  return ({
+export const uiSchema = (intl, user) => {
+  const uiSchemaFields = {
     defaultEditor: {
       "ui:widget": "select",
       "ui:help": intl.formatMessage(messages.defaultEditorDescription),
@@ -182,5 +182,21 @@ export const uiSchema = intl => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.isReviewerDescription),
     },
-  })
+    "ui:order": [
+      "defaultEditor", "locale", "defaultBasemap", "leaderboardOptOut", "isReviewer",
+    ],
+  }
+
+  // Show 'needsReview' option if value is not REVIEW_MANDATORY or to superusers
+  if (AsManager(user).isSuperUser() || user.settings.needsReview !== needsReviewType.mandatory) {
+    uiSchemaFields["ui:order"].push("needsReview")
+    uiSchemaFields["ui:order"].push("notificationSubscriptions")
+    uiSchemaFields["ui:order"].push("email")
+  }
+  else {
+    uiSchemaFields["ui:order"].push("email")
+    uiSchemaFields["ui:order"].push("notificationSubscriptions")
+  }
+
+  return uiSchemaFields
 }
