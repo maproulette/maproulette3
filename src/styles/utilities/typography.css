@@ -6,9 +6,10 @@ h1,
     @apply mr-text-5xl;
   }
 }
+
 h2,
 .mr-h2 {
-  @apply mr-text-3xl mr-font-light mr-leading-tight mr-font-normal;
+  @apply mr-text-3xl mr-font-normal mr-leading-tight;
 
   @screen md {
     @apply mr-text-4xl;
@@ -31,10 +32,6 @@ h4,
   @screen md {
     @apply mr-text-lg;
   }
-}
-
-.mr-label, form.rjsf label.label {
-  @apply mr-font-medium mr-text-blue-light;
 }
 
 .mr-list-header {
@@ -65,4 +62,78 @@ h4,
 
 .mr-overflow-ellipsis {
   text-overflow: ellipsis;
+}
+
+.mr-markdown {
+  @apply mr-text-sm;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply mr-font-medium mr-leading-tight;
+  }
+
+  h1 {
+    @apply mr-text-xl;
+  }
+
+  h2 {
+    @apply mr-text-lg;
+  }
+
+  h3 {
+    @apply mr-text-md;
+  }
+
+  h4,
+  h5,
+  h6 {
+    @apply mr-text-base;
+  }
+
+  p,
+  ol,
+  ul,
+  pre {
+    @apply mr-my-2;
+  }
+
+  ol, ul {
+    @apply mr-ml-6;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  a {
+    @apply mr-text-green-lighter;
+
+    &:hover {
+      @apply mr-text-yellow;
+    }
+  }
+
+  &--longtext {
+    @apply mr-text-base;
+
+    p,
+    ol,
+    ul,
+    pre {
+      @apply mr-my-4;
+    }
+  }
+
+  &--light {
+    a {
+      @apply mr-text-blue-light mr-underline;
+
+      &:hover {
+        @apply mr-text-current;
+      }
+    }
+  }
 }
