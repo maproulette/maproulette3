@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
-import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _findIndex from 'lodash/findIndex'
 import parse from 'date-fns/parse'
@@ -33,7 +32,13 @@ const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
 export class ChallengeDetail extends Component {
   render() {
     const challenge = this.props.browsedChallenge
-    const loadingBrowsedChallenge = this.props.loadingBrowsedChallenge
+    if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
+      return (
+        <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 lg:mr-flex">
+          <BusySpinner />
+        </div>
+      )
+    }
 
     // Setup saved status and controls based on whether the user has saved this
     // challenge
@@ -113,10 +118,7 @@ export class ChallengeDetail extends Component {
         <div className="mr-flex-1 mr-flex mr-items-center">
           <div className="mr-flex-grow mr-max-w-md mr-mx-auto">
             <div className="mr-p-8">
-              {loadingBrowsedChallenge ? (
-                <BusySpinner />
-              ) : (
-                <>
+                <React.Fragment>
                   {(isSaved || challenge.featured || challenge.popular || challenge.newest) &&
                     <ul className="mr-card-challenge__taxonomy">
                       {isSaved &&
@@ -146,15 +148,15 @@ export class ChallengeDetail extends Component {
                   </h1>
 
                   {challenge.parent && // virtual challenges don't have projects
-                    <Link 
+                    <Link
                       className="mr-card-challenge__owner"
                       onClick={(e) => {e.stopPropagation()}}
                       to={`/project/${challenge.parent.id}/leaderboard`}
                     >
-                      {_get(this.props, 'challenge.parent.displayName')}
+                      {challenge.parent.displayName}
                     </Link>
                   }
-                  
+
                   <div className="mr-card-challenge__content">
                     {!challenge.isVirtual &&
                       <ol className="mr-card-challenge__meta">
@@ -193,7 +195,7 @@ export class ChallengeDetail extends Component {
 
                     <ul className="mr-card-challenge__actions">
                       {startControl &&
-                        <li> 
+                        <li>
                           {startControl}
                         </li>
                       }
@@ -208,9 +210,7 @@ export class ChallengeDetail extends Component {
                       }
                     </ul>
                   </div>
-
-                </>
-              )}
+                </React.Fragment>
             </div>
           </div>
         </div>
