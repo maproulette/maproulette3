@@ -79,20 +79,21 @@ export class TaskReviewTable extends Component {
 
     var subheader = <FormattedMessage {...messages.myReviewTasks} />
     var columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge,
-                   columnTypes.mappedOn, columnTypes.reviewedBy, columnTypes.status,
-                   columnTypes.mapperControls, columnTypes.viewComments]
+                   columnTypes.mappedOn, columnTypes.reviewedBy, columnTypes.reviewedAt,
+                   columnTypes.status, columnTypes.mapperControls, columnTypes.viewComments]
 
     if (this.props.asReviewer) {
       subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
-      columns = [columnTypes.id, columnTypes.reviewRequestedBy,
-                 columnTypes.challenge, columnTypes.mappedOn, columnTypes.status,
-                 columnTypes.reviewerControls, columnTypes.viewComments]
+      columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
+                 columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedBy,
+                 columnTypes.reviewedAt, columnTypes.status, columnTypes.reviewerControls,
+                 columnTypes.viewComments]
 
       if (this.props.showReviewedByMe) {
         subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
         columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.mappedOn, columnTypes.status,
-                   columnTypes.reviewCompleteControls, columnTypes.viewComments]
+                   columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedAt,
+                   columnTypes.status, columnTypes.reviewCompleteControls, columnTypes.viewComments]
       }
     }
 
@@ -238,6 +239,23 @@ const setupColumnTypes = (props, openComments, data, tableState) => {
     sortable: true,
     defaultSortDesc: false,
     exportable: t => t.mappedOn,
+    maxWidth: 180,
+    Cell: props => (
+      props.value &&
+        <span>
+          <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
+        </span>
+
+    )
+  }
+
+  columns.reviewedAt = {
+    id: 'reviewedAt',
+    Header: props.intl.formatMessage(messages.reviewedAtLabel),
+    accessor: 'reviewedAt',
+    sortable: true,
+    defaultSortDesc: false,
+    exportable: t => t.reviewedAt,
     maxWidth: 180,
     Cell: props => (
       props.value &&
