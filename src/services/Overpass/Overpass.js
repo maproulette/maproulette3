@@ -1,7 +1,7 @@
 import addMinutes from 'date-fns/add_minutes'
 import isAfter from 'date-fns/is_after'
 import format from 'date-fns/format'
-import { JOSM, isJosmEditor, sendJOSMCommand } from '../Editor/Editor'
+import { isJosmEditor, sendJOSMCommand } from '../Editor/Editor'
 import _get from 'lodash/get'
 
 /**
