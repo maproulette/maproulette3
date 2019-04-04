@@ -58,16 +58,8 @@
   }
 
   &__description {
-    @apply mr-text-base mr-mb-4 mr-max-h-48 mr-overflow-auto mr-scrolling-touch mr-break-words;
+    @apply mr-text-base mr-my-4 mr-max-h-48 mr-overflow-auto mr-scrolling-touch mr-break-words;
     word-break: break-word;
-
-
-    p,
-    ol,
-    ul,
-    pre {
-      @apply mr-my-2;
-    }
   }
 
   &__actions {

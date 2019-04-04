@@ -79,8 +79,8 @@ export class App extends Component {
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
             <CachedRoute exact path='/' component={Home} />
-            <CachedRoute path='/browse/challenges/:challengeId?' component={ChallengePane} />
-            <CachedRoute path='/browse/challenge/:challengeId?' component={ChallengeDetail} />
+            <CachedRoute exact path='/browse/challenges' component={ChallengePane} />
+            <CachedRoute path='/browse/challenges/:challengeId' component={ChallengeDetail} />
             <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
             <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />

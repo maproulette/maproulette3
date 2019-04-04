@@ -71,7 +71,7 @@ let colors = {
   pink: '#E87CE0',
   'pink-light': '#FFB2F0',
   twitter: '#1DA1F2',
-  orange: '#ED9F22',
+  orange: '#f7bb59',
   red: '#CA484C',
   'red-light': '#E05054',
   purple: '#8990E5',

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
 import _isObject from 'lodash/isObject'
+import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
 import parse from 'date-fns/parse'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
@@ -34,7 +35,7 @@ export class ChallengeDetail extends Component {
     const challenge = this.props.browsedChallenge
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
       return (
-        <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 lg:mr-flex">
+        <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 mr-items-center mr-justify-center lg:mr-flex mr-text-center mr-py-8">
           <BusySpinner />
         </div>
       )
@@ -118,99 +119,102 @@ export class ChallengeDetail extends Component {
         <div className="mr-flex-1 mr-flex mr-items-center">
           <div className="mr-flex-grow mr-max-w-md mr-mx-auto">
             <div className="mr-p-8">
-                <React.Fragment>
-                  {(isSaved || challenge.featured || challenge.popular || challenge.newest) &&
-                    <ul className="mr-card-challenge__taxonomy">
-                      {isSaved &&
-                        <li>
-                          <span className="mr-text-pink-light">Saved</span>
-                        </li>
-                      }
-                      {challenge.featured &&
-                        <li>
-                          <span className="mr-text-turquoise">Featured</span>
-                        </li>
-                      }
-                      {challenge.popular &&
-                        <li>
-                          <span className="mr-text-orange">Popular</span>
-                        </li>
-                      }
-                      {challenge.newest &&
-                        <li>
-                          <span className="mr-text-yellow">Newest</span>
-                        </li>
-                      }
-                    </ul>
-                  }
-                  <h1 className="mr-card-challenge__title">
-                    {challenge.name}
-                  </h1>
-
-                  {challenge.parent && // virtual challenges don't have projects
-                    <Link
-                      className="mr-card-challenge__owner"
-                      onClick={(e) => {e.stopPropagation()}}
-                      to={`/project/${challenge.parent.id}/leaderboard`}
-                    >
-                      {challenge.parent.displayName}
-                    </Link>
-                  }
-
-                  <div className="mr-card-challenge__content">
-                    {!challenge.isVirtual &&
-                      <ol className="mr-card-challenge__meta">
-                        <li>
-                          <strong className="mr-text-yellow">
-                            <FormattedMessage {...messages.difficulty} />:
-                          </strong> <FormattedMessage
-                            {...messagesByDifficulty[challenge.difficulty]}
-                          />
-                        </li>
-                        <li>
-                          <strong className="mr-text-yellow">
-                            <FormattedMessage {...messages.lastTaskRefreshLabel} />:
-                          </strong> <FormattedRelative
-                            value={parse(challenge.lastTaskRefresh)}
-                          />
-                        </li>
-                        <li>
-                          <Link
-                            className="mr-text-green-lighter hover:mr-text-white"
-                            to={`/challenge/${challenge.id}/leaderboard`}
-                          >
-                            <FormattedMessage {...messages.viewLeaderboard} />
-                          </Link>
-                        </li>
-                      </ol>
-                    }
-
-                    <div className="mr-card-challenge__description">
-                      <MarkdownContent
-                        markdown={challenge.description || challenge.blurb}
-                      />
-                    </div>
-
-                    <ChallengeProgress className="mr-mt-4 mr-mb-12" challenge={challenge} />
-
-                    <ul className="mr-card-challenge__actions">
-                      {startControl &&
-                        <li>
-                          {startControl}
-                        </li>
-                      }
-                      {(saveControl || unsaveControl) &&
-                        <li>
-                          {saveControl}
-                          {unsaveControl}
-                        </li>
-                      }
-                      {manageControl &&
-                        <li>{manageControl}</li>
-                      }
-                    </ul>
+                {_get(this.props, 'history.location.state.fromSearch') && (
+                  <div class="mr-mb-4">        
+                    <button className="mr-text-green-lighter mr-text-sm hover:mr-text-white" onClick={() => this.props.history.goBack()}>&larr; Go Back</button>
                   </div>
-                </React.Fragment>
+                )}
+                {(isSaved || challenge.featured || challenge.popular || challenge.newest) &&
+                  <ul className="mr-card-challenge__taxonomy">
+                    {isSaved &&
+                      <li>
+                        <span className="mr-text-pink-light">Saved</span>
+                      </li>
+                    }
+                    {challenge.featured &&
+                      <li>
+                        <span className="mr-text-turquoise">Featured</span>
+                      </li>
+                    }
+                    {challenge.popular &&
+                      <li>
+                        <span className="mr-text-orange">Popular</span>
+                      </li>
+                    }
+                    {challenge.newest &&
+                      <li>
+                        <span className="mr-text-yellow">Newest</span>
+                      </li>
+                    }
+                  </ul>
+                }
+                <h1 className="mr-card-challenge__title">
+                  {challenge.name}
+                </h1>
+
+                {challenge.parent && // virtual challenges don't have projects
+                  <Link
+                    className="mr-card-challenge__owner"
+                    onClick={(e) => {e.stopPropagation()}}
+                    to={`/project/${challenge.parent.id}/leaderboard`}
+                  >
+                    {challenge.parent.displayName}
+                  </Link>
+                }
+
+                <div className="mr-card-challenge__content">
+                  {!challenge.isVirtual &&
+                    <ol className="mr-card-challenge__meta">
+                      <li>
+                        <strong className="mr-text-yellow">
+                          <FormattedMessage {...messages.difficulty} />:
+                        </strong> <FormattedMessage
+                          {...messagesByDifficulty[challenge.difficulty]}
+                        />
+                      </li>
+                      <li>
+                        <strong className="mr-text-yellow">
+                          <FormattedMessage {...messages.lastTaskRefreshLabel} />:
+                        </strong> <FormattedRelative
+                          value={parse(challenge.lastTaskRefresh)}
+                        />
+                      </li>
+                      <li>
+                        <Link
+                          className="mr-text-green-lighter hover:mr-text-white"
+                          to={`/challenge/${challenge.id}/leaderboard`}
+                        >
+                          <FormattedMessage {...messages.viewLeaderboard} />
+                        </Link>
+                      </li>
+                    </ol>
+                  }
+
+                  <div className="mr-card-challenge__description">
+                    <MarkdownContent
+                      markdown={challenge.description || challenge.blurb}
+                    />
+                  </div>
+
+                  <ChallengeProgress className="mr-mt-4 mr-mb-12" challenge={challenge} />
+
+                  <ul className="mr-card-challenge__actions">
+                    {startControl &&
+                      <li>
+                        {startControl}
+                      </li>
+                    }
+                    {(saveControl || unsaveControl) &&
+                      <li>
+                        {saveControl}
+                        {unsaveControl}
+                      </li>
+                    }
+                    {manageControl &&
+                      <li>{manageControl}</li>
+                    }
+                  </ul>
+                </div>
             </div>
           </div>
         </div>

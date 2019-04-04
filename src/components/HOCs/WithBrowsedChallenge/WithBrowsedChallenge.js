@@ -158,7 +158,9 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
         this.props.history.push(`/browse/virtual/${challenge.id}`)
       }
       else {
-        this.props.history.push(`/browse/challenges/${challenge.id}`)
+        this.props.history.push(`/browse/challenges/${challenge.id}`, {
+          fromSearch: true,
+        })
       }
     }
 
