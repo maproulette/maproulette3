@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import MediaQuery from 'react-responsive'
-import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
 import WithWidgetWorkspaces
        from '../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
+import AsManager from '../../interactions/User/AsManager'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
@@ -92,13 +92,20 @@ export class TaskPane extends Component {
   }
 
   render() {
-    if (!_isFinite(_get(this.props, 'task.id'))) {
+    if (!_get(this.props, 'task.parent.parent')) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
         </div>
       )
     }
+
+    const taskInspectRoute =
+      `/admin/project/${this.props.task.parent.parent.id}/` +
+      `challenge/${this.props.task.parent.id}/task/${this.props.task.id}/inspect`
+
+    const isManageable =
+      AsManager(this.props.user).canManageChallenge(_get(this.props, 'task.parent'))
 
     return (
       <div className='task-pane'>
@@ -121,6 +128,14 @@ export class TaskPane extends Component {
                 <li className="mr-links-green-lighter">
                   <OwnerContactLink {...this.props} />
                 </li>
+
+                {isManageable && !this.props.inspectTask && (
+                  <li>
+                    <button className="mr-text-current" onClick={() => this.props.history.push(taskInspectRoute)}>
+                      Inspect
+                    </button>
+                  </li>
+                )}
               </ul>
             }
             completeTask={this.completeTask}
