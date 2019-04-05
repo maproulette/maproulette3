@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
@@ -19,6 +20,7 @@ import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
+import messages from './Messages'
 import './TaskPane.scss'
 
 // Setup child components with necessary HOCs
@@ -131,8 +133,8 @@ export class TaskPane extends Component {
 
                 {isManageable && !this.props.inspectTask && (
                   <li>
-                    <button className="mr-text-current" onClick={() => this.props.history.push(taskInspectRoute)}>
-                      Inspect
+                    <button className="mr-transition mr-text-current hover:mr-text-green-lighter" onClick={() => this.props.history.push(taskInspectRoute)}>
+                      <FormattedMessage {...messages.inspectLabel} />
                     </button>
                   </li>
                 )}
@@ -164,7 +166,7 @@ TaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    TaskPane,
+    injectIntl(TaskPane),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup
