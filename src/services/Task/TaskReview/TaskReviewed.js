@@ -6,7 +6,6 @@ import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
-import _isArray from 'lodash/isArray'
 import _uniqueId from 'lodash/uniqueId'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
@@ -95,51 +94,5 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       console.log(error.response || error)
     })
-  }
-}
-
-// redux reducers
-export const currentReviewedByUserTasks = function(state={}, action) {
-  if (action.type === RECEIVE_REVIEWED_BY_USER_TASKS) {
-    return updateReduxState(state, action, "reviewed")
-  }
-  else {
-    return state
-  }
-}
-
-export const currentReviewedTasks = function(state={}, action) {
-  if (action.type === RECEIVE_REVIEWED_TASKS) {
-    return updateReduxState(state, action, "reviewedByUser")
-  }
-  else {
-    return state
-  }
-}
-
-const updateReduxState = function(state={}, action, listName) {
-  const currentFetch = parseInt(_get(state, 'fetchId', 0), 10)
-
-  if (parseInt(action.fetchId, 10) >= currentFetch) {
-    const updatedTasks = {
-      fetchId: action.fetchId
-    }
-
-    if (action.status === RequestStatus.inProgress) {
-      updatedTasks.tasks = state.tasks
-      updatedTasks.loading = true
-      updatedTasks.totalCount = state.totalCount
-    }
-    else {
-      updatedTasks.tasks = _isArray(action.tasks) ? action.tasks : []
-      updatedTasks.loading = false
-      updatedTasks.totalCount = action.totalCount
-    }
-
-    state[listName] = updatedTasks
-    return state
-  }
-  else {
-    return state
   }
 }

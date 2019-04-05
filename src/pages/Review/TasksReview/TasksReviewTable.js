@@ -37,7 +37,7 @@ export class TaskReviewTable extends Component {
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
 
   updateTasks(tableState, instance) {
-    this.setState({loading: true, pageSize: tableState.pageSize})
+    this.setState({pageSize: tableState.pageSize})
 
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,
@@ -49,7 +49,7 @@ export class TaskReviewTable extends Component {
 
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page},
                                   tableState.pageSize).then(() => {
-      this.setState({loading: false,
+      this.setState({
         tableState: {sortBy: sortCriteria.sortBy,
                      direction: sortCriteria.direction,
                      filters: filters}})
@@ -107,15 +107,9 @@ export class TaskReviewTable extends Component {
               </h1>
             </div>
             <div>
-              {!this.props.loading && this.props.asReviewer && !this.props.showReviewedByMe && data.length > 0 &&
+              {this.props.asReviewer && !this.props.showReviewedByMe && data.length > 0 &&
                 <button className="mr-button mr-button-small mr-button--green mr-mr-4" onClick={() => this.startReviewing()}>
                   <FormattedMessage {...messages.startReviewing} />
-                </button>
-              }
-              {this.props.loading ?
-                <BusySpinner/> :
-                <button className="mr-button mr-button-small mr-button--green" onClick={() => this.refresh()}>
-                  <FormattedMessage {...messages.refresh} />
                 </button>
               }
             </div>
@@ -130,7 +124,6 @@ export class TaskReviewTable extends Component {
                         noDataText={<FormattedMessage {...messages.noTasks} />}
                         pages={totalPages}
                         onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
-                        loading={this.props.loading}
             />
           </div>
         </div>
@@ -355,6 +348,7 @@ const setupColumnTypes = (props, openComments, data, tableState) => {
     id: 'viewComments',
     Header: () => <FormattedMessage {...messages.commentsColumnHeader} />,
     accessor: 'commentID',
+    sortable: false,
     maxWidth: 110,
     Cell: props =>
       <ViewCommentsButton onClick={() => openComments(props.row.id)} />,
