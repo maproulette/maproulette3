@@ -141,7 +141,7 @@ export class RebuildTasksControl extends Component {
   }
 }
 
-RebuildTasksControl.proptypes = {
+RebuildTasksControl.propTypes = {
   challenge: PropTypes.object.isRequired,
   rebuildChallenge: PropTypes.func.isRequired,
 }
