@@ -1,7 +1,7 @@
 import addMinutes from 'date-fns/add_minutes'
 import isAfter from 'date-fns/is_after'
 import format from 'date-fns/format'
-import { JOSM, sendJOSMCommand } from '../Editor/Editor'
+import { isJosmEditor, sendJOSMCommand } from '../Editor/Editor'
 import _get from 'lodash/get'
 
 /**
@@ -18,7 +18,7 @@ export const viewAtticOverpass = (selectedEditor, actionDate, actionBBox) => {
 
   // Try sending to JOSM if it's user's chosen editor, otherwise Overpass Turbo.
   var overpassApiURL = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
-  if (selectedEditor === JOSM) {
+  if (isJosmEditor(selectedEditor)) {
     sendJOSMCommand('http://127.0.0.1:8111/import?new_layer=true&layer_name=' +
                      adjustedDateString + '&layer_locked=true&url=' +
                      encodeURIComponent(overpassApiURL)
