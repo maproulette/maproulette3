@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import _get from 'lodash/get'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus, messagesByStatus }
@@ -14,7 +15,6 @@ import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/Ta
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import TaskConfirmationModal from '../TaskConfirmationModal/TaskConfirmationModal'
-import queryString from 'query-string'
 import messages from './Messages'
 import './ReviewTaskControls.scss'
 
@@ -123,7 +123,7 @@ export class ReviewTaskControls extends Component {
       )
     }
 
-    const fromInbox = queryString.parse(this.props.history.location.search)["fromInbox"]
+    const fromInbox = _get(this.props.history, 'location.state.fromInbox')
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>

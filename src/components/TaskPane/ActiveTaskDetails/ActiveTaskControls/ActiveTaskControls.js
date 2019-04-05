@@ -5,7 +5,6 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
-import queryString from 'query-string'
 import { allowedStatusProgressions, isCompletionStatus,
          isFinalStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -153,7 +152,7 @@ export class ActiveTaskControls extends Component {
       _get(this.props, 'editor.taskId') !== this.props.task.id &&
            this.state.taskBeingCompleted === this.props.task.id
 
-    const fromInbox = queryString.parse(this.props.history.location.search)["fromInbox"]
+    const fromInbox = _get(this.props.history, 'location.state.fromInbox')
 
     if (editorLoading) {
       return <BusySpinner />
