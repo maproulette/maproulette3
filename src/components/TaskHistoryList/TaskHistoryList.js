@@ -135,7 +135,7 @@ export default class TaskHistoryList extends Component {
               </div>
               {!this.props.selectDiffs &&
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.task.calculateBBox())}>
+                <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.mapBounds.bounds)}>
                   <FormattedMessage {...messages.viewAtticLabel} />
                 </a>
               }
