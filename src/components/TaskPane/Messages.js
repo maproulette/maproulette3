@@ -1,11 +1,11 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with TaskManagementControls.
+ * Internationalized messages for use with TaskPane.
  */
 export default defineMessages({
   inspectLabel: {
-    id: "Task.management.controls.inspect.label",
+    id: "Task.pane.controls.inspect.label",
     defaultMessage: "Inspect",
   },
 })
