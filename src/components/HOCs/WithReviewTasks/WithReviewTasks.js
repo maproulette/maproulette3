@@ -98,7 +98,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   startNextReviewTask: (sortBy, direction, filters, url) => {
     dispatch(loadNextReviewTask({sortCriteria: {sortBy, direction}, filters})).then((task) => {
-      url.push(`/challenge/${task.parentId}/task/${task.id}/review`)
+      url.push(`/challenge/${task.parent}/task/${task.id}/review`)
     }).catch(error => {
       console.log(error)
       dispatch(addError(AppErrors.reviewTask.fetchFailure))

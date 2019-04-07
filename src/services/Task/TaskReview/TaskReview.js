@@ -1,9 +1,6 @@
-import { RECEIVE_REVIEW_NEEDED_TASKS,
-         currentReviewNeededTasks } from './TaskReviewNeeded'
+import { RECEIVE_REVIEW_NEEDED_TASKS } from './TaskReviewNeeded'
 import { RECEIVE_REVIEWED_TASKS,
-         RECEIVE_REVIEWED_BY_USER_TASKS,
-         currentReviewedTasks,
-         currentReviewedByUserTasks } from './TaskReviewed'
+         RECEIVE_REVIEWED_BY_USER_TASKS } from './TaskReviewed'
 
 import _get from 'lodash/get'
 import _isArray from 'lodash/isArray'

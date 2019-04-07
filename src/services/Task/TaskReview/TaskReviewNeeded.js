@@ -10,6 +10,7 @@ import _uniqueId from 'lodash/uniqueId'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
+import format from 'date-fns/format'
 
 // redux actions
 export const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
@@ -56,6 +57,10 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
   }
   if (filters.status && filters.status !== "all") {
     searchParameters.tStatus = filters.status
+  }
+  if (filters.reviewedAt) {
+    searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
+    searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
   }
 
   return function(dispatch) {

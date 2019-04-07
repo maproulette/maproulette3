@@ -7,7 +7,6 @@ import _each from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
 import _debounce from 'lodash/debounce'
-import BusySpinner from '../../../components/BusySpinner/BusySpinner'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
@@ -15,6 +14,7 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
+import IntlDatePicker from '../../../components/IntlDatePicker/IntlDatePicker'
 import messages from './Messages'
 
 import { Link } from 'react-router-dom'
@@ -73,7 +73,10 @@ export class TaskReviewTable extends Component {
   render() {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'reviewTasks', [])
-    const columnTypes = setupColumnTypes(this.props, taskId => this.setState({openComments: taskId}), data, this.state.tableState)
+    const columnTypes = setupColumnTypes(this.props,
+                           taskId => this.setState({openComments: taskId}),
+                           (id, value) => this.setState({filtered: [{id: id, value: value}]}),
+                           data, this.state.tableState)
     const pageSize = this.state.pageSize || this.props.defaultPageSize
     const totalPages = Math.ceil(_get(this.props, 'totalCount', 0) / pageSize)
 
@@ -124,6 +127,16 @@ export class TaskReviewTable extends Component {
                         noDataText={<FormattedMessage {...messages.noTasks} />}
                         pages={totalPages}
                         onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+                        getTheadFilterThProps={(state, rowInfo, column) => {
+                          return {style: {position: "inherit", overflow: "inherit"}}}
+                        }
+                        filtered={this.state.filtered}
+                        onFilteredChange={filtered => {
+                          this.setState({ filtered })
+                          if (this.fetchData) {
+                            this.fetchData()
+                          }
+                        }}
             />
           </div>
         </div>
@@ -138,7 +151,7 @@ export class TaskReviewTable extends Component {
   }
 }
 
-const setupColumnTypes = (props, openComments, data, tableState) => {
+const setupColumnTypes = (props, openComments, setFiltered, data, tableState) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -247,16 +260,28 @@ const setupColumnTypes = (props, openComments, data, tableState) => {
     Header: props.intl.formatMessage(messages.reviewedAtLabel),
     accessor: 'reviewedAt',
     sortable: true,
+    filterable: true,
     defaultSortDesc: false,
     exportable: t => t.reviewedAt,
-    maxWidth: 180,
+    minWidth: 180,
+    maxWidth: 200,
     Cell: props => (
       props.value &&
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
 
-    )
+    ),
+    Filter: ({ filter, onChange }) =>
+      <div>
+        <IntlDatePicker
+            selected={_get(tableState, 'filters.reviewedAt')}
+            onChange={(value) => {
+              setFiltered("reviewedAt", value)
+            }}
+            intl={props.intl}
+        />
+      </div>,
   }
 
   columns.reviewedBy = {
