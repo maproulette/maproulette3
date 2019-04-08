@@ -2,25 +2,17 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
-import _debounce from 'lodash/debounce'
 import { logoutUser,
          fetchUser,
          loadCompleteUser,
-         loadUserSettings,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,
-         updateUserSettings,
-         updateUserAppSetting,
-         updateNotificationSubscriptions,
          fetchTopChallenges,
          fetchSavedChallenges,
          fetchSavedTasks,
          fetchUserActivity,
-         resetAPIKey,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../interactions/User/AsEndUser'
-
-const APP_ID = "mr3Frontend"
 
 /**
  * WithCurrentUser passes down the current user from the redux store.  If the
@@ -59,7 +51,6 @@ export const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
     fetchUser,
     loadCompleteUser,
-    loadUserSettings,
     logoutUser,
     fetchSavedChallenges,
     saveChallenge,
@@ -67,20 +58,9 @@ export const mapDispatchToProps = dispatch => {
     fetchSavedTasks,
     saveTask,
     unsaveTask,
-    updateUserSettings,
-    updateNotificationSubscriptions,
     fetchTopChallenges,
     fetchUserActivity,
-    resetAPIKey,
   }, dispatch)
-
-  actions.updateUserAppSetting = _debounce((userId, setting) => {
-    return dispatch(updateUserAppSetting(userId, APP_ID, setting))
-  }, 100)
-
-  actions.getUserAppSetting = (user, settingName) => {
-    return _get(user, `properties.${APP_ID}.settings.${settingName}`)
-  }
 
   return actions
 }

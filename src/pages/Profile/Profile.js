@@ -2,53 +2,18 @@ import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate, injectIntl }
        from 'react-intl'
 import _get from 'lodash/get'
-import _find from 'lodash/find'
-import _toNumber from 'lodash/toNumber'
 import UserSettings from './UserSettings/UserSettings'
-import AsManager from '../../interactions/User/AsManager'
-import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
+import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
 import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import ApiKey from './ApiKey'
 import messages from './Messages'
 
 class Profile extends Component {
-  state = {
-    showingUserId: null,
-  }
-
   componentDidMount() {
     // Make sure our user is logged in
     if (_get(this.props, 'user.isLoggedIn')) {
       this.props.fetchUser(this.props.user.id)
-    }
-
-    // If there is a user id on the url then we want to show
-    // that user instead (but only if our current user is a super user)
-    if (this.props.match.params.userId) {
-      if (AsManager(this.props.user).isSuperUser()) {
-        this.props.loadUserSettings(this.props.match.params.userId).then(() => {
-          this.setState({loading: false})
-        })
-        this.setState({showingUserId: this.props.match.params.userId, loading: true})
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.match.params.userId && !this.state.showingUserId) {
-      if (AsManager(this.props.user).isSuperUser()) {
-        this.props.loadUserSettings(this.props.match.params.userId).then(() => {
-          this.setState({loading: false})
-        })
-        this.setState({showingUserId: this.props.match.params.userId, loading: true})
-      }
-    }
-
-    if (this.props.user && this.props.user.id !== _get(prevProps, 'user.id')) {
-      if (this.props.user.isLoggedIn) {
-        this.props.fetchUser(this.props.user.id)
-      }
     }
   }
 
@@ -64,28 +29,14 @@ class Profile extends Component {
       )
     }
 
-    var user = this.props.user
+    let user = this.props.user
 
-    if (this.state.showingUserId) {
-      user = _find(this.props.allUsers, (user) => {
-        return user.id === _toNumber(this.state.showingUserId)
-      })
-
-      if (!user) {
-        user = _find(this.props.allUsers, (user) => {
-          return _get(user, 'osmProfile.id') === _toNumber(this.state.showingUserId)
-        })
-      }
-
-      if (!user) {
-        user = _find(this.props.allUsers, (user) => {
-          return _get(user, 'osmProfile.displayName') === this.state.showingUserId
-        })
-      }
+    if (this.props.showingUserId) {
+      user = this.props.targetUser
 
       // If no user then we are still loading
       if (!user) {
-        if (this.state.loading) {
+        if (this.props.loading) {
           return (
             <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
               <BusySpinner />
@@ -94,7 +45,13 @@ class Profile extends Component {
         }
         else {
           // User supplied was not found so we will user our current user
-          user = this.props.user
+          return (
+            <div className="">
+              <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
+                <h2><FormattedMessage {...messages.userNotFound} /></h2>
+              </div>
+            </div>
+          )
         }
       }
     }
@@ -129,4 +86,4 @@ class Profile extends Component {
   }
 }
 
-export default WithCurrentUser(injectIntl(Profile))
+export default WithTargetUser(injectIntl(Profile))
