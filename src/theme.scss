@@ -383,27 +383,6 @@ code {
   @media(max-width: $app-mobile-break) {
     height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
   }
-
-  .progress-status {
-    flex-basis: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    &__title {
-      color: $primary;
-    }
-
-    &__description {
-      font-size: $size-3;
-      color: $grey-darkest;
-    }
-  }
-
-  .busy-spinner {
-    @include busy-spinner-color($primary);
-    flex: auto;
-  }
 }
 
 // Add a short-and-wide variant of the rounded Bulma switch

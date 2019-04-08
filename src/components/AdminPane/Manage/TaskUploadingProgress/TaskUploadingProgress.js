@@ -22,21 +22,23 @@ export default class TaskUploadingProgress extends Component {
     // Show a message and busy spinner. If we also have completion/progress
     // data, then show that too.
     return (
-      <div className="pane-loading full-screen-height">
-        <div className="progress-status">
-          <h1 className="progress-status__title">
-            <FormattedMessage {...messages.creatingTasks} />
-          </h1>
+      <div className="mr-flex mr-justify-center mr-min-h-screen-50 mr-m-12">
+        <div className="mr-bg-blue-dark-75 mr-w-3/4 mr-p-4 mr-flex mr-items-center mr-justify-center mr-text-center">
+          <div className="mr-flex-col mr-items-center mr-text-center">
+            <div className="mr-text-yellow mr-text-4xl mr-mb-4">
+              <FormattedMessage {...messages.creatingTasks} />
+            </div>
 
-          <div className="progress-status__description">
-            {_isFinite(this.props.progress.creatingTasks.stepsCompleted) &&
-              <React.Fragment>
-                {
-                  this.props.progress.creatingTasks.stepsCompleted
-                } <FormattedMessage {...messages.tasksCreated} />
-              </React.Fragment>
-            }
-            <BusySpinner />
+            <div className="mr-white mr-text-lg">
+              {_isFinite(this.props.progress.creatingTasks.stepsCompleted) &&
+                <React.Fragment>
+                  {
+                    this.props.progress.creatingTasks.stepsCompleted
+                  } <FormattedMessage {...messages.tasksCreated} />
+                </React.Fragment>
+              }
+              <BusySpinner className="mr-mt-4" />
+            </div>
           </div>
         </div>
       </div>
