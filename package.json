@@ -38,6 +38,7 @@
     "react-calendar-heatmap": "^1.6.3",
     "react-clickout": "^3.0.8",
     "react-copy-to-clipboard": "^5.0.1",
+    "react-datepicker": "^2.3.0",
     "react-delayed": "^0.2.0",
     "react-dom": "^16.0.0",
     "react-dom-confetti": "^0.0.10",

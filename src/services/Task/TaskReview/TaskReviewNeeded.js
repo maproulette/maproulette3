@@ -6,11 +6,11 @@ import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
-import _isArray from 'lodash/isArray'
 import _uniqueId from 'lodash/uniqueId'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
+import format from 'date-fns/format'
 
 // redux actions
 export const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
@@ -58,6 +58,10 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
   if (filters.status && filters.status !== "all") {
     searchParameters.tStatus = filters.status
   }
+  if (filters.reviewedAt) {
+    searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
+    searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
+  }
 
   return function(dispatch) {
     const fetchId = _uniqueId()
@@ -85,38 +89,5 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       console.log(error.response || error)
     })
-  }
-}
-
-// redux reducers
-export const currentReviewNeededTasks = function(state={}, action) {
-  if (action.type === RECEIVE_REVIEW_NEEDED_TASKS) {
-    const currentFetch = parseInt(_get(state, 'fetchId', 0), 10)
-
-    if (parseInt(action.fetchId, 10) >= currentFetch) {
-      const updatedTasks = {
-        fetchId: action.fetchId
-      }
-
-      if (action.status === RequestStatus.inProgress) {
-        updatedTasks.tasks = state.tasks
-        updatedTasks.loading = true
-        updatedTasks.totalCount = state.totalCount
-      }
-      else {
-        updatedTasks.tasks = _isArray(action.tasks) ? action.tasks : []
-        updatedTasks.loading = false
-        updatedTasks.totalCount = action.totalCount
-      }
-
-      state.reviewNeeded = updatedTasks
-      return state
-    }
-    else {
-      return state
-    }
-  }
-  else {
-    return state
   }
 }

@@ -89,6 +89,11 @@ export default defineMessages({
     defaultMessage: "Mapped On",
   },
 
+  reviewedAtLabel: {
+    id: "Review.fields.reviewedAt.label",
+    defaultMessage: "Reviewed On",
+  },
+
   reviewTaskLabel: {
     id: "Review.TaskAnalysisTable.controls.reviewTask.label",
     defaultMessage: "Review",
