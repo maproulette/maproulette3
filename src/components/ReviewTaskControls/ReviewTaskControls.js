@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import _get from 'lodash/get'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus, messagesByStatus }
@@ -122,6 +123,8 @@ export class ReviewTaskControls extends Component {
       )
     }
 
+    const fromInbox = _get(this.props.history, 'location.state.fromInbox')
+
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
         <div className="mr-text-sm mr-text-white mr-mt-4 mr-whitespace-no-wrap">
@@ -178,6 +181,7 @@ export class ReviewTaskControls extends Component {
             chooseLoadBy={this.chooseLoadBy}
             loadBy={this.state.loadBy}
             inReview={true}
+            fromInbox={fromInbox}
           />
         }
       </div>

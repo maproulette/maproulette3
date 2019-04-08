@@ -126,7 +126,48 @@ export class TaskConfirmationModal extends Component {
                   <label className="mr-mr-4">
                     <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
                   </label>
+                  { this.props.fromInbox &&
+                    <React.Fragment>
+                      <input
+                        type="radio"
+                        name="loadReviewPreference"
+                        className="mr-mr-1"
+                        checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                        onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                      />
+                      <label className="mr-mr-4">
+                        <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
+                      </label>
+                    </React.Fragment>
+                  }
+                  <input
+                    type="radio"
+                    name="loadReviewPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                  />
+                  <label>
+                    <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
+                  </label>
+                </div>
+              }
 
+              { reviewConfirmation && this.props.needsRevised && this.props.fromInbox &&
+                <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
+                  <span className="mr-mr-4">
+                    <FormattedMessage {...messages.loadNextReviewLabel} />
+                  </span>
+                  <input
+                    type="radio"
+                    name="loadReviewPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                  />
+                  <label className="mr-mr-4">
+                    <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
+                  </label>
                   <input
                     type="radio"
                     name="loadReviewPreference"
