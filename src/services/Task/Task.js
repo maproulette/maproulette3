@@ -1,14 +1,4 @@
 import { schema } from 'normalizr'
-import { defaultRoutes as api, isSecurityError } from '../Server/Server'
-import Endpoint from '../Server/Endpoint'
-import RequestStatus from '../Server/RequestStatus'
-import genericEntityReducer from '../Server/GenericEntityReducer'
-import { challengeSchema } from '../Challenge/Challenge'
-import { placeSchema, fetchPlace } from '../Place/Place'
-import { commentSchema, receiveComments } from '../Comment/Comment'
-import { addServerError, addError } from '../Error/Error'
-import AppErrors from '../Error/AppErrors'
-import { ensureUserLoggedIn } from '../User/User'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -22,6 +12,17 @@ import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
 import _snakeCase from 'lodash/snakeCase'
+import { defaultRoutes as api, isSecurityError, websocketClient } from '../Server/Server'
+import Endpoint from '../Server/Endpoint'
+import RequestStatus from '../Server/RequestStatus'
+import genericEntityReducer from '../Server/GenericEntityReducer'
+import { challengeSchema } from '../Challenge/Challenge'
+import { placeSchema, fetchPlace } from '../Place/Place'
+import { commentSchema, receiveComments } from '../Comment/Comment'
+import { addServerError, addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
+import { ensureUserLoggedIn } from '../User/User'
+import { markReviewDataStale } from './TaskReview/TaskReview'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -39,6 +40,31 @@ export const taskDenormalizationSchema = function() {
     comments: [ commentSchema() ]
   })
 }
+
+export const subscribeToReviewMessages = function(dispatch) {
+  websocketClient.addServerSubscription(
+    "reviews", null, "reviewMessageHandler",
+    messageObject => onReviewMessage(dispatch, messageObject)
+  )
+}
+
+export const unsubscribeFromReviewMessages = function() {
+  websocketClient.removeServerSubscription("reviews", null, "reviewMessageHandler")
+}
+
+const onReviewMessage = function(dispatch, messageObject) {
+  switch(messageObject.messageType) {
+    case "review-new":
+    case "review-claimed":
+    case "review-update":
+      // For now just mark the existing review data as stale
+      dispatch(markReviewDataStale())
+      break
+    default:
+      break // Ignore
+  }
+}
+
 
 // redux actions
 const RECEIVE_TASKS = 'RECEIVE_TASKS'

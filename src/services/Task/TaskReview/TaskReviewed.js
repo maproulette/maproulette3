@@ -89,7 +89,7 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
       }
 
       dispatch(receiveReviewedTasks(tasks,
-        asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS: RECEIVE_REVIEWED_TASKS,
+        asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS : RECEIVE_REVIEWED_TASKS,
         RequestStatus.success, fetchId, normalizedResults.result.total))
       return tasks
     }).catch((error) => {

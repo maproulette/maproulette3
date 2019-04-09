@@ -72,13 +72,13 @@ export class TaskReviewTable extends Component {
 
   render() {
     // Setup tasks table. See react-table docs for details.
-    const data = _get(this.props, 'reviewTasks', [])
+    const data = _get(this.props, 'reviewData.tasks', [])
     const columnTypes = setupColumnTypes(this.props,
                            taskId => this.setState({openComments: taskId}),
                            (id, value) => this.setState({filtered: [{id: id, value: value}]}),
                            data, this.state.tableState)
     const pageSize = this.state.pageSize || this.props.defaultPageSize
-    const totalPages = Math.ceil(_get(this.props, 'totalCount', 0) / pageSize)
+    const totalPages = Math.ceil(_get(this.props, 'reviewData.totalCount', 0) / pageSize)
 
     var subheader = <FormattedMessage {...messages.myReviewTasks} />
     var columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge,
@@ -115,6 +115,16 @@ export class TaskReviewTable extends Component {
                   <FormattedMessage {...messages.startReviewing} />
                 </button>
               }
+              <button
+                className={classNames(
+                  "mr-button mr-button-small", {
+                  "mr-button--green": !_get(this.props, 'reviewData.dataStale', false),
+                  "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
+                })}
+                onClick={() => this.refresh()}
+              >
+                <FormattedMessage {...messages.refresh} />
+              </button>
             </div>
           </header>
           <div className="mr-mt-6">
