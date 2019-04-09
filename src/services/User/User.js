@@ -176,12 +176,20 @@ export const findUser = function(username) {
  * the user data and does not fetch any accompanying data that would require
  * additional API requests to retrieve. Use `loadCompleteUser` to fully load
  * the user and accompanying data.
+ *
+ * @param userId - Can be either a userId, osmUserId, or username
  */
 export const fetchUser = function(userId) {
   return function(dispatch) {
-    return new Endpoint(
-      api.users.single, {schema: userSchema(), variables: {id: userId}}
-    ).execute().then(normalizedResults => {
+    const endPoint = isFinite(userId) ?
+      new Endpoint(
+        api.users.single, {schema: userSchema(), variables: {id: userId}}
+      ) :
+      new Endpoint(
+        api.users.singleByUsername, {schema: userSchema(), variables: {username: userId}}
+      )
+
+    return endPoint.execute().then(normalizedResults => {
       dispatch(receiveUsers(normalizedResults.entities))
       return normalizedResults
     })
@@ -401,6 +409,37 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
     }).then(() =>
       dispatch(setCurrentUser(userId))
     ).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Retrieve the given user data plus any accompanying data needed for User Settings,
+ * performing multiple API requests as needed.
+ */
+export const loadUserSettings = function(userId) {
+  return function(dispatch) {
+    if (userId === GUEST_USER_ID) {
+      return null
+    }
+
+    return fetchUser(userId)(dispatch).then(normalizedUsers => {
+      const fetchedUserId = normalizedUsers.result
+      if (fetchedUserId) {
+        fetchNotificationSubscriptions(fetchedUserId)(dispatch)
+      }
+      else {
+        dispatch(addError(AppErrors.user.notFound))
+      }
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))

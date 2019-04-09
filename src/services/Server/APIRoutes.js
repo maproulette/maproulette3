@@ -94,6 +94,7 @@ const apiRoutes = factory => {
     },
     'users': {
       'single': factory.get('/user/:id'),
+      'singleByUsername': factory.get('/osmuser/:username'),
       'leaderboard': factory.get('/data/user/leaderboard'),
       'userLeaderboard': factory.get('/data/user/:id/leaderboard'),
       'find': factory.get('/users/find/:username'),
