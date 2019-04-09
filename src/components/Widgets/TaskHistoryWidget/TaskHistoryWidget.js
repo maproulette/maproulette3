@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import TaskHistoryList from '../../TaskHistoryList/TaskHistoryList'
+import TaskCommentInput from '../../TaskCommentInput/TaskCommentInput'
 import WithTaskHistory from '../../HOCs/WithTaskHistory/WithTaskHistory'
 import WithSearch from '../../HOCs/WithSearch/WithSearch'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
@@ -77,6 +78,15 @@ export default class TaskHistoryWidget extends Component {
     return _get(this.props, 'user.settings.defaultEditor')
   }
 
+  setComment = comment => this.setState({comment})
+
+  postComment = () => {
+    this.props.postTaskComment(this.props.task, this.state.comment).then(() => {
+        this.props.reloadHistory()
+    })
+    this.setComment("")
+  }
+
   render() {
     return (
       <QuickWidget
@@ -110,6 +120,13 @@ export default class TaskHistoryWidget extends Component {
           </div>
         }
        >
+        <div className="mr-my-8 mr-mr-4">
+          <TaskCommentInput
+            value={this.state.comment}
+            commentChanged={this.setComment}
+            submitComment={this.postComment}
+          />
+        </div>
 
         <TaskHistoryList
           className="mr-px-4"

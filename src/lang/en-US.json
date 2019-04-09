@@ -607,8 +607,6 @@
   "Widgets.CompletionProgressWidget.noTasks": "Challenge has no tasks",
   "Widgets.KeyboardShortcutsWidget.label": "Keyboard Shortcuts",
   "Widgets.KeyboardShortcutsWidget.title": "Keyboard Shortcuts",
-  "Widgets.TaskCommentsWidget.label": "Comments",
-  "Widgets.TaskCommentsWidget.title": "Comments",
   "Widgets.TaskCompletionWidget.label": "Completion",
   "Widgets.TaskCompletionWidget.title": "Completion",
   "Widgets.TaskCompletionWidget.inspectTitle": "Inspect",
