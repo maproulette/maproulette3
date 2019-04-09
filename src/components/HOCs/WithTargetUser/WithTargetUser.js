@@ -2,18 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _get from 'lodash/get'
-import _debounce from 'lodash/debounce'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _toNumber from 'lodash/toNumber'
 import { loadUserSettings,
          updateUserSettings,
-         updateUserAppSetting,
          updateNotificationSubscriptions,
          resetAPIKey } from '../../../services/User/User'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
-
-const APP_ID = "mr3Frontend"
 
 /**
  * WithUser passes down the user from the redux store that is matches
@@ -111,14 +107,6 @@ export const mapDispatchToProps = dispatch => {
     updateNotificationSubscriptions,
     resetAPIKey,
   }, dispatch)
-
-  actions.updateUserAppSetting = _debounce((userId, setting) => {
-    return dispatch(updateUserAppSetting(userId, APP_ID, setting))
-  }, 100)
-
-  actions.getUserAppSetting = (user, settingName) => {
-    return _get(user, `properties.${APP_ID}.settings.${settingName}`)
-  }
 
   return actions
 }
