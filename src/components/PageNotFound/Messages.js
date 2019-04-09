@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   missingPage: {
     id: 'PageNotFound.message',
-    defaultMessage: 'Opps! The page you’re looking for is lost.',
+    defaultMessage: 'Oops! The page you’re looking for is lost.',
   },
 
   homePage: {

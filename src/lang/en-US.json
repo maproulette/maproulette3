@@ -507,7 +507,7 @@
   "Navbar.links.help": "Learn",
   "Navbar.links.userProfile": "User Settings",
   "Navbar.links.signout": "Sign out",
-  "PageNotFound.message": "Opps! The page you’re looking for is lost.",
+  "PageNotFound.message": "Oops! The page you’re looking for is lost.",
   "PageNotFound.homePage": "Take me home",
   "PastDurationSelector.pastMonths.selectOption": "Past {months, plural, one {Month} =12 {Year} other {# Months}}",
   "PointsTicker.label": "My Points",
