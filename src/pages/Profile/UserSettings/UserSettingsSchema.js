@@ -169,6 +169,7 @@ export const uiSchema = (intl, user) => {
       "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.leaderboardOptOutDescription)} />,
     },
     email: {
+      "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.emailDescription),
     },
     notificationSubscriptions: {
