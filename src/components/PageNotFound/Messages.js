@@ -5,17 +5,12 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   missingPage: {
-    id: "PageNotFound.message",
-    defaultMessage: "Sorry, nothing here but open ocean.",
-  },
-
-  returnTo: {
-    id: "PageNotFound.returnTo",
-    defaultMessage: "Return to",
+    id: 'PageNotFound.message',
+    defaultMessage: 'Opps! The page you’re looking for is lost.',
   },
 
   homePage: {
-    id: "PageNotFound.homePage",
-    defaultMessage: "home page",
+    id: 'PageNotFound.homePage',
+    defaultMessage: 'Take me home',
   },
 })
