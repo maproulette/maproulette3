@@ -9,6 +9,7 @@ import ChallengeLeaderboard from './pages/Leaderboard/ChallengeLeaderboard'
 import ProjectLeaderboard from './pages/Leaderboard/ProjectLeaderboard'
 import CountryLeaderboard from './pages/Leaderboard/CountryLeaderboard'
 import ChallengePane from './components/ChallengePane/ChallengePane'
+import ChallengeDetail from './components/ChallengeDetail/ChallengeDetail'
 import TaskPane from './components/TaskPane/TaskPane'
 import ReviewTaskPane from './components/ReviewTaskPane/ReviewTaskPane'
 import AdminPane from './components/AdminPane/AdminPane'
@@ -78,7 +79,8 @@ export class App extends Component {
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>
             <CachedRoute exact path='/' component={Home} />
-            <CachedRoute path='/browse/challenges/:challengeId?' component={ChallengePane} />
+            <CachedRoute exact path='/browse/challenges' component={ChallengePane} />
+            <CachedRoute path='/browse/challenges/:challengeId' component={ChallengeDetail} />
             <CachedRoute path='/browse/virtual/:virtualChallengeId' component={VirtualChallengePane} />
             <CachedRoute exact path='/challenge/:challengeId/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute exact path='/challenge/:challengeId' component={LoadRandomChallengeTask} />
@@ -87,6 +89,7 @@ export class App extends Component {
             <CachedRoute exact path='/virtual/:virtualChallengeId'
                   component={LoadRandomVirtualChallengeTask} />
             <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
+            <CachedRoute path='/user/profile/:userId' component={Profile} />
             <CachedRoute path='/user/profile' component={Profile} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />

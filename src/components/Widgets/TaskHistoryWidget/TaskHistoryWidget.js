@@ -3,7 +3,9 @@ import { FormattedMessage } from 'react-intl'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import TaskHistoryList from '../../TaskHistoryList/TaskHistoryList'
+import TaskCommentInput from '../../TaskCommentInput/TaskCommentInput'
 import WithTaskHistory from '../../HOCs/WithTaskHistory/WithTaskHistory'
+import WithSearch from '../../HOCs/WithSearch/WithSearch'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import { viewDiffOverpass, viewOSMCha } from '../../../services/Overpass/Overpass'
@@ -41,7 +43,7 @@ export default class TaskHistoryWidget extends Component {
     if (diffTimestamps.length >= 2 ) {
       viewDiffOverpass(AsMappableTask(this.props.task).calculateBBox(),
                        ...diffTimestamps.slice(-2))
-      this.setState({selectedTimestamps: []})
+      this.setState({selectedTimestamps: [], diffSelectionActive: false})
     }
     else {
       this.setState({selectedTimestamps: diffTimestamps})
@@ -74,6 +76,15 @@ export default class TaskHistoryWidget extends Component {
 
   getEditor = () => {
     return _get(this.props, 'user.settings.defaultEditor')
+  }
+
+  setComment = comment => this.setState({comment})
+
+  postComment = () => {
+    this.props.postTaskComment(this.props.task, this.state.comment).then(() => {
+        this.props.reloadHistory()
+    })
+    this.setComment("")
   }
 
   render() {
@@ -109,12 +120,20 @@ export default class TaskHistoryWidget extends Component {
           </div>
         }
        >
+        <div className="mr-my-8 mr-mr-4">
+          <TaskCommentInput
+            value={this.state.comment}
+            commentChanged={this.setComment}
+            submitComment={this.postComment}
+          />
+        </div>
 
         <TaskHistoryList
           className="mr-px-4"
           taskHistory={this.props.task.history}
           task={AsMappableTask(this.props.task)}
           editor={this.getEditor()}
+          mapBounds={this.props.mapBounds}
           selectDiffs={this.state.diffSelectionActive}
           toggleSelection={this.toggleSelection}
           selectedTimestamps={this.state.selectedTimestamps}
@@ -127,4 +146,7 @@ export default class TaskHistoryWidget extends Component {
 TaskHistoryWidget.propTypes = {
 }
 
-registerWidgetType(WithTaskHistory(TaskHistoryWidget), descriptor)
+registerWidgetType(
+  WithSearch(WithTaskHistory(TaskHistoryWidget), 'task'),
+  descriptor
+)

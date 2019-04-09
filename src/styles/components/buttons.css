@@ -1,6 +1,6 @@
 .mr-button,
 .btn {
-  @apply mr-appearance-none mr-inline-block mr-text-center mr-text-base mr-font-medium mr-whitespace-no-wrap mr-border-green-lighter mr-text-green-lighter mr-py-2 mr-px-4 mr-rounded-sm mr-border-2 mr-leading-normal mr-transition;
+  @apply mr-appearance-none mr-inline-block mr-text-center mr-text-base mr-font-medium mr-whitespace-no-wrap mr-border-green-lighter mr-text-green-lighter mr-py-2 mr-px-6 mr-rounded-sm mr-border-2 mr-leading-normal mr-transition;
 
 
   &:hover {
@@ -45,6 +45,14 @@
 
     &:hover {
       @apply mr-border-green-light mr-text-green-lighter;
+    }
+  }
+
+  &--orange {
+    @apply mr-border-orange mr-text-orange;
+
+    &:hover {
+      @apply mr-border-green-dark mr-text-green-dark;
     }
   }
 

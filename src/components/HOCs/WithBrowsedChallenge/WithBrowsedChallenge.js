@@ -65,6 +65,22 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
       this.virtualChallengeId(props) : this.standardChallengeId(props)
 
     /**
+     * Returns a denormalized version of the current challenge
+     *
+     * @private
+     */
+    denormalizedChallenge = props => {
+      const challengeId = this.currentChallengeId(props)
+      const isVirtual = this.isVirtualChallenge(props)
+
+      return isVirtual ?
+             props.virtualChallenge : // nothing to denormalize for virtual challenges
+             denormalize(_get(props.entities, `challenges.${challengeId}`),
+                         challengeDenormalizationSchema(),
+                         props.entities)
+    }
+
+    /**
      * Updates the local state to set the browsedChallenge to that indicated in
      * the current route (if it's different), as well as kicking off loading of
      * the challenge's clustered tasks.
@@ -79,12 +95,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
         if (_get(this.state, 'browsedChallenge.id') !== challengeId ||
             this.state.isVirtual !== isVirtual ||
             _isFinite(this.state.loadingBrowsedChallenge)) {
-          let challenge = isVirtual ?
-                          props.virtualChallenge :
-                          denormalize(_get(this.props.entities, `challenges.${challengeId}`),
-                                      challengeDenormalizationSchema(),
-                                      this.props.entities)
-
+          let challenge = this.denormalizedChallenge(props)
           if (_isObject(challenge)) {
             // If our challenge data is stale, refresh it.
             if (Date.now() - challenge._meta.fetchedAt > FRESHNESS_THRESHOLD) {
@@ -130,12 +141,12 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
       }
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this.updateBrowsedChallenge(this.props)
     }
 
-    componentWillReceiveProps(nextProps) {
-      this.updateBrowsedChallenge(nextProps)
+    componentDidUpdate(prevProps) {
+      this.updateBrowsedChallenge(this.props)
     }
 
     /**
@@ -147,7 +158,9 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
         this.props.history.push(`/browse/virtual/${challenge.id}`)
       }
       else {
-        this.props.history.push(`/browse/challenges/${challenge.id}`)
+        this.props.history.push(`/browse/challenges/${challenge.id}`, {
+          fromSearch: true,
+        })
       }
     }
 
@@ -171,7 +184,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
       }
 
       return (
-        <WrappedComponent browsedChallenge = {this.state.browsedChallenge}
+        <WrappedComponent browsedChallenge = {this.denormalizedChallenge(this.props)}
                           loadingBrowsedChallenge = {this.state.loadingBrowsedChallenge}
                           startBrowsingChallenge={this.startBrowsingChallenge}
                           stopBrowsingChallenge={this.stopBrowsingChallenge}

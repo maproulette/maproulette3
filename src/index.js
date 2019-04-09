@@ -21,7 +21,7 @@ import { performChallengeSearch, fetchPreferredChallenges }
 import { setCompleteSearch } from './services/Search/Search'
 import { pushFetchChallenges, popFetchChallenges }
       from './services/Status/Status'
-import { ensureUserLoggedIn, fetchSavedChallenges }
+import { ensureUserLoggedIn, subscribeToUserUpdates, fetchSavedChallenges }
        from './services/User/User'
 import { setCheckingLoginStatus,
          clearCheckingLoginStatus } from './services/Status/Status'
@@ -65,9 +65,10 @@ const store = initializeStore()
 store.dispatch(setCheckingLoginStatus())
 store.dispatch(
   ensureUserLoggedIn(true)
-).then(
-  userId => store.dispatch(fetchSavedChallenges(userId))
-).catch(
+).then(userId => {
+  store.dispatch(fetchSavedChallenges(userId))
+  subscribeToUserUpdates(store.dispatch, userId)
+}).catch(
   error => console.log(error)
 ).then(() => store.dispatch(clearCheckingLoginStatus()))
 

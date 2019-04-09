@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     return dispatch(saveChallenge(challengeData)).then(async challenge => {
       // If we have line-by-line GeoJSON, we need to stream that separately
       if (_isObject(challenge) && challengeData.lineByLineGeoJSON) {
-        uploadLineByLine(dispatch, ownProps, challenge, challengeData.lineByLineGeoJSON, false)
+        await uploadLineByLine(dispatch, ownProps, challenge, challengeData.lineByLineGeoJSON, false)
         ownProps.updateCreatingTasksProgress(false)
       }
 

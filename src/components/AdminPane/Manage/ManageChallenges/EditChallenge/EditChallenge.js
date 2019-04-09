@@ -241,16 +241,16 @@ export class EditChallenge extends Component {
     this.setState({isSaving: true})
 
     this.prepareFormDataForSaving().then(formData => {
-      return this.props.saveChallenge(formData)
-    }).then(challenge => {
-      if (_isObject(challenge) && _isNumber(challenge.parent)) {
-        this.props.history.push(
-          `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
-      }
-      else {
-        this.finishing = false
-        this.setState({isSaving: false})
-      }
+      return this.props.saveChallenge(formData).then(challenge => {
+        if (_isObject(challenge) && _isNumber(challenge.parent)) {
+          this.props.history.push(
+            `/admin/project/${challenge.parent}/challenge/${challenge.id}`)
+        }
+        else {
+          this.finishing = false
+          this.setState({isSaving: false})
+        }
+      })
     })
   }
 
@@ -453,17 +453,16 @@ export class EditChallenge extends Component {
 
   render() {
     const isUploadingTasks = _get(this.props, 'progress.creatingTasks.inProgress', false)
+    if (isUploadingTasks) {
+      return <TaskUploadingProgress {...this.props} />
+    }
 
-    if (!this.props.project || (this.state.isSaving && !isUploadingTasks)) {
+    if (!this.props.project || this.state.isSaving) {
       return (
         <div className="pane-loading full-screen-height">
           <BusySpinner />
         </div>
       )
-    }
-
-    if (isUploadingTasks) {
-      return <TaskUploadingProgress {...this.props} />
     }
 
     const challengeData = this.prepareChallengeDataForForm()

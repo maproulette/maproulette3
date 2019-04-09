@@ -44,7 +44,8 @@ export const WithLoadedTaskHistory = function(WrappedComponent) {
     }
 
     render() {
-      return <WrappedComponent {..._omit(this.props, 'fetchTaskHistory')} />
+      return <WrappedComponent {..._omit(this.props, 'fetchTaskHistory')}
+                reloadHistory={() => this.loadHistory(this.props.taskId)} />
     }
   }
 }
