@@ -147,6 +147,7 @@ export class TaskReviewTable extends Component {
                             this.fetchData()
                           }
                         }}
+                        loading={this.props.loading}
             />
           </div>
         </div>
