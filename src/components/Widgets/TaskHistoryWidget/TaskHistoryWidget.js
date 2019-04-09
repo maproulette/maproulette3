@@ -4,6 +4,7 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import TaskHistoryList from '../../TaskHistoryList/TaskHistoryList'
 import WithTaskHistory from '../../HOCs/WithTaskHistory/WithTaskHistory'
+import WithSearch from '../../HOCs/WithSearch/WithSearch'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import { viewDiffOverpass, viewOSMCha } from '../../../services/Overpass/Overpass'
@@ -41,7 +42,7 @@ export default class TaskHistoryWidget extends Component {
     if (diffTimestamps.length >= 2 ) {
       viewDiffOverpass(AsMappableTask(this.props.task).calculateBBox(),
                        ...diffTimestamps.slice(-2))
-      this.setState({selectedTimestamps: []})
+      this.setState({selectedTimestamps: [], diffSelectionActive: false})
     }
     else {
       this.setState({selectedTimestamps: diffTimestamps})
@@ -115,6 +116,7 @@ export default class TaskHistoryWidget extends Component {
           taskHistory={this.props.task.history}
           task={AsMappableTask(this.props.task)}
           editor={this.getEditor()}
+          mapBounds={this.props.mapBounds}
           selectDiffs={this.state.diffSelectionActive}
           toggleSelection={this.toggleSelection}
           selectedTimestamps={this.state.selectedTimestamps}
@@ -127,4 +129,7 @@ export default class TaskHistoryWidget extends Component {
 TaskHistoryWidget.propTypes = {
 }
 
-registerWidgetType(WithTaskHistory(TaskHistoryWidget), descriptor)
+registerWidgetType(
+  WithSearch(WithTaskHistory(TaskHistoryWidget), 'task'),
+  descriptor
+)

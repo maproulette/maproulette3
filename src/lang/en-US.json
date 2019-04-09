@@ -854,6 +854,7 @@
   "Task.reviewStatus.approvedWithFixes": "Approved with Fixes",
   "Task.review.loadByMethod.next": "Next Task",
   "Task.review.loadByMethod.all": "Back to Review All",
+  "Task.review.loadByMethod.inbox": "Back to Inbox",
   "Task.status.created": "Created",
   "Task.status.fixed": "Fixed",
   "Task.status.falsePositive": "Not an Issue",
