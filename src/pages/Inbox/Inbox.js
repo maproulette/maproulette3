@@ -117,6 +117,8 @@ class Inbox extends Component {
       <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
         <section className="mr-flex-grow mr-w-full mr-bg-white mr-p-4 md:mr-p-8 mr-rounded">
           <HeaderNotifications
+            notificationsLoading={this.props.notificationsLoading}
+            refreshNotifications={this.props.refreshNotifications}
             markReadSelected={this.markReadSelected}
             deleteSelected={this.deleteSelected}
           />
@@ -271,6 +273,21 @@ const columns = tableProps => [{
       {value}
     </span>
   )
+}, {
+  id: 'taskId',
+  Header: tableProps.intl.formatMessage(messages.taskIdLabel),
+  accessor: 'taskId',
+  minWidth: 100,
+  maxWidth: 110,
+  filterable: true,
+  Cell: ({ value, row }) => (
+    <span
+      className="mr-cursor-pointer"
+      onClick={() => tableProps.readNotification(row._original)}
+    >
+      {value}
+    </span>
+  ),
 }, {
   id: 'controls',
   Header: tableProps.intl.formatMessage(messages.controlsLabel),

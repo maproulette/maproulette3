@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Notifications",
   },
 
+  refreshNotificationsLabel: {
+    id: "Inbox.controls.refreshNotifications.label",
+    defaultMessage: "Refresh",
+  },
+
   manageSubscriptionsLabel: {
     id: "Inbox.controls.manageSubscriptions.label",
     defaultMessage: "Manage Subscriptions",
@@ -47,6 +52,11 @@ export default defineMessages({
   isReadLabel: {
     id: "Inbox.tableHeaders.isRead",
     defaultMessage: "Read",
+  },
+
+  taskIdLabel: {
+    id: "Inbox.tableHeaders.taskId",
+    defaultMessage: "Task",
   },
 
   controlsLabel: {
