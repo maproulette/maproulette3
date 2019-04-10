@@ -11,6 +11,7 @@ This project adheres to
 ### Added
 - Task reviews
 - In-app notifications with optional emails
+- New user settings for managing notifications and emails
 - Brazilian Portuguese translation by @raphaelpe
 - Updated Korean translation by @depth221
 - Confirmation step when completing a task
@@ -18,6 +19,7 @@ This project adheres to
 - Task History widget on task-completion and task-review pages
 - Task inspection link for challenge owners on task completion page
 - Challenge detail page when navigating to a challenge URL
+- Updated 404 page
 - [internal] Upgrade various package dependencies, including React.
 
 ### Fixed
