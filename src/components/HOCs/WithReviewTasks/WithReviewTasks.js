@@ -19,23 +19,32 @@ const DEFAULT_PAGE_SIZE = 20
  */
 export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
   return class extends Component {
+    state = {
+      loading: false
+    }
+
     refresh = (sortBy, direction, filters) => {
       this.update(this.props, sortBy, direction, filters)
     }
 
     update(props, sortBy, direction, filters) {
+      this.setState({loading: true})
+
       if (props.asReviewer) {
         if (props.showReviewedByMe) {
           props.updateUserReviewedTasks({sortCriteria: {sortBy, direction}, filters}).then(() => {
+            this.setState({loading: false})
           })
         }
         else {
           props.updateReviewNeededTasks({sortCriteria: {sortBy, direction}, filters}).then(() => {
+            this.setState({loading: false})
           })
         }
       }
       else {
         props.updateReviewedTasks({sortCriteria: {sortBy, direction}, filters}).then(() => {
+          this.setState({loading: false})
         })
       }
     }
@@ -64,6 +73,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                           defaultPageSize={DEFAULT_PAGE_SIZE}
                           refresh={this.refresh}
                           startReviewing={this.props.startNextReviewTask}
+                          loading={this.state.loading}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
     }
   }
