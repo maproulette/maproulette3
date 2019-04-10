@@ -48,7 +48,13 @@ export const WithLoadedNotifications = function(WrappedComponent) {
     }
 
     render() {
-      return <WrappedComponent {...this.props} />
+      return (
+        <WrappedComponent
+          {...this.props}
+          notificationsLoading={this.state.notificationsLoading}
+          refreshNotifications={() => this.loadNotifications(this.props.user)}
+        />
+      )
     }
   }
 }

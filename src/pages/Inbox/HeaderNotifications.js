@@ -2,24 +2,36 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
+import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import messages from './Messages'
 
 class HeaderNotifications extends Component {
   render() {
     return (
       <header className="mr-mb-8 mr-pb-4 mr-border-b mr-border-grey-light">
-        <div className="sm:mr-flex sm:mr-items-end sm:mr-justify-between mr-mb-4 sm:mr-mb-8">
-          <h1 className="mr-h2 mr-text-blue-light mr-mb-2 md:mr-mb-0 md:mr-mr-4">
-            <FormattedMessage {...messages.inboxHeader} />
-          </h1>
+        <div className="sm:mr-flex sm:mr-justify-between mr-mb-2 sm:mr-mb-4">
           <div>
-            <ul className="mr-list-reset mr-text-sm mr-mb-3 mr-flex lg:mr-justify-end mr-items-center">
+            <h1 className="mr-h2 mr-text-blue-light mr-mb-2 md:mr-mb-0 md:mr-mr-4">
+              <FormattedMessage {...messages.inboxHeader} />
+            </h1>
+            <ul className="mr-list-reset mr-text-sm mr-mt-3">
               <li>
                 <Link to="/user/profile">
                   <FormattedMessage {...messages.manageSubscriptionsLabel} />
                 </Link>
               </li>
             </ul>
+          </div>
+          <div>
+            {this.props.notificationsLoading ?
+             <BusySpinner lightMode /> :
+             <button
+               className="mr-button mr-button--green"
+               onClick={this.props.refreshNotifications}
+             >
+               <FormattedMessage {...messages.refreshNotificationsLabel} />
+             </button>
+            }
           </div>
         </div>
         <div className="mr-flex mr-justify-end mr-items-center">
