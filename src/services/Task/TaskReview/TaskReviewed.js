@@ -62,6 +62,9 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
   if (filters.status && filters.status !== "all") {
     searchParameters.tStatus = filters.status
   }
+  if (filters.reviewStatus && filters.reviewStatus !== "all") {
+    searchParameters.trStatus = filters.reviewStatus
+  }
   if (filters.reviewedAt) {
     searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
     searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')

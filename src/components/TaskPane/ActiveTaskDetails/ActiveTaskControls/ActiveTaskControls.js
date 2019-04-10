@@ -36,7 +36,7 @@ export class ActiveTaskControls extends Component {
     confirmingTask: null,
     confirmingStatus: null,
     comment: "",
-    revisionLoadBy: TaskReviewLoadMethod.inbox,
+    revisionLoadBy: TaskReviewLoadMethod.all,
   }
 
   setComment = comment => this.setState({comment})
@@ -82,8 +82,8 @@ export class ActiveTaskControls extends Component {
   complete = taskStatus => {
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
-    if (this.state.submitRevision) {
-      this.props.updateTaskReviewStatus(this.props.task, TaskReviewStatus.needed,
+    if (!_isUndefined(this.state.submitRevision)) {
+      this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
                                         this.state.comment, this.state.revisionLoadBy,
                                         this.props.history)
     }
@@ -124,6 +124,14 @@ export class ActiveTaskControls extends Component {
   /** Move to the next task without modifying the task status */
   next = (challengeId, taskId) => {
     this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment)
+  }
+
+  componentDidUpdate(nextProps) {
+    // Let's set default revisionLoadBy to inbox if we are coming from inbox
+    if (_get(this.props.history, 'location.state.fromInbox') &&
+        this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox) {
+      this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox})
+    }
   }
 
   render() {
@@ -217,7 +225,7 @@ export class ActiveTaskControls extends Component {
                                                  this.chooseLoadBy(load)}
               onConfirm={this.confirmCompletion}
               onCancel={this.resetConfirmation}
-              needsRevised={needsRevised}
+              needsRevised={this.state.submitRevision}
               fromInbox={fromInbox}
             />
           }

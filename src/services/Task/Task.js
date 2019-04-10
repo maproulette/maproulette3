@@ -443,6 +443,9 @@ export const loadNextReviewTask = function(criteria={}) {
   if (filters.status && filters.status !== "all") {
     searchParameters.tStatus = filters.status
   }
+  if (filters.reviewStatus && filters.reviewStatus !== "all") {
+    searchParameters.trStatus = filters.reviewStatus
+  }
 
   return function(dispatch) {
     return retrieveChallengeTask(dispatch, new Endpoint(

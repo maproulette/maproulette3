@@ -38,6 +38,10 @@
   @apply mr-text-orange;
 }
 
+.mr-review-disputed {
+  @apply mr-text-orange;
+}
+
 .mr-notification-type-mention {
   @apply mr-text-pink;
 }
