@@ -8,12 +8,14 @@ export const REVIEW_STATUS_NEEDED = 0
 export const REVIEW_STATUS_APPROVED = 1
 export const REVIEW_STATUS_REJECTED = 2
 export const REVIEW_STATUS_APPROVED_WITH_FIXES = 3
+export const REVIEW_STATUS_DISPUTED = 4
 
 export const TaskReviewStatus = Object.freeze({
   needed: REVIEW_STATUS_NEEDED,
   approved: REVIEW_STATUS_APPROVED,
   rejected: REVIEW_STATUS_REJECTED,
   approvedWithFixes: REVIEW_STATUS_APPROVED_WITH_FIXES,
+  disputed: REVIEW_STATUS_DISPUTED,
 })
 
 export const keysByReviewStatus = Object.freeze(_invert(TaskReviewStatus))
@@ -44,3 +46,11 @@ export const messagesByReviewStatus = _fromPairs(
 export const reviewStatusLabels = intl => _fromPairs(
   _map(messages, (message, key) => [key, intl.formatMessage(message)])
 )
+
+/**
+ * Returns true if the given status represents a status that is
+ * valid for reviewing. (ie. not skipped and not created)
+ */
+export const isNeedsReviewStatus = function(status) {
+  return status === TaskReviewStatus.needed || status === TaskReviewStatus.disputed
+}
