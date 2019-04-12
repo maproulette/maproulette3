@@ -9,6 +9,7 @@ import { allowedStatusProgressions, isCompletionStatus,
          isFinalStatus, messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
+import { TaskReviewLoadMethod } from '../../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
@@ -35,6 +36,7 @@ export class ActiveTaskControls extends Component {
     confirmingTask: null,
     confirmingStatus: null,
     comment: "",
+    revisionLoadBy: TaskReviewLoadMethod.all,
   }
 
   setComment = comment => this.setState({comment})
@@ -66,6 +68,10 @@ export class ActiveTaskControls extends Component {
     this.props.setTaskLoadBy(challengeId, isVirtual, loadMethod)
   }
 
+  chooseRevisionLoadBy = loadMethod => {
+    this.setState({revisionLoadBy: loadMethod})
+  }
+
   /** Indicate the editor has been closed without completing the task */
   cancelEditing = () => {
     this.setState({taskBeingCompleted: null})
@@ -76,9 +82,10 @@ export class ActiveTaskControls extends Component {
   complete = taskStatus => {
     const revisionSubmission = this.props.task.reviewStatus === TaskReviewStatus.rejected
 
-    if (this.state.submitRevision) {
-      this.props.updateTaskReviewStatus(this.props.task, TaskReviewStatus.needed,
-                                        this.state.comment, null, this.props.history)
+    if (!_isUndefined(this.state.submitRevision)) {
+      this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
+                                        this.state.comment, this.state.revisionLoadBy,
+                                        this.props.history)
     }
     else {
       this.props.completeTask(this.props.task.id, this.props.task.parent.id,
@@ -87,7 +94,12 @@ export class ActiveTaskControls extends Component {
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview)
       if (revisionSubmission) {
-        this.props.history.push('/review')
+        if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
+          this.props.history.push('/inbox')
+        }
+        else {
+          this.props.history.push('/review')
+        }
       }
     }
   }
@@ -112,6 +124,14 @@ export class ActiveTaskControls extends Component {
   /** Move to the next task without modifying the task status */
   next = (challengeId, taskId) => {
     this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment)
+  }
+
+  componentDidUpdate(nextProps) {
+    // Let's set default revisionLoadBy to inbox if we are coming from inbox
+    if (_get(this.props.history, 'location.state.fromInbox') &&
+        this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox) {
+      this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox})
+    }
   }
 
   render() {
@@ -139,6 +159,8 @@ export class ActiveTaskControls extends Component {
     const editorLoading =
       _get(this.props, 'editor.taskId') !== this.props.task.id &&
            this.state.taskBeingCompleted === this.props.task.id
+
+    const fromInbox = _get(this.props.history, 'location.state.fromInbox')
 
     if (editorLoading) {
       return <BusySpinner />
@@ -198,11 +220,13 @@ export class ActiveTaskControls extends Component {
               setComment={this.setComment}
               needsReview={this.getNeedsReviewSetting()}
               toggleNeedsReview={this.toggleNeedsReview}
-              loadBy={this.props.taskLoadBy}
-              chooseLoadBy={this.chooseLoadBy}
+              loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
+              chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
+                                                 this.chooseLoadBy(load)}
               onConfirm={this.confirmCompletion}
               onCancel={this.resetConfirmation}
-              needsRevised={needsRevised}
+              needsRevised={this.state.submitRevision}
+              fromInbox={fromInbox}
             />
           }
         </div>

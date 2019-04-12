@@ -55,21 +55,18 @@ export class ChallengeDetail extends Component {
         unsaveControl = (
           <Link
             to={{}}
-            onClick={() =>
-              this.props.unsaveChallenge(this.props.user.id, challenge.id)
-            }
+            onClick={() => this.props.unsaveChallenge(this.props.user.id, challenge.id)}
             className="mr-button"
           >
             <FormattedMessage {...messages.unsave} />
           </Link>
         )
-      } else {
+      }
+      else {
         saveControl = (
           <Link
             to={{}}
-            onClick={() =>
-              this.props.saveChallenge(this.props.user.id, challenge.id)
-            }
+            onClick={() => this.props.saveChallenge(this.props.user.id, challenge.id)}
             className="mr-button"
           >
             <FormattedMessage {...messages.save} />
@@ -206,13 +203,11 @@ export class ChallengeDetail extends Component {
                       </li>
                     </ol>
                   )}
-
                   <div className="mr-card-challenge__description">
                     <MarkdownContent
                       markdown={challenge.description || challenge.blurb}
                     />
                   </div>
-
                   <ChallengeProgress
                     className="mr-mt-4 mr-mb-12"
                     challenge={challenge}

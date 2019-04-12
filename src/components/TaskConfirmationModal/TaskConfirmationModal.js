@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
+import _isUndefined from 'lodash/isUndefined'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { needsReviewType } from '../../services/User/User'
@@ -11,6 +12,7 @@ import { TaskLoadMethod, messagesByLoadMethod }
        from '../../services/Task/TaskLoadMethod/TaskLoadMethod'
 import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
        from '../../services/Task/TaskReview/TaskReviewLoadMethod'
+import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
@@ -19,7 +21,7 @@ import messages from './Messages'
 
 export class TaskConfirmationModal extends Component {
   render() {
-    const reviewConfirmation = this.props.inReview || this.props.needsRevised
+    const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
 
     return (
       <External>
@@ -36,9 +38,12 @@ export class TaskConfirmationModal extends Component {
               <h2 className="mr-text-yellow mr-text-4xl mr-mb-4">
                 {this.props.inReview ?
                   <FormattedMessage {...messages.inReviewHeader} /> :
-                  this.props.needsRevised ?
-                    <FormattedMessage {...messages.submitRevisionHeader} /> :
-                    <FormattedMessage {...messages.header} />
+                  _isUndefined(this.props.needsRevised) ?
+                    <FormattedMessage {...messages.header} /> :
+                    (this.props.needsRevised === TaskReviewStatus.needed ?
+                      <FormattedMessage {...messages.submitRevisionHeader} /> :
+                      <FormattedMessage {...messages.disputeRevisionHeader} />)
+
                 }
 
               </h2>
@@ -111,7 +116,7 @@ export class TaskConfirmationModal extends Component {
                 </div>
               }
 
-              { reviewConfirmation && !this.props.needsRevised &&
+              { reviewConfirmation && _isUndefined(this.props.needsRevised) &&
                 <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
                   <span className="mr-mr-4">
                     <FormattedMessage {...messages.loadNextReviewLabel} />
@@ -126,7 +131,48 @@ export class TaskConfirmationModal extends Component {
                   <label className="mr-mr-4">
                     <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
                   </label>
+                  { this.props.fromInbox &&
+                    <React.Fragment>
+                      <input
+                        type="radio"
+                        name="loadReviewPreference"
+                        className="mr-mr-1"
+                        checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                        onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                      />
+                      <label className="mr-mr-4">
+                        <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
+                      </label>
+                    </React.Fragment>
+                  }
+                  <input
+                    type="radio"
+                    name="loadReviewPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                  />
+                  <label>
+                    <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
+                  </label>
+                </div>
+              }
 
+              { reviewConfirmation && !_isUndefined(this.props.needsRevised) && this.props.fromInbox &&
+                <div className="form mr-mt-8 mr-border-grey-lighter-10 mr-border-t mr-border-b mr-py-4">
+                  <span className="mr-mr-4">
+                    <FormattedMessage {...messages.loadNextReviewLabel} />
+                  </span>
+                  <input
+                    type="radio"
+                    name="loadReviewPreference"
+                    className="mr-mr-1"
+                    checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                  />
+                  <label className="mr-mr-4">
+                    <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
+                  </label>
                   <input
                     type="radio"
                     name="loadReviewPreference"

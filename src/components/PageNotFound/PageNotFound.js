@@ -1,14 +1,8 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
-import { latLng } from 'leaflet'
-import MapPane from '../EnhancedMap/MapPane/MapPane'
-import EnhancedMap from '../EnhancedMap/EnhancedMap'
-import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
-import { layerSourceWithId, OPEN_STREET_MAP }
-       from '../../services/VisibleLayer/LayerSources'
 import messages from './Messages'
-import './PageNotFound.scss'
+import Illustration404 from '../../static/images/404-illustration.svg'
 
 /**
  * PageNotFound displays a 404 message.
@@ -18,24 +12,15 @@ import './PageNotFound.scss'
 export default class PageNotFound extends Component {
   render() {
     return (
-      <div className="page-not-found full-screen-height">
-        <MapPane>
-          <EnhancedMap center={latLng(0, 0)} zoom={17} zoomControl={false}>
-            <SourcedTileLayer source={layerSourceWithId(OPEN_STREET_MAP)} />
-          </EnhancedMap>
-        </MapPane>
-
-        <div className="page-not-found__message">
-          <h1>404</h1>
-
-          <h2><FormattedMessage {...messages.missingPage} /></h2>
-          <span className="page-not-found__message__icon" role="img" aria-label="fish">🐠</span>
-
-          <p>
-            <FormattedMessage {...messages.returnTo} /> <Link to='/'>
-              <FormattedMessage {...messages.homePage} />
-            </Link>.
+      <div className="mr-min-h-content-no-filters mr-bg-gradient-b-blue-darker-blue-dark mr-flex mr-items-center mr-p-4">
+        <div className="mr-flex-grow mr-max-w-lg mr-mx-auto mr-text-center mr-text-white">
+          <img src={Illustration404} alt="404 - page not found" />
+          <p className="mr-my-8 mr-text-lg">
+            <FormattedMessage {...messages.missingPage} />
           </p>
+          <Link className="mr-button" to="/">
+            <FormattedMessage {...messages.homePage} />
+          </Link>
         </div>
       </div>
     )

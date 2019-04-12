@@ -3,20 +3,20 @@ import _map from 'lodash/map'
 import _values from 'lodash/values'
 import _without from 'lodash/without'
 import _filter from 'lodash/filter'
-import AsManager from '../../interactions/User/AsManager'
+import AsManager from '../../../interactions/User/AsManager'
 import { Locale, localeLabels, defaultLocale }
-       from '../../services/User/Locale/Locale'
+       from '../../../services/User/Locale/Locale'
 import { NotificationType, notificationTypeLabels }
-       from '../../services/Notification/NotificationType/NotificationType'
+       from '../../../services/Notification/NotificationType/NotificationType'
 import { SubscriptionType, subscriptionTypeLabels }
-       from '../../services/Notification/NotificationSubscription/NotificationSubscription'
-import { Editor, editorLabels } from '../../services/Editor/Editor'
+       from '../../../services/Notification/NotificationSubscription/NotificationSubscription'
+import { Editor, editorLabels } from '../../../services/Editor/Editor'
 import { ChallengeBasemap, basemapLayerLabels }
-       from '../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
-import { LayerSources } from '../../services/VisibleLayer/LayerSources'
-import MarkdownContent from '../../components/MarkdownContent/MarkdownContent'
-import { needsReviewType } from '../../services/User/User'
-import messages from './Messages'
+       from '../../../services/Challenge/ChallengeBasemap/ChallengeBasemap'
+import { LayerSources } from '../../../services/VisibleLayer/LayerSources'
+import MarkdownContent from '../../../components/MarkdownContent/MarkdownContent'
+import { needsReviewType } from '../../../services/User/User'
+import messages from '../Messages'
 
 /**
  * Generates a JSON Schema describing editable User Settings fields intended
@@ -169,6 +169,7 @@ export const uiSchema = (intl, user) => {
       "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.leaderboardOptOutDescription)} />,
     },
     email: {
+      "ui:emptyValue": "",
       "ui:help": intl.formatMessage(messages.emailDescription),
     },
     notificationSubscriptions: {

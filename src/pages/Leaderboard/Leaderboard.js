@@ -74,7 +74,7 @@ class Leaderboard extends Component {
                  <FormattedMessage {...messages.leaderboardGlobal} />
                 } <FormattedMessage {...messages.leaderboardTitle} />
               </h1>
-              <h3 className="mr-text-sm mr-text-grey-light mr-uppercase mr-tracking-wide mr-font-normal">
+              <h3 className="mr-text-sm mr-text-yellow mr-uppercase mr-tracking-wide mr-font-normal">
                 {this.props.countryCode ?
                  <FormattedMessage {...messages.updatedDaily} /> :
                  <FormattedMessage {...messages.updatedFrequently} />

@@ -65,6 +65,7 @@ let colors = {
   'blue-light': '#496B94',
   'blue-dark': '#182841',
   'blue-dark-75': 'rgba(24, 40, 65, .75)',
+  'blue-darker': '#0e192a',
   yellow: '#FFFD86',
   'yellow-75': 'rgba(255, 253, 134, .75)',
   turquoise: '#17FFF3',
@@ -544,6 +545,7 @@ module.exports = {
     screen: '100vh',
     '48': '12rem',
     'screen-50': '50vh',
+    'content-no-filters': 'calc(100vh - 103px)',
   },
 
   /*
@@ -952,6 +954,7 @@ module.exports = {
         'green-blue': [colors['green'], colors['blue']],
         'green-dark-blue': [colors['green-dark'], colors['blue']],
         'blue-dark-green-dark': [colors['blue-dark'], colors['green-dark']],
+        'blue-darker-blue-dark': [colors['blue-darker'], colors['blue-dark']],
       },
     }),
     require('tailwindcss-transforms')({

@@ -9,8 +9,6 @@ export { default as TaskMapWidget }
        from './TaskMapWidget/TaskMapWidget'
 export { default as TaskInstructionsWidget }
        from './TaskInstructionsWidget/TaskInstructionsWidget'
-export { default as TaskCommentsWidget }
-       from './TaskCommentsWidget/TaskCommentsWidget'
 export { default as TaskCompletionWidget }
        from './TaskCompletionWidget/TaskCompletionWidget'
 export { default as TaskReviewWidget }

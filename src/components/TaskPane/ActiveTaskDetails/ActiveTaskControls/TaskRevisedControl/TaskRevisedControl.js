@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus }
        from '../../../../../services/Task/TaskReview/TaskReviewStatus'
-import Button from '../../../../Button/Button'
+import Dropdown from '../../../../Dropdown/Dropdown'
 import messages from './Messages'
 
 /**
@@ -23,15 +23,52 @@ export default class TaskRevisedControl extends Component {
     }
     else {
       return (
-        <Button
-          className="mr-button--blue-fill"
-          onClick={() => this.props.complete(this.props.task.status, true)}
-        >
-          <FormattedMessage {...messages.revisedLabel} />
-        </Button>
+        <Dropdown
+          className="mr-dropdown--fixed mr-w-full"
+          dropdownButton={dropdown =>
+            <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} {...this.props}/>
+          }
+          dropdownContent={dropdown =>
+            <ListMoreOptionsItems {...this.props} />
+          }
+        />
       )
     }
   }
+}
+
+const MoreOptionsButton = function(props) {
+  return (
+    <button
+      className="mr-dropdown__button mr-button mr-text-green-lighter mr-w-full"
+      onClick={props.toggleDropdownVisible}
+    >
+      {props.intl.formatMessage(messages.revisedLabel)}&hellip;
+    </button>
+  )
+}
+
+const ListMoreOptionsItems = function(props) {
+  return (
+    <ol className="mr-list-dropdown">
+     <li>
+       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+       <a className=""
+         onClick={() => props.complete(props.task.status, TaskReviewStatus.needed)}
+       >
+         <FormattedMessage {...messages.resubmit} />
+       </a>
+     </li>
+     <li>
+       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+       <a className=""
+         onClick={() => props.complete(props.task.status, TaskReviewStatus.disputed)}
+       >
+         <FormattedMessage {...messages.dispute} />
+       </a>
+     </li>
+    </ol>
+  )
 }
 
 TaskRevisedControl.propTypes = {

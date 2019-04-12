@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
+import classNames from 'classnames'
 import Fuse from 'fuse.js'
 import { FormattedMessage, FormattedDate, FormattedTime, injectIntl }
        from 'react-intl'
@@ -117,6 +118,8 @@ class Inbox extends Component {
       <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
         <section className="mr-flex-grow mr-w-full mr-bg-white mr-p-4 md:mr-p-8 mr-rounded">
           <HeaderNotifications
+            notificationsLoading={this.props.notificationsLoading}
+            refreshNotifications={this.props.refreshNotifications}
             markReadSelected={this.markReadSelected}
             deleteSelected={this.deleteSelected}
           />
@@ -142,7 +145,7 @@ class Inbox extends Component {
             getTrProps={(state, rowInfo, column) => {
               const styles = {}
               if (!_get(rowInfo, 'row._original.isRead', false)) {
-                styles.fontWeight = 700;
+                styles.fontWeight = 700
               }
               return {style: styles}
             }}
@@ -191,7 +194,11 @@ const columns = tableProps => [{
   Cell: ({ value, row }) => (
     <span
       onClick={() => tableProps.readNotification(row._original)}
-      className={`mr-cursor-pointer mr-text-sm mr-font-medium mr-uppercase mr-notification-type-${_kebabCase(keysByNotificationType[value])}`}
+      className={classNames(
+        "mr-cursor-pointer mr-text-sm mr-font-medium mr-uppercase",
+        `mr-notification-type-${_kebabCase(keysByNotificationType[value])}`,
+        {"mr-line-through mr-font-normal mr-opacity-50": row._original.isRead}
+      )}
     >
       <FormattedMessage
         {...messagesByNotificationType[value]}
@@ -234,7 +241,10 @@ const columns = tableProps => [{
   maxWidth: 180,
   Cell: ({ value, row }) => (
     <span
-      className="mr-cursor-pointer"
+      className={classNames(
+        "mr-cursor-pointer",
+        {"mr-line-through mr-opacity-50": row._original.isRead}
+      )}
       onClick={() => tableProps.readNotification(row._original)}
     >
       <FormattedDate value={value} /> <FormattedTime value={value} />
@@ -250,7 +260,10 @@ const columns = tableProps => [{
   filterMethod: fuzzySearch,
   Cell: ({ value, row }) => (
     <span
-      className="mr-cursor-pointer"
+      className={classNames(
+        "mr-cursor-pointer",
+        {"mr-line-through mr-opacity-50": row._original.isRead}
+      )}
       onClick={() => tableProps.readNotification(row._original)}
     >
       {value}
@@ -265,12 +278,33 @@ const columns = tableProps => [{
   filterMethod: fuzzySearch,
   Cell: ({ value, row }) => (
     <span
-      className="mr-cursor-pointer"
+      className={classNames(
+        "mr-cursor-pointer",
+        {"mr-line-through mr-opacity-50": row._original.isRead}
+      )}
       onClick={() => tableProps.readNotification(row._original)}
     >
       {value}
     </span>
   )
+}, {
+  id: 'taskId',
+  Header: tableProps.intl.formatMessage(messages.taskIdLabel),
+  accessor: 'taskId',
+  minWidth: 100,
+  maxWidth: 110,
+  filterable: true,
+  Cell: ({ value, row }) => (
+    <span
+      className={classNames(
+        "mr-cursor-pointer",
+        {"mr-line-through mr-opacity-50": row._original.isRead}
+      )}
+      onClick={() => tableProps.readNotification(row._original)}
+    >
+      {value}
+    </span>
+  ),
 }, {
   id: 'controls',
   Header: tableProps.intl.formatMessage(messages.controlsLabel),

@@ -26,15 +26,24 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         const filters = searchParams.get('filters') ? JSON.parse(searchParams.get('filters')) : {}
 
         dispatch(loadNextReviewTask({sortCriteria: {sortBy, direction}, filters})).then((task) => {
-          if (loadBy === TaskReviewLoadMethod.next) {
+          if (task && loadBy === TaskReviewLoadMethod.next) {
             url.push(`/challenge/${task.parentId}/task/${task.id}/review`)
           }
+          else if (task && loadBy === TaskReviewLoadMethod.inbox) {
+            url.push('/inbox')
+          }
           else {
-            url.push('/review')
+            url.push({
+              pathname: '/review',
+              state: {sortBy, direction, filters},
+            })
           }
         }).catch(error => {
           console.log(error)
-          url.push('/review')
+          url.push({
+            pathname: '/review',
+            state: {sortBy, direction, filters},
+          })
         })
       }).catch(error => {
         console.log(error)

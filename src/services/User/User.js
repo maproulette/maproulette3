@@ -1,7 +1,7 @@
 import { schema } from 'normalizr'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -14,7 +14,7 @@ import _omit from 'lodash/omit'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
-import { defaultRoutes as api, isSecurityError, credentialsPolicy }
+import { defaultRoutes as api, isSecurityError, credentialsPolicy, websocketClient }
        from '../Server/Server'
 import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
@@ -56,6 +56,30 @@ export const userDenormalizationSchema = function() {
     topChallenges: [ challengeSchema() ],
     savedTasks: [ taskDenormalizationSchema() ],
   })
+}
+
+export const subscribeToUserUpdates = function(dispatch, userId) {
+  websocketClient.addServerSubscription(
+    "user", userId, `newNotificationHandler_${userId}`,
+    messageObject => onNewNotification(dispatch, userId, messageObject)
+  )
+}
+
+export const unsubscribeFromUserUpdates = function(userId) {
+  websocketClient.removeServerSubscription("user", userId, `newNotificationHandler_${userId}`)
+}
+
+const onNewNotification = function(dispatch, userId, messageObject) {
+  switch(messageObject.messageType) {
+    case "notification-new":
+      if (_get(messageObject, 'data.userId') === userId) {
+        // Refresh user's notifications from server
+        dispatch(fetchUserNotifications(userId))
+      }
+      break
+    default:
+      break // Ignore
+  }
 }
 
 // redux actions
@@ -152,12 +176,20 @@ export const findUser = function(username) {
  * the user data and does not fetch any accompanying data that would require
  * additional API requests to retrieve. Use `loadCompleteUser` to fully load
  * the user and accompanying data.
+ *
+ * @param userId - Can be either a userId, osmUserId, or username
  */
 export const fetchUser = function(userId) {
   return function(dispatch) {
-    return new Endpoint(
-      api.users.single, {schema: userSchema(), variables: {id: userId}}
-    ).execute().then(normalizedResults => {
+    const endPoint = isFinite(userId) ?
+      new Endpoint(
+        api.users.single, {schema: userSchema(), variables: {id: userId}}
+      ) :
+      new Endpoint(
+        api.users.singleByUsername, {schema: userSchema(), variables: {username: userId}}
+      )
+
+    return endPoint.execute().then(normalizedResults => {
       dispatch(receiveUsers(normalizedResults.entities))
       return normalizedResults
     })
@@ -364,7 +396,7 @@ export const fetchUserActivity = function(userId, limit=50) {
  */
 export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedTasksLimit=50) {
   return function(dispatch) {
-    if (!_isNumber(userId) || userId === GUEST_USER_ID) {
+    if (!_isFinite(userId) || userId === GUEST_USER_ID) {
       return null
     }
 
@@ -377,6 +409,37 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
     }).then(() =>
       dispatch(setCurrentUser(userId))
     ).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Retrieve the given user data plus any accompanying data needed for User Settings,
+ * performing multiple API requests as needed.
+ */
+export const loadUserSettings = function(userId) {
+  return function(dispatch) {
+    if (userId === GUEST_USER_ID) {
+      return null
+    }
+
+    return fetchUser(userId)(dispatch).then(normalizedUsers => {
+      const fetchedUserId = normalizedUsers.result
+      if (fetchedUserId) {
+        fetchNotificationSubscriptions(fetchedUserId)(dispatch)
+      }
+      else {
+        dispatch(addError(AppErrors.user.notFound))
+      }
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -561,8 +624,12 @@ export const unsaveTask = function(userId, taskId) {
 /**
  * Logout the current user on both the client and server.
  */
-export const logoutUser = function() {
+export const logoutUser = function(userId) {
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
+
+  if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+    unsubscribeFromUserUpdates(userId)
+  }
 
   return function(dispatch) {
     dispatch(setCurrentUser(GUEST_USER_ID))

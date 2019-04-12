@@ -89,6 +89,7 @@ export class App extends Component {
             <CachedRoute exact path='/virtual/:virtualChallengeId'
                   component={LoadRandomVirtualChallengeTask} />
             <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
+            <CachedRoute path='/user/profile/:userId' component={Profile} />
             <CachedRoute path='/user/profile' component={Profile} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />

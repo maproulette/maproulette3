@@ -48,6 +48,14 @@
     }
   }
 
+  &--orange {
+    @apply mr-border-orange mr-text-orange;
+
+    &:hover {
+      @apply mr-border-green-dark mr-text-green-dark;
+    }
+  }
+
   &--blue-fill {
     @apply mr-bg-blue mr-border-0 mr-text-white;
 

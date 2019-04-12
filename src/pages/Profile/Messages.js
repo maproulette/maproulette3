@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "User Settings",
   },
 
+  userNotFound: {
+    id: "Profile.noUser",
+    defaultMessage: "User not found or you are unauthorized to view this user.",
+  },
+
   userSince: {
     id: "Profile.userSince",
     defaultMessage: "User since:",
@@ -130,7 +135,7 @@ export default defineMessages({
                     "an email informing you of the notification (either immediately " +
                     "or as a daily digest)"
   },
-  
+
   yesLabel: {
     id: "Profile.form.yes.label",
     defaultMessage: "Yes",

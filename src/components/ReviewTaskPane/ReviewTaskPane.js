@@ -80,7 +80,6 @@ export class ReviewTaskPane extends Component {
           <WidgetWorkspace
             {...this.props}
             className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-8 mr-cards-inverse"
-            workspaceEyebrow={<ChallengeNameLink {...this.props} />}
             workspaceTitle={
               <h1 className="mr-h2 mr-my-2 mr-links-inverse">
                 <ChallengeNameLink {...this.props} />
