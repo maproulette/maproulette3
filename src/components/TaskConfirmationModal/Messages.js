@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Please Confirm Revision",
   },
 
+  disputeRevisionHeader: {
+    id: 'TaskConfirmationModal.disputeRevisionHeader',
+    defaultMessage: "Please Confirm Review Disagreement",
+  },
+
   inReviewHeader: {
     id: 'TaskConfirmationModal.inReviewHeader',
     defaultMessage: "Please Confirm Review",

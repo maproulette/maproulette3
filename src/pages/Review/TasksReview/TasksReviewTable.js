@@ -3,13 +3,14 @@ import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, FormattedTime }
        from 'react-intl'
 import _get from 'lodash/get'
-import _each from 'lodash/map'
+import _each from 'lodash/each'
+import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
 import _debounce from 'lodash/debounce'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
+import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
@@ -70,6 +71,18 @@ export class TaskReviewTable extends Component {
                        this.props.history)
   }
 
+  componentDidMount() {
+    const searchParams = this.props.history.location.state
+
+    if (searchParams) {
+      const sortBy = _get(searchParams, 'sortBy')
+      const direction = _get(searchParams, 'direction')
+      const filters = _get(searchParams, 'filters')
+
+      this.setState({tableState: {sortBy, direction, filters}})
+    }
+  }
+
   render() {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'reviewData.tasks', [])
@@ -98,6 +111,16 @@ export class TaskReviewTable extends Component {
                    columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedAt,
                    columnTypes.status, columnTypes.reviewCompleteControls, columnTypes.viewComments]
       }
+    }
+
+    let defaultSorted = [{id: 'mappedOn', desc: false}]
+    if (this.props.asReviewer && !this.props.showReviewedByMe && this.state.tableState.sortBy) {
+      defaultSorted = [{id: this.state.tableState.sortBy, desc: this.state.tableState.direction === "DESC"}]
+    }
+
+    let defaultFiltered = []
+    if (this.props.asReviewer && !this.props.showReviewedByMe && this.state.tableState.filters) {
+      defaultFiltered = _map(this.state.tableState.filters, (value, key) => {return {id: key, value}})
     }
 
     return (
@@ -130,7 +153,8 @@ export class TaskReviewTable extends Component {
           <div className="mr-mt-6">
             <ReactTable data={data} columns={columns}
                         defaultPageSize={pageSize}
-                        defaultSorted={[ {id: 'mappedOn', desc: false} ]}
+                        defaultSorted={defaultSorted}
+                        defaultFiltered={defaultFiltered}
                         minRows={1}
                         manual
                         multiSort={false}
@@ -237,16 +261,27 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
     sortable: false,
     exportable: t => _get(t.parent, 'name'),
     minWidth: 120,
-    Cell: ({row}) => (
-      <div className="row-challenge-column">
-        <Link
-          to={`/challenge/${row._original.parent.id}`}
-          title={row._original.parent.name}
-        >
-          {row._original.parent.name}
-        </Link>
-      </div>
-    )
+    Cell: ({row}) => {
+      let linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
+      if (tableState.sortBy) {
+        linkTo += `sortBy=${tableState.sortBy}&direction=${tableState.direction}&`
+      }
+
+      if (tableState.filters) {
+        linkTo += `filters=${encodeURIComponent(JSON.stringify(tableState.filters))}`
+      }
+
+      return (
+        <div className="row-challenge-column">
+          <Link
+            to={linkTo}
+            title={row._original.parent.name}
+          >
+            {row._original.parent.name}
+          </Link>
+        </div>
+      )
+    }
   }
 
   columns.mappedOn = {
@@ -314,6 +349,7 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
     Header: props.intl.formatMessage(messages.reviewStatusLabel),
     accessor: 'reviewStatus',
     sortable: true,
+    filterable: true,
     exportable: t => props.intl.formatMessage(messagesByReviewStatus[t.reviewStatus]),
     maxWidth: 180,
     Cell: props => (
@@ -323,6 +359,42 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
         className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
       />
     ),
+    Filter: ({ filter, onChange }) => {
+      const options = [
+        <option key="all" value="all">All</option>
+      ]
+
+      if (!props.asReviewer || props.showReviewedByMe) {
+        _each(TaskReviewStatus, (status) => {
+          options.push(
+            <option key={keysByReviewStatus[status]} value={status}>
+              {props.intl.formatMessage(messagesByReviewStatus[status])}
+            </option>
+          )
+        })
+      }
+      else {
+        _each(TaskReviewStatus, (status) => {
+          if (isNeedsReviewStatus(status)) {
+            options.push(
+              <option key={keysByReviewStatus[status]} value={status}>
+                {props.intl.formatMessage(messagesByReviewStatus[status])}
+              </option>
+            )
+          }
+        })
+      }
+
+      return (
+        <select
+          onChange={event => onChange(event.target.value)}
+          style={{ width: '100%' }}
+          value={filter ? filter.value : 'all'}
+        >
+          {options}
+        </select>
+      )
+    },
   }
 
   columns.reviewerControls = {
@@ -330,8 +402,9 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
     Header: props.intl.formatMessage(messages.actionsColumnHeader),
     sortable: false,
     maxWidth: 120,
+    minWidth: 110,
     Cell: ({row}) =>{
-      var linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
+      let linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
       if (tableState.sortBy) {
         linkTo += `sortBy=${tableState.sortBy}&direction=${tableState.direction}&`
       }
@@ -340,12 +413,37 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
         linkTo += `filters=${encodeURIComponent(JSON.stringify(tableState.filters))}`
       }
 
+      let action =
+            <Link to={linkTo}>
+              <FormattedMessage {...messages.reviewTaskLabel} />
+            </Link>
+
+      if (row._original.reviewedBy) {
+        if (row._original.reviewStatus === TaskReviewStatus.needed) {
+          action =
+            <Link to={linkTo}>
+              <FormattedMessage {...messages.reviewAgainTaskLabel} />
+            </Link>
+        }
+        else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+          if (row._original.reviewedBy.id !== props.user.id) {
+            action =
+              <Link to={linkTo}>
+                <FormattedMessage {...messages.resolveTaskLabel} />
+              </Link>
+          }
+          else {
+            action =
+              <span className="mr-text-grey-light">
+                <FormattedMessage {...messages.resolveTaskLabel}/>
+              </span>
+          }
+        }
+      }
+
       return <div className="row-controls-column">
-        <Link to={linkTo}>
-          <FormattedMessage {...messages.reviewTaskLabel} />
-          { row._original.reviewedBy && row._original.reviewStatus === TaskReviewStatus.needed && " (again)" }
-        </Link>
-      </div>
+              {action}
+            </div>
     }
   }
 
