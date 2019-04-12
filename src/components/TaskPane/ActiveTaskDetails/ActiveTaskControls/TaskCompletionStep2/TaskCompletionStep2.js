@@ -6,6 +6,7 @@ import TaskTooHardControl from '../TaskTooHardControl/TaskTooHardControl'
 import TaskAlreadyFixedControl from '../TaskAlreadyFixedControl/TaskAlreadyFixedControl'
 import TaskSkipControl from '../TaskSkipControl/TaskSkipControl'
 import TaskFalsePositiveControl from '../TaskFalsePositiveControl/TaskFalsePositiveControl'
+import TaskRevisedControl from '../TaskRevisedControl/TaskRevisedControl'
 import TaskCancelEditingControl from '../TaskCancelEditingControl/TaskCancelEditingControl'
 import Dropdown from '../../../../Dropdown/Dropdown'
 import './TaskCompletionStep2.scss'
@@ -52,6 +53,10 @@ export default class TaskCompletionStep2 extends Component {
            />
           }
         </div>
+
+        {this.props.needsRevised &&
+          <TaskRevisedControl {...this.props} className="mr-mb-4" />
+        }
 
         <TaskCancelEditingControl {...this.props} />
       </div>
