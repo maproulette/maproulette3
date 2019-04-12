@@ -490,8 +490,8 @@ module.exports = {
     hero: '43.75rem',
     full: '100%',
     screen: '100vh',
-    content: 'calc(100vh - 240px)',
-    'content-no-filters': 'calc(100vh - 103px)',
+    content: 'calc(100vh - 102px)',
+    challenges: 'calc(100vh - 244px)',
   },
 
   /*
