@@ -489,7 +489,8 @@ module.exports = {
     hero: '43.75rem',
     full: '100%',
     screen: '100vh',
-    content: 'calc(100vh - 240px)',
+    content: 'calc(100vh - 102px)',
+    challenges: 'calc(100vh - 244px)',
   },
 
   /*
@@ -604,7 +605,7 @@ module.exports = {
     screen: '100vh',
     '48': '12rem',
     '115': '28.75rem',
-    'screen40': '40vh',
+    screen40: '40vh',
     '1/3': '33%',
   },
 
