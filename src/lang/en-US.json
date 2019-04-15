@@ -612,7 +612,7 @@
   "Widgets.TaskCompletionWidget.label": "Completion",
   "Widgets.TaskCompletionWidget.title": "Completion",
   "Widgets.TaskCompletionWidget.inspectTitle": "Inspect",
-  "Widgets.TaskHistoryWidget.label": "History",
+  "Widgets.TaskHistoryWidget.label": "Task History",
   "Widgets.TaskHistoryWidget.title": "History",
   "Widgets.TaskHistoryWidget.control.startDiff": "Start Diff",
   "Widgets.TaskHistoryWidget.control.cancelDiff": "Cancel Diff",
