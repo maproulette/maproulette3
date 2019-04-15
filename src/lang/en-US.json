@@ -551,6 +551,7 @@
   "TaskHistory.controls.viewAttic.label": "View Attic",
   "Task.markedAs.label": "Task marked as",
   "Task.requestReview.label": "request review?",
+  "Task.awaitingReview.label": "Task is awaiting review.",
   "Task.controls.moreOptions.label": "More Options",
   "Task.controls.alreadyFixed.label": "Already fixed",
   "Task.controls.alreadyFixed.tooltip": "Already fixed",
