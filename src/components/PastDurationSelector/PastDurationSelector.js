@@ -49,8 +49,12 @@ const DurationButton = function(props) {
     >
       <span className="mr-flex">
         <span className="mr-mr-2">
-          <FormattedMessage {...messages.pastMonthsOption}
-                            values={{months: props.currentMonthsPast}} />
+          {props.currentMonthsPast >= 0 &&
+                 <FormattedMessage {...messages.pastMonthsOption}
+                            values={{months: props.currentMonthsPast}} />}
+          {props.currentMonthsPast < 0 &&
+                 <FormattedMessage {...messages.allTimeOption}
+                            values={{months: props.currentMonthsPast}} />}
         </span>
         <SvgSymbol
           sym="icon-cheveron-down"
@@ -67,7 +71,8 @@ const ListDurationItems = function(props) {
     <li key={months}>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.pickDuration(months, props.closeDropdown)}>
-        <FormattedMessage {...messages.pastMonthsOption} values={{months}} />
+        {months >= 0  && <FormattedMessage {...messages.pastMonthsOption} values={{months}} />}
+        {months < 0  && <FormattedMessage {...messages.allTimeOption} />}
       </a>
     </li>
   ))

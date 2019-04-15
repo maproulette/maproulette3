@@ -78,7 +78,7 @@ class Profile extends Component {
             </p>
           </header>
 
-          <UserSettings {...this.props} user={user} />
+          <UserSettings {...this.props} user={user} editor={this.props.user}/>
           <ApiKey {...this.props} user={user} />
         </div>
       </div>

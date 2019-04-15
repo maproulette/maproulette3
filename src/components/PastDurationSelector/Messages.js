@@ -8,6 +8,9 @@ export default defineMessages({
     id: "PastDurationSelector.pastMonths.selectOption",
     defaultMessage: "Past {months, plural, one {Month} =12 {Year} other {# Months}}",
   },
+  
+  allTimeOption: {
+    id: "PastDurationSelector.allTime.selectOption",
+    defaultMessage: "All Time",
+  },
 })
-
-
