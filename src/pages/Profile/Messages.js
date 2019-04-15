@@ -145,4 +145,9 @@ export default defineMessages({
     id: "Profile.form.no.label",
     defaultMessage: "No",
   },
+
+  mandatoryLabel: {
+    id: "Profile.form.mandatory.label",
+    defaultMessage: "Mandatory",
+  },
 })

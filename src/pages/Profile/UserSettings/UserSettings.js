@@ -144,8 +144,8 @@ class UserSettings extends Component {
         </header>
 
         <Form
-          schema={jsSchema(this.props.intl, this.props.user)}
-          uiSchema={uiSchema(this.props.intl, this.props.user)}
+          schema={jsSchema(this.props.intl, this.props.user, this.props.editor)}
+          uiSchema={uiSchema(this.props.intl, this.props.user, this.props.editor)}
           widgets={{SelectWidget: CustomSelectWidget}}
           className="form form--2-col"
           liveValidate

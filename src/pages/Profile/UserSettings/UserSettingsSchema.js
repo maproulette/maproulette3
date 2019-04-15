@@ -29,7 +29,7 @@ import messages from '../Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, user) => {
+export const jsSchema = (intl, user, editor) => {
   const localizedLocaleLabels = localeLabels(intl)
   const localizedEditorLabels = editorLabels(intl)
   const localizedBasemapLabels = basemapLayerLabels(intl)
@@ -123,7 +123,17 @@ export const jsSchema = (intl, user) => {
   }
 
   // Show 'needsReview' option if value is not REVIEW_MANDATORY or to superusers
-  if (AsManager(user).isSuperUser() || user.settings.needsReview !== needsReviewType.mandatory) {
+  if (AsManager(editor).isSuperUser()) {
+    schemaFields.properties.needsReview = {
+      title: intl.formatMessage(messages.needsReviewLabel),
+      type: "number",
+      enum: [needsReviewType.needed, needsReviewType.notNeeded, needsReviewType.mandatory],
+      enumNames: [intl.formatMessage(messages.yesLabel), intl.formatMessage(messages.noLabel),
+                  intl.formatMessage(messages.mandatoryLabel)],
+      default: needsReviewType.notNeeded,
+    }
+  }
+  else if (AsManager(user).isSuperUser() || user.settings.needsReview !== needsReviewType.mandatory) {
     schemaFields.properties.needsReview = {
       title: intl.formatMessage(messages.needsReviewLabel),
       type: "number",
@@ -146,7 +156,7 @@ export const jsSchema = (intl, user) => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = (intl, user) => {
+export const uiSchema = (intl, user, editor) => {
   const uiSchemaFields = {
     defaultEditor: {
       "ui:widget": "select",
@@ -189,7 +199,8 @@ export const uiSchema = (intl, user) => {
   }
 
   // Show 'needsReview' option if value is not REVIEW_MANDATORY or to superusers
-  if (AsManager(user).isSuperUser() || user.settings.needsReview !== needsReviewType.mandatory) {
+  if (AsManager(editor).isSuperUser() || AsManager(user).isSuperUser() ||
+      user.settings.needsReview !== needsReviewType.mandatory) {
     uiSchemaFields["ui:order"].push("needsReview")
     uiSchemaFields["ui:order"].push("notificationSubscriptions")
     uiSchemaFields["ui:order"].push("email")
