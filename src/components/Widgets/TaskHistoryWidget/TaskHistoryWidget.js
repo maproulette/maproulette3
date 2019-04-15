@@ -19,8 +19,8 @@ const descriptor = {
   widgetKey: 'TaskHistoryWidget',
   label: messages.label,
   targets: [WidgetDataTarget.task],
-  minWidth: 4,
-  defaultWidth: 3,
+  minWidth: 3,
+  defaultWidth: 4,
   minHeight: 3,
   defaultHeight: 6,
 }

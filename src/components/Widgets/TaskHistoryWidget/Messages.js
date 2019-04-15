@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   label: {
     id: "Widgets.TaskHistoryWidget.label",
-    defaultMessage: "History",
+    defaultMessage: "Task History",
   },
 
   title: {
