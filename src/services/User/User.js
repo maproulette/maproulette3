@@ -337,6 +337,7 @@ export const fetchUserNotifications = function(userId) {
   return function(dispatch) {
     return new Endpoint(api.user.notifications, {
       variables: {userId},
+      params: {limit: -1}
     }).execute().then(response => {
       const user = {id: userId}
       user.notifications = response
