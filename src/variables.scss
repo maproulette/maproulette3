@@ -5,35 +5,35 @@ $radius-medium: 4px;
 $radius-medium-less: 3px;
 
 // Colors
-$blue: #2281C2; // cornflower-blue
+$blue: #2281c2; // cornflower-blue
 $grey-darkest: #333333;
 $grey-dark: #606060;
 $grey-dark-less: #646464;
 $grey: #777777;
 $grey-light-less: #979797;
-$grey-light: #AAAAAA;
-$grey-lighter: #CCCCCC;
-$grey-lighter-more: #D8D8D8;
-$grey-lightest-less: #E3E3E3;
-$grey-lightest: #EEEEEE;
-$grey-lightest-more: #F6F6F6;
-$green: #00A592; // persian green
-$green-light: #A4DBD5;
-$yellow: #FCCB4E; // mustard
-$coral: #E05054; // coral
-$orange: #EA8433;
-$cyan: #38E5DB;
-$purple: #9D6ADC;
-$nearly-black: #0A0A0A;
+$grey-light: #aaaaaa;
+$grey-lighter: #cccccc;
+$grey-lighter-more: #d8d8d8;
+$grey-lightest-less: #e3e3e3;
+$grey-lightest: #eeeeee;
+$grey-lightest-more: #f6f6f6;
+$green: #00a592; // persian green
+$green-light: #a4dbd5;
+$yellow: #fccb4e; // mustard
+$coral: #e05054; // coral
+$orange: #ea8433;
+$cyan: #38e5db;
+$purple: #9d6adc;
+$nearly-black: #0a0a0a;
 
 // Chart colors
-$chart-blue-light: #E0F5F2;
-$chart-green: #61CDBB;
-$chart-green-light: #97E3D5;
-$chart-yellow: #F1E15B;
-$chart-orange: #E8A838;
-$chart-red: #F47560;
-$chart-brown: #E8C1A0;
+$chart-blue-light: #e0f5f2;
+$chart-green: #61cdbb;
+$chart-green-light: #97e3d5;
+$chart-yellow: #f1e15b;
+$chart-orange: #e8a838;
+$chart-red: #f47560;
+$chart-brown: #e8c1a0;
 
 $primary: $blue;
 $danger: $coral;
@@ -43,7 +43,7 @@ $progress-value-background-color: $chart-green;
 $switch-background-active: $green;
 $default-icon-color: $grey-dark;
 $minimizer-arrow-color: $grey-light-less;
-$box-shadow-color: rgba(0,0,0, 0.15);
+$box-shadow-color: rgba(0, 0, 0, 0.15);
 $form-element-border-color: $grey-lightest-less;
 
 // Task status colors
@@ -108,11 +108,11 @@ $navbar-item-color: $white;
 $navbar-item-active-color: $white;
 $navbar-item-hover-color: $white;
 $navbar-item-hover-background-color: transparent;
-$navbar-height: 120px;
-$mobile-navbar-height: 60px;
+$navbar-height: 103px;
+$mobile-navbar-height: 92px;
 
 // Subnav
-$subnav-height: $navbar-height;
+$subnav-height: 94px;
 $mobile-subnav-height: 50px;
 
 // Steps
@@ -127,7 +127,9 @@ $menu-background-color: $white;
 $app-tablet-break: 1024px;
 $app-mobile-break: 800px;
 $mobile-address-bar-height: 75px; // cumulative top and bottom bars
-$mobile-full-screen-pane: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
+$mobile-full-screen-pane: calc(
+  100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+);
 
 // Screen sizes
 $full-screen: calc(100vh - #{$navbar-height});

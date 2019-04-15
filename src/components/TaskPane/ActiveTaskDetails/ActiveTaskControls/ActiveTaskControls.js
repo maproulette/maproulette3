@@ -194,12 +194,13 @@ export class ActiveTaskControls extends Component {
            />
           }
 
-          {isEditingTask && !needsRevised &&
+          {isEditingTask &&
            <TaskCompletionStep2
              {...this.props}
              allowedProgressions={allowedProgressions}
              complete={this.initiateCompletion}
              cancelEditing={this.cancelEditing}
+             needsRevised={needsRevised}
            />
           }
 

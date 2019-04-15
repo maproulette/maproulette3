@@ -13,8 +13,7 @@ import BusySpinner from '../BusySpinner/BusySpinner'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SignInButton from '../SignInButton/SignInButton'
-import AsManager
-       from '../../interactions/User/AsManager'
+import AsManager from '../../interactions/User/AsManager'
 import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
@@ -24,8 +23,8 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
 
 /**
- * ChallengeDetail represents a specific challenge view. It presents an 
- * overview of the challenge and allows the user to choose to start 
+ * ChallengeDetail represents a specific challenge view. It presents an
+ * overview of the challenge and allows the user to choose to start
  * working on the challenge.
  *
  * @author [Ryan Scherler](https://github.com/ryanscherler)
@@ -49,24 +48,28 @@ export class ChallengeDetail extends Component {
     let startControl = null
 
     if (_isObject(this.props.user) && !challenge.isVirtual) {
-      if (_findIndex(this.props.user.savedChallenges,
-                     {id: challenge.id}) !== -1) {
+      if (
+        _findIndex(this.props.user.savedChallenges, { id: challenge.id }) !== -1
+      ) {
         isSaved = true
         unsaveControl = (
           <Link
             to={{}}
-            onClick={() => this.props.unsaveChallenge(this.props.user.id, challenge.id)}
+            onClick={() =>
+              this.props.unsaveChallenge(this.props.user.id, challenge.id)
+            }
             className="mr-button"
           >
             <FormattedMessage {...messages.unsave} />
           </Link>
         )
-      }
-      else {
+      } else {
         saveControl = (
           <Link
             to={{}}
-            onClick={() => this.props.saveChallenge(this.props.user.id, challenge.id)}
+            onClick={() =>
+              this.props.saveChallenge(this.props.user.id, challenge.id)
+            }
             className="mr-button"
           >
             <FormattedMessage {...messages.save} />
@@ -77,9 +80,8 @@ export class ChallengeDetail extends Component {
 
     // Users need to be signed in to start a challenge
     if (!_isObject(this.props.user)) {
-      startControl = <SignInButton {...this.props} longForm className='' />
-    }
-    else {
+      startControl = <SignInButton {...this.props} longForm className="" />
+    } else {
       startControl = (
         <Link
           to={{}}
@@ -92,8 +94,9 @@ export class ChallengeDetail extends Component {
     }
 
     // Does this user own (or can manage) the current challenge?
-    const isManageable =
-      AsManager(this.props.user).canManageChallenge(challenge)
+    const isManageable = AsManager(this.props.user).canManageChallenge(
+      challenge
+    )
 
     const manageControl = !isManageable ? null : (
       <Link
@@ -105,77 +108,91 @@ export class ChallengeDetail extends Component {
     )
 
     return (
-      <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50 lg:mr-flex">
+      <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
         <div className="mr-flex-1">
-            <MapPane>
-                <BrowseMap 
-                    className="split-pane"
-                    challenge={challenge}
-                    onTaskClick={this.props.startChallengeWithTask}
-                    {...this.props} 
-                />
-            </MapPane>
+          <MapPane>
+            <BrowseMap
+              className="split-pane"
+              challenge={challenge}
+              onTaskClick={this.props.startChallengeWithTask}
+              {...this.props}
+            />
+          </MapPane>
         </div>
-        <div className="mr-flex-1 mr-flex mr-items-center">
-          <div className="mr-flex-grow mr-max-w-md mr-mx-auto">
-            <div className="mr-p-8">
+        <div className="mr-flex-1">
+          <div className="mr-h-content mr-overflow-auto">
+            <div className="mr-max-w-md mr-mx-auto">
+              <div className="mr-py-12 mr-px-8">
                 {_get(this.props, 'history.location.state.fromSearch') && (
-                  <div class="mr-mb-4">        
-                    <button className="mr-text-green-lighter mr-text-sm hover:mr-text-white" onClick={() => this.props.history.goBack()}>&larr; Go Back</button>
+                  <div class="mr-mb-4">
+                    <button
+                      className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
+                      onClick={() => this.props.history.goBack()}
+                    >
+                      &larr; Go Back
+                    </button>
                   </div>
                 )}
-                {(isSaved || challenge.featured || challenge.popular || challenge.newest) &&
+                {(isSaved ||
+                  challenge.featured ||
+                  challenge.popular ||
+                  challenge.newest) && (
                   <ul className="mr-card-challenge__taxonomy">
-                    {isSaved &&
+                    {isSaved && (
                       <li>
                         <span className="mr-text-pink-light">Saved</span>
                       </li>
-                    }
-                    {challenge.featured &&
+                    )}
+                    {challenge.featured && (
                       <li>
                         <span className="mr-text-turquoise">Featured</span>
                       </li>
-                    }
-                    {challenge.popular &&
+                    )}
+                    {challenge.popular && (
                       <li>
                         <span className="mr-text-orange">Popular</span>
                       </li>
-                    }
-                    {challenge.newest &&
+                    )}
+                    {challenge.newest && (
                       <li>
                         <span className="mr-text-yellow">Newest</span>
                       </li>
-                    }
+                    )}
                   </ul>
-                }
-                <h1 className="mr-card-challenge__title">
-                  {challenge.name}
-                </h1>
+                )}
+                <h1 className="mr-card-challenge__title">{challenge.name}</h1>
 
-                {challenge.parent && // virtual challenges don't have projects
+                {challenge.parent && ( // virtual challenges don't have projects
                   <Link
                     className="mr-card-challenge__owner"
-                    onClick={(e) => {e.stopPropagation()}}
+                    onClick={e => {
+                      e.stopPropagation()
+                    }}
                     to={`/project/${challenge.parent.id}/leaderboard`}
                   >
                     {challenge.parent.displayName}
                   </Link>
-                }
+                )}
 
                 <div className="mr-card-challenge__content">
-                  {!challenge.isVirtual &&
+                  {!challenge.isVirtual && (
                     <ol className="mr-card-challenge__meta">
                       <li>
                         <strong className="mr-text-yellow">
                           <FormattedMessage {...messages.difficulty} />:
-                        </strong> <FormattedMessage
+                        </strong>{' '}
+                        <FormattedMessage
                           {...messagesByDifficulty[challenge.difficulty]}
                         />
                       </li>
                       <li>
                         <strong className="mr-text-yellow">
-                          <FormattedMessage {...messages.lastTaskRefreshLabel} />:
-                        </strong> <FormattedRelative
+                          <FormattedMessage
+                            {...messages.lastTaskRefreshLabel}
+                          />
+                          :
+                        </strong>{' '}
+                        <FormattedRelative
                           value={parse(challenge.lastTaskRefresh)}
                         />
                       </li>
@@ -188,7 +205,7 @@ export class ChallengeDetail extends Component {
                         </Link>
                       </li>
                     </ol>
-                  }
+                  )}
 
                   <div className="mr-card-challenge__description">
                     <MarkdownContent
@@ -196,25 +213,23 @@ export class ChallengeDetail extends Component {
                     />
                   </div>
 
-                  <ChallengeProgress className="mr-mt-4 mr-mb-12" challenge={challenge} />
+                  <ChallengeProgress
+                    className="mr-mt-4 mr-mb-12"
+                    challenge={challenge}
+                  />
 
                   <ul className="mr-card-challenge__actions">
-                    {startControl &&
-                      <li>
-                        {startControl}
-                      </li>
-                    }
-                    {(saveControl || unsaveControl) &&
+                    {startControl && <li>{startControl}</li>}
+                    {(saveControl || unsaveControl) && (
                       <li>
                         {saveControl}
                         {unsaveControl}
                       </li>
-                    }
-                    {manageControl &&
-                      <li>{manageControl}</li>
-                    }
+                    )}
+                    {manageControl && <li>{manageControl}</li>}
                   </ul>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -223,13 +238,8 @@ export class ChallengeDetail extends Component {
   }
 }
 
-export default 
-  WithCurrentUser(
-      WithClusteredTasks(
-        WithStartChallenge(
-          WithBrowsedChallenge(
-            injectIntl(ChallengeDetail)
-          )
-        )
-      )
+export default WithCurrentUser(
+  WithClusteredTasks(
+    WithStartChallenge(WithBrowsedChallenge(injectIntl(ChallengeDetail)))
   )
+)

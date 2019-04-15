@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus }
        from '../../../../../services/Task/TaskReview/TaskReviewStatus'
@@ -24,7 +25,7 @@ export default class TaskRevisedControl extends Component {
     else {
       return (
         <Dropdown
-          className="mr-dropdown--fixed mr-w-full"
+          className={classNames("mr-dropdown--fixed mr-w-full", this.props.className)}
           dropdownButton={dropdown =>
             <MoreOptionsButton toggleDropdownVisible={dropdown.toggleDropdownVisible} {...this.props}/>
           }
