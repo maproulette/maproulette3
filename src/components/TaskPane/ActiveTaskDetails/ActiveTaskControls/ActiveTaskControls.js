@@ -180,6 +180,12 @@ export class ActiveTaskControls extends Component {
              /> <FormattedMessage
                {...messagesByStatus[this.props.task.status]}
              />
+             {(this.props.task.reviewStatus === TaskReviewStatus.needed ||
+               this.props.task.reviewStatus === TaskReviewStatus.disputed) &&
+                <div className="mr-text-yellow mr-text-sd mr-my-4">
+                  <FormattedMessage {...messages.awaitingReview} />
+                </div>
+             }
            </div>
           }
 

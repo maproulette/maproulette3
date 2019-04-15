@@ -13,4 +13,9 @@ export default defineMessages({
     id: 'Task.requestReview.label',
     defaultMessage: "request review?",
   },
+
+  awaitingReview: {
+    id: 'Task.awaitingReview.label',
+    defaultMessage: "Task is awaiting review.",
+  },
 })
