@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.3] - 2019-04-12
+## [v3.3] - 2019-04-15
 ### Added
 - Task reviews
 - In-app notifications with optional emails
