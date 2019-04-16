@@ -86,6 +86,21 @@ export default defineMessages({
     defaultMessage: "Unable to fetch map-bounded tasks",
   },
 
+  reviewTaskFetchFailure: {
+    id: 'Errors.reviewTask.fetchFailure',
+    defaultMessage: "Unable to fetch review needed tasks",
+  },
+
+  reviewTaskAlreadyClaimed: {
+    id: 'Errors.reviewTask.alreadyClaimed',
+    defaultMessage: "This task is already being reviewed by someone else.",
+  },
+
+  reviewTaskNotClaimed: {
+    id: 'Errors.reviewTask.notClaimedByYou',
+    defaultMessage: "Unable to cancel review.",
+  },
+
   challengeFetchFailure: {
     id: 'Errors.challenge.fetchFailure',
     defaultMessage: "Unable to retrieve latest challenge data from server."

@@ -55,6 +55,7 @@ let colors = {
   grey: '#737373',
   'grey-light': '#BDB8AE',
   'grey-lighter': '#F2EFE9',
+  'grey-lighter-10': 'rgba(242, 239, 233, .1)',
   green: '#5B937A',
   'green-light': '#7EBC89',
   'green-lighter': '#91F3A2',
@@ -64,15 +65,18 @@ let colors = {
   'blue-light': '#496B94',
   'blue-dark': '#182841',
   'blue-dark-75': 'rgba(24, 40, 65, .75)',
+  'blue-darker': '#0e192a',
   yellow: '#FFFD86',
   'yellow-75': 'rgba(255, 253, 134, .75)',
   turquoise: '#17FFF3',
   pink: '#E87CE0',
   'pink-light': '#FFB2F0',
   twitter: '#1DA1F2',
-  orange: '#ED9F22',
+  orange: '#f7bb59',
   red: '#CA484C',
   'red-light': '#E05054',
+  purple: '#8990E5',
+  teal: '#6FB3B8',
 }
 
 module.exports = {
@@ -486,7 +490,8 @@ module.exports = {
     hero: '43.75rem',
     full: '100%',
     screen: '100vh',
-    content: 'calc(100vh - 240px)',
+    content: 'calc(100vh - 102px)',
+    challenges: 'calc(100vh - 244px)',
   },
 
   /*
@@ -514,6 +519,7 @@ module.exports = {
     '60': '15rem',
     auto: 'auto',
     full: '100%',
+    '1/2': '50vw',
     button: '7.8125rem',
   },
 
@@ -539,6 +545,7 @@ module.exports = {
     screen: '100vh',
     '48': '12rem',
     'screen-50': '50vh',
+    'content-no-filters': 'calc(100vh - 103px)',
   },
 
   /*
@@ -569,6 +576,7 @@ module.exports = {
     '6xl': '120rem',
     full: '100%',
     '48': '12rem',
+    '1/3': '33%',
     '1/4': '25%',
     '3/4': '75%',
     '1/5': '20%',
@@ -599,6 +607,8 @@ module.exports = {
     screen: '100vh',
     '48': '12rem',
     '115': '28.75rem',
+    screen40: '40vh',
+    '1/3': '33%',
   },
 
   /*
@@ -944,6 +954,7 @@ module.exports = {
         'green-blue': [colors['green'], colors['blue']],
         'green-dark-blue': [colors['green-dark'], colors['blue']],
         'blue-dark-green-dark': [colors['blue-dark'], colors['green-dark']],
+        'blue-darker-blue-dark': [colors['blue-darker'], colors['blue-dark']],
       },
     }),
     require('tailwindcss-transforms')({
@@ -954,6 +965,7 @@ module.exports = {
         '270': '270deg',
       },
       translate: {
+        '1/4': '25%',
         '1/2': '50%',
         full: '100%',
       },

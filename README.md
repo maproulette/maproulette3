@@ -54,14 +54,12 @@ server.
    to the `conf/application.conf` file, `conf/dev.conf` file and maproulette2
    docs for explanations of the various server configuration settings. At the
    very least, you'll want to make sure your JDBC url is correct and your OAuth
-   consumer key and secret are set properly. You'll also need to set the
-   `mr3.host` to the URL of your front-end dev server (`http://127.0.0.1:3000`
-   by default) and set `mr3.devMode=true` if you're doing development
+   consumer key and secret are set properly.
 
 4. Fire up your back-end server, specifying the path to your .conf file with
    `-Dconfig.resource` or explicitly specifying the various system properties
-   on the command line (e.g. `-Dmr3.host="http://127.0.0.1:3000`). See the
-   maproulette2 docs for details on starting up the server
+   on the command line. See the maproulette2 docs for details on starting up
+   the server
 
 5. Edit your `.env.development.local` file in your front-end project and set:
    ```

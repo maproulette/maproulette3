@@ -1,19 +1,18 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { denormalize } from 'normalizr'
-import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
+import _get from 'lodash/get'
 import { logoutUser,
+         fetchUser,
          loadCompleteUser,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,
-         updateUserSettings,
-         updateUserAppSetting,
          fetchTopChallenges,
          fetchSavedChallenges,
          fetchSavedTasks,
          fetchUserActivity,
-         resetAPIKey,
+         updateUserAppSetting,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../interactions/User/AsEndUser'
 
@@ -32,7 +31,7 @@ const WithCurrentUser =
   WrappedComponent => connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
 
 export const mapStateToProps = state => {
-  const props = {user: null}
+  const props = {user: null, allUsers: null}
 
   const userId = _get(state, 'currentUser.userId')
   const userEntity = _get(state, `entities.users.${userId}`)
@@ -44,14 +43,17 @@ export const mapStateToProps = state => {
       const endUser = AsEndUser(props.user)
       props.user.isLoggedIn = endUser.isLoggedIn()
       props.user.isSuperUser = endUser.isSuperUser()
+      props.user.hasUnreadNotifications = endUser.hasUnreadNotifications()
     }
   }
 
+  props.allUsers = _get(state, "entities.users")
   return props
 }
 
 export const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
+    fetchUser,
     loadCompleteUser,
     logoutUser,
     fetchSavedChallenges,
@@ -60,10 +62,8 @@ export const mapDispatchToProps = dispatch => {
     fetchSavedTasks,
     saveTask,
     unsaveTask,
-    updateUserSettings,
     fetchTopChallenges,
     fetchUserActivity,
-    resetAPIKey,
   }, dispatch)
 
   actions.updateUserAppSetting = _debounce((userId, setting) => {

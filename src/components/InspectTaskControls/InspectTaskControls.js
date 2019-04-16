@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
 import _omit from 'lodash/omit'
+import _get from 'lodash/get'
+import BusySpinner from '../BusySpinner/BusySpinner'
 import AsManager from '../../interactions/User/AsManager'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts
@@ -73,6 +75,13 @@ export class InspectTaskControls extends Component {
   }
   render() {
     const manager = AsManager(this.props.user)
+    if (!_get(this.props, 'task.parent.parent')) {
+      return (
+        <div className={classNames("inspect-task-controls", this.props.className)}>
+          <BusySpinner />
+        </div>
+      )
+    }
 
     return (
       <div className={classNames("inspect-task-controls", this.props.className)}>
@@ -82,7 +91,7 @@ export class InspectTaskControls extends Component {
                             className="active-task-controls__edit-control"
                             {..._omit(this.props, 'className')} />
 
-          {manager.canWriteProject(this.props.task.parent.parent) ?
+          {manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
            <Link
              to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
              className="mr-button"

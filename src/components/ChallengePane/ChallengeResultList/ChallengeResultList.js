@@ -35,9 +35,15 @@ export class ChallengeResultList extends Component {
 
     // If the user is actively browsing a challenge, include that challenge even if
     // it didn't pass the filters.
-    if (_isObject(this.props.browsedChallenge) && !this.props.loadingBrowsedChallenge) {
-      if (this.props.browsedChallenge.isVirtual ||
-          _findIndex(challengeResults, {id: this.props.browsedChallenge.id}) === -1) {
+    if (
+      _isObject(this.props.browsedChallenge) &&
+      !this.props.loadingBrowsedChallenge
+    ) {
+      if (
+        this.props.browsedChallenge.isVirtual ||
+        _findIndex(challengeResults, { id: this.props.browsedChallenge.id }) ===
+          -1
+      ) {
         challengeResults.push(this.props.browsedChallenge)
       }
     }
@@ -46,14 +52,18 @@ export class ChallengeResultList extends Component {
     // challenge), offer the user an option to start a virtual challenge to
     // work on those mapped tasks.
     let virtualChallengeOption = null
-    if (_get(this.props, 'mapBoundedTasks.tasks.length', 0) > 0 &&
-        !_isObject(this.props.browsedChallenge)) {
-      virtualChallengeOption =
+    if (
+      _get(this.props, 'mapBoundedTasks.tasks.length', 0) > 0 &&
+      !_isObject(this.props.browsedChallenge)
+    ) {
+      virtualChallengeOption = (
         <StartVirtualChallenge
           {...this.props}
           taskCount={this.props.mapBoundedTasks.tasks.length}
           createVirtualChallenge={this.props.startMapBoundedTasks}
-          creatingVirtualChallenge={this.props.creatingVirtualChallenge} />
+          creatingVirtualChallenge={this.props.creatingVirtualChallenge}
+        />
+      )
     }
 
     let results = null
@@ -61,12 +71,13 @@ export class ChallengeResultList extends Component {
       if (!isFetching) {
         results = (
           <div className="mr-text-white mr-text-lg mr-pt-4">
-            <span><FormattedMessage {...messages.noResults} /></span>
+            <span>
+              <FormattedMessage {...messages.noResults} />
+            </span>
           </div>
         )
       }
-    }
-    else {
+    } else {
       results = _map(challengeResults, challenge => (
         <ChallengeResultItem
           key={challenge.id}
@@ -81,7 +92,8 @@ export class ChallengeResultList extends Component {
     return (
       <div
         ref={this.listRef}
-        className="mr-relative lg:mr-w-sm lg:mr-pr-6 lg:mr-mr-2 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-content lg:mr-overflow-auto">
+        className="mr-relative lg:mr-w-sm lg:mr-pr-6 lg:mr-mr-2 mr-mb-6 lg:mr-mb-0 lg:mr-rounded lg:mr-h-challenges lg:mr-overflow-auto"
+      >
         {virtualChallengeOption}
         {results}
 
@@ -111,7 +123,7 @@ ChallengeResultList.propTypes = {
 }
 
 export default WithCurrentUser(
-                 WithSortedChallenges(
-                   WithPagedChallenges(ChallengeResultList, "challenges", "pagedChallenges")
-                 )
-               )
+  WithSortedChallenges(
+    WithPagedChallenges(ChallengeResultList, 'challenges', 'pagedChallenges')
+  )
+)

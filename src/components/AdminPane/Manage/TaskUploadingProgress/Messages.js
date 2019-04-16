@@ -6,7 +6,7 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   creatingTasks: {
     id: 'Admin.TaskUploadProgress.uploadingTasks.header',
-    defaultMessage: "Rebuilding Tasks",
+    defaultMessage: "Building Tasks",
   },
 
   tasksCreated: {

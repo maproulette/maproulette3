@@ -43,6 +43,11 @@ export default {
     fetchFailure: messages.boundedTaskFetchFailure,
   },
 
+  reviewTask: {
+    fetchFailure: messages.reviewTaskFetchFailure,
+    alreadyClaimed: messages.reviewTaskAlreadyClaimed,
+  },
+
   challenge: {
     fetchFailure: messages.challengeFetchFailure,
     searchFailure: messages.challengeSearchFailure,

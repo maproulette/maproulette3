@@ -16,6 +16,10 @@
     .field-radio-group {
       @apply mr-text-grey;
     }
+
+    .array-item-list .array-item {
+      @apply mr-mb-4;
+    }
   }
 
   .field {
@@ -37,7 +41,7 @@
   }
 }
 
-.control-label {
+.control-label, .form-group.field-boolean label span, .form-group.field-number label span {
   @apply mr-cursor-pointer mr-inline-block mr-mb-2 mr-font-medium mr-text-blue;
 
   .field-hide-label & {

@@ -13,7 +13,7 @@ import { messagesByDifficulty }
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
+// import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 
@@ -69,6 +69,7 @@ export class CardChallenge extends Component {
              </Link>
             }
           </div>
+          {/*
           {!this.props.permanentlyExpanded &&
            <SvgSymbol
              sym="icon-cheveron-down"
@@ -79,6 +80,7 @@ export class CardChallenge extends Component {
              )}
            />
           }
+          */}
         </header>
 
         <AnimateHeight duration={500} height={this.props.isExpanded ? 'auto' : 0}>

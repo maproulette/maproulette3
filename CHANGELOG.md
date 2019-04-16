@@ -7,6 +7,39 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.3] - 2019-04-16
+### Added
+- Task reviews
+- In-app notifications with optional emails
+- New user settings for managing notifications and emails
+- Brazilian Portuguese translation by @raphaelpe
+- Updated Korean translation by @depth221
+- Confirmation step when completing a task
+- Comment mentions with `@[user name]` (spaces) or `@username` (no spaces)
+- Task History widget on task-completion and task-review pages
+- Task inspection link for challenge owners on task completion page
+- Challenge detail page when navigating to a challenge URL
+- All Time timeframe to Leaderboard, which is now the default
+- Updated 404 page
+- [internal] Upgrade various package dependencies, including React
+
+### Fixed
+- Default page title by @LoicUV
+- Ensure line-by-line geojson upload progress shown (#701)
+- Remove stale backend setup instructions from README
+- Formatting of markdown lists
+- JOSM communication in Safari (#580)
+- Increase prominence of leaderboard refresh delay
+
+### Changed
+- Task completion comment now requested at confirmation step
+- Random vs Nearby task loading setting moved to confirmation step
+- Global leaderboard now defaults to All Time timeframe
+
+### Removed
+- Task Comments widget (users can use Task History widget instead)
+
+
 ## [v3.2.3] - 2019-03-12
 ### Fixed
 - Honor task priorities when loading the next random task

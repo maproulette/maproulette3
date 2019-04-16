@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "User Settings",
   },
 
+  userNotFound: {
+    id: "Profile.noUser",
+    defaultMessage: "User not found or you are unauthorized to view this user.",
+  },
+
   userSince: {
     id: "Profile.userSince",
     defaultMessage: "User since:",
@@ -81,5 +86,68 @@ export default defineMessages({
     id: "Profile.apiKey.controls.reset.label",
     defaultMessage: "Reset",
   },
-})
 
+  needsReviewLabel: {
+    id: "Profile.form.needsReview.label",
+    defaultMessage: "Request Review of all Work",
+  },
+
+  needsReviewDescription: {
+    id: "Profile.form.needsReview.description",
+    defaultMessage: "Automatically request a human review of each task you complete",
+  },
+
+  isReviewerLabel: {
+    id: "Profile.form.isReviewer.label",
+    defaultMessage: "Volunteer as a Reviewer",
+  },
+
+  isReviewerDescription: {
+    id: "Profile.form.isReviewer.description",
+    defaultMessage: "Volunteer to review tasks for which a review has been requested",
+  },
+
+  emailLabel: {
+    id: "Profile.form.email.label",
+    defaultMessage: "Email address",
+  },
+
+  emailDescription: {
+    id: "Profile.form.email.description",
+    defaultMessage: "If you request emails in your Notification Subscriptions, they " +
+                    "will be sent here"
+  },
+
+  notificationLabel: {
+    id: "Profile.form.notification.label",
+    defaultMessage: "Notification",
+  },
+
+  notificationSubscriptionsLabel: {
+    id: "Profile.form.notificationSubscriptions.label",
+    defaultMessage: "Notification Subscriptions",
+  },
+
+  notificationSubscriptionsDescription: {
+    id: "Profile.form.notificationSubscriptions.description",
+    defaultMessage: "Decide which MapRoulette notifications you would like to " +
+                    "receive, along with whether you would like to be sent " +
+                    "an email informing you of the notification (either immediately " +
+                    "or as a daily digest)"
+  },
+
+  yesLabel: {
+    id: "Profile.form.yes.label",
+    defaultMessage: "Yes",
+  },
+
+  noLabel: {
+    id: "Profile.form.no.label",
+    defaultMessage: "No",
+  },
+
+  mandatoryLabel: {
+    id: "Profile.form.mandatory.label",
+    defaultMessage: "Mandatory",
+  },
+})

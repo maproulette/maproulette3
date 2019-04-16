@@ -8,6 +8,7 @@ import _isString from 'lodash/isString'
 import _isPlainObject from 'lodash/isPlainObject'
 import { taskDenormalizationSchema,
          fetchTask,
+         fetchTaskForReview,
          fetchTaskComments,
          fetchTaskPlace,
          loadRandomTaskFromChallenge,
@@ -41,8 +42,8 @@ const PROJECT_STALE = 300000 // 5 minutes
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithCurrentTask = WrappedComponent =>
-  connect(mapStateToProps, mapDispatchToProps)(WithLoadedTask(WrappedComponent))
+const WithCurrentTask = (WrappedComponent, forReview=false) =>
+  connect(mapStateToProps, mapDispatchToProps)(WithLoadedTask(WrappedComponent, forReview))
 
 /**
  * WithLoadedTask is a private HOC used to fetch an up-to-date copy of the task
@@ -50,11 +51,11 @@ const WithCurrentTask = WrappedComponent =>
  *
  * @private
  */
-const WithLoadedTask = function(WrappedComponent) {
+const WithLoadedTask = function(WrappedComponent, forReview) {
   return class extends Component {
     loadNeededTask = props => {
       if (_isFinite(props.taskId)) {
-        props.loadTask(props.taskId, props.task)
+        props.loadTask(props.taskId, props.task, forReview)
       }
     }
 
@@ -106,9 +107,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      *
      * @private
      */
-    loadTask: (taskId, existingTask=null) => {
+    loadTask: (taskId, existingTask=null, forReview=false) => {
       dispatch(
-        fetchTask(taskId)
+        forReview ? fetchTaskForReview(taskId) : fetchTask(taskId)
       ).then(normalizedResults => {
         if (!_isFinite(normalizedResults.result) ||
             _get(normalizedResults,
@@ -139,6 +140,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(fetchChallengeActions(loadedTask.parent))
 
         return normalizedResults
+      }).catch(error => {
+        if (forReview) {
+          dispatch(addError(AppErrors.reviewTask.alreadyClaimed))
+        }
+        else {
+          dispatch(addError(AppErrors.task.taskFetchFailure))
+        }
       })
     },
 
@@ -161,16 +169,18 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy, userId) => {
+    completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
       return dispatch(
-        completeTask(taskId, challengeId, taskStatus)
+        completeTask(taskId, challengeId, taskStatus, needsReview)
       ).then(() => {
-        // Start loading the next task from the challenge.
-        nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
-          visitNewTask(ownProps, taskId, newTask)
-        ).catch(error => {
-          ownProps.history.push(`/browse/challenges/${challengeId}`)
-        })
+        if (taskLoadBy) {
+          // Start loading the next task from the challenge.
+          nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+            visitNewTask(ownProps, taskId, newTask)
+          ).catch(error => {
+            ownProps.history.push(`/browse/challenges/${challengeId}`)
+          })
+        }
 
         if (_isString(comment) && comment.length > 0) {
           dispatch(addTaskComment(taskId, comment, taskStatus))
@@ -210,7 +220,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Post a comment on the task without performing any other action
      */
     postTaskComment: (task, comment) => {
-      dispatch(addTaskComment(task.id, comment))
+      return dispatch(addTaskComment(task.id, comment))
     },
 
     fetchOSMUser,

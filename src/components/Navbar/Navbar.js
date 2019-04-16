@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MediaQuery from 'react-responsive'
 import { screens } from '../../tailwind'
 import MobileMenu from 'react-burger-menu/lib/menus/slide'
+import classNames from 'classnames'
 import _get from 'lodash/get'
 import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
@@ -36,7 +37,7 @@ export default class Navbar extends Component {
   }
 
   signout = () => {
-    this.props.logoutUser()
+    this.props.logoutUser(_get(this.props, 'user.id'))
     this.closeMobileMenu()
   }
 
@@ -142,6 +143,7 @@ const ProfileButton = function(props) {
     <button className="mr-dropdown__button" onClick={props.toggleDropdownVisible}>
       <span className="mr-flex mr-items-center mr-text-white">
         <div className="mr-relative">
+          <UnreadNotificationsIndicator {...props} />
           <ProfileImage {...props} />
         </div>
 
@@ -158,9 +160,34 @@ const ProfileButton = function(props) {
   )
 }
 
+const UnreadNotificationsIndicator = function(props) {
+  if (!props.user.hasUnreadNotifications) {
+    return null
+  }
+
+  return (
+    <span
+      className={classNames("mr-rounded-full mr-bg-red-light mr-text-white", {
+                            "mr-absolute mr-pin-t mr-pin-l-50 mr-translate-x-1/2 mr-w-3 mr-h-3": !props.inline,
+                            "mr-inline-block mr-ml-2 mr-w-2 mr-h-2": props.inline})}
+    />
+  )
+}
+
 const ProfileMenu = function(props) {
   return (
     <ol className="mr-list-dropdown mr-list-dropdown--nav">
+      <li>
+        <NavLink to="/inbox" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.inbox} />
+          <UnreadNotificationsIndicator {...props} inline />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/review" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.review} />
+        </NavLink>
+      </li>
       <li>
         <NavLink to='/admin/projects' onClick={props.closeDropdown}>
           <FormattedMessage {...messages.adminCreate} />
@@ -205,11 +232,13 @@ const Nav = props => (
         <FormattedMessage {...messages.results} />
       </NavLink>
     </li>
+
     <li>
       <NavLink to='/leaderboard' onClick={props.closeMobileMenu}>
         <FormattedMessage {...messages.leaderboard} />
       </NavLink>
     </li>
+
     <li>
       <a
         href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"
@@ -251,6 +280,17 @@ const MobileNav = props => (
         <li>
           <NavLink to='/user/profile' onClick={props.closeMobileMenu}>
             <FormattedMessage {...messages.profile} />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/inbox" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.inbox} />
+            <UnreadNotificationsIndicator {...props} inline />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/review" onClick={props.closeMobileMenu}>
+            <FormattedMessage {...messages.review} />
           </NavLink>
         </li>
         <li>

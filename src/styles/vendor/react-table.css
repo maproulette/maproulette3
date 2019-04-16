@@ -1,0 +1,83 @@
+@import 'react-table/react-table';
+
+.ReactTable {
+  @apply mr-border-none mr-text-grey;
+
+  .rt-table {
+    @apply mr-mb-3;
+  }
+
+  .rt-thead {
+    &.-header {
+      @apply mr-shadow-none mr-border-b mr-border-grey-lighter;
+    }
+
+    .rt-tr {
+      @apply mr-text-left;
+    }
+
+    .rt-th,
+    .rt-tb {
+      @apply mr-border-none mr-p-4 mr-text-grey mr-text-xs mr-leading-none mr-font-medium mr-uppercase mr-tracking-wide;
+
+      &.-sort-asc {
+        box-shadow: inset 0 2px 0 0 config('colors.blue-light');
+      }
+
+      &.-sort-desc {
+        box-shadow: inset 0 -2px 0 0 config('colors.blue-light');
+      }
+    }
+
+    &.-filters {
+      @apply mr-border-none;
+
+      .rt-th {
+        @apply mr-border-none mr-pb-0 mr-pt-4;
+      }
+
+      input {
+        @apply mr-text-xs mr-leading-tight mr-border-grey-light mr-p-2 mr-rounded;
+
+        &:focus {
+          @apply mr-border-grey;
+        }
+      }
+    }
+  }
+
+  .rt-td {
+    @apply mr-p-3 mr-text-sm;
+  }
+
+  .rt-tbody {
+    .rt-tr-group {
+      @apply mr-border-grey-lighter;
+    }
+
+    .rt-td {
+      @apply mr-border-r-0 mr-p-4 mr-leading-normal;
+    }
+  }
+
+  .-pagination {
+    @apply mr-shadow-none mr-border-t-0 mr-text-sm;
+
+    .-btn {
+      @apply mr-py-2 mr-px-4 mr-rounded mr-border-2 mr-bg-transparent mr-font-medium mr-text-green-light mr-transition;
+      border: config('borderWidths.2') solid config('colors.current');
+
+      &[disabled] {
+        @apply mr-opacity-25;
+      }
+
+      &:not([disabled]):hover {
+        @apply mr-bg-transparent mr-text-green;
+      }
+    }
+  }
+
+  .rt-noData {
+    top: 66%;
+  }
+}

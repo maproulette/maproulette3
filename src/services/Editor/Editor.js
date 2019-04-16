@@ -148,7 +148,7 @@ export const isJosmEditor = function(editor) {
  */
 export const taskCenterPoint = function(mapBounds, task) {
   // If the mapbounds don't match the task, compute our own centerpoint.
-  return mapBounds.taskId === task.id ?
+  return (mapBounds && mapBounds.taskId === task.id) ?
          mapBounds.bounds.getCenter() :
          AsMappableTask(task).calculateCenterPoint()
 }
@@ -318,7 +318,30 @@ export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds) {
  * Sends a command to JOSM and returns a promise that resolves to true on
  * success, false on failure
  */
-const sendJOSMCommand = function(uri) {
+export const sendJOSMCommand = function(uri) {
+  // Safari won't send AJAX commands to the default (insecure) JOSM port when
+  // on a secure site, and the secure JOSM port uses a self-signed certificate
+  // that requires the user to jump through a bunch of hoops to trust before
+  // communication can proceed. So for Safari only, fall back to sending JOSM
+  // requests via the opening of a separate window instead of AJAX
+  if (window.safari) {
+    return new Promise((resolve, reject) => {
+      if (editorWindowReference && !editorWindowReference.closed) {
+        editorWindowReference.close()
+      }
+
+      editorWindowReference = window.open(uri)
+
+      // Close the window after 1 second and resolve the promise
+      setTimeout(() => {
+        if (editorWindowReference && !editorWindowReference.closed) {
+          editorWindowReference.close()
+        }
+        resolve(true)
+      }, 1000)
+    })
+  }
+
   return fetch(uri).then(
     response => response.status === 200
   ).catch(error => {

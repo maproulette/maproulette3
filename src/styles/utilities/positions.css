@@ -1,11 +1,33 @@
-.mr-pin-t-100 {
-  top: 100%;
-}
+@responsive {
+  .mr-pin-t-100 {
+    top: 100%;
+  }
 
-.mr-pin-b-100 {
-  bottom: 100%;
-}
+  .mr-pin-b-100 {
+    bottom: 100%;
+  }
 
-.mr-pin-l-50 {
-  left: 50%;
+  .mr-pin-l-50 {
+    left: 50%;
+  }
+
+  .mr--pin-l-50 {
+    left: -50%;
+  }
+
+  .mr-pin-l-16 {
+    left: 16%;
+  }
+
+  .mr-pin-t-50 {
+    top: 50%;
+  }
+
+  .mr-pin-t-20 {
+    top: 20%;
+  }
+
+  .mr--translate-1\/2 {
+    transform: translate(-50%, -50%);
+  }
 }

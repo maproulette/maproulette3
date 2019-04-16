@@ -1,7 +1,7 @@
 import { schema } from 'normalizr'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
-import _isNumber from 'lodash/isNumber'
+import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -10,10 +10,11 @@ import _keys from 'lodash/keys'
 import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _toPairs from 'lodash/toPairs'
+import _omit from 'lodash/omit'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import subMonths from 'date-fns/sub_months'
-import { defaultRoutes as api, isSecurityError, credentialsPolicy }
+import { defaultRoutes as api, isSecurityError, credentialsPolicy, websocketClient }
        from '../Server/Server'
 import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
@@ -28,6 +29,17 @@ import AppErrors from '../Error/AppErrors'
 
 // constants defined on the server
 export const GUEST_USER_ID = -998 // i.e., not logged in
+
+// constants defined on the Server
+export const REVIEW_NOT_NEEDED = 0
+export const REVIEW_NEEDED = 1
+export const REVIEW_MANDATORY = 2
+
+export const needsReviewType = Object.freeze({
+  notNeeded: REVIEW_NOT_NEEDED,
+  needed: REVIEW_NEEDED,
+  mandatory: REVIEW_MANDATORY,
+})
 
 /** normalizr schema for users */
 export const userSchema = function() {
@@ -44,6 +56,30 @@ export const userDenormalizationSchema = function() {
     topChallenges: [ challengeSchema() ],
     savedTasks: [ taskDenormalizationSchema() ],
   })
+}
+
+export const subscribeToUserUpdates = function(dispatch, userId) {
+  websocketClient.addServerSubscription(
+    "user", userId, `newNotificationHandler_${userId}`,
+    messageObject => onNewNotification(dispatch, userId, messageObject)
+  )
+}
+
+export const unsubscribeFromUserUpdates = function(userId) {
+  websocketClient.removeServerSubscription("user", userId, `newNotificationHandler_${userId}`)
+}
+
+const onNewNotification = function(dispatch, userId, messageObject) {
+  switch(messageObject.messageType) {
+    case "notification-new":
+      if (_get(messageObject, 'data.userId') === userId) {
+        // Refresh user's notifications from server
+        dispatch(fetchUserNotifications(userId))
+      }
+      break
+    default:
+      break // Ignore
+  }
 }
 
 // redux actions
@@ -140,12 +176,20 @@ export const findUser = function(username) {
  * the user data and does not fetch any accompanying data that would require
  * additional API requests to retrieve. Use `loadCompleteUser` to fully load
  * the user and accompanying data.
+ *
+ * @param userId - Can be either a userId, osmUserId, or username
  */
 export const fetchUser = function(userId) {
   return function(dispatch) {
-    return new Endpoint(
-      api.users.single, {schema: userSchema(), variables: {id: userId}}
-    ).execute().then(normalizedResults => {
+    const endPoint = isFinite(userId) ?
+      new Endpoint(
+        api.users.single, {schema: userSchema(), variables: {id: userId}}
+      ) :
+      new Endpoint(
+        api.users.singleByUsername, {schema: userSchema(), variables: {username: userId}}
+      )
+
+    return endPoint.execute().then(normalizedResults => {
       dispatch(receiveUsers(normalizedResults.entities))
       return normalizedResults
     })
@@ -271,6 +315,67 @@ export const fetchSavedTasks = function(userId, limit=50) {
 }
 
 /**
+ * Fetch the user's notification subscriptions
+ */
+export const fetchNotificationSubscriptions = function(userId) {
+  return function(dispatch) {
+    return new Endpoint(api.user.notificationSubscriptions, {
+      variables: {userId},
+    }).execute().then(response => {
+      const user = {id: userId}
+      user.notificationSubscriptions = _omit(response, ['id', 'userId'])
+      dispatch(receiveUsers(simulatedEntities(user)))
+      return response
+    })
+  }
+}
+
+/**
+ * Fetch the user's notifications
+ */
+export const fetchUserNotifications = function(userId) {
+  return function(dispatch) {
+    return new Endpoint(api.user.notifications, {
+      variables: {userId},
+      params: {limit: -1}
+    }).execute().then(response => {
+      const user = {id: userId}
+      user.notifications = response
+      dispatch(receiveUsers(simulatedEntities(user)))
+      return response
+    })
+  }
+}
+
+/**
+ * Mark notifications as read
+ */
+export const markNotificationsRead = function(userId, notificationIds) {
+  return function(dispatch) {
+    return new Endpoint(api.user.markNotificationsRead, {
+      variables: {userId},
+      params: {notificationIds: notificationIds.join(',')},
+    }).execute().then(response => {
+      return fetchUserNotifications(userId)(dispatch)
+    })
+  }
+}
+
+/**
+ * Delete notifications
+ */
+export const deleteNotifications = function(userId, notificationIds) {
+  return function(dispatch) {
+    return new Endpoint(api.user.deleteNotifications, {
+      variables: {userId},
+      params: {notificationIds: notificationIds.join(',')},
+    }).execute().then(response => {
+      return fetchUserNotifications(userId)(dispatch)
+    })
+  }
+}
+
+/**
  * Fetch the user's recent activity.
  */
 export const fetchUserActivity = function(userId, limit=50) {
@@ -292,7 +397,7 @@ export const fetchUserActivity = function(userId, limit=50) {
  */
 export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedTasksLimit=50) {
   return function(dispatch) {
-    if (!_isNumber(userId) || userId === GUEST_USER_ID) {
+    if (!_isFinite(userId) || userId === GUEST_USER_ID) {
       return null
     }
 
@@ -301,9 +406,41 @@ export const loadCompleteUser = function(userId, savedChallengesLimit=50, savedT
       fetchTopChallenges(userId)(dispatch)
       fetchSavedTasks(userId, savedTasksLimit)(dispatch)
       fetchUserActivity(userId)(dispatch)
+      fetchNotificationSubscriptions(userId)(dispatch)
     }).then(() =>
       dispatch(setCurrentUser(userId))
     ).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Retrieve the given user data plus any accompanying data needed for User Settings,
+ * performing multiple API requests as needed.
+ */
+export const loadUserSettings = function(userId) {
+  return function(dispatch) {
+    if (userId === GUEST_USER_ID) {
+      return null
+    }
+
+    return fetchUser(userId)(dispatch).then(normalizedUsers => {
+      const fetchedUserId = normalizedUsers.result
+      if (fetchedUserId) {
+        fetchNotificationSubscriptions(fetchedUserId)(dispatch)
+      }
+      else {
+        dispatch(addError(AppErrors.user.notFound))
+      }
+    }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -327,8 +464,24 @@ export const updateUserSettings = function(userId, settings) {
 
     return new Endpoint(
       api.user.updateSettings, {variables: {userId}, json: settings}
-    ).execute()
-  }, true)
+    ).execute().then(() => dispatch(fetchUser(userId))) // fetch latest
+  })
+}
+
+/**
+ * Update the given user's notification subscription options with the given
+ * subscriptions
+ */
+export const updateNotificationSubscriptions = function(userId, subscriptions) {
+  return updateUser(userId, dispatch => {
+    // Optimistically assume it will succeed and update the local store.
+    // If it doesn't, it'll get updated properly by the server response.
+    dispatch(receiveUsers({[userId]: {id: userId, notificationSubscriptions: subscriptions}}))
+
+    return new Endpoint(
+      api.user.updateNotificationSubscriptions, {variables: {userId}, json: {...subscriptions, userId, id: -1}}
+    ).execute().then(() => dispatch(fetchNotificationSubscriptions(userId))) // fetch latest
+  })
 }
 
 /**
@@ -472,8 +625,12 @@ export const unsaveTask = function(userId, taskId) {
 /**
  * Logout the current user on both the client and server.
  */
-export const logoutUser = function() {
+export const logoutUser = function(userId) {
   const logoutURI = `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/auth/signout`
+
+  if (_isFinite(userId) && userId !== GUEST_USER_ID) {
+    unsubscribeFromUserUpdates(userId)
+  }
 
   return function(dispatch) {
     dispatch(setCurrentUser(GUEST_USER_ID))
@@ -491,15 +648,9 @@ export const logoutUser = function() {
  * an error to ensure the local store reflects the latest data from the server
  * in the event optimistic local updates were made.
  */
-const updateUser = function(userId, updateFunction, reloadOnSuccess=false) {
+const updateUser = function(userId, updateFunction) {
   return function(dispatch) {
-    return updateFunction(dispatch)
-    .then(() => {
-      // Reload the current user to get the updated data
-      if (reloadOnSuccess) {
-        return dispatch(loadCompleteUser(userId))
-      }
-    }).catch(error => {
+    return updateFunction(dispatch).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>
           dispatch(addError(AppErrors.user.unauthorized))
@@ -548,6 +699,10 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
 
     if (_isArray(entity.savedTasks)) {
       mergedState[entity.id].savedTasks = entity.savedTasks
+    }
+
+    if (_isArray(entity.notifications)) {
+      mergedState[entity.id].notifications = entity.notifications
     }
 
     // Always completely replace app-specific properties with new ones

@@ -1,14 +1,4 @@
 import { schema } from 'normalizr'
-import { defaultRoutes as api, isSecurityError } from '../Server/Server'
-import Endpoint from '../Server/Endpoint'
-import RequestStatus from '../Server/RequestStatus'
-import genericEntityReducer from '../Server/GenericEntityReducer'
-import { challengeSchema } from '../Challenge/Challenge'
-import { placeSchema, fetchPlace } from '../Place/Place'
-import { commentSchema, receiveComments } from '../Comment/Comment'
-import { addServerError, addError } from '../Error/Error'
-import AppErrors from '../Error/AppErrors'
-import { ensureUserLoggedIn } from '../User/User'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -20,6 +10,19 @@ import _isString from 'lodash/isString'
 import _isFinite from 'lodash/isFinite'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
+import _values from 'lodash/values'
+import _snakeCase from 'lodash/snakeCase'
+import { defaultRoutes as api, isSecurityError, websocketClient } from '../Server/Server'
+import Endpoint from '../Server/Endpoint'
+import RequestStatus from '../Server/RequestStatus'
+import genericEntityReducer from '../Server/GenericEntityReducer'
+import { challengeSchema } from '../Challenge/Challenge'
+import { placeSchema, fetchPlace } from '../Place/Place'
+import { commentSchema, receiveComments } from '../Comment/Comment'
+import { addServerError, addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
+import { ensureUserLoggedIn } from '../User/User'
+import { markReviewDataStale } from './TaskReview/TaskReview'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -37,6 +40,31 @@ export const taskDenormalizationSchema = function() {
     comments: [ commentSchema() ]
   })
 }
+
+export const subscribeToReviewMessages = function(dispatch) {
+  websocketClient.addServerSubscription(
+    "reviews", null, "reviewMessageHandler",
+    messageObject => onReviewMessage(dispatch, messageObject)
+  )
+}
+
+export const unsubscribeFromReviewMessages = function() {
+  websocketClient.removeServerSubscription("reviews", null, "reviewMessageHandler")
+}
+
+const onReviewMessage = function(dispatch, messageObject) {
+  switch(messageObject.messageType) {
+    case "review-new":
+    case "review-claimed":
+    case "review-update":
+      // For now just mark the existing review data as stale
+      dispatch(markReviewDataStale())
+      break
+    default:
+      break // Ignore
+  }
+}
+
 
 // redux actions
 const RECEIVE_TASKS = 'RECEIVE_TASKS'
@@ -93,13 +121,99 @@ export const fetchTask = function(taskId, suppressReceive=false, includeMapillar
 }
 
 /**
- * Mark the given task as completed with the given status.
+ * Fetch data for the given task and claim it for review.
+ *
+ * If info on available mapillary images for the task is also desired, set
+ * includeMapillary to true
  */
-export const completeTask = function(taskId, challengeId, taskStatus) {
+export const fetchTaskForReview = function(taskId, includeMapillary=false) {
   return function(dispatch) {
-    return updateTaskStatus(dispatch, taskId, taskStatus)
+    return new Endpoint(api.task.startReview, {
+      schema: taskSchema(),
+      variables: {id: taskId},
+      params: {mapillary: includeMapillary}
+    }).execute().then(normalizedResults => {
+      dispatch(receiveTasks(normalizedResults.entities))
+      return normalizedResults
+    })
   }
 }
+
+/**
+ * Mark the given task as completed with the given status.
+ */
+export const completeTask = function(taskId, challengeId, taskStatus, needsReview) {
+  return function(dispatch) {
+    return updateTaskStatus(dispatch, taskId, taskStatus, needsReview)
+  }
+}
+
+/**
+ *
+ */
+export const completeReview = function(taskId, taskReviewStatus, comment) {
+  return function(dispatch) {
+    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment)
+  }
+}
+
+const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment) {
+  // Optimistically assume request will succeed. The store will be updated
+  // with fresh task data from the server if the save encounters an error.
+  dispatch(receiveTasks({
+    tasks: {
+      [taskId]: {
+        id: taskId,
+        status: newStatus
+      }
+    }
+  }))
+
+  return new Endpoint(
+    api.task.updateReviewStatus,
+    {schema: taskSchema(), variables: {id: taskId, status: newStatus}, params:{comment: comment}}
+  ).execute().catch(error => {
+    if (isSecurityError(error)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
+    }
+    else {
+      dispatch(addError(AppErrors.task.updateFailure))
+      console.log(error.response || error)
+    }
+    fetchTask(taskId)(dispatch) // Fetch accurate task data
+  })
+}
+
+/**
+ * Remove the task review claim on this task.
+ */
+export const cancelReviewClaim = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.cancelReview, {schema: taskSchema(), variables: {id: taskId}}
+    ).execute().then(normalizedResults => {
+      // Server doesn't explicitly return empty fields from JSON.
+      // This field should now be null so we will set it so when the
+      // task data is merged with existing task data it will be correct.
+      normalizedResults.entities.tasks[taskId].reviewClaimedBy = null
+      dispatch(receiveTasks(normalizedResults.entities))
+      return normalizedResults
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        console.log(error.response || error)
+      }
+      fetchTask(taskId)(dispatch) // Fetch accurate task data
+    })
+  }
+}
+
 
 /**
  * Bulk update the given tasks. Note that the bulk update APIs require ids to
@@ -183,6 +297,32 @@ export const fetchTaskComments = function(taskId) {
       }
 
       return normalizedComments
+    })
+  }
+}
+
+/**
+ * Fetch history for the given task
+ */
+export const fetchTaskHistory = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.history,
+      {schema: {}, variables: {id: taskId}}
+    ).execute().then(normalizedHistory => {
+      if (_isObject(normalizedHistory.result)) {
+        // Inject history into task.
+        dispatch(receiveTasks({
+          tasks: {
+            [taskId]: {
+              id: taskId,
+              history: _values(normalizedHistory.result),
+            }
+          }
+        }))
+      }
+
+      return normalizedHistory
     })
   }
 }
@@ -282,6 +422,44 @@ export const loadNextSequentialTaskFromChallenge = function(challengeId,
 }
 
 /**
+ * Retrieve the next task to review with the given sort and filter criteria
+ */
+export const loadNextReviewTask = function(criteria={}) {
+  const sortBy = _get(criteria, 'sortCriteria.sortBy')
+  const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
+  const sort = sortBy ? `${_snakeCase(sortBy)}` : null
+  const filters = _get(criteria, 'filters', {})
+
+  const searchParameters = {}
+  if (filters.reviewRequestedBy) {
+    searchParameters.o = filters.reviewRequestedBy
+  }
+  if (filters.reviewedBy) {
+    searchParameters.r = filters.reviewedBy
+  }
+  if (filters.challenge) {
+    searchParameters.cs = filters.challenge
+  }
+  if (filters.status && filters.status !== "all") {
+    searchParameters.tStatus = filters.status
+  }
+  if (filters.reviewStatus && filters.reviewStatus !== "all") {
+    searchParameters.trStatus = filters.reviewStatus
+  }
+
+  return function(dispatch) {
+    return retrieveChallengeTask(dispatch, new Endpoint(
+      api.tasks.reviewNext,
+      {
+        schema: taskSchema(),
+        variables: {},
+        params: {sort, order, ...searchParameters},
+      }
+    ))
+  }
+}
+
+/**
  * Retrieve all tasks (up to the given limit) belonging to the given
  * challenge
  */
@@ -301,21 +479,27 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
  * Set the given status on the given task
  * @private
  */
-const updateTaskStatus = function(dispatch, taskId, newStatus) {
+const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
     tasks: {
       [taskId]: {
         id: taskId,
-        status: newStatus,
+        status: newStatus
       }
     }
   }))
 
+  const params = {}
+  if (requestReview != null) {
+    params.requestReview = requestReview
+  }
+
   return new Endpoint(
     api.task.updateStatus,
-    {schema: taskSchema(), variables: {id: taskId, status: newStatus}}
+    {schema: taskSchema(),
+     variables: {id: taskId, status: newStatus}, params}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       dispatch(ensureUserLoggedIn()).then(() =>

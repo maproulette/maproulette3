@@ -42,18 +42,22 @@ $tablet: 40px;
     height: calc(100vh - #{$navbar-height});
   }
 
-  @media(max-width: $app-mobile-break) {
-    height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height} - #{$mobile-address-bar-height});
+  @media (max-width: $app-mobile-break) {
+    height: calc(
+      100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height} - #{$mobile-address-bar-height}
+    );
   }
 }
 
-.task .full-screen-height, .page-not-found.full-screen-height {
+.task .full-screen-height {
   // no subnav in task mode or about pane
   .leaflet-container {
     height: calc(100vh - #{$navbar-height});
 
-    @media(max-width: $app-mobile-break) {
-      height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
+    @media (max-width: $app-mobile-break) {
+      height: calc(
+        100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+      );
     }
   }
 }
@@ -62,19 +66,25 @@ $tablet: 40px;
 // presence or absence of navbar and subnav.
 .full-screen-map {
   .leaflet-container {
-    height: calc(100vh - #{$navbar-height} - #{$subnav-height});
+    height: calc(100vh - #{$navbar-height});
 
-    @media(max-width: $app-mobile-break) {
-      height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height} - #{$mobile-address-bar-height});
+    @media (max-width: $app-mobile-break) {
+      height: calc(
+        100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+      );
     }
   }
 
-  &.task, &.about { // no subnav in task mode or about pane
+  &.task,
+  &.about {
+    // no subnav in task mode or about pane
     .leaflet-container {
       height: calc(100vh - #{$navbar-height});
 
-      @media(max-width: $app-mobile-break) {
-        height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
+      @media (max-width: $app-mobile-break) {
+        height: calc(
+          100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+        );
       }
     }
   }
@@ -102,13 +112,13 @@ $tablet: 40px;
 }
 
 .button {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   &:focus {
     outline: 0 !important;
     box-shadow: none !important;
   }
   svg {
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
   }
 }
 
@@ -139,7 +149,8 @@ $tablet: 40px;
   background-color: transparent;
   padding: 0;
 
-  .icon:first-child:last-child, .icon:first-child:not(:last-child) {
+  .icon:first-child:last-child,
+  .icon:first-child:not(:last-child) {
     margin-left: 0;
     margin-right: 0;
 
@@ -174,7 +185,8 @@ $tablet: 40px;
   justify-content: center;
   align-items: center;
 
-  &:hover, &:enabled:focus {
+  &:hover,
+  &:enabled:focus {
     box-shadow: 0px 2px 4px 0px $box-shadow-color;
     color: $green;
   }
@@ -244,7 +256,8 @@ $tablet: 40px;
       fill: $primary;
     }
 
-    &:enabled:hover, &:enabled:focus {
+    &:enabled:hover,
+    &:enabled:focus {
       svg {
         fill: $primary-invert;
       }
@@ -305,7 +318,7 @@ img.is-circular {
 
 // Animations
 .animate-slide-enter {
-  transform: translate(100%,0);
+  transform: translate(100%, 0);
   transition: transform 1500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -331,9 +344,9 @@ img.is-circular {
 @import '../node_modules/bulma/bulma.sass';
 @import '../node_modules/bulma-badge/dist/bulma-badge.sass';
 @import '../node_modules/bulma-timeline/dist/bulma-timeline.sass';
-@import "../node_modules/bulma-steps-component/bulma-steps.sass";
-@import "../node_modules/bulma-switch/dist/bulma-switch.sass";
-@import "../node_modules/bulma-checkradio/dist/bulma-checkradio.sass";
+@import '../node_modules/bulma-steps-component/bulma-steps.sass';
+@import '../node_modules/bulma-switch/dist/bulma-switch.sass';
+@import '../node_modules/bulma-checkradio/dist/bulma-checkradio.sass';
 
 .collapsible-icon {
   height: 1em;
@@ -380,49 +393,30 @@ code {
   font-size: $size-1;
   height: calc(100vh - #{$navbar-height});
 
-  @media(max-width: $app-mobile-break) {
-    height: calc(100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height});
-  }
-
-  .progress-status {
-    flex-basis: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    &__title {
-      color: $primary;
-    }
-
-    &__description {
-      font-size: $size-3;
-      color: $grey-darkest;
-    }
-  }
-
-  .busy-spinner {
-    @include busy-spinner-color($primary);
-    flex: auto;
+  @media (max-width: $app-mobile-break) {
+    height: calc(
+      100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+    );
   }
 }
 
 // Add a short-and-wide variant of the rounded Bulma switch
-.switch[type="checkbox"].is-rounded.short-and-wide + label::before {
+.switch[type='checkbox'].is-rounded.short-and-wide + label::before {
   width: 60px;
   height: 20px;
 }
 
-.switch[type="checkbox"].is-rounded.short-and-wide + label::after {
+.switch[type='checkbox'].is-rounded.short-and-wide + label::after {
   height: 14px;
   width: 14px;
   top: 3px;
 }
 
-.switch[type="checkbox"].short-and-wide:checked + label::after {
+.switch[type='checkbox'].short-and-wide:checked + label::after {
   left: 41px;
 }
 
-.switch[type="checkbox"].short-and-wide + label {
+.switch[type='checkbox'].short-and-wide + label {
   padding-left: 74px;
   padding-top: 0;
 }
@@ -441,7 +435,7 @@ html {
   background-color: $app-background;
 
   // In case page doesn't fill screen on some devices
-  @media(max-width: $app-mobile-break) {
+  @media (max-width: $app-mobile-break) {
     background-color: $grey-darkest;
   }
 }

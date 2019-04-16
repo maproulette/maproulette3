@@ -88,7 +88,13 @@ export class ViewChallengeTasks extends Component {
 
     this.setState({bulkUpdating: true}) // will be reset by componentDidUpdate
     this.props.applyBulkTaskChanges(
-      tasks, {status: TaskStatus.created}
+      tasks, {status: TaskStatus.created,
+              mappedOn: null,
+              reviewStatus: null,
+              reviewRequestedBy: null,
+              reviewedBy: null,
+              reviewedAt: null}
+
     ).then(() => this.props.refreshChallenge())
   }
 

@@ -19,7 +19,7 @@ import RowLeaderboard from './RowLeaderboard'
 import LeaderboardMap from './LeaderboardMap'
 import messages from './Messages'
 
-const INITIAL_MONTHS_PAST = 12;
+const INITIAL_MONTHS_PAST = -1;
 
 class Leaderboard extends Component {
   loggedInUserMissing = () => {
@@ -74,7 +74,7 @@ class Leaderboard extends Component {
                  <FormattedMessage {...messages.leaderboardGlobal} />
                 } <FormattedMessage {...messages.leaderboardTitle} />
               </h1>
-              <h3 className="mr-text-sm mr-text-grey-light mr-uppercase mr-tracking-wide mr-font-normal">
+              <h3 className="mr-text-sm mr-text-yellow mr-uppercase mr-tracking-wide mr-font-normal">
                 {this.props.countryCode ?
                  <FormattedMessage {...messages.updatedDaily} /> :
                  <FormattedMessage {...messages.updatedFrequently} />
@@ -84,7 +84,7 @@ class Leaderboard extends Component {
             <div className="mr-flex mr-justify-center mr-mb-2">
               <PastDurationSelector
                 className="mr-button mr-mr-8"
-                pastMonthsOptions={[1, 3, 6, 12]}
+                pastMonthsOptions={[-1, 1, 3, 6, 12]}
                 currentMonthsPast={this.props.monthsPast}
                 selectDuration={this.props.setMonthsPast}
               />
