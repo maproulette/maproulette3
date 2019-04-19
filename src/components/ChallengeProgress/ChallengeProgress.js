@@ -118,7 +118,7 @@ export class ChallengeProgress extends Component {
     const challengeStatsColumns = _chunk(Object.entries(challengeStats), 3)
 
     return (
-      <>
+      <React.Fragment>
         <div className="mr-text-sm mr-grid mr-grid-columns-2 mr-grid-gap-4">
           {_map(challengeStatsColumns, stats => (
             <ul>
@@ -188,7 +188,7 @@ export class ChallengeProgress extends Component {
             />
           </p>
         }
-      </>
+      </React.Fragment>
     )
   }
 }
