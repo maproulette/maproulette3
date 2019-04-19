@@ -214,7 +214,7 @@ export class ChallengeDetail extends Component {
                   </div>
 
                   <ChallengeProgress
-                    className="mr-mt-4 mr-mb-12"
+                    className="mr-my-4"
                     challenge={challenge}
                   />
 
