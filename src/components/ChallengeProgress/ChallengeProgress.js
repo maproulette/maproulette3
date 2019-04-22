@@ -125,6 +125,7 @@ export class ChallengeProgress extends Component {
                 {_map(stats, stat => (  
                   <li class="mr-flex mr-items-center">
                     <span className="mr-text-lg mr-text-yellow">
+                      {/* eslint-disable-next-line react/style-prop-object */}
                       <FormattedNumber 
                         style="percent" 
                         value={stat[1] / 100}
