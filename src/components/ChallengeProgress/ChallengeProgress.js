@@ -126,10 +126,7 @@ export class ChallengeProgress extends Component {
                   <li class="mr-flex mr-items-center">
                     <span className="mr-text-lg mr-text-yellow">
                       {/* eslint-disable-next-line react/style-prop-object */}
-                      <FormattedNumber 
-                        style="percent" 
-                        value={stat[1] / 100}
-                      /> 
+                      <FormattedNumber style="percent" value={stat[1] / 100} /> 
                     </span>
                     <span className="mr-ml-2 mr-uppercase">
                       {stat[0]}{' '}
