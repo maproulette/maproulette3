@@ -97,3 +97,16 @@ export const boundsWithinAllowedMaxDegrees = function(bounds, maxAllowedDegrees)
          _max([normalizedBounds.getEast() - normalizedBounds.getWest(),
                normalizedBounds.getNorth() - normalizedBounds.getSouth()])
 }
+
+/**
+ * Determines if the two bounds are within the given degress apart from each other.
+ */
+export const boundsWithinDegrees = function(bounds1, bounds2, maxAllowedDegrees) {
+  const normalizedBounds1 = toLatLngBounds(bounds1)
+  const normalizedBounds2 = toLatLngBounds(bounds2)
+  return maxAllowedDegrees >
+         _max([Math.abs(normalizedBounds1.getEast() - normalizedBounds2.getEast()),
+               Math.abs(normalizedBounds1.getWest() - normalizedBounds2.getWest()),
+               Math.abs(normalizedBounds1.getNorth() - normalizedBounds2.getNorth()),
+               Math.abs(normalizedBounds1.getSouth() - normalizedBounds2.getSouth())])
+}

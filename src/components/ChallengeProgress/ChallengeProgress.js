@@ -166,12 +166,12 @@ export class ChallengeProgress extends Component {
                         tooltipFormat={v => `${v}%`}
                         theme={theme}
           />
-          {taskActions.total > 0 && taskActions.available === 0 &&
+          {taskActions.total > 0 && taskActions.available && taskActions.available === 0 &&
             <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
                       className="challenge-task-progress__completed-indicator" />
           }        
         </div>
-        {taskActions.total > 0 && taskActions.available !== 0 &&
+        {taskActions.total > 0 && taskActions.available && taskActions.available !== 0 &&
           <p className="mr-my-4">
             <FormattedMessage
               {...messages.tasksRemaining}
@@ -192,7 +192,7 @@ export class ChallengeProgress extends Component {
 }
 
 ChallengeProgress.propTypes = {
-  challenge: PropTypes.object,
+  taskMetrics: PropTypes.object,
 }
 
 export default injectIntl(ChallengeProgress)
