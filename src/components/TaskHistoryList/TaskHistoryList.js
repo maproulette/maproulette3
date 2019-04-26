@@ -88,6 +88,7 @@ export default class TaskHistoryList extends Component {
 
           if (log.startedAt) {
             startedAtEntry = {timestamp: log.startedAt,
+                              ignoreAtticOffset: true,
                               entry: [
                                 <li className="mr-mb-4" key={"start-" + index}>
                                   <div>
@@ -135,7 +136,8 @@ export default class TaskHistoryList extends Component {
               </div>
               {!this.props.selectDiffs &&
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.mapBounds.bounds)}>
+                <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp,
+                                    this.props.mapBounds.bounds, log.ignoreAtticOffset)}>
                   <FormattedMessage {...messages.viewAtticLabel} />
                 </a>
               }
