@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+
+[maproulette3.en-us-json]
+file_filter = src/lang/<lang>.json
+minimum_perc = 0
+source_file = src/lang/en-US.json
+source_lang = en
+type = KEYVALUEJSON
+
