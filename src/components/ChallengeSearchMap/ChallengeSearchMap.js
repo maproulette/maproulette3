@@ -175,7 +175,7 @@ export class ChallengeSearchMap extends Component {
           }
         </EnhancedMap>
 
-        {!!this.props.tasksLoading && <BusySpinner />}
+        {!!this.props.tasksLoading && <BusySpinner mapMode />}
       </div>
     )
   }
