@@ -120,13 +120,13 @@ export class ChallengeProgress extends Component {
     return (
       <React.Fragment>
         <div className="mr-text-sm mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          {_map(challengeStatsColumns, stats => (
-            <ul>
-                {_map(stats, stat => (  
-                  <li class="mr-flex mr-items-center">
+          {_map(challengeStatsColumns, (stats, index1) => (
+            <ul key={index1}>
+                {_map(stats, (stat, index2) => (
+                  <li className="mr-flex mr-items-center" key={index1 + "-" + index2}>
                     <span className="mr-text-lg mr-text-yellow">
                       {/* eslint-disable-next-line react/style-prop-object */}
-                      <FormattedNumber style="percent" value={stat[1] / 100} /> 
+                      <FormattedNumber style="percent" value={stat[1] / 100} />
                     </span>
                     <span className="mr-ml-2 mr-uppercase">
                       {stat[0]}{' '}
@@ -166,12 +166,12 @@ export class ChallengeProgress extends Component {
                         tooltipFormat={v => `${v}%`}
                         theme={theme}
           />
-          {taskActions.total > 0 && taskActions.available === 0 &&
+          {taskActions.total > 0 && taskActions.available && taskActions.available === 0 &&
             <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
                       className="challenge-task-progress__completed-indicator" />
-          }        
+          }
         </div>
-        {taskActions.total > 0 && taskActions.available !== 0 &&
+        {taskActions.total > 0 && taskActions.available && taskActions.available !== 0 &&
           <p className="mr-my-4">
             <FormattedMessage
               {...messages.tasksRemaining}
@@ -192,7 +192,7 @@ export class ChallengeProgress extends Component {
 }
 
 ChallengeProgress.propTypes = {
-  challenge: PropTypes.object,
+  taskMetrics: PropTypes.object,
 }
 
 export default injectIntl(ChallengeProgress)

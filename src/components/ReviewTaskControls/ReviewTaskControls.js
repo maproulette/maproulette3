@@ -53,8 +53,7 @@ export class ReviewTaskControls extends Component {
 
   /** Stop Reviewing (release claim) */
   stopReviewing = () => {
-    this.props.stopReviewing(this.props.task)
-    this.props.history.push('/review')
+    this.props.stopReviewing(this.props.task, this.props.history)
   }
 
   /** Start Reviewing (claim this task) */
