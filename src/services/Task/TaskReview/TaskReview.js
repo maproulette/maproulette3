@@ -3,6 +3,7 @@ import _set from 'lodash/set'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
+import _uniqueId from 'lodash/uniqueId'
 import format from 'date-fns/format'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
@@ -58,12 +59,13 @@ export const receiveReviewMetrics = function(metrics, status=RequestStatus.succe
 /**
  * Add or replace the review clusters in the redux store
  */
-export const receiveReviewClusters = function(clusters, status=RequestStatus.success) {
+export const receiveReviewClusters = function(clusters, status=RequestStatus.success, fetchId) {
   return {
     type: RECEIVE_REVIEW_CLUSTERS,
     status,
     clusters,
     receivedAt: Date.now(),
+    fetchId
   }
 }
 
@@ -101,10 +103,11 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
  export const fetchClusteredReviewTasks = function(reviewTasksType, criteria) {
   const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox)
-
-  const type = determineType(reviewTasksType)
-
   return function(dispatch) {
+    const type = determineType(reviewTasksType)
+    const fetchId = _uniqueId()
+
+    dispatch(receiveReviewClusters([], RequestStatus.inProgress, fetchId))
     return new Endpoint(
       api.tasks.fetchReviewClusters,
       {
@@ -113,11 +116,12 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
       }
     ).execute().then(normalizedResults => {
       if (normalizedResults.result) {
-        dispatch(receiveReviewClusters(normalizedResults.result, RequestStatus.success))
+        dispatch(receiveReviewClusters(normalizedResults.result, RequestStatus.success, fetchId))
       }
 
       return normalizedResults.result
     }).catch((error) => {
+      dispatch(receiveReviewClusters([], RequestStatus.error, fetchId))
       console.log(error.response || error)
     })
   }
@@ -312,7 +316,12 @@ const updateReduxState = function(state={}, action, listName) {
   }
 
   if (action.type === RECEIVE_REVIEW_CLUSTERS) {
-    mergedState[listName] = action.clusters
+    const currentFetch = parseInt(_get(state, 'fetchId', 0), 10)
+    if (parseInt(action.fetchId, 10) >= currentFetch) {
+      mergedState.fetchId = action.fetchId
+      mergedState[listName] = action.clusters
+    }
+
     return mergedState
   }
 

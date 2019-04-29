@@ -83,7 +83,7 @@ export class ReviewTasksDashboard extends Component {
         <MediaQuery query="(min-width: 1024px)">
           <ReviewWidgetWorkspace
             {...this.props}
-            className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-py-8 mr-cards-inverse"
+            className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
             workspaceTitle=""
             workspaceInfo={
               <section className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 md:mr-py-12 md:mr-px-12 mr-flex mr-flex-col mr-items-center">

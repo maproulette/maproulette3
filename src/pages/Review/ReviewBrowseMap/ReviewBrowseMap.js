@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl, Marker} from 'react-leaflet'
 import { latLng } from 'leaflet'
-import { point, featureCollection } from '@turf/helpers'
 import bbox from '@turf/bbox'
-import bboxPolygon from '@turf/bbox-polygon'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
@@ -21,6 +19,7 @@ import WithStatus from '../../../components/HOCs/WithStatus/WithStatus'
 import BusySpinner from '../../../components/BusySpinner/BusySpinner'
 import { toLatLngBounds, boundsWithinDegrees }
   from '../../../services/MapBounds/MapBounds'
+import './ReviewBrowseMap.scss'
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
@@ -41,41 +40,41 @@ export class ReviewBrowseMap extends Component {
   taskMarkers = null
   skipNextUpdateBounds = false
 
-  componentDidUpdate(prevProps, prevState) {
+  shouldComponentUpdate(nextProps, nextState) {
     // We want to be careful about not constantly re-rendering, so we only
     // re-render if something meaningful changes:
-    if (_get(prevProps, 'reviewData') !== _get(this.props, 'reviewData')) {
+    if (_get(nextProps, 'reviewCriteria.boundingBox') !== _get(this.props, 'reviewCriteria.boundingBox')) {
       return true
     }
 
     // the base layer has changed, or
-    if (_get(prevProps, 'source.id') !== _get(this.props, 'source.id')) {
+    if (_get(nextProps, 'source.id') !== _get(this.props, 'source.id')) {
       return true
     }
 
     // the available overlays have changed, or
-    if (!_isEqual(prevProps.intersectingOverlays, this.props.intersectingOverlays)) {
+    if (!_isEqual(nextProps.intersectingOverlays, this.props.intersectingOverlays)) {
       return true
     }
 
     // the visible overlays have changed, or
-    if (prevProps.visibleOverlays.length !== this.props.visibleOverlays.length) {
+    if (nextProps.visibleOverlays.length !== this.props.visibleOverlays.length) {
        return true
     }
 
     // the task markers have changed
-    if (_get(prevProps, 'taskMarkers.length') !==
+    if (_get(nextProps, 'taskMarkers.length') !==
         _get(this.props, 'taskMarkers.length')) {
       return true
     }
 
     // the task markers have changed
-    if (_get(prevProps, 'taskMarkers') !== _get(this.props, 'taskMarkers')) {
+    if (_get(nextProps, 'taskMarkers') !== _get(this.props, 'taskMarkers')) {
       return true
     }
 
     // the loading status of tasks change
-    if (!!prevProps.tasksLoading !== !!this.props.tasksLoading) {
+    if (!!nextProps.loading !== !!this.props.loading) {
       return true
     }
 
@@ -143,25 +142,7 @@ export class ReviewBrowseMap extends Component {
       return null
     }
 
-    // Get the bounding so we know which part of the map to display.
-    if (_get(this.props, 'reviewCriteria.boundingBox')) {
-      this.currentBounds = toLatLngBounds(_get(this.props, 'reviewCriteria.boundingBox').split(","))
-      this.skipNextUpdateBounds = true
-    }
-
-    const hasTaskMarkers = _get(this.props, 'taskMarkers.length', 0) > 0
-
-    let bounding = null
-    if (hasTaskMarkers) {
-      bounding = bboxPolygon(
-        bbox(featureCollection(
-          _map(this.props.taskMarkers,
-               marker => point([marker.position[1], marker.position[0]]))
-        ))
-      )
-    }
-
-    if (hasTaskMarkers) {
+    if (_get(this.props, 'taskMarkers.length', 0) > 0) {
       this.generateMarkers(this.props)
     }
 
@@ -171,13 +152,11 @@ export class ReviewBrowseMap extends Component {
 
     const map =
       <EnhancedMap className="mr-z-0"
-                   center={latLng(0, 45)}
-                   zoom={3} minZoom={2} maxZoom={18}
+                   center={latLng(0, 0)}
+                   zoom={2} minZoom={2} maxZoom={16}
                    setInitialBounds={false}
                    initialBounds = {this.currentBounds}
-                   zoomControl={false} animate={true} worldCopyJump={true}
-                   features={bounding}
-                   justFitFeatures={hasTaskMarkers}
+                   zoomControl={false} animate={false} worldCopyJump={true}
                    onBoundsChange={this.updateBounds}>
         <ZoomControl className="mr-z-10" position='topright' />
         <VisibleTileLayer {...this.props} zIndex={1} />
@@ -186,10 +165,10 @@ export class ReviewBrowseMap extends Component {
       </EnhancedMap>
 
     return (
-      <div className={classNames('challenge-task-map', this.props.className)}>
+      <div className={classNames('review-browse-map', {"full-screen-map": this.props.isMobile}, this.props.className)}>
         <LayerToggle {...this.props} />
         {map}
-        {!!this.props.tasksLoading && <BusySpinner />}
+        {!!this.props.loading && <BusySpinner mapMode />}
       </div>
     )
   }
@@ -199,11 +178,9 @@ ReviewBrowseMap.propTypes = {
   /** Map markers for the tasks to display */
   taskMarkers: PropTypes.array.isRequired,
   /** Set to true if tasks are still loading */
-  tasksLoading: PropTypes.bool,
+  loading: PropTypes.bool,
   /** Invoked when the user moves the map */
-  //setReviewBrowseMapBounds: PropTypes.func.isRequired,
-  /** Invoked when the user clicks on an individual task marker */
-  //onTaskClick: PropTypes.func,
+  updateReview: PropTypes.func.isRequired,
 }
 
 export default

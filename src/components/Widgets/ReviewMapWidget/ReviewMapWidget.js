@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
+import MapPane from '../../EnhancedMap/MapPane/MapPane'
 import ReviewBrowseMap from '../../../pages/Review/ReviewBrowseMap/ReviewBrowseMap'
 import WithReviewTaskClusters from '../../HOCs/WithReviewTaskClusters/WithReviewTaskClusters'
 import QuickWidget from '../../QuickWidget/QuickWidget'
@@ -26,7 +27,9 @@ export default class ReviewMapWidget extends Component {
         className="review-map-widget"
         noMain
       >
-        <BrowseMap {...this.props} />
+        <MapPane {...this.props}>
+          <BrowseMap {...this.props} />
+        </MapPane>
       </QuickWidget>
     )
   }
