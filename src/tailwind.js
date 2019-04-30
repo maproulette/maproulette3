@@ -804,6 +804,7 @@ module.exports = {
     'blue-dark': colors['blue-dark'],
     'green-light': colors['green-light'],
     'green-lighter': colors['green-lighter'],
+    grey: colors["grey"],
     twitter: colors['twitter'],
   },
 

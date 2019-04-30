@@ -12,6 +12,7 @@ import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
+import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
@@ -31,15 +32,11 @@ import ReactTable from 'react-table'
 export class TaskReviewTable extends Component {
   state = {
     openComments: null,
-    tableState: {sortBy: 'mapped_on',
-                 direction: 'ASC'},
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
 
   updateTasks(tableState, instance) {
-    this.setState({pageSize: tableState.pageSize})
-
     const sortCriteria = {
       sortBy: tableState.sorted[0].id,
       direction: tableState.sorted[0].desc ? "DESC" : "ASC",
@@ -48,39 +45,16 @@ export class TaskReviewTable extends Component {
     const filters = {}
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
-    this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page},
-                                  tableState.pageSize).then(() => {
-      this.setState({
-        tableState: {sortBy: sortCriteria.sortBy,
-                     direction: sortCriteria.direction,
-                     filters: filters}})
-    })
+    this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
+                                  boundingBox: this.props.reviewCriteria.boundingBox},
+                                  tableState.pageSize)
   }
 
   startReviewing() {
-    this.props.startReviewing(this.state.tableState.sortBy,
-                              this.state.tableState.direction,
-                              this.state.tableState.filters,
-                              this.props.history)
-  }
-
-  refresh() {
-    this.props.refresh(this.state.tableState.sortBy,
-                       this.state.tableState.direction,
-                       this.state.tableState.filters,
-                       this.props.history)
+    this.props.startReviewing(this.props.history)
   }
 
   componentDidMount() {
-    const searchParams = this.props.history.location.state
-
-    if (searchParams) {
-      const sortBy = _get(searchParams, 'sortBy')
-      const direction = _get(searchParams, 'direction')
-      const filters = _get(searchParams, 'filters')
-
-      this.setState({tableState: {sortBy, direction, filters}})
-    }
   }
 
   render() {
@@ -89,38 +63,45 @@ export class TaskReviewTable extends Component {
     const columnTypes = setupColumnTypes(this.props,
                            taskId => this.setState({openComments: taskId}),
                            (id, value) => this.setState({filtered: [{id: id, value: value}]}),
-                           data, this.state.tableState)
-    const pageSize = this.state.pageSize || this.props.defaultPageSize
+                           data, this.props.reviewCriteria)
+    const pageSize = this.props.pageSize
     const totalPages = Math.ceil(_get(this.props, 'reviewData.totalCount', 0) / pageSize)
 
-    var subheader = <FormattedMessage {...messages.myReviewTasks} />
-    var columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge,
-                   columnTypes.mappedOn, columnTypes.reviewedBy, columnTypes.reviewedAt,
-                   columnTypes.status, columnTypes.mapperControls, columnTypes.viewComments]
+    let subheader = null
+    let columns = null
+    let defaultSorted = [{id: 'mappedOn', desc: false}]
+    let defaultFiltered = []
 
-    if (this.props.asReviewer) {
-      subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
-      columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                 columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedBy,
-                 columnTypes.reviewedAt, columnTypes.status, columnTypes.reviewerControls,
-                 columnTypes.viewComments]
+    if (_get(this.props, 'reviewCriteria.sortCriteria.sortBy')) {
+      defaultSorted = [{id: this.props.reviewCriteria.sortCriteria.sortBy,
+                        desc: this.props.reviewCriteria.sortCriteria.direction === "DESC"}]
+    }
+    if (_get(this.props, 'reviewCriteria.filters')) {
+      defaultFiltered = _map(this.props.reviewCriteria.filters,
+                             (value, key) => {return {id: key, value}})
+    }
 
-      if (this.props.showReviewedByMe) {
+    switch( this.props.reviewTasksType ) {
+      case ReviewTasksType.reviewedByMe:
         subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
         columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
                    columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedAt,
                    columnTypes.status, columnTypes.reviewCompleteControls, columnTypes.viewComments]
-      }
-    }
-
-    let defaultSorted = [{id: 'mappedOn', desc: false}]
-    if (this.props.asReviewer && !this.props.showReviewedByMe && this.state.tableState.sortBy) {
-      defaultSorted = [{id: this.state.tableState.sortBy, desc: this.state.tableState.direction === "DESC"}]
-    }
-
-    let defaultFiltered = []
-    if (this.props.asReviewer && !this.props.showReviewedByMe && this.state.tableState.filters) {
-      defaultFiltered = _map(this.state.tableState.filters, (value, key) => {return {id: key, value}})
+        break
+      case ReviewTasksType.toBeReviewed:
+        subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
+        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
+                   columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedBy,
+                   columnTypes.reviewedAt, columnTypes.status, columnTypes.reviewerControls,
+                   columnTypes.viewComments]
+        break
+      case ReviewTasksType.myReviewedTasks:
+      default:
+        subheader = <FormattedMessage {...messages.myReviewTasks} />
+        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge,
+                   columnTypes.mappedOn, columnTypes.reviewedBy, columnTypes.reviewedAt,
+                   columnTypes.status, columnTypes.mapperControls, columnTypes.viewComments]
+        break
     }
 
     return (
@@ -133,7 +114,7 @@ export class TaskReviewTable extends Component {
               </h1>
             </div>
             <div>
-              {this.props.asReviewer && !this.props.showReviewedByMe && data.length > 0 &&
+              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
                 <button className="mr-button mr-button-small mr-button--green mr-mr-4" onClick={() => this.startReviewing()}>
                   <FormattedMessage {...messages.startReviewing} />
                 </button>
@@ -144,14 +125,14 @@ export class TaskReviewTable extends Component {
                   "mr-button--green": !_get(this.props, 'reviewData.dataStale', false),
                   "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
                 })}
-                onClick={() => this.refresh()}
+                onClick={() => this.props.refresh()}
               >
                 <FormattedMessage {...messages.refresh} />
               </button>
             </div>
           </header>
           <div className="mr-mt-6">
-            <ReactTable data={data} columns={columns}
+            <ReactTable data={data} columns={columns} key={this.props.reviewTasksType}
                         defaultPageSize={pageSize}
                         defaultSorted={defaultSorted}
                         defaultFiltered={defaultFiltered}
@@ -164,7 +145,6 @@ export class TaskReviewTable extends Component {
                         getTheadFilterThProps={(state, rowInfo, column) => {
                           return {style: {position: "inherit", overflow: "inherit"}}}
                         }
-                        filtered={this.state.filtered}
                         onFilteredChange={filtered => {
                           this.setState({ filtered })
                           if (this.fetchData) {
@@ -186,7 +166,7 @@ export class TaskReviewTable extends Component {
   }
 }
 
-const setupColumnTypes = (props, openComments, setFiltered, data, tableState) => {
+const setupColumnTypes = (props, openComments, setFiltered, data, criteria) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -263,12 +243,16 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
     minWidth: 120,
     Cell: ({row}) => {
       let linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
-      if (tableState.sortBy) {
-        linkTo += `sortBy=${tableState.sortBy}&direction=${tableState.direction}&`
+      if (_get(criteria, 'sortCriteria.sortBy')) {
+        linkTo += `sortBy=${criteria.sortCriteria.sortBy}&direction=${criteria.sortCriteria.direction}&`
       }
 
-      if (tableState.filters) {
-        linkTo += `filters=${encodeURIComponent(JSON.stringify(tableState.filters))}`
+      if (_get(criteria, 'filters')) {
+        linkTo += `filters=${encodeURIComponent(JSON.stringify(criteria.filters))}&`
+      }
+
+      if (_get(criteria, 'boundingBox')) {
+        linkTo += `boundingBox=${criteria.boundingBox}`
       }
 
       return (
@@ -321,7 +305,7 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
     Filter: ({ filter, onChange }) =>
       <div>
         <IntlDatePicker
-            selected={_get(tableState, 'filters.reviewedAt')}
+            selected={_get(criteria, 'filters.reviewedAt')}
             onChange={(value) => {
               setFiltered("reviewedAt", value)
             }}
@@ -364,7 +348,8 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
         <option key="all" value="all">All</option>
       ]
 
-      if (!props.asReviewer || props.showReviewedByMe) {
+      if (props.reviewTasksType === ReviewTasksType.reviewedByMe ||
+          props.reviewTasksType === ReviewTasksType.myReviewedTasks) {
         _each(TaskReviewStatus, (status) => {
           options.push(
             <option key={keysByReviewStatus[status]} value={status}>
@@ -405,12 +390,12 @@ const setupColumnTypes = (props, openComments, setFiltered, data, tableState) =>
     minWidth: 110,
     Cell: ({row}) =>{
       let linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
-      if (tableState.sortBy) {
-        linkTo += `sortBy=${tableState.sortBy}&direction=${tableState.direction}&`
+      if (_get(criteria, 'sortCriteria.sortBy')) {
+        linkTo += `sortBy=${criteria.sortCriteria.sortBy}&direction=${criteria.sortCriteria.direction}&`
       }
 
-      if (tableState.filters) {
-        linkTo += `filters=${encodeURIComponent(JSON.stringify(tableState.filters))}`
+      if (criteria.filters) {
+        linkTo += `filters=${encodeURIComponent(JSON.stringify(criteria.filters))}`
       }
 
       let action =

@@ -9,8 +9,12 @@ import _get from 'lodash/get'
  * View the AOI defined by the given bounds (either LatLngBounds or an array)
  * as of the given date via Overpass attic query
  */
-export const viewAtticOverpass = (selectedEditor, actionDate, bounds) => {
-  const adjustedDateString = offsetAtticDateMoment(actionDate).toISOString()
+export const viewAtticOverpass = (selectedEditor, actionDate, bounds, ignoreAtticOffset = false) => {
+  let adjustedDateString = offsetAtticDateMoment(actionDate).toISOString()
+  if (ignoreAtticOffset) {
+    adjustedDateString = actionDate
+  }
+
   const bbox = overpassBBox(bounds).join(',')
   const query =
     `[out:xml][timeout:25][bbox:${bbox}][date:"${adjustedDateString}"];` +

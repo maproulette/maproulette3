@@ -23,6 +23,7 @@ export const WIDGET_DATA_TARGET_CHALLENGE = 'challenge'
 export const WIDGET_DATA_TARGET_TASKS = 'tasks'
 export const WIDGET_DATA_TARGET_TASK = 'task'
 export const WIDGET_DATA_TARGET_USER = 'user'
+export const WIDGET_DATA_TARGET_REVIEW = 'review'
 
 export const WIDGET_USER_TARGET_ALL = 'all'
 export const WIDGET_USER_TARGET_MANAGER_READ = 'managerRead'
@@ -37,6 +38,7 @@ export const WidgetDataTarget = {
   tasks: WIDGET_DATA_TARGET_TASKS,
   task: WIDGET_DATA_TARGET_TASK,
   user: WIDGET_DATA_TARGET_USER,
+  review: WIDGET_DATA_TARGET_REVIEW
 }
 
 export const WidgetUserTarget = {

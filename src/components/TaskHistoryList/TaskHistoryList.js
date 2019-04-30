@@ -12,7 +12,7 @@ import _isUndefined from 'lodash/isUndefined'
 import _indexOf from 'lodash/indexOf'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
-import { keysByStatus, messagesByStatus }
+import { keysByStatus, messagesByStatus, TASK_STATUS_CREATED }
       from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
@@ -86,8 +86,9 @@ export default class TaskHistoryList extends Component {
           username = _get(log, 'user.username')
           updatedStatus = statusEntry(log, this.props, index)
 
-          if (log.startedAt) {
-            startedAtEntry = {timestamp: log.startedAt,
+          if (log.startedAt || log.oldStatus === TASK_STATUS_CREATED) {
+            startedAtEntry = {timestamp: (log.startedAt || log.timestamp),
+                              ignoreAtticOffset: true,
                               entry: [
                                 <li className="mr-mb-4" key={"start-" + index}>
                                   <div>
@@ -135,7 +136,8 @@ export default class TaskHistoryList extends Component {
               </div>
               {!this.props.selectDiffs &&
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp, this.props.mapBounds.bounds)}>
+                <a onClick={() => viewAtticOverpass(this.props.editor, log.timestamp,
+                                    this.props.mapBounds.bounds, log.ignoreAtticOffset)}>
                   <FormattedMessage {...messages.viewAtticLabel} />
                 </a>
               }

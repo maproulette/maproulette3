@@ -76,6 +76,8 @@ const apiRoutes = factory => {
       'review': factory.get('/tasks/review'),
       'reviewed': factory.get('/tasks/reviewed'),
       'reviewNext': factory.get('/tasks/review/next'),
+      'reviewMetrics': factory.get('/tasks/review/metrics'),
+      'fetchReviewClusters': factory.get('/taskCluster/review')
     },
     'task': {
       'single': factory.get('/task/:id'),
