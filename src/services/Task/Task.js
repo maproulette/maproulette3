@@ -132,6 +132,30 @@ export const fetchTaskForReview = function(taskId, includeMapillary=false) {
       schema: taskSchema(),
       variables: {id: taskId},
       params: {mapillary: includeMapillary}
+    }).execute()
+  }
+}
+
+/**
+ * Locks a task that is to be started.
+ */
+export const startTask = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(api.task.start, {
+      schema: taskSchema(),
+      variables: {id: taskId}
+    }).execute()
+  }
+}
+
+/**
+ * Unlocks a task.
+ */
+export const releaseTask = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(api.task.release, {
+      schema: taskSchema(),
+      variables: {id: taskId}
     }).execute().then(normalizedResults => {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
