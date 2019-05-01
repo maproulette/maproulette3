@@ -6,7 +6,6 @@ import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _get from 'lodash/get'
 import _values from 'lodash/values'
-import _uniqueId from 'lodash/uniqueId'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
@@ -23,13 +22,11 @@ export const RECEIVE_REVIEWED_BY_USER_TASKS = 'RECEIVE_REVIEWED_BY_USER_TASKS'
 export const receiveReviewedTasks = function(tasks,
                                             type,
                                             status=RequestStatus.success,
-                                            fetchId,
                                             totalCount) {
   return {
     type: type,
     status,
     tasks,
-    fetchId,
     totalCount,
     receivedAt: Date.now(),
   }
@@ -50,10 +47,9 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
   const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}), criteria.boundingBox)
 
   return function(dispatch) {
-    const fetchId = _uniqueId()
     dispatch(receiveReviewedTasks(null,
       asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS: RECEIVE_REVIEWED_TASKS,
-      RequestStatus.inProgress, fetchId))
+      RequestStatus.inProgress))
     return new Endpoint(
       api.tasks.reviewed,
       {
@@ -72,12 +68,12 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
 
       dispatch(receiveReviewedTasks(tasks,
         asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS : RECEIVE_REVIEWED_TASKS,
-        RequestStatus.success, fetchId, normalizedResults.result.total))
+        RequestStatus.success, normalizedResults.result.total))
       return tasks
     }).catch((error) => {
       dispatch(receiveReviewedTasks([],
         asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS: RECEIVE_REVIEWED_TASKS,
-        RequestStatus.error, fetchId))
+        RequestStatus.error))
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       console.log(error.response || error)
     })

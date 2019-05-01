@@ -8,6 +8,7 @@ import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
 import _debounce from 'lodash/debounce'
+import _cloneDeep from 'lodash/cloneDeep'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
@@ -54,6 +55,12 @@ export class TaskReviewTable extends Component {
     this.props.startReviewing(this.props.history)
   }
 
+  toggleShowFavorites(event) {
+    const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
+    reviewCriteria.savedChallengesOnly = !reviewCriteria.savedChallengesOnly
+    this.props.updateReviewTasks(reviewCriteria)
+  }
+
   componentDidMount() {
   }
 
@@ -85,20 +92,20 @@ export class TaskReviewTable extends Component {
       case ReviewTasksType.reviewedByMe:
         subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
         columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedAt,
+                   columnTypes.challenge, columnTypes.project, columnTypes.mappedOn, columnTypes.reviewedAt,
                    columnTypes.status, columnTypes.reviewCompleteControls, columnTypes.viewComments]
         break
       case ReviewTasksType.toBeReviewed:
         subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
         columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.mappedOn, columnTypes.reviewedBy,
+                   columnTypes.challenge, columnTypes.project, columnTypes.mappedOn, columnTypes.reviewedBy,
                    columnTypes.reviewedAt, columnTypes.status, columnTypes.reviewerControls,
                    columnTypes.viewComments]
         break
       case ReviewTasksType.myReviewedTasks:
       default:
         subheader = <FormattedMessage {...messages.myReviewTasks} />
-        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge,
+        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge, columnTypes.project,
                    columnTypes.mappedOn, columnTypes.reviewedBy, columnTypes.reviewedAt,
                    columnTypes.status, columnTypes.mapperControls, columnTypes.viewComments]
         break
@@ -112,6 +119,14 @@ export class TaskReviewTable extends Component {
               <h1 className="mr-h2 mr-text-blue-light md:mr-mr-4">
                 {subheader}
               </h1>
+              {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
+                <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleShowFavorites()}>
+                  <input type="checkbox" className=""
+                         checked={!!this.props.reviewCriteria.savedChallengesOnly}
+                         onChange={() => null} />
+                  <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+                </div>
+              }
             </div>
             <div>
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
@@ -255,6 +270,10 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria) => {
         linkTo += `boundingBox=${criteria.boundingBox}`
       }
 
+      if (_get(criteria, 'savedChallengesOnly')) {
+        linkTo += `savedChallengesOnly=${criteria.savedChallengesOnly}`
+      }
+
       return (
         <div className="row-challenge-column">
           <Link
@@ -263,6 +282,22 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria) => {
           >
             {row._original.parent.name}
           </Link>
+        </div>
+      )
+    }
+  }
+
+  columns.project = {
+    id: 'project',
+    Header: props.intl.formatMessage(messages.projectLabel),
+    filterable: true,
+    sortable: false,
+    exportable: t => _get(t.parent, 'parent.displayName'),
+    minWidth: 120,
+    Cell: ({row}) => {
+      return (
+        <div className="row-project-column">
+          {row._original.parent.parent.displayName}
         </div>
       )
     }

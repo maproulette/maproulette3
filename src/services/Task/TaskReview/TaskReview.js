@@ -74,7 +74,8 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
  */
  export const fetchReviewMetrics = function(reviewTasksType, criteria) {
   const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
-                                                       criteria.boundingBox)
+                                                       criteria.boundingBox,
+                                                       _get(criteria, 'savedChallengesOnly'))
 
   const type = determineType(reviewTasksType)
 
@@ -102,7 +103,8 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
  */
  export const fetchClusteredReviewTasks = function(reviewTasksType, criteria) {
   const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
-                                                       criteria.boundingBox)
+                                                       criteria.boundingBox,
+                                                       _get(criteria, 'savedChallengesOnly'))
   return function(dispatch) {
     const type = determineType(reviewTasksType)
     const fetchId = _uniqueId()
@@ -148,7 +150,8 @@ export const loadNextReviewTask = function(criteria={}) {
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? `${_snakeCase(sortBy)}` : null
   const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
-                                                       criteria.boundingBox)
+                                                       criteria.boundingBox,
+                                                       _get(criteria, 'savedChallengesOnly')                                                       )
 
   return function(dispatch) {
     return retrieveChallengeTask(dispatch, new Endpoint(
@@ -221,7 +224,7 @@ export const completeReview = function(taskId, taskReviewStatus, comment) {
 /**
  * Sets up the search parameters that the server expects.
  */
-export const setupFilterSearchParameters = (filters, boundingBox) => {
+export const setupFilterSearchParameters = (filters, boundingBox, savedChallengesOnly) => {
   const searchParameters = {}
   if (filters.reviewRequestedBy) {
     searchParameters.o = filters.reviewRequestedBy
@@ -231,6 +234,9 @@ export const setupFilterSearchParameters = (filters, boundingBox) => {
   }
   if (filters.challenge) {
     searchParameters.cs = filters.challenge
+  }
+  if (filters.project) {
+    searchParameters.ps = filters.project
   }
   if (filters.status && filters.status !== "all") {
     searchParameters.tStatus = filters.status
@@ -246,6 +252,10 @@ export const setupFilterSearchParameters = (filters, boundingBox) => {
   if (boundingBox) {
     //tbb =>  [left, bottom, right, top]
     searchParameters.tbb = boundingBox
+  }
+
+  if (savedChallengesOnly) {
+    searchParameters.onlySaved = savedChallengesOnly
   }
 
   return searchParameters
@@ -307,7 +317,6 @@ export const currentReviewTasks = function(state={}, action) {
 }
 
 const updateReduxState = function(state={}, action, listName) {
-  const currentFetch = parseInt(_get(state, 'fetchId', 0), 10)
   const mergedState = _cloneDeep(state)
 
   if (action.type === RECEIVE_REVIEW_METRICS) {
@@ -325,12 +334,8 @@ const updateReduxState = function(state={}, action, listName) {
     return mergedState
   }
 
-  if (parseInt(action.fetchId, 10) >= currentFetch &&
-      action.status === RequestStatus.success) {
-
-    const updatedTasks = {
-      fetchId: action.fetchId
-    }
+  if (action.status === RequestStatus.success) {
+    const updatedTasks = {}
 
     updatedTasks.tasks = _isArray(action.tasks) ? action.tasks : []
     updatedTasks.totalCount = action.totalCount
