@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
+import classNames from 'classnames'
 import AsEndUser from '../../interactions/User/AsEndUser'
 import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithWebSocketSubscriptions
@@ -83,16 +84,14 @@ export class ReviewTasksDashboard extends Component {
         <MediaQuery query="(min-width: 1024px)">
           <ReviewWidgetWorkspace
             {...this.props}
-            className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
-            workspaceTitle=""
+            className="mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
+            workspaceTitle={null}
             workspaceInfo={
-              <section className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 md:mr-py-12 md:mr-px-12 mr-flex mr-flex-col mr-items-center">
-                <div className="review-tabs">
-                  <div className="" onClick={() => this.setState({showType: ReviewTasksType.toBeReviewed})}>Tasks to be Reviewed</div>
-                  {user.isReviewer() && <div className="" onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}>Tasks Reviewed by Me</div>}
-                  {user.isReviewer() && <div className="" onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})} >My Reviewed Tasks</div>}
-                </div>
-              </section>
+              <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex">
+                <li><button className={classNames(this.state.showType === 'tasksToBeReviewed' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.toBeReviewed})}>Tasks to be Reviewed</button></li>
+                {user.isReviewer() && <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green"><button className={classNames(this.state.showType === 'tasksReviewedByMe' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}>Tasks Reviewed by Me</button></li>}
+                {user.isReviewer() && <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green"><button className={classNames(this.state.showType === 'myReviewedTasks' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})} >My Reviewed Tasks</button></li>}
+              </ol>
             }
             reviewTasksType={this.state.showType}
           />

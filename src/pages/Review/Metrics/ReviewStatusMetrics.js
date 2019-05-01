@@ -15,7 +15,7 @@ export default class ReviewStatusMetrics extends Component {
     const type = this.props.reviewTasksType
 
     return (
-      <div className={classNames("review-status-metrics", this.props.className)}>
+      <div className={classNames("review-status-metrics")}>
         {metrics &&
           <div className="mr-grid mr-grid-columns-1 mr-grid-gap-4">
             {type === ReviewTasksType.toBeReviewed &&
@@ -62,11 +62,11 @@ export default class ReviewStatusMetrics extends Component {
 }
 
 function buildMetric(amount, total, description) {
-  return <div className="mr-ml-4 mr-grid mr-grid-columns-2 mr-grid-gap-2">
-    <div className="mr-text-yellow mr-text-xl">{amount === 0 ? 0 : Math.round(amount / total * 100)}%</div>
-    <div className="decription">
+  return <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
+    <div className="mr-col-span-1 mr-text-yellow mr-text-2xl">{amount === 0 ? 0 : Math.round(amount / total * 100)}%</div>
+    <div className="mr-col-span-4">
       <div className="mr-text-yellow">{amount} / {total}</div>
-      <div >{description}</div>
+      <div>{description}</div>
     </div>
   </div>
 }
