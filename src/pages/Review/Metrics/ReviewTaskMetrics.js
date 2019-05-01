@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import messages from './Messages'
 import ChallengeProgress from '../../../components/ChallengeProgress/ChallengeProgress'
 
 
