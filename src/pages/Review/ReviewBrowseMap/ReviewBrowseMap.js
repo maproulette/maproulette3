@@ -165,7 +165,7 @@ export class ReviewBrowseMap extends Component {
       </EnhancedMap>
 
     return (
-      <div className={classNames('review-browse-map', {"full-screen-map": this.props.isMobile}, this.props.className)}>
+      <div className={classNames('review-browse-map', {"full-screen-map": this.props.isMobile})}>
         <LayerToggle {...this.props} />
         {map}
         {!!this.props.loading && <BusySpinner mapMode />}
