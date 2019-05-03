@@ -17,6 +17,7 @@ import WidgetWorkspace from '../../components/WidgetWorkspace/WidgetWorkspace'
 import { ReviewTasksType } from '../../services/Task/TaskReview/TaskReview'
 import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
 import WithReviewMetrics from '../../components/HOCs/WithReviewMetrics/WithReviewMetrics'
+import messages from './Messages'
 
 
 const WIDGET_WORKSPACE_NAME = "reviewOverview"
@@ -75,6 +76,34 @@ export class ReviewTasksDashboard extends Component {
       )
     }
 
+    const showType = !user.isReviewer() ? ReviewTasksType.myReviewedTasks : this.state.showType
+
+    const reviewerTabs =
+      <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex">
+        <li>
+          <button className={classNames(this.state.showType === 'tasksToBeReviewed' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.toBeReviewed})}>
+            {this.props.intl.formatMessage(messages.tasksToBeReviewed)}
+          </button>
+        </li>
+        <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
+          <button className={classNames(this.state.showType === 'tasksReviewedByMe' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}>
+            {this.props.intl.formatMessage(messages.tasksReviewedByMe)}
+          </button>
+        </li>
+        <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
+          <button className={classNames(this.state.showType === 'myReviewedTasks' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})}>
+            {this.props.intl.formatMessage(messages.myReviewTasks)}
+          </button>
+        </li>
+      </ol>
+
+    const notReviewerTabs =
+      <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex">
+        <li className="mr-text-green-lighter">
+          {this.props.intl.formatMessage(messages.myReviewTasks)}
+        </li>
+      </ol>
+
     return (
       <div className='review-pane'>
         <MediaQuery query="(max-width: 1023px)">
@@ -86,14 +115,8 @@ export class ReviewTasksDashboard extends Component {
             {...this.props}
             className="mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
             workspaceTitle={null}
-            workspaceInfo={
-              <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex">
-                <li><button className={classNames(this.state.showType === 'tasksToBeReviewed' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.toBeReviewed})}>Tasks to be Reviewed</button></li>
-                {user.isReviewer() && <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green"><button className={classNames(this.state.showType === 'tasksReviewedByMe' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}>Tasks Reviewed by Me</button></li>}
-                {user.isReviewer() && <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green"><button className={classNames(this.state.showType === 'myReviewedTasks' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})} >My Reviewed Tasks</button></li>}
-              </ol>
-            }
-            reviewTasksType={this.state.showType}
+            workspaceInfo={user.isReviewer()? reviewerTabs : notReviewerTabs}
+            reviewTasksType={showType}
           />
         </MediaQuery>
       </div>

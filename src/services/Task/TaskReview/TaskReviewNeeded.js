@@ -1,6 +1,5 @@
 import _get from 'lodash/get'
 import _values from 'lodash/values'
-import _uniqueId from 'lodash/uniqueId'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
@@ -22,12 +21,11 @@ export const RECEIVE_REVIEW_NEEDED_TASKS = 'RECEIVE_REVIEW_NEEDED_TASKS'
  */
 export const receiveReviewNeededTasks = function(tasks,
                                                  status=RequestStatus.success,
-                                                 fetchId, totalCount) {
+                                                 totalCount) {
   return {
     type: RECEIVE_REVIEW_NEEDED_TASKS,
     status,
     tasks,
-    fetchId,
     totalCount,
     receivedAt: Date.now(),
   }
@@ -43,11 +41,11 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
-  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}), criteria.boundingBox)
+  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
+                                                       criteria.boundingBox,
+                                                       _get(criteria, 'savedChallengesOnly'))
 
   return function(dispatch) {
-    const fetchId = _uniqueId()
-    dispatch(receiveReviewNeededTasks(null, RequestStatus.inProgress, fetchId))
     return new Endpoint(
       api.tasks.review,
       {
@@ -63,11 +61,11 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
           tasks = _reverse(tasks)
         }
       }
-      dispatch(receiveReviewNeededTasks(tasks, RequestStatus.success, fetchId,
+      dispatch(receiveReviewNeededTasks(tasks, RequestStatus.success,
                                         normalizedResults.result.total))
       return tasks
     }).catch((error) => {
-      dispatch(receiveReviewNeededTasks([], RequestStatus.error, fetchId))
+      dispatch(receiveReviewNeededTasks([], RequestStatus.error))
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       console.log(error.response || error)
     })

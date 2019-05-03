@@ -4,6 +4,7 @@ import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _cloneDeep from 'lodash/cloneDeep'
 import _isString from 'lodash/isString'
+import _isUndefined from 'lodash/isUndefined'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchReviewNeededTasks }
        from '../../../services/Task/TaskReview/TaskReviewNeeded'
@@ -39,6 +40,10 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
         pageSize = this.state.pageSize
       }
 
+      if (_isUndefined(criteria.savedChallengesOnly)) {
+        criteria.savedChallengesOnly = _get(this.state.criteria[this.props.reviewTasksType], "savedChallengesOnly")
+      }
+
       const typedCriteria = _cloneDeep(this.state.criteria)
       typedCriteria[props.reviewTasksType] = criteria
       this.setState({loading: true, criteria: typedCriteria, pageSize})
@@ -67,7 +72,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       const criteria = buildSearchCrteria(searchParams)
       const stateCriteria = this.state.criteria
       stateCriteria[this.props.reviewTasksType] = criteria
-      this.setState({stateCriteria, pageSize})
+      this.setState({criteria: stateCriteria, pageSize})
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -138,6 +143,7 @@ function buildSearchCrteria(searchParams) {
     let filters = _get(searchParams, 'filters', {})
     const page = _get(searchParams, 'page')
     const boundingBox = searchParams.boundingBox
+    const savedChallengesOnly = searchParams.savedChallengesOnly
 
     if (_isString(filters)) {
       filters = JSON.parse(searchParams.filters)
@@ -148,7 +154,7 @@ function buildSearchCrteria(searchParams) {
       direction = _get(searchParams, 'sortCriteria.direction')
     }
 
-    return {sortCriteria: {sortBy, direction}, filters, page, boundingBox}
+    return {sortCriteria: {sortBy, direction}, filters, page, boundingBox, savedChallengesOnly}
   }
   else return DEFAULT_CRITERIA
 }
