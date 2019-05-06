@@ -11,7 +11,6 @@ import _isFinite from 'lodash/isFinite'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
-import _snakeCase from 'lodash/snakeCase'
 import { defaultRoutes as api, isSecurityError, websocketClient } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -121,25 +120,6 @@ export const fetchTask = function(taskId, suppressReceive=false, includeMapillar
 }
 
 /**
- * Fetch data for the given task and claim it for review.
- *
- * If info on available mapillary images for the task is also desired, set
- * includeMapillary to true
- */
-export const fetchTaskForReview = function(taskId, includeMapillary=false) {
-  return function(dispatch) {
-    return new Endpoint(api.task.startReview, {
-      schema: taskSchema(),
-      variables: {id: taskId},
-      params: {mapillary: includeMapillary}
-    }).execute().then(normalizedResults => {
-      dispatch(receiveTasks(normalizedResults.entities))
-      return normalizedResults
-    })
-  }
-}
-
-/**
  * Mark the given task as completed with the given status.
  */
 export const completeTask = function(taskId, challengeId, taskStatus, needsReview) {
@@ -147,73 +127,6 @@ export const completeTask = function(taskId, challengeId, taskStatus, needsRevie
     return updateTaskStatus(dispatch, taskId, taskStatus, needsReview)
   }
 }
-
-/**
- *
- */
-export const completeReview = function(taskId, taskReviewStatus, comment) {
-  return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment)
-  }
-}
-
-const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment) {
-  // Optimistically assume request will succeed. The store will be updated
-  // with fresh task data from the server if the save encounters an error.
-  dispatch(receiveTasks({
-    tasks: {
-      [taskId]: {
-        id: taskId,
-        status: newStatus
-      }
-    }
-  }))
-
-  return new Endpoint(
-    api.task.updateReviewStatus,
-    {schema: taskSchema(), variables: {id: taskId, status: newStatus}, params:{comment: comment}}
-  ).execute().catch(error => {
-    if (isSecurityError(error)) {
-      dispatch(ensureUserLoggedIn()).then(() =>
-        dispatch(addError(AppErrors.user.unauthorized))
-      )
-    }
-    else {
-      dispatch(addError(AppErrors.task.updateFailure))
-      console.log(error.response || error)
-    }
-    fetchTask(taskId)(dispatch) // Fetch accurate task data
-  })
-}
-
-/**
- * Remove the task review claim on this task.
- */
-export const cancelReviewClaim = function(taskId) {
-  return function(dispatch) {
-    return new Endpoint(
-      api.task.cancelReview, {schema: taskSchema(), variables: {id: taskId}}
-    ).execute().then(normalizedResults => {
-      // Server doesn't explicitly return empty fields from JSON.
-      // This field should now be null so we will set it so when the
-      // task data is merged with existing task data it will be correct.
-      normalizedResults.entities.tasks[taskId].reviewClaimedBy = null
-      dispatch(receiveTasks(normalizedResults.entities))
-      return normalizedResults
-    }).catch(error => {
-      if (isSecurityError(error)) {
-        dispatch(ensureUserLoggedIn()).then(() =>
-          dispatch(addError(AppErrors.user.unauthorized))
-        )
-      }
-      else {
-        console.log(error.response || error)
-      }
-      fetchTask(taskId)(dispatch) // Fetch accurate task data
-    })
-  }
-}
-
 
 /**
  * Bulk update the given tasks. Note that the bulk update APIs require ids to
@@ -416,44 +329,6 @@ export const loadNextSequentialTaskFromChallenge = function(challengeId,
       {
         schema: taskSchema(),
         variables: {challengeId: challengeId, taskId: currentTaskId},
-      }
-    ))
-  }
-}
-
-/**
- * Retrieve the next task to review with the given sort and filter criteria
- */
-export const loadNextReviewTask = function(criteria={}) {
-  const sortBy = _get(criteria, 'sortCriteria.sortBy')
-  const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
-  const sort = sortBy ? `${_snakeCase(sortBy)}` : null
-  const filters = _get(criteria, 'filters', {})
-
-  const searchParameters = {}
-  if (filters.reviewRequestedBy) {
-    searchParameters.o = filters.reviewRequestedBy
-  }
-  if (filters.reviewedBy) {
-    searchParameters.r = filters.reviewedBy
-  }
-  if (filters.challenge) {
-    searchParameters.cs = filters.challenge
-  }
-  if (filters.status && filters.status !== "all") {
-    searchParameters.tStatus = filters.status
-  }
-  if (filters.reviewStatus && filters.reviewStatus !== "all") {
-    searchParameters.trStatus = filters.reviewStatus
-  }
-
-  return function(dispatch) {
-    return retrieveChallengeTask(dispatch, new Endpoint(
-      api.tasks.reviewNext,
-      {
-        schema: taskSchema(),
-        variables: {},
-        params: {sort, order, ...searchParameters},
       }
     ))
   }

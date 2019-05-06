@@ -36,12 +36,14 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
       // Ensure default layout honors properties from each widget's descriptor
       for (let i = 0; i < conf.widgets.length; i++) {
         const widget = conf.widgets[i]
-        conf.layout[i] = Object.assign({}, {
-          minW: widget.minWidth,
-          maxW: widget.maxWidth,
-          minH: widget.minHeight,
-          maxH: widget.maxHeight,
-        }, conf.layout[i])
+        if (widget) {
+          conf.layout[i] = Object.assign({}, {
+            minW: widget.minWidth,
+            maxW: widget.maxWidth,
+            minH: widget.minHeight,
+            maxH: widget.maxHeight,
+          }, conf.layout[i])
+        }
       }
 
       return conf

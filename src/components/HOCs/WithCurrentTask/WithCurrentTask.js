@@ -8,13 +8,13 @@ import _isString from 'lodash/isString'
 import _isPlainObject from 'lodash/isPlainObject'
 import { taskDenormalizationSchema,
          fetchTask,
-         fetchTaskForReview,
          fetchTaskComments,
          fetchTaskPlace,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
+import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'        
 import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
 import { fetchUser } from '../../../services/User/User'

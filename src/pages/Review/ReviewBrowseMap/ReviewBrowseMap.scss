@@ -1,0 +1,57 @@
+@import 'variables.scss';
+
+/**
+ * Mixin to set the colors for map clusters. Three colors are required: the
+ * normal base color, along with the colors for clusters with few items and
+ * many items (used for clusters with the 'few' or 'many' decorator
+ * classes, respectively).
+ */
+@mixin colored-cluster($normalColor, $fewColor, $manyColor) {
+  color: white;
+  background-color: transparent;
+  border-radius: 50%;
+  text-align: center;
+  border: 5px solid rgba($normalColor, 0.5);
+
+  .count {
+    display: inline-block;
+    background-color: rgba($normalColor, 0.9);
+    width: 30px;
+    height: 30px;
+    padding-top: 6px;
+    border-radius: 50%;
+  }
+
+  &.few {
+    border-color: rgba($fewColor, 0.5);
+    .count {
+      background-color: rgba($fewColor, 0.9);
+    }
+  }
+
+  &.many {
+    border-color: rgba($manyColor, 0.5);
+    .count {
+      background-color: rgba($manyColor, 0.9);
+    }
+  }
+}
+
+.review-browse-map {
+  .busy-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+
+  position: relative;
+  height: 100%;
+
+  .leaflet-container {
+    height: 100%;
+  }
+}
+
+.greyscale-cluster {
+  @include colored-cluster($grey-dark-less, $grey-light-less, $grey-darkest);
+}

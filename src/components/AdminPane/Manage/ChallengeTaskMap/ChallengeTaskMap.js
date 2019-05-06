@@ -327,7 +327,7 @@ export class ChallengeTaskMap extends Component {
           }
         </EnhancedMap>
 
-        {loadingClusteredTasks && <BusySpinner />}
+        {loadingClusteredTasks && <BusySpinner mapMode />}
       </div>
     )
   }
