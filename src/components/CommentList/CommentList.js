@@ -54,8 +54,7 @@ export default class CommentList extends Component {
             </span> &mdash; {comment.osm_username}
           </div>
           <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
-                                     {"mr-bg-grey-lighter": this.props.lightMode,
-                                      "mr-bg-grey-lighter-10": !this.props.lightMode})}>
+                                     this.props.lightMode ? "mr-bg-grey-lighter" : "mr-bg-grey-lighter-10")}>
             <MarkdownContent markdown={comment.comment} />
           </div>
 

@@ -117,6 +117,7 @@ export class ProjectDashboard extends Component {
       <div className="admin__manage project-dashboard">
         <WidgetWorkspace
           {...this.props}
+          lightMode
           className="mr-mt-4"
           workspaceEyebrow={pageHeader}
           filterComponent={ChallengeFilterGroup}
