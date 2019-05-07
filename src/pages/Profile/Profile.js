@@ -62,8 +62,8 @@ class Profile extends Component {
           <header className="mr-max-w-xs mr-mx-auto mr-text-center">
             <img
               className="mr-block mr-mx-auto mr-mb-4 mr-rounded-full md:mr-w-30 md:mr-h-30 md:mr--mt-23"
-              src={`${user.osmProfile.avatarURL}?s=120`}
-              srcSet={`${user.osmProfile.avatarURL}?s=120 1x, ${user.osmProfile.avatarURL}?s=240 2x"`}
+              src={`${user.osmProfile.avatarURL}&s=120`}
+              srcSet={`${user.osmProfile.avatarURL}&s=120 1x, ${user.osmProfile.avatarURL}&s=240 2x"`}
               alt={user.osmProfile.displayName}
             />
             <h1 className="mr-h3 mr-text-blue mr-mb-1">{user.osmProfile.displayName}</h1>

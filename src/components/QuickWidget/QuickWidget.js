@@ -16,7 +16,7 @@ import classNames from 'classnames'
 export default class QuickWidget extends Component {
   render() {
     return (
-      <section className={classNames("mr-flex mr-flex-col mr-h-full", {"mr-mb-4": this.props.isEditing})}>
+      <section className={classNames("mr-flex mr-flex-col mr-h-full", this.props.className, {"mr-mb-4": this.props.isEditing})}>
         {this.props.isEditing && !this.props.permanent &&
          <button
            className="mr-card-widget__delete"
@@ -64,4 +64,6 @@ QuickWidget.propTypes = {
   headerControls: PropTypes.element,
   /** Optional controls to display in widget drop-down menu */
   menuControls: PropTypes.element,
+  /** Classnames to pass into Widget */
+  className: PropTypes.string,  
 }

@@ -27,6 +27,10 @@
 
   &__header {
     @apply mr-py-2 mr-px-4;
+
+    .mr-card-widget--padded & {
+      @apply mr-px-6 mr-pt-6;
+    }
   }
 
   &__title {
@@ -61,23 +65,20 @@
   &__content {
     @apply mr-text-sm mr-h-full mr-overflow-auto mr-scrolling-touch mr-px-4 mr-pb-4;
 
-    p,
-    ol,
-    ul,
-    pre {
-      @apply mr-my-2;
+    .mr-card-widget--padded & {
+      @apply mr-px-6;
     }
 
     .mr-cards-inverse & {
-      
+
       a {
         @apply mr-text-green-lighter;
-  
+
         &:hover {
           @apply mr-text-white;
         }
       }
     }
-    
+
   }
 }

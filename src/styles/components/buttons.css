@@ -8,7 +8,7 @@
   }
 
   &--small {
-    @apply mr-text-sm mr-py-1 mr-px-4 mr-min-w-auto;
+    @apply mr-text-sm mr-py-1 mr-px-3 mr-min-w-auto;
   }
 
   &--link {

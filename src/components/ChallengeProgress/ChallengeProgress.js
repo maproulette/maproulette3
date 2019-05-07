@@ -43,7 +43,10 @@ const theme = {
 };
 
 export class ChallengeProgress extends Component {
-  percent = (value, total) => Math.round(value / total * 100)
+  percent = (value, total) => {
+    if (value === 0 ) return 0
+    return Math.round(value / total * 100)
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     // Only re-render if the challenge or actions changed
@@ -120,11 +123,11 @@ export class ChallengeProgress extends Component {
       <React.Fragment>
         <div className="mr-text-sm mr-grid mr-grid-columns-2 mr-grid-gap-4">
           {_map(challengeStatsColumns, (stats, index1) => (
-            <ul key={index1}>
+            <ul key={index1} className={this.props.listClassName}>
                 {_map(stats, (stat, index2) => (
                   <li className="mr-flex mr-items-center" key={index1 + "-" + index2}>
                     <span
-                      className={classNames("mr-text-lg",
+                      className={classNames("mr-text-lg mr-min-w-8 mr-text-right",
                                             this.props.lightMode ? "mr-text-pink" : "mr-text-yellow")}
                     >
                       {isNaN(stat[1]) ? '--' :

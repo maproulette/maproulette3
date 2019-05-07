@@ -392,6 +392,16 @@ export const fetchUserActivity = function(userId, limit=50) {
 }
 
 /**
+ * Fetch the user's recent metrics.
+ */
+export const fetchUserMetrics = function(userId, monthDuration = -1, reviewDuration = -1) {
+  return new Endpoint(api.user.metrics, {
+    variables: {userId},
+    params: {monthDuration, reviewDuration}
+  }).execute()
+}
+
+/**
  * Retrieve the given user data plus their accompanying data, performing
  * multiple API requests as needed.
  */
