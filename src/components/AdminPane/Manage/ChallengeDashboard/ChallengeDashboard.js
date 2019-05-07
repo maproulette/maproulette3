@@ -192,6 +192,7 @@ export class ChallengeDashboard extends Component {
       <div className="admin__manage challenge-dashboard">
         <WidgetWorkspace
           {...this.props}
+          lightMode
           className="mr-mt-4"
           workspaceEyebrow={pageHeader}
         />
