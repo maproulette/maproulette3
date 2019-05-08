@@ -19,8 +19,6 @@ import { fetchLeaderboard, fetchLeaderboardForUser,
 const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialOptions={}) {
   return class extends Component {
     state = {
-      monthsPast: initialMonthsPast,
-      countryCode: null,
       leaderboard: null,
       leaderboardLoading: false,
       showingCount: DEFAULT_LEADERBOARD_COUNT,
@@ -94,46 +92,27 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
     }
 
     setMonthsPast = (monthsPast, skipHistory=false) => {
-      let lastMonthsPast = this.state.monthsPast
-
-      const urlQuery = queryString.parse(_get(this.props.history, 'location.search'))
-      if (urlQuery.monthsPast) {
-        lastMonthsPast = urlQuery.monthsPast
-      }
-
-      if (monthsPast !== lastMonthsPast) {
-        this.setState({monthsPast})
-
-        const countryCode = this.props.countryCode || this.state.countryCode
+      if (monthsPast !== this.monthsPast()) {
+        const countryCode = this.props.countryCode
         this.updateLeaderboard(monthsPast, countryCode)
 
         if (!skipHistory) {
-          if (countryCode) {
-            this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${monthsPast}` )
-          }
-          else if (!this.props.projects && !this.props.challenges){
-            this.props.history.push(`/leaderboard?monthsPast=${monthsPast}` )
-          }
-          else {
-            this.props.history.push(this.props.location.pathname)
-          }
+          this.props.history.push(`${this.props.location.pathname}?monthsPast=${monthsPast}`)
         }
       }
     }
 
     setCountryCode = countryCode => {
-      if (countryCode !== this.state.countryCode) {
-        if (countryCode === "ALL") {
-          this.props.history.push(`/leaderboard?monthsPast=${this.monthsPast()}` )
-        }
-        else {
-          this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${this.monthsPast()}` )
-        }
+      if (countryCode === "ALL") {
+        this.props.history.push(`/leaderboard?monthsPast=${this.monthsPast()}` )
+      }
+      else {
+        this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${this.monthsPast()}` )
       }
     }
 
     loadMore = () => {
-      this.updateLeaderboard(this.monthsPast(), this.props.countryCode || this.state.countryCode, true)
+      this.updateLeaderboard(this.monthsPast(), this.props.countryCode, true)
     }
 
     monthsPast = () => {
@@ -141,12 +120,12 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       if (urlParams.monthsPast)
         return parseInt(urlParams.monthsPast, 10)
       else
-        return this.props.monthsPast || this.state.monthsPast
+        return this.props.monthsPast || initialMonthsPast
 
     }
 
     componentDidMount() {
-      this.updateLeaderboard(this.monthsPast(), this.props.countryCode || this.state.countryCode)
+      this.updateLeaderboard(this.monthsPast(), this.props.countryCode)
     }
 
     componentDidUpdate(prevProps) {
@@ -156,8 +135,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
           this.props.countryCode !== prevProps.countryCode ||
           !_isEqual(this.props.challenges, prevProps.challenges) ||
           !_isEqual(this.props.projects, prevProps.projects)) {
-        this.updateLeaderboard(this.monthsPast(),
-                               this.props.countryCode || this.state.countryCode)
+        this.updateLeaderboard(this.monthsPast(), this.props.countryCode)
       }
     }
 
@@ -167,7 +145,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       return <WrappedComponent leaderboard={this.state.leaderboard}
                                leaderboardLoading={this.state.leaderboardLoading}
                                monthsPast={this.monthsPast()}
-                               countryCode={this.state.countryCode || this.props.countryCode}
+                               countryCode={this.props.countryCode}
                                setMonthsPast={this.setMonthsPast}
                                setCountryCode={this.setCountryCode}
                                loadMore={this.loadMore}
