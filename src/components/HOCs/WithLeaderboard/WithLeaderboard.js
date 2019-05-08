@@ -94,7 +94,14 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
     }
 
     setMonthsPast = (monthsPast, skipHistory=false) => {
-      if (monthsPast !== this.state.monthsPast) {
+      let lastMonthsPast = this.state.monthsPast
+
+      const urlQuery = queryString.parse(_get(this.props.history, 'location.search'))
+      if (urlQuery.monthsPast) {
+        lastMonthsPast = urlQuery.monthsPast
+      }
+
+      if (monthsPast !== lastMonthsPast) {
         this.setState({monthsPast})
 
         const countryCode = this.props.countryCode || this.state.countryCode
@@ -104,7 +111,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
           if (countryCode) {
             this.props.history.push(`/country/${countryCode}/leaderboard?monthsPast=${monthsPast}` )
           }
-          else {
+          else if (!this.props.projects && !this.props.challenges){
             this.props.history.push(`/leaderboard?monthsPast=${monthsPast}` )
           }
         }
