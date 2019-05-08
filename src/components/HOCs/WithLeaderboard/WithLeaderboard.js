@@ -114,6 +114,9 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
           else if (!this.props.projects && !this.props.challenges){
             this.props.history.push(`/leaderboard?monthsPast=${monthsPast}` )
           }
+          else {
+            this.props.history.push(this.props.location.pathname)
+          }
         }
       }
     }
