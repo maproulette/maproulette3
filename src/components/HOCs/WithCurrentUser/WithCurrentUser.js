@@ -5,6 +5,7 @@ import _debounce from 'lodash/debounce'
 import _get from 'lodash/get'
 import { logoutUser,
          fetchUser,
+         fetchBasicUser,
          loadCompleteUser,
          saveChallenge, unsaveChallenge,
          saveTask, unsaveTask,
@@ -54,6 +55,7 @@ export const mapStateToProps = state => {
 export const mapDispatchToProps = dispatch => {
   const actions = bindActionCreators({
     fetchUser,
+    fetchBasicUser,
     loadCompleteUser,
     logoutUser,
     fetchSavedChallenges,

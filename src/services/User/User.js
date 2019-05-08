@@ -197,6 +197,28 @@ export const fetchUser = function(userId) {
 }
 
 /**
+ * Fetch the public user data for the given user.
+ *
+ * @param userId - Can be either a userId, osmUserId, or username
+ */
+export const fetchBasicUser = function(userId) {
+  return function(dispatch) {
+    const endPoint = isFinite(userId) ?
+      new Endpoint(
+        api.users.public, {schema: userSchema(), variables: {id: userId}}
+      ) :
+      new Endpoint(
+        api.users.publicByUsername, {schema: userSchema(), variables: {username: userId}}
+      )
+
+    return endPoint.execute().then(normalizedResults => {
+      dispatch(receiveUsers(normalizedResults.entities))
+      return normalizedResults
+    })
+  }
+}
+
+/**
  * Pings the server to ensure the current (given) user is logged in with
  * the server, and automatically signs out the user locally if not.
  */

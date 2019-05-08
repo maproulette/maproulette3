@@ -45,7 +45,7 @@ const WithTargetUser = function(WrappedComponent, readAll) {
           })
         }
         else {
-          this.props.fetchUser(targetUserId).then(() => {
+          this.props.fetchBasicUser(targetUserId).then(() => {
             this.setState({loading: false})
           })
         }
