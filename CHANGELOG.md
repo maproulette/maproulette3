@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.3.1] - 2019-05-8
+## [v3.3.1] - 2019-05-09
 ### Added
 - Status-specific metrics in Completion Progress widget
 - Updated Korean translation by @depth221
@@ -24,6 +24,8 @@ This project adheres to
 - Inconsistent user score in top nav vs. all-time leaderboard score
 - Error when trying to review a task immediately after status change
 - Lost challenge-name filter when consecutively reviewing a series of tasks
+- Don't leave project leaderboard when changing timeframes (#743)
+- Ensure task review data is reset if task status is reset back to created
 
 
 ## [v3.3] - 2019-04-16
