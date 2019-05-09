@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import classNames from 'classnames'
 import _map from 'lodash/map'
 import _noop from 'lodash/noop'
 import _filter from 'lodash/filter'
