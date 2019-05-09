@@ -83,6 +83,7 @@ export const parseSearchCriteria = (url, newState) => {
   let direction = searchParams.direction
   let filters = searchParams.filters || {}
   const boundingBox = searchParams.boundingBox
+  const savedChallengesOnly = searchParams.savedChallengesOnly
 
   if (_isString(filters)) {
     filters = JSON.parse(searchParams.filters)
@@ -93,8 +94,8 @@ export const parseSearchCriteria = (url, newState) => {
     direction = _get(searchParams, 'sortCriteria.direction')
   }
 
-  newState = {sortBy, direction, filters, boundingBox}
-  return {sortCriteria: {sortBy, direction}, filters, boundingBox}
+  newState = {sortBy, direction, filters, boundingBox, savedChallengesOnly}
+  return {sortCriteria: {sortBy, direction}, filters, boundingBox, savedChallengesOnly}
 }
 
 

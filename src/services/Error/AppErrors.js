@@ -27,6 +27,7 @@ export default {
     deleteFailure: messages.taskDeleteFailure,
     fetchFailure: messages.taskFetchFailure,
     doesNotExist: messages.taskDoesNotExist,
+    locked: messages.taskLocked,
   },
 
   osm: {

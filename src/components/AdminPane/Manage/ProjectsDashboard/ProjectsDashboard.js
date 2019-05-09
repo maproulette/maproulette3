@@ -77,6 +77,7 @@ export class ProjectsDashboard extends Component {
          </div> :
          <WidgetWorkspace
            {...this.props}
+           lightMode
            className="mr-mt-4"
            workspaceEyebrow={pageHeader}
            filterComponent={ProjectFilterGroup}
