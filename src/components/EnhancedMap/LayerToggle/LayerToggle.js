@@ -31,7 +31,7 @@ export class LayerToggle extends Component {
 
     const layerListItems = _map(baseSources, layer => (
       <li key={layer.id}>
-        <button className={classNames('test', this.props.source.id === layer.id ? 'mr-text-green-lighter' : 'mr-text-current')}
+        <button className={this.props.source.id === layer.id ? 'mr-text-green-lighter' : 'mr-text-current'}
          onClick={() => this.props.changeLayer(layer.id)}
         >
           {layer.name}

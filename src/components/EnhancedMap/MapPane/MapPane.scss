@@ -39,8 +39,6 @@
         .leaflet-control, .leaflet-bar  {
           z-index: $layer-map-control;
           top: 40px; // swap zoom with layer toggle for mobile
-          //border-color: $grey-lighter;
-          //border-width: 1px;
           border-radius: $radius-medium-less;
           box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
           margin-right: .5rem;
@@ -77,11 +75,6 @@
             &:last-child {
               border-bottom-left-radius: $radius-medium-less;
               border-bottom-right-radius: $radius-medium-less;
-            }
-
-            &:hover {
-              //background-color: $grey-lightest-more;
-              //border-color: $grey-lighter;
             }
           }
         }
