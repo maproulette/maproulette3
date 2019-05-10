@@ -5,6 +5,7 @@ import _each from 'lodash/each'
 import _differenceBy from 'lodash/differenceBy'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
+import _map from 'lodash/map'
 import { generateWidgetId, widgetDescriptor, compatibleWidgetTypes }
        from '../../../services/Widget/Widget'
 
@@ -25,7 +26,9 @@ const WithWidgetManagement = function(WrappedComponent) {
     availableWidgets = () => {
       const compatibleWidgets = compatibleWidgetTypes(this.props.workspace.targets)
       const unusedWidgets = _differenceBy(compatibleWidgets, this.props.workspace.widgets, 'widgetKey')
-      return _differenceBy(unusedWidgets, this.props.workspace.excludeWidgets, 'widgetKey')
+      return _differenceBy(unusedWidgets,
+                           _map(this.props.workspace.excludeWidgets, key => ({widgetKey: key})),
+                           'widgetKey')
     }
 
     /**
