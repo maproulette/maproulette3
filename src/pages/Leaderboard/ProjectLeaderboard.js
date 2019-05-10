@@ -8,6 +8,7 @@ export class ProjectLeaderboard extends Component {
     return <Leaderboard leaderboardOptions={{onlyEnabled: false, filterProjects: true}}
                         projects={[{id: this.props.match.params.projectId}]}
                         displayName={_get(this.props.project, 'displayName')}
+                        suppressCountrySelection={true}
                         {...this.props} />
   }
 }

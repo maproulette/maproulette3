@@ -124,7 +124,7 @@ export class ChallengeDetail extends Component {
             <div className="mr-max-w-md mr-mx-auto">
               <div className="mr-py-12 mr-px-8">
                 {_get(this.props, 'history.location.state.fromSearch') && (
-                  <div class="mr-mb-4">
+                  <div className="mr-mb-4">
                     <button
                       className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
                       onClick={() => this.props.history.goBack()}
@@ -214,7 +214,7 @@ export class ChallengeDetail extends Component {
                   </div>
 
                   <ChallengeProgress
-                    className="mr-mt-4 mr-mb-12"
+                    className="mr-my-4"
                     challenge={challenge}
                   />
 

@@ -62,6 +62,10 @@ export default defineMessages({
     id: 'Errors.task.doesNotExist',
     defaultMessage: "That task does not exist.",
   },
+  taskLocked: {
+    id: 'Errors.task.alreadyLocked',
+    defaultMessage: "Task has already been locked by someone else.",
+  },
 
   osmRequestTooLarge: {
     id: 'Errors.osm.requestTooLarge',

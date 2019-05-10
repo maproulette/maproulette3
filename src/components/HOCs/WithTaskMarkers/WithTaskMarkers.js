@@ -19,7 +19,8 @@ export default function WithTaskMarkers(WrappedComponent,
                                         tasksProp='clusteredTasks') {
   class _WithTaskMarkers extends Component {
     render() {
-      const clusteredTasks = this.props[tasksProp]
+      const clusteredTasks = _get(this.props, tasksProp)
+
       const markers = []
       if (_isObject(clusteredTasks)) {
         if (_isArray(clusteredTasks.tasks) && clusteredTasks.tasks.length > 0) {
@@ -37,6 +38,21 @@ export default function WithTaskMarkers(WrappedComponent,
                   taskId: task.id,
                 },
               })
+            }
+            else if (task.geometries) {
+              _each(_get(task.geometries, 'features'), (feature) => {
+                if (feature.geometry.type === "Point" )
+                  markers.push({
+                    position: [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
+                    options: {
+                      challengeId: task.challengeId || task.parentId,
+                      isVirtualChallenge: clusteredTasks.isVirtualChallenge,
+                      challengeName: task.parentName,
+                      taskId: task.id,
+                    },
+                  })
+                }
+              )
             }
           })
         }

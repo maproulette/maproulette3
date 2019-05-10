@@ -7,6 +7,32 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.3.1] - 2019-05-10
+### Added
+- Status-specific metrics in Completion Progress widget
+- Updated Korean translation by @depth221
+- Project filter on Review page
+- Favorite Challenges filter on Review page
+- Converted Review page to a widget workspace
+- Review Metrics widget for Review page workspace
+- Geographic filtering map widget for Review page workspace
+- Preserve filters on Review page
+
+### Fixed
+- Do not apply date offset to attic query for task-start entry
+- Ensure task gets properly locked when navigated to directly in browser
+- Inconsistent user score in top nav vs. all-time leaderboard score
+- Error when trying to review a task immediately after status change
+- Lost challenge-name filter when consecutively reviewing a series of tasks
+- Don't leave project leaderboard when changing timeframes (#743)
+- Ensure task review data is reset if task status is reset back to created
+- Orphaned task history when challenge moved to another project
+- Old colorscheme on map controls
+
+### Changed
+- Map layers dropdown now activated/deactivated on click instead of hover
+
+
 ## [v3.3] - 2019-04-16
 ### Added
 - Task reviews

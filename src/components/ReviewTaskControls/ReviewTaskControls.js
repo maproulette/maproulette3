@@ -53,8 +53,7 @@ export class ReviewTaskControls extends Component {
 
   /** Stop Reviewing (release claim) */
   stopReviewing = () => {
-    this.props.stopReviewing(this.props.task)
-    this.props.history.push('/review')
+    this.props.stopReviewing(this.props.task, this.props.history)
   }
 
   /** Start Reviewing (claim this task) */
@@ -85,6 +84,15 @@ export class ReviewTaskControls extends Component {
       return (
         <div className="mr-text-white mr-text-md mr-mt-4 mr-mx-4">
           <FormattedMessage {...messages.userNotReviewer} />
+        </div>
+      )
+    }
+
+    // Cannot review own task unless a superuser
+    if (this.props.task.reviewRequestedBy === user.id && !user.isSuperUser) {
+      return (
+        <div className="mr-text-white mr-text-md mr-mt-4 mr-mx-4">
+          <FormattedMessage {...messages.reviewerIsMapper} />
         </div>
       )
     }

@@ -1,8 +1,11 @@
 import { connect } from 'react-redux'
+import _merge from 'lodash/merge'
+import _isString from 'lodash/isString'
+import _get from 'lodash/get'
 import { completeReview,
          cancelReviewClaim,
-         fetchTaskForReview,
-         loadNextReviewTask } from '../../../services/Task/Task'
+         loadNextReviewTask,
+         fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskReviewLoadMethod } from '../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
@@ -16,33 +19,37 @@ import AppErrors from '../../../services/Error/AppErrors'
 const WithTaskReview = WrappedComponent =>
   connect(null, mapDispatchToProps)(WrappedComponent)
 
-export const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateTaskReviewStatus: (task, status, comment, loadBy, url) => {
       dispatch(completeReview(task.id, status, comment)).then(() => {
-        const searchParams = new URLSearchParams(url.location.search)
-        const sortBy = searchParams.get('sortBy')
-        const direction = searchParams.get('direction')
-        const filters = searchParams.get('filters') ? JSON.parse(searchParams.get('filters')) : {}
+        let newState = url.location.state
+        const searchCriteria = parseSearchCriteria(url, newState)
 
-        dispatch(loadNextReviewTask({sortCriteria: {sortBy, direction}, filters})).then((task) => {
+        dispatch(loadNextReviewTask(searchCriteria)).then((task) => {
           if (task && loadBy === TaskReviewLoadMethod.next) {
-            url.push(`/challenge/${task.parentId}/task/${task.id}/review`)
+            url.push({
+              pathname:`/challenge/${task.parentId || task.parent}/task/${task.id}/review`,
+              state: newState
+            })
           }
           else if (task && loadBy === TaskReviewLoadMethod.inbox) {
-            url.push('/inbox')
+            url.push({
+              pathname:'/inbox',
+              state: newState
+            })
           }
           else {
             url.push({
               pathname: '/review',
-              state: {sortBy, direction, filters},
+              state: newState,
             })
           }
         }).catch(error => {
           console.log(error)
           url.push({
             pathname: '/review',
-            state: {sortBy, direction, filters},
+            state: newState,
           })
         })
       }).catch(error => {
@@ -51,9 +58,14 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       })
     },
 
-    stopReviewing: (task) => {
+    stopReviewing: (task, url) => {
       dispatch(cancelReviewClaim(task.id)).catch(error => {
         dispatch(addError(AppErrors.user.unauthorized))
+      })
+
+      url.push({
+        pathname: '/review',
+        state: parseSearchCriteria(url)
       })
     },
 
@@ -63,6 +75,27 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       })
     },
   }
+}
+
+export const parseSearchCriteria = (url, newState) => {
+  const searchParams = _merge(new URLSearchParams(url.location.search), url.location.state)
+  let sortBy = searchParams.sortBy
+  let direction = searchParams.direction
+  let filters = searchParams.filters || {}
+  const boundingBox = searchParams.boundingBox
+  const savedChallengesOnly = searchParams.savedChallengesOnly
+
+  if (_isString(filters)) {
+    filters = JSON.parse(searchParams.filters)
+  }
+
+  if (searchParams.sortCriteria) {
+    sortBy = _get(searchParams, 'sortCriteria.sortBy')
+    direction = _get(searchParams, 'sortCriteria.direction')
+  }
+
+  newState = {sortBy, direction, filters, boundingBox, savedChallengesOnly}
+  return {sortCriteria: {sortBy, direction}, filters, boundingBox, savedChallengesOnly}
 }
 
 

@@ -7,6 +7,7 @@ import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _each from 'lodash/each'
+import _chunk from 'lodash/chunk'
 import _isEqual from 'lodash/isEqual'
 import { TaskStatus, keysByStatus, statusLabels }
        from '../../services/Task/TaskStatus/TaskStatus'
@@ -16,7 +17,6 @@ import './ChallengeProgress.scss'
 import { colors } from '../../tailwind'
 
 const theme = {
-  // background: "#222222",
   axis: {
     fontSize: ".75rem",
     tickColor: colors.white,
@@ -107,39 +107,77 @@ export class ChallengeProgress extends Component {
       localizedStatuses[keysByStatus[status]]
     ).concat([availableLabel])
 
+    let challengeStats = {}
+
+    _each(orderedStatuses, status => {
+      challengeStats[localizedStatuses[keysByStatus[status]]] = {
+        count: taskActions[keysByStatus[status]],
+        percent: this.percent(taskActions[keysByStatus[status]], taskActions.total),
+      }
+    })
+
+    const challengeStatsColumns = _chunk(Object.entries(challengeStats), 3)
     return (
-      <div className={classNames("challenge-task-progress", this.props.className)}>
-        <ResponsiveBar data={[completionData]}
-                       keys={orderedKeys}
-                       indexBy="label"
-                       minValue={0}
-                       maxValue={100}
-                       margin={{
-                         top: 5,
-                         right: 15,
-                         bottom: 25,
-                         left: 7,
-                       }}
-                       layout="horizontal"
-                       colorBy={item => statusColors[item.id]}
-                       borderColor="inherit:darker(1.6)"
-                       enableGridY={false}
-                       enableLabel={false}
-                       enableAxisLeft={false}
-                       animate={true}
-                       motionStiffness={90}
-                       motionDamping={15}
-                       axisLeft={{tickCount: 0, tickValues: []}}
-                       axisBottom={{format: v => `${v}%`, tickCount: 5}}
-                       tooltipFormat={v => `${v}%`}
-                       theme={theme}
-        />
-        {taskActions.total > 0 && taskActions.available === 0 &&
-          <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
-                     className="challenge-task-progress__completed-indicator" />
-        }
-        {taskActions.total > 0 && taskActions.available !== 0 &&
-          <div className="challenge-task-progress__tasks-remaining">
+      <React.Fragment>
+        <div className="mr-text-sm mr-grid mr-grid-columns-2 mr-grid-gap-4">
+          {_map(challengeStatsColumns, (stats, index1) => (
+            <ul key={index1}>
+                {_map(stats, (stat, index2) => (
+                  <li className="mr-flex mr-items-center" key={index1 + "-" + index2}>
+                    <span
+                      className={classNames("mr-text-lg",
+                                            this.props.lightMode ? "mr-text-pink" : "mr-text-yellow")}
+                    >
+                      {isNaN(stat[1].percent) ? '--' :
+                       /* eslint-disable-next-line react/style-prop-object */
+                       <FormattedNumber style="percent" value={stat[1].percent / 100} />
+                      }
+                    </span>
+                    <span className="mr-ml-2 mr-uppercase">
+                      {stat[0]}{' '}
+                      <span className="mr-text-xs">
+                        ({stat[1].count >= 0 ? stat[1].count : '--'}/{taskActions.total >= 0 ? taskActions.total : '--'})
+                      </span>
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          ))}
+        </div>
+        <div className={classNames("challenge-task-progress", this.props.className)}>
+
+          <ResponsiveBar data={[completionData]}
+                        keys={orderedKeys}
+                        indexBy="label"
+                        minValue={0}
+                        maxValue={100}
+                        margin={{
+                          top: 5,
+                          right: 15,
+                          bottom: 25,
+                          left: 7,
+                        }}
+                        layout="horizontal"
+                        colorBy={item => statusColors[item.id]}
+                        borderColor="inherit:darker(1.6)"
+                        enableGridY={false}
+                        enableLabel={false}
+                        enableAxisLeft={false}
+                        animate={true}
+                        motionStiffness={90}
+                        motionDamping={15}
+                        axisLeft={{tickCount: 0, tickValues: []}}
+                        axisBottom={{format: v => `${v}%`, tickCount: 5}}
+                        tooltipFormat={v => `${v}%`}
+                        theme={theme}
+          />
+          {taskActions.total > 0 && taskActions.available && taskActions.available === 0 &&
+            <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
+                      className="challenge-task-progress__completed-indicator" />
+          }
+        </div>
+        {taskActions.total > 0 && taskActions.available && taskActions.available !== 0 &&
+          <p className="mr-my-4">
             <FormattedMessage
               {...messages.tasksRemaining}
               values={{taskCount: taskActions.available}}
@@ -151,15 +189,15 @@ export class ChallengeProgress extends Component {
               {...messages.outOfTotal}
               values={{totalCount: taskActions.total}}
             />
-          </div>
+          </p>
         }
-      </div>
+      </React.Fragment>
     )
   }
 }
 
 ChallengeProgress.propTypes = {
-  challenge: PropTypes.object,
+  taskMetrics: PropTypes.object,
 }
 
 export default injectIntl(ChallengeProgress)

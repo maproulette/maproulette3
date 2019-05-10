@@ -56,14 +56,9 @@ const FitBoundsLeafletControl = Control.extend({
 
     // build the control button, render it, and return it
     const controlContent = (
-      // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      <a className="fit-bounds-control button"
-         title={this.options.intl.formatMessage(messages.tooltip)}
-         onClick={() => this.fitFeatures(map)}>
-        <span className="icon is-small">
-          <SvgSymbol sym="target-icon" viewBox="0 0 20 20" />
-        </span>
-      </a>
+      <button onClick={() => this.fitFeatures(map)} className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter">
+        <SvgSymbol title={this.options.intl.formatMessage(messages.tooltip)} sym="target-icon" className="mr-w-4 mr-h-4 mr-fill-current" viewBox="0 0 20 20" />
+      </button>
     )
 
     const controlContainer = DomUtil.create('div')

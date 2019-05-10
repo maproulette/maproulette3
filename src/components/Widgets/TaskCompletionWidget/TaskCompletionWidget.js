@@ -4,6 +4,7 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithEditor from '../../HOCs/WithEditor/WithEditor'
+import WithLockedTask from '../../HOCs/WithLockedTask/WithLockedTask'
 import ActiveTaskControls
        from '../../TaskPane/ActiveTaskDetails/ActiveTaskControls/ActiveTaskControls'
 import InspectTaskControls from '../../InspectTaskControls/InspectTaskControls'
@@ -45,4 +46,4 @@ export default class TaskCompletionWidget extends Component {
   }
 }
 
-registerWidgetType(WithCurrentUser(WithEditor(TaskCompletionWidget)), descriptor)
+registerWidgetType(WithCurrentUser(WithEditor(WithLockedTask(TaskCompletionWidget))), descriptor)

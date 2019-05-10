@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Review these Tasks",
   },
 
+  onlySavedChallenges: {
+    id: "Review.TaskAnalysisTable.onlySavedChallenges",
+    defaultMessage: "Limit to favorite challenges",
+  },
+
   tasksNoneReviewedByMe: {
     id: "Review.TaskAnalysisTable.noTasksReviewedByMe",
     defaultMessage: "You have not reviewed any tasks.",
@@ -122,5 +127,10 @@ export default defineMessages({
   challengeLabel: {
     id: "Review.fields.challenge.label",
     defaultMessage: "Challenge",
+  },
+
+  projectLabel: {
+    id: "Review.fields.project.label",
+    defaultMessage: "Project",
   },
 })
