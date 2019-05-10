@@ -51,7 +51,7 @@ export default class CommentsWidget extends Component {
                   headerControls={exportControl}>
         <CommentList includeChallengeNames={_get(this.props, 'challenges.length', 0) > 1}
                      includeTaskLinks
-                     lightMode
+                     lightMode={this.props.lightMode}
                      comments={comments} />
       </QuickWidget>
     )

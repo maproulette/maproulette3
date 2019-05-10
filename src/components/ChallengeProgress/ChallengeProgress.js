@@ -17,7 +17,6 @@ import './ChallengeProgress.scss'
 import { colors } from '../../tailwind'
 
 const theme = {
-  // background: "#222222",
   axis: {
     fontSize: ".75rem",
     tickColor: colors.white,
@@ -111,12 +110,13 @@ export class ChallengeProgress extends Component {
     let challengeStats = {}
 
     _each(orderedStatuses, status => {
-      challengeStats[localizedStatuses[keysByStatus[status]]] =
-        this.percent(taskActions[keysByStatus[status]], taskActions.total)
+      challengeStats[localizedStatuses[keysByStatus[status]]] = {
+        count: taskActions[keysByStatus[status]],
+        percent: this.percent(taskActions[keysByStatus[status]], taskActions.total),
+      }
     })
 
     const challengeStatsColumns = _chunk(Object.entries(challengeStats), 3)
-
     return (
       <React.Fragment>
         <div className="mr-text-sm mr-grid mr-grid-columns-2 mr-grid-gap-4">
@@ -124,14 +124,19 @@ export class ChallengeProgress extends Component {
             <ul key={index1}>
                 {_map(stats, (stat, index2) => (
                   <li className="mr-flex mr-items-center" key={index1 + "-" + index2}>
-                    <span className="mr-text-lg mr-text-yellow">
-                      {/* eslint-disable-next-line react/style-prop-object */}
-                      <FormattedNumber style="percent" value={stat[1] / 100} />
+                    <span
+                      className={classNames("mr-text-lg",
+                                            this.props.lightMode ? "mr-text-pink" : "mr-text-yellow")}
+                    >
+                      {isNaN(stat[1].percent) ? '--' :
+                       /* eslint-disable-next-line react/style-prop-object */
+                       <FormattedNumber style="percent" value={stat[1].percent / 100} />
+                      }
                     </span>
                     <span className="mr-ml-2 mr-uppercase">
                       {stat[0]}{' '}
                       <span className="mr-text-xs">
-                        ({stat[1]}/{taskActions.total})
+                        ({stat[1].count >= 0 ? stat[1].count : '--'}/{taskActions.total >= 0 ? taskActions.total : '--'})
                       </span>
                     </span>
                   </li>
