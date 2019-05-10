@@ -46,12 +46,13 @@
           a, a.button {
             width: 2rem;
             height: 2rem;
-            font-size: 1.5rem;
+            font-size: 1.375rem;
             font-weight: normal;
             transition: all 0.25s ease-in-out;
 
             &.leaflet-control-zoom-in,
-            &.leaflet-control-zoom-out {
+            &.leaflet-control-zoom-out,
+            &.fit-bounds-control {
               background-color: rgba(0, 0, 0, .5);
 
               &:hover {

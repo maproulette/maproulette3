@@ -53,9 +53,9 @@ export class LayerToggle extends Component {
       <Dropdown
         className="mr-dropdown--right mr-absolute mr-z-10 mr-pin-r mr-pin-t mr-mr-2 mr-mt-2"
         dropdownButton={dropdown =>
-          <button onClick={dropdown.toggleDropdownVisible} className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter" aria-haspopup="true"
+          <button onClick={dropdown.toggleDropdownVisible} className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter" aria-haspopup="true"
           aria-controls="dropdown-menu">
-          <SvgSymbol sym="layers-icon" className="mr-w-4 mr-h-4 mr-fill-current" viewBox="0 0 20 20" />
+            <SvgSymbol sym="layers-icon" className="mr-w-4 mr-h-4 mr-fill-current" viewBox="0 0 20 20" />
           </button>
         }
         dropdownContent={() =>
