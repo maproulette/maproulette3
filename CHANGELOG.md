@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.3.1] - 2019-05-09
+## [v3.3.1] - 2019-05-10
 ### Added
 - Status-specific metrics in Completion Progress widget
 - Updated Korean translation by @depth221
@@ -26,6 +26,11 @@ This project adheres to
 - Lost challenge-name filter when consecutively reviewing a series of tasks
 - Don't leave project leaderboard when changing timeframes (#743)
 - Ensure task review data is reset if task status is reset back to created
+- Orphaned task history when challenge moved to another project
+- Old colorscheme on map controls
+
+### Changed
+- Map layers dropdown now activated/deactivated on click instead of hover
 
 
 ## [v3.3] - 2019-04-16
