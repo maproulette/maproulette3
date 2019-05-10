@@ -110,12 +110,13 @@ export class ChallengeProgress extends Component {
     let challengeStats = {}
 
     _each(orderedStatuses, status => {
-      challengeStats[localizedStatuses[keysByStatus[status]]] =
-        this.percent(taskActions[keysByStatus[status]], taskActions.total)
+      challengeStats[localizedStatuses[keysByStatus[status]]] = {
+        count: taskActions[keysByStatus[status]],
+        percent: this.percent(taskActions[keysByStatus[status]], taskActions.total),
+      }
     })
 
     const challengeStatsColumns = _chunk(Object.entries(challengeStats), 3)
-
     return (
       <React.Fragment>
         <div className="mr-text-sm mr-grid mr-grid-columns-2 mr-grid-gap-4">
@@ -127,15 +128,15 @@ export class ChallengeProgress extends Component {
                       className={classNames("mr-text-lg",
                                             this.props.lightMode ? "mr-text-pink" : "mr-text-yellow")}
                     >
-                      {isNaN(stat[1]) ? '--' :
+                      {isNaN(stat[1].percent) ? '--' :
                        /* eslint-disable-next-line react/style-prop-object */
-                       <FormattedNumber style="percent" value={stat[1] / 100} />
+                       <FormattedNumber style="percent" value={stat[1].percent / 100} />
                       }
                     </span>
                     <span className="mr-ml-2 mr-uppercase">
                       {stat[0]}{' '}
                       <span className="mr-text-xs">
-                        ({isNaN(stat[1]) ? '--' : stat[1]}/{taskActions.total >= 0 ? taskActions.total : '--'})
+                        ({stat[1].count >= 0 ? stat[1].count : '--'}/{taskActions.total >= 0 ? taskActions.total : '--'})
                       </span>
                     </span>
                   </li>

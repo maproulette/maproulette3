@@ -17,7 +17,7 @@ import WithIntersectingOverlays
        from '../../../components/HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithStatus from '../../../components/HOCs/WithStatus/WithStatus'
 import BusySpinner from '../../../components/BusySpinner/BusySpinner'
-import { toLatLngBounds, boundsWithinDegrees }
+import { toLatLngBounds }
   from '../../../services/MapBounds/MapBounds'
 import './ReviewBrowseMap.scss'
 
@@ -90,9 +90,6 @@ export class ReviewBrowseMap extends Component {
   updateBounds = (bounds, zoom) => {
     // If the new bounds are the same as the old, do nothing.
     if (this.currentBounds && this.currentBounds.equals(bounds)){
-      return
-    }
-    else if (this.currentBounds && bounds && boundsWithinDegrees(bounds, this.currentBounds, 2.5/zoom)) {
       return
     }
     else if (this.skipNextUpdateBounds) {
