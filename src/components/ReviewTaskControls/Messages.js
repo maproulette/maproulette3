@@ -35,6 +35,11 @@ export default defineMessages({
                     "a reviewer you can do so by visiting your user settings.",
   },
 
+  reviewerIsMapper: {
+    id: "Admin.TaskReview.reviewerIsMapper",
+    defaultMessage: "You cannot review tasks you mapped.",
+  },
+
   taskNotCompleted: {
     id: "Admin.TaskReview.controls.taskNotCompleted",
     defaultMessage: "This task is not ready for review as it has not been completed yet.",

@@ -88,6 +88,15 @@ export class ReviewTaskControls extends Component {
       )
     }
 
+    // Cannot review own task unless a superuser
+    if (this.props.task.reviewRequestedBy === user.id && !user.isSuperUser) {
+      return (
+        <div className="mr-text-white mr-text-md mr-mt-4 mr-mx-4">
+          <FormattedMessage {...messages.reviewerIsMapper} />
+        </div>
+      )
+    }
+
     // A review has not been requested on this task.
     if (this.props.task.reviewStatus === undefined) {
       return (
