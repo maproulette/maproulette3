@@ -62,7 +62,7 @@ export const WithUserMetrics = function(WrappedComponent) {
 
     componentDidMount() {
       if (this.props.targetUser) {
-        this.updateMetrics(this.props)
+        this.updateAllMetrics(this.props)
       }
     }
 

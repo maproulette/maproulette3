@@ -139,4 +139,4 @@ class Metrics extends Component {
   }
 }
 
-export default WithStatus(WithTargetUser(WithUserMetrics(injectIntl(Metrics)), true))
+export default WithStatus(WithTargetUser(WithUserMetrics(injectIntl(Metrics)), false))
