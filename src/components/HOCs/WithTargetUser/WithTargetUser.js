@@ -13,28 +13,28 @@ import { loadUserSettings,
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 
 /**
- * WithUser passes down the user from the redux store that is matches
- * the userId parameter. This id could either be the internal id,
+ * WithTargetUser passes down the user from the redux store that matches
+ * the userId parameter from the url. This id could either be the internal id,
  * the username, or the osm id. The current user making the request
  * must be a super user otherwise only the current user is accessible.
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const WithTargetUser = function(WrappedComponent, readAll) {
+const WithTargetUser = function(WrappedComponent, limitToSuperUsers) {
   return class extends Component {
     state = {
       currentUser: null,
       targetUser: null,
     }
 
-    targetUserId = props => _get(props, 'match.params.userId')
+    getTargetUserId = props => _get(props, 'match.params.userId')
 
     loadTargetUser = props => {
-      if ((!this.state.currentUser || !this.state.currentUser.isSuperUser) && !readAll) {
+      if ((!_get(this.state.currentUser, 'isSuperUser')) && limitToSuperUsers) {
         return
       }
 
-      const targetUserId = this.targetUserId(props)
+      const targetUserId = this.getTargetUserId(props)
 
       if (targetUserId) {
         this.setState({showingUserId: targetUserId, loading: true})
@@ -68,8 +68,8 @@ const WithTargetUser = function(WrappedComponent, readAll) {
 
       if (!targetUser) {
        targetUser = _find(props.allUsers, (user) => {
-         return _get(user, 'osmProfile.displayName', '').toLowerCase() ===
-                    _get(this.state, 'showingUserId', '').toLowerCase()
+         return (_get(user, 'osmProfile.displayName') || '').toLowerCase() ===
+                    (_get(this.state, 'showingUserId') || '').toLowerCase()
        })
       }
 
@@ -103,7 +103,7 @@ const WithTargetUser = function(WrappedComponent, readAll) {
       }
 
       // Only reload target user if user id changes
-      if (this.targetUserId(this.props) !== this.state.showingUserId) {
+      if (this.getTargetUserId(this.props) !== this.state.showingUserId) {
         this.loadTargetUser(this.props)
       }
     }
@@ -135,6 +135,6 @@ export const mapDispatchToProps = dispatch => {
   return actions
 }
 
-export default (WrappedComponent, readAll = false) =>
+export default (WrappedComponent, limitToSuperUsers = true) =>
   connect(mapStateToProps,
-          mapDispatchToProps)(WithCurrentUser(WithTargetUser(WrappedComponent, readAll)))
+          mapDispatchToProps)(WithCurrentUser(WithTargetUser(WrappedComponent, limitToSuperUsers)))
