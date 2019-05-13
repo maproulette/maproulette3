@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import Home from './pages/Home/Home'
 import Profile from './pages/Profile/Profile'
+import Metrics from './pages/Metrics/Metrics'
 import Dashboard from './pages/Dashboard/Dashboard.js'
 import Leaderboard from './pages/Leaderboard/Leaderboard'
 import ChallengeLeaderboard from './pages/Leaderboard/ChallengeLeaderboard'
@@ -91,6 +92,8 @@ export class App extends Component {
             <CachedRoute exact path='/task/:taskId' component={CurrentTaskPane} />
             <CachedRoute path='/user/profile/:userId' component={Profile} />
             <CachedRoute path='/user/profile' component={Profile} />
+            <CachedRoute path='/user/metrics/:userId' component={Metrics} />
+            <CachedRoute path='/user/metrics' component={Metrics} />
             <CachedRoute path='/dashboard' component={Dashboard} />
             <CachedRoute path='/leaderboard' component={Leaderboard} />
             <CachedRoute path='/review' component={Review} />

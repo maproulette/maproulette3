@@ -5,6 +5,7 @@ import _get from 'lodash/get'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _toNumber from 'lodash/toNumber'
+import queryString from 'query-string'
 import { loadUserSettings,
          updateUserSettings,
          updateNotificationSubscriptions,
@@ -19,7 +20,7 @@ import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-const WithTargetUser = function(WrappedComponent) {
+const WithTargetUser = function(WrappedComponent, readAll) {
   return class extends Component {
     state = {
       currentUser: null,
@@ -29,7 +30,7 @@ const WithTargetUser = function(WrappedComponent) {
     targetUserId = props => _get(props, 'match.params.userId')
 
     loadTargetUser = props => {
-      if (!this.state.currentUser || !this.state.currentUser.isSuperUser) {
+      if ((!this.state.currentUser || !this.state.currentUser.isSuperUser) && !readAll) {
         return
       }
 
@@ -38,9 +39,16 @@ const WithTargetUser = function(WrappedComponent) {
       if (targetUserId) {
         this.setState({showingUserId: targetUserId, loading: true})
 
-        this.props.loadUserSettings(targetUserId).then(() => {
-          this.setState({loading: false})
-        })
+        if (this.state.currentUser && (this.state.currentUser.id === targetUserId || this.state.currentUser.isSuperUser)) {
+          this.props.loadUserSettings(targetUserId).then(() => {
+            this.setState({loading: false})
+          })
+        }
+        else {
+          this.props.fetchBasicUser(targetUserId).then(() => {
+            this.setState({loading: false})
+          })
+        }
       }
       else if (this.state.showingUserId != null) {
         this.setState({showingUserId: null, targetUser: null})
@@ -48,9 +56,7 @@ const WithTargetUser = function(WrappedComponent) {
     }
 
     getTargetUser = (props) => {
-      let targetUser = props.user
-
-      targetUser = _find(props.allUsers, (user) => {
+      let targetUser = _find(props.allUsers, (user) => {
                      return user.id === _toNumber(this.state.showingUserId)
                    })
 
@@ -62,11 +68,27 @@ const WithTargetUser = function(WrappedComponent) {
 
       if (!targetUser) {
        targetUser = _find(props.allUsers, (user) => {
-         return _get(user, 'osmProfile.displayName') === this.state.showingUserId
+         return _get(user, 'osmProfile.displayName', '').toLowerCase() ===
+                    _get(this.state, 'showingUserId', '').toLowerCase()
        })
       }
 
+      if (!targetUser && !this.state.showingUserId) {
+        targetUser = props.user
+      }
+
+      if (_get(targetUser, 'osmProfile.avatarURL')) {
+        const avatarURL = targetUser.osmProfile.avatarURL
+        const avatarUrlBase = avatarURL.substring(avatarURL.indexOf('?'), 0)
+        const avatarUrlParams = avatarURL.substring(avatarURL.indexOf('?') + 1)
+        let parsedAvatarURLparams = queryString.parse(avatarUrlParams)
+        parsedAvatarURLparams = _omit(parsedAvatarURLparams, ['s']) // omit size param coming from server and use `&s={size}` in requests
+        const newAvatarUrl = `${avatarUrlBase}?${queryString.stringify(parsedAvatarURLparams)}`
+        targetUser.osmProfile.avatarURL = newAvatarUrl
+      }
+
       return targetUser
+
     }
 
     componentDidMount() {
@@ -87,8 +109,10 @@ const WithTargetUser = function(WrappedComponent) {
     }
 
     render() {
+      const targetUser = this.getTargetUser(this.props)
+
       return <WrappedComponent {..._omit(this.props, ['allUsers'])}
-                               targetUser={this.getTargetUser(this.props)}
+                               targetUser={targetUser}
                                showingUserId={this.state.showingUserId}
                                loading={this.state.loading} />
     }
@@ -111,6 +135,6 @@ export const mapDispatchToProps = dispatch => {
   return actions
 }
 
-export default (WrappedComponent) =>
+export default (WrappedComponent, readAll = false) =>
   connect(mapStateToProps,
-          mapDispatchToProps)(WithCurrentUser(WithTargetUser(WrappedComponent)))
+          mapDispatchToProps)(WithCurrentUser(WithTargetUser(WrappedComponent, readAll)))

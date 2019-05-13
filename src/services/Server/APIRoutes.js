@@ -99,6 +99,8 @@ const apiRoutes = factory => {
     'users': {
       'single': factory.get('/user/:id'),
       'singleByUsername': factory.get('/osmuser/:username'),
+      'public': factory.get('/user/:id/public'),
+      'publicByUsername': factory.get('/osmuser/:username/public'),
       'leaderboard': factory.get('/data/user/leaderboard'),
       'userLeaderboard': factory.get('/data/user/:id/leaderboard'),
       'find': factory.get('/users/find/:username'),
@@ -106,6 +108,7 @@ const apiRoutes = factory => {
     'user': {
       'whoami': factory.get('/user/whoami'),
       'activity': factory.get('/data/user/activity'),
+      'metrics': factory.get('/data/user/:userId/metrics'),
       'topChallenges': factory.get('/data/user/:userId/topChallenges'),
       'savedChallenges': factory.get('/user/:userId/saved'),
       'saveChallenge': factory.post('/user/:userId/save/:challengeId'),

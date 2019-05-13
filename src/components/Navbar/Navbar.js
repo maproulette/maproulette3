@@ -199,6 +199,11 @@ const ProfileMenu = function(props) {
         </NavLink>
       </li>
       <li>
+        <NavLink to="/user/metrics" onClick={props.closeDropdown}>
+          <FormattedMessage {...messages.metrics} />
+        </NavLink>
+      </li>
+      <li>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={props.logoutUser}>
           <FormattedMessage {...messages.signout} />

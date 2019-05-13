@@ -44,6 +44,11 @@ export default defineMessages({
     defaultMessage: "User Settings",
   },
 
+  metrics: {
+    id: 'Navbar.links.userMetrics',
+    defaultMessage: "User Metrics",
+  },
+
   signout: {
     id: 'Navbar.links.signout',
     defaultMessage: "Sign out",

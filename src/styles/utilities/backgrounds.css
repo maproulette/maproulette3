@@ -31,3 +31,7 @@
   background-position: left top, right top;
   background-repeat: no-repeat;
 }
+
+.mr-bg-world-map {
+  background-image: url('./static/images/bg-world-map.svg');
+}
