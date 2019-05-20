@@ -8,6 +8,7 @@ import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _map from 'lodash/map'
+import _indexOf from 'lodash/indexOf'
 import { fetchProject,
          fetchProjectActivity } from '../../../../services/Project/Project'
 import { challengeDenormalizationSchema,
@@ -174,7 +175,10 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
 
       if (options.includeChallenges && _isFinite(projectId)) {
         const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
-        challenges = _filter(allChallenges, {parent: projectId})
+        challenges = _filter(allChallenges, (challenge) => {
+                          return challenge.parent === projectId ||
+                            _indexOf(challenge.virtualParents, projectId) !== -1
+                        })
 
         challenges = _map(challenges, challenge =>
           denormalize(challenge, challengeDenormalizationSchema(), this.props.entities)

@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Admin.ProjectDashboard.controls.addChallenge.label",
     defaultMessage: "Add Challenge",
   },
+
+  manageChallengesLabel: {
+    id: "Admin.ProjectDashboard.controls.manageChallenges.label",
+    defaultMessage: "Manage Challenges",
+  },
 })

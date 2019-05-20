@@ -11,27 +11,40 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = intl => ({
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  type: "object",
-  properties: {
-    displayName: {
-      title: intl.formatMessage(messages.displayNameLabel),
-      type: "string",
-      minLength: 3,
+export const jsSchema = (intl, project) => {
+  const schemaFields = {
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    type: "object",
+    properties: {
+      displayName: {
+        title: intl.formatMessage(messages.displayNameLabel),
+        type: "string",
+        minLength: 3,
+      },
+      enabled: {
+        title: intl.formatMessage(messages.enabledLabel),
+        type: "boolean",
+        default: false,
+      },
+      description: {
+        title: intl.formatMessage(messages.descriptionLabel),
+        type: "string",
+      },
     },
-    enabled: {
-      title: intl.formatMessage(messages.enabledLabel),
+    required: ["displayName"],
+  }
+
+  // Show 'isVirtual' option only if this is a new project
+  if (!project) {
+    schemaFields.properties.isVirtual = {
+      title: intl.formatMessage(messages.isVirtualLabel),
       type: "boolean",
       default: false,
-    },
-    description: {
-      title: intl.formatMessage(messages.descriptionLabel),
-      type: "string",
-    },
-  },
-  required: ["displayName"],
-})
+    }
+  }
+
+  return schemaFields
+}
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -43,16 +56,32 @@ export const jsSchema = intl => ({
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = intl => ({
-  displayName: {
-    "ui:help": intl.formatMessage(messages.displayNameDescription),
-  },
-  enabled: {
-    "ui:widget": "radio",
-    "ui:help": intl.formatMessage(messages.enabledDescription),
-  },
-  description: {
-    "ui:widget": "textarea",
-    "ui:help": intl.formatMessage(messages.descriptionDescription),
-  },
-})
+export const uiSchema = (intl, project) => {
+  const uiSchemaFields = {
+    displayName: {
+      "ui:help": intl.formatMessage(messages.displayNameDescription),
+    },
+    enabled: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.enabledDescription),
+    },
+    isVirtual: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.isVirtualDescription),
+    },
+    description: {
+      "ui:widget": "textarea",
+      "ui:help": intl.formatMessage(messages.descriptionDescription),
+    },
+    "ui:order": [
+      "displayName", "enabled", "description"
+    ],
+  }
+
+  // This is a new project then we show the isVirtual flag
+  if (!project) {
+    uiSchemaFields["ui:order"].push("isVirtual")
+  }
+
+  return uiSchemaFields
+}

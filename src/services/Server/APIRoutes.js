@@ -23,7 +23,7 @@ const apiRoutes = factory => {
     },
     'project': {
       'single': factory.get('/project/:id'),
-      'multiple': factory.get('/projects'),
+      'multiple': factory.get('/projectsById'),      
       'challenges': factory.get('/project/:id/challenges'),
       'create': factory.post('/project'),
       'edit': factory.put('/project/:id'),
@@ -33,6 +33,8 @@ const apiRoutes = factory => {
       'setManagerPermission': factory.put('/user/:userId/project/:projectId/:groupType'),
       'removeManager': factory.delete('/user/:userId/project/:projectId/-1'),
       'delete': factory.delete('/project/:id'),
+      'addToVirtual': factory.post('/project/:projectId/challenge/:challengeId/add'),
+      'removeFromVirtual': factory.post('/project/:projectId/challenge/:challengeId/remove'),
     },
     'challenges': {
       'listing': factory.get('/challenges/listing'),

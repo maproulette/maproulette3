@@ -66,6 +66,8 @@ export class ProjectDashboard extends Component {
     }
 
     const manager = AsManager(this.props.user)
+    const isVirtual = this.props.project.isVirtual
+
     const pageHeader = (
       <div className="admin__manage__header admin__manage__header--flush">
         <nav className="breadcrumb" aria-label="breadcrumbs">
@@ -79,6 +81,10 @@ export class ProjectDashboard extends Component {
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a aria-current="page">
                 {this.props.project.displayName || this.props.project.name}
+                {isVirtual ?
+                  <span className="mr-mx-4 mr-text-yellow mr-text-sm">
+                    <FormattedMessage {...manageMessages.virtualHeader} />
+                  </span> : null}
                 {this.props.loadingProject && <BusySpinner inline />}
               </a>
             </li>
@@ -86,10 +92,17 @@ export class ProjectDashboard extends Component {
         </nav>
 
         <div className="admin__manage__controls mr-flex">
-          {manager.canWriteProject(this.props.project) &&
+          {manager.canWriteProject(this.props.project) && !isVirtual &&
             <Link to={`/admin/project/${this.props.project.id}/challenges/new`}
                   className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
               <FormattedMessage {...messages.addChallengeLabel } />
+            </Link>
+          }
+
+          {manager.canWriteProject(this.props.project) && isVirtual &&
+            <Link to={`/admin/virtual/project/${this.props.project.id}/challenges/manage`}
+                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+              <FormattedMessage {...messages.manageChallengesLabel } />
             </Link>
           }
 

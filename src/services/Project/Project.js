@@ -124,7 +124,7 @@ export const fetchProject = function(projectId) {
 export const fetchProjectsById = function(projectIds) {
   return function(dispatch) {
     return new Endpoint(
-      api.project.multiple, {schema: [ projectSchema() ], params: {projectIds: projectIds}}
+      api.project.multiple, {schema: [ projectSchema() ], params: {projectIds: _isArray(projectIds) ? projectIds.join(',') : projectIds}}
     ).execute().then(normalizedResults => {
       dispatch(receiveProjects(normalizedResults.entities))
       return normalizedResults

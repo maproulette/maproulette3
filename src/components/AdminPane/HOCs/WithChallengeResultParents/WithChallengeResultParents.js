@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import _get from 'lodash/get'
 import _filter from 'lodash/filter'
-import _map from 'lodash/map'
+import _each from 'lodash/each'
 import _uniqBy from 'lodash/uniqBy'
 import _isArray from 'lodash/isArray'
 
@@ -24,8 +24,12 @@ const WithChallengeResultParents = function(WrappedComponent) {
                           this.props.filteredProjects :
                           this.props.projects
 
-      const projectsWithChallengeSearchResults =
-        new Set(_map(this.props.filteredChallenges, 'parent'))
+      const projectsWithChallengeSearchResults = new Set()
+      _each(this.props.filteredChallenges, c => {
+          projectsWithChallengeSearchResults.add(c.parent)
+          _each(c.virtualParents, (vp) =>
+                  projectsWithChallengeSearchResults.add(vp))
+      })
 
       // Include both project results and projects that have challenge results.
       return _uniqBy(this.props.resultProjects.concat(

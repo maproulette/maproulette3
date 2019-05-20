@@ -10,6 +10,7 @@ import ScreenTooNarrow
        from '../ScreenTooNarrow/ScreenTooNarrow'
 import EditChallenge from './Manage/ManageChallenges/EditChallenge/EditChallenge'
 import EditProject from './Manage/EditProject/EditProject'
+import ManageChallengeList from './Manage/VirtualProjects/ManageChallengeList'
 import EditTask from './Manage/ManageTasks/EditTask/EditTask'
 import InspectTask from './Manage/InspectTask/InspectTask'
 import ProjectsDashboard from './Manage/ProjectsDashboard/ProjectsDashboard'
@@ -79,6 +80,7 @@ export class AdminPane extends Component {
                 <Route exact path='/admin/project/:projectId/challenge/:challengeId/clone'
                        component={EditChallenge} />
                 <Route exact path='/admin/project/:projectId/edit' component={EditProject} />
+                <Route exact path='/admin/virtual/project/:projectId/challenges/manage' component={ManageChallengeList} />
                 <Route exact path='/admin/projects' component={ProjectsDashboard} />
                 <Route exact path='/admin/project/:projectId' component={ProjectDashboard} />
                 <Route exact path='/admin/projects/new' component={EditProject} />
