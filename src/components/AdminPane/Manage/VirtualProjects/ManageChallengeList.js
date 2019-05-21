@@ -10,6 +10,7 @@ import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithSearchResults from '../../../HOCs/WithSearchResults/WithSearchResults'
 import WithChallenges from '../../../HOCs/WithChallenges/WithChallenges'
+import WithPagedChallenges from '../../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import { extendedFind } from '../../../../services/Challenge/Challenge'
 import SearchBox from '../../../SearchBox/SearchBox'
 import AssociatedChallengeList from './AssociatedChallengeList'
@@ -31,10 +32,9 @@ const ChallengeSearch = WithSearch(
 
 const ChallengeSearchResults =
   WithChallenges(
-    WithSearchResults(AssociatedChallengeList,
+    WithSearchResults(WithPagedChallenges(AssociatedChallengeList, 'challenges'),
                       'adminChallengeList', 'challenges')
   )
-
 
 /**
  * Allows adding and removing challenges from the virtual project challenge list.
@@ -98,6 +98,7 @@ export class manageChallengeList extends Component {
         <Header
           className="mr-px-8"
           eyebrow={breadcrumbs}
+          title={""}
           actions={doneButton}
         />
 
@@ -109,7 +110,7 @@ export class manageChallengeList extends Component {
                         headerControls={searchControl}>
               <ChallengeSearchResults {..._omit(this.props, 'challenges')} toBeAdded
                 addChallenge={(challengeId) => this.addChallenge(challengeId, projectId, this.props)}
-                challenges={this.props.filteredChallenges}
+                challenges={this.props.filteredChallenges || []}
                 excludeChallenges={this.props.challenges}
                 allStatuses={true} />
             </QuickWidget>

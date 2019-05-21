@@ -166,7 +166,7 @@ export const fetchProjectChallengeListing = function(projectIds, onlyEnabled=fal
       {
         schema: [ challengeSchema() ],
         params: {
-          projectList: _isArray(projectIds) ? projectIds.join(',') : projectIds,
+          projectIds: _isArray(projectIds) ? projectIds.join(',') : projectIds,
           onlyEnabled,
           limit,
         }

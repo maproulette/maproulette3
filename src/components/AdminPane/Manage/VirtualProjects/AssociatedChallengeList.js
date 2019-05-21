@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
-import _differenceBy from 'lodash/differenceBy'
 import classNames from 'classnames'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import PageResultsButton from '../../../LoadMoreButton/PageResultsButton'
 import messages from './Messages'
 import './AssociatedChallengeList.scss'
 
@@ -16,11 +16,8 @@ import './AssociatedChallengeList.scss'
  */
 export default class AssociatedChallengeList extends Component {
   render() {
-    const challenges =
-      _differenceBy(this.props.challenges, this.props.excludeChallenges, 'id')
-
     const challengeCards =
-      _map(challenges, challenge => (
+      _map(this.props.challenges, challenge => (
         <div className='item-entry' key={challenge.id}>
           <div className='columns challenge-list-item'>
             <div className='column is-narrow item-visibility'>
@@ -56,6 +53,11 @@ export default class AssociatedChallengeList extends Component {
            <FormattedMessage {...messages.noChallenges} />
          </div> :
          challengeCards
+        }
+        {this.props.setSearchPage &&
+          <div className="mr-text-center mr-mt-5">
+            <PageResultsButton className="mr-button--green" {...this.props} />
+          </div>
         }
       </div>
     )

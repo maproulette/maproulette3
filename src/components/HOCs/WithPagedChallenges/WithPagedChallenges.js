@@ -4,6 +4,7 @@ import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 import _isEmpty from 'lodash/isEmpty'
 import _slice from 'lodash/slice'
+import _differenceBy from 'lodash/differenceBy'
 import { RESULTS_PER_PAGE } from '../../../services/Search/Search'
 
 export default function(WrappedComponent,
@@ -15,7 +16,8 @@ export default function(WrappedComponent,
       const resultsPerPage = _get(this.props, 'searchPage.resultsPerPage') || RESULTS_PER_PAGE
       const numberResultsToShow = (currentPage + 1) * resultsPerPage
 
-      let pagedChallenges = this.props[challengesProp]
+      let pagedChallenges = _differenceBy(this.props[challengesProp],
+                                          this.props.excludeChallenges, 'id')
 
       const hasMoreResults = (pagedChallenges.length >= numberResultsToShow) || this.props.isLoading
       pagedChallenges = _slice(pagedChallenges, 0, numberResultsToShow)
@@ -33,6 +35,7 @@ export default function(WrappedComponent,
   WithPagedChallenges.propTypes = {
     user: PropTypes.object,
     challenges: PropTypes.array,
+    excludeChallenges: PropTypes.array
   }
 
   return WithPagedChallenges
