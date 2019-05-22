@@ -71,6 +71,8 @@ let colors = {
   turquoise: '#17FFF3',
   pink: '#E87CE0',
   'pink-light': '#FFB2F0',
+  'pink-light-10': 'rgba(255,178,240,0.1)',
+  'pink-light-50': 'rgba(255,178,240,0.5)',
   twitter: '#1DA1F2',
   orange: '#f7bb59',
   red: '#CA484C',
@@ -610,6 +612,7 @@ module.exports = {
     '48': '12rem',
     '115': '28.75rem',
     screen40: '40vh',
+    screen80: '80vh',
     '1/3': '33%',
   },
 
