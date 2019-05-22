@@ -206,7 +206,7 @@
   "Admin.VirtualProject.controls.done.label": "Done",
   "Admin.VirtualProject.controls.addChallenge.label": "Add Challenge",
   "Admin.VirtualProject.ChallengeList.noChallenges": "No Challenges",
-  "Admin.VirtualProject.currentChallenges.label": "Challenges in Virtual Project",
+  "Admin.VirtualProject.currentChallenges.label": "Challenges in",
   "Admin.VirtualProject.findChallenges.label": "Find Challenges",
   "Admin.VirtualProject.controls.add.label": "Add",
   "Admin.VirtualProject.controls.remove.label": "Remove",

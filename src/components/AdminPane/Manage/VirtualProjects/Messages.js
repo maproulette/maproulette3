@@ -26,7 +26,7 @@ export default defineMessages({
 
   currentChallengesLabel: {
     id: 'Admin.VirtualProject.currentChallenges.label',
-    defaultMessage: "Challenges in Virtual Project",
+    defaultMessage: "Challenges in ",
   },
 
   findChallengesLabel: {

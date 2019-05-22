@@ -9,7 +9,7 @@ import WithManageableProjects
 import WithCurrentProject from '../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithSearchResults from '../../../HOCs/WithSearchResults/WithSearchResults'
-import WithChallenges from '../../../HOCs/WithChallenges/WithChallenges'
+import WithPermittedChallenges from '../../HOCs/WithPermittedChallenges/WithPermittedChallenges'
 import WithPagedChallenges from '../../../HOCs/WithPagedChallenges/WithPagedChallenges'
 import { extendedFind } from '../../../../services/Challenge/Challenge'
 import SearchBox from '../../../SearchBox/SearchBox'
@@ -31,8 +31,9 @@ const ChallengeSearch = WithSearch(
 )
 
 const ChallengeSearchResults =
-  WithChallenges(
-    WithSearchResults(WithPagedChallenges(AssociatedChallengeList, 'challenges'),
+  WithPermittedChallenges(
+    WithSearchResults(
+      WithPagedChallenges(AssociatedChallengeList, 'challenges'),
                       'adminChallengeList', 'challenges')
   )
 
@@ -55,6 +56,10 @@ export class manageChallengeList extends Component {
   }
 
   render() {
+    if (!this.props.project) {
+      return <BusySpinner />
+    }
+
     const searchControl = this.props.projects.length === 0 ? null : (
       <ChallengeSearch className="challenge-list-widget__searchbox"
                        inputClassName="mr-text-blue mr-border-b mr-border-blue"
@@ -62,6 +67,9 @@ export class manageChallengeList extends Component {
     )
 
     const projectId = _get(this.props, 'project.id')
+    const projectName = _get(this.props, 'project.displayName')
+    const listTitle =
+      `${this.props.intl.formatMessage(messages.currentChallengesLabel)} ${projectName}`
 
     const doneButton =
       <Button onClick={() => this.done(this.props)}>
@@ -118,7 +126,7 @@ export class manageChallengeList extends Component {
           <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded mr-w-full">
             <QuickWidget {...this.props}
                         className="challenge-list-widget"
-                        widgetTitle={this.props.intl.formatMessage(messages.currentChallengesLabel)}>
+                        widgetTitle={listTitle}>
               <AssociatedChallengeList {...this.props} challenges={this.props.challenges}
                 removeChallenge={(challengeId) => this.removeChallenge(challengeId, projectId, this.props)} />
             </QuickWidget>

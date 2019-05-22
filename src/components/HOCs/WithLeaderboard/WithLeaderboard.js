@@ -73,6 +73,14 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
         showingCount += DEFAULT_LEADERBOARD_COUNT
       }
 
+      // If we are filtering by challenges and no challenges are provided then
+      // we don't need to go to the server.
+      const options = _merge(this.state.leaderboardOptions, this.props.leaderboardOptions)
+      if (options.filterChallenges && _isArray(this.props.challenges) &&
+          this.props.challenges.length < 1) {
+        return
+      }
+
       this.setState({leaderboardLoading: true, showingCount})
 
       fetchLeaderboard(...this.leaderboardParams(numberMonths, countryCode), showingCount).then(leaderboard => {
