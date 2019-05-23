@@ -6,8 +6,12 @@ import _isFinite from 'lodash/isFinite'
 import _each from 'lodash/each'
 import _omit from 'lodash/omit'
 import _assign from 'lodash/assign'
-import { generateWidgetId, migrateWidgetGridConfiguration, pruneDecommissionedWidgets }
-       from '../../../services/Widget/Widget'
+import {
+  generateWidgetId,
+  migrateWidgetGridConfiguration,
+  pruneDecommissionedWidgets,
+  pruneWidgets
+} from '../../../services/Widget/Widget'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithStatus from '../WithStatus/WithStatus'
 import SignInButton from '../../SignInButton/SignInButton'
@@ -77,7 +81,7 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
      * @private
      */
     completeWorkspaceConfiguration = initialWorkspace => {
-      const configuration = _assign({
+      let configuration = _assign({
         id: generateWidgetId(),
         targets: _isArray(targets) ? targets : [targets], // store as array
         cols: 12,
@@ -118,10 +122,21 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
         })
       }
 
-      return pruneDecommissionedWidgets(migrateWidgetGridConfiguration(
-        configuration,
-        () => this.setupWorkspace(defaultConfiguration)
-      ))
+      // Make sure workspace is upgraded to latest data model
+      configuration = migrateWidgetGridConfiguration(configuration,
+                                                     () => this.setupWorkspace(defaultConfiguration))
+
+      // Prune any widgets that have been decommissioned
+      configuration = pruneDecommissionedWidgets(configuration)
+
+      // Make sure excludedWidgets reflects latest from default configuration,
+      // and prune any newly excluded widgets if necessary
+      configuration.excludeWidgets = defaultConfiguration().excludeWidgets
+      if (configuration.excludeWidgets && configuration.excludeWidgets.length > 0) {
+        configuration = pruneWidgets(configuration, configuration.excludeWidgets)
+      }
+
+      return configuration
     }
 
     /**

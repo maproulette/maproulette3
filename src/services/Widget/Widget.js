@@ -8,6 +8,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isString from 'lodash/isString'
 import _findIndex from 'lodash/findIndex'
 import _each from 'lodash/each'
+import _reduce from 'lodash/reduce'
 import GridMigrations from './GridMigrations'
 
 /**
@@ -169,33 +170,53 @@ export const migrateWidgetGridConfiguration = function(originalConfiguration,
 }
 
 /**
-  * Checks the given gridConfiguration for any missing/decommissioned widgets,
-  * returning a copy pruned of such widgets if detected or the original
-  * gridConfiguration if not
-  */
-export const pruneDecommissionedWidgets = gridConfiguration => {
-  let prunedConfiguration = null
-
-  _each(gridConfiguration.widgets, widgetConfiguration => {
+ * Scans the given gridConfiguration for any missing/decommissioned widgets and
+ * returns an array of any discovered, or an empty array if none
+ */
+export const decommissionedWidgets = gridConfiguration => {
+  return _reduce(gridConfiguration.widgets, (missing, widgetConfiguration) => {
     const WidgetComponent = widgetComponent(widgetConfiguration)
     if (!WidgetComponent) {
       const widgetKey = _isString(widgetConfiguration) ?
                         widgetConfiguration :
                         widgetConfiguration.widgetKey
-      console.log(`No widget "${widgetKey}" registered. Pruning.`)
+      missing.push(widgetKey)
+    }
+    return missing
+  }, [])
+}
 
-      // Make a copy of the gridConfiguration if we haven't already
-      if (!prunedConfiguration) {
+/**
+ * Returns a copy of the given gridConfiguration pruned of any missing or
+ * decommissioned widgets, or the original gridConfiguration if there were none
+ */
+export const pruneDecommissionedWidgets = gridConfiguration => {
+  const decommissioned = decommissionedWidgets(gridConfiguration)
+
+  return decommissioned.length > 0 ?
+         pruneWidgets(gridConfiguration, decommissionedWidgets) :
+         gridConfiguration
+}
+
+/**
+ * Returns a copy of the given gridConfiguration pruned of the given widgets,
+ * or gridConfiguration if no pruning was needed
+ */
+export const pruneWidgets = (gridConfiguration, widgetKeys) => {
+  let prunedConfiguration = gridConfiguration
+
+  _each(widgetKeys, widgetKey => {
+    const widgetIndex = _findIndex(prunedConfiguration.widgets, {widgetKey})
+    if (widgetIndex !== -1) {
+      // If we haven't made a fresh copy of gridConfiguration yet, do so now
+      if (prunedConfiguration === gridConfiguration) {
         prunedConfiguration = _cloneDeep(gridConfiguration)
       }
 
-      // Look up the index of the widget in the pruned workspace since it can
-      // vary if we've already pruned earlier widgets
-      const widgetIndex = _findIndex(prunedConfiguration.widgets, {widgetKey})
       prunedConfiguration.widgets.splice(widgetIndex, 1)
       prunedConfiguration.layout.splice(widgetIndex, 1)
     }
   })
 
-  return prunedConfiguration || gridConfiguration
+  return prunedConfiguration
 }
