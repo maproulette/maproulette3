@@ -17,6 +17,8 @@ import { fetchManageableProjects,
          saveProject,
          removeProject,
          deleteProject} from '../../../../services/Project/Project'
+import { addChallenge,
+         removeChallenge } from '../../../../services/Project/VirtualProject'
 import { fetchProjectChallengeListing }
        from '../../../../services/Challenge/Challenge'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
@@ -117,6 +119,8 @@ const mapDispatchToProps = dispatch => {
     fetchProjectManagers,
     setProjectManagerGroupType,
     removeProjectManager,
+    addChallenge,
+    removeChallenge,
   }, dispatch)
 
   actions.deleteProject = (projectId, immediate=false) => {

@@ -166,7 +166,7 @@ export const fetchProjectChallengeListing = function(projectIds, onlyEnabled=fal
       {
         schema: [ challengeSchema() ],
         params: {
-          projectList: _isArray(projectIds) ? projectIds.join(',') : projectIds,
+          projectIds: _isArray(projectIds) ? projectIds.join(',') : projectIds,
           onlyEnabled,
           limit,
         }
@@ -539,6 +539,14 @@ export const fetchChallenge = function(challengeId, suppressReceive = false) {
       api.challenge.single,
       {schema: challengeSchema(), variables: {id: challengeId}}
     ).execute().then(normalizedResults => {
+      const challenge = normalizedResults.entities.challenges[normalizedResults.result]
+
+      // If there are no virtual parents then this field will not be set by server
+      // so we need to indicate it's empty.
+      if (_isUndefined(challenge.virtualParents)) {
+        challenge.virtualParents = []
+      }
+
       if (!suppressReceive) {
         dispatch(receiveChallenges(normalizedResults.entities))
       }
@@ -583,7 +591,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'description', 'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
-        'remoteGeoJson', 'status', 'tags', 'updateTasks'])
+        'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents'])
 
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
@@ -834,6 +842,10 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
 
     if (_isArray(entity.activity)) {
       mergedState[entity.id].activity = entity.activity
+    }
+
+    if (_isArray(entity.virtualParents)) {
+      mergedState[entity.id].virtualParents = entity.virtualParents
     }
   })
 }

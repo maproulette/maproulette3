@@ -17,16 +17,24 @@ import './ChallengeList.scss'
  */
 export default class ChallengeList extends Component {
   render() {
+    const isVirtual = this.props.project.isVirtual
     const manager = AsManager(this.props.user)
 
     // Show pinned challenges first
     const challengeCards = _sortBy(
-      _map(this.props.challenges, challenge => (
-        <ChallengeCard {...this.props}
-                       key={challenge.id}
-                       challenge={challenge}
-                       isPinned={this.props.pinnedChallenges.indexOf(challenge.id) !== -1} />
-      )),
+      _map(this.props.challenges, challenge => {
+        let link = `/admin/project/${this.props.project.id}/challenge/${challenge.id}`
+
+        if (isVirtual) {
+          link = `/browse/challenges/${challenge.id}`
+        }
+
+        return <ChallengeCard {...this.props}
+                 key={challenge.id}
+                 challenge={challenge}
+                 isPinned={this.props.pinnedChallenges.indexOf(challenge.id) !== -1}
+                 link={link} />
+      }),
       challengeCard => !challengeCard.props.isPinned
     )
 

@@ -65,6 +65,19 @@ export default defineMessages({
       "Visible, you can see your Project as testing ground for Challenges.",
   },
 
+  isVirtualLabel: {
+    id: 'Admin.EditProject.form.isVirtual.label',
+    defaultMessage: "Virtual",
+  },
+
+  isVirtualDescription: {
+    id: 'Admin.EditProject.form.isVirtual.description',
+    defaultMessage: "If a project is virtual, then you can add " +
+      "existing challenges as a means of grouping. This setting " +
+      "cannot be changed after the project is created. Permissions " +
+      "remain in effect from the challenges' original parent projects. "
+  },
+
   descriptionLabel: {
     id: 'Admin.EditProject.form.description.label',
     defaultMessage: "Description",

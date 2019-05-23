@@ -8,6 +8,8 @@ import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _map from 'lodash/map'
+import _indexOf from 'lodash/indexOf'
+import _sortBy from 'lodash/sortBy'
 import { fetchProject,
          fetchProjectActivity } from '../../../../services/Project/Project'
 import { challengeDenormalizationSchema,
@@ -70,6 +72,14 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       return projectId
     }
 
+    challengeProjects = (projectId, props) => {
+      const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
+      return _filter(allChallenges, (challenge) => {
+                        return challenge.parent === projectId ||
+                          _indexOf(challenge.virtualParents, projectId) !== -1
+                    })
+    }
+
     loadProject = props => {
       if (props.loadingProjects) {
         return
@@ -111,13 +121,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
             return
           }
 
-          if (options.includeActivity) {
-            // Used for daily heatmap
-            props.fetchProjectActivity(projectId, new Date(project.created)).then(() =>
-              this.setState({loadingProject: false})
-            )
-          }
-          else {
+          if (!options.includeActivity) {
             this.setState({loadingProject: false})
           }
         })
@@ -138,9 +142,25 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
             retrievals.push(props.fetchProjectChallengeComments(projectId))
           }
 
-          Promise.all(retrievals).then(() =>
+          Promise.all(retrievals).then(() => {
+            if (options.includeActivity) {
+              // Used for daily heatmap
+              const project = _find(props.projects, (p) => p.id === projectId)
+              let activityStartDate = new Date(project.created)
+
+              const challenges = _sortBy(this.challengeProjects(projectId, props), ['created'])
+              const earliestChallenge = challenges.pop()
+              if (earliestChallenge) {
+                activityStartDate = earliestChallenge.created
+              }
+
+              props.fetchProjectActivity(projectId, activityStartDate).then(() =>
+                this.setState({loadingProject: false})
+              )
+            }
+
             this.setState({loadingChallenges: false})
-          )
+          })
         }
       }
       else {
@@ -173,10 +193,7 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
       let challenges = this.props.challenges // pass through challenges by default
 
       if (options.includeChallenges && _isFinite(projectId)) {
-        const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
-        challenges = _filter(allChallenges, {parent: projectId})
-
-        challenges = _map(challenges, challenge =>
+        challenges = _map(this.challengeProjects(projectId, this.props), challenge =>
           denormalize(challenge, challengeDenormalizationSchema(), this.props.entities)
         )
       }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import _get from 'lodash/get'
 import { Link } from 'react-router-dom'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 
@@ -18,7 +17,6 @@ export default class ChallengeCard extends Component {
       return null
     }
 
-    const projectId = _get(this.props.challenge, 'parent.id', this.props.challenge.parent)
     return (
       <div className='item-entry' key={this.props.challenge.id}>
         <div className='columns challenge-list-item'>
@@ -29,7 +27,7 @@ export default class ChallengeCard extends Component {
           </div>
 
           <div className='column challenge-name'>
-            <Link to={`/admin/project/${projectId}/challenge/${this.props.challenge.id}`}>
+            <Link to={this.props.link}>
               {this.props.challenge.name}
             </Link>
           </div>
