@@ -43,14 +43,6 @@ const ChallengeSearchResults =
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class manageChallengeList extends Component {
-  addChallenge(challengeId, projectId, props) {
-    props.addChallenge(challengeId, projectId)
-  }
-
-  removeChallenge(challengeId, projectId, props) {
-    props.removeChallenge(challengeId, projectId)
-  }
-
   done(props) {
     props.history.push(`/admin/project/${props.project.id}`)
   }
@@ -66,7 +58,6 @@ export class manageChallengeList extends Component {
                        placeholder={"search...."} />
     )
 
-    const projectId = _get(this.props, 'project.id')
     const projectName = _get(this.props, 'project.displayName')
     const listTitle =
       `${this.props.intl.formatMessage(messages.currentChallengesLabel)} ${projectName}`
@@ -117,7 +108,6 @@ export class manageChallengeList extends Component {
                         widgetTitle={this.props.intl.formatMessage(messages.findChallengesLabel)}
                         headerControls={searchControl}>
               <ChallengeSearchResults {..._omit(this.props, 'challenges')} toBeAdded
-                addChallenge={(challengeId) => this.addChallenge(challengeId, projectId, this.props)}
                 challenges={this.props.filteredChallenges || []}
                 excludeChallenges={this.props.challenges}
                 allStatuses={true} />
@@ -127,8 +117,7 @@ export class manageChallengeList extends Component {
             <QuickWidget {...this.props}
                         className="challenge-list-widget"
                         widgetTitle={listTitle}>
-              <AssociatedChallengeList {...this.props} challenges={this.props.challenges}
-                removeChallenge={(challengeId) => this.removeChallenge(challengeId, projectId, this.props)} />
+              <AssociatedChallengeList {...this.props} challenges={this.props.challenges} />
             </QuickWidget>
           </div>
         </div>

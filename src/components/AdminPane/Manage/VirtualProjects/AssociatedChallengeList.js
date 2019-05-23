@@ -33,11 +33,11 @@ export default class AssociatedChallengeList extends Component {
             <div className='column is-narrow item-pinned mr-mr-10'>
               {this.props.toBeAdded ?
                 <div className="clickable mr-text-green"
-                     onClick={() => this.props.addChallenge(challenge.id)}>
+                     onClick={() => this.props.addChallenge(challenge.id, this.props.project.id)}>
                   <FormattedMessage {...messages.addLabel} />
                 </div> :
                 <div className="clickable mr-text-green"
-                     onClick={() => this.props.removeChallenge(challenge.id)}>
+                     onClick={() => this.props.removeChallenge(challenge.id, this.props.project.id)}>
                   <FormattedMessage {...messages.removeLabel} />
                 </div>
               }
