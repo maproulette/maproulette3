@@ -14,7 +14,14 @@ class HeaderNotifications extends Component {
             <h1 className="mr-h2 mr-text-blue-light mr-mb-2 md:mr-mb-0 md:mr-mr-4">
               <FormattedMessage {...messages.inboxHeader} />
             </h1>
-            <ul className="mr-list-reset mr-text-sm mr-mt-3">
+            <ul className="mr-list-reset mr-text-sm mr-mt-0">
+              <li className="mr-mb-4">
+                <input
+                  type="checkbox"
+                  checked={this.props.groupByTask}
+                  onChange={this.props.toggleGroupByTask}
+                /> Group by Task
+              </li>
               <li>
                 <Link to="/user/profile">
                   <FormattedMessage {...messages.manageSubscriptionsLabel} />
