@@ -60,6 +60,7 @@ export default class SearchBox extends Component {
 
     return (
       <div
+        role="search"
         className={classNames(
           "mr-flex mr-items-center", {
             "lg:ml-ml-6 xl:mr-ml-12": !this.props.leftAligned
@@ -67,7 +68,7 @@ export default class SearchBox extends Component {
           this.props.className
         )}
       >
-        <label htmlFor="input-search">
+        <label className="mr-mr-2" htmlFor="input-search">
           {!isLoading && !this.props.suppressIcon &&
            <SvgSymbol
              sym="search-icon"
@@ -79,8 +80,8 @@ export default class SearchBox extends Component {
           {isLoading && <BusySpinner inline />}
         </label>
         <input
-          type="search"
-          className={classNames("mr-appearance-none mr-w-full mr-bg-transparent mr-outline-none mr-shadow-none mr-rounded-none mr-text-white mr-text-xl mr-leading-normal mr-font-light mr-ml-3", this.props.inputClassName)}
+          type="text"
+          className={classNames("mr-appearance-none mr-w-full mr-bg-transparent mr-outline-none mr-shadow-none mr-rounded-none", this.props.inputClassName)}
           placeholder={this.props.placeholder}
           maxLength="63"
           onChange={this.queryChanged}

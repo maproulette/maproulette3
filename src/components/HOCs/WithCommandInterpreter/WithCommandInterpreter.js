@@ -63,6 +63,7 @@ const WithCommandInterpreter = function(WrappedComponent) {
 
       return <WrappedComponent {..._omit(this.props, ['searchQuery', 'clearSearch',
                                           'executeSearch', 'searchGroup'])}
+                               inputClassName='mr-text-white mr-text-xl mr-leading-normal mr-font-light'
                                searchQuery={{query: query, meta: {fetchingResults: loading}}}
                                setSearch={this.executeSearch}
                                clearSearch={this.clearSearch}

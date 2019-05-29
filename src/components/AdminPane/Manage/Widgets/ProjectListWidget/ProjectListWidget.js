@@ -93,8 +93,8 @@ export default class ProjectListWidget extends Component {
     )
 
     const searchControl = this.props.projects.length === 0 ? null : (
-      <ProjectAndChallengeSearch
-        inputClassName="mr-text-blue mr-border-b mr-border-blue"
+      <ProjectAndChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm" 
+        inputClassName="mr-text-grey mr-leading-normal"
         placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)} />
     )
 

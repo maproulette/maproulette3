@@ -37,8 +37,8 @@ const ChallengeSearch = WithSearch(
 export default class ChallengeListWidget extends Component {
   render() {
     const searchControl = this.props.projects.length === 0 ? null : (
-      <ChallengeSearch className="challenge-list-widget__searchbox" 
-                       inputClassName="mr-text-blue mr-border-b mr-border-blue"
+      <ChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm" 
+                       inputClassName="mr-text-grey mr-leading-normal"
                        placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)} />
     )
 
@@ -46,7 +46,7 @@ export default class ChallengeListWidget extends Component {
       <QuickWidget {...this.props}
                   className="challenge-list-widget"
                   widgetTitle={<FormattedMessage {...messages.title} />}
-                  headerControls={searchControl}>
+                  rightHeaderControls={searchControl}>
         <ChallengeList {...this.props}
                        challenges={this.props.challenges}
                        suppressControls />
