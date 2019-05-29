@@ -53,9 +53,9 @@ export class manageChallengeList extends Component {
     }
 
     const searchControl = this.props.projects.length === 0 ? null : (
-      <ChallengeSearch className="challenge-list-widget__searchbox"
-                       inputClassName="mr-text-blue mr-border-b mr-border-blue"
-                       placeholder={"search...."} />
+      <ChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm"
+                       inputClassName="mr-text-grey mr-leading-normal"
+                       placeholder={"Search..."} />
     )
 
     const projectName = _get(this.props, 'project.displayName')
@@ -68,7 +68,7 @@ export class manageChallengeList extends Component {
       </Button>
 
     const breadcrumbs =
-      <nav className="breadcrumb" aria-label="breadcrumbs">
+      <nav className="breadcrumb mr-mt-2" aria-label="breadcrumbs">
         <ul>
           <li>
             <Link to='/admin/projects'>
@@ -95,25 +95,25 @@ export class manageChallengeList extends Component {
     return (
       <div className="admin__manage edit-project">
         <Header
-          className="mr-px-8"
+          className="mr-px-8 mr-pt-4"
           eyebrow={breadcrumbs}
           title={""}
           actions={doneButton}
         />
 
         <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-2">
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-my-4 mr-p-4 mr-rounded">
             <QuickWidget {...this.props}
                         className="challenge-list-widget"
                         widgetTitle={this.props.intl.formatMessage(messages.findChallengesLabel)}
-                        headerControls={searchControl}>
+                        rightHeaderControls={searchControl}>
               <ChallengeSearchResults {..._omit(this.props, 'challenges')} toBeAdded
                 challenges={this.props.filteredChallenges || []}
                 excludeChallenges={this.props.challenges}
                 allStatuses={true} />
             </QuickWidget>
           </div>
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded mr-w-full">
+          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-my-4 mr-p-4 mr-rounded mr-w-full">
             <QuickWidget {...this.props}
                         className="challenge-list-widget"
                         widgetTitle={listTitle}>
