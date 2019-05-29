@@ -24,7 +24,7 @@ export const jsSchema = intl => {
   const localizedPriorityLabels = taskPriorityLabels(intl)
 
   return {
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     title: intl.formatMessage(messages.step3Label),
     description: intl.formatMessage(messages.step3Description),
     type: "object",

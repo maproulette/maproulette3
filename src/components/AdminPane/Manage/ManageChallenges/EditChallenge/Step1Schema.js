@@ -32,7 +32,7 @@ export const jsSchema = (intl, user, challengeData) => {
   const localizedKeywordLabels = keywordLabels(intl)
 
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     title: intl.formatMessage(messages.step1Label),
     type: "object",
     properties: {
@@ -128,9 +128,9 @@ export const jsSchema = (intl, user, challengeData) => {
 export const uiSchema = (intl, user, challengeData) => {
   const uiSchemaFields = {
     "ui:order": [
-      "enabled", "name", "description", "blurb", "instruction",
-      "checkinComment", "checkinSource", "difficulty", "category",
-      "additionalKeywords",
+      "featured", "enabled", "name", "description", "blurb", "instruction",
+      "checkinComment", "includeCheckinHashtag", "checkinSource",
+      "difficulty", "category", "additionalKeywords",
     ],
     featured: {
       "ui:widget": "radio",
@@ -178,21 +178,6 @@ export const uiSchema = (intl, user, challengeData) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription),
     },
-  }
-
-  // Set ordering of conditional fields
-  if (AsManager(user).isSuperUser()) {
-    // Put featured field at top of form.
-    uiSchemaFields["ui:order"].unshift("featured")
-  }
-
-  if (AsEditableChallenge(challengeData).isNew()) {
-    // Add includeCheckinHashtag field after checkinComment
-    uiSchemaFields["ui:order"].splice(
-      uiSchemaFields["ui:order"].indexOf("checkinComment") + 1,
-      0,
-      "includeCheckinHashtag"
-    )
   }
 
   return uiSchemaFields

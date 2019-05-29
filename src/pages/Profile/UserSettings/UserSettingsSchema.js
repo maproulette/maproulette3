@@ -44,7 +44,7 @@ export const jsSchema = (intl, user, editor) => {
   ])
 
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       defaultEditor: {
@@ -194,7 +194,7 @@ export const uiSchema = (intl, user, editor) => {
       "ui:help": intl.formatMessage(messages.isReviewerDescription),
     },
     "ui:order": [
-      "defaultEditor", "locale", "defaultBasemap", "leaderboardOptOut", "isReviewer",
+      "defaultEditor", "locale", "defaultBasemap", "leaderboardOptOut", "customBasemap", "isReviewer",
     ],
   }
 
