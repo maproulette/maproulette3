@@ -53,4 +53,9 @@ export default defineMessages({
     id: 'TaskConfirmationModal.submit.label',
     defaultMessage: "Submit",
   },
+
+  placeholder: {
+    id: 'TaskConfirmationModal.comment.placeholder',
+    defaultMessage: "Your comment (optional)",
+  },
 })

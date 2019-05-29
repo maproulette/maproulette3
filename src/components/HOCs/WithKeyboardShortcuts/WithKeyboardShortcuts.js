@@ -51,6 +51,7 @@ const mapDispatchToProps = dispatch => {
 
       if (event.key === key) {
         handler()
+        event.preventDefault()
       }
     }),
   }

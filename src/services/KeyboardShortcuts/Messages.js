@@ -93,4 +93,9 @@ export default defineMessages({
     id: "KeyMapping.taskInspect.prevTask",
     defaultMessage: "Previous Task",
   },
+
+  confirmSubmit: {
+    id: "KeyMapping.taskCompletion.confirmSubmit",
+    defaultMessage: "Submit",
+  },
 })

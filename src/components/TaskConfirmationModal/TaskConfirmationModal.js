@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
+import _pick from 'lodash/pick'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { needsReviewType } from '../../services/User/User'
@@ -13,13 +14,45 @@ import { TaskLoadMethod, messagesByLoadMethod }
 import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
        from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
-import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import messages from './Messages'
 
 export class TaskConfirmationModal extends Component {
+  commentInputRef = React.createRef()
+
+  handleKeyboardShortcuts = event => {
+    if (event.key ===
+          this.props.keyboardShortcutGroups.taskCompletion.confirmSubmit.key &&
+        event.shiftKey) {
+      this.props.onConfirm()
+      event.preventDefault()
+    }
+  }
+
+  componentDidUpdate() {
+    this.commentInputRef.current.focus()
+  }
+
+  componentDidMount(prevProps, prevState) {
+    this.commentInputRef.current.focus()
+
+    this.props.activateKeyboardShortcut(
+      'taskCompletion',
+      _pick(this.props.keyboardShortcutGroups.taskCompletion, 'confirmSubmit'),
+      this.handleKeyboardShortcuts)
+  }
+
+  componentWillUnmount() {
+    this.props.deactivateKeyboardShortcut('taskCompletion', 'confirmSubmit',
+                                          this.handleKeyboardShortcuts)
+  }
+
+  handleComment = (event) => {
+    this.props.setComment(event.target.value)
+  }
+
   render() {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
 
@@ -66,12 +99,27 @@ export class TaskConfirmationModal extends Component {
                 </div>
               }
 
-              <TaskCommentInput
-                className="mr-mt-6"
-                rows={3}
-                value={this.props.comment}
-                commentChanged={this.props.setComment}
-              />
+              <div className="mr-mt-2">
+                <textarea
+                  ref={this.commentInputRef}
+                  className="mr-input mr-input--green-lighter-outline mr-mt-6"
+                  rows={3}
+                  cols="1"
+                  placeholder={this.props.intl.formatMessage(messages.placeholder)}
+                  value={this.props.comment}
+                  onChange={this.handleComment}
+                />
+                {this.props.submitComment &&
+                 <div className="mr-my-1 mr-flex mr-justify-end">
+                   <button
+                     className="mr-button mr-button--link"
+                     onClick={this.props.submitComment}
+                   >
+                     <FormattedMessage {...messages.submitCommentLabel} />
+                   </button>
+                 </div>
+                }
+              </div>
 
               {this.props.status !== TaskStatus.skipped && !reviewConfirmation &&
                 this.props.user.settings.needsReview !== needsReviewType.mandatory &&
