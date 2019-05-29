@@ -266,7 +266,7 @@ export const CheckboxField = ({id, label, required, rawDescription, children}) =
 export const DropzoneTextUpload = ({id, required, onChange, readonly, formContext}) => {
   if (readonly) {
     return (
-      <div className="readonly-file">
+      <div className="readonly-file mr-text-pink">
         <FormattedMessage {...messages.readOnlyFile} />
       </div>
     )

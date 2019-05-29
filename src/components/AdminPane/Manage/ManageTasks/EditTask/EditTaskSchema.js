@@ -23,7 +23,7 @@ export const jsSchema = (intl, task) => {
   )
 
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       name: {

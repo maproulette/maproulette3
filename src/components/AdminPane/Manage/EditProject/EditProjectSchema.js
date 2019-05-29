@@ -13,7 +13,7 @@ import messages from './Messages'
  */
 export const jsSchema = (intl, project) => {
   const schemaFields = {
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
     properties: {
       displayName: {
@@ -74,13 +74,8 @@ export const uiSchema = (intl, project) => {
       "ui:help": intl.formatMessage(messages.descriptionDescription),
     },
     "ui:order": [
-      "displayName", "enabled", "description"
+      "displayName", "enabled", "description", "isVirtual"
     ],
-  }
-
-  // This is a new project then we show the isVirtual flag
-  if (!project) {
-    uiSchemaFields["ui:order"].push("isVirtual")
   }
 
   return uiSchemaFields

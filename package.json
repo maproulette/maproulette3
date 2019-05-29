@@ -46,7 +46,7 @@
     "react-grid-layout": "^0.16.6",
     "react-intl": "^2.8.0",
     "react-intl-formatted-duration": "^3.0.0",
-    "react-jsonschema-form": "1.0.3",
+    "react-jsonschema-form": "1.5.0",
     "react-jsonschema-form-async": "^0.2.0",
     "react-leaflet": "^1.8.0",
     "react-leaflet-markercluster": "^1.1.7",

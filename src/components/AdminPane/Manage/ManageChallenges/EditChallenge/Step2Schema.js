@@ -25,7 +25,7 @@ export const jsSchema = (intl, user, challengeData) => {
   const sourceReadOnly = AsEditableChallenge(challengeData).isSourceReadOnly()
 
   const schema = {
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     title: intl.formatMessage(messages.step2Label),
     description: intl.formatMessage(messages.step2Description),
     type: "object",
@@ -139,6 +139,6 @@ export const uiSchema = (intl, user, challengeData) => {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.ignoreSourceErrorsDescription),
     },
-    "ui:order": sourceReadOnly ? undefined : [ "*", "ignoreSourceErrors" ],
+    "ui:order": [ "*", "ignoreSourceErrors" ],
   }
 }
