@@ -8,6 +8,7 @@ import _map from 'lodash/map'
 import _isObject from 'lodash/isObject'
 import _filter from 'lodash/filter'
 import _isFinite from 'lodash/isFinite'
+import _each from 'lodash/each'
 import { AsEndUser } from './AsEndUser'
 
 /**
@@ -147,10 +148,24 @@ export class AsManager extends AsEndUser {
   manageableChallenges(projects, challenges) {
     const projectIds = _map(this.manageableProjects(projects), 'id')
 
-    return _filter(challenges, challenge =>
+    const projectChallenges = new Set()
+
+    _each(challenges, challenge => {
       // handle both normalized and denormalized challenges
-      projectIds.indexOf(_get(challenge, 'parent.id', challenge.parent)) !== -1
-    )
+      if (projectIds.indexOf(_get(challenge, 'parent.id', challenge.parent)) !== -1) {
+        projectChallenges.add(challenge)
+      }
+
+      _each(challenge.virtualParents, (vp) => {
+        if (projectIds.indexOf(vp) !== -1) {
+          if (!projectChallenges.has(challenge)) {
+            projectChallenges.add(challenge)
+          }
+        }
+      })
+    })
+
+    return [...projectChallenges]
   }
 }
 
