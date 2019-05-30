@@ -55,7 +55,7 @@ export const defaultDashboardSetup = function() {
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 5},
+      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 7},
       {i: generateWidgetId(), x: 0, y: 12, w: 4, h: 8},
       {i: generateWidgetId(), x: 0, y: 20, w: 4, h: 14},
       {i: generateWidgetId(), x: 0, y: 34, w: 4, h: 12},

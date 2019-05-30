@@ -17,7 +17,7 @@ const descriptor = {
   minWidth: 3,
   defaultWidth: 4,
   minHeight: 2,
-  defaultHeight: 5,
+  defaultHeight: 7,
 }
 
 export default class CompletionProgressWidget extends Component {
