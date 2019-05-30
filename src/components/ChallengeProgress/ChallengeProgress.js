@@ -16,31 +16,33 @@ import messages from './Messages'
 import './ChallengeProgress.scss'
 import { colors } from '../../tailwind'
 
-const theme = {
-  axis: {
-    fontSize: ".75rem",
-    tickColor: colors.white,
-    ticks: {
-      line: {
-        stroke: colors.white
+const theme = (lightMode = false) => {
+  return {
+    axis: {
+      fontSize: ".75rem",
+      tickColor: (lightMode ? colors.grey : colors.white),
+      ticks: {
+        line: {
+          stroke: (lightMode ? colors.grey : colors.white)
+        },
+        text: {
+          fill: (lightMode ? colors.grey : colors.white)
+        }
       },
-      text: {
-        fill: colors.white
+      legend: {
+        text: {
+          fill: (lightMode ? colors.grey : colors.white)
+        }
       }
     },
-    legend: {
-      text: {
-        fill: colors.white
+    grid: {
+      line: {
+        stroke: "#555555"
       }
-    }
-  },
-  grid: {
-    line: {
-      stroke: "#555555"
-    }
-  },
-  tooltip: {container: {color: colors.black, background: colors.white}}
-};
+    },
+    tooltip: {container: {color: colors.black, background: colors.white}}
+  }
+}
 
 export class ChallengeProgress extends Component {
   percent = (value, total) => {
@@ -172,7 +174,7 @@ export class ChallengeProgress extends Component {
                         axisLeft={{tickCount: 0, tickValues: []}}
                         axisBottom={{format: v => `${v}%`, tickCount: 5}}
                         tooltipFormat={v => `${v}%`}
-                        theme={theme}
+                        theme={theme(this.props.lightMode)}
           />
           {taskActions.total > 0 && taskActions.available && taskActions.available === 0 &&
             <SvgSymbol sym='check-icon' viewBox='0 0 20 20'

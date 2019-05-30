@@ -44,10 +44,10 @@ export const defaultDashboardSetup = function() {
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 5},
-      {i: generateWidgetId(), x: 0, y: 12, w: 4, h: 12},
-      {i: generateWidgetId(), x: 0, y: 24, w: 4, h: 10},
-      {i: generateWidgetId(), x: 0, y: 34, w: 4, h: 8},
+      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 14, w: 4, h: 12},
+      {i: generateWidgetId(), x: 0, y: 26, w: 4, h: 10},
+      {i: generateWidgetId(), x: 0, y: 36, w: 4, h: 8},
       {i: generateWidgetId(), x: 8, y: 0, w: 8, h: 34},
     ],
   }

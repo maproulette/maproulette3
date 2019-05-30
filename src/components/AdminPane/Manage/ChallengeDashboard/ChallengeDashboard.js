@@ -55,12 +55,12 @@ export const defaultDashboardSetup = function() {
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
-      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 5},
-      {i: generateWidgetId(), x: 0, y: 12, w: 4, h: 8},
-      {i: generateWidgetId(), x: 0, y: 20, w: 4, h: 14},
-      {i: generateWidgetId(), x: 0, y: 34, w: 4, h: 12},
-      {i: generateWidgetId(), x: 0, y: 46, w: 4, h: 12},
-      {i: generateWidgetId(), x: 0, y: 58, w: 4, h: 12},
+      {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 7},
+      {i: generateWidgetId(), x: 0, y: 14, w: 4, h: 8},
+      {i: generateWidgetId(), x: 0, y: 22, w: 4, h: 14},
+      {i: generateWidgetId(), x: 0, y: 36, w: 4, h: 12},
+      {i: generateWidgetId(), x: 0, y: 48, w: 4, h: 12},
+      {i: generateWidgetId(), x: 0, y: 60, w: 4, h: 12},
       {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 49},
     ],
   }
