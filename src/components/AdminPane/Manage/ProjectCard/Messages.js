@@ -42,5 +42,10 @@ export default defineMessages({
   challengePreviewHeader: {
     id: "Admin.Project.headers.challengePreview",
     defaultMessage: "Challenge Matches",
+  },
+
+  virtualHeader: {
+    id: "Admin.Project.headers.virtual",
+    defaultMessage: "Virtual",
   }
 })

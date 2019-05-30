@@ -9,9 +9,13 @@ export default defineMessages({
     defaultMessage: "Add Challenge",
   },
 
+  manageChallengeListLabel: {
+    id: 'Admin.Project.controls.manageChallengeList.label',
+    defaultMessage: "Manage Challenge List",
+  },
+
   noChallenges: {
     id: "Admin.ChallengeList.noChallenges",
     defaultMessage: "No Challenges",
   },
 })
-

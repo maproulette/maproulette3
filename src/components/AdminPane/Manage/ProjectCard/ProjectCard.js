@@ -27,6 +27,10 @@ export class ProjectCard extends Component {
         <div className="level">
           <Link to={`/admin/project/${project.id}`}>
             {project.displayName || project.name}
+            {project.isVirtual ?
+              <span className="mr-mx-4 mr-text-orange mr-text-sm">
+                <FormattedMessage {...messages.virtualHeader} />
+              </span> : null}
           </Link>
           {this.props.isExpanded && this.props.loadingChallenges && <BusySpinner inline />}
         </div>
