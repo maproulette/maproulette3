@@ -10,6 +10,7 @@ import _kebabCase from 'lodash/kebabCase'
 import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
 import _indexOf from 'lodash/indexOf'
+import _sortBy from 'lodash/sortBy'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus, TASK_STATUS_CREATED }
@@ -116,6 +117,8 @@ export default class TaskHistoryList extends Component {
         startedAtEntry = null
       }
     }
+
+    _sortBy(combinedLogs, ['timestamp'])
 
     const historyEntries = _map(combinedLogs, (log, index) => {
       return (
