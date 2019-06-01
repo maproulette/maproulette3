@@ -47,6 +47,17 @@ export const addServerError = function(error, serverError) {
   }
 }
 
+/**
+ * Add an error with an additional detailed message string. Note that the
+ * default error message must support the inclusion of details
+ */
+export const addErrorWithDetails = function(error, detailString) {
+  return function(dispatch) {
+    const detailedError = _cloneDeep(error)
+    detailedError.values = {details: `: ${detailString}`}
+    return dispatch(addError(detailedError))
+  }
+}
 
 // redux action creators
 export const addError = function(error) {

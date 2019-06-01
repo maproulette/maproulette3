@@ -14,6 +14,8 @@ import Dropdown from '../Dropdown/Dropdown'
 import Header from '../Header/Header'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import ExportLayoutModal from './ExportLayoutModal'
+import ImportLayoutModal from './ImportLayoutModal'
 import messages from './Messages'
 import './WidgetWorkspace.scss'
 
@@ -27,6 +29,8 @@ import './WidgetWorkspace.scss'
 export class WidgetWorkspace extends Component {
   state = {
     isEditingId: null,
+    isExportingLayout: false,
+    isImportingLayout: false,
   }
 
   startEditingLayout = (conf=this.props.currentConfiguration) => {
@@ -64,6 +68,21 @@ export class WidgetWorkspace extends Component {
 
   resetConfiguration = closeDropdown => {
     this.props.resetWorkspaceConfiguration(this.props.currentConfiguration.id)
+    closeDropdown()
+  }
+
+  beginExportingConfiguration = closeDropdown => {
+    this.setState({isExportingLayout: true})
+    closeDropdown()
+  }
+
+  exportConfiguration = exportName => {
+    this.props.exportWorkspaceConfiguration(this.props.currentConfiguration.id, exportName)
+    this.setState({isExportingLayout: false})
+  }
+
+  importConfiguration = closeDropdown => {
+    this.setState({isImportingLayout: true})
     closeDropdown()
   }
 
@@ -111,6 +130,8 @@ export class WidgetWorkspace extends Component {
                   switchConfiguration={this.switchConfiguration}
                   addConfiguration={this.addConfiguration}
                   resetConfiguration={this.resetConfiguration}
+                  beginExportingConfiguration={this.beginExportingConfiguration}
+                  importConfiguration={this.importConfiguration}
                   deleteConfiguration={this.deleteConfiguration}
                   closeDropdown={dropdown.closeDropdown}
                 />
@@ -145,6 +166,7 @@ export class WidgetWorkspace extends Component {
       )
     }
 
+
     return (
       <div className={classNames("mr-widget-workspace", this.props.className)}>
         <Header
@@ -154,15 +176,30 @@ export class WidgetWorkspace extends Component {
           info={this.props.workspaceInfo}
           actions={this.headerActions()}
         />
-        <WidgetGrid {...this.props}
-                    isEditing={this.isEditing()}
-                    editNameControl={editNameBox}
-                    doneEditingControl={
-                      <Button className="mr-button--white" onClick={this.doneEditingLayout}>
-                        <FormattedMessage {...messages.saveConfigurationLabel} />
-                      </Button>
-                    }
-                    workspace={this.props.currentConfiguration} />
+        <WidgetGrid
+          {...this.props}
+          isEditing={this.isEditing()}
+          editNameControl={editNameBox}
+          doneEditingControl={
+            <Button className="mr-button--white" onClick={this.doneEditingLayout}>
+              <FormattedMessage {...messages.saveConfigurationLabel} />
+            </Button>
+          }
+          workspace={this.props.currentConfiguration}
+        />
+        {this.state.isExportingLayout &&
+         <ExportLayoutModal
+           onCancel={() => this.setState({isExportingLayout: false})}
+           onDownload={this.exportConfiguration}
+           exportName={this.props.currentConfiguration.label}
+         />
+        }
+        {this.state.isImportingLayout &&
+         <ImportLayoutModal
+           onCancel={() => this.setState({isImportingLayout: false})}
+           onUpload={file => this.props.importWorkspaceConfiguration(file)}
+         />
+        }
       </div>
     )
   }
@@ -220,16 +257,28 @@ const ListLayoutItems = function(props) {
         <li>
           <ConfirmAction>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
-              <FormattedMessage {...messages.deleteConfigurationLabel} />
+            <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
+              <FormattedMessage {...messages.resetConfigurationLabel} />
             </a>
           </ConfirmAction>
         </li>
         <li>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => props.beginExportingConfiguration(props.closeDropdown)}>
+            <FormattedMessage {...messages.exportConfigurationLabel} />
+          </a>
+        </li>
+        <li>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => props.importConfiguration(props.closeDropdown)}>
+            <FormattedMessage {...messages.importConfigurationLabel} />
+          </a>
+        </li>
+        <li>
           <ConfirmAction>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => props.resetConfiguration(props.closeDropdown)}>
-              <FormattedMessage {...messages.resetConfigurationLabel} />
+            <a onClick={() => props.deleteConfiguration(props.closeDropdown)}>
+              <FormattedMessage {...messages.deleteConfigurationLabel} />
             </a>
           </ConfirmAction>
         </li>

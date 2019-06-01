@@ -179,6 +179,11 @@ export default defineMessages({
     defaultMessage: "Unable to render workspace. Switching to a working layout.",
   },
 
+  widgetWorkspaceImportFailure: {
+    id: 'Errors.widgetWorkspace.importFailure',
+    defaultMessage: "Unable to import layout{details}",
+  },
+
   josmNoResponse: {
     id: 'Errors.josm.noResponse',
     defaultMessage: "OSM remote control did not respond. Do you have JOSM " +
