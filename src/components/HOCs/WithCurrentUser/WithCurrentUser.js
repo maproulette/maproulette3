@@ -13,6 +13,7 @@ import { logoutUser,
          fetchSavedChallenges,
          fetchSavedTasks,
          fetchUserActivity,
+         updateUserSettings,
          updateUserAppSetting,
          userDenormalizationSchema } from '../../../services/User/User'
 import AsEndUser from '../../../interactions/User/AsEndUser'
@@ -64,6 +65,7 @@ export const mapDispatchToProps = dispatch => {
     fetchSavedTasks,
     saveTask,
     unsaveTask,
+    updateUserSettings,
     fetchTopChallenges,
     fetchUserActivity,
   }, dispatch)
