@@ -16,7 +16,7 @@ import AppErrors from '../../../services/Error/AppErrors'
 
 
 const DEFAULT_PAGE_SIZE = 20
-const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mapped_on', direction: 'ASC'}}
+const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mapped_on', direction: 'ASC'}, pageSize: DEFAULT_PAGE_SIZE}
 
 /**
  * WithReviewTasks retrieves tasks that need to be Reviewed
@@ -35,10 +35,14 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       this.update(this.props, this.state.criteria[this.props.reviewTasksType])
     }
 
-    update(props, criteria, pageSize) {
-      if (!pageSize) {
-        pageSize = this.state.pageSize
-      }
+    changePageSize = (pageSize) => {
+      const typedCriteria = _cloneDeep(this.state.criteria)
+      typedCriteria[this.props.reviewTasksType].pageSize = pageSize
+      this.setState({criteria: typedCriteria})
+    }
+
+    update(props, criteria) {
+      const pageSize = _get(this.state.criteria[props.reviewTasksType], 'pageSize')
 
       if (_isUndefined(criteria.savedChallengesOnly)) {
         criteria.savedChallengesOnly = _get(this.state.criteria[this.props.reviewTasksType], "savedChallengesOnly")
@@ -46,7 +50,9 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
       const typedCriteria = _cloneDeep(this.state.criteria)
       typedCriteria[props.reviewTasksType] = criteria
-      this.setState({loading: true, criteria: typedCriteria, pageSize})
+      typedCriteria[props.reviewTasksType].pageSize = pageSize
+
+      this.setState({loading: true, criteria: typedCriteria})
 
       switch(props.reviewTasksType) {
         case ReviewTasksType.reviewedByMe:
@@ -70,9 +76,11 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       let pageSize = _get(searchParams, 'pageSize') || DEFAULT_PAGE_SIZE
 
       const criteria = buildSearchCrteria(searchParams)
+      criteria.pageSize = pageSize
+
       const stateCriteria = this.state.criteria
       stateCriteria[this.props.reviewTasksType] = criteria
-      this.setState({criteria: stateCriteria, pageSize})
+      this.setState({criteria: stateCriteria})
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -100,11 +108,12 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       const criteria = this.state.criteria[this.props.reviewTasksType] || DEFAULT_CRITERIA
       return (
         <WrappedComponent reviewData={reviewData}
-                          updateReviewTasks={(criteria, pageSize) => this.update(this.props, criteria, pageSize)}
+                          updateReviewTasks={(criteria) => this.update(this.props, criteria)}
                           refresh={this.refresh}
                           reviewCriteria={criteria}
-                          pageSize={this.state.pageSize}
-                          startReviewing={(url) => this.props.startNextReviewTask(criteria, url)}
+                          pageSize={criteria.pageSize}
+                          changePageSize={this.changePageSize}
+                          startReviewing={(url) => this.props.startNextReviewTask(criteria, url, this.state.pageSize)}
                           loading={this.state.loading}
                           {..._omit(this.props, ['updateReviewTasks'])} />)
     }
@@ -124,16 +133,17 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     return dispatch(fetchReviewedTasks(searchCriteria, true, pageSize))
   },
 
-  startNextReviewTask: (searchCriteria={}, url) => {
+  startNextReviewTask: (searchCriteria={}, url, pageSize) => {
     dispatch(loadNextReviewTask(searchCriteria)).then((task) => {
-      url.push(`/challenge/${task.parent}/task/${task.id}/review`, searchCriteria)
+      const searchParams = _cloneDeep(searchCriteria)
+      searchParams.pageSize = pageSize
+      url.push(`/challenge/${task.parent}/task/${task.id}/review`, searchParams)
     }).catch(error => {
       console.log(error)
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       url.push('/review', searchCriteria)
     })
   }
-
 })
 
 function buildSearchCrteria(searchParams) {

@@ -47,8 +47,7 @@ export class TaskReviewTable extends Component {
     _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
 
     this.props.updateReviewTasks({sortCriteria, filters, page: tableState.page,
-                                  boundingBox: this.props.reviewCriteria.boundingBox},
-                                  tableState.pageSize)
+                                  boundingBox: this.props.reviewCriteria.boundingBox})
   }
 
   startReviewing() {
@@ -67,11 +66,12 @@ export class TaskReviewTable extends Component {
   render() {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'reviewData.tasks', [])
+    const pageSize = this.props.pageSize
     const columnTypes = setupColumnTypes(this.props,
                            taskId => this.setState({openComments: taskId}),
                            (id, value) => this.setState({filtered: [{id: id, value: value}]}),
-                           data, this.props.reviewCriteria)
-    const pageSize = this.props.pageSize
+                           data, this.props.reviewCriteria, pageSize)
+
     const totalPages = Math.ceil(_get(this.props, 'reviewData.totalCount', 0) / pageSize)
 
     let subheader = null
@@ -148,7 +148,7 @@ export class TaskReviewTable extends Component {
           </header>
           <div className="mr-mt-6">
             <ReactTable data={data} columns={columns} key={this.props.reviewTasksType}
-                        defaultPageSize={pageSize}
+                        pageSize={pageSize}
                         defaultSorted={defaultSorted}
                         defaultFiltered={defaultFiltered}
                         minRows={1}
@@ -157,6 +157,7 @@ export class TaskReviewTable extends Component {
                         noDataText={<FormattedMessage {...messages.noTasks} />}
                         pages={totalPages}
                         onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+                        onPageSizeChange={(pageSize, pageIndex) => this.props.changePageSize(pageSize)}
                         getTheadFilterThProps={(state, rowInfo, column) => {
                           return {style: {position: "inherit", overflow: "inherit"}}}
                         }
@@ -181,7 +182,7 @@ export class TaskReviewTable extends Component {
   }
 }
 
-const setupColumnTypes = (props, openComments, setFiltered, data, criteria) => {
+const setupColumnTypes = (props, openComments, setFiltered, data, criteria, pageSize) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -257,31 +258,9 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria) => {
     exportable: t => _get(t.parent, 'name'),
     minWidth: 120,
     Cell: ({row}) => {
-      let linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
-      if (_get(criteria, 'sortCriteria.sortBy')) {
-        linkTo += `sortBy=${criteria.sortCriteria.sortBy}&direction=${criteria.sortCriteria.direction}&`
-      }
-
-      if (_get(criteria, 'filters')) {
-        linkTo += `filters=${encodeURIComponent(JSON.stringify(criteria.filters))}&`
-      }
-
-      if (_get(criteria, 'boundingBox')) {
-        linkTo += `boundingBox=${criteria.boundingBox}`
-      }
-
-      if (_get(criteria, 'savedChallengesOnly')) {
-        linkTo += `savedChallengesOnly=${criteria.savedChallengesOnly}`
-      }
-
       return (
-        <div className="row-challenge-column">
-          <Link
-            to={linkTo}
-            title={row._original.parent.name}
-          >
-            {row._original.parent.name}
-          </Link>
+        <div className="row-challenge-column mr-text-green">
+          {row._original.parent.name}
         </div>
       )
     }
@@ -424,33 +403,25 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria) => {
     maxWidth: 120,
     minWidth: 110,
     Cell: ({row}) =>{
-      let linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review?`
-      if (_get(criteria, 'sortCriteria.sortBy')) {
-        linkTo += `sortBy=${criteria.sortCriteria.sortBy}&direction=${criteria.sortCriteria.direction}&`
-      }
-
-      if (criteria.filters) {
-        linkTo += `filters=${encodeURIComponent(JSON.stringify(criteria.filters))}`
-      }
-
+      const linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review`
       let action =
-            <Link to={linkTo}>
-              <FormattedMessage {...messages.reviewTaskLabel} />
-            </Link>
+        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+          <FormattedMessage {...messages.reviewTaskLabel} />
+        </div>
 
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action =
-            <Link to={linkTo}>
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
-            </Link>
+            </div>
         }
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           if (row._original.reviewedBy.id !== props.user.id) {
             action =
-              <Link to={linkTo}>
+              <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
                 <FormattedMessage {...messages.resolveTaskLabel} />
-              </Link>
+              </div>
           }
           else {
             action =
@@ -474,9 +445,9 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria) => {
     maxWidth: 110,
     Cell: ({row}) =>{
       return <div className="row-controls-column">
-        <Link to={`/challenge/${row._original.parent.id}/task/${row.id}`}>
+        <div onClick={() => props.history.push(`/challenge/${row._original.parent.id}/task/${row.id}`, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
           <FormattedMessage {...messages.viewTaskLabel} />
-        </Link>
+        </div>
       </div>
     }
   }
