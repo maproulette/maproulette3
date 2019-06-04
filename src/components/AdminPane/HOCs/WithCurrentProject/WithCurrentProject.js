@@ -124,6 +124,20 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
           if (!options.includeActivity) {
             this.setState({loadingProject: false})
           }
+          else {
+            // Used for daily heatmap
+            let activityStartDate = new Date(project.created)
+
+            const challenges = _sortBy(this.challengeProjects(projectId, props), ['created'])
+            const earliestChallenge = challenges.pop()
+            if (earliestChallenge) {
+              activityStartDate = earliestChallenge.created
+            }
+
+            props.fetchProjectActivity(projectId, activityStartDate).then(() =>
+              this.setState({loadingProject: false})
+            )
+          }
         })
 
         if (options.includeChallenges) {
@@ -143,22 +157,6 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
           }
 
           Promise.all(retrievals).then(() => {
-            if (options.includeActivity) {
-              // Used for daily heatmap
-              const project = _find(props.projects, (p) => p.id === projectId)
-              let activityStartDate = new Date(project.created)
-
-              const challenges = _sortBy(this.challengeProjects(projectId, props), ['created'])
-              const earliestChallenge = challenges.pop()
-              if (earliestChallenge) {
-                activityStartDate = earliestChallenge.created
-              }
-
-              props.fetchProjectActivity(projectId, activityStartDate).then(() =>
-                this.setState({loadingProject: false})
-              )
-            }
-
             this.setState({loadingChallenges: false})
           })
         }
