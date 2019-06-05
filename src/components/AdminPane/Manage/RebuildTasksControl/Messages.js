@@ -34,8 +34,8 @@ export default defineMessages({
     defaultMessage:
 `* Existing tasks included in the latest data will be updated
 * New tasks will be added
-* If you choose to remove unmatched incomplete tasks (below), existing __incomplete__ tasks that aren't included will be removed
-* If you do not remove unmatched incomplete tasks, they will be left as-is, possibly leaving tasks that have already been addressed outside of MapRoulette`,
+* If you choose to first remove incomplete tasks (below), existing __incomplete__ tasks will first be removed
+* If you do not first remove incomplete tasks, they will be left as-is, possibly leaving tasks that have already been addressed outside of MapRoulette`,
   },
 
   warning: {
@@ -50,7 +50,7 @@ export default defineMessages({
 
   removeUnmatchedLabel: {
     id: "RebuildTasksControl.modal.controls.removeUnmatched.label",
-    defaultMessage: "Remove unmatched incomplete tasks"
+    defaultMessage: "First remove incomplete tasks"
   },
 
   cancel: {

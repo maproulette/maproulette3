@@ -13,8 +13,9 @@ export const CHALLENGE_STATUS_FAILED = 2
 export const CHALLENGE_STATUS_READY = 3
 export const CHALLENGE_STATUS_PARTIALLY_LOADED = 4
 export const CHALLENGE_STATUS_FINISHED = 5
+export const CHALLENGE_STATUS_DELETING_TASKS = 6
 
-//We can ask the server for challenges that have no status by using -1
+// We can ask the server for challenges that have no status by using -1
 export const CHALLENGE_STATUS_EMPTY = -1
 
 export const ChallengeStatus = Object.freeze({
@@ -24,6 +25,7 @@ export const ChallengeStatus = Object.freeze({
   ready: CHALLENGE_STATUS_READY,
   partiallyLoaded: CHALLENGE_STATUS_PARTIALLY_LOADED,
   finished: CHALLENGE_STATUS_FINISHED,
+  deletingTasks: CHALLENGE_STATUS_DELETING_TASKS,
   empty: CHALLENGE_STATUS_EMPTY,
 })
 
