@@ -14,7 +14,7 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromVirtualChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
-import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'        
+import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
 import { fetchUser } from '../../../services/User/User'
@@ -24,6 +24,8 @@ import { fetchOSMUser, fetchOSMData } from '../../../services/OSM/OSM'
 import { fetchChallengeActions } from '../../../services/Challenge/Challenge'
 import { renewVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
+import { CHALLENGE_STATUS_FINISHED }
+       from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -137,6 +139,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         // Fetch the task comments and location data, but don't wait for them
         dispatch(fetchTaskComments(taskId))
         dispatch(fetchTaskPlace(loadedTask))
+        dispatch(fetchChallenge(loadedTask.parent))
         dispatch(fetchChallengeActions(loadedTask.parent))
 
         return normalizedResults
@@ -145,7 +148,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           dispatch(addError(AppErrors.reviewTask.alreadyClaimed))
         }
         else {
-          dispatch(addError(AppErrors.task.taskFetchFailure))
+          dispatch(addError(AppErrors.task.fetchFailure))
         }
       })
     },
@@ -176,7 +179,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         if (taskLoadBy) {
           // Start loading the next task from the challenge.
           nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
-            visitNewTask(ownProps, taskId, newTask)
+            visitNewTask(dispatch, ownProps, taskId, newTask)
           ).catch(error => {
             ownProps.history.push(`/browse/challenges/${challengeId}`)
           })
@@ -212,7 +215,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       }
 
       nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
-        visitNewTask(ownProps, taskId, newTask)
+        visitNewTask(dispatch, ownProps, taskId, newTask)
       )
     },
 
@@ -289,7 +292,7 @@ export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
  * Route to the given new task. If there's no new task, we assume the challenge
  * is complete and congratulate the user.
  */
-export const visitNewTask = function(props, currentTaskId, newTask) {
+export const visitNewTask = function(dispatch, props, currentTaskId, newTask) {
   if (_isPlainObject(newTask) && newTask.id !== currentTaskId) {
     // The route we use is different for virtual challenges vs standard
     // challenges.
@@ -302,9 +305,18 @@ export const visitNewTask = function(props, currentTaskId, newTask) {
     }
   }
   else {
-    // Assume challenge is complete. Redirect home with note to congratulate
+    // If challenge is complete, redirect home with note to congratulate
     // user.
-    props.history.push('/browse/challenges', {congratulate: true})
+    const challengeId = challengeIdFromRoute(props, props.challengeId)
+    dispatch(fetchChallenge(challengeId)).then( normalizedResults => {
+      const challenge = normalizedResults.entities.challenges[normalizedResults.result]
+      if (challenge.status === CHALLENGE_STATUS_FINISHED) {
+        props.history.push('/browse/challenges', {congratulate: true, warn: false})
+      }
+      else {
+        props.history.push('/browse/challenges', {warn: true, congratulate: false})
+      }
+    })
   }
 }
 

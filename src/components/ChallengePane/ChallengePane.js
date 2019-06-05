@@ -6,6 +6,7 @@ import MapPane from '../EnhancedMap/MapPane/MapPane'
 import ChallengeSearchMap from '../ChallengeSearchMap/ChallengeSearchMap'
 import ChallengeBrowseMap from '../ChallengeBrowseMap/ChallengeBrowseMap'
 import CongratulateModal from '../CongratulateModal/CongratulateModal'
+import ChallengeEndModal from '../ChallengeEndModal/ChallengeEndModal'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
 import WithChallenges from '../HOCs/WithChallenges/WithChallenges'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
@@ -66,7 +67,12 @@ export class ChallengePane extends Component {
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50">
         {_get(this.props, 'history.location.state.congratulate', false) &&
-         <CongratulateModal />
+         !_get(this.props, 'history.location.state.warn', false) &&
+          <CongratulateModal />
+        }
+        {_get(this.props, 'history.location.state.warn', false) &&
+         !_get(this.props, 'history.location.state.congratulate', false) &&
+          <ChallengeEndModal />
         }
         <ChallengeFilterSubnav {...this.props} />
 
