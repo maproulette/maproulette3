@@ -1,4 +1,5 @@
 import uuidv4 from 'uuid/v4'
+import FileSaver from 'file-saver'
 import _isFinite from 'lodash/isFinite'
 import _isObject from 'lodash/isObject'
 import _map from 'lodash/map'
@@ -9,6 +10,8 @@ import _isString from 'lodash/isString'
 import _findIndex from 'lodash/findIndex'
 import _each from 'lodash/each'
 import _reduce from 'lodash/reduce'
+import _pick from 'lodash/pick'
+import _snakeCase from 'lodash/snakeCase'
 import GridMigrations from './GridMigrations'
 
 /**
@@ -219,4 +222,104 @@ export const pruneWidgets = (gridConfiguration, widgetKeys) => {
   })
 
   return prunedConfiguration
+}
+
+/**
+ * Downloads a JSON representation of the given workspace configuration
+ * suitable for import by this or another user into the same workspace
+ */
+export const exportWorkspaceConfiguration = (workspaceConfiguration, exportName) => {
+  const exportRepresentation = {
+    meta: {
+      exportFormatVersion: 1,
+      targetWorkspace: workspaceConfiguration.name,
+      exportName: exportName ? exportName : workspaceConfiguration.label,
+      exportTimestamp: (new Date()).toISOString(),
+    },
+    workspace: Object.assign(
+      _pick(workspaceConfiguration, ['dataModelVersion', 'name', 'cols', 'rowHeight', 'targets']),
+      {
+        widgetKeys: _map(workspaceConfiguration.widgets, 'widgetKey'),
+        layout: _map(workspaceConfiguration.layout,
+                    widgetLayout => _pick(widgetLayout, ['h', 'w', 'x', 'y'])),
+      }
+    ),
+  }
+
+  const exportBlob = new Blob([JSON.stringify(exportRepresentation)],
+                              {type: "application/json;charset=utf-8"})
+  FileSaver.saveAs(
+    exportBlob,
+    `${_snakeCase(workspaceConfiguration.name)}-${_snakeCase(exportRepresentation.meta.exportName)}-layout.json`
+  )
+}
+
+/**
+ * Parses and returns a previously-exported workspace layout from the given
+ * file
+ */
+export const importWorkspaceConfiguration = (workspaceName, importFile) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      let representation = null
+      try {
+        representation = JSON.parse(reader.result)
+      }
+      catch(error) {
+        reject(new Error("unrecognized or unsupported import format"))
+        return
+      }
+
+      try {
+        if (!representation || !representation.meta || representation.meta.exportFormatVersion !== 1) {
+          reject(new Error("unrecognized or unsupported import format"))
+          return
+        }
+
+        // Todo: validate import against a json schema rather than these piecemeal checks
+        if (representation.meta.targetWorkspace !== workspaceName) {
+          reject(new Error("imported layout is not intended for this workspace"))
+          return
+        }
+
+        if (!representation.workspace) {
+          reject(new Error("imported layout appears to be corrupted"))
+          return
+        }
+
+        const importedConfiguration = representation.workspace
+        importedConfiguration.label = representation.meta.exportName
+        importedConfiguration.widgets =
+          _map(importedConfiguration.widgetKeys, key => widgetDescriptor(key))
+        delete importedConfiguration.widgetKeys
+
+        _each(importedConfiguration.layout, widgetLayout => widgetLayout.i = generateWidgetId())
+        resolve(importedConfiguration)
+      }
+      catch(error) {
+        reject(error)
+      }
+    }
+    reader.readAsText(importFile)
+  })
+}
+
+/**
+ * Determines the next available (non-duplicated) version of the given
+ * preferredName, returning preferredName if it does not duplicate any of the
+ * existing configuration names, or else an altered unique version in the form
+ * of `preferredName (x)`
+ */
+export const nextAvailableConfigurationLabel = function(preferredLabel, existingLabels, dupValue=1) {
+  if (dupValue <= 1 && existingLabels.indexOf(preferredLabel) === -1) {
+    return preferredLabel
+  }
+
+  const candidateName = `${preferredLabel} (${dupValue})`
+  if (existingLabels.indexOf(candidateName) === -1) {
+    return candidateName
+  }
+
+  return nextAvailableConfigurationLabel(preferredLabel, existingLabels, dupValue + 1)
 }

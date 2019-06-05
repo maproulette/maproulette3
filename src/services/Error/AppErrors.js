@@ -79,6 +79,7 @@ export default {
 
   widgetWorkspace: {
     renderFailure: messages.widgetWorkspaceRenderFailure,
+    importFailure: messages.widgetWorkspaceImportFailure,
   },
 
   josm: {

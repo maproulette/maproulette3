@@ -4,16 +4,22 @@ import _find from 'lodash/find'
 import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 import _each from 'lodash/each'
+import _map from 'lodash/map'
 import _omit from 'lodash/omit'
 import _assign from 'lodash/assign'
 import {
   generateWidgetId,
+  nextAvailableConfigurationLabel,
   migrateWidgetGridConfiguration,
   pruneDecommissionedWidgets,
-  pruneWidgets
+  pruneWidgets,
+  exportWorkspaceConfiguration,
+  importWorkspaceConfiguration,
 } from '../../../services/Widget/Widget'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithStatus from '../WithStatus/WithStatus'
+import WithErrors from '../WithErrors/WithErrors'
+import AppErrors from '../../../services/Error/AppErrors'
 import SignInButton from '../../SignInButton/SignInButton'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 
@@ -72,6 +78,15 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
      */
     workspaceConfigurations = () => {
       return this.allUserWorkspaces()[workspaceName] || {}
+    }
+
+    /**
+     * Retrieves all configuration labels in use for the current workspace
+     *
+     * @private
+     */
+    workspaceConfigurationLabels = () => {
+      return _map(this.workspaceConfigurations(), 'label')
     }
 
     /**
@@ -217,6 +232,34 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     }
 
     /**
+     * Export a downloadable copy of the given workspace
+     */
+    exportWorkspaceConfiguration = (workspaceConfigurationId, exportName) => {
+      return exportWorkspaceConfiguration(
+        this.workspaceConfigurations()[workspaceConfigurationId], exportName
+      )
+    }
+
+    /**
+     * Import a workspace layout for the given workspace from the given file
+     */
+    importWorkspaceConfiguration = importFile => {
+      return importWorkspaceConfiguration(workspaceName, importFile)
+        .then(importedConfiguration => {
+          const newConfiguration = this.completeWorkspaceConfiguration(importedConfiguration)
+          newConfiguration.label =
+            nextAvailableConfigurationLabel(newConfiguration.label, this.workspaceConfigurationLabels())
+          this.saveWorkspaceConfiguration(newConfiguration)
+
+          setTimeout(() => this.setState({currentConfigurationId: newConfiguration.id}), 500)
+          return newConfiguration
+        }).catch(error => {
+          this.props.addErrorWithDetails(AppErrors.widgetWorkspace.importFailure, error.message)
+          return null
+        })
+    }
+
+    /**
      * Retrieve the current, active configuration or a default configuration if
      * there is no active configuration
      */
@@ -243,7 +286,8 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
      */
     addNewWorkspaceConfiguration = () => {
       const newConfiguration = this.setupWorkspace(defaultConfiguration)
-      newConfiguration.label = `(New) ${newConfiguration.label}`
+      newConfiguration.label =
+        nextAvailableConfigurationLabel(newConfiguration.label, this.workspaceConfigurationLabels())
 
       this.saveWorkspaceConfiguration(newConfiguration)
       setTimeout(() => this.setState({currentConfigurationId: newConfiguration.id}), 500)
@@ -295,6 +339,8 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
                addNewWorkspaceConfiguration={this.addNewWorkspaceConfiguration}
                saveWorkspaceConfiguration={this.saveWorkspaceConfiguration}
                resetWorkspaceConfiguration={this.resetWorkspaceConfiguration}
+               exportWorkspaceConfiguration={this.exportWorkspaceConfiguration}
+               importWorkspaceConfiguration={this.importWorkspaceConfiguration}
                deleteWorkspaceConfiguration={this.deleteWorkspaceConfiguration}
              />
     }
@@ -304,6 +350,8 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
 export default (WrappedComponent, targets, workspaceName, defaultConfiguration) =>
   WithStatus(
     WithCurrentUser(
-      WithWidgetWorkspaces(WrappedComponent, targets, workspaceName, defaultConfiguration)
+      WithErrors(
+        WithWidgetWorkspaces(WrappedComponent, targets, workspaceName, defaultConfiguration)
+      )
     )
   )
