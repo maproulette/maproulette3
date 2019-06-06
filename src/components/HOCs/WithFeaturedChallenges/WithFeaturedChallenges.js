@@ -23,7 +23,7 @@ const WithFeaturedChallenges = WrappedComponent => {
 
     async componentDidMount() {
       const normalizedResults = await this.props.fetchFeaturedChallenges()
-      if (!_isEmpty(normalizedResults.entities)) {
+      if (normalizedResults && !_isEmpty(normalizedResults.entities)) {
         this.setState({
           featuredChallenges: _filter(_values(normalizedResults.entities.challenges),
                                       challenge => isUsableChallengeStatus(challenge))

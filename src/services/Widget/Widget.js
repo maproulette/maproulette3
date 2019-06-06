@@ -197,7 +197,7 @@ export const pruneDecommissionedWidgets = gridConfiguration => {
   const decommissioned = decommissionedWidgets(gridConfiguration)
 
   return decommissioned.length > 0 ?
-         pruneWidgets(gridConfiguration, decommissionedWidgets) :
+         pruneWidgets(gridConfiguration, decommissioned) :
          gridConfiguration
 }
 

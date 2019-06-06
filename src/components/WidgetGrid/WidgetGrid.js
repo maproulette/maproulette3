@@ -33,6 +33,10 @@ export class WidgetGrid extends Component {
     const widgetInstances =
       _map(this.props.workspace.widgets, (widgetConfiguration, index) => {
         const WidgetComponent = widgetComponent(widgetConfiguration)
+        if (!WidgetComponent) {
+          throw new Error(`Missing component for widget: ${widgetConfiguration.widgetKey}`)
+        }
+
         const widgetY = this.props.workspace.layout[index].y
         return (
           <div
