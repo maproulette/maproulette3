@@ -29,6 +29,11 @@ export default defineMessages({
     defaultMessage: "Contested"
   },
 
+  unset: {
+    id: "Task.reviewStatus.unset",
+    defaultMessage: "Review not yet requested"
+  },
+
   next: {
     id: 'Task.review.loadByMethod.next',
     defaultMessage: "Next Task",

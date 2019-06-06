@@ -7,8 +7,11 @@ import _isEmpty from 'lodash/isEmpty'
 import _isArray from 'lodash/isArray'
 import _differenceBy from 'lodash/differenceBy'
 import _omit from 'lodash/omit'
+import _isUndefined from 'lodash/isUndefined'
 import { TaskStatus, keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatusWithUnset, keysByReviewStatus }
+      from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskPriority, keysByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
 
@@ -31,6 +34,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
   return class extends Component {
     state = {
       includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
+      includeReviewStatuses: _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true])),
       includePriorities: _fromPairs(_map(TaskPriority, priority => [priority, true])),
       selectedTasks: new Map(),
       filteredTasks: {tasks: []},
@@ -46,11 +50,35 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         {[status]: !this.state.includeStatuses[status]}
       )
 
-      const filteredTasks = this.filterTasks(includeStatuses, this.state.includePriorities)
+      const filteredTasks = this.filterTasks(includeStatuses,
+                                             this.state.includeReviewStatuses,
+                                             this.state.includePriorities)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
 
       this.setState({
         includeStatuses,
+        selectedTasks,
+        filteredTasks,
+      })
+    }
+
+    /**
+     * Toggle filtering on or off for the given task review status
+     */
+    toggleIncludedReviewStatus = status => {
+      const includeReviewStatuses = Object.assign(
+        {},
+        this.state.includeReviewStatuses,
+        {[status]: !this.state.includeReviewStatuses[status]}
+      )
+
+      const filteredTasks = this.filterTasks(this.state.includeStatuses,
+                                             includeReviewStatuses,
+                                             this.state.includePriorities)
+      const selectedTasks = this.unselectExcludedTasks(filteredTasks)
+
+      this.setState({
+        includeReviewStatuses,
         selectedTasks,
         filteredTasks,
       })
@@ -66,7 +94,9 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         {[priority]: !this.state.includePriorities[priority]}
       )
 
-      const filteredTasks = this.filterTasks(this.state.includeStatuses, includePriorities)
+      const filteredTasks = this.filterTasks(this.state.includeStatuses,
+                                             this.state.includeReviewStatuses,
+                                             includePriorities)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
       this.setState({
         includePriorities,
@@ -79,12 +109,14 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      * Filters the tasks, returning only those that match both the given
      * statuses and priorites.
      */
-    filterTasks = (includeStatuses, includePriorities) => {
+    filterTasks = (includeStatuses, includeReviewStatuses, includePriorities) => {
       let results = null
       if (_isArray(_get(this.props[tasksProp], 'tasks'))) {
         results = Object.assign({}, this.props[tasksProp], {
           tasks: _filter(this.props[tasksProp].tasks, task =>
-            includeStatuses[task.status] && includePriorities[task.priority]
+            includeStatuses[task.status] && includePriorities[task.priority] &&
+            ((_isUndefined(task.reviewStatus) && includeReviewStatuses[-1]) ||
+              includeReviewStatuses[task.reviewStatus])
           ),
         })
       }
@@ -152,6 +184,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      */
     refreshSelectedTasks = () => {
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
+                                             this.state.includeReviewStatuses,
                                              this.state.includePriorities)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
       this.setState({filteredTasks, selectedTasks})
@@ -212,15 +245,18 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     }
 
     clearAllFilters = () => {
-      const filteredTasks = this.filterTasks(keysByStatus, keysByPriority)
+      const filteredTasks = this.filterTasks(keysByStatus, keysByReviewStatus, keysByPriority)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
+
       this.setState({filteredTasks, selectedTasks,
                      includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
+                     includeReviewStatuses: _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true])),
                      includePriorities: _fromPairs(_map(TaskPriority, priority => [priority, true])), })
     }
 
     componentDidMount() {
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
+                                             this.state.includeReviewStatuses,
                                              this.state.includePriorities)
       this.setState({filteredTasks})
     }
@@ -230,6 +266,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
           _get(this.props[tasksProp], 'tasks.length', 0)) {
         this.setState({
           filteredTasks: this.filterTasks(this.state.includeStatuses,
+                                          this.state.includeReviewStatuses,
                                           this.state.includePriorities)
         })
       }
@@ -242,9 +279,11 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       return <WrappedComponent {...{[outputProp]: this.state.filteredTasks}}
                                includeTaskStatuses={this.state.includeStatuses}
+                               includeTaskReviewStatuses={this.state.includeReviewStatuses}
                                includeTaskPriorities={this.state.includePriorities}
                                selectedTasks={this.state.selectedTasks}
                                toggleIncludedTaskStatus={this.toggleIncludedStatus}
+                               toggleIncludedTaskReviewStatus={this.toggleIncludedReviewStatus}
                                toggleIncludedTaskPriority={this.toggleIncludedPriority}
                                toggleTaskSelection={this.toggleTaskSelection}
                                toggleAllTasksSelection={this.toggleAllTasksSelection}

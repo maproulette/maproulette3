@@ -13,6 +13,11 @@ import { TaskStatus,
          messagesByStatus,
          statusLabels }
        from '../../../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatusWithUnset,
+        keysByReviewStatus,
+        messagesByReviewStatus,
+        reviewStatusLabels }
+      from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskPriority,
          keysByPriority,
          messagesByPriority,
@@ -155,7 +160,7 @@ export class ViewChallengeTasks extends Component {
     }
 
     const statusFilters = _map(TaskStatus, status => (
-      <div key={status} className="filter-option status-filter is-narrow">
+      <li key={status} className="filter-option status-filter is-narrow">
         <div className={classNames("field", keysByStatus[status])}
              onClick={() => this.props.toggleIncludedTaskStatus(status)}>
           <input className="is-checkradio is-circle has-background-color is-success"
@@ -166,11 +171,26 @@ export class ViewChallengeTasks extends Component {
             <FormattedMessage {...messagesByStatus[status]} />
           </label>
         </div>
-      </div>
+      </li>
+    ))
+
+    const reviewStatusFilters = _map(TaskReviewStatusWithUnset, status => (
+      <li key={status} className="filter-option status-filter is-narrow">
+        <div className={classNames("field", keysByReviewStatus[status])}
+             onClick={() => this.props.toggleIncludedTaskReviewStatus(status)}>
+          <input className="is-checkradio is-circle has-background-color is-success"
+                 type="checkbox"
+                 checked={this.props.includeTaskReviewStatuses[status]}
+                 onChange={() => null} />
+          <label>
+            <FormattedMessage {...messagesByReviewStatus[status]} />
+          </label>
+        </div>
+      </li>
     ))
 
     const priorityFilters = _reverse(_map(TaskPriority, priority => (
-      <div key={priority} className="filter-option priority-filter is-narrow">
+      <li key={priority} className="filter-option priority-filter is-narrow">
         <div className={classNames("field", keysByPriority[priority])}
              onClick={() => this.props.toggleIncludedTaskPriority(priority)}>
           <input className="is-checkradio is-circle has-background-color is-success"
@@ -181,16 +201,18 @@ export class ViewChallengeTasks extends Component {
             <FormattedMessage {...messagesByPriority[priority]} />
           </label>
         </div>
-      </div>
+      </li>
     )))
 
     const filterOptions = {
       includeStatuses: this.props.includeTaskStatuses,
+      includeReviewStatuses: this.props.includeTaskReviewStatuses,
       withinBounds: this.props.mapBounds,
     }
 
 
     const localizedStatusLabels = statusLabels(this.props.intl)
+    const localizedReviewStatusLabels = reviewStatusLabels(this.props.intl)
     const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
 
     const taskSelectionActions =
@@ -200,6 +222,13 @@ export class ViewChallengeTasks extends Component {
         status,
         statusAction: true,
       })
+    ).concat(
+      _map(TaskReviewStatusWithUnset, status => ({
+        key: `review-status-${status}`,
+        text: localizedReviewStatusLabels[keysByReviewStatus[status]],
+        status,
+        statusAction: true,
+      }))
     ).concat(
       _map(TaskPriority, priority => ({
         key: `priority-${priority}`,
@@ -235,13 +264,17 @@ export class ViewChallengeTasks extends Component {
                             {...this.props} />
         </MapPane>
 
-        <div className="filter-set">
+        <ul className="filter-set">
           {statusFilters}
-        </div>
+        </ul>
 
-        <div className="filter-set centered">
+        <ul className="filter-set">
+          {reviewStatusFilters}
+        </ul>
+
+        <ul className="filter-set centered">
           {priorityFilters}
-        </div>
+        </ul>
 
         {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
          <div className="admin__manage-tasks__task-controls">
@@ -306,8 +339,12 @@ ViewChallengeTasks.propTypes = {
   refreshChallenge: PropTypes.func.isRequired,
   /** Object enumerating whether each task status filter is on or off. */
   includeTaskStatuses: PropTypes.object,
+  /** Object enumerating whether each task review status filter is on or off. */
+  includeTaskReviewStatuses: PropTypes.object,
   /** Invoked to toggle filtering of a task status on or off */
   toggleIncludedTaskStatus: PropTypes.func.isRequired,
+  /** Invoked to toggle filtering of a task review status on or off */
+  toggleIncludedTaskReviewStatus: PropTypes.func.isRequired,
   /** Latest bounds of the challenge-owner map */
   mapBounds: PropTypes.object,
   /** Latest zoom of the challenge-owner map */

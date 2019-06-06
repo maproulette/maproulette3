@@ -10,6 +10,8 @@ export const REVIEW_STATUS_REJECTED = 2
 export const REVIEW_STATUS_APPROVED_WITH_FIXES = 3
 export const REVIEW_STATUS_DISPUTED = 4
 
+export const REVIEW_STATUS_NOT_SET = -1
+
 export const TaskReviewStatus = Object.freeze({
   needed: REVIEW_STATUS_NEEDED,
   approved: REVIEW_STATUS_APPROVED,
@@ -18,7 +20,16 @@ export const TaskReviewStatus = Object.freeze({
   disputed: REVIEW_STATUS_DISPUTED,
 })
 
-export const keysByReviewStatus = Object.freeze(_invert(TaskReviewStatus))
+export const TaskReviewStatusWithUnset = Object.freeze({
+  needed: REVIEW_STATUS_NEEDED,
+  approved: REVIEW_STATUS_APPROVED,
+  rejected: REVIEW_STATUS_REJECTED,
+  approvedWithFixes: REVIEW_STATUS_APPROVED_WITH_FIXES,
+  disputed: REVIEW_STATUS_DISPUTED,
+  unset: REVIEW_STATUS_NOT_SET,
+})
+
+export const keysByReviewStatus = Object.freeze(_invert(TaskReviewStatusWithUnset))
 
 /**
  * Returns true if the given status represents a status where review is needed.
@@ -39,7 +50,7 @@ export const hasBeenReviewed = function(status) {
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesByReviewStatus = _fromPairs(
-  _map(messages, (message, key) => [TaskReviewStatus[key], message])
+  _map(messages, (message, key) => [TaskReviewStatusWithUnset[key], message])
 )
 
 /** Returns object containing localized labels  */
