@@ -46,11 +46,12 @@ export default function(WrappedComponent,
         pagedProjects = pinnedProjects.concat(pagedProjects)
       }
       else {
-         // Otherwise sort by the fuzzy search score. We want to move any matching
-         // challenges (and their project parents) up toward the top of the results.
+        // Otherwise sort by the fuzzy search score. We want to promote high
+        // challenge scores to their parent projects so they show up in an
+        // appropriate place in the list
         _each(this.props.filteredChallenges, (c) => {
           const parent = _find(pagedProjects, (p) => p.id === (_isObject(c.parent) ? c.parent.id : c.parent))
-          if (parent && (!parent.score || c.score < parent.score)) {
+          if (parent && (!parent.score || c.score > parent.score)) {
             parent.score = c.score
           }
         })
