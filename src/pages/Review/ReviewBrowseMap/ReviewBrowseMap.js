@@ -148,7 +148,7 @@ export class ReviewBrowseMap extends Component {
     )
 
     if (!this.currentBounds && _get(this.props, 'reviewCriteria.boundingBox')) {
-      const bbox = _get(this.props, 'reviewCriteria.boundingBox').split(',')
+      const bbox = this.props.reviewCriteria.boundingBox.split(',')
       this.currentBounds = toLatLngBounds(bbox)
     }
 
