@@ -91,7 +91,7 @@ test("mapDispatchToProps completeTask calls completeTask", () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(dispatch).toBeCalled()
   expect(completeTask).toBeCalledWith(task.id, challenge.id, completionStatus)
 })
@@ -105,8 +105,8 @@ test("completeTask calls addComment if comment present",  async () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(task.id, challenge.id, completionStatus, comment)
-  expect(addTaskComment).toHaveBeenLastCalledWith(task.id, comment, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus, comment)
+  expect(addTaskComment).toHaveBeenLastCalledWith(task, comment, completionStatus)
 })
 
 test("completeTask does not call addComment if no comment", async () => {
@@ -119,7 +119,7 @@ test("completeTask does not call addComment if no comment", async () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(addTaskComment).not.toHaveBeenCalled()
 })
 
@@ -131,7 +131,7 @@ test("completeTask calls loadRandomTaskFromChallenge without proximate task by d
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, undefined)
 })
 
@@ -143,7 +143,7 @@ test("completeTask calls loadRandomTaskFromChallenge with task if proximate load
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  await mappedProps.completeTask(task.id, challenge.id,
+  await mappedProps.completeTask(task, challenge.id,
                            completionStatus, "", TaskLoadMethod.proximity)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, task.id)
 })
@@ -155,7 +155,7 @@ test("completeTask calls fetchChallengeActions", () => {
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
-  mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  mappedProps.completeTask(task, challenge.id, completionStatus)
   jest.runOnlyPendingTimers()
 
   expect(fetchChallengeActions).toBeCalledWith(challenge.id)
@@ -173,7 +173,7 @@ test("completeTask routes the user to the new task if there is one", async () =>
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(history.push).toBeCalledWith(`/challenge/${challenge.id}/task/${nextTask.id}`)
 })
 
@@ -190,7 +190,7 @@ test("completeTask routes the user to the new task in a virtual challenge", asyn
   const mappedProps =
     mapDispatchToProps(dispatch, {history, virtualChallengeId: virtualChallenge.id})
 
-  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(history.push).toBeCalledWith(`/virtual/${virtualChallenge.id}/task/${nextTask.id}`)
 })
 
@@ -206,7 +206,7 @@ test("completeTask routes the user home if the next task isn't new", async () =>
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(history.push).toBeCalledWith('/browse/challenges', {congratulate: true})
 })
 
@@ -220,6 +220,6 @@ test("completeTask routes the user home if there is no next task", async () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(task.id, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(history.push).toBeCalledWith('/browse/challenges', {congratulate: true})
 })
