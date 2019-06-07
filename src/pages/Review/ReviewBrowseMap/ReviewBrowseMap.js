@@ -147,6 +147,11 @@ export class ReviewBrowseMap extends Component {
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
 
+    if (!this.currentBounds && _get(this.props, 'reviewCriteria.boundingBox')) {
+      const bbox = _get(this.props, 'reviewCriteria.boundingBox').split(',')
+      this.currentBounds = toLatLngBounds(bbox)
+    }
+
     const map =
       <EnhancedMap className="mr-z-0"
                    center={latLng(0, 0)}
