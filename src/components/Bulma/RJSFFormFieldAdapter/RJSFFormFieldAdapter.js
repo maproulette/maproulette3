@@ -15,45 +15,6 @@ import 'react-tagsinput/react-tagsinput.css'
 import './RJSFFormFieldAdapter.scss'
 
 /**
- * CustomFieldTemplate returns an appropriate input field template for the
- * given react-jsonschema-form field data that is structured in a mostly
- * Bulma-compliant manner using Bulma classes. We don't have complete control
- * over the markup, so in some cases it's an approximation and we rely on the
- * css styling to fix things up.
- *
- * @see See [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form)
- */
-export const CustomFieldTemplate = props => {
-  // If the field has errors, mark the form context to let it know the
-  // form is not valid. This is necessary because, even though RJSF performs
-  // field-level validation at initialization, it does not inform any top-level
-  // handlers of these errors until the data is actually modified by the user.
-  if (_get(props, 'rawErrors.length', 0) > 0) {
-    props.formContext.isValid = false
-  }
-
-  // RJSF starts with an artificial 'root' field. We basically ignore it,
-  // just rendering the children within a wrapper div.
-  if (props.id === 'root') {
-    return <div className="form-fields-wrapper">{props.children}</div>
-  }
-
-  // Decide which template to render based on the ui:widget field in the
-  // given uiSchema. It's recommended that an explicit widget type is set
-  // in the uiSchema for anything other than a basic text input in order
-  // to ensure the proper template is used.
-  switch(_get(props, 'uiSchema.ui:widget')) {
-    case 'select':
-      return SelectField(props)
-    case 'checkbox':
-    case 'radio':
-      return CheckboxField(props)
-    default:
-      return InputField(props)
-  }
-}
-
-/**
  * fieldset tags can't be styled using flexbox or grid in Chrome, so this
  * template attempts to render the fields the same way as the default but using
  * a div with class "fieldset" instead of a fieldset. To use it, set
@@ -145,28 +106,6 @@ export const CustomSelectWidget = function(props) {
 }
 
 /**
- * SelectField is a Bulma template for RJSF select fields
- */
-export const SelectField = ({id, label, required, rawDescription, children}) => (
-  <div className="field is-horizontal">
-    <div className="field-label">
-      <label className="label">
-        {label}
-        {required ? <span className='required'>*</span> : null}
-      </label>
-    </div>
-    <div className="field-body">
-      <div className="field">
-        <div className="control">
-          <div className="select">{children}</div>
-          <MarkdownContent className="help" markdown={rawDescription} />
-        </div>
-      </div>
-    </div>
-  </div>
-)
-
-/**
  * MarkdownEditField renders a textarea and markdown preview side-by-side.
  */
 export class MarkdownEditField extends Component {
@@ -190,36 +129,6 @@ export class MarkdownEditField extends Component {
   }
 }
 
-/**
- * InputField is a Bulma template for RJSF text input fields. It's also compatible
- * with textarea fields with some css tweaks.
- */
-export const InputField = ({id, label, required, rawDescription, rawErrors, children}) => (
-  <div className="field is-horizontal">
-    <div className="field-label">
-      <label className="label">
-        {label}
-        {required ? <span className='required'>*</span> : null}
-      </label>
-    </div>
-    <div className="field-body">
-      <div className="field">
-        <div className="control">
-          {_get(rawErrors, 'length', 0) > 0 &&
-            <div className="errors">
-              {_map(rawErrors, (error, index) =>
-                <div className="error" key={index}>{error}</div>
-              )}
-            </div>
-          }
-          {children}
-          <MarkdownContent className="help" markdown={rawDescription} />
-        </div>
-      </div>
-    </div>
-  </div>
-)
-
 export const TagsInputField = props => {
   return (
     <div className="tags-field">
@@ -231,29 +140,6 @@ export const TagsInputField = props => {
     </div>
   )
 }
-
-/**
- * CheckboxField is a Bulma template for RJSF checkbox fields. It's also compatible
- * with radio group fields with some css tweaks.
- */
-export const CheckboxField = ({id, label, required, rawDescription, children}) => (
-  <div className="field is-horizontal">
-    <div className="field-label">
-      <label className="label">
-        {label}
-        {required ? <span className='required'>*</span> : null}
-      </label>
-    </div>
-    <div className="field-body">
-      <div className="field">
-        <div className="control">
-          {children}
-          <MarkdownContent className="help" markdown={rawDescription} />
-        </div>
-      </div>
-    </div>
-  </div>
-)
 
 /**
  * Provides a custom Dropzone widget for extracting *text* content (like

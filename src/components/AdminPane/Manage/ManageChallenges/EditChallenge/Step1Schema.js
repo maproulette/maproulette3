@@ -153,7 +153,7 @@ export const uiSchema = (intl, user, challengeData) => {
     },
     instruction: {
       "ui:field": "markdown",
-      "ui:help": intl.formatMessage(messages.instructionDescription),
+      "ui:help": intl.formatMessage(messages.instructionDescription, {dummy: ''}),
     },
     difficulty: {
       "ui:widget": "select",
