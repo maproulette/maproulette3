@@ -14,6 +14,7 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromVirtualChallenge,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
+import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
@@ -172,10 +173,11 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (taskId, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
-      return dispatch(
-        completeTask(taskId, challengeId, taskStatus, needsReview)
-      ).then(() => {
+    completeTask: (task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
+      const taskId = task.id
+
+      // Work to be done after the status is set
+      const doAfter = () => {
         if (taskLoadBy) {
           // Start loading the next task from the challenge.
           nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
@@ -202,7 +204,17 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         if (_isFinite(ownProps.virtualChallengeId)) {
           setTimeout(() => dispatch(renewVirtualChallenge(ownProps.virtualChallengeId)), 1000)
         }
-      })
+      }
+
+      if (taskStatus === TaskStatus.skipped && task.taskStatus !== TaskStatus.created) {
+        // Skipping task that already has a status
+        return doAfter()
+      }
+      else {
+        return dispatch(
+          completeTask(taskId, challengeId, taskStatus, needsReview)
+        ).then(doAfter())
+      }
     },
 
     /**
