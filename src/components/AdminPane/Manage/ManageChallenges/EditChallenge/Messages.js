@@ -86,6 +86,9 @@ export default defineMessages({
     defaultMessage: "Instructions",
   },
 
+  // Note: dummy variable included to workaround react-intl
+  // [bug 1158](https://github.com/yahoo/react-intl/issues/1158)
+  // Just pass in an empty string for its value
   instructionDescription: {
     id: 'Admin.EditChallenge.form.instruction.description',
     defaultMessage: "The instruction tells a mapper how to resolve a Task in " +
@@ -96,7 +99,7 @@ export default defineMessages({
       "this field supports Markdown. You can also reference feature properties " +
       "from your GeoJSON with simple mustache tags: e.g. `\\{\\{address\\}\\}` would be " +
       "replaced with the value of the `address` property, allowing for basic " +
-      "customization of instructions for each task. This field is required.",
+      "customization of instructions for each task. This field is required. {dummy}",
   },
 
   checkinCommentLabel: {
