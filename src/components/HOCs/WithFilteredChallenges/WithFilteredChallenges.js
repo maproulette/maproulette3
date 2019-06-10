@@ -9,11 +9,14 @@ import { challengePassesKeywordFilter }
        from '../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import { challengePassesLocationFilter }
        from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
+import { challengePassesProjectFilter }
+       from '../../../services/Challenge/ChallengeProject/ChallengeProject'
 
 const allFilters = [
   challengePassesDifficultyFilter,
   challengePassesKeywordFilter,
   challengePassesLocationFilter,
+  challengePassesProjectFilter,
 ]
 
 /**

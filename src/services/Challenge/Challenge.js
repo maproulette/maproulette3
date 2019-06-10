@@ -225,7 +225,7 @@ export const performChallengeSearch = function(searchObject, limit=RESULTS_PER_P
  * @param {object} criteria - criteria to include in search. Can include keys:
  *                            'searchQuery', 'filters', 'onlyEnabled', 'bounds'
  *                            'sortCriteria.sortBy', 'sortCrtiera.direction',
-                              'page','challengeStatus'
+                              'page', 'challengeStatus'
  * @param {number} limit
  */
 export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
@@ -247,6 +247,7 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
     // setup query parameters desired by server.
     // ce: limit to enabled challenges
     // pe: limit to enabled projects
+    // ps: limit to projects matching name search
     // cs: query string
     // cd: challenge difficulty
     // ct: keywords/tags (comma-separated string)
@@ -258,6 +259,10 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
 
     if (_isFinite(filters.difficulty)) {
       queryParams.cd = filters.difficulty
+    }
+
+    if (_isString(filters.project)) {
+      queryParams.ps = filters.project
     }
 
     // Keywords/tags can come from both the the query and the filter, so we need to
