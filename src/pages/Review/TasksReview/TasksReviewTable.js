@@ -102,6 +102,13 @@ export class TaskReviewTable extends Component {
                    columnTypes.reviewedAt, columnTypes.status, columnTypes.reviewerControls,
                    columnTypes.viewComments]
         break
+      case ReviewTasksType.allReviewedTasks:
+        subheader = <FormattedMessage {...messages.allReviewedTasks} />
+        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
+                   columnTypes.challenge, columnTypes.project, columnTypes.mappedOn,  columnTypes.reviewedBy,
+                   columnTypes.reviewedAt, columnTypes.status, columnTypes.mapperControls,
+                   columnTypes.viewComments]
+        break
       case ReviewTasksType.myReviewedTasks:
       default:
         subheader = <FormattedMessage {...messages.myReviewTasks} />
@@ -245,7 +252,7 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria, page
     maxWidth: 180,
     Cell: ({row}) =>
       <div className="row-user-column">
-        {row._original.reviewRequestedBy.username}
+        {_get(row._original.reviewRequestedBy, 'username')}
       </div>
   }
 
@@ -363,7 +370,8 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria, page
       ]
 
       if (props.reviewTasksType === ReviewTasksType.reviewedByMe ||
-          props.reviewTasksType === ReviewTasksType.myReviewedTasks) {
+          props.reviewTasksType === ReviewTasksType.myReviewedTasks ||
+          props.reviewTasksType === ReviewTasksType.allReviewedTasks) {
         _each(TaskReviewStatus, (status) => {
           options.push(
             <option key={keysByReviewStatus[status]} value={status}>

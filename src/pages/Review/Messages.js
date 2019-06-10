@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Review.Dashboard.myReviewTasks",
     defaultMessage: "My Reviewed Tasks",
   },
+
+  allReviewedTasks: {
+    id: "Review.Dashboard.allReviewedTasks",
+    defaultMessage: "All Reviewed Tasks",
+  },
 })

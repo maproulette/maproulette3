@@ -95,6 +95,11 @@ export class ReviewTasksDashboard extends Component {
             {this.props.intl.formatMessage(messages.myReviewTasks)}
           </button>
         </li>
+        <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
+          <button className={classNames(this.state.showType === 'allReviewedTasks' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.allReviewedTasks})}>
+            {this.props.intl.formatMessage(messages.allReviewedTasks)}
+          </button>
+        </li>
       </ol>
 
     const notReviewerTabs =
