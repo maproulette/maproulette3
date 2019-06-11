@@ -213,7 +213,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       else {
         return dispatch(
           completeTask(taskId, challengeId, taskStatus, needsReview)
-        ).then(doAfter())
+        ).then(() => doAfter())
       }
     },
 
