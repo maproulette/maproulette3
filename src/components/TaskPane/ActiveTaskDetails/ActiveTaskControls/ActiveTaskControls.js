@@ -72,9 +72,17 @@ export class ActiveTaskControls extends Component {
     this.setState({revisionLoadBy: loadMethod})
   }
 
+  chooseNextTask = (challengeId, isVirtual, taskId) => {
+    this.setState({requestedNextTask: taskId})
+  }
+
+  clearNextTask = () => {
+    this.setState({requestedNextTask: null})
+  }
+
   /** Indicate the editor has been closed without completing the task */
   cancelEditing = () => {
-    this.setState({taskBeingCompleted: null})
+    this.setState({taskBeingCompleted: null, requestedNextTask: null})
     this.props.closeEditor()
   }
 
@@ -90,9 +98,10 @@ export class ActiveTaskControls extends Component {
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
                               taskStatus, this.state.comment,
-                              revisionSubmission? null : this.props.taskLoadBy,
+                              revisionSubmission ? null : this.props.taskLoadBy,
                               this.props.user.id,
-                              revisionSubmission || this.state.needsReview)
+                              revisionSubmission || this.state.needsReview,
+                              this.state.requestedNextTask)
       if (revisionSubmission) {
         if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
           this.props.history.push('/inbox')
@@ -118,7 +127,12 @@ export class ActiveTaskControls extends Component {
   }
 
   resetConfirmation = () => {
-    this.setState({confirmingTask: null, confirmingStatus: null, comment: ""})
+    this.setState({
+      confirmingTask: null,
+      confirmingStatus: null,
+      requestedNextTask: null,
+      comment: "",
+    })
   }
 
   /** Move to the next task without modifying the task status */
@@ -221,7 +235,6 @@ export class ActiveTaskControls extends Component {
           {this.state.confirmingTask &&
             <TaskConfirmationModal
               {...this.props}
-              task={this.state.taskBeingComfirmed}
               status={this.state.confirmingStatus}
               comment={this.state.comment}
               setComment={this.setComment}
@@ -230,6 +243,9 @@ export class ActiveTaskControls extends Component {
               loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
               chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
                                                  this.chooseLoadBy(load)}
+              chooseNextTask={this.chooseNextTask}
+              clearNextTask={this.clearNextTask}
+              requestedNextTask={this.state.requestedNextTask}
               onConfirm={this.confirmCompletion}
               onCancel={this.resetConfirmation}
               needsRevised={this.state.submitRevision}

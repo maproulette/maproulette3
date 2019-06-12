@@ -73,9 +73,9 @@ export class TaskPane extends Component {
    * WithCurrentTask, but we intercept the call so that we can manage our
    * transition animation as the task prepares to complete.
    */
-  completeTask = (task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
+  completeTask = (task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview, requestedNextTask) => {
     this.setState({completingTask: task.id})
-    this.props.completeTask(task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview)
+    this.props.completeTask(task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview, requestedNextTask)
   }
 
   clearCompletingTask = () => {

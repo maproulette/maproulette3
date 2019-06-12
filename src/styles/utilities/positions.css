@@ -19,12 +19,24 @@
     left: 16%;
   }
 
+  .mr-pin-l-30 {
+    left: 30%;
+  }
+
+  .mr-pin-l-33 {
+    left: 33%;
+  }
+
   .mr-pin-t-50 {
     top: 50%;
   }
 
   .mr-pin-t-20 {
     top: 20%;
+  }
+
+  .mr-pin-t-15 {
+    top: 15%;
   }
 
   .mr--translate-1\/2 {

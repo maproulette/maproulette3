@@ -7911,10 +7911,9 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-leaflet-vectoricon@^0.2.0:
+"leaflet-vectoricon@https://github.com/nrotstan/Leaflet.VectorIcon.git#with-viewbox":
   version "0.2.0"
-  resolved "https://registry.yarnpkg.com/leaflet-vectoricon/-/leaflet-vectoricon-0.2.0.tgz#82ba887a6cbb1862949538a87bcbd5085d7354d5"
-  integrity sha1-grqIemy7GGKUlTioe8vVCF1zVNU=
+  resolved "https://github.com/nrotstan/Leaflet.VectorIcon.git#d68290932dcb0fb05c04bce06d1cd3e856ce59b2"
 
 leaflet.markercluster@^1.4.1:
   version "1.4.1"
