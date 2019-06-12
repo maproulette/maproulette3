@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
@@ -41,6 +40,7 @@ import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
 import { geoJson } from 'leaflet'
+import Dropdown from '../../../Dropdown/Dropdown'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
@@ -160,47 +160,38 @@ export class ViewChallengeTasks extends Component {
     }
 
     const statusFilters = _map(TaskStatus, status => (
-      <li key={status} className="filter-option status-filter is-narrow">
-        <div className={classNames("field", keysByStatus[status])}
-             onClick={() => this.props.toggleIncludedTaskStatus(status)}>
-          <input className="is-checkradio is-circle has-background-color is-success"
-                 type="checkbox"
-                 checked={this.props.includeTaskStatuses[status]}
-                 onChange={() => null} />
-          <label>
-            <FormattedMessage {...messagesByStatus[status]} />
-          </label>
-        </div>
+      <li key={status}>
+        <label className="mr-flex mr-items-center">
+          <input className="mr-mr-2"
+            type="checkbox"
+            checked={this.props.includeTaskStatuses[status]}
+            onChange={() => this.props.toggleIncludedTaskStatus(status)} />
+           <FormattedMessage {...messagesByStatus[status]} />
+        </label>
       </li>
     ))
 
     const reviewStatusFilters = _map(TaskReviewStatusWithUnset, status => (
-      <li key={status} className="filter-option status-filter is-narrow">
-        <div className={classNames("field", keysByReviewStatus[status])}
-             onClick={() => this.props.toggleIncludedTaskReviewStatus(status)}>
-          <input className="is-checkradio is-circle has-background-color is-success"
-                 type="checkbox"
-                 checked={this.props.includeTaskReviewStatuses[status]}
-                 onChange={() => null} />
-          <label>
-            <FormattedMessage {...messagesByReviewStatus[status]} />
-          </label>
-        </div>
+      <li key={status}>
+        <label className="mr-flex mr-items-center">
+          <input className="mr-mr-2"
+            type="checkbox"
+            checked={this.props.includeTaskReviewStatuses[status]}
+            onChange={() => this.props.toggleIncludedTaskReviewStatus(status)} />
+          <FormattedMessage {...messagesByReviewStatus[status]} />
+        </label>
       </li>
     ))
 
     const priorityFilters = _reverse(_map(TaskPriority, priority => (
-      <li key={priority} className="filter-option priority-filter is-narrow">
-        <div className={classNames("field", keysByPriority[priority])}
-             onClick={() => this.props.toggleIncludedTaskPriority(priority)}>
-          <input className="is-checkradio is-circle has-background-color is-success"
-                 type="checkbox"
-                 checked={this.props.includeTaskPriorities[priority]}
-                 onChange={() => null} />
-          <label>
-            <FormattedMessage {...messagesByPriority[priority]} />
-          </label>
-        </div>
+      <li key={priority}>
+        <label className="mr-flex mr-items-center">
+          <input className="mr-mr-2"
+            type="checkbox"
+            checked={this.props.includeTaskPriorities[priority]}
+            onChange={() => this.props.toggleIncludedTaskPriority(priority)} />
+          <FormattedMessage {...messagesByPriority[priority]} />
+        </label>
       </li>
     )))
 
@@ -239,12 +230,14 @@ export class ViewChallengeTasks extends Component {
     )
 
     const clearFiltersControl = (
-      <button className="button is-clear has-svg-icon admin__manage-tasks__task-controls__clear-filters-control"
-              onClick={() => {
-                this.props.clearAllFilters()
-                this.resetMapBounds()
-              }}>
-        <SvgSymbol viewBox='0 0 20 20' sym="close-icon" />
+      <button className="mr-flex mr-items-center mr-text-blue-light"
+        onClick={() => {
+          this.props.clearAllFilters()
+          this.resetMapBounds()
+        }}>
+        <SvgSymbol sym="close-icon" 
+          viewBox='0 0 20 20'  
+          className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
         <FormattedMessage {...messages.clearFiltersLabel} />
       </button>
     )
@@ -255,27 +248,88 @@ export class ViewChallengeTasks extends Component {
 
         <MapPane>
           <ChallengeTaskMap taskInfo={this.props.taskInfo}
-                            setChallengeOwnerMapBounds={this.props.setChallengeOwnerMapBounds}
-                            lastBounds={this.props.mapBounds}
-                            lastZoom={this.props.mapZoom}
-                            statusColors={statusColors}
-                            filterOptions={filterOptions}
-                            monochromaticClusters
-                            {...this.props} />
+            setChallengeOwnerMapBounds={this.props.setChallengeOwnerMapBounds}
+            lastBounds={this.props.mapBounds}
+            lastZoom={this.props.mapZoom}
+            statusColors={statusColors}
+            filterOptions={filterOptions}
+            monochromaticClusters
+            {...this.props} />
         </MapPane>
 
-        <ul className="filter-set">
-          {statusFilters}
-        </ul>
+        <div className="mr-my-4 xl:mr-flex mr-justify-between">
+          <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
+            <li className="md:mr-mr-8">
+              <Dropdown
+                className="mr-dropdown--right"
+                dropdownButton={dropdown => (
+                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
+                    <span className="mr-text-base mr-uppercase mr-mr-1">
+                      <FormattedMessage {...messages.filterByStatusLabel} />
+                    </span>
+                    <SvgSymbol
+                      sym="icon-cheveron-down"
+                      viewBox="0 0 20 20"
+                      className="mr-fill-current mr-w-5 mr-h-5"
+                    />
+                  </button>
+                )}
+                dropdownContent={() =>
+                  <ul className="mr-list-dropdown">
+                    {statusFilters}
+                  </ul>
+                }
+              />            
+            </li>
+            <li className="md:mr-mr-8">
+              <Dropdown
+                className="mr-dropdown--right"
+                dropdownButton={dropdown => (
+                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
+                    <span className="mr-text-base mr-uppercase mr-mr-1">
+                    <FormattedMessage {...messages.filterByReviewStatusLabel} />
+                    </span>
+                    <SvgSymbol
+                      sym="icon-cheveron-down"
+                      viewBox="0 0 20 20"
+                      className="mr-fill-current mr-w-5 mr-h-5"
+                    />
+                  </button>
+                )}
+                dropdownContent={() =>
+                  <ul className="mr-list-dropdown">
+                    {reviewStatusFilters}
+                  </ul>
+                }
+              />
+            </li>
+            <li>
+              <Dropdown
+                className="mr-dropdown--right"
+                dropdownButton={dropdown => (
+                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
+                    <span className="mr-text-base mr-uppercase mr-mr-1">
+                      <FormattedMessage {...messages.sortByPriorityLabel} />
+                    </span>
+                    <SvgSymbol
+                      sym="icon-cheveron-down"
+                      viewBox="0 0 20 20"
+                      className="mr-fill-current mr-w-5 mr-h-5"
+                    />
+                  </button>
+                )}
+                dropdownContent={() =>
+                  <ul className="mr-list-dropdown">
+                    {priorityFilters}
+                  </ul>
+                }
+              />
+            </li>
+          </ul>
 
-        <ul className="filter-set">
-          {reviewStatusFilters}
-        </ul>
-
-        <ul className="filter-set centered">
-          {priorityFilters}
-        </ul>
-
+          {_get(this.props, 'clusteredTasks.tasks.length') !== _get(this.props, 'taskInfo.tasks.length', 0) ? clearFiltersControl : null}
+        </div>
+    
         {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
          <div className="admin__manage-tasks__task-controls">
            <div className="admin__manage-tasks__task-controls__selection"
@@ -316,9 +370,8 @@ export class ViewChallengeTasks extends Component {
         }
 
         <TaskAnalysisTable filterOptions={filterOptions}
-                           totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
-                           clearFiltersControl={clearFiltersControl}
-                           {...this.props} />
+          totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
+          {...this.props} />
       </div>
     )
   }

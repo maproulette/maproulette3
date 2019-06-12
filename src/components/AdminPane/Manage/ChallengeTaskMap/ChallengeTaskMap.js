@@ -294,14 +294,12 @@ export class ChallengeTaskMap extends Component {
       <div key={this.props.challenge.id}
            className={classNames('challenge-task-map', this.props.className)}>
         {canUncluster &&
-         <div className="field cluster-tasks-control" onClick={this.toggleClusterTasks}>
-           <input type="checkbox" className="switch is-rounded short-and-wide"
-                   checked={this.state.clusterTasks}
-                   onChange={() => null} />
-           <label>
-             <FormattedMessage {...messages.clusterTasksLabel } />
-           </label>
-         </div>
+         <label className="mr-absolute mr-z-10 mr-pin-b mr-pin-l mr-mb-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
+            <input type="checkbox" className="mr-mr-2"
+              checked={this.state.clusterTasks}
+              onChange={this.toggleClusterTasks} />
+            <FormattedMessage {...messages.clusterTasksLabel } />
+          </label>
         }
 
         <LayerToggle {...this.props} />

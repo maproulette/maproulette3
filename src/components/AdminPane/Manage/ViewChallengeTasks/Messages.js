@@ -73,6 +73,21 @@ export default defineMessages({
     defaultMessage: "Export CSV",
   },
 
+  filterByStatusLabel: {
+    id: "Admin.manageTasks.controls.filterByStatus.label",
+    defaultMessage: "Filter by Status",
+  },
+
+  filterByReviewStatusLabel: {
+    id: "Admin.manageTasks.controls.filterByReviewStatus.label",
+    defaultMessage: "Filter by Review Status",
+  },
+
+  sortByPriorityLabel: {
+    id: "Admin.manageTasks.controls.sortByPriority.label",
+    defaultMessage: "Sort by Priority",
+  },
+  
   clearFiltersLabel: {
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",

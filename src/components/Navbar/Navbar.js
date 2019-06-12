@@ -176,7 +176,7 @@ const UnreadNotificationsIndicator = function(props) {
 
 const ProfileMenu = function(props) {
   return (
-    <ol className="mr-list-dropdown mr-list-dropdown--nav">
+    <ol className="mr-list-dropdown">
       <li>
         <NavLink to="/inbox" onClick={props.closeDropdown}>
           <FormattedMessage {...messages.inbox} />
