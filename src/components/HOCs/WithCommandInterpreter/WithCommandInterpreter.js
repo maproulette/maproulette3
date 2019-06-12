@@ -18,6 +18,7 @@ import AppErrors from '../../../services/Error/AppErrors'
  * Supported Actions:
  *    m/  => Execute a map bounds search with either a bounding box or a centerpoint
  *    n/  => Execute a nominatim search and move map bounds
+ *    p/  => Execute project name search
  *    s/ or default => Execute a standard search query
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
@@ -31,27 +32,26 @@ const WithCommandInterpreter = function(WrappedComponent) {
     }
 
     executeSearch = commandString => {
-      if (this.state.searchActive || commandString.length <= 2) {
-        // executeCommmand either runs the command or runs a search. It returns
-        // true if it ran a search, false if it ran a command
-        const wasStandardSearch = executeCommand(this.props, commandString)
-        this.setState({
-          commandString: wasStandardSearch ? null : commandString,
-          searchActive: wasStandardSearch,
-        })
-      }
-      else {
-        this.setState({commandString})
-      }
+      // executeCommmand either runs the command or runs a standard challenge
+      // search. It returns true if it ran a search, false if it ran a command
+      const wasStandardSearch = executeCommand(this.props, commandString, false, false)
+      this.setState({
+        commandString: wasStandardSearch ? null : commandString,
+        searchActive: wasStandardSearch,
+      })
     }
 
     clearSearch = commandString => {
+      // Temporary: until we add an Advanced Search dialog where a user can
+      // clear a project search filter, we need to do it explicitly here
+      this.props.removeSearchFilters(['project'])
+
       this.props.clearSearch()
       this.setState({commandString: null, searchActive: true})
     }
 
     deactivate = () => {
-      executeCommand(this.props, this.state.commandString, (loading) => this.setState({mapLoading: loading}))
+      executeCommand(this.props, this.state.commandString, (loading) => this.setState({mapLoading: loading}), true)
     }
 
     render() {
@@ -74,26 +74,40 @@ const WithCommandInterpreter = function(WrappedComponent) {
 }
 
 /**
- * Executes the appropriate search type based on the start of
- * the query string
+ * Executes the appropriate search type based on the start of the query string.
+ * If isComplete is set to true then the user has indicated the search string is
+ * complete; otherwise user may be in the middle of typing/constructing their
+ * search
  *
  * @return boolean - Whether this was a typical search or a command search
  */
-export const executeCommand = (props, commandString, setLoading) => {
+export const executeCommand = (props, commandString, setLoading, isComplete=false) => {
   const command = commandString.length >= 2 ? commandString.substring(0, 2) : null
   let query = commandString.substring(2)
+
+  // Temporary: until we add an Advanced Search dialog where a user can clear a
+  // project search filter, we need to do it explicitly here if needed
+  if (command !== '/p') {
+    props.removeSearchFilters(['project'])
+  }
 
   switch(command) {
     case 'm/':
       props.setSearch("")  // We need to clear the initial 'm' from the query
-      if (query.length > 0) {
+      if (isComplete && query.length > 0) {
         debouncedMapSearch(props, query, setLoading)
       }
       return false
     case 'n/':
       props.setSearch("") // We need to clear the initial 'n' from the query
-      if (query.length > 0) {
+      if (isComplete && query.length > 0) {
         debouncedPlaceSearch(props, query, setLoading)
+      }
+      return false
+    case 'p/':
+      props.setSearch("") // We need to clear the initial 'p' from the query
+      if (query.length > 0) {
+        props.setSearchFilters({project: query})
       }
       return false
     case 's/':
@@ -184,8 +198,8 @@ export const executePlaceSearch = (props, query, setLoading) => {
 }
 
 /**
-* Returns the bouding box from the given centerpoint coordinates
-*/
+ * Returns the bouding box from the given centerpoint coordinates
+ */
 const determineBoundingBox = (centerpointLong, centerpointLat) => {
   const bboxWidth = parseFloat(process.env.REACT_APP_NEARBY_LONGITUDE_LENGTH)
   const bboxHeight = parseFloat(process.env.REACT_APP_NEARBY_LATITUDE_LENGTH)
