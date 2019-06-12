@@ -23,10 +23,13 @@ import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
+import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
 import TaskUploadingProgress
        from '../TaskUploadingProgress/TaskUploadingProgress'
+import TaskDeletingProgress
+       from '../TaskDeletingProgress/TaskDeletingProgress'
 import Dropdown from '../../../Dropdown/Dropdown'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -85,6 +88,11 @@ export class ChallengeDashboard extends Component {
   render() {
     if (!this.props.challenge) {
       return <BusySpinner />
+    }
+
+    const isDeletingTasks = _get(this.props, 'progress.deletingTasks.inProgress', false)
+    if (isDeletingTasks) {
+      return <TaskDeletingProgress {...this.props} />
     }
 
     const isUploadingTasks = _get(this.props, 'progress.creatingTasks.inProgress', false)
@@ -244,20 +252,23 @@ ChallengeDashboard.propTypes = {
 export default
 WithManageableProjects(
   WithCurrentProject(
-    WithCurrentChallenge(
-      WithWidgetWorkspaces(
-        WithFilteredClusteredTasks(
-          WithChallengeMetrics(
-            injectIntl(ChallengeDashboard),
+    WithSearch(
+      WithCurrentChallenge(
+        WithWidgetWorkspaces(
+          WithFilteredClusteredTasks(
+            WithChallengeMetrics(
+              injectIntl(ChallengeDashboard),
+            ),
+            'clusteredTasks',
+            'filteredClusteredTasks',
           ),
-          'clusteredTasks',
-          'filteredClusteredTasks',
+          WidgetDataTarget.challenge,
+          DASHBOARD_NAME,
+          defaultDashboardSetup
         ),
-        WidgetDataTarget.challenge,
-        DASHBOARD_NAME,
-        defaultDashboardSetup
+        true
       ),
-      true
+      'challengeOwner'
     )
   )
 )

@@ -304,7 +304,7 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
  * Fetch action metrics for the given challenge (or all challenges
  * if none is given).
  */
-export const fetchChallengeActions = function(challengeId = null) {
+export const fetchChallengeActions = function(challengeId = null, suppressReceive = false) {
   return function(dispatch) {
     const challengeActionsEndpoint = new Endpoint(
       _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
@@ -327,7 +327,10 @@ export const fetchChallengeActions = function(challengeId = null) {
         }
       }
 
-      dispatch(receiveChallenges(normalizedResults.entities))
+      if (!suppressReceive) {
+        dispatch(receiveChallenges(normalizedResults.entities))
+      }
+      return normalizedResults
     }).catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>

@@ -293,17 +293,6 @@ form.rjsf {
     &.active {
       border-color: $green;
     }
-
-    svg {
-      margin-top: 10px;
-      width: 20px;
-      height: auto;
-      fill: $green;
-
-      &.success {
-        width: 30px;
-      }
-    }
   }
 
   .react-tagsinput {

@@ -31,24 +31,27 @@ export class RebuildTasksControl extends Component {
     this.setState({ removeUnmatchedTasks: !this.state.removeUnmatchedTasks })
   }
 
-  resetState = () =>
+  resetState = () => {
     this.setState({
       confirming: false,
       removeUnmatchedTasks: false,
       localFilename: null,
       localFile: null,
     })
+  }
 
   proceed = () => {
     const removeUnmatched = this.state.removeUnmatchedTasks
     const updatedFile = this.state.localFile ? this.state.localFile.file : null
     this.resetState()
 
-    this.props.rebuildChallenge(
-      this.props.challenge,
-      removeUnmatched,
-      updatedFile
-    )
+    const deleteStepIfRequested = removeUnmatched ?
+                                  this.props.deleteIncompleteTasks(this.props.challenge) :
+                                  Promise.resolve()
+
+    deleteStepIfRequested.then(() => {
+      this.props.rebuildChallenge(this.props.challenge, updatedFile)
+    })
   }
 
   render() {
@@ -125,12 +128,13 @@ export class RebuildTasksControl extends Component {
 
                 <div className="rebuild-tasks-control__options">
                   <div className="rebuild-tasks-control__remove-unmatched-option">
-                    <label className="checkbox">
-                      <input
-                        type="checkbox"
-                        checked={this.state.removeUnmatchedTasks}
-                        onChange={this.toggleRemoveUnmatchedTasks}
-                      />
+                    <input
+                      type="checkbox"
+                      className="mr-mr-1"
+                      checked={this.state.removeUnmatchedTasks}
+                      onChange={this.toggleRemoveUnmatchedTasks}
+                    />
+                    <label className="mr-text-blue-light">
                       <FormattedMessage {...messages.removeUnmatchedLabel} />
                     </label>
                   </div>

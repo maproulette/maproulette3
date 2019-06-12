@@ -378,6 +378,18 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
 }
 
 /**
+ * Initiate deletion of tasks in the given statuses belonging to the given
+ * challenge. Note that this does not wait until the tasks have been deleted
+ * before resolving.
+ */
+export const deleteChallengeTasks = function(challengeId, statuses=null) {
+  return new Endpoint(api.challenge.deleteTasks, {
+    variables: {id: challengeId},
+    params: statuses ? {statusFilters: statuses.join(',')} : undefined,
+  }).execute()
+}
+
+/**
  * Set the given status on the given task
  * @private
  */

@@ -26,7 +26,8 @@ export class AsManageableChallenge {
   isRebuildable() {
     return _isFinite(this.status) &&
            this.status !== ChallengeStatus.none &&
-           this.status !== ChallengeStatus.building
+           this.status !== ChallengeStatus.building &&
+           this.status !== ChallengeStatus.deletingTasks
   }
 
   dataSource() {

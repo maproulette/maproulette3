@@ -28,4 +28,8 @@ export default defineMessages({
     id: "Challenge.status.finished",
     defaultMessage: "Finished"
   },
+  deletingTasks: {
+    id: "Challenge.status.deletingTasks",
+    defaultMessage: "Deleting Tasks"
+  },
 })

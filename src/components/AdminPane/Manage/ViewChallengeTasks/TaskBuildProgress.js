@@ -73,7 +73,7 @@ export default class TaskBuildProgress extends Component {
             <h3>
               <FormattedMessage
                 {...messages.tasksBuilding}
-              /> <BusySpinner className="inline" />
+              /> <BusySpinner lightMode inline />
             </h3>
 
             <div>
