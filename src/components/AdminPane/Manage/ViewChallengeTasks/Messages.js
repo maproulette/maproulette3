@@ -92,4 +92,14 @@ export default defineMessages({
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
   },
+
+  taskCountShownStatus: {
+    id: "Admin.TaskAnalysisTableHeader.taskCountStatus",
+    defaultMessage: "Shown: {countShown} Tasks",
+  },
+
+  taskPercentShownStatus: {
+    id: "Admin.TaskAnalysisTableHeader.taskPercentStatus",
+    defaultMessage: "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
+  },
 })

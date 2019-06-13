@@ -4,36 +4,23 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
-import _noop from 'lodash/noop'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
-         keysByStatus,
-         messagesByStatus,
-         statusLabels }
+         messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatusWithUnset,
-        keysByReviewStatus,
-        messagesByReviewStatus,
-        reviewStatusLabels }
+        messagesByReviewStatus }
       from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskPriority,
-         keysByPriority,
-         messagesByPriority,
-         taskPriorityLabels }
+         messagesByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
-import AsManager from '../../../../interactions/User/AsManager'
 import WithBoundedTasks
        from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
-import DropdownButton from '../../../Bulma/DropdownButton'
-import TriStateCheckbox from '../../../Bulma/TriStateCheckbox'
-import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import IntervalRender from '../../../IntervalRender/IntervalRender'
-import WithDeactivateOnOutsideClick
-       from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
 import ChallengeTaskMap from '../ChallengeTaskMap/ChallengeTaskMap'
 import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
 import TaskBuildProgress from './TaskBuildProgress'
@@ -41,8 +28,6 @@ import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
 import { geoJson } from 'leaflet'
 import Dropdown from '../../../Dropdown/Dropdown'
-
-const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
 /**
  * ViewChallengeTasks displays challenge tasks as both a map and a table,
@@ -146,8 +131,6 @@ export class ViewChallengeTasks extends Component {
       )
     }
 
-    const manager = AsManager(this.props.user)
-
     // Use CSS Modules once supported by create-react-app
     const statusColors = {
       [TaskStatus.created]: '#2281C2',       // $status-created-color
@@ -200,34 +183,6 @@ export class ViewChallengeTasks extends Component {
       includeReviewStatuses: this.props.includeTaskReviewStatuses,
       withinBounds: this.props.mapBounds,
     }
-
-
-    const localizedStatusLabels = statusLabels(this.props.intl)
-    const localizedReviewStatusLabels = reviewStatusLabels(this.props.intl)
-    const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
-
-    const taskSelectionActions =
-      _map(TaskStatus, status => ({
-        key: `status-${status}`,
-        text: localizedStatusLabels[keysByStatus[status]],
-        status,
-        statusAction: true,
-      })
-    ).concat(
-      _map(TaskReviewStatusWithUnset, status => ({
-        key: `review-status-${status}`,
-        text: localizedReviewStatusLabels[keysByReviewStatus[status]],
-        status,
-        statusAction: true,
-      }))
-    ).concat(
-      _map(TaskPriority, priority => ({
-        key: `priority-${priority}`,
-        text: `${localizedPriorityLabels[keysByPriority[priority]]} ${this.props.intl.formatMessage(messages.priorityLabel)}`,
-        priority,
-        priorityAction: true,
-      }))
-    )
 
     const clearFiltersControl = (
       <button className="mr-flex mr-items-center mr-text-blue-light"
@@ -329,45 +284,6 @@ export class ViewChallengeTasks extends Component {
 
           {_get(this.props, 'clusteredTasks.tasks.length') !== _get(this.props, 'taskInfo.tasks.length', 0) ? clearFiltersControl : null}
         </div>
-    
-        {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
-         <div className="admin__manage-tasks__task-controls">
-           <div className="admin__manage-tasks__task-controls__selection"
-                title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}>
-             <label className="checkbox">
-               <TriStateCheckbox
-                 checked={this.props.allTasksAreSelected()}
-                 indeterminate={this.props.someTasksAreSelected()}
-                 onClick={() => this.props.toggleAllTasksSelection()}
-                 onChange={_noop}
-               />
-             </label>
-             <DeactivatableDropdownButton options={taskSelectionActions}
-                                            onSelect={this.takeTaskSelectionAction}>
-               <div className="basic-dropdown-indicator" />
-             </DeactivatableDropdownButton>
-           </div>
-           <div>
-             {manager.canWriteProject(this.props.challenge.parent) &&
-              <ConfirmAction>
-                <button className="button is-rounded is-outlined is-primary"
-                        disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}
-                        onClick={this.markAsCreated}>
-                  <FormattedMessage {...messages.markCreatedLabel} />
-                </button>
-              </ConfirmAction>
-             }
-             <a target="_blank"
-                rel="noopener noreferrer"
-                href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
-                className="button is-outlined is-primary has-svg-icon csv-export"
-             >
-               <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
-               <FormattedMessage {...messages.exportCSVLabel} />
-             </a>
-           </div>
-         </div>
-        }
 
         <TaskAnalysisTable filterOptions={filterOptions}
           totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}

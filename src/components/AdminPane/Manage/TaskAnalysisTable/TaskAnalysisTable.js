@@ -27,44 +27,10 @@ import TaskCommentsModal
 import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
+import TaskAnalysisTableHeader from '../TaskAnalysisTableHeader/TaskAnalysisTableHeader'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
-
-const HeaderContent = ({totalTaskCount, countShown, withReviewColumns, toggleReviewColumns}) => {
-  if (totalTaskCount < 1) {
-    return (
-      <h2 className="mr-text-md mr-uppercase">
-        <FormattedMessage {...messages.taskCountShownStatus} values={{countShown}} />
-      </h2>
-    )
-  }
-
-  const percentShown = Math.round(countShown / totalTaskCount * 100.0)
-
-  return (
-    <div className="mr-flex mr-justify-between">
-      <h2 className="mr-text-md mr-uppercase">
-        <FormattedMessage {...messages.taskPercentShownStatus}
-          values={{
-            percentShown,
-            countShown,
-            countTotal: totalTaskCount,
-          }} />
-      </h2>
-      <button onClick={() => toggleReviewColumns()}>
-        {withReviewColumns ? "Hide Review Columns" : "Show Review Columns"}
-      </button>
-    </div>
-  )
-}
-
-HeaderContent.propTypes = {
-  totalTaskCount: PropTypes.number.isRequired,
-  countShown: PropTypes.number.isRequired,
-  withReviewColumns: PropTypes.bool.isRequired,
-  toggleReviewColumns: PropTypes.func.isRequired,
-}
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -125,11 +91,11 @@ export class TaskAnalysisTable extends Component {
       <React.Fragment>
         <section className="mr-my-4">
           <header className="mr-mb-4">
-            <HeaderContent 
-              totalTaskCount={_get(this.props, 'totalTaskCount', 0)}
+            <TaskAnalysisTableHeader            
               countShown={data.length} 
               withReviewColumns={this.state.withReviewColumns}
               toggleReviewColumns={this.toggleReviewColumns.bind(this)}
+              {...this.props}
             />
           </header>
           <ReactTable data={data} columns={columns}
