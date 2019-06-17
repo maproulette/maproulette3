@@ -4,16 +4,6 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with TaskAnalysisTable
  */
 export default defineMessages({
-  taskCountShownStatus: {
-    id: "Admin.TaskAnalysisTable.taskCountStatus",
-    defaultMessage: "Shown: {countShown} Tasks",
-  },
-
-  taskPercentShownStatus: {
-    id: "Admin.TaskAnalysisTable.taskPercentStatus",
-    defaultMessage: "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
-  },
-
   actionsColumnHeader: {
     id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",

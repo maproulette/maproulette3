@@ -27,10 +27,10 @@ import TaskCommentsModal
 import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
+import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
-
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -47,6 +47,10 @@ export class TaskAnalysisTable extends Component {
   state = {
     withReviewColumns: false,
     openComments: null,
+  }
+
+  toggleReviewColumns() {
+    this.setState({withReviewColumns: !this.state.withReviewColumns})
   }
 
   getColumns = (manager, taskBaseRoute, data) => {
@@ -82,57 +86,26 @@ export class TaskAnalysisTable extends Component {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'taskInfo.tasks', [])
     const columns = this.getColumns(manager, taskBaseRoute, data)
-
-
-    // Setup wrapper that displays total tasks available, percentage
-    // currently included in the table, CSV export option, etc.
-    const taskCountWrapper = [{
-      id: 'taskCount',
-      Header: () => {
-        const countShown = data.length
-
-        if (_get(this.props, 'totalTaskCount', 0) < 1) {
-          return <FormattedMessage {...messages.taskCountShownStatus}
-                                   values={{countShown}} />
-        }
-
-        const percentShown =
-          Math.round(data.length / this.props.totalTaskCount * 100.0)
-
-        return (
-          <div className="mr-flex mr-justify-between">
-            <div>
-              <FormattedMessage {...messages.taskPercentShownStatus}
-                                    values={{
-                                      percentShown,
-                                      countShown,
-                                      countTotal: this.props.totalTaskCount,
-                                    }} />
-
-              {this.props.totalTaskCount !== countShown ? this.props.clearFiltersControl : null}
-            </div>
-            <div>
-              <button onClick={() => this.setState({withReviewColumns: !this.state.withReviewColumns})}>
-              {this.state.withReviewColumns ? "Hide Review Columns" : "Show Review Columns"}
-              </button>
-            </div>
-          </div>
-        )
-      },
-      columns: columns,
-    }]
-
+    
     return (
       <React.Fragment>
-        <div className="mr-flex-grow mr-w-full mr-mx-auto mr-bg-white mr-text-black mr-rounded mr-p-6 md:mr-p-8 mr-mb-12">
-          <ReactTable data={data} columns={taskCountWrapper}
+        <section className="mr-my-4">
+          <header className="mr-mb-4">
+            <TaskAnalysisTableHeader
+              countShown={data.length}
+              withReviewColumns={this.state.withReviewColumns}
+              toggleReviewColumns={this.toggleReviewColumns.bind(this)}
+              {...this.props}
+            />
+          </header>
+          <ReactTable data={data} columns={columns}
                       SubComponent={props =>
                         <ViewTaskSubComponent taskId={props.original.id} />
                       }
                       collapseOnDataChange={false}
                       defaultSorted={[ {id: 'featureId', desc: false} ]}
           />
-        </div>
+        </section>
         {_isFinite(this.state.openComments) &&
          <TaskCommentsModal
            taskId={this.state.openComments}
