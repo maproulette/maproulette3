@@ -10,7 +10,7 @@ import _omit from 'lodash/omit'
 import _isUndefined from 'lodash/isUndefined'
 import { TaskStatus, keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatusWithUnset, keysByReviewStatus }
+import { TaskReviewStatusWithUnset, keysByReviewStatus, REVIEW_STATUS_NOT_SET }
       from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskPriority, keysByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
@@ -115,7 +115,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         results = Object.assign({}, this.props[tasksProp], {
           tasks: _filter(this.props[tasksProp].tasks, task =>
             includeStatuses[task.status] && includePriorities[task.priority] &&
-            ((_isUndefined(task.reviewStatus) && includeReviewStatuses[-1]) ||
+            ((_isUndefined(task.reviewStatus) && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
               includeReviewStatuses[task.reviewStatus])
           ),
         })
