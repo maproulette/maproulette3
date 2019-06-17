@@ -63,6 +63,16 @@ export default defineMessages({
     defaultMessage: "Change Priority",
   },
 
+  showReviewColumnsLabel: {
+    id: "Admin.manageTasks.controls.showReviewColumns.label",
+    defaultMessage: "Show Review Columns",
+  },
+
+  hideReviewColumnsLabel: {
+    id: "Admin.manageTasks.controls.hideReviewColumns.label",
+    defaultMessage: "Hide Review Columns",
+  },
+
   priorityLabel: {
     id: "Admin.manageTasks.priorityLabel",
     defaultMessage: "Priority",
@@ -87,7 +97,7 @@ export default defineMessages({
     id: "Admin.manageTasks.controls.sortByPriority.label",
     defaultMessage: "Sort by Priority",
   },
-  
+
   clearFiltersLabel: {
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",

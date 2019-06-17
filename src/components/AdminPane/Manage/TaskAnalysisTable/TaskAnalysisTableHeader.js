@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import classNames from 'classnames'
 import messages from '../ViewChallengeTasks/Messages'
 import _noop from 'lodash/noop'
 import _get from 'lodash/get'
@@ -36,7 +37,7 @@ export class TaskAnalysisTableHeader extends Component {
 
     render() {
         const {countShown, withReviewColumns, toggleReviewColumns} = this.props
-        const totalTaskCount = _get(this.props, 'totalTaskCount', 0)    
+        const totalTaskCount = _get(this.props, 'totalTaskCount', 0)
         const percentShown = Math.round(countShown / totalTaskCount * 100.0)
         const manager = AsManager(this.props.user)
 
@@ -88,7 +89,7 @@ export class TaskAnalysisTableHeader extends Component {
                                 </DeactivatableDropdownButton>
                             </div>
                         </div>
-                    } 
+                    }
 
                     <h2 className="mr-text-md mr-uppercase">
                         {totalTaskCount < 1 ? <FormattedMessage {...messages.taskCountShownStatus} values={{countShown}} /> :
@@ -100,7 +101,7 @@ export class TaskAnalysisTableHeader extends Component {
                             }} />}
                     </h2>
                 </div>
-              
+
                 <Dropdown className="mr-dropdown--right"
                     dropdownButton={dropdown => (
                         <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-light">
@@ -113,19 +114,22 @@ export class TaskAnalysisTableHeader extends Component {
                         <React.Fragment>
                             <ul className="mr-list-dropdown">
                                 {manager.canWriteProject(this.props.challenge.parent) &&
-                                    <li>                
+                                    <li>
                                         <ConfirmAction>
-                                            <button className="mr-text-current"
+                                            <button className={classNames("mr-text-current",
+                                                                (!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) ? "mr-text-grey mr-cursor-default" : "")}
                                                     disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}
-                                                    onClick={this.markAsCreated}>
+                                                    onClick={this.props.markAsCreated}>
                                                 <FormattedMessage {...messages.markCreatedLabel} />
                                             </button>
-                                        </ConfirmAction>                              
+                                        </ConfirmAction>
                                     </li>
                                 }
                                 <li>
                                     <button className="mr-text-current" onClick={() => toggleReviewColumns()}>
-                                        {withReviewColumns ? "Hide Review Columns" : "Show Review Columns"}
+                                        {withReviewColumns ?
+                                          <FormattedMessage {...messages.hideReviewColumnsLabel} /> :
+                                          <FormattedMessage {...messages.showReviewColumnsLabel} />}
                                     </button>
                                 </li>
                             </ul>
@@ -144,7 +148,7 @@ export class TaskAnalysisTableHeader extends Component {
                             </ul>
                         </React.Fragment>
                     }
-                /> 
+                />
             </div>
         )
     }

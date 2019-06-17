@@ -27,7 +27,7 @@ import TaskCommentsModal
 import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
-import TaskAnalysisTableHeader from '../TaskAnalysisTableHeader/TaskAnalysisTableHeader'
+import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
@@ -86,13 +86,13 @@ export class TaskAnalysisTable extends Component {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'taskInfo.tasks', [])
     const columns = this.getColumns(manager, taskBaseRoute, data)
-
+    
     return (
       <React.Fragment>
         <section className="mr-my-4">
           <header className="mr-mb-4">
-            <TaskAnalysisTableHeader            
-              countShown={data.length} 
+            <TaskAnalysisTableHeader
+              countShown={data.length}
               withReviewColumns={this.state.withReviewColumns}
               toggleReviewColumns={this.toggleReviewColumns.bind(this)}
               {...this.props}

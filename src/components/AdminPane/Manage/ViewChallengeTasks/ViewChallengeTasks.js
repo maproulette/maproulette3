@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
+import _cloneDeep from 'lodash/cloneDeep'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
@@ -49,10 +50,8 @@ export class ViewChallengeTasks extends Component {
       if (bounding) {
         this.setState({initialBounds: {mapBounds: geoJson(bounding).getBounds(), mapZoom: this.props.mapZoom}})
       }
-      else {
-        this.setState({initialBounds: {mapBounds: this.props.mapBounds, mapZoom: this.props.mapZoom}})
-      }
     }
+
     // When bulk updating, wait until the tasks have been reloaded before turning
     // off the bulkUpdating flag and refreshing any selected tasks.
     if (this.state.bulkUpdating && prevProps.loadingTasks && !this.props.loadingTasks) {
@@ -89,6 +88,11 @@ export class ViewChallengeTasks extends Component {
   }
 
   resetMapBounds = () => {
+    let initialBounds = _cloneDeep(this.state.initialBounds)
+    if (!initialBounds) {
+      initialBounds = {mapBounds: this.props.mapBounds, mapZoom: this.props.mapZoom}
+    }
+
     this.props.setChallengeOwnerMapBounds(this.props.challenge.id,
                                           this.state.initialBounds.mapBounds,
                                           this.state.initialBounds.mapZoom)
@@ -190,8 +194,8 @@ export class ViewChallengeTasks extends Component {
           this.props.clearAllFilters()
           this.resetMapBounds()
         }}>
-        <SvgSymbol sym="close-icon" 
-          viewBox='0 0 20 20'  
+        <SvgSymbol sym="close-icon"
+          viewBox='0 0 20 20'
           className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
         <FormattedMessage {...messages.clearFiltersLabel} />
       </button>
@@ -215,70 +219,13 @@ export class ViewChallengeTasks extends Component {
         <div className="mr-my-4 xl:mr-flex mr-justify-between">
           <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
             <li className="md:mr-mr-8">
-              <Dropdown
-                className="mr-dropdown--right"
-                dropdownButton={dropdown => (
-                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
-                    <span className="mr-text-base mr-uppercase mr-mr-1">
-                      <FormattedMessage {...messages.filterByStatusLabel} />
-                    </span>
-                    <SvgSymbol
-                      sym="icon-cheveron-down"
-                      viewBox="0 0 20 20"
-                      className="mr-fill-current mr-w-5 mr-h-5"
-                    />
-                  </button>
-                )}
-                dropdownContent={() =>
-                  <ul className="mr-list-dropdown">
-                    {statusFilters}
-                  </ul>
-                }
-              />            
+              {buildFilterDropdown("filterByStatusLabel", statusFilters)}
             </li>
             <li className="md:mr-mr-8">
-              <Dropdown
-                className="mr-dropdown--right"
-                dropdownButton={dropdown => (
-                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
-                    <span className="mr-text-base mr-uppercase mr-mr-1">
-                    <FormattedMessage {...messages.filterByReviewStatusLabel} />
-                    </span>
-                    <SvgSymbol
-                      sym="icon-cheveron-down"
-                      viewBox="0 0 20 20"
-                      className="mr-fill-current mr-w-5 mr-h-5"
-                    />
-                  </button>
-                )}
-                dropdownContent={() =>
-                  <ul className="mr-list-dropdown">
-                    {reviewStatusFilters}
-                  </ul>
-                }
-              />
+              {buildFilterDropdown("filterByReviewStatusLabel", reviewStatusFilters)}
             </li>
             <li>
-              <Dropdown
-                className="mr-dropdown--right"
-                dropdownButton={dropdown => (
-                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
-                    <span className="mr-text-base mr-uppercase mr-mr-1">
-                      <FormattedMessage {...messages.sortByPriorityLabel} />
-                    </span>
-                    <SvgSymbol
-                      sym="icon-cheveron-down"
-                      viewBox="0 0 20 20"
-                      className="mr-fill-current mr-w-5 mr-h-5"
-                    />
-                  </button>
-                )}
-                dropdownContent={() =>
-                  <ul className="mr-list-dropdown">
-                    {priorityFilters}
-                  </ul>
-                }
-              />
+              {buildFilterDropdown("sortByPriorityLabel", priorityFilters)}
             </li>
           </ul>
 
@@ -286,11 +233,37 @@ export class ViewChallengeTasks extends Component {
         </div>
 
         <TaskAnalysisTable filterOptions={filterOptions}
+          markAsCreated={this.markAsCreated}
           totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
           {...this.props} />
       </div>
     )
   }
+}
+
+const buildFilterDropdown = (titleId, filters) => {
+  return (
+    <Dropdown
+      className="mr-dropdown--right"
+      dropdownButton={dropdown => (
+        <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
+          <span className="mr-text-base mr-uppercase mr-mr-1">
+            <FormattedMessage {...messages[titleId]} />
+          </span>
+          <SvgSymbol
+            sym="icon-cheveron-down"
+            viewBox="0 0 20 20"
+            className="mr-fill-current mr-w-5 mr-h-5"
+          />
+        </button>
+      )}
+      dropdownContent={() =>
+        <ul className="mr-list-dropdown">
+          {filters}
+        </ul>
+      }
+    />
+  )
 }
 
 ViewChallengeTasks.propTypes = {

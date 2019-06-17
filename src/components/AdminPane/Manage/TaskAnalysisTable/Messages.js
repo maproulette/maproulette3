@@ -78,9 +78,4 @@ export default defineMessages({
     id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
-
-  markCreatedLabel: {
-    id: "Admin.manageTasks.controls.markCreated.label",
-    defaultMessage: "Reset status to Created",
-  },
 })
