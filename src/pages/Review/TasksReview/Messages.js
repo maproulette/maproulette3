@@ -49,6 +49,11 @@ export default defineMessages({
     defaultMessage: "My Mapped Tasks after Review",
   },
 
+  allReviewedTasks: {
+    id: "Review.TaskAnalysisTable.allReviewedTasks",
+    defaultMessage: "All Reviewed Tasks",
+  },
+
   totalTasks: {
     id: "Review.TaskAnalysisTable.totalTasks",
     defaultMessage: "Total: {countShown}"

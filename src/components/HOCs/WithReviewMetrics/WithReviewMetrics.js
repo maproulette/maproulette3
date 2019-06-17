@@ -4,6 +4,7 @@ import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import { fetchReviewMetrics }
        from '../../../services/Task/TaskReview/TaskReview'
+import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 
 /**
  * WithReviewMetrics retrieves metrics for the currently filtered review tasks
@@ -19,7 +20,9 @@ export const WithReviewMetrics = function(WrappedComponent) {
     updateMetrics(props) {
       this.setState({loading: true})
 
-      props.updateReviewMetrics(props.reviewTasksType, props.reviewCriteria).then(() => {
+      props.updateReviewMetrics(_get(props.user, 'id'),
+                                props.reviewTasksType,
+                                props.reviewCriteria).then(() => {
         this.setState({loading: false})
       })
     }
@@ -50,10 +53,10 @@ export const WithReviewMetrics = function(WrappedComponent) {
 const mapStateToProps = state => ({ reviewMetrics: _get(state, 'currentReviewTasks.metrics') })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateReviewMetrics: (reviewTasksType, searchCriteria={}) => {
-    return dispatch(fetchReviewMetrics(reviewTasksType, searchCriteria))
+  updateReviewMetrics: (userId, reviewTasksType, searchCriteria={}) => {
+    return dispatch(fetchReviewMetrics(userId, reviewTasksType, searchCriteria))
   },
 })
 
 export default WrappedComponent =>
-  connect(mapStateToProps, mapDispatchToProps)(WithReviewMetrics(WrappedComponent))
+  connect(mapStateToProps, mapDispatchToProps)(WithCurrentUser(WithReviewMetrics(WrappedComponent)))

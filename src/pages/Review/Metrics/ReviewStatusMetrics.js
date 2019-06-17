@@ -54,6 +54,21 @@ export default class ReviewStatusMetrics extends Component {
               buildMetric(metrics.reviewDisputed, metrics.total,
                 <FormattedMessage {...messages.disputedReview} />)}
 
+            {type === ReviewTasksType.allReviewedTasks &&
+              buildMetric(metrics.reviewRequested, metrics.total,
+                <FormattedMessage {...messages.awaitingReview} />)}
+            {type === ReviewTasksType.allReviewedTasks &&
+              buildMetric(metrics.reviewApproved, metrics.total,
+                <FormattedMessage {...messages.approvedReview} />)}
+            {type === ReviewTasksType.allReviewedTasks &&
+              buildMetric(metrics.reviewRejected, metrics.total,
+                <FormattedMessage {...messages.rejectedReview} />)}
+            {type === ReviewTasksType.allReviewedTasks &&
+              buildMetric(metrics.reviewAssisted, metrics.total,
+                <FormattedMessage {...messages.assistedReview} />)}
+            {type === ReviewTasksType.allReviewedTasks &&
+              buildMetric(metrics.reviewDisputed, metrics.total,
+                <FormattedMessage {...messages.disputedReview} />)}
           </div>
         }
       </div>

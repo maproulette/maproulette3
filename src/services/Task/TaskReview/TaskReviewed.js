@@ -13,6 +13,7 @@ import { setupFilterSearchParameters } from './TaskReview'
 
 // redux actions
 export const RECEIVE_REVIEWED_TASKS = 'RECEIVE_REVIEWED_TASKS'
+export const RECEIVE_MAPPER_REVIEWED_TASKS = 'RECEIVE_MAPPER_REVIEWED_TASKS'
 export const RECEIVE_REVIEWED_BY_USER_TASKS = 'RECEIVE_REVIEWED_BY_USER_TASKS'
 
 
@@ -38,23 +39,33 @@ export const receiveReviewedTasks = function(tasks,
  * Retrieve all tasks (up to the given limit) that have been reviewed
  * by user or requested by user
  */
-export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
+export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, asMapper=false, limit=50) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
 
   const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}), criteria.boundingBox)
+  const mappers = asMapper ? [userId] : []
+  const reviewers = asReviewer ? [userId] : []
+
+  let dispatchType = RECEIVE_REVIEWED_TASKS
+  if (asReviewer) {
+    dispatchType = RECEIVE_REVIEWED_BY_USER_TASKS
+  }
+  else if (asMapper) {
+    dispatchType = RECEIVE_MAPPER_REVIEWED_TASKS
+  }
 
   return function(dispatch) {
     dispatch(receiveReviewedTasks(null,
-      asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS: RECEIVE_REVIEWED_TASKS,
+      dispatchType,
       RequestStatus.inProgress))
     return new Endpoint(
       api.tasks.reviewed,
       {
         schema: {tasks: [taskSchema()]},
-        params: {asReviewer, limit, sort, order, page: (page * limit),
+        params: {mappers, reviewers, limit, sort, order, page: (page * limit),
                  allowReviewNeeded: (asReviewer ? false : true), ...searchParameters},
       }
     ).execute().then(normalizedResults => {
@@ -66,13 +77,11 @@ export const fetchReviewedTasks = function(criteria, asReviewer, limit=50) {
         }
       }
 
-      dispatch(receiveReviewedTasks(tasks,
-        asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS : RECEIVE_REVIEWED_TASKS,
+      dispatch(receiveReviewedTasks(tasks, dispatchType,
         RequestStatus.success, normalizedResults.result.total))
       return tasks
     }).catch((error) => {
-      dispatch(receiveReviewedTasks([],
-        asReviewer ? RECEIVE_REVIEWED_BY_USER_TASKS: RECEIVE_REVIEWED_TASKS,
+      dispatch(receiveReviewedTasks([], dispatchType,
         RequestStatus.error))
       dispatch(addError(AppErrors.reviewTask.fetchFailure))
       console.log(error.response || error)

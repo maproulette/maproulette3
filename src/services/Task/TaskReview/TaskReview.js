@@ -9,6 +9,7 @@ import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
 import { RECEIVE_REVIEW_NEEDED_TASKS } from './TaskReviewNeeded'
 import { RECEIVE_REVIEWED_TASKS,
+         RECEIVE_MAPPER_REVIEWED_TASKS,
          RECEIVE_REVIEWED_BY_USER_TASKS } from './TaskReviewed'
 import RequestStatus from '../../Server/RequestStatus'
 import { taskSchema, retrieveChallengeTask, receiveTasks, fetchTask } from '.././Task'
@@ -22,11 +23,13 @@ export const MARK_REVIEW_DATA_STALE = "MARK_REVIEW_DATA_STALE"
 export const REVIEW_TASKS_TO_BE_REVIEWED = 'tasksToBeReviewed'
 export const MY_REVIEWED_TASKS = 'myReviewedTasks'
 export const REVIEW_TASKS_BY_ME = 'tasksReviewedByMe'
+export const ALL_REVIEWED_TASKS = 'allReviewed'
 
 export const ReviewTasksType = {
   toBeReviewed: REVIEW_TASKS_TO_BE_REVIEWED,
   myReviewedTasks: MY_REVIEWED_TASKS,
-  reviewedByMe: REVIEW_TASKS_BY_ME
+  reviewedByMe: REVIEW_TASKS_BY_ME,
+  allReviewed: ALL_REVIEWED_TASKS,
 }
 
 // redux action creators
@@ -72,19 +75,21 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
 /**
  * Retrieve metrics for a given review tasks type and filter criteria
  */
- export const fetchReviewMetrics = function(reviewTasksType, criteria) {
+ export const fetchReviewMetrics = function(userId, reviewTasksType, criteria) {
+  const type = determineType(reviewTasksType)
   const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
                                                        _get(criteria, 'savedChallengesOnly'))
 
-  const type = determineType(reviewTasksType)
+  const mappers = (reviewTasksType === ReviewTasksType.myReviewedTasks) ? [userId] : []
+  const reviewers = (reviewTasksType === ReviewTasksType.reviewedByMe) ? [userId] : []
 
   return function(dispatch) {
     return new Endpoint(
       api.tasks.reviewMetrics,
       {
         schema: null,
-        params: {reviewTasksType: type, ...searchParameters},
+        params: {reviewTasksType: type, ...searchParameters, mappers, reviewers},
       }
     ).execute().then(normalizedResults => {
       if (normalizedResults.length > 0) {
@@ -136,8 +141,10 @@ const determineType = (reviewTasksType) => {
     case ReviewTasksType.reviewedByMe:
       return 2
     case ReviewTasksType.myReviewedTasks:
-    default:
       return 3
+    case ReviewTasksType.allReviewedTasks:
+    default:
+      return 4
   }
 }
 
@@ -303,6 +310,8 @@ export const currentReviewTasks = function(state={}, action) {
       return updatedState
     case RECEIVE_REVIEWED_TASKS:
       return updateReduxState(state, action, "reviewed")
+    case RECEIVE_MAPPER_REVIEWED_TASKS:
+      return updateReduxState(state, action, "mapperReviewed")
     case RECEIVE_REVIEWED_BY_USER_TASKS:
       return updateReduxState(state, action, "reviewedByUser")
     case RECEIVE_REVIEW_NEEDED_TASKS:

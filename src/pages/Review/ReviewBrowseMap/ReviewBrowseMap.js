@@ -155,7 +155,7 @@ export class ReviewBrowseMap extends Component {
     const map =
       <EnhancedMap className="mr-z-0"
                    center={latLng(0, 0)}
-                   zoom={2} minZoom={2} maxZoom={16}
+                   zoom={2} minZoom={2} maxZoom={18}
                    setInitialBounds={false}
                    initialBounds = {this.currentBounds}
                    zoomControl={false} animate={false} worldCopyJump={true}
