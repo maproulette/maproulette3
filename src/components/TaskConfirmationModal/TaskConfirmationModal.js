@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
 import _pick from 'lodash/pick'
+import _noop from 'lodash/noop'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { needsReviewType } from '../../services/User/User'
@@ -128,7 +129,8 @@ export class TaskConfirmationModal extends Component {
                   type="checkbox"
                   className="mr-mr-1"
                   checked={this.props.needsReview}
-                  onChange={this.props.toggleNeedsReview}
+                  onClick={this.props.toggleNeedsReview}
+                  onChange={_noop}
                 />
                 <label>
                   <FormattedMessage {...messages.reviewLabel} />
@@ -145,7 +147,8 @@ export class TaskConfirmationModal extends Component {
                     name="randomnessPreference"
                     className="mr-mr-1"
                     checked={this.props.loadBy === TaskLoadMethod.random}
-                    onChange={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
+                    onClick={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
+                    onChange={_noop}
                   />
                   <label className="mr-mr-4">
                     <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.random]} />
@@ -156,7 +159,8 @@ export class TaskConfirmationModal extends Component {
                     name="randomnessPreference"
                     className="mr-mr-1"
                     checked={this.props.loadBy === TaskLoadMethod.proximity}
-                    onChange={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
+                    onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
+                    onChange={_noop}
                   />
                   <label>
                     <FormattedMessage {...messagesByLoadMethod[TaskLoadMethod.proximity]} />
@@ -174,7 +178,8 @@ export class TaskConfirmationModal extends Component {
                     name="loadReviewPreference"
                     className="mr-mr-1"
                     checked={this.props.loadBy === TaskReviewLoadMethod.next}
-                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
+                    onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
+                    onChange={_noop}
                   />
                   <label className="mr-mr-4">
                     <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
@@ -186,7 +191,8 @@ export class TaskConfirmationModal extends Component {
                         name="loadReviewPreference"
                         className="mr-mr-1"
                         checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
-                        onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                        onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                        onChange={_noop}
                       />
                       <label className="mr-mr-4">
                         <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
@@ -198,7 +204,8 @@ export class TaskConfirmationModal extends Component {
                     name="loadReviewPreference"
                     className="mr-mr-1"
                     checked={this.props.loadBy === TaskReviewLoadMethod.all}
-                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                    onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                    onChange={_noop}
                   />
                   <label>
                     <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
@@ -216,7 +223,8 @@ export class TaskConfirmationModal extends Component {
                     name="loadReviewPreference"
                     className="mr-mr-1"
                     checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
-                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                    onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                    onChange={_noop}
                   />
                   <label className="mr-mr-4">
                     <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
@@ -226,7 +234,8 @@ export class TaskConfirmationModal extends Component {
                     name="loadReviewPreference"
                     className="mr-mr-1"
                     checked={this.props.loadBy === TaskReviewLoadMethod.all}
-                    onChange={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                    onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                    onChange={_noop}
                   />
                   <label>
                     <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
