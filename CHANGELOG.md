@@ -28,9 +28,12 @@ This project adheres to
 - Entries in Task History widget sometimes in incorrect order
 - Missing new-notification indicator on fresh load of application
 - Occasional missing results from project search for project managers
-- Rebuilding of challenge tasks when pruning existing incomplete tasks
+- Timeout rebuilding challenge when pruning many incomplete tasks
 - Pinned projects not always showing all challenges to project managers
 - Lost page-size and map bounds on Task Review page upon return
+- Repeated serving of same skipped or too-hard task at priority boundary
+- Non-reviewers prevented from disputing a task review
+- Incorrect data in reviewer column in CSV export for challenge managers
 
 ### Changed
 - Don't alter pre-existing task status if another mapper skips the task
