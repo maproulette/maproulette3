@@ -317,18 +317,23 @@ export const visitNewTask = function(dispatch, props, currentTaskId, newTask) {
     }
   }
   else {
-    // If challenge is complete, redirect home with note to congratulate
-    // user.
-    const challengeId = challengeIdFromRoute(props, props.challengeId)
-    dispatch(fetchChallenge(challengeId)).then( normalizedResults => {
-      const challenge = normalizedResults.entities.challenges[normalizedResults.result]
-      if (challenge.status === CHALLENGE_STATUS_FINISHED) {
-        props.history.push('/browse/challenges', {congratulate: true, warn: false})
-      }
-      else {
-        props.history.push('/browse/challenges', {warn: true, congratulate: false})
-      }
-    })
+    // If challenge is complete, redirect home with note to congratulate user
+    if (_isFinite(props.virtualChallengeId)) {
+      // We don't get a status for virtual challenges, so just assume we're done
+      props.history.push('/browse/challenges', {congratulate: true, warn: false})
+    }
+    else {
+      const challengeId = challengeIdFromRoute(props, props.challengeId)
+      dispatch(fetchChallenge(challengeId)).then( normalizedResults => {
+        const challenge = normalizedResults.entities.challenges[normalizedResults.result]
+        if (challenge.status === CHALLENGE_STATUS_FINISHED) {
+          props.history.push('/browse/challenges', {congratulate: true, warn: false})
+        }
+        else {
+          props.history.push('/browse/challenges', {warn: true, congratulate: false})
+        }
+      })
+    }
   }
 }
 
