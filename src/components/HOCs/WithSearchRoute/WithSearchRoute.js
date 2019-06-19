@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _each from 'lodash/each'
+import _debounce from 'lodash/debounce'
 import queryString from 'query-string'
 import { toLatLngBounds, fromLatLngBounds }
        from '../../../services/MapBounds/MapBounds'
@@ -146,6 +147,14 @@ export const executeRouteSearch = (routeCriteria, searchString) => {
   })
 }
 
+/**
+ * Debounce browser history update to avoid Safari security error caused by
+ * changing the history more than 100 times in 30 seconds if someone is really
+ * going crazy with the search box
+ */
+export const debouncedUpdateHistory =
+  _debounce((history, newPath) => history.replace(newPath), 500)
+
 export const addSearchCriteriaToRoute = (history, newCriteria) => {
   const searchCriteria = queryString.parse(history.location.search)
 
@@ -158,8 +167,8 @@ export const addSearchCriteriaToRoute = (history, newCriteria) => {
     }
   })
 
-  const newRoute = queryString.stringify(searchCriteria)
-  history.replace(`${history.location.pathname}?${newRoute}`)
+  const newRoute = `${history.location.pathname}?${queryString.stringify(searchCriteria)}`
+  debouncedUpdateHistory(history, newRoute)
 }
 
 export const updateBoundsOnRoute = (props, searchGroup, bounds, locationFilter, removeIfNeeded = true) => {
@@ -188,8 +197,8 @@ export const removeSearchCriteriaFromRoute = (history, criteriaKeys) => {
     delete searchCriteria[key]
   })
 
-  const newRoute = queryString.stringify(searchCriteria)
-  history.replace(`${history.location.pathname}?${newRoute}`)
+  const newRoute = `${history.location.pathname}?${queryString.stringify(searchCriteria)}`
+  history.replace(newRoute)
 }
 
 export default WithSearchRoute
