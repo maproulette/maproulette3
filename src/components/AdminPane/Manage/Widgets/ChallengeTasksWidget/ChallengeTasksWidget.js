@@ -19,7 +19,7 @@ export default class ChallengeTasksWidget extends Component {
   render() {
     return (
       <QuickWidget {...this.props}
-                  className="calendar-heatmap-widget"
+                  className="ChallengeTasksWidget"
                   widgetTitle={<FormattedMessage {...messages.title} />}>
         <ViewChallengeTasks {...this.props} />
       </QuickWidget>
