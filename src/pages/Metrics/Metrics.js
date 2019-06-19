@@ -12,17 +12,21 @@ import TaskStats from './blocks/TaskStats'
 import LeaderboardStats from './blocks/LeaderboardStats'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
+import AsUser from '../../interactions/User/AsUser'
 
-const ProfileImage = props => (
-  <img
-    className="mr-block mr-mx-auto mr-w-32 mr-h-32 mr-rounded-full mr-mb-4"
-    src={props.targetUser.osmProfile.avatarURL}
-    srcSet={`${props.targetUser.osmProfile.avatarURL}&s=128 1x, ${
-      props.user.osmProfile.avatarURL
-    }&s=256 2x"`}
-    alt={props.user.osmProfile.displayName}
-  />
-)
+const ProfileImage = props => {
+
+  const osmProfile = AsUser(props.targetUser.osmProfile)
+
+  return (
+    <img
+      className="mr-block mr-mx-auto mr-w-32 mr-h-32 mr-rounded-full mr-mb-4"
+      src={osmProfile.profilePic(128)}
+      srcSet={`${osmProfile.profilePic(128)} 1x, ${osmProfile.profilePic(256)} 2x"`}
+      alt={osmProfile.displayName}
+    />
+  )
+}
 
 class Metrics extends Component {
   componentDidMount() {
