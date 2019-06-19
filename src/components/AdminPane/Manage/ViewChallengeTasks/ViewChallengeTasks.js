@@ -5,9 +5,6 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
 import _cloneDeep from 'lodash/cloneDeep'
-import _noop from 'lodash/noop'
-import _each from 'lodash/each'
-import _join from 'lodash/join'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,

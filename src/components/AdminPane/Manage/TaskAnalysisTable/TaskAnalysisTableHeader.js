@@ -6,6 +6,8 @@ import messages from '../ViewChallengeTasks/Messages'
 import _noop from 'lodash/noop'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _join from 'lodash/join'
+import _each from 'lodash/each'
 import AsManager from '../../../../interactions/User/AsManager'
 import Dropdown from '../../../Dropdown/Dropdown'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
@@ -44,6 +46,22 @@ export class TaskAnalysisTableHeader extends Component {
         const localizedStatusLabels = statusLabels(this.props.intl)
         const localizedReviewStatusLabels = reviewStatusLabels(this.props.intl)
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
+
+        let taskStatusQuery = []
+        _each(this.props.includeTaskStatuses, (include, status) => {
+          if (include) taskStatusQuery.push(status)
+        })
+        let taskPriorityQuery = []
+        _each(this.props.includeTaskPriorities, (include, priority) => {
+          if (include) taskPriorityQuery.push(priority)
+        })
+        let taskReviewStatusQuery = []
+        _each(this.props.includeTaskReviewStatuses, (include, reviewStatus) => {
+          if (include) taskReviewStatusQuery.push(reviewStatus)
+        })
+        const queryFilters = `status=${_join(taskStatusQuery, ',')}&` +
+                             `priority=${_join(taskPriorityQuery, ',')}&` +
+                             `reviewStatus=${_join(taskReviewStatusQuery, ',')}`
 
         const taskSelectionActions =
             _map(TaskStatus, status => ({
@@ -135,15 +153,27 @@ export class TaskAnalysisTableHeader extends Component {
                             </ul>
                             <hr className="mr-rule-dropdown" />
                             <ul className="mr-list-dropdown">
+                              <li>
+                                <a target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract?${queryFilters}`}
+                                    className="mr-flex mr-items-center"
+                                >
+                                    <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                                    <FormattedMessage {...messages.exportCSVLabel} />
+                                </a>
+                              </li>
+                            </ul>
+                            <ul className="mr-list-dropdown">
                                 <li>
-                                    <a target="_blank"
-                                        rel="noopener noreferrer"
-                                        href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract`}
-                                        className="mr-flex mr-items-center"
-                                    >
-                                        <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                                        <FormattedMessage {...messages.exportCSVLabel} />
-                                    </a>
+                                  <a target="_blank"
+                                      rel="noopener noreferrer"
+                                      href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/${_get(this.props, 'challenge.id')}?${queryFilters}`}
+                                      className="mr-flex mr-items-center"
+                                   >
+                                     <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                                     <FormattedMessage {...messages.exportGeoJSONLabel} />
+                                   </a>
                                 </li>
                             </ul>
                         </React.Fragment>

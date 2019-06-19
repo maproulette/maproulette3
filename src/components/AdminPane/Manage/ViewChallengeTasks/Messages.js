@@ -96,8 +96,8 @@ export default defineMessages({
   sortByPriorityLabel: {
     id: "Admin.manageTasks.controls.sortByPriority.label",
     defaultMessage: "Sort by Priority",
-  }
-  
+  },
+
   exportGeoJSONLabel: {
     id: "Admin.manageTasks.controls.exportGeoJSON.label",
     defaultMessage: "Export GeoJSON",

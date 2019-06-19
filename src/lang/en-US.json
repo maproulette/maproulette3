@@ -208,6 +208,7 @@
   "Admin.manageTasks.controls.filterByStatus.label": "Filter by Status",
   "Admin.manageTasks.controls.filterByReviewStatus.label": "Filter by Review Status",
   "Admin.manageTasks.controls.sortByPriority.label": "Sort by Priority",
+  "Admin.manageTasks.controls.exportGeoJSON.label": "Export GeoJSON",
   "Admin.manageTasks.controls.clearFilters.label": "Clear Filters",
   "Admin.TaskAnalysisTableHeader.taskCountStatus": "Shown: {countShown} Tasks",
   "Admin.TaskAnalysisTableHeader.taskPercentStatus": "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
