@@ -25,7 +25,7 @@ export const viewAtticOverpass = (selectedEditor, actionDate, bounds, ignoreAtti
   if (isJosmEditor(selectedEditor)) {
     const overpassApiURL = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query)
     sendJOSMCommand('http://127.0.0.1:8111/import?new_layer=true&layer_name=' +
-                     adjustedDateString + '&layer_locked=true&url=' +
+                     adjustedDateString + '&upload_policy=never&download_policy=never&url=' +
                      encodeURIComponent(overpassApiURL))
   }
   else {
