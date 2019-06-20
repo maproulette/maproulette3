@@ -22,9 +22,9 @@ export default class ExportLayoutModal extends Component {
           <div className="mr-flex mr-justify-between">
             <div className="mr-pt-12">
               <SvgSymbol
-                sym="illustration-choose"
-                viewBox="0 0 147 200"
-                className="mr-h-64 mr-mr-12 mr-max-w-40"
+                sym="illustration-tasks"
+                viewBox="0 0 200 171"
+                className="mr-h-40 mr-mr-12"
               />
             </div>
 
