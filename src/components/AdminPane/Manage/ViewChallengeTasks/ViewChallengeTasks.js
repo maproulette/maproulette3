@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _reverse from 'lodash/reverse'
-import _cloneDeep from 'lodash/cloneDeep'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
@@ -27,7 +26,6 @@ import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
-import { geoJson } from 'leaflet'
 import Dropdown from '../../../Dropdown/Dropdown'
 
 /**
@@ -39,19 +37,9 @@ import Dropdown from '../../../Dropdown/Dropdown'
 export class ViewChallengeTasks extends Component {
   state = {
     bulkUpdating: false,
-    initialBounds: null,
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.state.initialBounds) {
-      const bounding = _get(this.props, 'challenge.bounding.bounding') ||
-                       _get(this.props, 'challenge.bounding')
-
-      if (bounding) {
-        this.setState({initialBounds: {mapBounds: geoJson(bounding).getBounds(), mapZoom: this.props.mapZoom}})
-      }
-    }
-
     // When bulk updating, wait until the tasks have been reloaded before turning
     // off the bulkUpdating flag and refreshing any selected tasks.
     if (this.state.bulkUpdating && prevProps.loadingTasks && !this.props.loadingTasks) {
@@ -88,14 +76,7 @@ export class ViewChallengeTasks extends Component {
   }
 
   resetMapBounds = () => {
-    let initialBounds = _cloneDeep(this.state.initialBounds)
-    if (!initialBounds) {
-      initialBounds = {mapBounds: this.props.mapBounds, mapZoom: this.props.mapZoom}
-    }
-
-    this.props.setChallengeOwnerMapBounds(this.props.challenge.id,
-                                          this.state.initialBounds.mapBounds,
-                                          this.state.initialBounds.mapZoom)
+    this.props.clearMapBounds(this.props.searchGroup)
   }
 
   render() {
@@ -225,7 +206,7 @@ export class ViewChallengeTasks extends Component {
               {buildFilterDropdown("filterByReviewStatusLabel", reviewStatusFilters)}
             </li>
             <li>
-              {buildFilterDropdown("sortByPriorityLabel", priorityFilters)}
+              {buildFilterDropdown("filterByPriorityLabel", priorityFilters)}
             </li>
           </ul>
 
