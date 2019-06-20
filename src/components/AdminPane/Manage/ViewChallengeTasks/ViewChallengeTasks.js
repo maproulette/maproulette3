@@ -105,12 +105,12 @@ export class ViewChallengeTasks extends Component {
 
     if (this.props.challenge.status === ChallengeStatus.failed) {
       return (
-        <div className="challenge-tasks-status title has-centered-children">
-          <h3 className="is-danger">
+        <div>
+          <h3 className="mr-text-red">
             <FormattedMessage {...messages.tasksFailed} />
           </h3>
 
-          <pre className="challenge-tasks-status__status-message">
+          <pre className="mr-text-grey-light">
             {this.props.challenge.statusMessage}
           </pre>
         </div>
