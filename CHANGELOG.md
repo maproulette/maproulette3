@@ -34,9 +34,10 @@ This project adheres to
 - Repeated serving of same skipped or too-hard task at priority boundary
 - Non-reviewers prevented from disputing a task review
 - Incorrect data in reviewer column in CSV export for challenge managers
+- Frozen search box in Safari if search was rapidly changed many times
 
 ### Changed
-- Don't alter pre-existing task status if another mapper skips the task
+- Don't alter pre-existing task status if a subsequent mapper skips the task
 
 
 ## [v3.3.1] - 2019-05-10
