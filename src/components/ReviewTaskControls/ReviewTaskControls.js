@@ -9,6 +9,7 @@ import { TaskStatus, messagesByStatus }
 import { TaskReviewLoadMethod } from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
+import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithEditor from '../HOCs/WithEditor/WithEditor'
 import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
@@ -64,7 +65,7 @@ export class ReviewTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, {zoom: 20})
+    this.props.editTask(value, this.props.task, this.props.mapBounds)
   }
 
   render() {
@@ -202,4 +203,12 @@ ReviewTaskControls.propTypes = {
   task: PropTypes.object,
 }
 
-export default WithTaskReview(WithEditor(WithKeyboardShortcuts(ReviewTaskControls)))
+export default
+  WithSearch(
+    WithTaskReview(
+      WithEditor(
+        WithKeyboardShortcuts(ReviewTaskControls)
+      )
+    ),
+    'task'
+  )
