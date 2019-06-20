@@ -93,9 +93,9 @@ export default defineMessages({
     defaultMessage: "Filter by Review Status",
   },
 
-  sortByPriorityLabel: {
-    id: "Admin.manageTasks.controls.sortByPriority.label",
-    defaultMessage: "Sort by Priority",
+  filterByPriorityLabel: {
+    id: "Admin.manageTasks.controls.filterByPriority.label",
+    defaultMessage: "Filter by Priority",
   },
 
   clearFiltersLabel: {
