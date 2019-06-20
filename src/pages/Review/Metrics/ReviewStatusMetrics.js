@@ -20,55 +20,71 @@ export default class ReviewStatusMetrics extends Component {
           <div className="mr-grid mr-grid-columns-1 mr-grid-gap-4">
             {type === ReviewTasksType.toBeReviewed &&
               buildMetric(metrics.reviewRequested, metrics.total,
-                <FormattedMessage {...messages.awaitingReview} />)}
+                <FormattedMessage {...messages.awaitingReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.toBeReviewed &&
               buildMetric(metrics.reviewDisputed, metrics.total,
-                <FormattedMessage {...messages.disputedReview} />)}
+                <FormattedMessage {...messages.disputedReview} />,
+                this.props.lightMode)}
 
             {type === ReviewTasksType.reviewedByMe &&
               buildMetric(metrics.reviewApproved, metrics.total,
-                <FormattedMessage {...messages.approvedReview} />)}
+                <FormattedMessage {...messages.approvedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.reviewedByMe &&
               buildMetric(metrics.reviewRejected, metrics.total,
-                <FormattedMessage {...messages.rejectedReview} />)}
+                <FormattedMessage {...messages.rejectedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.reviewedByMe &&
               buildMetric(metrics.reviewAssisted, metrics.total,
-                <FormattedMessage {...messages.assistedReview} />)}
+                <FormattedMessage {...messages.assistedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.reviewedByMe &&
               buildMetric(metrics.reviewDisputed, metrics.total,
-                <FormattedMessage {...messages.disputedReview} />)}
+                <FormattedMessage {...messages.disputedReview} />,
+                this.props.lightMode)}
 
             {type === ReviewTasksType.myReviewedTasks &&
               buildMetric(metrics.reviewRequested, metrics.total,
-                <FormattedMessage {...messages.awaitingReview} />)}
+                <FormattedMessage {...messages.awaitingReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.myReviewedTasks &&
               buildMetric(metrics.reviewApproved, metrics.total,
-                <FormattedMessage {...messages.approvedReview} />)}
+                <FormattedMessage {...messages.approvedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.myReviewedTasks &&
               buildMetric(metrics.reviewRejected, metrics.total,
-                <FormattedMessage {...messages.rejectedReview} />)}
+                <FormattedMessage {...messages.rejectedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.myReviewedTasks &&
               buildMetric(metrics.reviewAssisted, metrics.total,
-                <FormattedMessage {...messages.assistedReview} />)}
+                <FormattedMessage {...messages.assistedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.myReviewedTasks &&
               buildMetric(metrics.reviewDisputed, metrics.total,
-                <FormattedMessage {...messages.disputedReview} />)}
+                <FormattedMessage {...messages.disputedReview} />,
+                this.props.lightMode)}
 
             {type === ReviewTasksType.allReviewedTasks &&
               buildMetric(metrics.reviewRequested, metrics.total,
-                <FormattedMessage {...messages.awaitingReview} />)}
+                <FormattedMessage {...messages.awaitingReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.allReviewedTasks &&
               buildMetric(metrics.reviewApproved, metrics.total,
-                <FormattedMessage {...messages.approvedReview} />)}
+                <FormattedMessage {...messages.approvedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.allReviewedTasks &&
               buildMetric(metrics.reviewRejected, metrics.total,
-                <FormattedMessage {...messages.rejectedReview} />)}
+                <FormattedMessage {...messages.rejectedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.allReviewedTasks &&
               buildMetric(metrics.reviewAssisted, metrics.total,
-                <FormattedMessage {...messages.assistedReview} />)}
+                <FormattedMessage {...messages.assistedReview} />,
+                this.props.lightMode)}
             {type === ReviewTasksType.allReviewedTasks &&
               buildMetric(metrics.reviewDisputed, metrics.total,
-                <FormattedMessage {...messages.disputedReview} />)}
+                <FormattedMessage {...messages.disputedReview} />,
+                this.props.lightMode)}
           </div>
         }
       </div>
@@ -76,11 +92,16 @@ export default class ReviewStatusMetrics extends Component {
   }
 }
 
-function buildMetric(amount, total, description) {
+function buildMetric(amount, total, description, lightMode = false) {
   return <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
-    <div className="mr-col-span-1 mr-text-yellow mr-text-2xl">{amount === 0 ? 0 : Math.round(amount / total * 100)}%</div>
+    <div className={classNames("mr-col-span-1 mr-text-2xl",
+                    lightMode ? "mr-text-pink":"mr-text-yellow")}>
+      {amount === 0 ? 0 : Math.round(amount / total * 100)}%
+    </div>
     <div className="mr-col-span-4">
-      <div className="mr-text-yellow">{amount} / {total}</div>
+      <div className={classNames(lightMode ? "mr-text-pink":"mr-text-yellow")}>
+        {amount} / {total}
+      </div>
       <div>{description}</div>
     </div>
   </div>
