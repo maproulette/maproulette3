@@ -727,6 +727,7 @@
   "Metrics.reviewStats.rejected.label": "Tasks that failed",
   "Metrics.reviewStats.assisted.label": "Reviewed tasks that passed with changes",
   "Metrics.reviewStats.disputed.label": "Reviewed tasks that are being disputed",
+  "Metrics.reviewStats.awaiting.label": "Reviewed tasks that are awaiting review",
   "Profile.settings.header": "User Settings",
   "Profile.noUser": "User not found or you are unauthorized to view this user.",
   "Profile.userSince": "User since:",

@@ -45,7 +45,7 @@ export default class ReviewStats extends Component {
         rightHeaderControls={
           <PastDurationSelector
             className="mr-button mr-button--small"
-            pastMonthsOptions={[1, 3, 6, 9, 12]}
+            pastMonthsOptions={[1, 3, 6, 9, 12, -1]}
             currentMonthsPast={this.props.tasksReviewedMonthsPast}
             selectDuration={this.props.setTasksReviewedMonthsPast}
           />
@@ -62,6 +62,8 @@ export default class ReviewStats extends Component {
                             totalReviewTasks, <FormattedMessage {...messages.assistedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'disputed'),
                             totalReviewTasks, <FormattedMessage {...messages.disputedReview} />)}
+          {this.displayStat(_get(this.props.reviewMetrics, 'requested'),
+                            totalReviewTasks, <FormattedMessage {...messages.awaitingReview} />)}
         </ul>
       </QuickWidget>
     )
