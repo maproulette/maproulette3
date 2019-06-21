@@ -7,7 +7,6 @@ class Footer extends Component {
   render() {
     return (
       <footer
-        role="contentInfo"
         className="mr-px-4 mr-py-12 md:mr-py-24 mr-links-green-lighter"
       >
         <div className="mr-max-w-3xl mr-mx-auto mr-overflow-hidden">

@@ -95,78 +95,84 @@
       }
     }
 
-    .leaflet-popup-content-wrapper {
-      border-radius: $radius-medium;
+    .leaflet-popup {
+      a.leaflet-popup-close-button {
+        color: #C3C3C3;
+      }
 
-      .leaflet-popup-content {
-        width: 350px;
-        overflow-y: auto;
-        margin: 0;
+      .leaflet-popup-content-wrapper {
+        border-radius: $radius-medium;
 
-        h3 {
-          text-align: center;
-          color: $primary;
-          font-size: $size-6;
-          font-weight: $weight-medium;
-          padding: 12px 19px 12px 19px;
-          margin-bottom: 12px;
-          border-bottom: 2px solid $grey-lightest-more;
-        }
-
-        .marker-popup-content__links {
-          text-align: center;
-          font-size: $size-7;
-          margin: 12px;
-        }
-
-        .feature-properties {
-          color: $grey;
-          font-size: $size-7;
-          margin: 19px 0px;
-          max-height: 70vh;
+        .leaflet-popup-content {
+          width: 350px;
           overflow-y: auto;
+          margin: 0;
 
           h3 {
-            text-align: left;
-            padding-top: 0;
+            text-align: center;
+            color: #23395B; // tailwind blue
+            font-size: $size-6;
+            font-weight: $weight-medium;
+            padding: 12px 19px 12px 19px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid $grey-lightest-more;
           }
 
-          .name {
-            font-weight: $weight-medium;
-            padding: 5px 0.5em 5px 0px;
-            border: none;
-            position: relative;
+          .marker-popup-content__links {
+            text-align: center;
+            font-size: $size-7;
+            margin: 12px;
+          }
 
-            .not-linked {
-              color: $grey;
-              padding-left: 19px;
+          .feature-properties {
+            color: $grey;
+            font-size: $size-7;
+            margin: 19px 0px;
+            max-height: 70vh;
+            overflow-y: auto;
+
+            h3 {
+              text-align: left;
+              padding-top: 0;
             }
 
-            a, a:link, a:active, a:visited {
-              color: $grey;
-              padding-left: 19px;
+            .name {
+              font-weight: $weight-medium;
+              padding: 5px 0.5em 5px 0px;
+              border: none;
+              position: relative;
 
-              &:hover {
-                &:before {
-                  content: '?';
-                  font-size: 10px;
-                  color: $white;
-                  background-color: $grey-light;
-                  border-radius: 50%;
-                  padding: 0px 4px;
-                  position: absolute;
-                  top: 8px;
-                  left: 2px;
+              .not-linked {
+                color: $grey;
+                padding-left: 19px;
+              }
+
+              a, a:link, a:active, a:visited {
+                color: $grey;
+                padding-left: 19px;
+
+                &:hover {
+                  &:before {
+                    content: '?';
+                    font-size: 10px;
+                    color: $white;
+                    background-color: $grey-light;
+                    border-radius: 50%;
+                    padding: 0px 4px;
+                    position: absolute;
+                    top: 8px;
+                    left: 2px;
+                  }
                 }
               }
             }
-          }
 
-          .value {
-            @include constrained-text-content;
-            hyphens: initial;
-            padding: 5px 19px 5px 0px;
-            border: none;
+            .value {
+              @include constrained-text-content;
+              hyphens: initial;
+              padding: 5px 19px 5px 0px;
+              border: none;
+            }
           }
         }
       }

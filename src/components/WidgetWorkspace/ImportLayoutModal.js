@@ -34,7 +34,6 @@ export default class ImportLayoutModal extends Component {
                 {this.state.importingFiles ? <BusySpinner /> :
                  <div>
                    <Dropzone
-                     className="dropzone mr-text-green-lighter mr-border-green-lighter mr-border-2 mr-rounded mr-p-4 mr-mx-auto mr-mt-12 mr-cursor-pointer"
                      acceptClassName="active"
                      multiple={false}
                      disablePreview
@@ -46,22 +45,27 @@ export default class ImportLayoutModal extends Component {
                        })
                      }}
                    >
-                     {({acceptedFiles}) => {
-                       if (acceptedFiles.length > 0) {
-                         return <p>{acceptedFiles[0].name}</p>
-                       }
-                       else {
-                         return (
-                           <div>
-                             <SvgSymbol
-                               viewBox='0 0 20 20'
-                               sym="upload-icon"
-                               className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
-                             />
-                             <FormattedMessage {...messages.importModalUploadLabel} />
-                           </div>
-                         )
-                       }
+                     {({acceptedFiles, getRootProps, getInputProps}) => {
+                       const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
+                         <React.Fragment>
+                           <SvgSymbol
+                             viewBox='0 0 20 20'
+                             sym="upload-icon"
+                             className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
+                           />
+                           <FormattedMessage {...messages.importModalUploadLabel} />
+                           <input {...getInputProps()} />
+                         </React.Fragment>
+                       )
+
+                       return (
+                         <div
+                           className="dropzone mr-text-green-lighter mr-border-green-lighter mr-border-2 mr-rounded mr-p-4 mr-mx-auto mr-mt-12 mr-cursor-pointer"
+                           {...getRootProps()}
+                         >
+                           {body}
+                         </div>
+                       )
                      }}
                    </Dropzone>
                    <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
