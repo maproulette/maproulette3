@@ -11,6 +11,8 @@ import WithCurrentUser
        from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import PastDurationSelector
        from '../../components/PastDurationSelector/PastDurationSelector'
+import {ALL_TIME}
+       from '../../components/PastDurationSelector/PastDurationSelector'
 import CountrySelector
        from '../../components/CountrySelector/CountrySelector'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
@@ -84,7 +86,7 @@ class Leaderboard extends Component {
             <div className="mr-flex mr-justify-center mr-mb-2">
               <PastDurationSelector
                 className="mr-button mr-mr-8"
-                pastMonthsOptions={[-1, 1, 3, 6, 12]}
+                pastMonthsOptions={[ALL_TIME, 1, 3, 6, 12]}
                 currentMonthsPast={this.props.monthsPast}
                 selectDuration={this.props.setMonthsPast}
               />

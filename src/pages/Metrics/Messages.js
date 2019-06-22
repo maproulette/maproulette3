@@ -71,6 +71,6 @@ export default defineMessages({
 
   awaitingReview: {
     id: 'Metrics.reviewStats.awaiting.label',
-    defaultMessage: "Reviewed tasks that are awaiting review",
+    defaultMessage: "Tasks that are awaiting review",
   },
 })
