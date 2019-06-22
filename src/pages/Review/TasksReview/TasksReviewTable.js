@@ -297,13 +297,16 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria, page
     defaultSortDesc: false,
     exportable: t => t.mappedOn,
     maxWidth: 180,
-    Cell: props => (
-      props.value &&
+    Cell: props => {
+      if (!props.value) {
+        return null
+      }
+      return (
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-
-    )
+      )
+    }
   }
 
   columns.reviewedAt = {
@@ -316,13 +319,17 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria, page
     exportable: t => t.reviewedAt,
     minWidth: 180,
     maxWidth: 200,
-    Cell: props => (
-      props.value &&
+    Cell: props => {
+      if (!props.value) {
+        return null
+      }
+
+      return (
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-
-    ),
+      )
+    },
     Filter: ({ filter, onChange }) =>
       <div>
         <IntlDatePicker

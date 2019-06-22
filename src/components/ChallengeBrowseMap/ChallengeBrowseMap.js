@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl } from 'react-leaflet'
+import { Marker, ZoomControl } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { point, featureCollection } from '@turf/helpers'
 import bbox from '@turf/bbox'
@@ -136,6 +136,11 @@ export class ChallengeBrowseMap extends Component {
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
 
+    const renderedMarkers = _map(this.props.taskMarkers, markerData => (
+      <Marker key={markerData.options.taskId} {...markerData}
+              onClick={() => this.markerClicked(markerData)} />
+    ))
+
     return (
       <div key={this.props.browsedChallenge.id}
            className={classNames('full-screen-map', this.props.className)}>
@@ -150,10 +155,7 @@ export class ChallengeBrowseMap extends Component {
           <ZoomControl position='topright' />
           <VisibleTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
-          {hasTaskMarkers &&
-            <MarkerClusterGroup markers={this.props.taskMarkers}
-                                onMarkerClick={this.markerClicked} />
-          }
+          {hasTaskMarkers && <MarkerClusterGroup>{renderedMarkers}</MarkerClusterGroup>}
         </EnhancedMap>
 
         {!!this.props.tasksLoading && <BusySpinner mapMode />}

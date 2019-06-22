@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Control, Handler, DomUtil, DomEvent, FeatureGroup }
        from 'leaflet'
 import { injectIntl } from 'react-intl'
-import { MapControl } from 'react-leaflet'
+import { MapControl, withLeaflet } from 'react-leaflet'
 import _pick from 'lodash/pick'
 import WithKeyboardShortcuts
        from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
@@ -107,7 +107,9 @@ const keyboardHandler = function(key, controlFunction) {
  */
 export class FitBoundsControl extends MapControl {
   // props will be available as `options` field in the leaflet control
-  createLeafletElement = props => new FitBoundsLeafletControl(props)
+  createLeafletElement(props) {
+    return new FitBoundsLeafletControl(props)
+  }
 }
 
-export default WithKeyboardShortcuts(injectIntl(FitBoundsControl))
+export default WithKeyboardShortcuts(withLeaflet(injectIntl(FitBoundsControl)))
