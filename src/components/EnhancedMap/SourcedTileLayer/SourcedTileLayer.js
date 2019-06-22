@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
+import { BingLayer } from 'react-leaflet-bing'
 import _isEmpty from 'lodash/isEmpty'
 import { layerSourceShape, normalizeLayer }
        from '../../../services/VisibleLayer/LayerSources'
@@ -28,11 +29,27 @@ export class SourcedTileLayer extends Component {
 
   render() {
     const normalizedLayer = normalizeLayer(this.props.source)
+    if (normalizedLayer.type === 'bing') {
+      // Bing layers have to be specially rendered
+      return (
+        <BingLayer
+          key={normalizedLayer.id}
+          {...normalizedLayer}
+          type="Aerial"
+          attribution={this.attribution(normalizedLayer)}
+          {...this.props}
+        />
+      )
+    }
 
-    return <TileLayer key={normalizedLayer.id}
-                      {...normalizedLayer}
-                      attribution={this.attribution(normalizedLayer)}
-                      {...this.props} />
+    return (
+      <TileLayer
+        key={normalizedLayer.id}
+        {...normalizedLayer}
+        attribution={this.attribution(normalizedLayer)}
+        {...this.props}
+      />
+    )
   }
 }
 
