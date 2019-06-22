@@ -23,13 +23,13 @@ export const MARK_REVIEW_DATA_STALE = "MARK_REVIEW_DATA_STALE"
 export const REVIEW_TASKS_TO_BE_REVIEWED = 'tasksToBeReviewed'
 export const MY_REVIEWED_TASKS = 'myReviewedTasks'
 export const REVIEW_TASKS_BY_ME = 'tasksReviewedByMe'
-export const ALL_REVIEWED_TASKS = 'allReviewed'
+export const ALL_REVIEWED_TASKS = 'allReviewedTasks'
 
 export const ReviewTasksType = {
   toBeReviewed: REVIEW_TASKS_TO_BE_REVIEWED,
   myReviewedTasks: MY_REVIEWED_TASKS,
   reviewedByMe: REVIEW_TASKS_BY_ME,
-  allReviewed: ALL_REVIEWED_TASKS,
+  allReviewedTasks: ALL_REVIEWED_TASKS,
 }
 
 // redux action creators

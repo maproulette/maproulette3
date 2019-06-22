@@ -86,17 +86,17 @@ export class ReviewTasksDashboard extends Component {
           </button>
         </li>
         <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
-          <button className={classNames(this.state.showType === 'tasksReviewedByMe' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}>
+          <button className={classNames(this.state.showType === ReviewTasksType.reviewedByMe ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}>
             {this.props.intl.formatMessage(messages.tasksReviewedByMe)}
           </button>
         </li>
         <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
-          <button className={classNames(this.state.showType === 'myReviewedTasks' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})}>
+          <button className={classNames(this.state.showType === ReviewTasksType.myReviewedTasks ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})}>
             {this.props.intl.formatMessage(messages.myReviewTasks)}
           </button>
         </li>
         <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
-          <button className={classNames(this.state.showType === undefined ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.allReviewedTasks})}>
+          <button className={classNames(this.state.showType === ReviewTasksType.allReviewedTasks ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.allReviewedTasks})}>
             {this.props.intl.formatMessage(messages.allReviewedTasks)}
           </button>
         </li>
