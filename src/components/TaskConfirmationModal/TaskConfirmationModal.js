@@ -126,7 +126,6 @@ export class TaskConfirmationModal extends Component {
                       value={this.props.comment}
                       onChange={this.handleComment}
                     />
-
                     <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
                                          handleAddTag={this.handleAddTag}
                                          formData={this.props.tags} {...this.props}

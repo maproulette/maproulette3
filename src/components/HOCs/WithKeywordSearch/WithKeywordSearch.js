@@ -5,6 +5,7 @@ import _filter from 'lodash/filter'
 import _reject from 'lodash/reject'
 import _startsWith from 'lodash/startsWith'
 import _debounce from 'lodash/debounce'
+import _indexOf from 'lodash/indexOf'
 import { findKeyword } from '../../../services/Challenge/Challenge'
 
 /**

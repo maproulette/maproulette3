@@ -104,7 +104,7 @@ export class ActiveTaskControls extends Component {
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
                               taskStatus, this.state.comment, this.state.tags,
-                              revisionSubmission? null : this.props.taskLoadBy,
+                              revisionSubmission ? null : this.props.taskLoadBy,
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview,
                               this.state.requestedNextTask)
@@ -194,6 +194,7 @@ export class ActiveTaskControls extends Component {
         allowedStatusProgressions(this.props.task.status)
       const isComplete = isCompletionStatus(this.props.task.status)
       const isFinal = isFinalStatus(this.props.task.status)
+      const taskTags = _map(this.props.task.tags, (tag) => tag.name)
 
       return (
         <div className={this.props.className}>
@@ -211,6 +212,13 @@ export class ActiveTaskControls extends Component {
                 </div>
              }
            </div>
+          }
+          {taskTags.length > 0 &&
+            <div className="mr-text-sm mr-text-white">
+              <FormattedMessage
+                {...messages.taskTags}
+              /> {taskTags.join(', ')}
+            </div>
           }
 
           <TaskTags task={this.props.task}
