@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus,
@@ -13,6 +14,7 @@ import { TaskReviewLoadMethod } from '../../../../services/Task/TaskReview/TaskR
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
+import WithTaskTags from '../../../HOCs/WithTaskTags/WithTaskTags'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -36,10 +38,12 @@ export class ActiveTaskControls extends Component {
     confirmingTask: null,
     confirmingStatus: null,
     comment: "",
+    tags: "",
     revisionLoadBy: TaskReviewLoadMethod.all,
   }
 
   setComment = comment => this.setState({comment})
+  setTags = tags => this.setState({tags})
 
   toggleNeedsReview = () => {
     this.setState({needsReview: !this.getNeedsReviewSetting()})
@@ -92,13 +96,13 @@ export class ActiveTaskControls extends Component {
 
     if (!_isUndefined(this.state.submitRevision)) {
       this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
-                                        this.state.comment, this.state.revisionLoadBy,
-                                        this.props.history)
+                                        this.state.comment, this.state.tags,
+                                        this.state.revisionLoadBy, this.props.history)
     }
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
-                              taskStatus, this.state.comment,
-                              revisionSubmission ? null : this.props.taskLoadBy,
+                              taskStatus, this.state.comment, this.state.tags,
+                              revisionSubmission? null : this.props.taskLoadBy,
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview,
                               this.state.requestedNextTask)
@@ -131,7 +135,7 @@ export class ActiveTaskControls extends Component {
       confirmingTask: null,
       confirmingStatus: null,
       requestedNextTask: null,
-      comment: "",
+      comment: "", tags: "",
     })
   }
 
@@ -184,6 +188,7 @@ export class ActiveTaskControls extends Component {
         allowedStatusProgressions(this.props.task.status)
       const isComplete = isCompletionStatus(this.props.task.status)
       const isFinal = isFinalStatus(this.props.task.status)
+      const taskTags = _map(this.props.task.tags, (tag) => tag.name)
 
       return (
         <div className={this.props.className}>
@@ -201,6 +206,13 @@ export class ActiveTaskControls extends Component {
                 </div>
              }
            </div>
+          }
+          {taskTags.length > 0 &&
+            <div className="mr-text-sm mr-text-white">
+              <FormattedMessage
+                {...messages.taskTags}
+              /> {taskTags.join(', ')}
+            </div>
           }
 
           {!isEditingTask && (!isFinal || needsRevised) &&
@@ -238,6 +250,8 @@ export class ActiveTaskControls extends Component {
               status={this.state.confirmingStatus}
               comment={this.state.comment}
               setComment={this.setComment}
+              tags={this.state.tags}
+              setTags={this.setTags}
               needsReview={this.getNeedsReviewSetting()}
               toggleNeedsReview={this.toggleNeedsReview}
               loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
@@ -272,9 +286,12 @@ ActiveTaskControls.defaultProps = {
 }
 
 export default WithSearch(
-  WithTaskReview(
-    WithKeyboardShortcuts(
-      injectIntl(ActiveTaskControls)
-    )),
+  WithTaskTags(
+    WithTaskReview(
+      WithKeyboardShortcuts(
+        injectIntl(ActiveTaskControls)
+      )
+    )
+  ),
   'task'
 )

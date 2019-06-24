@@ -31,4 +31,18 @@
       }
     }
   }
+
+  &.dark-mode {
+    border-radius: 1px;
+    input {
+      background: transparent;
+      border-radius: 0px;
+      border: none;
+      color: white;
+
+      &::placeholder {
+        color: white;
+      }
+    }
+  }
 }

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import { TagsInputField }
-       from '../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
-import AutosuggestTextBox from '../../../AutosuggestTextBox/AutosuggestTextBox'
-import WithKeywordSearch from '../../HOCs/WithKeywordSearch/WithKeywordSearch'
+       from '../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import AutosuggestTextBox from '../AutosuggestTextBox/AutosuggestTextBox'
+import WithKeywordSearch from '../HOCs/WithKeywordSearch/WithKeywordSearch'
 import messages from './Messages'
 import './KeywordAutosuggestInput.scss'
 
@@ -35,7 +35,12 @@ export class KeywordAutosuggestInput extends Component {
                         inputValue={this.state.value}
                         onInputValueChange={value => this.setState({value})}
                         onChange={keyword => {
-                          props.addTag(keyword.name)
+                          if (this.props.handleAddTag) {
+                            this.props.handleAddTag(keyword.name)
+                          }
+                          else {
+                            props.addTag(keyword.name)
+                          }
                           this.setState({value: ''})
                         }}
                         resultClassName={this.keywordClassName}
@@ -44,10 +49,25 @@ export class KeywordAutosuggestInput extends Component {
     />
   )
 
+  handleChangeTags = keyword => {
+    if (this.props.handleChangeTags) {
+      this.props.handleChangeTags(keyword)
+      this.setState({value: ''})
+    }
+  }
+
   render() {
-    return <TagsInputField {...this.props}
-                           renderInput={this.autosuggestInput}
-                           className="keyword-autosuggest-input" />
+    if (this.props.handleChangeTags) {
+      return <TagsInputField {...this.props}
+                             onChange={this.props.handleChangeTags}
+                             renderInput={this.autosuggestInput}
+                             className="keyword-autosuggest-input dark-mode" />
+    }
+    else {
+      return <TagsInputField {...this.props}
+                             renderInput={this.autosuggestInput}
+                             className="keyword-autosuggest-input" />
+    }
   }
 }
 

@@ -21,8 +21,8 @@ const WithTaskReview = WrappedComponent =>
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateTaskReviewStatus: (task, status, comment, loadBy, url) => {
-      dispatch(completeReview(task.id, status, comment)).then(() => {
+    updateTaskReviewStatus: (task, status, comment, tags, loadBy, url) => {
+      dispatch(completeReview(task.id, status, comment, tags)).then(() => {
         let newState = url.location.state
         const searchCriteria = parseSearchCriteria(url, newState)
 

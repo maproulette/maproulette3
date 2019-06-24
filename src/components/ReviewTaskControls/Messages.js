@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Review Status:",
   },
 
+  taskTags: {
+    id: "Admin.TaskReview.controls.taskTags.label",
+    defaultMessage: "Tags:",
+  },
+
   reviewNotRequested: {
     id: "Admin.TaskReview.controls.reviewNotRequested",
     defaultMessage: "A review has not been requested for this task.",
