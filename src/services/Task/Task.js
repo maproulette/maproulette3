@@ -133,9 +133,6 @@ export const fetchTaskTags = function(taskId) {
       api.task.tags,
       {schema: {}, variables: {id: taskId}}
     ).execute().then(normalizedTags => {
-      console.log("FETCHED TASK TAGS:")
-      console.log(normalizedTags)
-
       if (_isObject(normalizedTags.result)) {
         // Inject tags into task.
         dispatch(receiveTasks({
@@ -523,7 +520,7 @@ export const saveTask = function(originalTaskData) {
   return function(dispatch) {
     const taskData = _pick(
       originalTaskData,
-      ['id', 'name', 'instruction', 'geometries', 'status', 'priority']
+      ['id', 'name', 'instruction', 'geometries', 'status', 'priority', 'tags']
     )
 
     // If the geometries are a string, convert to JSON.
@@ -632,6 +629,23 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
   })
 }
 
+/**
+ * reduceTasksFurther will be invoked by the genericEntityReducer function to
+ * perform additional reduction on challenge entities.
+ *
+ * @private
+ */
+const reduceTasksFurther = function(mergedState, oldState, taskEntities) {
+  // The generic reduction will merge arrays and objects, but for some fields
+  // we want to simply overwrite with the latest data.
+  taskEntities.forEach(entity => {
+    if (_isArray(entity.tags)) {
+      mergedState[entity.id].tags = entity.tags
+    }
+  })
+}
+
+
 
 // redux reducers
 export const taskEntities = function(state, action) {
@@ -641,6 +655,6 @@ export const taskEntities = function(state, action) {
     return mergedState
   }
   else {
-    return genericEntityReducer(RECEIVE_TASKS, 'tasks')(state, action)
+    return genericEntityReducer(RECEIVE_TASKS, 'tasks', reduceTasksFurther)(state, action)
   }
 }
