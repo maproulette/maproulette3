@@ -512,6 +512,32 @@ export const fetchTaskPlace = function(task) {
 }
 
 /**
+ * Update the tags on the task.
+ *
+ */
+export const updateTaskTags = function(taskId, tags) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.updateTags,
+      {schema: {}, variables: {id: taskId}, params: {tags: tags}}
+    ).execute().then(normalizedTags => {
+      if (_isObject(normalizedTags.result)) {
+        // Inject tags into task.
+        dispatch(receiveTasks({
+          tasks: {
+            [taskId]: {
+              id: taskId,
+              tags: _values(normalizedTags.result),
+            }
+          }
+        }))
+      }
+      return normalizedTags
+    })
+  }
+}
+
+/**
  * Saves the given task (either creating it or updating it, depending on
  * whether it already has an id) and updates the redux store with the latest
  * version from the server.

@@ -17,7 +17,7 @@ import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import TaskNearbyList from '../TaskPane/TaskNearbyList/TaskNearbyList'
 import KeywordAutosuggestInput
-       from '..//KeywordAutosuggestInput/KeywordAutosuggestInput'
+       from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
 import Modal from '../Modal/Modal'

@@ -14,7 +14,8 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromVirtualChallenge,
          startTask,
          addTaskComment,
-         completeTask } from '../../../services/Task/Task'
+         completeTask,
+         updateTaskTags } from '../../../services/Task/Task'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
@@ -242,6 +243,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      */
     postTaskComment: (task, comment) => {
       return dispatch(addTaskComment(task.id, comment))
+    },
+
+    /**
+     * Update tags on task.
+     */
+    saveTaskTags: (task, tags) => {
+      return dispatch(updateTaskTags(task.id, tags))
     },
 
     fetchOSMUser,

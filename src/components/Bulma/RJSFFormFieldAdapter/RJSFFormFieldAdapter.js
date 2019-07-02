@@ -135,7 +135,7 @@ export const TagsInputField = props => {
   if (_isArray(props.formData)) {
     tags = _map(props.formData, (tag) => tag.name)
   }
-  else if (_isString(props.formData) && props.formData != "") {
+  else if (_isString(props.formData) && props.formData !== "") {
     tags = props.formData.split(',')
   }
 

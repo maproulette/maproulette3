@@ -98,6 +98,7 @@ const apiRoutes = factory => {
       'edit': factory.put('/task/:id'),
       'history': factory.get('/task/:id/history'),
       'tags': factory.get('/task/:id/tags'),
+      'updateTags': factory.get('/task/:id/tags/update'),
     },
     'keywords': {
       'find': factory.get('/keywords'),

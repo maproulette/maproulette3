@@ -23,8 +23,10 @@ import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
 import TaskConfirmationModal
        from '../../../TaskConfirmationModal/TaskConfirmationModal'
+import TaskTags from '../../../TaskTags/TaskTags'
 import messages from './Messages'
 import './ActiveTaskControls.scss'
+
 
 /**
  * ActiveTaskControls renders the appropriate controls for the given
@@ -38,7 +40,7 @@ export class ActiveTaskControls extends Component {
     confirmingTask: null,
     confirmingStatus: null,
     comment: "",
-    tags: "",
+    tags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
   }
 
@@ -150,6 +152,10 @@ export class ActiveTaskControls extends Component {
         this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox) {
       this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox})
     }
+
+    if (this.state.tags === null && _get(this.props, 'task.tags')) {
+      this.setState({tags: _map(this.props.task.tags, (tag) => tag.name).join(', ')})
+    }
   }
 
   render() {
@@ -188,7 +194,6 @@ export class ActiveTaskControls extends Component {
         allowedStatusProgressions(this.props.task.status)
       const isComplete = isCompletionStatus(this.props.task.status)
       const isFinal = isFinalStatus(this.props.task.status)
-      const taskTags = _map(this.props.task.tags, (tag) => tag.name)
 
       return (
         <div className={this.props.className}>
@@ -207,13 +212,12 @@ export class ActiveTaskControls extends Component {
              }
            </div>
           }
-          {taskTags.length > 0 &&
-            <div className="mr-text-sm mr-text-white">
-              <FormattedMessage
-                {...messages.taskTags}
-              /> {taskTags.join(', ')}
-            </div>
-          }
+
+          <TaskTags task={this.props.task}
+                         tags={this.state.tags}
+                         setTags={this.setTags}
+                         onConfirm={this.confirmCompletion}
+                         saveTaskTags={this.props.saveTaskTags} />
 
           {!isEditingTask && (!isFinal || needsRevised) &&
            <TaskCompletionStep1
