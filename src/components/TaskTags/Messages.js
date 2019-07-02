@@ -21,7 +21,7 @@ export default defineMessages({
 
   saveTags: {
     id: "Task.taskTags.save.label",
-    defaultMessage: "Save Tags",
+    defaultMessage: "Save",
   },
 
   cancelTags: {

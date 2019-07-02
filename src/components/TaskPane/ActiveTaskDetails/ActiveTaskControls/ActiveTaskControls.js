@@ -194,7 +194,6 @@ export class ActiveTaskControls extends Component {
         allowedStatusProgressions(this.props.task.status)
       const isComplete = isCompletionStatus(this.props.task.status)
       const isFinal = isFinalStatus(this.props.task.status)
-      const taskTags = _map(this.props.task.tags, (tag) => tag.name)
 
       return (
         <div className={this.props.className}>
@@ -213,13 +212,12 @@ export class ActiveTaskControls extends Component {
              }
            </div>
           }
-          {taskTags.length > 0 &&
-            <div className="mr-text-sm mr-text-white">
-              <FormattedMessage
-                {...messages.taskTags}
-              /> {taskTags.join(', ')}
-            </div>
-          }
+
+          <TaskTags task={this.props.task}
+                         tags={this.state.tags}
+                         setTags={this.setTags}
+                         onConfirm={this.confirmCompletion}
+                         saveTaskTags={this.props.saveTaskTags} />
 
           <TaskTags task={this.props.task}
                          tags={this.state.tags}
