@@ -1,9 +1,9 @@
 import defaultPic from '../../static/images/user_no_image.png'
 
 /**
- * AsUser adds functionality to a User related to a general user.
+ * AsAvatarUser adds functionality to a User related to a general user.
  */
-export class AsUser {
+export class AsAvatarUser {
   constructor(user) {
     Object.assign(this, user)
   }
@@ -13,4 +13,4 @@ export class AsUser {
   }
 }
 
-export default user => new AsUser(user)
+export default user => new AsAvatarUser(user)

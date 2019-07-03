@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
-import AsUser from '../../interactions/User/AsUser'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 
 class RowLeaderboard extends Component {
   render() {
-    const leader = AsUser(this.props.leader)
+    const leader = this.props.leader
 
     const topChallengeItems =
       this.props.suppressTopChallenges ? null :
@@ -21,7 +21,7 @@ class RowLeaderboard extends Component {
           </Link>
         </li>
       ))
-            
+
     return (
       <article className={classNames('mr-leaderboard-row', this.props.className)}>
         <div className="sm:mr-grid sm:mr-grid-columns-10 sm:mr-grid-gap-8">
@@ -34,7 +34,7 @@ class RowLeaderboard extends Component {
             <div className="md:mr-flex mr-items-center">
               <div
                 className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full"
-                style={{ backgroundImage: `url(${leader.profilePic(200)})` }}
+                style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(200)})` }}
               />
               <div className="md:mr-pl-8">
                 <h2 className="mr-text-lg mr-font-normal mr-mb-2">

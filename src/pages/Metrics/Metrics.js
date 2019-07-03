@@ -12,11 +12,11 @@ import TaskStats from './blocks/TaskStats'
 import LeaderboardStats from './blocks/LeaderboardStats'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
-import AsUser from '../../interactions/User/AsUser'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 
 const ProfileImage = props => {
 
-  const osmProfile = AsUser(props.targetUser.osmProfile)
+  const osmProfile = AsAvatarUser(props.targetUser.osmProfile)
 
   return (
     <img

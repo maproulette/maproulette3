@@ -8,7 +8,7 @@ import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import ApiKey from './ApiKey'
 import messages from './Messages'
-import AsUser from '../../interactions/User/AsUser'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 
 class Profile extends Component {
   componentDidMount() {
@@ -31,7 +31,7 @@ class Profile extends Component {
     }
 
     let user = this.props.user
-    let osmProfile = AsUser(user.osmProfile)
+    let osmProfile = AsAvatarUser(user.osmProfile)
 
     if (this.props.showingUserId) {
       user = this.props.targetUser
