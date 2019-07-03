@@ -109,14 +109,18 @@ export class TaskNearbyMap extends Component {
     if (hasTaskMarkers) {
       coloredMarkers = _map(this.props.taskMarkers, marker => {
         const isRequestedMarker = marker.options.taskId === this.props.requestedNextTask
-        const coloredMarker = _cloneDeep(marker)
-        coloredMarker.options.icon = markerIconSvg(isRequestedMarker ? colors.yellow :
-                                                                       colors['blue-leaflet'])
-        coloredMarker.options.title=`Task ${marker.options.taskId}`
-        if (isRequestedMarker) {
-          coloredMarker.options.zIndexOffset = 500
-        }
-        return coloredMarker
+        const markerData = _cloneDeep(marker)
+        markerData.options.title = `Task ${marker.options.taskId}`
+
+        return (
+          <Marker
+            key={marker.options.taskId}
+            {...markerData}
+            icon={markerIconSvg(isRequestedMarker ? colors.yellow : colors['blue-leaflet'])}
+            zIndexOffset={isRequestedMarker ? 1000 : undefined}
+            onClick={() => this.markerClicked(markerData)}
+          />
+        )
       })
     }
 
@@ -143,12 +147,10 @@ export class TaskNearbyMap extends Component {
             icon={starIconSvg}
             title={this.props.intl.formatMessage(messages.currentTaskTooltip)}
           />
-          {hasTaskMarkers &&
-            <MarkerClusterGroup
-              markers={coloredMarkers}
-              onMarkerClick={this.markerClicked}
-              maxClusterRadius={5}
-            />
+          {coloredMarkers.length > 0 &&
+           <MarkerClusterGroup key={Date.now()} maxClusterRadius={5}>
+             {coloredMarkers}
+           </MarkerClusterGroup>
           }
         </EnhancedMap>
 
