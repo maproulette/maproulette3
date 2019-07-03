@@ -7,6 +7,8 @@ import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './PastDurationSelector.scss'
 
+export const ALL_TIME = -1
+
 /**
  * PastDurationSelector renders an unmanaged dropdown button that can be used
  * to select a past number of months or years.

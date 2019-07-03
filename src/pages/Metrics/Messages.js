@@ -68,4 +68,9 @@ export default defineMessages({
     id: 'Metrics.reviewStats.disputed.label',
     defaultMessage: "Reviewed tasks that are being disputed",
   },
+
+  awaitingReview: {
+    id: 'Metrics.reviewStats.awaiting.label',
+    defaultMessage: "Tasks that are awaiting review",
+  },
 })
