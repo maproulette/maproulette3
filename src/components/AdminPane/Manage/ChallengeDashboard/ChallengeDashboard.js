@@ -23,6 +23,8 @@ import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
+import WithChallengeReviewMetrics
+      from '../../HOCs/WithChallengeReviewMetrics/WithChallengeReviewMetrics'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
 import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
@@ -257,7 +259,9 @@ WithManageableProjects(
         WithWidgetWorkspaces(
           WithFilteredClusteredTasks(
             WithChallengeMetrics(
-              injectIntl(ChallengeDashboard),
+              WithChallengeReviewMetrics(
+                injectIntl(ChallengeDashboard),
+              )
             ),
             'clusteredTasks',
             'filteredClusteredTasks',

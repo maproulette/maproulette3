@@ -255,6 +255,9 @@ export const setupFilterSearchParameters = (filters, boundingBox, savedChallenge
     searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
     searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
   }
+  if (filters.challengeId) {
+    searchParameters.cid = [filters.challengeId]
+  }
 
   if (boundingBox) {
     //tbb =>  [left, bottom, right, top]
