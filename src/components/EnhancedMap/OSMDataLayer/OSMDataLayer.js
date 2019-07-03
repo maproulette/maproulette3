@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { FeatureGroup } from 'react-leaflet'
+import { Path, withLeaflet } from 'react-leaflet'
 import L from 'leaflet'
 import PropertyList from '../PropertyList/PropertyList'
 
@@ -9,7 +9,7 @@ const OSM_DATA_COLOR = "#EA8433" // orange
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
  */
-export default class OSMDataLayer extends FeatureGroup {
+export class OSMDataLayer extends Path {
   popupContent = layer => {
     const header = (
       <a target="_blank"
@@ -28,6 +28,11 @@ export default class OSMDataLayer extends FeatureGroup {
     return contentElement
   }
 
+  componentDidMount() {
+    super.componentDidMount()
+    this.setStyle(this.props)
+  }
+
   createLeafletElement(props) {
     const layerGroup = new L.OSM.DataLayer(props.xmlData, {
       styles: {
@@ -43,6 +48,8 @@ export default class OSMDataLayer extends FeatureGroup {
     return layerGroup
   }
 }
+
+export default withLeaflet(OSMDataLayer)
 
 // The below code (with a couple minor linter fixes) comes from the
 // [leaflet-osm](https://github.com/openstreetmap/leaflet-osm) project's

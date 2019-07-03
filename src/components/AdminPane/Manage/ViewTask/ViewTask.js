@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import SyntaxHighlighter,
-       { registerLanguage } from 'react-syntax-highlighter/light'
-import jsonLang from 'react-syntax-highlighter/languages/hljs/json'
-import highlightColors from 'react-syntax-highlighter/styles/hljs/github'
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
+import jsonLang from 'react-syntax-highlighter/dist/languages/hljs/json'
+import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/github'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 
-registerLanguage('json', jsonLang);
+SyntaxHighlighter.registerLanguage('json', jsonLang);
 
 export default class ViewTask extends Component {
   render() {

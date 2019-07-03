@@ -11,7 +11,7 @@ import ja from 'react-intl/locale-data/ja'
 import ko from 'react-intl/locale-data/ko'
 import pt from 'react-intl/locale-data/pt'
 import { Router } from 'react-router-dom'
-import createBrowserHistory from 'history/createBrowserHistory'
+import { createBrowserHistory } from 'history'
 import PiwikReactRouter from 'piwik-react-router'
 import _isEmpty from 'lodash/isEmpty'
 import App from './App';

@@ -15,6 +15,8 @@ import { saveChallenge,
 import { bulkUpdateTasks, deleteChallengeTasks }
        from '../../../../services/Task/Task'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
+import { addError } from '../../../../services/Error/Error'
+import AppErrors from '../../../../services/Error/AppErrors'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import AsValidatableGeoJSON
@@ -141,20 +143,25 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   rebuildChallenge: async (challenge, localFile) => {
     ownProps.updateCreatingTasksProgress(true)
 
-    // For local files we need to figure out if it's line-by-line to
-    // decide which service call to use
-    if (localFile) {
-      if (await AsValidatableGeoJSON(localFile).isLineByLine()) {
-        await uploadLineByLine(dispatch, ownProps, challenge, localFile)
+    try {
+      // For local files we need to figure out if it's line-by-line to
+      // decide which service call to use
+      if (localFile) {
+        if (await AsValidatableGeoJSON(localFile).isLineByLine()) {
+          await uploadLineByLine(dispatch, ownProps, challenge, localFile)
+        }
+        else {
+          await dispatch(
+            uploadChallengeGeoJSON(challenge.id, localFile, false)
+          )
+        }
       }
       else {
-        await dispatch(
-          uploadChallengeGeoJSON(challenge.id, localFile, false)
-        )
+        await dispatch(rebuildChallenge(challenge.id))
       }
     }
-    else {
-      await dispatch(rebuildChallenge(challenge.id))
+    catch(error) {
+      dispatch(addError(AppErrors.challenge.rebuildFailure))
     }
 
     // Refresh all the challenge data, including clustered tasks if we can, as

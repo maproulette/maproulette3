@@ -69,7 +69,6 @@ export class TaskReviewTable extends Component {
     const pageSize = this.props.pageSize
     const columnTypes = setupColumnTypes(this.props,
                            taskId => this.setState({openComments: taskId}),
-                           (id, value) => this.setState({filtered: [{id: id, value: value}]}),
                            data, this.props.reviewCriteria, pageSize)
 
     const totalPages = Math.ceil(_get(this.props, 'reviewData.totalCount', 0) / pageSize)
@@ -189,7 +188,7 @@ export class TaskReviewTable extends Component {
   }
 }
 
-const setupColumnTypes = (props, openComments, setFiltered, data, criteria, pageSize) => {
+const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
   const columns = {}
   columns.id = {
     id: 'id',
@@ -297,13 +296,16 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria, page
     defaultSortDesc: false,
     exportable: t => t.mappedOn,
     maxWidth: 180,
-    Cell: props => (
-      props.value &&
+    Cell: props => {
+      if (!props.value) {
+        return null
+      }
+      return (
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-
-    )
+      )
+    }
   }
 
   columns.reviewedAt = {
@@ -316,19 +318,23 @@ const setupColumnTypes = (props, openComments, setFiltered, data, criteria, page
     exportable: t => t.reviewedAt,
     minWidth: 180,
     maxWidth: 200,
-    Cell: props => (
-      props.value &&
+    Cell: props => {
+      if (!props.value) {
+        return null
+      }
+
+      return (
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
-
-    ),
+      )
+    },
     Filter: ({ filter, onChange }) =>
       <div>
         <IntlDatePicker
             selected={_get(criteria, 'filters.reviewedAt')}
             onChange={(value) => {
-              setFiltered("reviewedAt", value)
+              props.setFiltered("reviewedAt", value)
             }}
             intl={props.intl}
         />

@@ -7,6 +7,39 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.3.2] - 2019-06-20
+### Added
+- Virtual Projects
+- Notification threading/grouping by task in inbox
+- Export and import of widget workspace layouts
+- Keyboard navigation to task-completion confirmation step
+- Additional task-review tab for All Reviewed Tasks
+- Basic project-name search for mappers
+- Automatically remove newly-excluded widgets from existing workspaces
+- Explanatory message when user has skipped all remaining tasks in challenge
+- Filters for review statuses on challenge dashboard for challenge owners
+
+### Fixed
+- Error when user set a custom basemap in user settings
+- Error when mapper completed virtual challenge
+- Occasional premature end of challenge after task completion
+- Extra backslashes in Mustache-tag example in challenge creation help
+- Invisible challenge-progress percentages for challenge managers
+- Entries in Task History widget sometimes in incorrect order
+- Missing new-notification indicator on fresh load of application
+- Occasional missing results from project search for project managers
+- Timeout rebuilding challenge when pruning many incomplete tasks
+- Pinned projects not always showing all challenges to project managers
+- Lost page-size and map bounds on Task Review page upon return
+- Repeated serving of same skipped or too-hard task at priority boundary
+- Non-reviewers prevented from disputing a task review
+- Incorrect data in reviewer column in CSV export for challenge managers
+- Frozen search box in Safari if search was rapidly changed many times
+
+### Changed
+- Don't alter pre-existing task status if a subsequent mapper skips the task
+
+
 ## [v3.3.1] - 2019-05-10
 ### Added
 - Status-specific metrics in Completion Progress widget
