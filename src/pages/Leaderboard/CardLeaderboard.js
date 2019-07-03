@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
-import AsUser from '../../interactions/User/AsUser'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 
 class CardLeaderboard extends Component {
   render() {
-    const leader = AsUser(this.props.leader)
+    const leader = this.props.leader
 
     const topChallengeItems =
       this.props.suppressTopChallenges ? null :
@@ -32,7 +32,7 @@ class CardLeaderboard extends Component {
         <header className="mr-max-w-xs mr-mx-auto mr-mb-2">
           <div
             className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full"
-            style={{ backgroundImage: `url(${leader.profilePic(200)})` }}
+            style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(200)})` }}
           />
           <h2 className="mr-h4 mr-mb-1">
             <span className="mr-text-4xl mr-font-bold mr-absolute mr-pin-l mr-pin-t mr-mt-6 mr-ml-6">
