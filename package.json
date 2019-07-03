@@ -26,6 +26,7 @@
     "leaflet": "^1.5.1",
     "leaflet-vectoricon": "^0.2.0",
     "leaflet.markercluster": "^1.4.1",
+    "leaflet-vectoricon": "https://github.com/nrotstan/Leaflet.VectorIcon.git#with-viewbox",
     "localforage": "^1.5.2",
     "node-sass": "^4.11.0",
     "normalize.css": "^7.0.0",

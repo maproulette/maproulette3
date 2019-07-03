@@ -12,6 +12,7 @@ import { taskDenormalizationSchema,
          fetchTaskPlace,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
+         startTask,
          addTaskComment,
          completeTask } from '../../../services/Task/Task'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
@@ -173,14 +174,19 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
+    completeTask: (task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview, requestedNextTask) => {
       const taskId = task.id
 
       // Work to be done after the status is set
       const doAfter = () => {
         if (taskLoadBy) {
           // Start loading the next task from the challenge.
-          nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+          const loadNextTask =
+            _isFinite(requestedNextTask) ?
+            nextRequestedTask(dispatch, ownProps, requestedNextTask) :
+            nextRandomTask(dispatch, ownProps, taskId, taskLoadBy)
+
+          loadNextTask.then(newTask =>
             visitNewTask(dispatch, ownProps, taskId, newTask)
           ).catch(error => {
             ownProps.history.push(`/browse/challenges/${challengeId}`)
@@ -298,6 +304,17 @@ export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
       )
     )
   }
+}
+
+/**
+ * Load and lock a requested next task
+ */
+export const nextRequestedTask = function(dispatch, props, requestedTaskId) {
+  return dispatch(fetchTask(requestedTaskId))
+    .then(() => dispatch(startTask(requestedTaskId)))
+    .then(normalizedResults =>
+      _get(normalizedResults, `entities.tasks.${normalizedResults.result}`)
+    )
 }
 
 /**

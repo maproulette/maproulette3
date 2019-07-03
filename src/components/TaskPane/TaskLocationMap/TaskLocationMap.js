@@ -8,6 +8,7 @@ import './TaskLocationMap.scss'
 
 const starIconSvg = L.vectorIcon({
   className: 'star-marker-icon',
+  viewBox: '0 0 20 20',
   svgHeight: 20,
   svgWidth: 20,
   type: 'path',
