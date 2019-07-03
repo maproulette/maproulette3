@@ -98,6 +98,11 @@ export default defineMessages({
     defaultMessage: "Filter by Priority",
   },
 
+  exportGeoJSONLabel: {
+    id: "Admin.manageTasks.controls.exportGeoJSON.label",
+    defaultMessage: "Export GeoJSON",
+  },
+
   clearFiltersLabel: {
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
