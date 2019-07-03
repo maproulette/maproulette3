@@ -137,7 +137,7 @@ export class ActiveTaskControls extends Component {
       confirmingTask: null,
       confirmingStatus: null,
       requestedNextTask: null,
-      comment: "", tags: "",
+      comment: "", tags: null,
     })
   }
 
@@ -151,6 +151,10 @@ export class ActiveTaskControls extends Component {
     if (_get(this.props.history, 'location.state.fromInbox') &&
         this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox) {
       this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox})
+    }
+
+    if (_get(this.props, 'task.id') !== _get(nextProps, 'task.id')) {
+      this.resetConfirmation()
     }
 
     if (this.state.tags === null && _get(this.props, 'task.tags')) {
@@ -212,12 +216,6 @@ export class ActiveTaskControls extends Component {
              }
            </div>
           }
-
-          <TaskTags task={this.props.task}
-                         tags={this.state.tags}
-                         setTags={this.setTags}
-                         onConfirm={this.confirmCompletion}
-                         saveTaskTags={this.props.saveTaskTags} />
 
           <TaskTags task={this.props.task}
                          tags={this.state.tags}
