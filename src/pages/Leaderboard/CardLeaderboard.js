@@ -6,12 +6,15 @@ import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
+import AsUser from '../../interactions/User/AsUser'
 
 class CardLeaderboard extends Component {
   render() {
+    const leader = AsUser(this.props.leader)
+
     const topChallengeItems =
       this.props.suppressTopChallenges ? null :
-      _map(this.props.leader.topChallenges.slice(0, this.props.maxTopChallenges), challenge => (
+      _map(leader.topChallenges.slice(0, this.props.maxTopChallenges), challenge => (
         <li key={challenge.id}>
           <Link to={`/browse/challenges/${challenge.id}`} title={challenge.name}>
             {_truncate(challenge.name, {length: 35})}
@@ -29,18 +32,18 @@ class CardLeaderboard extends Component {
         <header className="mr-max-w-xs mr-mx-auto mr-mb-2">
           <div
             className="mr-block mr-w-24 mr-h-24 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-mb-4 mr-rounded-full"
-            style={{ backgroundImage: `url("${this.props.leader.avatarURL}?s=200")` }}
+            style={{ backgroundImage: `url(${leader.profilePic(200)})` }}
           />
           <h2 className="mr-h4 mr-mb-1">
             <span className="mr-text-4xl mr-font-bold mr-absolute mr-pin-l mr-pin-t mr-mt-6 mr-ml-6">
-              <FormattedNumber value={this.props.leader.rank} />
+              <FormattedNumber value={leader.rank} />
             </span>
-            {this.props.leader.name}
+            {leader.name}
           </h2>
         </header>
         <h3 className="mr-h2 mr-mb-4 mr-text-green-lighter">
           <strong className="mr-font-bold mr-text-green-lighter">
-            <FormattedNumber value={this.props.leader.score} />
+            <FormattedNumber value={leader.score} />
           </strong> <FormattedMessage {...messages.userPoints} />
         </h3>
         {!this.props.suppressTopChallenges &&
