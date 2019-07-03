@@ -39,6 +39,14 @@
     top: 15%;
   }
 
+  .mr-pin-t-10 {
+    top: 10%;
+  }
+
+  .mr-pin-t-5 {
+    top: 5%;
+  }
+
   .mr--translate-1\/2 {
     transform: translate(-50%, -50%);
   }

@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _map from 'lodash/map'
+import _isArray from 'lodash/isArray'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
@@ -130,11 +131,19 @@ export class MarkdownEditField extends Component {
 }
 
 export const TagsInputField = props => {
+  let tags = []
+  if (_isArray(props.formData)) {
+    tags = _map(props.formData, (tag) => tag.name)
+  }
+  else if (_isString(props.formData) && props.formData !== "") {
+    tags = props.formData.split(',')
+  }
+
   return (
     <div className="tags-field">
       <TagsInput {...props}
                  inputProps={{placeholder: "Add keyword"}}
-                 value={props.formData ? props.formData.split(',') : []}
+                 value={tags}
                  onChange={tags => props.onChange(tags.join(','))}
                  addOnBlur />
     </div>

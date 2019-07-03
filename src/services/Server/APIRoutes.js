@@ -23,7 +23,7 @@ const apiRoutes = factory => {
     },
     'project': {
       'single': factory.get('/project/:id'),
-      'multiple': factory.get('/projectsById'),      
+      'multiple': factory.get('/projectsById'),
       'challenges': factory.get('/project/:id/challenges'),
       'create': factory.post('/project'),
       'edit': factory.put('/project/:id'),
@@ -97,6 +97,8 @@ const apiRoutes = factory => {
       'create': factory.post('/task'),
       'edit': factory.put('/task/:id'),
       'history': factory.get('/task/:id/history'),
+      'tags': factory.get('/task/:id/tags'),
+      'updateTags': factory.get('/task/:id/tags/update'),
     },
     'keywords': {
       'find': factory.get('/keywords'),

@@ -14,9 +14,14 @@ const mapStateToProps = state => {
   }
 }
 const textInputActive = function(event) {
-  return (event.target.nodeName.toLowerCase() === 'input' &&
+  if (event.target.type === 'text')
+    return true
+
+  return (event.target.nodeName != null &&
+          event.target.getAttribute('type') != null &&
+          event.target.nodeName.toLowerCase() === 'input' &&
           event.target.getAttribute('type').toLowerCase() === 'text') ||
-         event.target.nodeName.toLowerCase() === 'textarea'
+          event.target.nodeName.toLowerCase() === 'textarea'
 }
 
 const mapDispatchToProps = dispatch => {

@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 import _filter from 'lodash/filter'
 import _reject from 'lodash/reject'
 import _startsWith from 'lodash/startsWith'
 import _debounce from 'lodash/debounce'
-import { findKeyword } from '../../../../services/Challenge/Challenge'
+import { findKeyword } from '../../../services/Challenge/Challenge'
 
 /**
  * WithKeywordSearch provides a search function to the wrapped component that allows
@@ -26,7 +27,7 @@ const WithKeywordSearch = function(WrappedComponent, includePrefixInResults=true
     performSearch = _debounce(keywordPrefix => {
       this.setState({isSearchingKeywords: true})
 
-      findKeyword(keywordPrefix).then(results => {
+      findKeyword(keywordPrefix, this.props.tagType || "challenges").then(results => {
         const existingKeywordCount = results.length
         const keywordResults = includePrefixInResults ?
                                this.resultsWithPrefix(keywordPrefix, results) :
@@ -92,5 +93,12 @@ const WithKeywordSearch = function(WrappedComponent, includePrefixInResults=true
     }
   }
 }
+
+
+WithKeywordSearch.propTypes = {
+  /** TagType to limit tags */
+  tagType: PropTypes.string,
+}
+
 
 export default WithKeywordSearch

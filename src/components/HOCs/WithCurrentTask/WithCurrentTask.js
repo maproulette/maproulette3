@@ -14,7 +14,8 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromVirtualChallenge,
          startTask,
          addTaskComment,
-         completeTask } from '../../../services/Task/Task'
+         completeTask,
+         updateTaskTags } from '../../../services/Task/Task'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
@@ -174,7 +175,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview, requestedNextTask) => {
+    completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview, requestedNextTask) => {
       const taskId = task.id
 
       // Work to be done after the status is set
@@ -218,7 +219,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       }
       else {
         return dispatch(
-          completeTask(taskId, challengeId, taskStatus, needsReview)
+          completeTask(taskId, challengeId, taskStatus, needsReview, tags)
         ).then(() => doAfter())
       }
     },
@@ -242,6 +243,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      */
     postTaskComment: (task, comment) => {
       return dispatch(addTaskComment(task.id, comment))
+    },
+
+    /**
+     * Update tags on task.
+     */
+    saveTaskTags: (task, tags) => {
+      return dispatch(updateTaskTags(task.id, tags))
     },
 
     fetchOSMUser,

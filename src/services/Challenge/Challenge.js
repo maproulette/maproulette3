@@ -785,8 +785,8 @@ export const fetchParentProject = function(dispatch, normalizedChallengeResults)
  * Search for keyword by prefix. Resolves with a (possibly empty) list of
  * results.
  */
-export const findKeyword = function(keywordPrefix) {
-  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix}}).execute()
+export const findKeyword = function(keywordPrefix, tagType = null) {
+  return new Endpoint(api.keywords.find, {params: {prefix: keywordPrefix, tagType}}).execute()
 }
 
 /**

@@ -78,4 +78,15 @@ export default defineMessages({
     defaultMessage: "Status of this task. Depending on the current " +
       "status, your choices for updating the status may be restricted",
   },
+
+  additionalTagsLabel: {
+    id: 'Admin.EditTask.form.additionalTags.label',
+    defaultMessage: "Tags",
+  },
+
+  additionalTagsDescription: {
+    id: 'Admin.EditTask.form.additionalTags.description',
+    defaultMessage: "You can optionally provide additional " +
+    "tags that can be used to annotate this task.",
+  },
 })

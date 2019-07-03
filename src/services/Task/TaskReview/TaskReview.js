@@ -222,9 +222,9 @@ export const cancelReviewClaim = function(taskId) {
 /**
  *
  */
-export const completeReview = function(taskId, taskReviewStatus, comment) {
+export const completeReview = function(taskId, taskReviewStatus, comment, tags) {
   return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment)
+    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags)
   }
 }
 
@@ -271,7 +271,7 @@ export const setupFilterSearchParameters = (filters, boundingBox, savedChallenge
   return searchParameters
 }
 
-const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment) {
+const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, tags) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -285,7 +285,9 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment) {
 
   return new Endpoint(
     api.task.updateReviewStatus,
-    {schema: taskSchema(), variables: {id: taskId, status: newStatus}, params:{comment: comment}}
+    {schema: taskSchema(),
+     variables: {id: taskId, status: newStatus},
+     params:{comment: comment, tags: tags}}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       dispatch(ensureUserLoggedIn()).then(() =>

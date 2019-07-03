@@ -16,6 +16,8 @@ import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
        from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import TaskNearbyList from '../TaskPane/TaskNearbyList/TaskNearbyList'
+import KeywordAutosuggestInput
+       from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
@@ -49,6 +51,14 @@ export class TaskConfirmationModal extends Component {
 
   handleComment = (event) => {
     this.props.setComment(event.target.value)
+  }
+
+  handleAddTag = (value) => {
+    this.props.setTags(!this.props.tags ? value : (this.props.tags + "," + value))
+  }
+
+  handleChangeTags = (value) => {
+    this.props.setTags(value)
   }
 
   render() {
@@ -116,6 +126,11 @@ export class TaskConfirmationModal extends Component {
                       value={this.props.comment}
                       onChange={this.handleComment}
                     />
+                    <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
+                                         handleAddTag={this.handleAddTag}
+                                         formData={this.props.tags} {...this.props}
+                                         tagType={"tasks"} />
+
                     {this.props.submitComment &&
                     <div className="mr-my-1 mr-flex mr-justify-end">
                       <button

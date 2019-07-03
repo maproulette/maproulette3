@@ -28,6 +28,11 @@ export const taskSchema = function() {
   return new schema.Entity('tasks')
 }
 
+/** normalizr schema for task tags */
+export const taskTagsSchema = function() {
+  return new schema.Entity('tags')
+}
+
 /**
  * normalizr denormalization schema, which will pull in projects and places
  * (fetched separately, so not needed in normal schema)
@@ -120,6 +125,31 @@ export const fetchTask = function(taskId, suppressReceive=false, includeMapillar
 }
 
 /**
+ * Fetch tags for the given task.
+ */
+export const fetchTaskTags = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.tags,
+      {schema: {}, variables: {id: taskId}}
+    ).execute().then(normalizedTags => {
+      if (_isObject(normalizedTags.result)) {
+        // Inject tags into task.
+        dispatch(receiveTasks({
+          tasks: {
+            [taskId]: {
+              id: taskId,
+              tags: _values(normalizedTags.result),
+            }
+          }
+        }))
+      }
+      return normalizedTags
+    })
+  }
+}
+
+/**
  * Locks a task that is to be started.
  */
 export const startTask = function(taskId) {
@@ -149,9 +179,9 @@ export const releaseTask = function(taskId) {
 /**
  * Mark the given task as completed with the given status.
  */
-export const completeTask = function(taskId, challengeId, taskStatus, needsReview) {
+export const completeTask = function(taskId, challengeId, taskStatus, needsReview, tags) {
   return function(dispatch) {
-    return updateTaskStatus(dispatch, taskId, taskStatus, needsReview)
+    return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags)
   }
 }
 
@@ -415,7 +445,7 @@ export const deleteChallengeTasks = function(challengeId, statuses=null) {
  * Set the given status on the given task
  * @private
  */
-const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null) {
+const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null, tags = null) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -430,6 +460,10 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
   const params = {}
   if (requestReview != null) {
     params.requestReview = requestReview
+  }
+
+  if (tags != null) {
+    params.tags = tags
   }
 
   return new Endpoint(
@@ -478,6 +512,32 @@ export const fetchTaskPlace = function(task) {
 }
 
 /**
+ * Update the tags on the task.
+ *
+ */
+export const updateTaskTags = function(taskId, tags) {
+  return function(dispatch) {
+    return new Endpoint(
+      api.task.updateTags,
+      {schema: {}, variables: {id: taskId}, params: {tags: tags}}
+    ).execute().then(normalizedTags => {
+      if (_isObject(normalizedTags.result)) {
+        // Inject tags into task.
+        dispatch(receiveTasks({
+          tasks: {
+            [taskId]: {
+              id: taskId,
+              tags: _values(normalizedTags.result),
+            }
+          }
+        }))
+      }
+      return normalizedTags
+    })
+  }
+}
+
+/**
  * Saves the given task (either creating it or updating it, depending on
  * whether it already has an id) and updates the redux store with the latest
  * version from the server.
@@ -486,7 +546,7 @@ export const saveTask = function(originalTaskData) {
   return function(dispatch) {
     const taskData = _pick(
       originalTaskData,
-      ['id', 'name', 'instruction', 'geometries', 'status', 'priority']
+      ['id', 'name', 'instruction', 'geometries', 'status', 'priority', 'tags']
     )
 
     // If the geometries are a string, convert to JSON.
@@ -595,6 +655,23 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
   })
 }
 
+/**
+ * reduceTasksFurther will be invoked by the genericEntityReducer function to
+ * perform additional reduction on challenge entities.
+ *
+ * @private
+ */
+const reduceTasksFurther = function(mergedState, oldState, taskEntities) {
+  // The generic reduction will merge arrays and objects, but for some fields
+  // we want to simply overwrite with the latest data.
+  taskEntities.forEach(entity => {
+    if (_isArray(entity.tags)) {
+      mergedState[entity.id].tags = entity.tags
+    }
+  })
+}
+
+
 
 // redux reducers
 export const taskEntities = function(state, action) {
@@ -604,6 +681,6 @@ export const taskEntities = function(state, action) {
     return mergedState
   }
   else {
-    return genericEntityReducer(RECEIVE_TASKS, 'tasks')(state, action)
+    return genericEntityReducer(RECEIVE_TASKS, 'tasks', reduceTasksFurther)(state, action)
   }
 }
