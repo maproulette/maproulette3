@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
+import _get from 'lodash/get'
 import classNames from 'classnames'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import PageResultsButton from '../../../LoadMoreButton/PageResultsButton'
@@ -26,6 +27,7 @@ export default class AssociatedChallengeList extends Component {
 
           <div className='mr-flex-grow mr-text-base mr-text-grey'>
             {challenge.name}
+            <div className='mr-text-xs mr-text-grey-light'>{_get(challenge.parent, 'displayName')}</div>
           </div>
 
           <div className="mr-text-sm mr-text-green">
