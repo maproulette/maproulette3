@@ -65,7 +65,7 @@ const WithDashboardEntityFilter = function(WrappedComponent,
         _get(this.props.currentConfiguration.filters, this.filterFieldName(), {})
 
       const filteredDashboardEntities = _filter(this.props[itemsProp], entities =>
-        passesFilterFunction(entities, manager, this.props[pinsProp], filters)
+        passesFilterFunction(entities, manager, this.props[pinsProp], filters, this.props)
       )
 
       // Generate prop names based on filter type.

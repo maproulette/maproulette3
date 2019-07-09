@@ -11,8 +11,6 @@ import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject
        from '../../HOCs/WithCurrentProject/WithCurrentProject'
-import WithChallengeMetrics
-       from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import WithWidgetWorkspaces
        from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WithDashboardEntityFilter
@@ -155,9 +153,7 @@ WithManageableProjects(
   WithCurrentProject(
     WithWidgetWorkspaces(
       WithDashboardEntityFilter(
-        WithChallengeMetrics(
-          injectIntl(ProjectDashboard),
-        ),
+        injectIntl(ProjectDashboard),
         'challenge',
         'challenges',
         'pinnedChallenges',

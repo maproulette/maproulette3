@@ -38,6 +38,30 @@
     }
   }
 
+  .item-tally-toggle {
+    max-width: 50px;
+    float: right;
+    margin-left: 18px;
+    margin-right: 10px;
+    margin-top: 10px;
+
+    svg.icon {
+      height: 18px;
+      width: auto;
+      fill: $grey-lightest;
+      vertical-align: middle;
+
+      &.turnOff {
+        fill: $blue;
+      }
+
+      &.partialOn {
+        fill: $blue;
+        opacity: 0.5;
+      }
+    }
+  }
+
   .tabs {
     ul {
       border-bottom: 2px solid $grey-lightest-less;
@@ -286,6 +310,21 @@
             fill: $grey-lightest;
             vertical-align: middle;
             transform: rotate(10deg);
+
+            &.enabled {
+              fill: $blue;
+            }
+          }
+        }
+
+        .column.item-tallied {
+          max-width: 50px;
+
+          svg.icon {
+            height: 18px;
+            width: auto;
+            fill: $grey-lightest;
+            vertical-align: middle;
 
             &.enabled {
               fill: $blue;

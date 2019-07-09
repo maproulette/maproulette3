@@ -40,6 +40,17 @@ export default class ChallengeCard extends Component {
                           sym='pin-icon' />
             </div>
           </div>
+
+          {!this.props.hideTallyControl &&
+            <div className='column is-narrow item-tallied'>
+              <div className="clickable"
+                   onClick={() => this.props.toggleChallengeTally(this.props.project.id, this.props.challenge.id)}>
+                <SvgSymbol className={classNames('icon', {enabled: this.props.isTallied})}
+                            viewBox='0 0 20 20'
+                            sym='chart-icon' />
+              </div>
+            </div>
+          }
         </div>
       </div>
     )

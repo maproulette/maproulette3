@@ -24,6 +24,7 @@ import { fetchProjectChallengeListing }
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
 import AsManager from '../../../../interactions/User/AsManager'
 import WithPinned from '../../HOCs/WithPinned/WithPinned'
+import WithTallied from '../../HOCs/WithTallied/WithTallied'
 
 /**
  * WithManageableProjects makes available to the WrappedComponent all the
@@ -140,5 +141,8 @@ const mapDispatchToProps = dispatch => {
 
 export default (WrappedComponent, includeChallenges) =>
   connect(mapStateToProps, mapDispatchToProps)(
-    WithCurrentUser(WithPinned(WithManageableProjects(WrappedComponent, includeChallenges)))
+    WithCurrentUser(
+      WithPinned(
+        WithTallied(
+          WithManageableProjects(WrappedComponent, includeChallenges))))
   )
