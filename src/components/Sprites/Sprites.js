@@ -198,6 +198,9 @@ export default function() {
         <symbol id="check-icon" viewBox="0 0 20 20">
           <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
         </symbol>
+        <symbol id="check-circled-icon" viewBox="0 0 20 20">
+          <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM6.7 9.29L9 11.6l4.3-4.3 1.4 1.42L9 14.4l-3.7-3.7 1.4-1.42z" />
+        </symbol>
         <symbol id="skip-icon" viewBox="0 0 20 20">
           <path d="M1 5l9 5-9 5V5zm9 0l9 5-9 5V5z" />
         </symbol>

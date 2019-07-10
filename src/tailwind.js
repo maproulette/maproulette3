@@ -477,6 +477,7 @@ module.exports = {
     auto: 'auto',
     px: '1px',
     '3px': '3px',
+    '5px': '5px',
     '1': '0.25rem',
     '2': '0.5rem',
     '3': '0.75rem',
@@ -674,6 +675,7 @@ module.exports = {
   margin: {
     auto: 'auto',
     px: '1px',
+    'n2px': '-2px',
     '0': '0',
     '1': '0.25rem',
     '2': '0.5rem',
@@ -817,6 +819,7 @@ module.exports = {
     'green-light': colors['green-light'],
     'green-lighter': colors['green-lighter'],
     grey: colors["grey"],
+    'grey-light': colors['grey-light'],
     twitter: colors['twitter'],
   },
 
