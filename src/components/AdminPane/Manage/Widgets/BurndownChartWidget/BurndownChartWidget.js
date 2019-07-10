@@ -4,6 +4,8 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import BurndownChart from '../../BurndownChart/BurndownChart'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
+import WithChallengeMetrics
+       from '../../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import messages from './Messages'
 import './BurndownChartWidget.scss'
 
@@ -34,4 +36,4 @@ export default class BurndownChartWidget extends Component {
   }
 }
 
-registerWidgetType(BurndownChartWidget, descriptor)
+registerWidgetType(WithChallengeMetrics(BurndownChartWidget), descriptor)

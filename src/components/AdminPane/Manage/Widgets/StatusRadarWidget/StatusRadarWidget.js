@@ -4,6 +4,8 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import CompletionRadar from '../../CompletionRadar/CompletionRadar'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
+import WithChallengeMetrics
+       from '../../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import messages from './Messages'
 import './StatusRadarWidget.scss'
 
@@ -31,4 +33,4 @@ export default class StatusRadarWidget extends Component {
   }
 }
 
-registerWidgetType(StatusRadarWidget, descriptor)
+registerWidgetType(WithChallengeMetrics(StatusRadarWidget), descriptor)

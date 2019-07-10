@@ -4,6 +4,8 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
 import QuickWidget from '../../QuickWidget/QuickWidget'
+import WithChallengeMetrics
+       from '../../AdminPane/HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import messages from './Messages'
 
 const descriptor = {
@@ -35,4 +37,5 @@ export default class CompletionProgressWidget extends Component {
   }
 }
 
-registerWidgetType(CompletionProgressWidget, descriptor)
+registerWidgetType(
+  WithChallengeMetrics(CompletionProgressWidget), descriptor)

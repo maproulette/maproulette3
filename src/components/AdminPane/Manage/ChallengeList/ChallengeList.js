@@ -33,6 +33,8 @@ export default class ChallengeList extends Component {
                  key={challenge.id}
                  challenge={challenge}
                  isPinned={this.props.pinnedChallenges.indexOf(challenge.id) !== -1}
+                 isTallied={this.props.showAsTallied(this.props.project.id, challenge.id)}
+                 hideTallyControl={this.props.hideTallyControl || this.props.suppressControls}
                  showProjectName={isVirtual}
                  link={link} />
       }),
