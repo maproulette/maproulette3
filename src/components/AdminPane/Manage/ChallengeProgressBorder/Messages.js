@@ -5,7 +5,7 @@ import { defineMessages } from 'react-intl'
  */
 export default defineMessages({
   available: {
-    id: "Task.fauxStatus.available",
+    id: "ChallengeProgressBorder.available",
     defaultMessage: "Available"
   },
 })
