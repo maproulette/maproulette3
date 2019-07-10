@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import { injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
-import _isEqual from 'lodash/isEqual'
 import { TaskStatus, TaskStatusColors, keysByStatus, statusLabels }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import messages from './Messages'
@@ -34,22 +33,6 @@ export class ChallengeProgressBorder extends Component {
   percent(value, total) {
     if (value === 0 || total === 0) return 0
     return Math.round(value / total * 100)
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.hoveredStatus !== this.state.hoveredStatus) {
-      return true
-    }
-
-    if (_get(nextProps, 'challenge.id') !== _get(this.props, 'challenge.id')) {
-      return true
-    }
-
-    if (!_isEqual(_get(nextProps, 'challenge.actions'), _get(this.props, 'challenge.actions'))) {
-      return true
-    }
-
-    return false
   }
 
   /**

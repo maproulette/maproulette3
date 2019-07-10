@@ -11,14 +11,6 @@
 
   .item-entry:not(:last-child) {
     margin-bottom: 0;
-
-    &:first-child {
-      .challenge-list-item {
-        .column {
-          padding-top: 0;
-        }
-      }
-    }
   }
 
   .item-entry:last-child {
