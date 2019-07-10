@@ -33,6 +33,7 @@ export default class ChallengeList extends Component {
                  key={challenge.id}
                  challenge={challenge}
                  isPinned={this.props.pinnedChallenges.indexOf(challenge.id) !== -1}
+                 showProjectName={isVirtual}
                  link={link} />
       }),
       challengeCard => !challengeCard.props.isPinned
