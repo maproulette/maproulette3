@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
+import _get from 'lodash/get'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 
 /**
@@ -30,6 +31,11 @@ export default class ChallengeCard extends Component {
             <Link to={this.props.link}>
               {this.props.challenge.name}
             </Link>
+            {this.props.showProjectName &&
+              <div className='mr-text-xs mr-text-grey-light'>
+                {_get(this.props.challenge, 'parent.displayName')}
+              </div>
+            }
           </div>
 
           <div className='column is-narrow item-pinned'>
