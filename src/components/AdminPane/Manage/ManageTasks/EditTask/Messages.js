@@ -81,12 +81,17 @@ export default defineMessages({
 
   additionalTagsLabel: {
     id: 'Admin.EditTask.form.additionalTags.label',
-    defaultMessage: "Tags",
+    defaultMessage: "MR Tags",
   },
 
   additionalTagsDescription: {
     id: 'Admin.EditTask.form.additionalTags.description',
     defaultMessage: "You can optionally provide additional " +
-    "tags that can be used to annotate this task.",
+    "MR tags that can be used to annotate this task.",
+  },
+
+  addTagsPlaceholder: {
+    id: 'Admin.EditTask.form.additionalTags.placeholder',
+    defaultMessage: "Add MR Tags",
   },
 })
