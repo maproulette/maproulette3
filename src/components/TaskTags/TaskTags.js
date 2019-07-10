@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import messages from './Messages'
 
-export default class TaskTags extends Component {
+export class TaskTags extends Component {
   state = {
     edit: false
   }
@@ -37,7 +37,8 @@ export default class TaskTags extends Component {
                 <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
                                          handleAddTag={this.handleAddTag}
                                          formData={this.props.tags} {...this.props}
-                                         tagType={"tasks"} />
+                                         tagType={"tasks"}
+                                         placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
               </div>
               <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
                 <button
@@ -86,3 +87,5 @@ export default class TaskTags extends Component {
     }
   }
 }
+
+export default injectIntl(TaskTags)

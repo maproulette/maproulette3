@@ -30,24 +30,29 @@ export class KeywordAutosuggestInput extends Component {
    *
    * @private
    */
-  autosuggestInput = props => (
-    <AutosuggestTextBox {...this.props}
-                        inputValue={this.state.value}
-                        onInputValueChange={value => this.setState({value})}
-                        onChange={keyword => {
-                          if (this.props.handleAddTag) {
-                            this.props.handleAddTag(keyword.name)
-                          }
-                          else {
-                            props.addTag(keyword.name)
-                          }
-                          this.setState({value: ''})
-                        }}
-                        resultClassName={this.keywordClassName}
-                        showNoResults={this.props.existingKeywordCount === 0}
-                        placeholder={this.props.intl.formatMessage(messages.addKeywordPlaceholder)}
-    />
-  )
+  autosuggestInput = props => {
+    const placeholder = this.props.placeholder ||
+      this.props.intl.formatMessage(messages.addKeywordPlaceholder)
+
+    return (
+      <AutosuggestTextBox {...this.props}
+                          inputValue={this.state.value}
+                          onInputValueChange={value => this.setState({value})}
+                          onChange={keyword => {
+                            if (this.props.handleAddTag) {
+                              this.props.handleAddTag(keyword.name)
+                            }
+                            else {
+                              props.addTag(keyword.name)
+                            }
+                            this.setState({value: ''})
+                          }}
+                          resultClassName={this.keywordClassName}
+                          showNoResults={this.props.existingKeywordCount === 0}
+                          placeholder={placeholder}
+      />
+    )
+  }
 
   handleChangeTags = keyword => {
     if (this.props.handleChangeTags) {
@@ -59,7 +64,7 @@ export class KeywordAutosuggestInput extends Component {
   render() {
     if (this.props.handleChangeTags) {
       return <TagsInputField {...this.props}
-                             onChange={this.props.handleChangeTags}
+                             onChange={this.handleChangeTags}
                              renderInput={this.autosuggestInput}
                              className="keyword-autosuggest-input dark-mode" />
     }

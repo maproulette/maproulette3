@@ -89,7 +89,8 @@ export class EditTask extends Component {
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
-      tags: (props) => <KeywordAutosuggestInput {...props} tagType={"tasks"} />,
+      tags: (props) => <KeywordAutosuggestInput {...props} tagType={"tasks"}
+        placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />,
     }
 
     return (

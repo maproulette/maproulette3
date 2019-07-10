@@ -129,7 +129,8 @@ export class TaskConfirmationModal extends Component {
                     <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
                                          handleAddTag={this.handleAddTag}
                                          formData={this.props.tags} {...this.props}
-                                         tagType={"tasks"} />
+                                         tagType={"tasks"}
+                                         placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
 
                     {this.props.submitComment &&
                     <div className="mr-my-1 mr-flex mr-justify-end">

@@ -6,17 +6,17 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   taskTags: {
     id: "Task.taskTags.label",
-    defaultMessage: "Tags:",
+    defaultMessage: "MR Tags:",
   },
 
   addTags: {
     id: "Task.taskTags.add.label",
-    defaultMessage: "Add Tags",
+    defaultMessage: "Add MR Tags",
   },
 
   updateTags: {
     id: "Task.taskTags.update.label",
-    defaultMessage: "Update Tags",
+    defaultMessage: "Update MR Tags",
   },
 
   saveTags: {
@@ -31,6 +31,11 @@ export default defineMessages({
 
   modifyTags: {
     id: "Task.taskTags.modify.label",
-    defaultMessage: "Modify Tags",
+    defaultMessage: "Modify MR Tags",
   },
+
+  addTagsPlaceholder: {
+    id: "Task.taskTags.addTags.placeholder",
+    defaultMessage: "Add MR Tags",
+  }
 })
