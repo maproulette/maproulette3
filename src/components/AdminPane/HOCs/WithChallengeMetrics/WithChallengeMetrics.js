@@ -75,7 +75,7 @@ const WithChallengeMetrics = function(WrappedComponent) {
 }
 
 export const includeChallengeInMetrics = function(challenge, manager, tallied, challengeFilters, props) {
-  const tallyMarks = tallied(props.project.id)
+  const tallyMarks = tallied(_get(props.project, 'id'))
   if (tallyMarks && tallyMarks.length > 0 && tallyMarks.indexOf(challenge.id) === -1) {
     return false
   }

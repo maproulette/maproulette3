@@ -14,7 +14,7 @@ import './CalendarHeatmapWidget.scss'
 const descriptor = {
   widgetKey: 'CalendarHeatmapWidget',
   label: messages.label,
-  targets: [WidgetDataTarget.challenges, WidgetDataTarget.challenge],
+  targets: [WidgetDataTarget.challenge],
   defaultWidth: 8,
   defaultHeight: 7,
   minWidth: 5,
