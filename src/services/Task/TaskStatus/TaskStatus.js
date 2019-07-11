@@ -25,6 +25,15 @@ export const TaskStatus = Object.freeze({
 
 export const keysByStatus = Object.freeze(_invert(TaskStatus))
 
+export const TaskStatusColors = Object.freeze({
+  [TaskStatus.fixed]: '#61CDBB',
+  [TaskStatus.alreadyFixed]: '#97E3D5',
+  [TaskStatus.falsePositive]: '#F1E15B',
+  [TaskStatus.skipped]: '#E8A838',
+  [TaskStatus.tooHard]: '#F47560',
+  [TaskStatus.created]: 'rgba(0, 0, 0, .25)',
+})
+
 /**
  * Returns a Set of status progressions that are allowed
  * for the given status. An empty Set is returned if no

@@ -9,7 +9,7 @@ import _map from 'lodash/map'
 import _each from 'lodash/each'
 import _chunk from 'lodash/chunk'
 import _isEqual from 'lodash/isEqual'
-import { TaskStatus, keysByStatus, statusLabels }
+import { TaskStatus, TaskStatusColors, keysByStatus, statusLabels }
        from '../../services/Task/TaskStatus/TaskStatus'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
@@ -81,12 +81,12 @@ export class ChallengeProgress extends Component {
     const availableLabel = this.props.intl.formatMessage(messages.available)
 
     const statusColors = {
-      [localizedStatuses.fixed]: '#61CDBB',
-      [localizedStatuses.alreadyFixed]: '#97E3D5',
-      [localizedStatuses.falsePositive]: '#F1E15B',
-      [localizedStatuses.skipped]: '#E8A838',
-      [localizedStatuses.tooHard]: '#F47560',
-      [availableLabel]: 'rgba(0, 0, 0, .25)'
+      [localizedStatuses.fixed]: TaskStatusColors[TaskStatus.fixed],
+      [localizedStatuses.alreadyFixed]: TaskStatusColors[TaskStatus.alreadyFixed],
+      [localizedStatuses.falsePositive]: TaskStatusColors[TaskStatus.falsePositive],
+      [localizedStatuses.skipped]: TaskStatusColors[TaskStatus.skipped],
+      [localizedStatuses.tooHard]: TaskStatusColors[TaskStatus.tooHard],
+      [availableLabel]: TaskStatusColors[TaskStatus.created],
     }
 
     const completionData = {
