@@ -80,6 +80,11 @@ export default defineMessages({
     defaultMessage: "Unable to fetch data from OpenStreetMap",
   },
 
+  mapillaryFetchFailure: {
+    id: 'Errors.mapillary.fetchFailure',
+    defaultMessage: "Unable to fetch data from Mapillary",
+  },
+
   clusteredTaskFetchFailure: {
     id: 'Errors.clusteredTask.fetchFailure',
     defaultMessage: "Unable to fetch task clusters",
