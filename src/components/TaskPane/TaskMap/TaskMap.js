@@ -108,8 +108,10 @@ export class TaskMap extends Component {
     const isVirtual = _isFinite(this.props.virtualChallengeId)
     const challengeId = isVirtual ? this.props.virtualChallengeId :
                                     this.props.challenge.id
-    // If there's no mapillary data, we'll reload the task and request it
-    if (!this.props.showMapillaryLayer && !this.props.mapillaryImages) {
+    // If enabling layer, fetch fresh data. This allows users to toggle the
+    // layer off and on to refresh the data, e.g. if they have moved the map
+    // and wish to expand coverage of mapillary imagery
+    if (!this.props.showMapillaryLayer) {
       this.props.setShowMapillaryLayer(challengeId, isVirtual, true)
       await this.props.fetchMapillaryImagery(
         this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,

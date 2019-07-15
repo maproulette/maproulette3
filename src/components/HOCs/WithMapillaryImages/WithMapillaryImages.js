@@ -8,7 +8,6 @@ import { fetchMapillaryImages, mapillaryImageUrl,
        from '../../../services/Mapillary/Mapillary'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
-import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 
 /**
  * Provides WrappedComponent with the ability to fetch images from Mapillary
@@ -26,12 +25,9 @@ export const WithMapillaryImages = function(WrappedComponent) {
     }
 
     fetchMapillaryImagery = async (bounds, task) => {
-      const point = AsMappableTask(task).calculateCenterPoint()
-      const pointCoords = bounds.contains(point) ? [point.lng, point.lat] : null
-
       try {
         this.setState({taskId: task.id, mapillaryLoading: true})
-        const results = await fetchMapillaryImages(bounds.toBBoxString(), pointCoords)
+        const results = await fetchMapillaryImages(bounds.toBBoxString())
         this.setState({
           mapillaryLoading: false,
           mapillaryResults: results,
