@@ -19,6 +19,11 @@ export default defineMessages({
     defaultMessage: "Mapillary"
   },
 
+  moreMapillaryLabel: {
+    id: "LayerToggle.controls.moreMapillary.label",
+    defaultMessage: "More"
+  },
+
   imageCount: {
     id: "LayerToggle.imageCount",
     defaultMessage: "({count, plural, =0 {no images} other {# images}})"

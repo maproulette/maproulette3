@@ -157,22 +157,6 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     /**
-     * Refresh just the task data (no comments, location, etc.), potentially
-     * including mapillary image if desired
-     */
-    refreshTask: async (taskId, includeMapillary=false) => {
-      const normalizedResults = await dispatch(fetchTask(taskId, false, includeMapillary))
-
-      if (!_isFinite(normalizedResults.result) ||
-          _get(normalizedResults, `entities.tasks.${normalizedResults.result}.deleted`)) {
-        dispatch(addError(AppErrors.task.doesNotExist))
-        ownProps.history.push('/browse/challenges')
-      }
-
-      return normalizedResults
-    },
-
-    /**
      * Invoke to mark as a task as complete with the given status
      */
     completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview, requestedNextTask) => {

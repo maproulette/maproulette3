@@ -11,6 +11,10 @@
     @apply mr-text-sm mr-py-1 mr-px-3 mr-min-w-auto;
   }
 
+  &--xsmall {
+    @apply mr-text-xs mr-py-0 mr-px-2 mr-min-w-auto;
+  }
+
   &--link {
     @apply mr-min-w-auto mr-border-none mr-p-0;
   }

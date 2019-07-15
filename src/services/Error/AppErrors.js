@@ -36,6 +36,10 @@ export default {
     fetchFailure: messages.osmFetchFailure,
   },
 
+  mapillary: {
+    fetchFailure: messages.mapillaryFetchFailure,
+  },
+
   clusteredTask: {
     fetchFailure: messages.clusteredTaskFetchFailure,
   },

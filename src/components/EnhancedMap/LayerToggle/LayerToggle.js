@@ -101,7 +101,19 @@ export class LayerToggle extends Component {
                     /> {(this.props.showMapillary && !this.props.mapillaryLoading) &&
                         <FormattedMessage {...messages.imageCount}
                                           values={{count: this.props.mapillaryCount}} />
-                    } {this.props.mapillaryLoading && <FormattedMessage {...messages.loading} />}
+                    } {this.props.mapillaryLoading && <FormattedMessage {...messages.loading} />
+                    } {this.props.showMapillary && this.props.hasMoreMapillaryImagery && !this.props.mapillaryLoading &&
+                      <button
+                        className="mr-button mr-button--xsmall mr-ml-2"
+                        onClick={e => {
+                          e.stopPropagation()
+                          this.props.fetchMoreMapillaryImagery()
+                        }}
+                      >
+                        <FormattedMessage {...messages.moreMapillaryLabel} />
+                      </button>
+                    }
+
                   </label>
                 </div>
               }
