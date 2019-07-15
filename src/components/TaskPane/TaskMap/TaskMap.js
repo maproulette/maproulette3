@@ -289,8 +289,8 @@ export class TaskMap extends Component {
                      showOSMData={this.state.showOSMData}
                      toggleOSMData={this.toggleOSMDataVisibility}
                      osmDataLoading={this.state.osmDataLoading}
+                     toggleMapillary={this.props.isMapillaryEnabled() ? this.toggleMapillaryVisibility : undefined}
                      showMapillary={this.props.showMapillaryLayer}
-                     toggleMapillary={this.toggleMapillaryVisibility}
                      mapillaryCount={_get(this.props, 'mapillaryImages.length', 0)} />
         <EnhancedMap center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom} worldCopyJump={true}

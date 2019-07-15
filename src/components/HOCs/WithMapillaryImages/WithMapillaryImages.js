@@ -3,9 +3,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _map from 'lodash/map'
 import _uniqBy from 'lodash/uniqBy'
-import { fetchMapillaryImages, mapillaryImageUrl,
-         hasMoreMapillaryResults, nextMapillaryPage }
-       from '../../../services/Mapillary/Mapillary'
+import { isMapillaryEnabled,
+         fetchMapillaryImages,
+         mapillaryImageUrl,
+         hasMoreMapillaryResults,
+         nextMapillaryPage } from '../../../services/Mapillary/Mapillary'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -24,6 +26,12 @@ export const WithMapillaryImages = function(WrappedComponent) {
       mapillaryImages: null,
     }
 
+    /**
+     * Retrieve mapillary images within the given LatLngBounds for the given
+     * task. Up to 1000 images will be retrieved -- use
+     * `fetchMoreMapillaryImagery` to retrieve additional images -- and passed
+     * down to the WrappedComponent
+     */
     fetchMapillaryImagery = async (bounds, task) => {
       try {
         this.setState({taskId: task.id, mapillaryLoading: true})
@@ -40,6 +48,11 @@ export const WithMapillaryImages = function(WrappedComponent) {
       }
     }
 
+    /**
+     * Fetch the next page of image results from Mapillary. This concatenates
+     * the new results onto the existing results, making all available to the
+     * WrappedComponent
+     */
     fetchMoreMapillaryImagery = async () => {
       if (!this.state.mapillaryResults) {
         return
@@ -63,6 +76,11 @@ export const WithMapillaryImages = function(WrappedComponent) {
       }
     }
 
+    /**
+     * Extract the needed image information required to map and display the images
+     *
+     * @private
+     */
     extractImages = geojson => {
       return _map(geojson.features, feature => ({
         key: feature.properties.key,
@@ -79,6 +97,7 @@ export const WithMapillaryImages = function(WrappedComponent) {
       return (
         <WrappedComponent
           {...this.props}
+          isMapillaryEnabled={isMapillaryEnabled}
           fetchMapillaryImagery={this.fetchMapillaryImagery}
           mapillaryTaskId={this.state.taskId}
           mapillaryImages={this.state.mapillaryImages}
