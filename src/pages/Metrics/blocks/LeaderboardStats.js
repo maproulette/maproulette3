@@ -41,7 +41,7 @@ export default class LeaderboardStats extends Component {
           {_map(this.props.leaderboardMetrics.topChallenges.slice(0, 4), (challenge, index) => {
             return (
               <li key={index}>
-                <a href="#challenge">{challenge.name}</a>
+                <a href={"/browse/challenges/" + challenge.id}>{challenge.name}</a>
               </li>
             )
           })}
