@@ -4,6 +4,7 @@ import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
 import _uniqueId from 'lodash/uniqueId'
+import _join from 'lodash/join'
 import format from 'date-fns/format'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
@@ -256,7 +257,12 @@ export const setupFilterSearchParameters = (filters, boundingBox, savedChallenge
     searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
   }
   if (filters.challengeId) {
-    searchParameters.cid = [filters.challengeId]
+    if (!_isArray(filters.challengeId)) {
+      searchParameters.cid = filters.challengeId
+    }
+    else {
+      searchParameters.cid = _join(filters.challengeId, ',')
+    }
   }
 
   if (boundingBox) {

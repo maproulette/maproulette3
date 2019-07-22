@@ -12,7 +12,7 @@ import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 export default class ReviewStatusMetrics extends Component {
   render() {
     const metrics = this.props.reviewMetrics
-    const type = this.props.reviewTasksType
+    const type = this.props.reviewTasksType || ReviewTasksType.allReviewedTasks
 
     return (
       <div className={classNames("review-status-metrics")}>
