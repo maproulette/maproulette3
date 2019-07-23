@@ -256,7 +256,12 @@ export const setupFilterSearchParameters = (filters, boundingBox, savedChallenge
     searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
   }
   if (filters.challengeId) {
-    searchParameters.cid = [filters.challengeId]
+    if (!_isArray(filters.challengeId)) {
+      searchParameters.cid = filters.challengeId
+    }
+    else {
+      searchParameters.cid = filters.challengeId.join(',')
+    }
   }
 
   if (boundingBox) {

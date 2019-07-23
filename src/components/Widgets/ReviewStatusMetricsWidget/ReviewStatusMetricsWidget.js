@@ -9,7 +9,8 @@ import messages from './Messages'
 const descriptor = {
   widgetKey: 'ReviewStatusMetricsWidget',
   label: messages.label,
-  targets: [WidgetDataTarget.review, WidgetDataTarget.challenge],
+  targets: [WidgetDataTarget.review, WidgetDataTarget.challenge, 
+            WidgetDataTarget.challenges],
   minWidth: 2,
   defaultWidth: 4,
   minHeight: 4,
