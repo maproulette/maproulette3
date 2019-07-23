@@ -7,12 +7,12 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.3.3 - 2019-07-24
+## [v3.3.3] - 2019-07-24
 ### Added
 - MapRoulette-specific tagging support for tasks ("MR Tags")
 - Option to select next nearby task to work on from map of nearby tasks
 - Inclusion of Maproulette-specific statuses/data in GeoJSON exports
-- Review Metrics widget for Create & Manage challenge dashboard
+- Review Metrics widget for Create & Manage dashboards
 - Toggle for inclusion of challenges in metrics in Create & Manage area
 - Completion-progress indicators below each challenge in Create & Manage
 - Show name of challenge parent project in virtual-project challenge listings
