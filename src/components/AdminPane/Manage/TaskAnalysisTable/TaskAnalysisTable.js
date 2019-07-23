@@ -86,7 +86,7 @@ export class TaskAnalysisTable extends Component {
     // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'taskInfo.tasks', [])
     const columns = this.getColumns(manager, taskBaseRoute, data)
-    
+
     return (
       <React.Fragment>
         <section className="mr-my-4">
@@ -191,7 +191,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     maxWidth: 180,
     minWidth: 150,
     Cell: props => (
-      props.value &&
+      !props.value ? null :
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
@@ -221,7 +221,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     maxWidth: 180,
     minWidth: 150,
     Cell: props => (
-      props.value &&
+      !props.value ? null :
         <span>
           <FormattedDate value={props.value} /> <FormattedTime value={props.value} />
         </span>
@@ -237,7 +237,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     exportable: t => _get(t.reviewedBy, 'username') || t.reviewedBy,
     maxWidth: 180,
     Cell: ({row}) => (
-      row._original.reviewedBy &&
+      !row._original.reviewedBy ? null :
         <div className="row-user-column">
           {row._original.reviewedBy.username || row._original.reviewedBy}
         </div>
@@ -254,12 +254,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     minWidth: 155,
     defaultSortDesc: true,
     Cell: props => (
-      (!_isUndefined(props.value) && props.value !== -1) &&
+      (!_isUndefined(props.value) && props.value !== -1) ?
         <StatusLabel
           {...props}
           intlMessage={messagesByReviewStatus[props.value]}
           className={`mr-review-${_kebabCase(keysByReviewStatus[props.value])}`}
         />
+        : null
     ),
   }
 
