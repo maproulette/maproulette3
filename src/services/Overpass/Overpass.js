@@ -17,7 +17,7 @@ export const viewAtticOverpass = (selectedEditor, actionDate, bounds, ignoreAtti
 
   const bbox = overpassBBox(bounds).join(',')
   const query =
-    `[out:xml][timeout:25][bbox:${bbox}][date:"${adjustedDateString}"];` +
+    `[out:xml][timeout:150][bbox:${bbox}][date:"${adjustedDateString}"];` +
     `( node(${bbox}); <; >; );` +
     'out meta;'
 
