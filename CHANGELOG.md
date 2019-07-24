@@ -11,7 +11,8 @@ This project adheres to
 ### Added
 - MapRoulette-specific tagging support for tasks ("MR Tags")
 - Option to select next nearby task to work on from map of nearby tasks
-- Inclusion of Maproulette-specific statuses/data in GeoJSON exports
+- Export of challenges as GeoJSON from Create & Manage
+- Honor active filters when exporting CSV and GeoJSON files
 - Review Metrics widget for Create & Manage dashboards
 - Toggle for inclusion of challenges in metrics in Create & Manage area
 - Completion-progress indicators below each challenge in Create & Manage
