@@ -171,10 +171,10 @@ export default class ProjectManagersWidget extends Component {
     }
 
     const widgetIntro = user.canAdministrateProject(this.props.project) && (
-      <div className="project-managers__add-manager mr-mb-4">
+      <div className="project-managers__add-manager mr-mb-4 mr-px-4">
         <h3><FormattedMessage {...messages.addManager} /></h3>
 
-        <div className="project-managers__add-manager__form">
+        <div className="project-managers__add-manager__form mr-border mr-p-1">
           <ChooseOSMUser inputValue={this.state.addManagerUsername}
                          selectedItem={this.state.addManagerOSMUser}
                          onInputValueChange={username => this.setState({
