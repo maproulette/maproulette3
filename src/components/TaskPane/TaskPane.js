@@ -11,6 +11,8 @@ import AsManager from '../../interactions/User/AsManager'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
+import WithCurrentChallenge
+      from '../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
@@ -164,10 +166,12 @@ TaskPane.propTypes = {
 
 export default
 WithChallengePreferences(
-  WithWidgetWorkspaces(
-    injectIntl(TaskPane),
-    WidgetDataTarget.task,
-    WIDGET_WORKSPACE_NAME,
-    defaultWorkspaceSetup
+  WithCurrentChallenge(
+    WithWidgetWorkspaces(
+      injectIntl(TaskPane),
+      WidgetDataTarget.task,
+      WIDGET_WORKSPACE_NAME,
+      defaultWorkspaceSetup
+    )
   )
 )
