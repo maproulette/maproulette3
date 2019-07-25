@@ -56,7 +56,7 @@ export default class AutosuggestTextBox extends Component {
                                       {"is-active": isOpen && inputValue.length > 0})}>
               <div className="autosuggest-text-box__input-wrapper">
                 <input {...getInputProps()}
-                       className={classNames("input", this.props.inputClassName)}
+                       className={classNames(this.props.inputClassName)}
                        placeholder={this.props.placeholder}
                 />
                 {this.props.isSearching && <BusySpinner inline />}

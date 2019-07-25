@@ -12,8 +12,10 @@ import { taskDenormalizationSchema,
          fetchTaskPlace,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
+         startTask,
          addTaskComment,
-         completeTask } from '../../../services/Task/Task'
+         completeTask,
+         updateTaskTags } from '../../../services/Task/Task'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
@@ -155,32 +157,21 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     /**
-     * Refresh just the task data (no comments, location, etc.), potentially
-     * including mapillary image if desired
-     */
-    refreshTask: async (taskId, includeMapillary=false) => {
-      const normalizedResults = await dispatch(fetchTask(taskId, false, includeMapillary))
-
-      if (!_isFinite(normalizedResults.result) ||
-          _get(normalizedResults, `entities.tasks.${normalizedResults.result}.deleted`)) {
-        dispatch(addError(AppErrors.task.doesNotExist))
-        ownProps.history.push('/browse/challenges')
-      }
-
-      return normalizedResults
-    },
-
-    /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (task, challengeId, taskStatus, comment, taskLoadBy, userId, needsReview) => {
+    completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview, requestedNextTask) => {
       const taskId = task.id
 
       // Work to be done after the status is set
       const doAfter = () => {
         if (taskLoadBy) {
           // Start loading the next task from the challenge.
-          nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+          const loadNextTask =
+            _isFinite(requestedNextTask) ?
+            nextRequestedTask(dispatch, ownProps, requestedNextTask) :
+            nextRandomTask(dispatch, ownProps, taskId, taskLoadBy)
+
+          loadNextTask.then(newTask =>
             visitNewTask(dispatch, ownProps, taskId, newTask)
           ).catch(error => {
             ownProps.history.push(`/browse/challenges/${challengeId}`)
@@ -212,7 +203,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       }
       else {
         return dispatch(
-          completeTask(taskId, challengeId, taskStatus, needsReview)
+          completeTask(taskId, challengeId, taskStatus, needsReview, tags)
         ).then(() => doAfter())
       }
     },
@@ -236,6 +227,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      */
     postTaskComment: (task, comment) => {
       return dispatch(addTaskComment(task.id, comment))
+    },
+
+    /**
+     * Update tags on task.
+     */
+    saveTaskTags: (task, tags) => {
+      return dispatch(updateTaskTags(task.id, tags))
     },
 
     fetchOSMUser,
@@ -298,6 +296,17 @@ export const nextRandomTask = (dispatch, props, currentTaskId, taskLoadBy) => {
       )
     )
   }
+}
+
+/**
+ * Load and lock a requested next task
+ */
+export const nextRequestedTask = function(dispatch, props, requestedTaskId) {
+  return dispatch(fetchTask(requestedTaskId))
+    .then(() => dispatch(startTask(requestedTaskId)))
+    .then(normalizedResults =>
+      _get(normalizedResults, `entities.tasks.${normalizedResults.result}`)
+    )
 }
 
 /**

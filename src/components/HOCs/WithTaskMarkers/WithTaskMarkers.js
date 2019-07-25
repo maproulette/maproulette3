@@ -19,21 +19,22 @@ export default function WithTaskMarkers(WrappedComponent,
                                         tasksProp='clusteredTasks') {
   class _WithTaskMarkers extends Component {
     render() {
-      const clusteredTasks = _get(this.props, tasksProp)
+      const challengeTasks = _get(this.props, tasksProp)
 
       const markers = []
-      if (_isObject(clusteredTasks)) {
-        if (_isArray(clusteredTasks.tasks) && clusteredTasks.tasks.length > 0) {
-          _each(clusteredTasks.tasks, task => {
+      if (_isObject(challengeTasks)) {
+        if (_isArray(challengeTasks.tasks) && challengeTasks.tasks.length > 0) {
+          _each(challengeTasks.tasks, task => {
             // Only create markers for created or skipped tasks
             if (task.point && (task.status === TaskStatus.created ||
-                              task.status === TaskStatus.skipped)) {
+                               task.status === TaskStatus.skipped ||
+                               task.status === TaskStatus.tooHard)) {
               markers.push({
                 position: [task.point.lat, task.point.lng],
                 options: {
-                  challengeId: _isFinite(clusteredTasks.challengeId) ?
-                               clusteredTasks.challengeId : task.challengeId || task.parentId,
-                  isVirtualChallenge: clusteredTasks.isVirtualChallenge,
+                  challengeId: _isFinite(challengeTasks.challengeId) ?
+                               challengeTasks.challengeId : (task.challengeId || task.parentId),
+                  isVirtualChallenge: challengeTasks.isVirtualChallenge,
                   challengeName: task.parentName,
                   taskId: task.id,
                 },
@@ -45,8 +46,9 @@ export default function WithTaskMarkers(WrappedComponent,
                   markers.push({
                     position: [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
                     options: {
-                      challengeId: task.challengeId || task.parentId,
-                      isVirtualChallenge: clusteredTasks.isVirtualChallenge,
+                      challengeId: _isFinite(challengeTasks.challengeId) ?
+                                   challengeTasks.challengeId : (task.challengeId || task.parentId),
+                      isVirtualChallenge: challengeTasks.isVirtualChallenge,
                       challengeName: task.parentName,
                       taskId: task.id,
                     },

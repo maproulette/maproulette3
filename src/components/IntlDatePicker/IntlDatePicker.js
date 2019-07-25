@@ -21,7 +21,7 @@ export default class IntlDatePicker extends Component {
     return intlString
       .replace(dateParts[2], 'dd')
       .replace(dateParts[1], 'MM')
-      .replace(dateParts[0], 'YYYY')
+      .replace(dateParts[0], 'yyyy')
   }
 
   render() {

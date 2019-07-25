@@ -14,6 +14,9 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import parse from 'date-fns/parse'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
+import WithDashboardEntityFilter
+       from '../../HOCs/WithDashboardEntityFilter/WithDashboardEntityFilter'
+
 import { TaskStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 
@@ -71,5 +74,21 @@ const WithChallengeMetrics = function(WrappedComponent) {
   }
 }
 
+export const includeChallengeInMetrics = function(challenge, manager, tallied, challengeFilters, props) {
+  const tallyMarks = tallied(_get(props.project, 'id'))
+  if (tallyMarks && tallyMarks.length > 0 && tallyMarks.indexOf(challenge.id) === -1) {
+    return false
+  }
+
+  return true
+}
+
 export default WrappedComponent =>
-  WithComputedMetrics(injectIntl(WithChallengeMetrics(WrappedComponent)))
+  WithDashboardEntityFilter(
+    WithComputedMetrics(injectIntl(WithChallengeMetrics(WrappedComponent))),
+    'challenge',
+    'challenges',
+    'talliedChallenges',
+    'challenges',
+    includeChallengeInMetrics
+  )

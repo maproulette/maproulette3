@@ -10,11 +10,14 @@ import { CustomSelectWidget,
          MarkdownDescriptionField,
          MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
+import KeywordAutosuggestInput
+      from '../../../../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import WithCurrentProject
        from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
        from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentTask from '../../../HOCs/WithCurrentTask/WithCurrentTask'
+import WithTaskTags from '../../../../HOCs/WithTaskTags/WithTaskTags'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import { jsSchema, uiSchema } from './EditTaskSchema'
 import manageMessages from '../../Messages'
@@ -86,6 +89,8 @@ export class EditTask extends Component {
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
+      tags: (props) => <KeywordAutosuggestInput {...props} tagType={"tasks"}
+        placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />,
     }
 
     return (
@@ -138,7 +143,8 @@ export class EditTask extends Component {
                     showErrorList={false}
                     formData={taskData}
                     onChange={this.changeHandler}
-                    onSubmit={this.finish}>
+                    onSubmit={this.finish}
+                    tagType="tasks">
                 <div className="mr-flex mr-justify-end mr-mt-8">
                   <button className="mr-button mr-button--green"
                           disabled={this.state.isSaving}
@@ -163,6 +169,7 @@ export class EditTask extends Component {
 
 export default WithCurrentProject(
   WithCurrentChallenge(
-    WithCurrentTask(injectIntl(EditTask))
+    WithCurrentTask(
+      WithTaskTags(injectIntl(EditTask)))
   )
 )

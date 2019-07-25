@@ -123,3 +123,22 @@
     }
   }
 }
+
+.mr-placeholder-medium {
+  &::placeholder {
+    @apply mr-font-medium;
+  }
+
+  &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    @apply mr-font-medium;
+  }
+  &::-moz-placeholder { /* Firefox 19+ */
+    @apply mr-font-medium;
+  }
+  &:-ms-input-placeholder { /* IE 10+ */
+    @apply mr-font-medium;
+  }
+  &:-moz-placeholder { /* Firefox 18- */
+    @apply mr-font-medium;
+  }
+}

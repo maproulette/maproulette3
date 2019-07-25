@@ -42,6 +42,12 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       this.setState({criteria: typedCriteria})
     }
 
+    setFiltered = (column, value) => {
+      const typedCriteria = _cloneDeep(this.state.criteria)
+      typedCriteria[this.props.reviewTasksType].filters[column] = value
+      this.setState({criteria: typedCriteria})
+    }
+
     update(props, criteria) {
       const userId = _get(props, 'user.id')
       const pageSize = _get(this.state.criteria[props.reviewTasksType], 'pageSize') || DEFAULT_PAGE_SIZE
@@ -122,6 +128,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
                           reviewCriteria={criteria}
                           pageSize={criteria.pageSize}
                           changePageSize={this.changePageSize}
+                          setFiltered={this.setFiltered}
                           startReviewing={(url) => this.props.startNextReviewTask(criteria, url, criteria.pageSize)}
                           loading={this.state.loading}
                           {..._omit(this.props, ['updateReviewTasks'])} />)

@@ -23,13 +23,13 @@ export const MARK_REVIEW_DATA_STALE = "MARK_REVIEW_DATA_STALE"
 export const REVIEW_TASKS_TO_BE_REVIEWED = 'tasksToBeReviewed'
 export const MY_REVIEWED_TASKS = 'myReviewedTasks'
 export const REVIEW_TASKS_BY_ME = 'tasksReviewedByMe'
-export const ALL_REVIEWED_TASKS = 'allReviewed'
+export const ALL_REVIEWED_TASKS = 'allReviewedTasks'
 
 export const ReviewTasksType = {
   toBeReviewed: REVIEW_TASKS_TO_BE_REVIEWED,
   myReviewedTasks: MY_REVIEWED_TASKS,
   reviewedByMe: REVIEW_TASKS_BY_ME,
-  allReviewed: ALL_REVIEWED_TASKS,
+  allReviewedTasks: ALL_REVIEWED_TASKS,
 }
 
 // redux action creators
@@ -222,9 +222,9 @@ export const cancelReviewClaim = function(taskId) {
 /**
  *
  */
-export const completeReview = function(taskId, taskReviewStatus, comment) {
+export const completeReview = function(taskId, taskReviewStatus, comment, tags) {
   return function(dispatch) {
-    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment)
+    return updateTaskReviewStatus(dispatch, taskId, taskReviewStatus, comment, tags)
   }
 }
 
@@ -255,6 +255,14 @@ export const setupFilterSearchParameters = (filters, boundingBox, savedChallenge
     searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
     searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
   }
+  if (filters.challengeId) {
+    if (!_isArray(filters.challengeId)) {
+      searchParameters.cid = filters.challengeId
+    }
+    else {
+      searchParameters.cid = filters.challengeId.join(',')
+    }
+  }
 
   if (boundingBox) {
     //tbb =>  [left, bottom, right, top]
@@ -268,7 +276,7 @@ export const setupFilterSearchParameters = (filters, boundingBox, savedChallenge
   return searchParameters
 }
 
-const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment) {
+const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, tags) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -282,7 +290,9 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment) {
 
   return new Endpoint(
     api.task.updateReviewStatus,
-    {schema: taskSchema(), variables: {id: taskId, status: newStatus}, params:{comment: comment}}
+    {schema: taskSchema(),
+     variables: {id: taskId, status: newStatus},
+     params:{comment: comment, tags: tags}}
   ).execute().catch(error => {
     if (isSecurityError(error)) {
       dispatch(ensureUserLoggedIn()).then(() =>

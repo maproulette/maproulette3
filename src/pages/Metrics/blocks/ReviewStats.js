@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import messages from '../Messages'
 import QuickWidget from '../../../components/QuickWidget/QuickWidget'
 import PastDurationSelector from '../../../components/PastDurationSelector/PastDurationSelector'
+import {ALL_TIME} from '../../../components/PastDurationSelector/PastDurationSelector'
 import _get from 'lodash/get'
 
 export default class ReviewStats extends Component {
@@ -45,7 +46,7 @@ export default class ReviewStats extends Component {
         rightHeaderControls={
           <PastDurationSelector
             className="mr-button mr-button--small"
-            pastMonthsOptions={[1, 3, 6, 9, 12]}
+            pastMonthsOptions={[1, 3, 6, 9, 12, ALL_TIME]}
             currentMonthsPast={this.props.tasksReviewedMonthsPast}
             selectDuration={this.props.setTasksReviewedMonthsPast}
           />
@@ -62,6 +63,8 @@ export default class ReviewStats extends Component {
                             totalReviewTasks, <FormattedMessage {...messages.assistedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'disputed'),
                             totalReviewTasks, <FormattedMessage {...messages.disputedReview} />)}
+          {this.displayStat(_get(this.props.reviewMetrics, 'requested'),
+                            totalReviewTasks, <FormattedMessage {...messages.awaitingReview} />)}
         </ul>
       </QuickWidget>
     )

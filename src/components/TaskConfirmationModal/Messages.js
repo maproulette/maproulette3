@@ -58,4 +58,14 @@ export default defineMessages({
     id: 'TaskConfirmationModal.comment.placeholder',
     defaultMessage: "Your comment (optional)",
   },
+
+  nextNearbyLabel: {
+    id: 'TaskConfirmationModal.nextNearby.label',
+    defaultMessage: "Select your next nearby task (optional)",
+  },
+
+  addTagsPlaceholder: {
+    id: 'TaskConfirmationModal.addTags.placeholder',
+    defaultMessage: "Add MR Tags",
+  },
 })

@@ -6,13 +6,15 @@ import CalendarHeatmap from '../../CalendarHeatmap/CalendarHeatmap'
 import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
+import WithChallengeMetrics
+       from '../../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import messages from './Messages'
 import './CalendarHeatmapWidget.scss'
 
 const descriptor = {
   widgetKey: 'CalendarHeatmapWidget',
   label: messages.label,
-  targets: [WidgetDataTarget.challenges, WidgetDataTarget.challenge],
+  targets: [WidgetDataTarget.challenge],
   defaultWidth: 8,
   defaultHeight: 7,
   minWidth: 5,
@@ -50,4 +52,4 @@ export default class CalendarHeatmapWidget extends Component {
   }
 }
 
-registerWidgetType(CalendarHeatmapWidget, descriptor)
+registerWidgetType(WithChallengeMetrics(CalendarHeatmapWidget), descriptor)

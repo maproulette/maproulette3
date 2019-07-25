@@ -198,6 +198,9 @@ export default function() {
         <symbol id="check-icon" viewBox="0 0 20 20">
           <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
         </symbol>
+        <symbol id="check-circled-icon" viewBox="0 0 20 20">
+          <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM6.7 9.29L9 11.6l4.3-4.3 1.4 1.42L9 14.4l-3.7-3.7 1.4-1.42z" />
+        </symbol>
         <symbol id="skip-icon" viewBox="0 0 20 20">
           <path d="M1 5l9 5-9 5V5zm9 0l9 5-9 5V5z" />
         </symbol>
@@ -212,6 +215,9 @@ export default function() {
         </symbol>
         <symbol id="layers-icon" viewBox="0 0 20 20">
           <path d="M10 1l10 6-10 6L0 7l10-6zm6.67 10L20 13l-10 6-10-6 3.33-2L10 15l6.67-4z" />
+        </symbol>
+        <symbol id="chart-icon" viewBox="0 0 20 20">
+          <path d="M4.13 12H4a2 2 0 1 0 1.8 1.11L7.86 10a2.03 2.03 0 0 0 .65-.07l1.55 1.55a2 2 0 1 0 3.72-.37L15.87 8H16a2 2 0 1 0-1.8-1.11L12.14 10a2.03 2.03 0 0 0-.65.07L9.93 8.52a2 2 0 1 0-3.72.37L4.13 12zM0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4z"/>
         </symbol>
         <symbol id="home-icon" viewBox="0 0 71 80">
           <g

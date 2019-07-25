@@ -149,6 +149,17 @@ file for documentation). For custom layers, an API key can also simply be
 included in the specified layer url in `src/customLayers.json` if that is
 simpler.
 
+### Enabling the Mapillary Map Layer
+
+MapRoulette has built-in support for a Mapillary map layer during task
+completion, allowing the mapper to make of use of available street-level
+imagery. To enable the layer, simply set the `REACT_APP_MAPILLARY_API_KEY` .env
+key to your Mapillary client id and restart your dev server (or rebuild your
+dev front-end for staging/production). If you don't have a client id, you can
+set one up through the
+[Mapillary Developer Tools](https://www.mapillary.com/developer)
+
+
 # Development Notes
 
 The project was bootstrapped with

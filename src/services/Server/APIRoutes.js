@@ -23,7 +23,7 @@ const apiRoutes = factory => {
     },
     'project': {
       'single': factory.get('/project/:id'),
-      'multiple': factory.get('/projectsById'),      
+      'multiple': factory.get('/projectsById'),
       'challenges': factory.get('/project/:id/challenges'),
       'create': factory.post('/project'),
       'edit': factory.put('/project/:id'),
@@ -49,6 +49,7 @@ const apiRoutes = factory => {
       'single': factory.get('/challenge/:id'),
       'tasks': factory.get('/challenge/:id/tasks'),
       'clusteredTasks': factory.get('/challenge/clustered/:id'),
+      'nearbyTasks': factory.get('/challenge/:challengeId/tasksNearby/:taskId'),
       'deleteTasks': factory.delete('/challenge/:id/tasks'),
       'randomTask': factory.get('/challenge/:id/tasks/randomTasks', {noCache: true}),
       'prioritizedTask': factory.get('/challenge/:id/tasks/prioritizedTasks', {noCache: true}),
@@ -71,6 +72,7 @@ const apiRoutes = factory => {
       'edit': factory.put('/virtualchallenge/:id'),
       'randomTask': factory.get('/virtualchallenge/:id/task', {noCache: true}),
       'clusteredTasks': factory.get('/virtualchallenge/clustered/:id'),
+      'nearbyTasks': factory.get('/virtualchallenge/:challengeId/tasksNearby/:taskId'),
     },
     'tasks': {
       'random': factory.get('/tasks/random', {noCache: true}),
@@ -95,6 +97,8 @@ const apiRoutes = factory => {
       'create': factory.post('/task'),
       'edit': factory.put('/task/:id'),
       'history': factory.get('/task/:id/history'),
+      'tags': factory.get('/task/:id/tags'),
+      'updateTags': factory.get('/task/:id/tags/update'),
     },
     'keywords': {
       'find': factory.get('/keywords'),

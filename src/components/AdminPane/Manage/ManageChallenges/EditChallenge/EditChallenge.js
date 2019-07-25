@@ -24,7 +24,7 @@ import { CustomArrayFieldTemplate,
          MarkdownEditField }
        from '../../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import KeywordAutosuggestInput
-       from '../../KeywordAutosuggestInput/KeywordAutosuggestInput'
+       from '../../../../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import WithCurrentProject
        from '../../../HOCs/WithCurrentProject/WithCurrentProject'
 import WithCurrentChallenge
@@ -529,6 +529,7 @@ export class EditChallenge extends Component {
                     widgets={{SelectWidget: CustomSelectWidget}}
                     ArrayFieldTemplate={CustomArrayFieldTemplate}
                     fields={customFields}
+                    tagType={"challenges"}
                     noHtml5Validate
                     showErrorList={false}
                     formData={challengeData}

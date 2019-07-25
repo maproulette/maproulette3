@@ -46,7 +46,7 @@ export class ProjectCard extends Component {
             <FormattedMessage {...messages.challengePreviewHeader} />
           </div>
 
-          <ChallengeList challenges={matchingChallenges} suppressControls
+          <ChallengeList challenges={matchingChallenges} suppressControls hideTallyControl
                          {..._omit(this.props, 'challenges')} />
         </div>
       )
@@ -55,7 +55,7 @@ export class ProjectCard extends Component {
       projectBody = (
         <div className='project-card__project-content'>
           <ChallengeList challenges={project.childChallenges(this.props.challenges)}
-                         suppressControls={!manager.canWriteProject(project)}
+                         suppressControls={!manager.canWriteProject(project)} hideTallyControl
                          {..._omit(this.props, 'challenges')} />
         </div>
       )

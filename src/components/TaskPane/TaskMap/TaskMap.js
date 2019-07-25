@@ -26,6 +26,7 @@ import WithIntersectingOverlays
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
+import WithMapillaryImages from '../../HOCs/WithMapillaryImages/WithMapillaryImages'
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -39,12 +40,13 @@ import './TaskMap.scss'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class TaskMap extends Component {
+  latestBounds = null // track latest map bounds without causing rerender
+
   state = {
     showTaskFeatures: true,
     showOSMData: false,
     osmData: null,
     osmDataLoading: false,
-    mapillaryLayerLoading: false,
     mapillaryViewerImage: null,
   }
 
@@ -106,12 +108,15 @@ export class TaskMap extends Component {
     const isVirtual = _isFinite(this.props.virtualChallengeId)
     const challengeId = isVirtual ? this.props.virtualChallengeId :
                                     this.props.challenge.id
-    // If there's no mapillary data, we'll reload the task and request it
-    if (!this.props.showMapillaryLayer && !this.props.task.mapillaryImages) {
-      this.setState({mapillaryLayerLoading: true})
+    // If enabling layer, fetch fresh data. This allows users to toggle the
+    // layer off and on to refresh the data, e.g. if they have moved the map
+    // and wish to expand coverage of mapillary imagery
+    if (!this.props.showMapillaryLayer) {
       this.props.setShowMapillaryLayer(challengeId, isVirtual, true)
-      await this.props.refreshTask(this.props.task.id, true)
-      this.setState({mapillaryLayerLoading: false})
+      await this.props.fetchMapillaryImagery(
+        this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+        this.props.task
+      )
     }
     else {
       this.props.setShowMapillaryLayer(challengeId, isVirtual, !this.props.showMapillaryLayer)
@@ -121,13 +126,17 @@ export class TaskMap extends Component {
   /**
    * Reloads the task data with mapillary image info requested if needed
    */
-  loadMapillaryIfNeeded = () => {
-    // If we're supposed to show mapillary images but don't have them,
-    // explicitly reload the task with mapillary images
-    if (this.props.task &&
-        this.props.showMapillaryLayer &&
-        !this.props.task.mapillaryImages) {
-      this.props.refreshTask(this.props.task.id, true)
+  loadMapillaryIfNeeded = async () => {
+    // If we're supposed to show mapillary images but don't have them for
+    // this task, go ahead and fetch them
+    if (this.props.task && this.props.showMapillaryLayer) {
+      if (this.props.mapillaryTaskId !== this.props.taskId ||
+          (!this.props.mapillaryImages && !this.props.mapillaryLoading)) {
+        await this.props.fetchMapillaryImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+        )
+      }
     }
   }
 
@@ -163,7 +172,8 @@ export class TaskMap extends Component {
     }
 
     if (nextProps.showMapillaryLayer !== this.props.showMapillaryLayer ||
-        nextState.mapillaryLayerLoading !== this.state.mapillaryLayerLoading ||
+        nextProps.mapillaryLoading !== this.props.mapillaryLoading ||
+        nextProps.mapillaryTaskId !== this.props.mapillaryTaskId ||
         nextState.mapillaryViewerImage !== this.state.mapillaryViewerImage) {
       return true
     }
@@ -172,8 +182,8 @@ export class TaskMap extends Component {
       return true
     }
 
-    if(_get(nextProps, 'task.mapillaryImages.length') !==
-       _get(this.props, 'task.mapillaryImages.length')) {
+    if(_get(nextProps, 'mapillaryImages.length') !==
+       _get(this.props, 'mapillaryImages.length')) {
       return true
     }
 
@@ -212,6 +222,8 @@ export class TaskMap extends Component {
   }
 
   updateTaskBounds = (bounds, zoom) => {
+    this.latestBounds = bounds
+
     // Don't update map bounds if this task is in the process of completing.
     // We don't want to risk sending updates on a stale task as this one gets
     // unloaded.
@@ -221,25 +233,26 @@ export class TaskMap extends Component {
   }
 
   mapillaryImageMarkers = () => {
-    if (_get(this.props, 'task.mapillaryImages.length', 0) === 0) {
+    if (_get(this.props, 'mapillaryImages.length', 0) === 0) {
       return []
     }
 
     const icon = L.vectorIcon({
       svgHeight: 12,
       svgWidth: 12,
+      viewBox: '0 0 12 12',
       type: 'circle',
       shape: { r: 6, cx: 6, cy: 6 },
       style: { fill: "#39AF64" }, // mapillary green
     })
 
-    const markers = _map(this.props.task.mapillaryImages, (imageInfo, index) =>
+    const markers = _map(this.props.mapillaryImages, imageInfo =>
       <Marker key={imageInfo.key} position={[imageInfo.lat, imageInfo.lon]}
               icon={icon}
               onMouseover={({target}) => target.openPopup()}
               onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})}>
         <Popup>
-          <img src={imageInfo.url_320} alt="From Mapillary"
+          <img src={imageInfo.url320} alt="From Mapillary"
                onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})} />
         </Popup>
       </Marker>
@@ -276,10 +289,9 @@ export class TaskMap extends Component {
                      showOSMData={this.state.showOSMData}
                      toggleOSMData={this.toggleOSMDataVisibility}
                      osmDataLoading={this.state.osmDataLoading}
+                     toggleMapillary={this.props.isMapillaryEnabled() ? this.toggleMapillaryVisibility : undefined}
                      showMapillary={this.props.showMapillaryLayer}
-                     toggleMapillary={this.toggleMapillaryVisibility}
-                     mapillaryLoading={this.state.mapillaryLayerLoading}
-                     mapillaryCount={_get(this.props, 'task.mapillaryImages.length', 0)} />
+                     mapillaryCount={_get(this.props, 'mapillaryImages.length', 0)} />
         <EnhancedMap center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom} worldCopyJump={true}
                      features={_get(this.props.task, 'geometries.features')}
@@ -299,10 +311,11 @@ export class TaskMap extends Component {
         </EnhancedMap>
 
         {this.state.mapillaryViewerImage &&
-         <MapillaryViewer key={Date.now()}
-                          images={this.props.task.mapillaryImages}
-                          initialImageKey={this.state.mapillaryViewerImage}
-                          onDeactivate={() => this.setState({mapillaryViewerImage: null})} />
+         <MapillaryViewer
+            key={Date.now()}
+            initialImageKey={this.state.mapillaryViewerImage}
+            onClose={() => this.setState({mapillaryViewerImage: null})}
+         />
         }
       </div>
     )
@@ -324,13 +337,15 @@ TaskMap.propTypes = {
 }
 
 export default WithSearch(
-  WithTaskCenterPoint(
-    WithVisibleLayer(
-      WithIntersectingOverlays(
-        WithKeyboardShortcuts(TaskMap),
-        'task'
+  WithMapillaryImages(
+    WithTaskCenterPoint(
+      WithVisibleLayer(
+        WithIntersectingOverlays(
+          WithKeyboardShortcuts(TaskMap),
+          'task'
+        )
       )
-    )
+    ),
   ),
   'task'
 )

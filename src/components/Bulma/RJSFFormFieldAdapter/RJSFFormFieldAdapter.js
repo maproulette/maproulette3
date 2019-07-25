@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _map from 'lodash/map'
+import _isArray from 'lodash/isArray'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
@@ -130,11 +131,19 @@ export class MarkdownEditField extends Component {
 }
 
 export const TagsInputField = props => {
+  let tags = []
+  if (_isArray(props.formData)) {
+    tags = _map(props.formData, (tag) => tag.name)
+  }
+  else if (_isString(props.formData) && props.formData !== "") {
+    tags = props.formData.split(',')
+  }
+
   return (
     <div className="tags-field">
       <TagsInput {...props}
                  inputProps={{placeholder: "Add keyword"}}
-                 value={props.formData ? props.formData.split(',') : []}
+                 value={tags}
                  onChange={tags => props.onChange(tags.join(','))}
                  addOnBlur />
     </div>
@@ -160,7 +169,6 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
 
   return (
     <Dropzone
-      className="dropzone mr-text-grey mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
       acceptClassName="active"
       multiple={false}
       disablePreview
@@ -169,22 +177,27 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
         onChange(files[0].name)
       }}
     >
-      {({acceptedFiles}) => {
-        if (acceptedFiles.length > 0) {
-          return <p>{acceptedFiles[0].name}</p>
-        }
-        else {
-          return (
-            <div>
-              <SvgSymbol
-                viewBox='0 0 20 20'
-                sym="upload-icon"
-                className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
-              />
-              <FormattedMessage {...messages.uploadFilePrompt} />
-            </div>
-          )
-        }
+      {({acceptedFiles, getRootProps, getInputProps, ...params}) => {
+        const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
+          <React.Fragment>
+            <SvgSymbol
+              viewBox='0 0 20 20'
+              sym="upload-icon"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-mr-4"
+            />
+            <FormattedMessage {...messages.uploadFilePrompt} />
+            <input {...getInputProps()} />
+          </React.Fragment>
+        )
+
+        return (
+          <div
+            className="dropzone mr-text-grey mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
+            {...getRootProps()}
+          >
+            {body}
+          </div>
+        )
       }}
     </Dropzone>
   )

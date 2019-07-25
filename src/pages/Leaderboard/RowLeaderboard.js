@@ -6,12 +6,15 @@ import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
 import _truncate from 'lodash/truncate'
 import messages from './Messages'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 
 class RowLeaderboard extends Component {
   render() {
+    const leader = this.props.leader
+
     const topChallengeItems =
       this.props.suppressTopChallenges ? null :
-      _map(this.props.leader.topChallenges.slice(0, this.props.maxTopChallenges), challenge => (
+      _map(leader.topChallenges.slice(0, this.props.maxTopChallenges), challenge => (
         <li key={challenge.id}>
           <Link to={`/browse/challenges/${challenge.id}`} title={challenge.name}>
             {_truncate(challenge.name, {length: 35})}
@@ -25,21 +28,21 @@ class RowLeaderboard extends Component {
           <header className="mr-mb-4 sm:mr-mb-0 sm:mr-col-span-4 md:mr-flex md:mr-items-center mr-text-center sm:mr-text-left">
             <div>
               <h3 className="mr-mb-2 md:mr-mb-0 mr-font-bold md:mr-pr-8">
-                <FormattedNumber value={this.props.leader.rank} />
+                <FormattedNumber value={leader.rank} />
               </h3>
             </div>
             <div className="md:mr-flex mr-items-center">
               <div
                 className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full"
-                style={{ backgroundImage: `url(${this.props.leader.avatarURL}?s=200)` }}
+                style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(200)})` }}
               />
               <div className="md:mr-pl-8">
                 <h2 className="mr-text-lg mr-font-normal mr-mb-2">
-                  {this.props.leader.name}
+                  {leader.name}
                 </h2>
                 <h4 className="mr-text-md mr-text-green-lighter">
                   <strong className="mr-text-green-lighter">
-                    <FormattedNumber value={this.props.leader.score} />
+                    <FormattedNumber value={leader.score} />
                   </strong> <FormattedMessage {...messages.userPoints} />
                 </h4>
               </div>

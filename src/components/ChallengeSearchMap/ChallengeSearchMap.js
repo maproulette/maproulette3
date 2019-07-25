@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { injectIntl } from 'react-intl'
-import { ZoomControl } from 'react-leaflet'
+import { Marker, Popup, ZoomControl } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import _get from 'lodash/get'
-import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import { latLng } from 'leaflet'
@@ -109,48 +107,9 @@ export class ChallengeSearchMap extends Component {
     this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
   }
 
-  /**
-   * Invoked to request popup content when a task marker on the map is clicked
-   */
-  popupContent = marker => {
-    const content = (
-      <div className="marker-popup-content">
-        <h3>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a onClick={() => this.props.history.push(
-            `/browse/challenges/${marker.options.challengeId}`
-          )}>
-            {marker.options.challengeName}
-          </a>
-        </h3>
-
-        <div className="marker-popup-content__links">
-          <div>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => {
-              this.props.onTaskClick(marker.options.challengeId,
-                                     marker.options.isVirtualChallenge,
-                                     marker.options.taskId)
-            }}>
-              {this.props.intl.formatMessage(messages.startChallengeLabel)}
-            </a>
-          </div>
-        </div>
-      </div>
-    )
-
-
-    const contentElement = document.createElement('div')
-    ReactDOM.render(content, contentElement)
-    return contentElement
-  }
 
   render() {
     const hasMarkers = _get(this.props, 'taskMarkers.length', 0) > 0
-
-    if (hasMarkers) {
-      _each(this.props.taskMarkers, marker => marker.popup = this.popupContent)
-    }
 
     const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
@@ -158,6 +117,12 @@ export class ChallengeSearchMap extends Component {
 
     // If the app is still loading then we have no initialBounds
     const initialBounds = !this.props.loadedFromRouteDone ? null : _get(this.props, 'mapBounds.bounds')
+
+    const renderedMarkers = _map(this.props.taskMarkers, markerData => (
+      <Marker key={markerData.options.taskId} {...markerData}>
+        <TaskMarkerPopup {...this.props} marker={markerData} />
+      </Marker>
+    ))
 
     return (
       <div key='ChallengeSearchMap' className="mr-h-full">
@@ -170,9 +135,7 @@ export class ChallengeSearchMap extends Component {
           <ZoomControl position='topright' />
           <SourcedTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
-          {hasMarkers &&
-           <MarkerClusterGroup markers={this.props.taskMarkers} />
-          }
+          {hasMarkers && <MarkerClusterGroup>{renderedMarkers}</MarkerClusterGroup>}
         </EnhancedMap>
 
         {!!this.props.tasksLoading && <BusySpinner mapMode />}
@@ -180,6 +143,34 @@ export class ChallengeSearchMap extends Component {
     )
   }
 }
+
+const TaskMarkerPopup = props => (
+  <Popup>
+    <div className="marker-popup-content">
+      <h3>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a onClick={() => props.history.push(
+          `/browse/challenges/${props.marker.options.challengeId}`
+        )}>
+          {props.marker.options.challengeName}
+        </a>
+      </h3>
+
+      <div className="marker-popup-content__links">
+        <div>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => {
+            props.onTaskClick(props.marker.options.challengeId,
+                              props.marker.options.isVirtualChallenge,
+                              props.marker.options.taskId)
+          }}>
+            {props.intl.formatMessage(messages.startChallengeLabel)}
+          </a>
+        </div>
+      </div>
+    </div>
+  </Popup>
+)
 
 ChallengeSearchMap.propTypes = {
   /**

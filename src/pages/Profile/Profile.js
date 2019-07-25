@@ -8,6 +8,7 @@ import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import ApiKey from './ApiKey'
 import messages from './Messages'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 
 class Profile extends Component {
   componentDidMount() {
@@ -30,6 +31,7 @@ class Profile extends Component {
     }
 
     let user = this.props.user
+    let osmProfile = AsAvatarUser(user.osmProfile)
 
     if (this.props.showingUserId) {
       user = this.props.targetUser
@@ -61,12 +63,12 @@ class Profile extends Component {
         <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-p-4 md:mr-p-8 mr-rounded">
           <header className="mr-max-w-xs mr-mx-auto mr-text-center">
             <img
-              className="mr-block mr-mx-auto mr-mb-4 mr-rounded-full md:mr-w-30 md:mr-h-30 md:mr--mt-23"
-              src={`${user.osmProfile.avatarURL}&s=120`}
-              srcSet={`${user.osmProfile.avatarURL}&s=120 1x, ${user.osmProfile.avatarURL}&s=240 2x"`}
-              alt={user.osmProfile.displayName}
+              className="mr-block mr-mx-auto mr-mb-4 mr-rounded-full md:mr-w-32 md:mr-h-32 md:mr--mt-23"
+              src={osmProfile.profilePic(128)}
+              srcSet={`${osmProfile.profilePic(128)} 1x, ${osmProfile.profilePic(256)} 2x"`}
+              alt={osmProfile.displayName}
             />
-            <h1 className="mr-h3 mr-text-blue mr-mb-1">{user.osmProfile.displayName}</h1>
+            <h1 className="mr-h3 mr-text-blue mr-mb-1">{osmProfile.displayName}</h1>
             <p className="mr-text-grey mr-text-sm mr-font-mono">
               <FormattedMessage {...messages.userSince} /> <b>
                 <FormattedDate

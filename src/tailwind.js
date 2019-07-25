@@ -47,6 +47,7 @@ let colors = {
   current: 'currentColor',
   white: '#fff',
   'white-40': 'rgba(255, 255, 255, .4)',
+  'white-50': 'rgba(255, 255, 255, .5)',
   'white-10': 'rgba(255, 255, 255, .1)',
   'off-white': '#FAF7F2',
   black: '#222',
@@ -54,8 +55,10 @@ let colors = {
   'black-50': 'rgba(0, 0, 0, .5)',
   grey: '#737373',
   'grey-light': '#BDB8AE',
+  'grey-light-more': '#D8D8D8',
   'grey-lighter': '#F2EFE9',
   'grey-lighter-10': 'rgba(242, 239, 233, .1)',
+  'grey-leaflet': '#666',
   green: '#5B937A',
   'green-light': '#7EBC89',
   'green-lighter': '#91F3A2',
@@ -64,6 +67,7 @@ let colors = {
   blue: '#23395B',
   'blue-light': '#496B94',
   'blue-dark': '#182841',
+  'blue-leaflet': '#2E85CB', // '#2281C2',
   'blue-dark-75': 'rgba(24, 40, 65, .75)',
   'blue-darker': '#0e192a',
   yellow: '#FFFD86',
@@ -206,6 +210,7 @@ module.exports = {
   */
 
   textSizes: {
+    xxs: '.625rem', // 10px
     xs: '.75rem', // 12px
     sm: '.875rem', // 14px
     base: '1rem', // 16px
@@ -435,6 +440,7 @@ module.exports = {
     '40': '10rem',
     '48': '12rem',
     '64': '16rem',
+    '88': '22rem',
     '1/2': '50%',
     '1/3': '33.33333%',
     '2/3': '66.66667%',
@@ -472,6 +478,7 @@ module.exports = {
     auto: 'auto',
     px: '1px',
     '3px': '3px',
+    '5px': '5px',
     '1': '0.25rem',
     '2': '0.5rem',
     '3': '0.75rem',
@@ -489,6 +496,7 @@ module.exports = {
     '40': '10rem',
     '48': '12rem',
     '64': '16rem',
+    '112': '28rem',
     hero: '43.75rem',
     full: '100%',
     screen: '100vh',
@@ -573,6 +581,7 @@ module.exports = {
     md: '40rem',
     lg: '50rem',
     xl: '60rem',
+    '88': '22rem',
     '2xl': '70rem',
     '3xl': '80rem',
     '4xl': '90rem',
@@ -667,6 +676,7 @@ module.exports = {
   margin: {
     auto: 'auto',
     px: '1px',
+    'n2px': '-2px',
     '0': '0',
     '1': '0.25rem',
     '2': '0.5rem',
@@ -810,6 +820,7 @@ module.exports = {
     'green-light': colors['green-light'],
     'green-lighter': colors['green-lighter'],
     grey: colors["grey"],
+    'grey-light': colors['grey-light'],
     twitter: colors['twitter'],
   },
 

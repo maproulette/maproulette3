@@ -7,6 +7,38 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.3.3] - 2019-07-24
+### Added
+- MapRoulette-specific tagging support for tasks ("MR Tags")
+- Option to select next nearby task to work on from map of nearby tasks
+- Export of challenges as GeoJSON from Create & Manage
+- Honor active filters when exporting CSV and GeoJSON files
+- Review Metrics widget for Create & Manage dashboards
+- Toggle for inclusion of challenges in metrics in Create & Manage area
+- Completion-progress indicators below each challenge in Create & Manage
+- Show name of challenge parent project in virtual-project challenge listings
+- Improved Mapillary integration and official Mapillary image viewer
+- "All Time" duration option to Review Stats
+- [internal] Upgrade various package dependencies, including React
+
+### Fixed
+- Bing map layer showing incorrect imagery
+- Malfunctioning reviewed-on date filter on Tasks Review table
+- Retrieval of next nearby task not honoring task priority
+- JOSM editing bounds in task review inconsistent with task completion
+- Task map in Create & Manage not resetting when all filters cleared
+- Broken user profile images
+- Broken links to top-challenges on leaderboards in some cases
+- Insufficient Overpass timeout on attic queries
+- Various minor visual fixes and adjustments
+
+### Changed
+- JOSM attic layer policy from locked to no upload and no download
+
+### Removed
+- Broken heatmap from Create & Manage project dashboard
+
+
 ## [v3.3.2] - 2019-06-20
 ### Added
 - Virtual Projects

@@ -19,14 +19,16 @@ class Modal extends Component {
         />
         <div
           className={classNames(
-            "mr-z-90 mr-fixed mr-pin-t mr-pin-l md:mr-min-w-1/2", {
-            "md:mr-w-2/3 md:mr-pin-t-20 md:mr-pin-l-16": this.props.wide,
-            "mr-w-full lg:mr-w-auto lg:mr-pin-t-50 lg:mr-pin-l-50 lg:mr--translate-1/2": !this.props.wide
+            "mr-z-90 mr-fixed mr-pin-t mr-pin-l", {
+            "md:mr-w-2/3 md:mr-pin-t-5 md:mr-pin-l-16": this.props.wide,
+            "md:mr-min-w-1/3 md:mr-w-1/3 md:mr-pin-t-5 md:mr-pin-l-33": this.props.narrow,
+            "md:mr-min-w-2/5 md:mr-w-2/5 md:mr-pin-t-15 md:mr-pin-l-30": this.props.medium,
+            "md:mr-min-w-1/2 mr-w-full lg:mr-w-auto lg:mr-pin-t-50 lg:mr-pin-l-50 lg:mr--translate-1/2": !this.props.wide && !this.props.narrow && !this.props.medium
           })}
         >
           <div
             className={classNames(
-              'mr-relative mr-bg-blue-dark mr-p-8 mr-rounded mr-shadow mr-w-full mr-w-md mr-mx-auto',
+              'mr-relative mr-bg-blue-dark mr-p-8 mr-rounded mr-shadow mr-w-full mr-w-full mr-w-md mr-mx-auto mr-overflow-y-auto mr-max-h-screen100',
               this.props.contentClassName
             )}
           >

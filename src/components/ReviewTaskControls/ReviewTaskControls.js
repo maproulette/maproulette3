@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus, messagesByStatus }
@@ -9,6 +10,8 @@ import { TaskStatus, messagesByStatus }
 import { TaskReviewLoadMethod } from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
+import WithTaskTags from '../HOCs/WithTaskTags/WithTaskTags'
+import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithEditor from '../HOCs/WithEditor/WithEditor'
 import TaskEditControl from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
@@ -26,15 +29,17 @@ import './ReviewTaskControls.scss'
 export class ReviewTaskControls extends Component {
   state = {
     comment: "",
+    tags: "",
     loadBy: TaskReviewLoadMethod.next,
   }
 
   setComment = comment => this.setState({comment})
+  setTags = tags => this.setState({tags})
 
   onConfirm = () => {
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
-                                     this.state.comment, this.state.loadBy,
-                                     this.props.history)
+                                     this.state.comment, this.state.tags,
+                                     this.state.loadBy, this.props.history)
     this.setState({confirmingTask: false, comment: ""})
   }
 
@@ -64,7 +69,7 @@ export class ReviewTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, {zoom: 20})
+    this.props.editTask(value, this.props.task, this.props.mapBounds)
   }
 
   render() {
@@ -132,6 +137,7 @@ export class ReviewTaskControls extends Component {
     }
 
     const fromInbox = _get(this.props.history, 'location.state.fromInbox')
+    const tags = _map(this.props.task.tags, (tag) => tag.name)
 
     return (
       <div className={classNames("review-task-controls", this.props.className)}>
@@ -150,6 +156,14 @@ export class ReviewTaskControls extends Component {
             {...messagesByReviewStatus[this.props.task.reviewStatus]}
           />
         </div>
+
+        {tags.length > 0 &&
+          <div className="mr-text-sm mr-text-white">
+            <FormattedMessage
+              {...messages.taskTags}
+            /> {tags.join(', ')}
+          </div>
+        }
 
         <div className="mr-my-4">
           <UserEditorSelector {...this.props} />
@@ -184,6 +198,8 @@ export class ReviewTaskControls extends Component {
             status={this.state.reviewStatus}
             comment={this.state.comment}
             setComment={this.setComment}
+            tags={this.state.tags}
+            setTags={this.setTags}
             onConfirm={this.onConfirm}
             onCancel={this.onCancel}
             chooseLoadBy={this.chooseLoadBy}
@@ -202,4 +218,14 @@ ReviewTaskControls.propTypes = {
   task: PropTypes.object,
 }
 
-export default WithTaskReview(WithEditor(WithKeyboardShortcuts(ReviewTaskControls)))
+export default
+  WithSearch(
+    WithTaskTags(
+      WithTaskReview(
+        WithEditor(
+          WithKeyboardShortcuts(ReviewTaskControls)
+        )
+      )
+    ),
+    'task'
+  )

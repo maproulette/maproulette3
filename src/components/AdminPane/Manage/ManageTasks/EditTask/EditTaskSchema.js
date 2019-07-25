@@ -46,6 +46,9 @@ export const jsSchema = (intl, task) => {
         enumNames: allowedStatusLabels,
         default: TaskStatus.created,
       },
+      tags: {
+        title: intl.formatMessage(messages.additionalTagsLabel),
+      }
     },
     required: ["name", "geometries"],
   }
@@ -78,5 +81,9 @@ export const uiSchema = intl => ({
   status: {
     "ui:widget": "select",
     "ui:help": intl.formatMessage(messages.statusDescription),
+  },
+  tags: {
+    "ui:field": "tags",
+    "ui:help": intl.formatMessage(messages.additionalTagsDescription),
   },
 })

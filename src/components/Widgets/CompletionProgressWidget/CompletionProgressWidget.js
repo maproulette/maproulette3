@@ -5,6 +5,8 @@ import { WidgetDataTarget, registerWidgetType }
 import ChallengeProgress from '../../ChallengeProgress/ChallengeProgress'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
+import WithChallengeMetrics
+       from '../../AdminPane/HOCs/WithChallengeMetrics/WithChallengeMetrics'
 
 const descriptor = {
   widgetKey: 'CompletionProgressWidget',
@@ -20,6 +22,8 @@ const descriptor = {
   defaultHeight: 7,
 }
 
+const ChallengeProgressWithMetrics = WithChallengeMetrics(ChallengeProgress)
+
 export default class CompletionProgressWidget extends Component {
   render() {
     const challenge = this.props.task ?
@@ -29,7 +33,7 @@ export default class CompletionProgressWidget extends Component {
       <QuickWidget {...this.props}
                   className="completion-progress-widget"
                   widgetTitle={<FormattedMessage {...messages.title} />}>
-         <ChallengeProgress {...this.props} className="" challenge={challenge} />
+         <ChallengeProgressWithMetrics {...this.props} className="" challenge={challenge} />
       </QuickWidget>
     )
   }

@@ -74,8 +74,17 @@ if (_get(process.env, 'REACT_APP_MAP_LAYER_API_KEYS', '').length > 0) {
 
 export const normalizeBingLayer = function(layer) {
   const normalizedLayer = Object.assign({}, layer)
-  normalizedLayer.url = process.env.REACT_APP_BING_MAP_TILESERVER_URL
   normalizedLayer.maxZoom = normalizedLayer.max_zoom
+
+  // API key should be specified in .env file
+  const apiKey = layerAPIKeys[normalizedLayer.id]
+  if (apiKey) {
+    normalizedLayer[apiKey.name] = apiKey.value
+  }
+  else {
+    // Community key circulating around OSM
+    normalizedLayer.bingkey = "Arzdiw4nlOJzRwOz__qailc8NiR31Tt51dN2D7cm57NrnceZnCpgOkmJhNpGoppU"
+  }
 
   return normalizedLayer
 }

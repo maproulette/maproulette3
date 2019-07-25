@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus,
@@ -13,6 +14,7 @@ import { TaskReviewLoadMethod } from '../../../../services/Task/TaskReview/TaskR
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
+import WithTaskTags from '../../../HOCs/WithTaskTags/WithTaskTags'
 import WithKeyboardShortcuts
        from '../../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
@@ -21,8 +23,10 @@ import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
 import TaskConfirmationModal
        from '../../../TaskConfirmationModal/TaskConfirmationModal'
+import TaskTags from '../../../TaskTags/TaskTags'
 import messages from './Messages'
 import './ActiveTaskControls.scss'
+
 
 /**
  * ActiveTaskControls renders the appropriate controls for the given
@@ -36,10 +40,12 @@ export class ActiveTaskControls extends Component {
     confirmingTask: null,
     confirmingStatus: null,
     comment: "",
+    tags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
   }
 
   setComment = comment => this.setState({comment})
+  setTags = tags => this.setState({tags})
 
   toggleNeedsReview = () => {
     this.setState({needsReview: !this.getNeedsReviewSetting()})
@@ -72,9 +78,17 @@ export class ActiveTaskControls extends Component {
     this.setState({revisionLoadBy: loadMethod})
   }
 
+  chooseNextTask = (challengeId, isVirtual, taskId) => {
+    this.setState({requestedNextTask: taskId})
+  }
+
+  clearNextTask = () => {
+    this.setState({requestedNextTask: null})
+  }
+
   /** Indicate the editor has been closed without completing the task */
   cancelEditing = () => {
-    this.setState({taskBeingCompleted: null})
+    this.setState({taskBeingCompleted: null, requestedNextTask: null})
     this.props.closeEditor()
   }
 
@@ -84,15 +98,16 @@ export class ActiveTaskControls extends Component {
 
     if (!_isUndefined(this.state.submitRevision)) {
       this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
-                                        this.state.comment, this.state.revisionLoadBy,
-                                        this.props.history)
+                                        this.state.comment, this.state.tags,
+                                        this.state.revisionLoadBy, this.props.history)
     }
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
-                              taskStatus, this.state.comment,
-                              revisionSubmission? null : this.props.taskLoadBy,
+                              taskStatus, this.state.comment, this.state.tags,
+                              revisionSubmission ? null : this.props.taskLoadBy,
                               this.props.user.id,
-                              revisionSubmission || this.state.needsReview)
+                              revisionSubmission || this.state.needsReview,
+                              this.state.requestedNextTask)
       if (revisionSubmission) {
         if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
           this.props.history.push('/inbox')
@@ -118,7 +133,12 @@ export class ActiveTaskControls extends Component {
   }
 
   resetConfirmation = () => {
-    this.setState({confirmingTask: null, confirmingStatus: null, comment: ""})
+    this.setState({
+      confirmingTask: null,
+      confirmingStatus: null,
+      requestedNextTask: null,
+      comment: "", tags: null,
+    })
   }
 
   /** Move to the next task without modifying the task status */
@@ -131,6 +151,14 @@ export class ActiveTaskControls extends Component {
     if (_get(this.props.history, 'location.state.fromInbox') &&
         this.state.revisionLoadBy !== TaskReviewLoadMethod.inbox) {
       this.setState({revisionLoadBy: TaskReviewLoadMethod.inbox})
+    }
+
+    if (_get(this.props, 'task.id') !== _get(nextProps, 'task.id')) {
+      this.resetConfirmation()
+    }
+
+    if (this.state.tags === null && _get(this.props, 'task.tags')) {
+      this.setState({tags: _map(this.props.task.tags, (tag) => tag.name).join(', ')})
     }
   }
 
@@ -189,6 +217,12 @@ export class ActiveTaskControls extends Component {
            </div>
           }
 
+          <TaskTags task={this.props.task}
+                         tags={this.state.tags}
+                         setTags={this.setTags}
+                         onConfirm={this.confirmCompletion}
+                         saveTaskTags={this.props.saveTaskTags} />
+
           {!isEditingTask && (!isFinal || needsRevised) &&
            <TaskCompletionStep1
              {...this.props}
@@ -221,15 +255,19 @@ export class ActiveTaskControls extends Component {
           {this.state.confirmingTask &&
             <TaskConfirmationModal
               {...this.props}
-              task={this.state.taskBeingComfirmed}
               status={this.state.confirmingStatus}
               comment={this.state.comment}
               setComment={this.setComment}
+              tags={this.state.tags}
+              setTags={this.setTags}
               needsReview={this.getNeedsReviewSetting()}
               toggleNeedsReview={this.toggleNeedsReview}
               loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
               chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
                                                  this.chooseLoadBy(load)}
+              chooseNextTask={this.chooseNextTask}
+              clearNextTask={this.clearNextTask}
+              requestedNextTask={this.state.requestedNextTask}
               onConfirm={this.confirmCompletion}
               onCancel={this.resetConfirmation}
               needsRevised={this.state.submitRevision}
@@ -256,9 +294,12 @@ ActiveTaskControls.defaultProps = {
 }
 
 export default WithSearch(
-  WithTaskReview(
-    WithKeyboardShortcuts(
-      injectIntl(ActiveTaskControls)
-    )),
+  WithTaskTags(
+    WithTaskReview(
+      WithKeyboardShortcuts(
+        injectIntl(ActiveTaskControls)
+      )
+    )
+  ),
   'task'
 )

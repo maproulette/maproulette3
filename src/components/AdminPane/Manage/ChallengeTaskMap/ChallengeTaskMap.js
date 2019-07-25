@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { ZoomControl } from 'react-leaflet'
+import { Marker, Popup, ZoomControl } from 'react-leaflet'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { point, featureCollection } from '@turf/helpers'
@@ -170,50 +169,6 @@ export class ChallengeTaskMap extends Component {
     })
   }
 
-  /**
-   * Invoked to request popup content when a task marker on the map is clicked
-   */
-  popupContent = marker => {
-    const manager = AsManager(this.props.user)
-
-    const taskBaseRoute =
-      `/admin/project/${this.props.challenge.parent.id}` +
-      `/challenge/${this.props.challenge.id}/task/${marker.options.taskId}`
-
-    const content = (
-      <div className="marker-popup-content">
-        <div>
-          {this.props.intl.formatMessage(messages.nameLabel)} {marker.options.name}
-        </div>
-        <div>
-          {this.props.intl.formatMessage(messages.statusLabel)} {this.props.intl.formatMessage(messagesByStatus[marker.options.status])}
-        </div>
-
-        <div className="marker-popup-content__links">
-          <div>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => this.props.history.push(`${taskBaseRoute}/inspect`)}>
-              {this.props.intl.formatMessage(messages.inspectTaskLabel)}
-            </a>
-          </div>
-
-          {manager.canWriteProject(this.props.challenge.parent) &&
-           <div>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-             <a onClick={() => this.props.history.push(`${taskBaseRoute}/edit`)}>
-               {this.props.intl.formatMessage(messages.editTaskLabel)}
-             </a>
-           </div>
-          }
-        </div>
-      </div>
-    )
-
-    const contentElement = document.createElement('div')
-    ReactDOM.render(content, contentElement)
-    return contentElement
-  }
-
   render() {
     if (!this.props.challenge) {
       return null
@@ -254,13 +209,11 @@ export class ChallengeTaskMap extends Component {
           markers.push({
             position: [task.point.lat, task.point.lng],
             options: {
-              icon: statusIcons[task.status],
               taskId: task.id,
               name: task.name || task.title,
               status: task.status,
               priority: task.priority,
             },
-            popup: this.popupContent,
           })
         })
       }
@@ -286,6 +239,18 @@ export class ChallengeTaskMap extends Component {
     const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
+
+
+    const renderedMarkers = !_get(this.props, 'challenge.parent') ? [] :
+                            _map(markers, markerData => (
+      <Marker
+        key={markerData.options.taskId}
+        {...markerData}
+        icon={statusIcons[markerData.options.status]}
+      >
+        <TaskMarkerPopup {...this.props} marker={markerData} />
+      </Marker>
+    ))
 
     // Note: would like to enable chunkedLoading, but enabling runs into
     // https://github.com/Leaflet/Leaflet.markercluster/issues/743 on
@@ -316,12 +281,13 @@ export class ChallengeTaskMap extends Component {
           <SourcedTileLayer {...this.props} zIndex={1} />
           {overlayLayers}
           {markers.length > 0 &&
-              <MarkerClusterGroup
-                  key={Date.now()} markers={markers}
-                  disableClusteringAtZoom={(canUncluster && !this.state.clusterTasks) ? 1 : 19}
-                  iconCreateFunction={this.props.monochromaticClusters ?
-                                      this.clusterIcon : undefined}
-              />
+           <MarkerClusterGroup
+             key={Date.now()}
+             disableClusteringAtZoom={(canUncluster && !this.state.clusterTasks) ? 1 : 19}
+             iconCreateFunction={this.props.monochromaticClusters ? this.clusterIcon : undefined}
+           >
+             {renderedMarkers}
+           </MarkerClusterGroup>
           }
         </EnhancedMap>
 
@@ -329,6 +295,52 @@ export class ChallengeTaskMap extends Component {
       </div>
     )
   }
+}
+
+const TaskMarkerPopup = props => {
+  const manager = AsManager(props.user)
+  const taskBaseRoute =
+    `/admin/project/${props.challenge.parent.id}` +
+    `/challenge/${props.challenge.id}/task/${props.marker.options.taskId}`
+
+  return (
+    <Popup>
+      <div className="marker-popup-content">
+        <div>
+          {
+            props.intl.formatMessage(messages.nameLabel)
+          } {
+            props.marker.options.name
+          }
+        </div>
+        <div>
+          {
+            props.intl.formatMessage(messages.statusLabel)
+          } {
+            props.intl.formatMessage(messagesByStatus[props.marker.options.status])
+          }
+        </div>
+
+        <div className="marker-popup-content__links">
+          <div>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => props.history.push(`${taskBaseRoute}/inspect`)}>
+              {props.intl.formatMessage(messages.inspectTaskLabel)}
+            </a>
+          </div>
+
+          {manager.canWriteProject(props.challenge.parent) &&
+            <div>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a onClick={() => props.history.push(`${taskBaseRoute}/edit`)}>
+                {props.intl.formatMessage(messages.editTaskLabel)}
+              </a>
+            </div>
+          }
+        </div>
+      </div>
+    </Popup>
+  )
 }
 
 ChallengeTaskMap.propTypes = {
