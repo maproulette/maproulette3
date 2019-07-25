@@ -5,6 +5,9 @@ import _find from 'lodash/find'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 
+const USER_COLOR_MAP = ["mr-text-indigo", "mr-text-ocean", "mr-text-forest",
+                        "mr-text-cranberry", "mr-text-aqua", "mr-text-tangerine"]
+
 /**
  * Provides basic methods for interacting with users.
  */
@@ -51,6 +54,28 @@ export class AsEndUser {
     return this.isLoggedIn() &&
            !!_find(this.user.notifications, {isRead: false})
   }
+
+  /**
+   * Returns a mr-text-* color for the user's displayName
+   */
+  colorCode() {
+    return mapColors(this.user.osmProfile.displayName)
+  }
+}
+
+/**
+ * Returns a mr-text-* color based off a hash of the username.
+ */
+export function mapColors(username) {
+  if (!username) return ""
+
+  return USER_COLOR_MAP[Math.abs(hashCode(username) % 6)]
+}
+
+export function hashCode(s) {
+  for(var i = 0, h = 0; i < s.length; i++)
+    h = Math.imul(31, h) + s.charCodeAt(i) | 0
+  return h
 }
 
 export default user => new AsEndUser(user)

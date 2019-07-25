@@ -19,6 +19,7 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus }
       from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskHistoryAction } from '../../services/Task/TaskHistory/TaskHistory'
 import { viewAtticOverpass } from '../../services/Overpass/Overpass'
+import { mapColors } from '../../interactions/User/AsEndUser'
 import messages from './Messages'
 
 
@@ -93,7 +94,7 @@ export default class TaskHistoryList extends Component {
                               entry: [
                                 <li className="mr-mb-4" key={"start-" + index}>
                                   <div>
-                                    <span className="mr-text-yellow mr-mr-2">
+                                    <span className={classNames("mr-mr-2", mapColors(username))}>
                                       {username}
                                     </span> <FormattedMessage {...messages.startedOnLabel} />
                                   </div>
@@ -157,7 +158,7 @@ export default class TaskHistoryList extends Component {
             {(log.username || log.status) &&
               <li className="mr-mb-4">
                 <div className="mr-flex mr-justify-between">
-                  <span className="mr-text-yellow">{log.username}</span>
+                  <span className={mapColors(log.username)}>{log.username}</span>
                   {log.status}
                 </div>
               </li>
