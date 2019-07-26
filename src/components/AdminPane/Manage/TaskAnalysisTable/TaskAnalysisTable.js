@@ -18,6 +18,7 @@ import { messagesByReviewStatus,
       from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { messagesByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
+import { mapColors } from '../../../../interactions/User/AsEndUser'       
 import AsManager from '../../../../interactions/User/AsManager'
 import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
@@ -206,7 +207,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     exportable: t => _get(t.reviewRequestedBy, 'username') || t.reviewRequestedBy,
     maxWidth: 180,
     Cell: ({row}) =>
-      <div className="row-user-column">
+      <div className={classNames("row-user-column",
+                      mapColors(_get(row._original.reviewRequestedBy, 'username') || row._original.reviewRequestedBy))}>
         {_get(row._original.reviewRequestedBy, 'username') || row._original.reviewRequestedBy }
       </div>
   }
@@ -238,7 +240,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     maxWidth: 180,
     Cell: ({row}) => (
       !row._original.reviewedBy ? null :
-        <div className="row-user-column">
+        <div className={classNames("row-user-column",
+                        mapColors(row._original.reviewedBy.username || row._original.reviewedBy))}>
           {row._original.reviewedBy.username || row._original.reviewedBy}
         </div>
     )

@@ -18,6 +18,7 @@ import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
 import IntlDatePicker from '../../../components/IntlDatePicker/IntlDatePicker'
+import { mapColors } from '../../../interactions/User/AsEndUser'
 import messages from './Messages'
 
 import { Link } from 'react-router-dom'
@@ -250,7 +251,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     exportable: t => _get(t.reviewRequestedBy, 'username'),
     maxWidth: 180,
     Cell: ({row}) =>
-      <div className="row-user-column">
+      <div className={classNames("row-user-column", mapColors(_get(row._original.reviewRequestedBy, 'username')))}>
         {_get(row._original.reviewRequestedBy, 'username')}
       </div>
   }
@@ -350,7 +351,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     exportable: t => _get(t.reviewedBy, 'username'),
     maxWidth: 180,
     Cell: ({row}) =>
-      <div className="row-user-column">
+      <div className={classNames("row-user-column", mapColors(_get(row._original.reviewedBy, 'username')))}>
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
   }

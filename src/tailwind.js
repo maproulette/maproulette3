@@ -83,6 +83,15 @@ let colors = {
   'red-light': '#E05054',
   purple: '#8990E5',
   teal: '#6FB3B8',
+  rose: '#F89294',
+
+  // Username colors
+  indigo: '#8B40CD',
+  ocean: '#517ED3',
+  forest: '#3E7D29',
+  cranberry: '#E3558E',
+  aqua: '#34B2BE',
+  tangerine: '#FBAE17',
 }
 
 module.exports = {
