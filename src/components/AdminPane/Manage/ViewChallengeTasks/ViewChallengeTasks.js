@@ -57,7 +57,7 @@ export class ViewChallengeTasks extends Component {
     }
   }
 
-  markAsCreated = () => {
+  changeStatus = (newStatus = TaskStatus.created) => {
     const tasks = [...this.props.selectedTasks.values()]
     if (tasks.length === 0) {
       return
@@ -65,7 +65,7 @@ export class ViewChallengeTasks extends Component {
 
     this.setState({bulkUpdating: true}) // will be reset by componentDidUpdate
     this.props.applyBulkTaskChanges(
-      tasks, {status: TaskStatus.created,
+      tasks, {status: parseInt(newStatus),
               mappedOn: null,
               reviewStatus: null,
               reviewRequestedBy: null,
@@ -214,7 +214,7 @@ export class ViewChallengeTasks extends Component {
         </div>
 
         <TaskAnalysisTable filterOptions={filterOptions}
-          markAsCreated={this.markAsCreated}
+          changeStatus={this.changeStatus}
           totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
           {...this.props} />
       </div>

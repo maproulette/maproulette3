@@ -243,3 +243,10 @@
     }
   }
 }
+
+.ChallengeTasksWidget {
+  .modal.is-active {
+    display: block;
+    padding-top: 500px;
+  }
+}
