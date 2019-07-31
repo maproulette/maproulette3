@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
+import _keys from 'lodash/keys'
+import _pickBy from 'lodash/pickBy'
 import { fetchReviewMetrics, ReviewTasksType }
        from '../../../../services/Task/TaskReview/TaskReview'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
@@ -20,8 +22,20 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
     updateMetrics(props) {
       this.setState({loading: true})
 
-      props.updateReviewMetrics(_get(props.user, 'id'), _get(props.challenge, 'id')).then(() => {
-        this.setState({loading: false})
+      const criteria = {filters:{challengeId: _get(props.challenge, 'id')}}
+      if (props.includeTaskStatuses) {
+        criteria.filters.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
+      }
+      if (props.includeTaskReviewStatuses) {
+        criteria.filters.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses)).join(',')
+      }
+      if (props.includeTaskPriorities) {
+        criteria.filters.priorities =_keys(_pickBy(props.includeTaskPriorities)).join(',')
+      }
+
+      props.updateReviewMetrics(_get(props.user, 'id'), criteria).then((entity) => {
+        const reviewMetrics = entity
+        this.setState({loading: false, reviewMetrics: reviewMetrics})
       })
     }
 
@@ -33,22 +47,35 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
       if (_get(prevProps.challenge, 'id') !== _get(this.props.challenge, 'id')) {
         this.updateMetrics(this.props)
       }
+
+      if (this.props.includeTaskStatuses !== prevProps.includeTaskStatuses) {
+        this.updateMetrics(this.props)
+      }
+
+      if (this.props.includeTaskReviewStatuses !== prevProps.includeTaskReviewStatuses) {
+        this.updateMetrics(this.props)
+      }
+
+      if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
+        this.updateMetrics(this.props)
+      }
     }
 
     render() {
       return (
-        <WrappedComponent reviewMetrics = {this.props.reviewMetrics}
+        <WrappedComponent reviewMetrics = {this.state.reviewMetrics ||
+                                           this.props.allReviewMetrics}
                           loading={this.state.loading}
                           {..._omit(this.props, ['updateReviewMetrics'])} />)
     }
   }
 }
 
-const mapStateToProps = state => ({ reviewMetrics: _get(state, 'currentReviewTasks.metrics') })
+const mapStateToProps = state => ({allReviewMetrics: _get(state, 'currentReviewTasks.metrics')})
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateReviewMetrics: (userId, challengeId) => {
-    return dispatch(fetchReviewMetrics(userId, ReviewTasksType.allReviewedTasks, {filters:{challengeId}}))
+  updateReviewMetrics: (userId, criteria) => {
+    return dispatch(fetchReviewMetrics(userId, ReviewTasksType.allReviewedTasks, criteria))
   },
 })
 

@@ -12,6 +12,10 @@ import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
+import _keys from 'lodash/keys'
+import _pickBy from 'lodash/pickBy'
+import _values from 'lodash/values'
+import _indexOf from 'lodash/indexOf'
 import parse from 'date-fns/parse'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
 import WithDashboardEntityFilter
@@ -20,14 +24,82 @@ import WithDashboardEntityFilter
 import { TaskStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 
-const WithChallengeMetrics = function(WrappedComponent) {
+const WithChallengeMetrics = function(WrappedComponent, applyFilters = false) {
   return class extends Component {
+    state = {
+      loading: false
+    }
+
+    isFiltering(includesFiltersArray) {
+      return _indexOf(_values(includesFiltersArray), false) !== -1
+    }
+
+    updateMetrics(props) {
+      const challengeId =_get(props.challenge, 'id')
+
+      if (challengeId && props.fetchChallengeActions) {
+        this.setState({loading: true})
+        const criteria = {}
+
+        if (props.includeTaskStatuses && this.isFiltering(props.includeTaskStatuses)) {
+          criteria.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
+        }
+        if (props.includeTaskReviewStatuses && this.isFiltering(props.includeTaskReviewStatuses)) {
+          criteria.reviewStatus = _keys(_pickBy(props.includeTaskReviewStatuses)).join(',')
+        }
+        if (props.includeTaskPriorities && this.isFiltering(props.includeTaskPriorities)) {
+          criteria.priorities =_keys(_pickBy(props.includeTaskPriorities)).join(',')
+        }
+
+        props.fetchChallengeActions(challengeId, true, criteria).then((normalizedResults) => {
+          let fetchedMetrics = null
+          if (_get(normalizedResults, `entities.challenges.${challengeId}`)) {
+            fetchedMetrics = _get(normalizedResults, 'entities.challenges')[challengeId].actions
+          }
+
+          this.setState({loading: false, fetchedMetrics: fetchedMetrics})
+        })
+      }
+    }
+
+    componentDidMount() {
+      this.updateMetrics(this.props)
+    }
+
+    componentDidUpdate(prevProps) {
+      if (this.state.loading || !applyFilters) {
+        return false
+      }
+
+      const challengeId =_get(this.props.challenge, 'id')
+
+      if (challengeId) {
+        if (challengeId !== _get(this.props.challenge, 'id')) {
+          this.updateMetrics(this.props)
+        }
+
+        if (this.props.includeTaskStatuses !== prevProps.includeTaskStatuses) {
+          this.updateMetrics(this.props)
+        }
+
+        if (this.props.includeTaskReviewStatuses !== prevProps.includeTaskReviewStatuses) {
+          this.updateMetrics(this.props)
+        }
+
+        if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
+          this.updateMetrics(this.props)
+        }
+      }
+    }
+
     render() {
       let tasksAvailable = null
       let dailyMetrics = []
 
-      if (!_isEmpty(this.props.taskMetrics) && !_isEmpty(this.props.challenges) &&
-          _get(this.props.taskMetrics, 'total', 0) > 0) {
+      const taskMetrics = this.state.fetchedMetrics || this.props.taskMetrics
+
+      if (!_isEmpty(taskMetrics) && !_isEmpty(this.props.challenges) &&
+          _get(taskMetrics, 'total', 0) > 0) {
         tasksAvailable = _sumBy(this.props.challenges, 'actions.available')
         if (_isFinite(tasksAvailable)) {
           let allActivity = _isArray(this.props.activity) ? this.props.activity :
@@ -68,6 +140,7 @@ const WithChallengeMetrics = function(WrappedComponent) {
       }
 
       return <WrappedComponent {...this.props}
+                               taskMetrics={taskMetrics}
                                tasksAvailable={tasksAvailable}
                                dailyMetrics={dailyMetrics} />
     }
@@ -83,9 +156,9 @@ export const includeChallengeInMetrics = function(challenge, manager, tallied, c
   return true
 }
 
-export default WrappedComponent =>
+export default (WrappedComponent, applyFilters = false) =>
   WithDashboardEntityFilter(
-    WithComputedMetrics(injectIntl(WithChallengeMetrics(WrappedComponent))),
+    WithComputedMetrics(injectIntl(WithChallengeMetrics(WrappedComponent, applyFilters))),
     'challenge',
     'challenges',
     'talliedChallenges',
