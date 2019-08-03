@@ -830,6 +830,7 @@ module.exports = {
     'green-lighter': colors['green-lighter'],
     grey: colors["grey"],
     'grey-light': colors['grey-light'],
+    'red-light': colors['red-light'],
     twitter: colors['twitter'],
   },
 

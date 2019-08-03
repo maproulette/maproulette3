@@ -12,13 +12,21 @@ const SystemNotices = function(props) {
   const notices = props.newSystemNotices.map(notice => (
     <li
       key={notice.uuid}
-      className="mr-flex mr-justify-between mr-items-center mr-w-full mr-border-white mr-py-2 mr-bg-blue-dark mr-px-4"
+      className="mr-flex mr-justify-between mr-items-center mr-w-full mr-py-4 mr-px-4"
     >
-      <MarkdownContent markdown={notice.message} />
+      <span className="mr-flex mr-items-center">
+        <SvgSymbol
+          sym="info-icon"
+          viewBox="0 0 40 40"
+          className="mr-fill-red-light mr-w-10 mr-w-10 mr-cursor-pointer mr-mx-4"
+        />
+
+        <MarkdownContent markdown={notice.message} className="mr-markdown--base" />
+      </span>
       <SvgSymbol
         sym="close-outline-icon"
         viewBox="0 0 20 20"
-        className="mr-fill-current mr-w-4 mr-w-4 mr-cursor-pointer"
+        className="mr-fill-green-lighter mr-w-5 mr-w-5 mr-cursor-pointer"
         onClick={() => props.acknowledgeNotice(notice)}
       />
     </li>
@@ -26,7 +34,7 @@ const SystemNotices = function(props) {
 
   return (
     <ul
-      className="mr-text-white mr-text-base mr-w-full"
+      className="mr-bg-gradient-b-blue-darker-blue-dark mr-text-white mr-w-full"
     >
       {notices}
     </ul>

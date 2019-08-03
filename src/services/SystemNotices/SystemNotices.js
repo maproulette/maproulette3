@@ -34,7 +34,7 @@ const NOTICES_URL = process.env.REACT_APP_SYSTEM_NOTICES_URL
  */
 export const fetchActiveSystemNotices = async function() {
   if (_isEmpty(NOTICES_URL)) {
-    return [];
+    return []
   }
 
   const response = await fetch(NOTICES_URL)
@@ -51,6 +51,7 @@ export const fetchActiveSystemNotices = async function() {
     }).filter(notice => isFuture(notice.expirationDate))
   }
   else {
-    throw new Error("Failed to fetch latest system notices")
+    // Allow server admin to delete file when not in use
+    return []
   }
 }
