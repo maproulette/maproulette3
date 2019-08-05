@@ -30,6 +30,7 @@ import LoadRandomChallengeTask
 import LoadRandomVirtualChallengeTask
        from './components/LoadRandomVirtualChallengeTask/LoadRandomVirtualChallengeTask'
 import Navbar from './components/Navbar/Navbar'
+import SystemNotices from './components/SystemNotices/SystemNotices'
 import Footer from './components/Footer/Footer'
 import ErrorModal from './components/ErrorModal/ErrorModal'
 import Sprites from './components/Sprites/Sprites'
@@ -76,6 +77,7 @@ export class App extends Component {
     return (
       <React.Fragment>
         <TopNav />
+        <SystemNotices />
 
         <main role="main" className="mr-bg-white mr-text-grey">
           <Switch>

@@ -136,4 +136,8 @@ h4,
       }
     }
   }
+
+  &--base {
+    @apply mr-text-base;
+  }
 }
