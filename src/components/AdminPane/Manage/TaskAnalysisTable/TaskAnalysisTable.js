@@ -11,7 +11,7 @@ import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
 import _isFinite from 'lodash/isFinite'
 import parse from 'date-fns/parse'
-import { differenceInSeconds } from 'date-fns'
+import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
          keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
