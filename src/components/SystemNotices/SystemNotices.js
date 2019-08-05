@@ -23,12 +23,14 @@ const SystemNotices = function(props) {
 
         <MarkdownContent markdown={notice.message} className="mr-markdown--base" />
       </span>
-      <SvgSymbol
-        sym="close-outline-icon"
-        viewBox="0 0 20 20"
-        className="mr-fill-green-lighter mr-w-5 mr-w-5 mr-cursor-pointer"
-        onClick={() => props.acknowledgeNotice(notice)}
-      />
+      {props.user && props.user.isLoggedIn &&
+       <SvgSymbol
+         sym="close-outline-icon"
+         viewBox="0 0 20 20"
+         className="mr-fill-green-lighter mr-w-5 mr-w-5 mr-cursor-pointer"
+         onClick={() => props.acknowledgeNotice(notice)}
+       />
+      }
     </li>
   ))
 
