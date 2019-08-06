@@ -158,18 +158,19 @@ export const taskCenterPoint = function(mapBounds, task) {
  */
 export const constructIdURI = function(task, mapBounds) {
   const baseUriComponent =
-    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
+    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id&`
 
   const centerPoint = taskCenterPoint(mapBounds, task)
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
 
-  const idUriComponent = "id=" + osmObjectParams(task, true)
+  const selectedEntityComponent = osmObjectParams(task, false, '=', '&')
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
+  const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
 
   return baseUriComponent +
-         [idUriComponent, mapUriComponent, commentUriComponent].join('&')
+    [mapUriComponent, commentUriComponent, sourceComponent, selectedEntityComponent].join('&')
 }
 
 /**
@@ -193,12 +194,18 @@ export const constructLevel0URI = function(task, mapBounds) {
 }
 
 /**
- * Extracts osm identifiers from the given task's features and returns
- * them as a comma-separated string. Features with missing osm ids are
- * skipped, and an empty string is returned if the task has no features
- * or none of its features have osm ids
+ * Extracts osm identifiers from the given task's features and returns them as
+ * a comma-separated string by default. Features with missing osm ids are
+ * skipped, and an empty string is returned if the task has no features or none
+ * of its features have osm ids
+ *
+ * To support varying formats required by different editors, the output string
+ * can optionally be customized with options that control whether the entity
+ * type is abbreviated or not, a separator character to be used between
+ * the type and osm id, and the character used to join together multiple
+ * entities
  */
-export const osmObjectParams = function(task, abbreviated=false) {
+export const osmObjectParams = function(task, abbreviated=false, entitySeparator='', joinSeparator=',') {
   let objects = []
   if (task.geometries && task.geometries.features) {
     objects = _compact(task.geometries.features.map(feature => {
@@ -209,19 +216,19 @@ export const osmObjectParams = function(task, abbreviated=false) {
 
       switch (feature.geometry.type) {
         case 'Point':
-          return `${abbreviated ? 'n' : 'node'}${osmId}`
+          return `${abbreviated ? 'n' : 'node'}${entitySeparator}${osmId}`
         case 'LineString':
         case 'Polygon':
-          return `${abbreviated ? 'w' : 'way'}${osmId}`
+          return `${abbreviated ? 'w' : 'way'}${entitySeparator}${osmId}`
         case 'MultiPolygon':
-          return `${abbreviated ? 'r' : 'relation'}${osmId}`
+          return `${abbreviated ? 'r' : 'relation'}${entitySeparator}${osmId}`
         default:
           return null
       }
     }))
   }
 
-  return objects.join(',')
+  return objects.join(joinSeparator)
 }
 
 /**
