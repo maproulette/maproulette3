@@ -29,6 +29,79 @@ export const jsSchema = intl => {
     description: intl.formatMessage(messages.step3Description),
     type: "object",
     definitions: {
+      tagRule: {
+        type: "object",
+        properties: {
+          valueType: {
+            title: "Property Type",
+            type: "string",
+            enum: ["string", "integer", "double", "long", "nested rule"],
+          },
+        },
+        required: [ "valueType" ],
+        dependencies: { // Show operators appropriate to value type
+          valueType: {
+            oneOf: [
+              { // nested rules
+                properties: {
+                  valueType: {
+                    enum: ["nested rule"],
+                  },
+                  ruleGroup: { $ref: "#/definitions/priorityRuleGroup" },
+                },
+              },
+              { // string values
+                properties: {
+                  valueType: {
+                    enum: ["string"],
+                  },
+                  key: {
+                    title: "Property Name",
+                    type: "string",
+                  },
+                  operator: {
+                    title: "Operator",
+                    type: "string",
+                    enum: ["equal", "not_equal",
+                          "contains", "not_contains",
+                          "is_empty", "is_not_empty"],
+                    enumNames: ["equals", "doesn't equal",
+                                "contains", "doesn't contain",
+                                "is empty", "isn't empty"],
+                    default: "equal",
+                  },
+                  value: {
+                    title: "Property Value",
+                    type: "string",
+                  },
+                },
+              },
+              { // numeric values
+                properties: {
+                  valueType: {
+                    enum: ["integer", "double", "long"],
+                  },
+                  key: {
+                    title: "Property Name",
+                    type: "string",
+                  },
+                  operator: {
+                    title: "Operator",
+                    type: "string",
+                    enum: ["==", "!=", "<", "<=", ">", ">="],
+                    enumNames: ["=", "≠", "<", "<=", ">", ">="],
+                    default: "==",
+                  },
+                  value: {
+                    title: "Property Value",
+                    type: "string",
+                  },
+                },
+              }
+            ]
+          }
+        },
+      },
       priorityRuleGroup: {
         title: " ", // empty title
         type: "object",
@@ -42,64 +115,7 @@ export const jsSchema = intl => {
           rules: {
             title: " ", // empty title
             type: "array",
-            items: {
-              type: "object",
-              properties: {
-                valueType: {
-                  title: "Property Type",
-                  type: "string",
-                  enum: ["string", "integer", "double", "long"],
-                  default: "string",
-                },
-                key: {
-                  title: "Property Name",
-                  type: "string",
-                },
-                value: {
-                  title: "Property Value",
-                  type: "string",
-                },
-              },
-              required: [ "valueType" ],
-              dependencies: { // Show operators appropriate to value type
-                valueType: {
-                  oneOf: [
-                    {
-                      properties: {
-                        valueType: {
-                          enum: ["string"],
-                        },
-                        operator: {
-                          title: "Operator",
-                          type: "string",
-                          enum: ["equal", "not_equal",
-                                "contains", "not_contains",
-                                "is_empty", "is_not_empty"],
-                          enumNames: ["equals", "doesn't equal",
-                                      "contains", "doesn't contain",
-                                      "is empty", "isn't empty"],
-                          default: "equal", // doesn't work, rjsf bug #768
-                        },
-                      },
-                    },
-                    {
-                      properties: {
-                        valueType: {
-                          enum: ["integer", "double", "long"],
-                        },
-                        operator: {
-                          title: "Operator",
-                          type: "string",
-                          enum: ["==", "!=", "<", "<=", ">", ">="],
-                          enumNames: ["=", "≠", "<", "<=", ">", ">="],
-                          default: "==", // doesn't work, rjsf bug #768
-                        },
-                      },
-                    }
-                  ]
-                }
-              },
-            },
+            items: { "$ref": "#/definitions/tagRule" }
           },
         },
       },
@@ -146,6 +162,7 @@ export const jsSchema = intl => {
  * @private
  */
 const priorityRuleGroupUISchema = {
+  classNames: "priority-rule-group",
   condition: {
     "ui:widget": "select",
   },
@@ -168,7 +185,33 @@ const priorityRuleGroupUISchema = {
       value: {
         "ui:placeholder": "Property Value",
       },
-      "ui:order": [ "valueType", "key", "operator", "value" ],
+      ruleGroup: {
+        classNames: "nested-rule-group mr-border mr-border-green-light mr-p-2 mr-mt-4 mr-flex mr-w-full",
+        rules: {
+          items: {
+            key: {
+              "ui:placeholder": "Property Name",
+            },
+            value: {
+              "ui:placeholder": "Property Value",
+            },
+            ruleGroup: {
+              classNames: "nested-rule-group mr-border mr-border-green-light mr-p-2 mr-mt-4 mr-flex mr-w-full",
+              rules: {
+                items: {
+                  key: {
+                    "ui:placeholder": "Property Name",
+                  },
+                  value: {
+                    "ui:placeholder": "Property Value",
+                  },
+                },
+              },
+            }
+          }
+        }
+      },
+      "ui:order": [ "valueType", "key", "operator", "value", "*" ],
     },
   },
 }
