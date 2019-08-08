@@ -13,6 +13,9 @@ This project adheres to
 - Color-coded usernames in various tables
 - Bulk task-status change for challenge managers
 
+### Fixed
+- Malfunctioning review-table date picker in Safari
+
 
 ## [v3.3.3] - 2019-07-25
 ### Added
