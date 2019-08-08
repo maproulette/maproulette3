@@ -4,6 +4,10 @@ import { GROUP_TYPE_SUPERUSER }
 import _find from 'lodash/find'
 import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
+import _get from 'lodash/get'
+
+const USER_COLORS = ["mr-text-indigo", "mr-text-ocean", "mr-text-forest",
+                     "mr-text-cranberry", "mr-text-aqua", "mr-text-tangerine"]
 
 /**
  * Provides basic methods for interacting with users.
@@ -51,6 +55,29 @@ export class AsEndUser {
     return this.isLoggedIn() &&
            !!_find(this.user.notifications, {isRead: false})
   }
+
+  /**
+   * Returns a mr-text-* color for the user's displayName
+   */
+  colorCode() {
+    return mapColors(_get(this.user, 'osmProfile.displayName'))
+  }
+}
+
+/**
+ * Returns a mr-text-* color based off a hash of the username.
+ */
+export function mapColors(username) {
+  if (!username) return ""
+
+  return USER_COLORS[Math.abs(hashCode(username)) % USER_COLORS.length]
+}
+
+export function hashCode(s) {
+  let h = 0
+  for(let i = 0; i < s.length; i++)
+    h = Math.imul(31, h) + s.charCodeAt(i) | 0
+  return h
 }
 
 export default user => new AsEndUser(user)

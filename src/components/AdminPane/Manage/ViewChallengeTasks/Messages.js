@@ -53,9 +53,9 @@ export default defineMessages({
     defaultMessage: "Select tasks for bulk operation",
   },
 
-  markCreatedLabel: {
-    id: "Admin.manageTasks.controls.markCreated.label",
-    defaultMessage: "Reset status to Created",
+  changeStatusToLabel: {
+    id: "Admin.manageTasks.controls.changeStatusTo.label",
+    defaultMessage: "Change status to ",
   },
 
   changePriorityLabel: {
