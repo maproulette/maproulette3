@@ -7,7 +7,14 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.3.3] - 2019-07-24
+## [v3.3.4] - 2019-08-08
+### Added
+- Support for system notices (e.g. notices of upcoming maintenance)
+- Color-coded usernames in various tables
+- Bulk task-status change for challenge managers
+
+
+## [v3.3.3] - 2019-07-25
 ### Added
 - MapRoulette-specific tagging support for tasks ("MR Tags")
 - Option to select next nearby task to work on from map of nearby tasks
