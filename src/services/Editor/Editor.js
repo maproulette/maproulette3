@@ -9,6 +9,7 @@ import { toLatLngBounds  } from '../MapBounds/MapBounds'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import messages from './Messages'
+import { constructChallengeComment } from '../Challenge/Challenge'
 
 // Editor option constants based on constants defined on server
 export const NONE = -1
@@ -166,7 +167,7 @@ export const constructIdURI = function(task, mapBounds) {
 
   const idUriComponent = "id=" + osmObjectParams(task, true)
   const commentUriComponent = "comment=" +
-                              encodeURIComponent(task.parent.checkinComment)
+    encodeURIComponent(constructChallengeComment(task.parent))
 
   return baseUriComponent +
          [idUriComponent, mapUriComponent, commentUriComponent].join('&')
@@ -184,7 +185,7 @@ export const constructLevel0URI = function(task, mapBounds) {
     "center=" + [centerPoint.lat, centerPoint.lng].join(',')
 
   const commentComponent =
-    "comment=" + encodeURIComponent(task.parent.checkinComment)
+    "comment=" + encodeURIComponent(constructChallengeComment(task.parent))
 
   const urlComponent = "url=" + osmObjectParams(task, true)
 
@@ -261,7 +262,7 @@ export const josmLayerParams = function(task, asNewLayer) {
  * and source from the given task's challenge
  */
 export const josmChangesetParams = function(task) {
-  return `changeset_comment=${encodeURIComponent(task.parent.checkinComment)}` +
+  return `changeset_comment=${encodeURIComponent(constructChallengeComment(task.parent))}` +
          `&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`
 }
 

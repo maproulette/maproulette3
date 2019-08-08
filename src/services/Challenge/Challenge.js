@@ -70,6 +70,42 @@ export const challengeResultEntity = function(normalizedChallengeResults) {
          null
 }
 
+/**
+ * Construct challenge changeset/commit comment.
+ *
+ * This is mostly pre-constructed at challenge creation time, but we might want
+ * to append the URL to the challenge, which requires us knowing its ID, which
+ * is only available after the challenge has been created and saved.
+ */
+export const constructChallengeComment = function(challenge) {
+  if (challenge.includeCheckinURL && // should include the URL
+      (!challenge.checkinComment || // either comment is empty, or
+       // comment does _not_ include something that looks like a MR URL
+       !challenge.checkinComment.includes(process.env.REACT_APP_URL))) {
+    const challengeURL = `${process.env.REACT_APP_URL}/browse/challenges/${challenge.id}`
+
+    // for empty comments, just replace with the URL
+    if (_isEmpty(challenge.checkinComment)) {
+      return challengeURL
+
+      // if the URL would be too long (OSM changeset comments must be <= 255 unicode
+      // codepoints in length - and we add a space, giving 254 remaining), then don't
+      // add the URL.
+      //
+      // note that Array.from(string) possibly overcounts the length of some emojis
+      // and codepoints outside the BMP, but it's at least conservative - worst case,
+      // the URL gets omitted rather than an error.
+    } else if ((Array.from(challenge.checkinComment).length + challengeURL.length) > 254) {
+      return challenge.checkinComment
+
+    } else {
+      return `${challenge.checkinComment} ${challengeURL}`
+    }
+  } else {
+    return challenge.checkinComment
+  }
+}
+
 // redux actions -- see Server/ChallengeActions
 
 // redux action creators
@@ -597,8 +633,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         ['blurb', 'challengeType', 'checkinComment', 'checkinSource', 'customBasemap',
         'defaultBasemap', 'defaultBasemapId', 'defaultPriority', 'defaultZoom',
         'description', 'difficulty', 'enabled', 'featured', 'highPriorityRule', 'id',
-        'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
-        'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
+        'includeCheckinURL', 'instruction', 'localGeoJSON', 'lowPriorityRule',
+        'maxZoom', 'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents'])
 
       // Setup the save function to either edit or create the challenge

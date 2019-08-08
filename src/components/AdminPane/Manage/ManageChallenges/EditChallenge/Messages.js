@@ -140,6 +140,22 @@ export default defineMessages({
       "is very useful for changeset analysis.",
   },
 
+  includeCheckinURLTrueLabel: {
+    id: 'Admin.EditChallenge.form.includeCheckinURL.value.true.label',
+    defaultMessage: "Automatically append challenge URL (highly recommended)",
+  },
+
+  includeCheckinURLFalseLabel: {
+    id: 'Admin.EditChallenge.form.includeCheckinURL.value.false.label',
+    defaultMessage: "Skip challenge URL",
+  },
+
+  includeCheckinURLDescription: {
+    id: 'Admin.EditChallenge.form.includeCheckinURL.description',
+    defaultMessage: "Allowing the challenge URL to be appended to changeset comments " +
+      "people find the challenge this edit was part of.",
+  },
+
   difficultyLabel: {
     id: 'Admin.EditChallenge.form.difficulty.label',
     defaultMessage: "Difficulty",

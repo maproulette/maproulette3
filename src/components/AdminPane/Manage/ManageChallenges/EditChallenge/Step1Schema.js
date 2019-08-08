@@ -110,6 +110,15 @@ export const jsSchema = (intl, user, challengeData) => {
                   intl.formatMessage(messages.includeCheckinHashtagFalseLabel)],
       default: true,
     }
+
+    schemaFields.properties.includeCheckinURL = {
+      title: " ",
+      type: "boolean",
+      enum: [true, false],
+      enumNames: [intl.formatMessage(messages.includeCheckinURLTrueLabel),
+                  intl.formatMessage(messages.includeCheckinURLFalseLabel)],
+      default: true,
+    }
   }
 
   return schemaFields
@@ -129,8 +138,8 @@ export const uiSchema = (intl, user, challengeData) => {
   const uiSchemaFields = {
     "ui:order": [
       "featured", "enabled", "name", "description", "blurb", "instruction",
-      "checkinComment", "includeCheckinHashtag", "checkinSource",
-      "difficulty", "category", "additionalKeywords",
+      "checkinComment", "includeCheckinHashtag", "includeCheckinURL",
+      "checkinSource", "difficulty", "category", "additionalKeywords",
     ],
     featured: {
       "ui:widget": "radio",
@@ -177,6 +186,10 @@ export const uiSchema = (intl, user, challengeData) => {
     includeCheckinHashtag: {
       "ui:widget": "radio",
       "ui:help": intl.formatMessage(messages.includeCheckinHashtagDescription),
+    },
+    includeCheckinURL: {
+      "ui:widget": "radio",
+      "ui:help": intl.formatMessage(messages.includeCheckinURLDescription),
     },
   }
 
