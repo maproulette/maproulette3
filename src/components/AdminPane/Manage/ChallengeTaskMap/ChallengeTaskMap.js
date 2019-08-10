@@ -25,6 +25,7 @@ import AsManager from '../../../../interactions/User/AsManager'
 import EnhancedMap from '../../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../../EnhancedMap/LayerToggle/LayerToggle'
+import SearchControl from '../../../EnhancedMap/SearchControl/SearchControl'
 import WithVisibleLayer from '../../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -268,6 +269,10 @@ export class ChallengeTaskMap extends Component {
         }
 
         <LayerToggle {...this.props} />
+        <SearchControl
+          {...this.props}
+          onResultSelected={bounds => this.props.setChallengeOwnerMapBounds(this.props.challenge.id, bounds)}
+        />
         <EnhancedMap center={latLng(0, 45)}
                      zoom={_get(this.props.lastZoom, 3)} minZoom={1} maxZoom={18}
                      setInitialBounds={false}

@@ -85,6 +85,11 @@ export default defineMessages({
     defaultMessage: "Unable to fetch data from Mapillary",
   },
 
+  nominatimFetchFailure: {
+    id: 'Errors.nominatim.fetchFailure',
+    defaultMessage: "Unable to fetch data from Nominatim",
+  },
+
   clusteredTaskFetchFailure: {
     id: 'Errors.clusteredTask.fetchFailure',
     defaultMessage: "Unable to fetch task clusters",

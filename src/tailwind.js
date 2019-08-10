@@ -538,6 +538,7 @@ module.exports = {
     '30': '7.5rem',
     '48': '12rem',
     '60': '15rem',
+    '102': '24rem',
     auto: 'auto',
     full: '100%',
     '1/2': '50vw',
@@ -699,6 +700,7 @@ module.exports = {
     '16': '4rem',
     '20': '5rem',
     '24': '6rem',
+    '31': '7.75rem',
     '32': '8rem',
   },
 
@@ -779,6 +781,7 @@ module.exports = {
   zIndex: {
     auto: 'auto',
     '0': 0,
+    '5': 5,
     '10': 10,
     '20': 20,
     '30': 30,
