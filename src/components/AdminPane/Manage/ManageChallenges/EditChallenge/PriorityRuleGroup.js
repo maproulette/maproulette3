@@ -8,15 +8,23 @@ import _trim from 'lodash/trim'
  * Prepares a group of priority rules from the server to the representation
  * expected by the edit form
  */
-export const preparePriorityRuleGroupForForm = ruleObject => {
+export const preparePriorityRuleGroupForForm = (ruleObject, isNested=false) => {
   const preparedGroup = {
     ruleGroup: {},
+  }
+
+  if (isNested) {
+    preparedGroup.valueType = 'nested rule'
   }
 
   if (!_isEmpty(ruleObject)) {
     if (_isArray(ruleObject.rules)) {
       preparedGroup.ruleGroup.condition = ruleObject.condition
       preparedGroup.ruleGroup.rules = _map(ruleObject.rules, rule => {
+        if (_isArray(rule.rules)) {
+          return preparePriorityRuleGroupForForm(rule, true)
+        }
+
         // Key and Value are represented as a single `value` field, dot
         // separated.
         let [key, ...value] = rule.value.split('.')
@@ -38,9 +46,17 @@ export const preparePriorityRuleGroupForForm = ruleObject => {
  * (stringified) JSON representation expected by the server.
  */
 export const preparePriorityRuleGroupForSaving = ruleGroup => {
-  const preparedGroup = {}
+  return JSON.stringify(normalizeRuleGroupForSaving(ruleGroup))
+}
+
+export const normalizeRuleGroupForSaving = ruleGroup => {
+  const normalizedGroup = {}
 
   const rules = _compact(_map(ruleGroup.rules, rule => {
+    if (rule.valueType === "nested rule") {
+      return normalizeRuleGroupForSaving(rule.ruleGroup)
+    }
+
     if (_isEmpty(rule.key)) {
       return null
     }
@@ -68,9 +84,9 @@ export const preparePriorityRuleGroupForSaving = ruleGroup => {
   }))
 
   if (rules.length > 0) {
-    preparedGroup.condition = ruleGroup.condition
-    preparedGroup.rules = rules
+    normalizedGroup.condition = ruleGroup.condition
+    normalizedGroup.rules = rules
   }
 
-  return JSON.stringify(preparedGroup)
+  return normalizedGroup
 }
