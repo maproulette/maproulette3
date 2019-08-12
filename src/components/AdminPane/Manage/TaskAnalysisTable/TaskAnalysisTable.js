@@ -10,6 +10,8 @@ import _isObject from 'lodash/isObject'
 import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
 import _isFinite from 'lodash/isFinite'
+import parse from 'date-fns/parse'
+import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
          keysByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -61,7 +63,7 @@ export class TaskAnalysisTable extends Component {
        return [columnTypes.selected, columnTypes.featuredId, columnTypes.id,
                columnTypes.status, columnTypes.priority, columnTypes.mappedOn,
                columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-               columnTypes.reviewedBy, columnTypes.reviewedAt,
+               columnTypes.reviewedBy, columnTypes.reviewedAt, columnTypes.reviewDuration,
                columnTypes.controls, columnTypes.viewComments]
     }
     else {
@@ -229,6 +231,29 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
         </span>
 
     )
+  }
+
+  columns.reviewDuration = {
+    id: 'reviewDuration',
+    Header: props.intl.formatMessage(messages.reviewDurationLabel),
+    accessor: 'reviewStartedAt',
+    sortable: true,
+    defaultSortDesc: true,
+    exportable: t => t.reviewStartedAt,
+    maxWidth: 120,
+    minWidth: 120,
+    Cell: ({row}) => {
+      if (!row._original.reviewedAt ||
+          !row._original.reviewStartedAt) return null
+
+      const seconds = differenceInSeconds(parse(row._original.reviewedAt),
+                                          parse(row._original.reviewStartedAt))
+      return (
+        <span>
+          {Math.floor(seconds / 60)}m {seconds % 60}s
+        </span>
+      )
+    }
   }
 
   columns.reviewedBy = {

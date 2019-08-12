@@ -185,6 +185,7 @@
   "Task.fields.requestedBy.label": "Mapper",
   "Task.fields.reviewedBy.label": "Reviewer",
   "Admin.fields.reviewedAt.label": "Reviewed On",
+  "Admin.fields.reviewDuration.label": "Review Time",
   "Admin.TaskAnalysisTable.columnHeaders.comments": "Comments",
   "Admin.TaskAnalysisTable.controls.inspectTask.label": "Inspect",
   "Admin.TaskAnalysisTable.controls.reviewTask.label": "Review",
