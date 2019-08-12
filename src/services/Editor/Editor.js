@@ -3,6 +3,7 @@ import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import _find from 'lodash/find'
 import _invert from 'lodash/invert'
+import _get from 'lodash/get'
 import RequestStatus from '../Server/RequestStatus'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import { toLatLngBounds  } from '../MapBounds/MapBounds'
@@ -62,7 +63,7 @@ export const editorOpened = function(editor, taskId, status=RequestStatus.succes
 }
 
 // async action creators
-export const editTask = function(editor, task, mapBounds) {
+export const editTask = function(editor, task, mapBounds, options) {
   return function(dispatch) {
     if (isWebEditor(editor)) {
       // For web editors, if we've already opened an editor window, close it so
@@ -73,10 +74,10 @@ export const editTask = function(editor, task, mapBounds) {
       }
 
       if (editor === ID) {
-        editorWindowReference = window.open(constructIdURI(task, mapBounds))
+        editorWindowReference = window.open(constructIdURI(task, mapBounds, options))
       }
       else if (editor === LEVEL0) {
-        editorWindowReference = window.open(constructLevel0URI(task, mapBounds))
+        editorWindowReference = window.open(constructLevel0URI(task, mapBounds, options))
       }
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
@@ -156,7 +157,7 @@ export const taskCenterPoint = function(mapBounds, task) {
 /**
  * Builds a Id editor URI for editing of the given task
  */
-export const constructIdURI = function(task, mapBounds) {
+export const constructIdURI = function(task, mapBounds, options) {
   const baseUriComponent =
     `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id&`
 
@@ -169,14 +170,19 @@ export const constructIdURI = function(task, mapBounds) {
                               encodeURIComponent(task.parent.checkinComment)
   const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
 
-  return baseUriComponent +
-    [mapUriComponent, commentUriComponent, sourceComponent, selectedEntityComponent].join('&')
+  const photoOverlayComponent =
+    _get(options, 'photoOverlay') ? "photo_overlay=" + options.photoOverlay : null;
+
+  return baseUriComponent + _compact(
+    [mapUriComponent, commentUriComponent, sourceComponent,
+      photoOverlayComponent, selectedEntityComponent]
+  ).join('&')
 }
 
 /**
  * Builds a Level0 editor URI for editing of the given task
  */
-export const constructLevel0URI = function(task, mapBounds) {
+export const constructLevel0URI = function(task, mapBounds, options) {
   const baseUriComponent =
     `${process.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`
 

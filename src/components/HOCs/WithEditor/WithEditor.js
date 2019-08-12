@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { editTask, closeEditor } from '../../../services/Editor/Editor'
 
 /**
@@ -15,9 +16,9 @@ export const mapStateToProps = state => ({
   editor: state.openEditor,
 })
 
-export const mapDispatchToProps = dispatch => ({
-  editTask: (editor, task, mapBounds) => dispatch(editTask(editor, task, mapBounds)),
-  closeEditor: () => dispatch(closeEditor()),
-})
+export const mapDispatchToProps = dispatch => bindActionCreators({
+  editTask,
+  closeEditor,
+}, dispatch)
 
 export default WithEditor
