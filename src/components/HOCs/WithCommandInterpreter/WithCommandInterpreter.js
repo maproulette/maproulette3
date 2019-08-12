@@ -184,7 +184,8 @@ export const executeMapSearch = (props, query, setLoading) => {
  */
 export const executePlaceSearch = (props, query, setLoading) => {
   setLoading(true)
-  fetchPlaceLocation(query).then(boundingBox => {
+  fetchPlaceLocation(query).then(results => {
+    const boundingBox = results.length > 0 ? results[0].bbox : null
     setLoading(false)
     if (boundingBox) {
       props.updateChallengeSearchMapBounds(boundingBox, true)

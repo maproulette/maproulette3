@@ -40,6 +40,10 @@ export default {
     fetchFailure: messages.mapillaryFetchFailure,
   },
 
+  nominatim: {
+    fetchFailure: messages.nominatimFetchFailure,
+  },
+
   clusteredTask: {
     fetchFailure: messages.clusteredTaskFetchFailure,
   },

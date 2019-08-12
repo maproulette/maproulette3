@@ -49,20 +49,24 @@ export const fetchPlace = function(lat, lng) {
  * @param placeSearch - place search string
  * @return boundingBox array
  */
-export const fetchPlaceLocation = function(placeSearch) {
+export const fetchPlaceLocation = function(placeSearch, limit=5) {
   const placeURI =
-    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(placeSearch)}&format=json&limit=1`
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(placeSearch)}&format=json&limit=${limit}`
 
   return fetchContent(placeURI, null, {omitCredentials: true}).then(placeResults => {
-    if (placeResults.length > 0) {
-      const bounds = _map(placeResults[0].boundingbox, (point) => parseFloat(point))
+    if (!placeResults) {
+      return []
+    }
 
-      // (from Nominatim) NSWE => (expected) WSEN
-      return [bounds[2], bounds[1], bounds[3], bounds[0]]
-    }
-    else {
-      return null
-    }
+    return placeResults.map(place => {
+      const bounds = _map(place.boundingbox, point => parseFloat(point))
+      return {
+        osmId: place.osm_id,
+        name: place.display_name,
+        type: place.type,
+        bbox: [bounds[2], bounds[1], bounds[3], bounds[0]], // NSWE => WSEN
+      }
+    })
   })
 }
 

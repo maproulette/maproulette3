@@ -12,6 +12,7 @@ import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../../components/EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../../components/EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../../../components/EnhancedMap/LayerToggle/LayerToggle'
+import SearchControl from '../../../components/EnhancedMap/SearchControl/SearchControl'
 import WithVisibleLayer from '../../../components/HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../../../components/HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -169,6 +170,13 @@ export class ReviewBrowseMap extends Component {
     return (
       <div className={classNames('review-browse-map', {"full-screen-map": this.props.isMobile})}>
         <LayerToggle {...this.props} />
+        <SearchControl
+          {...this.props}
+          onResultSelected={bounds => {
+            this.currentBounds = toLatLngBounds(bounds)
+            this.props.updateReview(bounds.join(','))
+          }}
+        />
         {map}
         {!!this.props.loading && <BusySpinner mapMode />}
       </div>

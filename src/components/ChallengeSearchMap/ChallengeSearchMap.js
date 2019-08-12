@@ -11,6 +11,7 @@ import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
+import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -127,6 +128,10 @@ export class ChallengeSearchMap extends Component {
     return (
       <div key='ChallengeSearchMap' className="mr-h-full">
         <LayerToggle {...this.props} />
+        <SearchControl
+          {...this.props}
+          onResultSelected={bounds => this.props.updateChallengeSearchMapBounds(bounds, true)}
+        />
         <EnhancedMap center={latLng(0, 45)} zoom={3} minZoom={2} maxZoom={18}
                      setInitialBounds={false}
                      initialBounds = {initialBounds}

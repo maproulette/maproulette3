@@ -42,6 +42,11 @@
           border-radius: $radius-medium-less;
           box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
           margin-right: .5rem;
+
+          &.leaflet-control-zoom {
+            border: none;
+            border-radius: 2px;
+          }
           
           a, a.button {
             width: 2rem;
@@ -69,13 +74,13 @@
             }
 
             &:first-child {
-              border-top-left-radius: $radius-medium-less;
-              border-top-right-radius: $radius-medium-less;
+              border-top-left-radius: 2px;
+              border-top-right-radius: 2px;
             }
 
             &:last-child {
-              border-bottom-left-radius: $radius-medium-less;
-              border-bottom-right-radius: $radius-medium-less;
+              border-bottom-left-radius: 2px;
+              border-bottom-right-radius: 2px;
             }
           }
         }
