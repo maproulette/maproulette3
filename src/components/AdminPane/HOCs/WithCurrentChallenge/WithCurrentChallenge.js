@@ -138,8 +138,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchChallengeActivity: (challengeId, startDate, endDate) =>
     dispatch(fetchChallengeActivity(challengeId, startDate, endDate)),
 
-  fetchChallengeActions: challengeId =>
-    dispatch(fetchChallengeActions(challengeId)),
+  fetchChallengeActions: (challengeId, suppressReceive, criteria) => {
+    return dispatch(fetchChallengeActions(challengeId, suppressReceive, criteria))
+  },
 })
 
 export default (WrappedComponent, includeTasks) =>
