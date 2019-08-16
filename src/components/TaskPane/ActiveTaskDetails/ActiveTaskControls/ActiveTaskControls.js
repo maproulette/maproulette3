@@ -64,7 +64,8 @@ export class ActiveTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, this.props.mapBounds)
+    this.props.editTask(value, this.props.task, this.props.mapBounds,
+                        {photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null})
   }
 
   chooseLoadBy = loadMethod => {
