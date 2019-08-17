@@ -20,6 +20,7 @@ import WithKeyboardShortcuts
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
+import SuggestedFixControls from './SuggestedFixControls/SuggestedFixControls'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
 import TaskConfirmationModal
        from '../../../TaskConfirmationModal/TaskConfirmationModal'
@@ -39,12 +40,14 @@ export class ActiveTaskControls extends Component {
     taskBeingCompleted: null,
     confirmingTask: null,
     confirmingStatus: null,
+    osmComment: "",
     comment: "",
     tags: null,
     revisionLoadBy: TaskReviewLoadMethod.all,
   }
 
   setComment = comment => this.setState({comment})
+  setOSMComment = osmComment => this.setState({osmComment})
   setTags = tags => this.setState({tags})
 
   toggleNeedsReview = () => {
@@ -108,7 +111,8 @@ export class ActiveTaskControls extends Component {
                               revisionSubmission ? null : this.props.taskLoadBy,
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview,
-                              this.state.requestedNextTask)
+                              this.state.requestedNextTask,
+                              this.state.osmComment)
       if (revisionSubmission) {
         if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
           this.props.history.push('/inbox')
@@ -123,6 +127,7 @@ export class ActiveTaskControls extends Component {
   initiateCompletion = (taskStatus, submitRevision) => {
     this.setState({
       confirmingTask: this.props.task,
+      osmComment: this.props.task.parent.checkinComment,
       confirmingStatus: taskStatus,
       submitRevision,
     })
@@ -201,7 +206,7 @@ export class ActiveTaskControls extends Component {
       const isFinal = isFinalStatus(this.props.task.status)
 
       return (
-        <div className={this.props.className}>
+        <div>
           {!isEditingTask && isComplete &&
            <div className="mr-text-white mr-text-md mr-my-4">
              <FormattedMessage
@@ -224,7 +229,16 @@ export class ActiveTaskControls extends Component {
                          onConfirm={this.confirmCompletion}
                          saveTaskTags={this.props.saveTaskTags} />
 
-          {!isEditingTask && (!isFinal || needsRevised) &&
+          {this.props.task.suggestedFix && (!isFinal || needsRevised) &&
+            <SuggestedFixControls
+              {...this.props}
+              allowedProgressions={allowedProgressions}
+              complete={this.initiateCompletion}
+              nextTask={this.next}
+              needsRevised={needsRevised}
+            />
+          }
+          {!this.props.task.suggestedFix && !isEditingTask && (!isFinal || needsRevised) &&
            <TaskCompletionStep1
              {...this.props}
              allowedProgressions={allowedProgressions}
@@ -259,6 +273,8 @@ export class ActiveTaskControls extends Component {
               status={this.state.confirmingStatus}
               comment={this.state.comment}
               setComment={this.setComment}
+              osmComment={this.state.osmComment}
+              setOSMComment={this.setOSMComment}
               tags={this.state.tags}
               setTags={this.setTags}
               needsReview={this.getNeedsReviewSetting()}

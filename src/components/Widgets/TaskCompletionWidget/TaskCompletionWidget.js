@@ -25,8 +25,8 @@ export default class TaskCompletionWidget extends Component {
   render() {
     const taskControls =
       this.props.inspectTask ?
-      <InspectTaskControls {...this.props} className="mr-px-4" /> :
-      <ActiveTaskControls {...this.props} className="mr-px-0" />
+      <InspectTaskControls {...this.props} /> :
+      <ActiveTaskControls {...this.props} />
 
     return (
       <QuickWidget

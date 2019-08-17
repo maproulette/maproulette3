@@ -99,6 +99,8 @@ const apiRoutes = factory => {
       'history': factory.get('/task/:id/history'),
       'tags': factory.get('/task/:id/tags'),
       'updateTags': factory.get('/task/:id/tags/update'),
+      'testTagFix': factory.post('/change/tag/test'),
+      'applySuggestedFix': factory.post('/task/:id/fix/apply'),
     },
     'keywords': {
       'find': factory.get('/keywords'),

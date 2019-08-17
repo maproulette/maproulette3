@@ -12,6 +12,7 @@ import { messagesByDifficulty } from '../../services/Challenge/ChallengeDifficul
 import { isUsableChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import messages from './Messages'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import ChallengeTaxonomy from '../ChallengeTaxonomy/ChallengeTaxonomy'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SignInButton from '../SignInButton/SignInButton'
@@ -140,37 +141,11 @@ export class ChallengeDetail extends Component {
                       className="mr-text-green-lighter mr-text-sm hover:mr-text-white"
                       onClick={() => this.props.history.goBack()}
                     >
-                      &larr; Go Back
+                      &larr; <FormattedMessage {...messages.goBack} />
                     </button>
                   </div>
                 )}
-                {(isSaved ||
-                  challenge.featured ||
-                  challenge.popular ||
-                  challenge.newest) && (
-                  <ul className="mr-card-challenge__taxonomy">
-                    {isSaved && (
-                      <li>
-                        <span className="mr-text-pink-light">Saved</span>
-                      </li>
-                    )}
-                    {challenge.featured && (
-                      <li>
-                        <span className="mr-text-turquoise">Featured</span>
-                      </li>
-                    )}
-                    {challenge.popular && (
-                      <li>
-                        <span className="mr-text-orange">Popular</span>
-                      </li>
-                    )}
-                    {challenge.newest && (
-                      <li>
-                        <span className="mr-text-yellow">Newest</span>
-                      </li>
-                    )}
-                  </ul>
-                )}
+                <ChallengeTaxonomy challenge={challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
 
                 {challenge.parent && ( // virtual challenges don't have projects

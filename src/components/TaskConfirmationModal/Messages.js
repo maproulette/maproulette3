@@ -54,6 +54,31 @@ export default defineMessages({
     defaultMessage: "Submit",
   },
 
+  osmUploadNotice: {
+    id: 'TaskConfirmationModal.osmUploadNotice',
+    defaultMessage: "These changes will be uploaded to OpenStreetMap on your behalf",
+  },
+
+  osmViewChangesetLabel: {
+    id: 'TaskConfirmationModal.controls.osmViewChangeset.label',
+    defaultMessage: "Inspect changeset",
+  },
+
+  osmCommentHeader: {
+    id: 'TaskConfirmationModal.osmComment.header',
+    defaultMessage: "OSM Change Comment",
+  },
+
+  osmCommentPlaceholder: {
+    id: 'TaskConfirmationModal.osmComment.placeholder',
+    defaultMessage: "OpenStreetMap comment",
+  },
+
+  mrCommentHeader: {
+    id: 'TaskConfirmationModal.comment.header',
+    defaultMessage: "MapRoulette Comment (optional)",
+  },
+
   placeholder: {
     id: 'TaskConfirmationModal.comment.placeholder',
     defaultMessage: "Your comment (optional)",

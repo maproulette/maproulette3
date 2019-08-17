@@ -12,6 +12,7 @@ import { messagesByDifficulty }
        from '../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
+import ChallengeTaxonomy from '../ChallengeTaxonomy/ChallengeTaxonomy'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
 // import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
@@ -30,31 +31,7 @@ export class CardChallenge extends Component {
       >
         <header className="mr-card-challenge__header" onClick={this.props.toggleExpanded}>
           <div>
-            {(this.props.isSaved || this.props.challenge.featured ||
-              this.props.challenge.popular || this.props.challenge.newest) &&
-             <ul className="mr-card-challenge__taxonomy">
-               {this.props.isSaved &&
-                <li>
-                  <span className="mr-text-pink-light">Saved</span>
-                </li>
-               }
-               {this.props.challenge.featured &&
-                <li>
-                  <span className="mr-text-turquoise">Featured</span>
-                </li>
-               }
-               {this.props.challenge.popular &&
-                <li>
-                  <span className="mr-text-orange">Popular</span>
-                </li>
-               }
-               {this.props.challenge.newest &&
-                <li>
-                  <span className="mr-text-yellow">Newest</span>
-                </li>
-               }
-             </ul>
-            }
+            <ChallengeTaxonomy {...this.props} />
             <h3 className="mr-card-challenge__title">
               {this.props.challenge.name}
             </h3>
@@ -69,18 +46,6 @@ export class CardChallenge extends Component {
              </Link>
             }
           </div>
-          {/*
-          {!this.props.permanentlyExpanded &&
-           <SvgSymbol
-             sym="icon-cheveron-down"
-             viewBox="0 0 20 20"
-             className={classNames(
-               'mr-transition mr-fill-green-lighter mr-min-w-6 mr-w-6 mr-h-6',
-               { 'mr-rotate-180': !this.props.isExpanded }
-             )}
-           />
-          }
-          */}
         </header>
 
         <AnimateHeight duration={500} height={this.props.isExpanded ? 'auto' : 0}>

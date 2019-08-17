@@ -75,6 +75,7 @@ let colors = {
   turquoise: '#17FFF3',
   pink: '#E87CE0',
   'pink-light': '#FFB2F0',
+  rosebud: '#FFA8A8',
   'pink-light-10': 'rgba(255,178,240,0.1)',
   'pink-light-50': 'rgba(255,178,240,0.5)',
   twitter: '#1DA1F2',
@@ -529,6 +530,7 @@ module.exports = {
 
   minWidth: {
     '0': '0',
+    '4': '1rem',
     '5': '1.25rem',
     '6': '2rem',
     '8': '2.5rem',

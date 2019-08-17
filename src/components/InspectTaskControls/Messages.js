@@ -20,4 +20,8 @@ export default defineMessages({
     id: "Admin.TaskInspect.controls.modifyTask.label",
     defaultMessage: "Modify Task",
   },
+  tagsHeader: {
+    id: "Admin.TaskInspect.tagHeader",
+    defaultMessage: "Proposed OSM Tags",
+  },
 })
