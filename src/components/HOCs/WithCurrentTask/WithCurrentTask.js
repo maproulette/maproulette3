@@ -31,6 +31,7 @@ import { CHALLENGE_STATUS_FINISHED }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
+import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
 
 const TASK_STALE = 30000 // 30 seconds
 const CHALLENGE_STALE = 300000 // 5 minutes
@@ -159,7 +160,8 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     /**
      * Invoke to mark as a task as complete with the given status
      */
-    completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview, requestedNextTask) => {
+    completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview,
+                   requestedNextTask, osmComment) => {
       const taskId = task.id
 
       // Work to be done after the status is set
@@ -202,8 +204,13 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         return doAfter()
       }
       else {
+        let suggestedFixSummary = null
+        if (task.suggestedFix) {
+          suggestedFixSummary = AsSuggestedFix(task).tagChangeSummary()
+        }
+
         return dispatch(
-          completeTask(taskId, challengeId, taskStatus, needsReview, tags)
+          completeTask(taskId, challengeId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment)
         ).then(() => doAfter())
       }
     },

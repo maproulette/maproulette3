@@ -22,6 +22,7 @@ import { addServerError, addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
 import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
+import { TaskStatus } from './TaskStatus/TaskStatus'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -179,9 +180,11 @@ export const releaseTask = function(taskId) {
 /**
  * Mark the given task as completed with the given status.
  */
-export const completeTask = function(taskId, challengeId, taskStatus, needsReview, tags) {
+export const completeTask = function(taskId, challengeId, taskStatus, needsReview,
+                                     tags, suggestedFixSummary, osmComment) {
   return function(dispatch) {
-    return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags)
+    return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags,
+                            suggestedFixSummary, osmComment)
   }
 }
 
@@ -445,7 +448,8 @@ export const deleteChallengeTasks = function(challengeId, statuses=null) {
  * Set the given status on the given task
  * @private
  */
-const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null, tags = null) {
+const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null,
+                                  tags = null, suggestedFixSummary = null, osmComment = null) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -466,11 +470,27 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
     params.tags = tags
   }
 
-  return new Endpoint(
-    api.task.updateStatus,
-    {schema: taskSchema(),
-     variables: {id: taskId, status: newStatus}, params}
-  ).execute().catch(error => {
+  let endpoint = null
+  // Suggested fixes that have been approved (fixed status) go to a different endpoint
+  if (suggestedFixSummary && newStatus === TaskStatus.fixed) {
+    endpoint = new Endpoint(api.task.applySuggestedFix, {
+      params,
+      variables: { id: taskId },
+      json: {
+        comment: osmComment,
+        changes: suggestedFixSummary,
+      }
+    })
+  }
+  else {
+    endpoint = new Endpoint(
+      api.task.updateStatus,
+      {schema: taskSchema(),
+      variables: {id: taskId, status: newStatus}, params}
+    )
+  }
+
+  return endpoint.execute().catch(error => {
     if (isSecurityError(error)) {
       dispatch(ensureUserLoggedIn()).then(() =>
         dispatch(addError(AppErrors.user.unauthorized))
@@ -482,6 +502,16 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
     }
     fetchTask(taskId)(dispatch) // Fetch accurate task data
   })
+}
+
+export const fetchSuggestedTagFixChangeset = function(suggestedFixSummary) {
+  const endpoint = new Endpoint(api.task.testTagFix, {
+    params: { changeType: 'osmchange' },
+    json: suggestedFixSummary,
+    expectXMLResponse: true,
+  })
+
+  return endpoint.execute()
 }
 
 /**

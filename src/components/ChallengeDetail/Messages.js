@@ -4,6 +4,10 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with ChallengeResultItem.
  */
 export default defineMessages({
+  goBack: {
+    id: 'ChallengeDetails.controls.goBack.label',
+    defaultMessage: 'Go Back',
+  },
 
   unsave: {
     id: 'ChallengeDetails.controls.unsave.label',

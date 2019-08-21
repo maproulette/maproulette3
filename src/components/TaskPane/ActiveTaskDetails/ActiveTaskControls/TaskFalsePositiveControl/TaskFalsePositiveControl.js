@@ -36,7 +36,9 @@ export default class TaskFalsePositiveControl extends Component {
       return (
         // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a onClick={() => this.props.complete(TaskStatus.falsePositive)}>
-          <FormattedMessage {...messages.falsePositiveLabel} />
+          {this.props.falsePositiveLabel ? this.props.falsePositiveLabel :
+           <FormattedMessage {...messages.falsePositiveLabel} />
+          }
         </a>
       )
     }
@@ -47,7 +49,9 @@ export default class TaskFalsePositiveControl extends Component {
         title={this.props.intl.formatMessage(messages.falsePositiveTooltip)}
         onClick={() => this.props.complete(TaskStatus.falsePositive)}
       >
-        <FormattedMessage {...messages.falsePositiveLabel} />
+        {this.props.falsePositiveLabel ? this.props.falsePositiveLabel :
+          <FormattedMessage {...messages.falsePositiveLabel} />
+        }
       </Button>
     )
   }

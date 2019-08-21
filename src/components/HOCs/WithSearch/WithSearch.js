@@ -7,7 +7,7 @@ import _isFunction from 'lodash/isFunction'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
 import _includes from 'lodash/includes'
-import { SORT_NAME, SORT_CREATED, SORT_POPULARITY,
+import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_SUGGESTED_FIX,
          setSort, removeSort, setPage,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
@@ -158,6 +158,9 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
         sort = {sortBy, direction: 'desc'}
         break
       case SORT_POPULARITY:
+        sort = {sortBy, direction: 'desc'}
+        break
+      case SORT_SUGGESTED_FIX:
         sort = {sortBy, direction: 'desc'}
         break
       default:

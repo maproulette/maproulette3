@@ -35,7 +35,9 @@ export default class TaskFixedControl extends Component {
       return (
         // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a onClick={() => this.props.complete(TaskStatus.fixed)}>
-          <FormattedMessage {...messages.fixedLabel} />
+          {this.props.fixedLabel ? this.props.fixedLabel :
+           <FormattedMessage {...messages.fixedLabel} />
+          }
         </a>
       )
     }
@@ -45,7 +47,9 @@ export default class TaskFixedControl extends Component {
           className="mr-button--blue-fill"
           onClick={() => this.props.complete(TaskStatus.fixed)}
         >
-          <FormattedMessage {...messages.fixedLabel} />
+          {this.props.fixedLabel ? this.props.fixedLabel :
+           <FormattedMessage {...messages.fixedLabel} />
+          }
         </Button>
       )
     }
