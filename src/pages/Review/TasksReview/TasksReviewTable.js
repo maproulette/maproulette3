@@ -432,18 +432,10 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
             </div>
         }
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-          if (row._original.reviewedBy.id !== props.user.id) {
-            action =
-              <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
-                <FormattedMessage {...messages.resolveTaskLabel} />
-              </div>
-          }
-          else {
-            action =
-              <span className="mr-text-grey-light">
-                <FormattedMessage {...messages.resolveTaskLabel}/>
-              </span>
-          }
+          action =
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+              <FormattedMessage {...messages.resolveTaskLabel} />
+            </div>          
         }
       }
 
