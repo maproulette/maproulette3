@@ -172,17 +172,20 @@ export class TaskAnalysisTableHeader extends Component {
                                       <div>
                                           <button className={classNames("mr-text-current mr-pr-1",
                                                               (!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) ? "mr-text-grey mr-cursor-default" : "")}
-                                                  disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}
-                                                  onClick={() => this.setState({showConfirm: true})}>
+                                                  disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}>
                                               <FormattedMessage {...messages.changeStatusToLabel} />
                                           </button>
                                           {(!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) &&
                                             <span className="mr-text-current mr-text-grey">...</span>}
                                           {(this.props.someTasksAreSelected() || this.props.allTasksAreSelected()) &&
-                                            <select onChange={e => {this.setState({statusChange: e.target.value})
-                                                                    this.setState({showConfirm: true})}}
+                                            <select onChange={e => { if (e.target.value !== "") {
+                                                                      this.setState({statusChange: e.target.value, showConfirm: true})
+                                                                    }}}
                                                     defaultValue={this.state.statusChange}
                                                     className="select mr-min-w-20 mr-bg-grey-lighter mr-rounded mr-px-1 mr-text-xs mr-pl-2">
+                                              <option key="choose" value="">
+                                                {this.props.intl.formatMessage(messages.chooseStatusLabel)}
+                                              </option>
                                               {_map(_omit(TaskStatus, "deleted"), (value, key) =>
                                                 <option key={key} value={value}>
                                                   {localizedStatusLabels[key]}
