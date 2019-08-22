@@ -21,6 +21,7 @@ import TaskFalsePositiveControl
 import TaskAlreadyFixedControl
        from '../../../../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskAlreadyFixedControl/TaskAlreadyFixedControl'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import TagDiffModal from '../../../../TagDiffVisualization/TagDiffModal'
 import messages from './Messages'
 
@@ -51,6 +52,7 @@ export class SuggestedFixControls extends Component {
             />
           </button>
         </div>
+        {this.props.loadingOSMData && <BusySpinner />}
         {_get(this.props, 'tagDiffs.length', 0) > 0 &&
          <TagDiffVisualization {...this.props} tagDiff={this.props.tagDiffs[0]} />
         }

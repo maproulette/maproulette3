@@ -8,6 +8,7 @@ import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/agate'
 import vkbeautify from 'vkbeautify'
 import _values from 'lodash/values'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 
 SyntaxHighlighter.registerLanguage('xml', xmlLang)
@@ -37,6 +38,14 @@ export class TagDiffVisualization extends Component {
   }
 
   render() {
+    if (this.props.loadingOSMData || this.props.loadingChangeset) {
+      return (
+        <div className="mr-bg-blue-dark mr-p-4 mr-rounded-sm mr-flex mr-justify-center mr-items-center">
+          <BusySpinner />
+        </div>
+      )
+    }
+
     const tagChanges = _values(this.props.tagDiff)
     if (this.props.hasTagChanges === false || tagChanges.length === 0) {
       return (
