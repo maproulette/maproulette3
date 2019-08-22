@@ -56,7 +56,7 @@ export class TagDiffVisualization extends Component {
     }
 
     const toolbar = (
-      <div className="mr-flex mr-mb-1 mr-px-4">
+      <div className="mr-flex mr-items-start mr-mb-1 mr-px-4">
         <button
           className={classNames(
             "mr-mr-4",
@@ -76,11 +76,7 @@ export class TagDiffVisualization extends Component {
           onClick={() => this.switchToChangeset()}
           title={this.props.intl.formatMessage(messages.changesetTooltip)}
         >
-          <SvgSymbol
-            sym="code-icon"
-            viewBox="0 0 20 20"
-            className="mr-transition mr-fill-current mr-w-4 mr-h-4"
-          />
+          <span className="mr-transition">&lt;/&gt;</span>
         </button>
       </div>
     )
