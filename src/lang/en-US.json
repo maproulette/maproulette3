@@ -205,6 +205,7 @@
   "Admin.ManageTasks.geographicIndexingNotice": "Please note that it can take up to {delay} hours to geographically index new or modified challenges. Your challenge (and tasks) may not appear as expected in location-specific browsing or searches until indexing is complete.",
   "Admin.manageTasks.controls.bulkSelection.tooltip": "Select tasks for bulk operation",
   "Admin.manageTasks.controls.changeStatusTo.label": "Change status to",
+  "Admin.manageTasks.controls.chooseStatus.label": "Choose ...",
   "Admin.manageTasks.controls.changePriority.label": "Change Priority",
   "Admin.manageTasks.controls.showReviewColumns.label": "Show Review Columns",
   "Admin.manageTasks.controls.hideReviewColumns.label": "Hide Review Columns",

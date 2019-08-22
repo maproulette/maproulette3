@@ -58,6 +58,11 @@ export default defineMessages({
     defaultMessage: "Change status to ",
   },
 
+  chooseStatusLabel: {
+    id: "Admin.manageTasks.controls.chooseStatus.label",
+    defaultMessage: "Choose ... ",
+  },
+
   changePriorityLabel: {
     id: "Admin.manageTasks.controls.changePriority.label",
     defaultMessage: "Change Priority",
