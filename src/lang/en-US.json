@@ -532,7 +532,6 @@
   "Admin.TaskInspect.controls.nextTask.label": "Next Task",
   "Admin.TaskInspect.controls.editTask.label": "Edit Task",
   "Admin.TaskInspect.controls.modifyTask.label": "Modify Task",
-  "Admin.TaskInspect.tagHeader": "Proposed OSM Tags",
   "KeywordAutosuggestInput.controls.addKeyword.placeholder": "Add keyword",
   "General.controls.moreResults.label": "More Results",
   "MobileNotSupported.header": "Please Visit on your Computer",
