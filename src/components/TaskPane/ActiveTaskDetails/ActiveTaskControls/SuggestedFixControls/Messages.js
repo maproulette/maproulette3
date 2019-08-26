@@ -4,14 +4,9 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with SuggestedFixControls
  */
 export default defineMessages({
-  tagsHeader: {
-    id: "SuggestedFixControls.tagHeader",
-    defaultMessage: "Proposed OSM Tags",
-  },
-
   prompt: {
     id: "SuggestedFixControls.prompt",
-    defaultMessage: "Are all of these changes correct?",
+    defaultMessage: "Are all of the tag changes correct?",
   },
 
   confirmLabel: {

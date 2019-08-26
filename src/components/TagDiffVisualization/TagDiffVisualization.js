@@ -7,6 +7,7 @@ import xmlLang from 'react-syntax-highlighter/dist/languages/hljs/xml'
 import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/agate'
 import vkbeautify from 'vkbeautify'
 import _values from 'lodash/values'
+import _filter from 'lodash/filter'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
@@ -23,9 +24,12 @@ SyntaxHighlighter.registerLanguage('xml', xmlLang)
  */
 export class TagDiffVisualization extends Component {
   state = {
-    showChangeset: false,
+    showChangeset: false,  // XML-changeset view instead of tag-list view
   }
 
+  /**
+   * Switch to changeset/XML view of tag changes
+   */
   switchToChangeset() {
     if (!this.props.xmlChangeset && !this.props.loadingChangeset && this.props.loadXMLChangeset) {
       this.props.loadXMLChangeset()
@@ -33,6 +37,9 @@ export class TagDiffVisualization extends Component {
     this.setState({showChangeset: true})
   }
 
+  /**
+   * Switch to table/list view of tag changes
+   */
   switchToTable() {
     this.setState({showChangeset: false})
   }
@@ -46,7 +53,10 @@ export class TagDiffVisualization extends Component {
       )
     }
 
-    const tagChanges = _values(this.props.tagDiff)
+    const tagChanges = this.props.onlyChanges ?
+                       justChanges(_values(this.props.tagDiff)) :
+                       _values(this.props.tagDiff)
+
     if (this.props.hasTagChanges === false || tagChanges.length === 0) {
       return (
         <div className="mr-bg-blue-dark mr-p-4 mr-rounded-sm mr-flex mr-items-center">
@@ -56,28 +66,50 @@ export class TagDiffVisualization extends Component {
     }
 
     const toolbar = (
-      <div className="mr-flex mr-items-start mr-mb-1 mr-px-4">
-        <button
-          className={classNames(
-            "mr-mr-4",
-            this.state.showChangeset ? "mr-text-green-light" : "mr-text-green-lighter"
-          )}
-          onClick={() => this.switchToTable()}
-          title={this.props.intl.formatMessage(messages.tagListTooltip)}
-        >
-          <SvgSymbol
-            sym="list-icon"
-            viewBox="0 0 20 20"
-            className="mr-transition mr-fill-current mr-w-4 mr-h-4"
-          />
-        </button>
-        <button
-          className={this.state.showChangeset ? "mr-text-green-lighter" : "mr-text-green-light"}
-          onClick={() => this.switchToChangeset()}
-          title={this.props.intl.formatMessage(messages.changesetTooltip)}
-        >
-          <span className="mr-transition">&lt;/&gt;</span>
-        </button>
+      <div className="mr-flex mr-mb-1 mr-px-4">
+        <div className="mr-text-base mr-text-yellow mr-mr-4">
+          <FormattedMessage {...messages.header} />
+        </div>
+
+        <div className="mr-flex mr-justify-end">
+          {!this.props.compact &&
+           <React.Fragment>
+             <button
+               className={classNames(
+                 "mr-mr-4",
+                 this.state.showChangeset ? "mr-text-green-light" : "mr-text-green-lighter"
+               )}
+               onClick={() => this.switchToTable()}
+               title={this.props.intl.formatMessage(messages.tagListTooltip)}
+             >
+               <SvgSymbol
+                 sym="list-icon"
+                 viewBox="0 0 20 20"
+                 className="mr-transition mr-fill-current mr-w-4 mr-h-4"
+               />
+             </button>
+             <button
+               className={classNames(
+                 "mr-mr-4",
+                 this.state.showChangeset ? "mr-text-green-lighter" : "mr-text-green-light"
+               )}
+               onClick={() => this.switchToChangeset()}
+               title={this.props.intl.formatMessage(messages.changesetTooltip)}
+             >
+               <span className="mr-transition">&lt;/&gt;</span>
+             </button>
+           </React.Fragment>
+          }
+          {this.props.compact &&
+           <button className="mr-text-green-light" onClick={this.props.showDiffModal}>
+             <SvgSymbol
+               sym="expand-icon"
+               viewBox="0 0 32 32"
+               className="mr-transition mr-fill-current mr-w-4 mr-h-4"
+             />
+           </button>
+          }
+        </div>
       </div>
     )
 
@@ -172,6 +204,16 @@ export class TagDiffVisualization extends Component {
   }
 }
 
+/**
+ * Filters out unchanged tags from the given diff values
+ */
+export const justChanges = tagDiffValues => {
+  return _filter(tagDiffValues, tag => tag.status !== 'unchanged')
+}
+
+/**
+ * Renders an icon/symbol that represents the given tag change
+ */
 export const changeSymbol = change => {
   let changeSymbol = null
   switch(change.status) {

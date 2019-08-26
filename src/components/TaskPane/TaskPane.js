@@ -12,6 +12,7 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
+import WithSuggestedFix from '../HOCs/WithSuggestedFix/WithSuggestedFix'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import VirtualChallengeNameLink
@@ -167,7 +168,9 @@ TaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    injectIntl(TaskPane),
+    WithSuggestedFix(
+      injectIntl(TaskPane)
+    ),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup
