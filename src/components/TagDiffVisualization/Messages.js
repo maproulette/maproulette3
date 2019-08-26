@@ -1,9 +1,14 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with TaskDiffVisualization
+ * Internationalized messages for use with TagDiffVisualization
  */
 export default defineMessages({
+  header: {
+    id: "TagDiffVisualization.header",
+    defaultMessage: "Proposed OSM Tag Changes",
+  },
+
   currentLabel: {
     id: "TagDiffVisualization.current.label",
     defaultMessage: "Current",
