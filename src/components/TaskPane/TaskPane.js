@@ -75,10 +75,10 @@ export class TaskPane extends Component {
    * transition animation as the task prepares to complete.
    */
   completeTask = (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
-                  needsReview, requestedNextTask, osmComment) => {
+                  needsReview, requestedNextTask, osmComment, tagEdits) => {
     this.setState({completingTask: task.id})
     this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
-                            needsReview, requestedNextTask, osmComment)
+                            needsReview, requestedNextTask, osmComment, tagEdits)
   }
 
   clearCompletingTask = () => {
