@@ -67,12 +67,20 @@ export const fetchOSMElement = function(idString, asXML=false) {
       else if (response.status === 400) {
         reject(AppErrors.osm.requestTooLarge)
       }
+      else if (response.status === 404) {
+        reject(AppErrors.osm.elementMissing)
+      }
       else if (response.status === 509) {
         reject(AppErrors.osm.bandwidthExceeded)
       }
     }).catch(error => {
-      console.log(error)
-      reject(AppErrors.osm.fetchFailure)
+      if (error.id && error.defaultMessage) {
+        reject(error)
+      }
+      else {
+        console.log(error)
+        reject(AppErrors.osm.fetchFailure)
+      }
     })
   })
 }

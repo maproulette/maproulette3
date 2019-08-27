@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import { fetchOSMElement } from '../../../services/OSM/OSM'
 import { fetchSuggestedTagFixChangeset } from '../../../services/Task/Task'
+import { addError } from '../../../services/Error/Error'
 import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
 
 /**
@@ -34,10 +37,17 @@ export const WithSuggestedFix = function(WrappedComponent) {
       this.setState({loadingOSMData: true, osmElements: null, tagDiffs: null, hasTagChanges: false})
 
       const elementMap = new Map()
-      await Promise.all(fix.existingOSMElementIds().map(async (elementId) => {
-        const elementJSON = await fetchOSMElement(elementId)
-        elementMap.set(elementId, elementJSON)
-      }))
+      try {
+        await Promise.all(fix.existingOSMElementIds().map(async (elementId) => {
+          const elementJSON = await fetchOSMElement(elementId)
+          elementMap.set(elementId, elementJSON)
+        }))
+      }
+      catch(error) {
+        this.props.addError(error)
+        this.setState({loadingOSMData: false})
+        return
+      }
 
       const tagDiffs = fix.tagDiffs(elementMap)
       const hasTagChanges = fix.hasTagChanges(tagDiffs)
@@ -92,4 +102,8 @@ export const WithSuggestedFix = function(WrappedComponent) {
   }
 }
 
-export default WithSuggestedFix
+export const mapDispatchToProps = dispatch =>
+  bindActionCreators({ addError }, dispatch)
+
+export default WrappedComponent =>
+  connect(null, mapDispatchToProps)(WithSuggestedFix(WrappedComponent))

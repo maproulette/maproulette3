@@ -75,6 +75,10 @@ export default defineMessages({
     id: 'Errors.osm.bandwidthExceeded',
     defaultMessage: "OpenStreetMap allowed bandwidth exceeded",
   },
+  osmElementMissing: {
+    id: 'Errors.osm.elementMissing',
+    defaultMessage: "Element not found on OpenStreetMap server",
+  },
   osmFetchFailure: {
     id: 'Errors.osm.fetchFailure',
     defaultMessage: "Unable to fetch data from OpenStreetMap",
