@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
+import _find from 'lodash/find'
+import _values from 'lodash/values'
 import { fetchOSMElement } from '../../../services/OSM/OSM'
 import { fetchSuggestedTagFixChangeset } from '../../../services/Task/Task'
 import { addError } from '../../../services/Error/Error'
@@ -26,6 +28,7 @@ export const WithSuggestedFix = function(WrappedComponent) {
       hasTagChanges: false,
       loadingChangeset: false,
       xmlChangeset: null,
+      tagEdits: null,
     }
 
     loadOSMElements = async (task) => {
@@ -34,7 +37,13 @@ export const WithSuggestedFix = function(WrappedComponent) {
         return
       }
 
-      this.setState({loadingOSMData: true, osmElements: null, tagDiffs: null, hasTagChanges: false})
+      this.setState({
+        loadingOSMData: true,
+        osmElements: null,
+        tagDiffs: null,
+        tagEdits: null,
+        hasTagChanges: false,
+      })
 
       const elementMap = new Map()
       try {
@@ -50,7 +59,7 @@ export const WithSuggestedFix = function(WrappedComponent) {
       }
 
       const tagDiffs = fix.tagDiffs(elementMap)
-      const hasTagChanges = fix.hasTagChanges(tagDiffs)
+      const hasTagChanges = this.tagsAreChanged(tagDiffs)
 
       this.setState({loadingOSMData: false, osmElements: elementMap, tagDiffs, hasTagChanges})
     }
@@ -62,7 +71,8 @@ export const WithSuggestedFix = function(WrappedComponent) {
 
       this.setState({loadingChangeset: true})
 
-      const suggestedFixSummary = AsSuggestedFix(this.props.task).tagChangeSummary()
+      const suggestedFixSummary =
+        AsSuggestedFix(this.props.task).tagChangeSummary(this.state.tagEdits)
       if (_isEmpty(suggestedFixSummary)) {
         this.setState({xmlChangeset: '', loadingChangeset: false})
         return
@@ -72,6 +82,31 @@ export const WithSuggestedFix = function(WrappedComponent) {
         this.setState({xmlChangeset: xml, loadingChangeset: false})
       }).catch(error => {
         this.setState({xmlChangeset: '', loadingChangeset: false})
+      })
+    }
+
+    setTagEdits = edits => {
+      if (edits === null) {
+        return this.revertTagEdits()
+      }
+
+      const hasTagChanges = this.tagsAreChanged([edits])
+      this.setState({tagEdits: edits, hasTagChanges, xmlChangeset: null})
+    }
+
+    revertTagEdits = () => {
+      const hasTagChanges = this.tagsAreChanged(this.state.tagDiffs)
+      this.setState({tagEdits: null, hasTagChanges, xmlChangeset: null})
+    }
+
+    /**
+     * Determines if there are any changes in the given tag diffs
+     *
+     * @private
+     */
+    tagsAreChanged = tagDiffs => {
+      return !!_find(tagDiffs, diff => {
+        return !!_find(_values(diff), change => change.status !== 'unchanged')
       })
     }
 
@@ -91,9 +126,12 @@ export const WithSuggestedFix = function(WrappedComponent) {
       return <WrappedComponent
               {...this.props}
               osmElements={this.state.osmElements}
-              tagDiffs={this.state.tagDiffs}
+              tagDiffs={this.state.tagEdits ? [ this.state.tagEdits ] : this.state.tagDiffs}
               hasTagChanges={this.state.hasTagChanges}
               xmlChangeset={this.state.xmlChangeset}
+              tagEdits={this.state.tagEdits}
+              setTagEdits={this.setTagEdits}
+              revertTagEdits={this.revertTagEdits}
               loadXMLChangeset={this.loadXMLChangeset}
               loadingOSMData={this.state.loadingOSMData}
               loadingChangeset={this.state.loadingChangeset}

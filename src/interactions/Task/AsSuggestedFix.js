@@ -4,8 +4,6 @@ import _map from 'lodash/map'
 import _toPairs from 'lodash/toPairs'
 import _each from 'lodash/each'
 import _isEmpty from 'lodash/isEmpty'
-import _find from 'lodash/find'
-import _filter from 'lodash/filter'
 import _values from 'lodash/values'
 
 /**
@@ -114,23 +112,11 @@ export class AsSuggestedFix {
   }
 
   /**
-   * Determines if there are any tag changes in any of the given tag diffs
-   */
-  hasTagChanges(tagDiffs) {
-    if (!tagDiffs || tagDiffs.length === 0) {
-      return false
-    }
-
-    return !!_find(tagDiffs, diff => {
-      return _filter(_values(diff), change => change.status !== 'unchanged').length > 0
-    })
-  }
-
-  /**
    * Summarizes tag changes for each OSM element in the form of
-   * { osmId, osmType, updates, deletes }
+   * { osmId, osmType, updates, deletes }, taking into account the given tag
+   * edits (if any)
    */
-  tagChangeSummary() {
+  tagChangeSummary(tagEdits=null) {
     if (!this.hasSuggestedFix()) {
       return []
     }
@@ -148,14 +134,27 @@ export class AsSuggestedFix {
         deletes: [],
       }
 
-      _each(independentOperation.data.operations, dependentOperation => {
-        if (dependentOperation.operation === 'setTags') {
-          change.updates = Object.assign(change.updates, dependentOperation.data)
-        }
-        else if (dependentOperation.operation === 'unsetTags') {
-          change.deletes = change.deletes.concat(dependentOperation.data)
-        }
-      })
+      if (tagEdits) {
+        // Work from tag edits instead of dependent operations
+        _each(_values(tagEdits), edit => {
+          if (edit.status === 'added' || edit.status === 'changed') {
+            change.updates[edit.name] = edit.newValue
+          }
+          else if (edit.status === 'removed') {
+            change.deletes.push(edit.name)
+          }
+        })
+      }
+      else {
+        _each(independentOperation.data.operations, dependentOperation => {
+          if (dependentOperation.operation === 'setTags') {
+            change.updates = Object.assign(change.updates, dependentOperation.data)
+          }
+          else if (dependentOperation.operation === 'unsetTags') {
+            change.deletes = change.deletes.concat(dependentOperation.data)
+          }
+        })
+      }
 
       if (_isEmpty(change.updates) && _isEmpty(change.deletes)) {
         return null

@@ -112,7 +112,8 @@ export class ActiveTaskControls extends Component {
                               this.props.user.id,
                               revisionSubmission || this.state.needsReview,
                               this.state.requestedNextTask,
-                              this.state.osmComment)
+                              this.state.osmComment,
+                              this.props.tagEdits)
       if (revisionSubmission) {
         if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
           this.props.history.push('/inbox')

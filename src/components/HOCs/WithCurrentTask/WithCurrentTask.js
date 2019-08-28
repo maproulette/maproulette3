@@ -161,7 +161,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Invoke to mark as a task as complete with the given status
      */
     completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview,
-                   requestedNextTask, osmComment) => {
+                   requestedNextTask, osmComment, tagEdits) => {
       const taskId = task.id
 
       // Work to be done after the status is set
@@ -206,7 +206,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
       else {
         let suggestedFixSummary = null
         if (task.suggestedFix) {
-          suggestedFixSummary = AsSuggestedFix(task).tagChangeSummary()
+          suggestedFixSummary = AsSuggestedFix(task).tagChangeSummary(tagEdits)
         }
 
         return dispatch(
