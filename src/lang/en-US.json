@@ -909,6 +909,7 @@
   "Errors.task.alreadyLocked": "Task has already been locked by someone else.",
   "Errors.osm.requestTooLarge": "OpenStreetMap data request too large",
   "Errors.osm.bandwidthExceeded": "OpenStreetMap allowed bandwidth exceeded",
+  "Errors.osm.elementMissing": "Element not found on OpenStreetMap server",
   "Errors.osm.fetchFailure": "Unable to fetch data from OpenStreetMap",
   "Errors.mapillary.fetchFailure": "Unable to fetch data from Mapillary",
   "Errors.nominatim.fetchFailure": "Unable to fetch data from Nominatim",
