@@ -48,6 +48,7 @@ export const challengeDenormalizationSchema = function() {
   return new schema.Entity('challenges', {
     parent: projectSchema(),
     comments: [ commentSchema() ],
+    virtualParents: [ projectSchema() ],
   })
 }
 

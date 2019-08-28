@@ -1,6 +1,6 @@
 import _filter from 'lodash/filter'
 import _isObject from 'lodash/isObject'
-import _indexOf from 'lodash/indexOf'
+import _find from 'lodash/find'
 
 /**
  * AsManageable adds functionality to a Project related to management.
@@ -14,7 +14,7 @@ export class AsManageableProject {
     return _filter(challenges, challenge =>
       ((_isObject(challenge.parent) ? challenge.parent.id === this.id :
                                       challenge.parent === this.id) ||
-        _indexOf(challenge.virtualParents, this.id) !== -1)
+        _find(challenge.virtualParents, (vp) => (_isObject(vp) ? vp.id === this.id : vp === this.id)))
     )
   }
 }
