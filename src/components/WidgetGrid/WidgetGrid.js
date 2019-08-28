@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _isFunction from 'lodash/isFunction'
 import ReactGridLayout, { WidthProvider } from 'react-grid-layout'
 import { widgetComponent } from '../../services/Widget/Widget'
 import WithWidgetManagement
@@ -30,30 +31,52 @@ export class WidgetGrid extends Component {
     )
 
     const GridFilters = this.props.filterComponent
+    const conditionalWidgets = this.props.workspace.conditionalWidgets || []
     const widgetInstances =
       _map(this.props.workspace.widgets, (widgetConfiguration, index) => {
+        let widgetHidden = false
         const WidgetComponent = widgetComponent(widgetConfiguration)
         if (!WidgetComponent) {
           throw new Error(`Missing component for widget: ${widgetConfiguration.widgetKey}`)
         }
 
-        const widgetY = this.props.workspace.layout[index].y
+        const widgetLayout = this.props.workspace.layout[index]
+
+        // Hide conditional widgets that shouldn't be shown
+        if (conditionalWidgets.indexOf(widgetConfiguration.widgetKey) !== -1) {
+          if (_isFunction(WidgetComponent.hideWidget) && WidgetComponent.hideWidget(this.props)) {
+            widgetHidden = true
+            if (widgetLayout.h > 0) {
+              widgetConfiguration.priorHeight = widgetLayout.h
+              widgetLayout.minH = 0
+              widgetLayout.h = 0
+            }
+          }
+          else if (widgetLayout.h === 0) {
+            widgetLayout.minH = widgetConfiguration.minHeight
+            widgetLayout.h = widgetConfiguration.priorHeight > 0 ?
+                             widgetConfiguration.priorHeight :
+                             widgetConfiguration.defaultHeight
+          }
+        }
+
         return (
           <div
-            key={this.props.workspace.layout[index].i}
+            key={widgetLayout.i}
             className={classNames(
               "mr-card-widget", {
                 'mr-card-widget--editing': this.props.isEditing,
-                'mr-card-widget--top-row': widgetY === 0,
+                'mr-card-widget--top-row': widgetLayout.y === 0,
               })}
             style={{
-              "zIndex": (highestY - widgetY), // higher values towards top of page
+              "zIndex": widgetHidden ? 0 : (highestY - widgetLayout.y), // higher values towards top of page
             }}
           >
             <WidgetComponent {...this.props}
-                            widgetLayout={this.props.workspace.layout[index]}
+                            widgetLayout={widgetLayout}
                             widgetConfiguration={_get(widgetConfiguration, 'defaultConfiguration', {})}
                             updateWidgetConfiguration={conf => this.props.updateWidgetConfiguration(index, conf)}
+                            widgetHidden={widgetHidden}
                             removeWidget={() => this.props.removeWidget(index)} />
           </div>
         )

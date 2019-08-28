@@ -12,6 +12,7 @@ import _each from 'lodash/each'
 import _reduce from 'lodash/reduce'
 import _pick from 'lodash/pick'
 import _snakeCase from 'lodash/snakeCase'
+import _find from 'lodash/find'
 import GridMigrations from './GridMigrations'
 
 /**
@@ -222,6 +223,66 @@ export const pruneWidgets = (gridConfiguration, widgetKeys) => {
   })
 
   return prunedConfiguration
+}
+
+/**
+ * Return a gridConfiguration with the given widgetDescriptor added to it,
+ * using the optional defaultConfiguration as a reference for the widget's
+ * position
+ */
+export const addWidgetToGrid = (gridConfiguration, widgetKey, defaultConfiguration) => {
+  const descriptor = widgetDescriptor(widgetKey)
+  if (!descriptor) {
+    throw new Error(`Attempt to add unknown widget ${widgetKey} to workspace.`)
+  }
+
+  const updatedConfiguration = _cloneDeep(gridConfiguration)
+  updatedConfiguration.widgets.unshift(descriptor)
+
+  // For simplicity, we'll add the new widget to the top row (the grid should
+  // auto-adjust). If the widget is laid out in the default configuration,
+  // we'll also match its default column
+  let defaultColumn = 0
+  if (defaultConfiguration) {
+    const widgetIndex = _findIndex(defaultConfiguration.widgets, {widgetKey})
+
+    if (widgetIndex !== -1) {
+      defaultColumn = defaultConfiguration.layout[widgetIndex].x
+    }
+  }
+
+  updatedConfiguration.layout.unshift({
+    i: generateWidgetId(),
+    x: defaultColumn,
+    y: 0,
+    w: descriptor.defaultWidth,
+    minW: descriptor.minWidth,
+    maxW: descriptor.maxWidth,
+    h: descriptor.defaultHeight,
+    minH: descriptor.minHeight,
+    maxH: descriptor.maxHeight,
+  })
+
+  return updatedConfiguration
+}
+
+/**
+ * Returns a gridConfiguration that has all permanent widgets in the given
+ * defaultConfiguration added to it (either a new instance if widgets needed to
+ * be added, or the given gridConfiguration if no additions were necessary)
+ */
+export const ensurePermanentWidgetsAdded = (gridConfiguration, defaultConfiguration) => {
+  let updatedConfiguration = gridConfiguration
+
+  _each(gridConfiguration.permanentWidgets, widgetKey => {
+    if (!_find(updatedConfiguration.widgets, {widgetKey})) {
+      updatedConfiguration = addWidgetToGrid(updatedConfiguration,
+                                             widgetKey,
+                                             defaultConfiguration)
+    }
+  })
+
+  return updatedConfiguration
 }
 
 /**

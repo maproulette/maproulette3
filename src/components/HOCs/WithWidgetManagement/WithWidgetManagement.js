@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import _clone from 'lodash/clone'
 import _cloneDeep from 'lodash/cloneDeep'
-import _each from 'lodash/each'
 import _differenceBy from 'lodash/differenceBy'
 import _find from 'lodash/find'
-import _findIndex from 'lodash/findIndex'
 import _map from 'lodash/map'
-import { generateWidgetId, widgetDescriptor, compatibleWidgetTypes }
+import { compatibleWidgetTypes, addWidgetToGrid }
        from '../../../services/Widget/Widget'
 
 /**
@@ -36,41 +34,13 @@ const WithWidgetManagement = function(WrappedComponent) {
      */
     addWidget = widgetKey => {
       // Make sure the widget is not already added to the workspace
-      if (_findIndex(this.props.workspace.widgets, {widgetKey}) !== -1) {
+      if (_find(this.props.workspace.widgets, {widgetKey})) {
         return
       }
 
-      const descriptor = widgetDescriptor(widgetKey)
-      if (!descriptor) {
-        throw new Error(`Attempt to add unknown widget ${widgetKey} to workspace.`)
-      }
-
-      // For simplicity, we'll add the new widget to the top in its own row.
-      const updatedWidgets = _clone(this.props.workspace.widgets)
-      updatedWidgets.unshift(descriptor)
-
-      const updatedLayout = _cloneDeep(this.props.workspace.layout)
-      // Push everything down to make room for the new widget
-      _each(updatedLayout, row => row.y += (descriptor.defaultHeight))
-
-      updatedLayout.unshift({
-        i: generateWidgetId(),
-        x: 0,
-        y: 0,
-        w: descriptor.defaultWidth,
-        minW: descriptor.minWidth,
-        maxW: descriptor.maxWidth,
-        h: descriptor.defaultHeight,
-        minH: descriptor.minHeight,
-        maxH: descriptor.maxHeight,
-      })
-
       this.props.saveWorkspaceConfiguration(
-        Object.assign(
-          {},
-          this.props.workspace,
-          {widgets: updatedWidgets, layout: updatedLayout}
-        ))
+        addWidgetToGrid(this.props.workspace, widgetKey)
+      )
     }
 
     /**

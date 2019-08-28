@@ -697,6 +697,8 @@
   "Widgets.ReviewTableWidget.label": "Review Table",
   "Widgets.ReviewTaskMetricsWidget.label": "Review Task Metrics",
   "Widgets.ReviewTaskMetricsWidget.title": "Task Status",
+  "Widgets.TagDiffWidget.label": "Suggested Fixes",
+  "Widgets.TagDiffWidget.title": "Proposed OSM Tag Changes",
   "Widgets.TaskCompletionWidget.label": "Completion",
   "Widgets.TaskCompletionWidget.title": "Completion",
   "Widgets.TaskCompletionWidget.inspectTitle": "Inspect",
