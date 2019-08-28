@@ -8,12 +8,10 @@ import _get from 'lodash/get'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import AsManager from '../../interactions/User/AsManager'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
-import WithSuggestedFix from '../HOCs/WithSuggestedFix/WithSuggestedFix'
 import WithKeyboardShortcuts
        from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import TaskEditControl
        from '../TaskPane/ActiveTaskDetails/ActiveTaskControls/TaskEditControl/TaskEditControl'
-import TagDiffVisualization from '../TagDiffVisualization/TagDiffVisualization'
 import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import messages from './Messages'
@@ -86,15 +84,6 @@ export class InspectTaskControls extends Component {
 
     return (
       <div className="inspect-task-controls">
-        {_get(this.props, 'tagDiffs.length', 0) > 0 &&
-          <div className="mr-mb-4">
-            <h4 className="mr-my-4 mr-text-base">
-              <FormattedMessage {...messages.tagsHeader} />
-            </h4>
-
-            <TagDiffVisualization {...this.props} tagDiff={this.props.tagDiffs[0]} />
-          </div>
-        }
         <UserEditorSelector {...this.props} className="mr-mb-4" />
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           <TaskEditControl pickEditor={this.pickEditor}
@@ -131,12 +120,4 @@ InspectTaskControls.propTypes = {
   nextSequentialTask: PropTypes.func.isRequired,
 }
 
-export default
-WithSearch(
-  WithSuggestedFix(
-    WithKeyboardShortcuts(
-      InspectTaskControls
-    )
-  ),
-  'task'
-)
+export default WithSearch(WithKeyboardShortcuts(InspectTaskControls), 'task')
