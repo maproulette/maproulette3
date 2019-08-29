@@ -159,7 +159,7 @@ export class TagDiffVisualization extends Component {
       tagChanges = justChanges(tagChanges)
     }
 
-    const toolbar = (
+    const toolbar = this.props.suppressToolbar ? null : (
       <div className="mr-flex mr-mb-1 mr-px-4">
         <div className="mr-text-base mr-text-yellow mr-mr-4">
           {this.props.onlyChanges ?

@@ -15,6 +15,10 @@ import classNames from 'classnames'
  */
 export default class QuickWidget extends Component {
   render() {
+    if (this.props.widgetHidden) {
+      return null
+    }
+
     return (
       <section className={classNames("mr-flex mr-flex-col mr-h-full", this.props.className, {"mr-mb-4": this.props.isEditing})}>
         {this.props.isEditing && !this.props.permanent &&

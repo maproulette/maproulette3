@@ -15,6 +15,7 @@ import {
   pruneWidgets,
   exportWorkspaceConfiguration,
   importWorkspaceConfiguration,
+  ensurePermanentWidgetsAdded,
 } from '../../../services/Widget/Widget'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithStatus from '../WithStatus/WithStatus'
@@ -150,6 +151,13 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
       if (configuration.excludeWidgets && configuration.excludeWidgets.length > 0) {
         configuration = pruneWidgets(configuration, configuration.excludeWidgets)
       }
+
+      // Make sure any new permanent widgets are added into the configuration
+      configuration.permanentWidgets = defaultConfiguration().permanentWidgets
+      configuration = ensurePermanentWidgetsAdded(configuration, defaultConfiguration())
+
+      // Make sure conditionalWidgets reflect the latest from default configuration
+      configuration.conditionalWidgets = defaultConfiguration().conditionalWidgets
 
       return configuration
     }

@@ -36,19 +36,29 @@ export const defaultWorkspaceSetup = function() {
     label: "Task Completion",
     widgets: [
       widgetDescriptor('TaskInstructionsWidget'),
+      widgetDescriptor('TagDiffWidget'),
       widgetDescriptor('TaskMapWidget'),
       widgetDescriptor('TaskCompletionWidget'),
       widgetDescriptor('TaskLocationWidget'),
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4},
-      {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 19},
+      {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 5},
+      {i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19},
       {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
       {i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8},
     ],
-    excludeWidgets: [
+    permanentWidgets: [ // Cannot be removed from workspace
+      'TaskMapWidget',
+      'TaskCompletionWidget',
+      'TagDiffWidget',
+    ],
+    excludeWidgets: [ // Cannot be added to workspace
       'TaskReviewWidget',
-    ]
+    ],
+    conditionalWidgets: [ // conditionally displayed
+      'TagDiffWidget',
+    ],
   }
 }
 
