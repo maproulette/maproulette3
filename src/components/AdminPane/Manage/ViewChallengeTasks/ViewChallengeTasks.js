@@ -17,18 +17,21 @@ import { TaskPriority,
        from '../../../../services/Task/TaskPriority/TaskPriority'
 import { TaskStatusColors }
        from '../../../../services/Task/TaskStatus/TaskStatus'
+import AsManager from '../../../../interactions/User/AsManager'
 import WithBoundedTasks
-       from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
+       from '../../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import IntervalRender from '../../../IntervalRender/IntervalRender'
-import ChallengeTaskMap from '../ChallengeTaskMap/ChallengeTaskMap'
-import TaskAnalysisTable from '../TaskAnalysisTable/TaskAnalysisTable'
+import ChallengeTaskMap from '../../../ChallengeTaskMap/ChallengeTaskMap'
+import TaskAnalysisTable from '../../../TaskAnalysisTable/TaskAnalysisTable'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
 import Dropdown from '../../../Dropdown/Dropdown'
+
+const TaskMap = ChallengeTaskMap('challengeOwner')
 
 /**
  * ViewChallengeTasks displays challenge tasks as both a map and a table,
@@ -177,16 +180,21 @@ export class ViewChallengeTasks extends Component {
       <div className='admin__manage-tasks'>
         <GeographicIndexingNotice challenge={this.props.challenge} />
 
-        <MapPane>
-          <ChallengeTaskMap taskInfo={this.props.taskInfo}
-            setChallengeOwnerMapBounds={this.props.setChallengeOwnerMapBounds}
-            lastBounds={this.props.mapBounds}
-            lastZoom={this.props.mapZoom}
-            statusColors={TaskStatusColors}
-            filterOptions={filterOptions}
-            monochromaticClusters
-            {...this.props} />
-        </MapPane>
+        <div className="mr-h-100">
+          <MapPane>
+            <TaskMap
+              taskInfo={this.props.taskInfo}
+              setMapBounds={this.props.setChallengeOwnerMapBounds}
+              lastBounds={this.props.mapBounds}
+              lastZoom={this.props.mapZoom}
+              statusColors={TaskStatusColors}
+              filterOptions={filterOptions}
+              taskMarkerContent={TaskMarkerContent}
+              challengeId={this.props.challenge.id}
+              monochromaticClusters
+              {...this.props} />
+          </MapPane>
+        </div>
 
         <div className="mr-my-4 xl:mr-flex mr-justify-between">
           <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
@@ -201,13 +209,15 @@ export class ViewChallengeTasks extends Component {
             </li>
           </ul>
 
-          {_get(this.props, 'clusteredTasks.tasks.length') !== _get(this.props, 'taskInfo.tasks.length', 0) ? clearFiltersControl : null}
-        </div>
+            {_get(this.props, 'clusteredTasks.tasks.length') !== _get(this.props, 'taskInfo.tasks.length', 0) ? clearFiltersControl : null}
+          </div>
 
-        <TaskAnalysisTable filterOptions={filterOptions}
-          changeStatus={this.changeStatus}
-          totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
-          {...this.props} />
+          <TaskAnalysisTable
+            filterOptions={filterOptions}
+            changeStatus={this.changeStatus}
+            totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
+            {...this.props}
+          />
       </div>
     )
   }
@@ -235,6 +245,50 @@ const buildFilterDropdown = (titleId, filters) => {
         </ul>
       }
     />
+  )
+}
+
+const TaskMarkerContent = props => {
+  const manager = AsManager(props.user)
+  const taskBaseRoute =
+    `/admin/project/${props.challenge.parent.id}` +
+    `/challenge/${props.challengeId}/task/${props.marker.options.taskId}`
+
+  return (
+    <React.Fragment>
+      <div>
+        {
+          props.intl.formatMessage(messages.nameLabel)
+        } {
+          props.marker.options.name
+        }
+      </div>
+      <div>
+        {
+          props.intl.formatMessage(messages.statusLabel)
+        } {
+          props.intl.formatMessage(messagesByStatus[props.marker.options.status])
+        }
+      </div>
+
+      <div className="marker-popup-content__links">
+        <div>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => props.history.push(`${taskBaseRoute}/inspect`)}>
+            {props.intl.formatMessage(messages.inspectTaskLabel)}
+          </a>
+        </div>
+
+        {manager.canWriteProject(props.challenge.parent) &&
+          <div>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a onClick={() => props.history.push(`${taskBaseRoute}/edit`)}>
+              {props.intl.formatMessage(messages.editTaskLabel)}
+            </a>
+          </div>
+        }
+      </div>
+    </React.Fragment>
   )
 }
 

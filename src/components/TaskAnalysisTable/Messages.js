@@ -83,4 +83,69 @@ export default defineMessages({
     id: "Admin.TaskAnalysisTable.controls.startTask.label",
     defaultMessage: "Start",
   },
+
+  bulkSelectionTooltip: {
+    id: "Admin.manageTasks.controls.bulkSelection.tooltip",
+    defaultMessage: "Select tasks",
+  },
+
+  taskCountShownStatus: {
+    id: "Admin.TaskAnalysisTableHeader.taskCountStatus",
+    defaultMessage: "Shown: {countShown} Tasks",
+  },
+
+  taskCountSelectedStatus: {
+    id: "Admin.TaskAnalysisTableHeader.taskCountSelectedStatus",
+    defaultMessage: "Selected: {selectedCount} Tasks",
+  },
+
+  taskPercentShownStatus: {
+    id: "Admin.TaskAnalysisTableHeader.taskPercentStatus",
+    defaultMessage: "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
+  },
+
+  changeStatusToLabel: {
+    id: "Admin.manageTasks.controls.changeStatusTo.label",
+    defaultMessage: "Change status to ",
+  },
+
+  chooseStatusLabel: {
+    id: "Admin.manageTasks.controls.chooseStatus.label",
+    defaultMessage: "Choose ... ",
+  },
+
+  showReviewColumnsLabel: {
+    id: "Admin.manageTasks.controls.showReviewColumns.label",
+    defaultMessage: "Show Review Columns",
+  },
+
+  hideReviewColumnsLabel: {
+    id: "Admin.manageTasks.controls.hideReviewColumns.label",
+    defaultMessage: "Hide Review Columns",
+  },
+
+  exportCSVLabel: {
+    id: "Admin.manageTasks.controls.exportCSV.label",
+    defaultMessage: "Export CSV",
+  },
+
+  exportGeoJSONLabel: {
+    id: "Admin.manageTasks.controls.exportGeoJSON.label",
+    defaultMessage: "Export GeoJSON",
+  },
+
+  shownLabel: {
+    id: "Admin.TaskAnalysisTableHeader.controls.chooseShown.label",
+    defaultMessage: "Shown",
+  },
+
+  multipleTasksTooltip: {
+    id: "Admin.TaskAnalysisTable.multipleTasks.tooltip",
+    defaultMessage: "Multiple bundled tasks",
+  },
+
+  bundleMemberTooltip: {
+    id: "Admin.TaskAnalysisTable.bundleMember.tooltip",
+    defaultMessage: "Member of a task bundle",
+  },
 })

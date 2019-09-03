@@ -49,6 +49,7 @@ const apiRoutes = factory => {
       'single': factory.get('/challenge/:id'),
       'tasks': factory.get('/challenge/:id/tasks'),
       'clusteredTasks': factory.get('/challenge/clustered/:id'),
+      'taskClusters': factory.get('/taskCluster'),
       'nearbyTasks': factory.get('/challenge/:challengeId/tasksNearby/:taskId'),
       'deleteTasks': factory.delete('/challenge/:id/tasks'),
       'randomTask': factory.get('/challenge/:id/tasks/randomTasks', {noCache: true}),
@@ -82,7 +83,16 @@ const apiRoutes = factory => {
       'reviewed': factory.get('/tasks/reviewed'),
       'reviewNext': factory.get('/tasks/review/next'),
       'reviewMetrics': factory.get('/tasks/review/metrics'),
-      'fetchReviewClusters': factory.get('/taskCluster/review')
+      'fetchReviewClusters': factory.get('/taskCluster/review'),
+      'inCluster': factory.get('/tasksInCluster/:clusterId'),
+      'bundle': factory.post('/taskBundle'),
+      'deleteBundle': factory.delete('/taskBundle/:bundleId'),
+      'fetchBundle': factory.get('/taskBundle/:bundleId'),
+      bundled: {
+        'updateStatus': factory.put('/taskBundle/:bundleId/:status'),
+        'addComment': factory.post('/taskBundle/:bundleId/comment'),
+        'updateReviewStatus': factory.put('/taskBundle/:bundleId/review/:status'),
+      }
     },
     'task': {
       'single': factory.get('/task/:id'),

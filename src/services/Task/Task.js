@@ -20,6 +20,7 @@ import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
 import { addServerError, addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
+import { generateSearchParametersString } from '../Search/Search'
 import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
 import { TaskStatus } from './TaskStatus/TaskStatus'
@@ -32,6 +33,10 @@ export const taskSchema = function() {
 /** normalizr schema for task tags */
 export const taskTagsSchema = function() {
   return new schema.Entity('tags')
+}
+
+export const taskBundleSchema = function() {
+  return new schema.Entity('taskBundles', {tasks: [ taskSchema() ]})
 }
 
 /**
@@ -180,11 +185,24 @@ export const releaseTask = function(taskId) {
 /**
  * Mark the given task as completed with the given status.
  */
-export const completeTask = function(taskId, challengeId, taskStatus, needsReview,
+export const completeTask = function(taskId, taskStatus, needsReview,
                                      tags, suggestedFixSummary, osmComment, completionResponses) {
   return function(dispatch) {
     return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags,
                             suggestedFixSummary, osmComment, completionResponses)
+  }
+}
+
+/**
+ * Mark all tasks in the given bundle as completed with the given status
+ */
+export const completeTaskBundle = function(bundleId, primaryTaskId, taskStatus, needsReview,
+                                           tags, suggestedFixSummary, osmComment, completionResponses) {
+  return function(dispatch) {
+    return updateBundledTasksStatus(
+      dispatch, bundleId, primaryTaskId, taskStatus, needsReview, tags,
+      suggestedFixSummary, osmComment, completionResponses
+    )
   }
 }
 
@@ -239,6 +257,59 @@ export const addTaskComment = function(taskId, comment, taskStatus) {
       }
       else {
         dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Add a comment to tasks in the given bundle, associating the given task
+ * status if provided
+ */
+export const addTaskBundleComment = function(bundleId, primaryTaskId, comment, taskStatus) {
+  return function(dispatch) {
+    const params = {comment}
+    if (_isFinite(taskStatus)) {
+      params.actionId = taskStatus
+    }
+
+    return new Endpoint(api.tasks.bundled.addComment, {
+      variables: {bundleId},
+      params,
+    }).execute().then(() => {
+      fetchTaskComments(primaryTaskId)(dispatch)
+      fetchTask(primaryTaskId)(dispatch) // Refresh task data
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+
+/**
+ * Fetch task bundle with given id
+ */
+export const fetchTaskBundle = function(bundleId) {
+  return function(dispatch) {
+    return new Endpoint(api.tasks.fetchBundle, {
+      variables: {bundleId},
+    }).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.bundleFailure))
         console.log(error.response || error)
       }
     })
@@ -401,6 +472,25 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
   }
 }
 
+/**
+ * Retrieve task clusters (up to the given number of points) matching the given
+ * search criteria. Criteria should contains a filters object and optional
+ * boundingBox string -- see Search.generateSearchParametersString for details
+ * of supported filters
+ */
+export const fetchTaskClusters = function(criteria, points=25) {
+  return function(dispatch) {
+    const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                            criteria.boundingBox,
+                                                            _get(criteria, 'savedChallengesOnly'))
+    return new Endpoint(
+      api.challenge.taskClusters, {
+        params: {points, ...searchParameters},
+      }
+    ).execute()
+  }
+}
+
 /*
  * Retrieve tasks geographically closest to the given task (up to the given
  * limit) belonging to the given challenge or virtual challenge. Returns an
@@ -408,11 +498,20 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
  * challenge or virtual challenge id. Note that this does not add the results
  * to the redux store, but simply returns them
  */
-export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId, limit=5) {
+export const fetchNearbyTasks = function(challengeId, isVirtualChallenge, taskId, excludeSelfLocked=false, limit=5) {
   return function(dispatch) {
+    const params = {limit}
+    if (excludeSelfLocked) {
+      params.excludeSelfLocked = 'true'
+    }
+
     return new Endpoint(
       isVirtualChallenge ? api.virtualChallenge.nearbyTasks : api.challenge.nearbyTasks,
-      {schema: [ taskSchema() ], variables: {challengeId, taskId}, params: {limit}}
+      {
+        schema: [ taskSchema() ],
+        variables: {challengeId, taskId},
+        params,
+      }
     ).execute().then(normalizedResults => ({
       challengeId,
       isVirtualChallenge,
@@ -503,6 +602,51 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
       console.log(error.response || error)
     }
     fetchTask(taskId)(dispatch) // Fetch accurate task data
+  })
+}
+
+/**
+ * Set the given status on the tasks in the given bundle
+ * @private
+ */
+const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
+                                          newStatus, requestReview = null, tags = null,
+                                          suggestedFixSummary = null, osmComment = null,
+                                          completionResponses = null) {
+  if (suggestedFixSummary) {
+    throw new Error("Suggested-fix tasks cannot be updated as a bundle at this time")
+  }
+
+  const params = {
+    primaryId: primaryTaskId,
+  }
+
+  if (requestReview != null) {
+    params.requestReview = requestReview
+  }
+
+  if (tags != null) {
+    params.tags = tags
+  }
+
+  const endpoint = new Endpoint(api.tasks.bundled.updateStatus, {
+    schema: taskBundleSchema(),
+    variables: {bundleId, status: newStatus},
+    params,
+    json: completionResponses,
+  })
+
+  return endpoint.execute().catch(error => {
+    if (isSecurityError(error)) {
+      dispatch(ensureUserLoggedIn()).then(() =>
+        dispatch(addError(AppErrors.user.unauthorized))
+      )
+    }
+    else {
+      dispatch(addError(AppErrors.task.updateFailure))
+      console.log(error.response || error)
+    }
+    fetchTask(primaryTaskId)(dispatch) // Fetch accurate task data
   })
 }
 
@@ -637,6 +781,51 @@ export const deleteTask = function(taskId) {
   }
 }
 
+export const bundleTasks = function(taskIds, bundleName="") {
+  return function(dispatch) {
+    return new Endpoint(api.tasks.bundle, {
+      json: {name: bundleName, taskIds},
+    }).execute().then(results => {
+      return results
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.bundleFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+export const deleteTaskBundle = function(bundleId, primaryTaskId) {
+  return function(dispatch) {
+    const params = {}
+    if (_isFinite(primaryTaskId)) {
+      params.primaryId = primaryTaskId
+    }
+
+    return new Endpoint(api.tasks.deleteBundle, {
+      variables: {bundleId},
+      params,
+    }).execute().then(results => {
+      return results
+    }).catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.bundleFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
 
 /**
  * Retrieve and process a single task retrieval from the given endpoint (next

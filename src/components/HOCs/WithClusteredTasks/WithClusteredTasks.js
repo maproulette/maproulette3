@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
-import { fetchClusteredTasks }
+import { bindActionCreators } from 'redux'
+import { fetchClusteredTasks, augmentClusteredTasks }
        from '../../../services/Task/ClusteredTask'
 
 /**
@@ -16,9 +17,9 @@ export const mapStateToProps = state => ({
   clusteredTasks: state.currentClusteredTasks,
 })
 
-export const mapDispatchToProps = dispatch => ({
-  fetchClusteredTasks: async (challengeId, isVirtualChallenge) =>
-    dispatch(fetchClusteredTasks(challengeId, isVirtualChallenge)),
-})
+export const mapDispatchToProps = dispatch => bindActionCreators({
+  fetchClusteredTasks,
+  augmentClusteredTasks,
+}, dispatch)
 
 export default WithClusteredTasks

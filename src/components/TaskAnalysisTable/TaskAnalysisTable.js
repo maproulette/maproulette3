@@ -9,24 +9,27 @@ import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
+import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
+import _map from 'lodash/map'
+import _compact from 'lodash/compact'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
          keysByStatus }
-       from '../../../../services/Task/TaskStatus/TaskStatus'
+       from '../../services/Task/TaskStatus/TaskStatus'
 import { messagesByReviewStatus,
          keysByReviewStatus }
-      from '../../../../services/Task/TaskReview/TaskReviewStatus'
+      from '../../services/Task/TaskReview/TaskReviewStatus'
 import { messagesByPriority }
-       from '../../../../services/Task/TaskPriority/TaskPriority'
-import { mapColors } from '../../../../interactions/User/AsEndUser'       
-import AsManager from '../../../../interactions/User/AsManager'
-import WithLoadedTask from '../../HOCs/WithLoadedTask/WithLoadedTask'
+       from '../../services/Task/TaskPriority/TaskPriority'
+import { mapColors } from '../../interactions/User/AsEndUser'
+import AsManager from '../../interactions/User/AsManager'
+import WithLoadedTask from '../HOCs/WithLoadedTask/WithLoadedTask'
 import ViewTask from '../ViewTask/ViewTask'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import TaskCommentsModal
-       from '../../../../components/TaskCommentsModal/TaskCommentsModal'
+       from '../../components/TaskCommentsModal/TaskCommentsModal'
 import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
@@ -59,54 +62,64 @@ export class TaskAnalysisTable extends Component {
   getColumns = (manager, taskBaseRoute, data) => {
     const columnTypes = setupColumnTypes(this.props, taskBaseRoute, manager, data, taskId => this.setState({openComments: taskId}))
 
-    if (this.state.withReviewColumns) {
-       return [columnTypes.selected, columnTypes.featuredId, columnTypes.id,
+    if (_isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
+      return _compact(_map(this.props.showColumns, columnId => columnTypes[columnId]))
+    }
+    else if (this.state.withReviewColumns) {
+       return [columnTypes.selected, columnTypes.featureId, columnTypes.id,
                columnTypes.status, columnTypes.priority, columnTypes.mappedOn,
                columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
                columnTypes.reviewedBy, columnTypes.reviewedAt, columnTypes.reviewDuration,
                columnTypes.controls, columnTypes.viewComments]
     }
     else {
-      return [columnTypes.selected, columnTypes.featuredId, columnTypes.id,
+      return [columnTypes.selected, columnTypes.featureId, columnTypes.id,
               columnTypes.status, columnTypes.priority,
               columnTypes.controls, columnTypes.viewComments]
     }
-
   }
 
   render() {
-    if (!_isObject(this.props.challenge) ||
-        !_isObject(this.props.challenge.parent)) {
-      return null
+    let taskBaseRoute = null
+
+    // if management controls are to be shown, then a challenge object is required
+    if (!_isArray(this.props.showColumns) ||
+        this.props.showColumns.indexOf('controls') !== -1) {
+      if (!_isObject(this.props.challenge) ||
+          !_isObject(this.props.challenge.parent)) {
+        return null
+      }
+
+      taskBaseRoute = `/admin/project/${this.props.challenge.parent.id}` +
+                      `/challenge/${this.props.challenge.id}/task`
     }
 
     const manager = AsManager(this.props.user)
-
-    const taskBaseRoute =
-      `/admin/project/${this.props.challenge.parent.id}` +
-      `/challenge/${this.props.challenge.id}/task`
-
-    // Setup tasks table. See react-table docs for details.
     const data = _get(this.props, 'taskInfo.tasks', [])
     const columns = this.getColumns(manager, taskBaseRoute, data)
 
     return (
       <React.Fragment>
         <section className="mr-my-4">
-          <header className="mr-mb-4">
-            <TaskAnalysisTableHeader
-              countShown={data.length}
-              withReviewColumns={this.state.withReviewColumns}
-              toggleReviewColumns={this.toggleReviewColumns.bind(this)}
-              {...this.props}
-            />
-          </header>
-          <ReactTable data={data} columns={columns}
-                      SubComponent={props =>
-                        <ViewTaskSubComponent taskId={props.original.id} />
-                      }
-                      collapseOnDataChange={false}
-                      defaultSorted={[ {id: 'featureId', desc: false} ]}
+          {!this.props.suppressHeader &&
+           <header className="mr-mb-4">
+             <TaskAnalysisTableHeader
+               countShown={data.length}
+               withReviewColumns={this.state.withReviewColumns}
+               toggleReviewColumns={this.toggleReviewColumns.bind(this)}
+               {...this.props}
+             />
+           </header>
+          }
+          <ReactTable
+            data={data}
+            columns={columns}
+            SubComponent={props =>
+              <ViewTaskSubComponent taskId={props.original.id} />
+            }
+            collapseOnDataChange={false}
+            defaultSorted={[ {id: 'featureId', desc: false} ]}
+            defaultPageSize={this.props.defaultPageSize}
           />
         </section>
         {_isFinite(this.state.openComments) &&
@@ -120,6 +133,7 @@ export class TaskAnalysisTable extends Component {
   }
 }
 
+// Setup tasks table. See react-table docs for details
 const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => {
   const columns = {}
 
@@ -127,6 +141,8 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Header: null,
     accessor: task => props.selectedTasks.has(task.id),
     Cell: ({value, original}) => (
+      props.highlightPrimaryTask && original.id === props.task.id ?
+      <span>✓</span> :
       <label className="checkbox">
         <input type="checkbox"
                checked={value}
@@ -139,7 +155,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     className: 'task-analysis-table__selection-option',
   }
 
-  columns.featuredId = {
+  columns.featureId = {
     id: 'featureId',
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: t => t.name || t.title,
@@ -149,7 +165,37 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   columns.id = {
     id: 'id',
     Header: props.intl.formatMessage(messages.idLabel),
-    accessor: 'id',
+    accessor: t => {
+      if (t.isBundlePrimary) {
+        return (
+          <span className="mr-flex mr-items-center">
+            <SvgSymbol
+              sym="box-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-pin-l mr--ml-2"
+              title={props.intl.formatMessage(messages.multipleTasksTooltip)}
+            />
+            {t.id}
+          </span>
+        )
+      }
+      else if (_isFinite(t.bundleId)) {
+        return (
+          <span className="mr-flex mr-items-center">
+            <SvgSymbol
+              sym="puzzle-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-4 mr-h-4 mr-absolute mr-pin-l mr--ml-2"
+              title={props.intl.formatMessage(messages.bundleMemberTooltip)}
+            />
+            {t.id}
+          </span>
+        )
+      }
+      else {
+        return <span>{t.id}</span>
+      }
+    },
     exportable: t => t.id,
     maxWidth: 120,
   }
@@ -299,20 +345,20 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     minWidth: 150,
     Cell: ({row}) =>
       <div className="row-controls-column">
-        <Link to={`${taskBaseRoute}/${row.id}/inspect`} className="mr-mr-2">
+        <Link to={`${taskBaseRoute}/${row._original.id}/inspect`} className="mr-mr-2">
           <FormattedMessage {...messages.inspectTaskLabel} />
         </Link>
         {manager.canWriteProject(props.challenge.parent) &&
-         <Link to={`${taskBaseRoute}/${row.id}/edit`} className="mr-mr-2">
+         <Link to={`${taskBaseRoute}/${row._original.id}/edit`} className="mr-mr-2">
            <FormattedMessage {...messages.editTaskLabel} />
          </Link>
         }
         {(!_isUndefined(row._original.reviewStatus)) &&
-         <Link to={`/challenge/${row._original.parent.id}/task/${row.id}/review`} className="mr-mr-2">
+         <Link to={`/challenge/${row._original.parent.id}/task/${row._original.id}/review`} className="mr-mr-2">
            <FormattedMessage {...messages.reviewTaskLabel} />
          </Link>
         }
-        <Link to={`/challenge/${props.challenge.id}/task/${row.id}`}>
+        <Link to={`/challenge/${props.challenge.id}/task/${row._original.id}`}>
           <FormattedMessage {...messages.startTaskLabel} />
         </Link>
       </div>
@@ -324,7 +370,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: 'commentID',
     maxWidth: 110,
     Cell: props =>
-      <ViewCommentsButton onClick={() => openComments(props.row.id)} />,
+      <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   }
 
   return columns

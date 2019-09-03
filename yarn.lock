@@ -11736,6 +11736,11 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
 
+uuid-time@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/uuid-time/-/uuid-time-1.0.0.tgz#8bb18fa7089987ef25b0c4047190133cfa3a14c6"
+  integrity sha1-i7GPpwiZh+8lsMQEcZATPPo6FMY=
+
 uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"

@@ -67,8 +67,13 @@ export class ActiveTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, this.props.mapBounds,
-                        {photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null})
+    this.props.editTask(
+      value,
+      this.props.task,
+      this.props.mapBounds,
+      {photoOverlay: this.props.showMapillaryLayer ? 'mapillary' : null},
+      this.props.taskBundle
+    )
   }
 
   chooseLoadBy = loadMethod => {
@@ -103,7 +108,8 @@ export class ActiveTaskControls extends Component {
     if (!_isUndefined(this.state.submitRevision)) {
       this.props.updateTaskReviewStatus(this.props.task, this.state.submitRevision,
                                         this.state.comment, this.state.tags,
-                                        this.state.revisionLoadBy, this.props.history)
+                                        this.state.revisionLoadBy, this.props.history,
+                                        this.props.taskBundle)
     }
     else {
       this.props.completeTask(this.props.task, this.props.task.parent.id,
@@ -113,7 +119,8 @@ export class ActiveTaskControls extends Component {
                               revisionSubmission || this.state.needsReview,
                               this.state.requestedNextTask,
                               this.state.osmComment,
-                              this.props.tagEdits)
+                              this.props.tagEdits,
+                              this.props.taskBundle)
       if (revisionSubmission) {
         if (this.state.revisionLoadBy === TaskReviewLoadMethod.inbox) {
           this.props.history.push('/inbox')

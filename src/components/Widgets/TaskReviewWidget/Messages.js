@@ -13,4 +13,9 @@ export default defineMessages({
     id: "Widgets.TaskReviewWidget.reviewTaskTitle",
     defaultMessage: "Review",
   },
+
+  simultaneousTasks: {
+    id: "Widgets.review.simultaneousTasks",
+    defaultMessage: "Reviewing {taskCount, number} tasks together",
+  },
 })

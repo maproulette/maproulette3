@@ -38,8 +38,10 @@
 }
 
 .challenge-task-map {
+  height: 100%;
+
   .leaflet-container {
-    height: 400px;
+    height: 100%;
     width: auto;
     border-radius: $radius-medium;
 

@@ -169,7 +169,7 @@ export default class MarkdownTemplate extends Component {
     return (
       <div>
         {this.markdownContent(content)}
-        {this.state.questions &&
+        {!_isEmpty(this.state.questions) &&
           <ul className="mr-bg-black-5 mr-p-3">
             {_values(this.state.questions)}
           </ul>

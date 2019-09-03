@@ -10,6 +10,7 @@ import WithWidgetWorkspaces
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
+import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from '../TaskPane/TaskMap/TaskMap'
@@ -86,6 +87,14 @@ export class ReviewTaskPane extends Component {
       )
     }
 
+    if (this.props.task.isBundlePrimary && !this.props.taskBundle) {
+      return (
+        <div className="pane-loading full-screen-height">
+          <BusySpinner />
+        </div>
+      )
+    }
+
     const completionResponses = this.state.completionResponses ||
                                 JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
 
@@ -114,6 +123,7 @@ export class ReviewTaskPane extends Component {
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
             disableTemplate={true}
+            disallowBundleChanges={true}
         />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
@@ -138,7 +148,9 @@ ReviewTaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    ReviewTaskPane,
+    WithTaskBundle(
+      ReviewTaskPane
+    ),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup

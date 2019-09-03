@@ -19,8 +19,6 @@ const descriptor = {
 
 export default class TaskReviewWidget extends Component {
   render() {
-    const taskControls = <ReviewTaskControls {...this.props} className="mr-px-4" />
-
     return (
       <QuickWidget
         {...this.props}
@@ -30,7 +28,15 @@ export default class TaskReviewWidget extends Component {
         }
         noMain
       >
-        {taskControls}
+        {this.props.taskBundle &&
+         <div className="mr-text-pink-light mr-mb-2 mr-text-base">
+           <FormattedMessage
+             {...messages.simultaneousTasks}
+             values={{taskCount: this.props.taskBundle.tasks.length}}
+           />
+         </div>
+        }
+        <ReviewTaskControls {...this.props} className="" />
       </QuickWidget>
     )
   }
