@@ -24,6 +24,10 @@ export default defineMessages({
     id: "Task.status.deleted",
     defaultMessage: "Deleted"
   },
+  disabled: {
+    id: "Task.status.disabled",
+    defaultMessage: "Disabled"
+  },
   alreadyFixed: {
     id: "Task.status.alreadyFixed",
     defaultMessage: "Already Fixed"

@@ -125,6 +125,7 @@ export class ViewChallengeTasks extends Component {
       [TaskStatus.deleted]: '#9D6ADC',       // $status-deleted-color
       [TaskStatus.alreadyFixed]: '#97E3D5',  // $status-alreadyFixed-color
       [TaskStatus.tooHard]: '#F47560',       // $status-tooHard-color
+      [TaskStatus.disabled]: '#9D6ADC',       // $status-disabled-color
     }
 
     const statusFilters = _map(TaskStatus, status => (
