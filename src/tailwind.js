@@ -87,12 +87,29 @@ let colors = {
   rose: '#F89294',
 
   // Username colors
-  indigo: '#8B40CD',
-  ocean: '#517ED3',
-  forest: '#3E7D29',
-  cranberry: '#E3558E',
-  aqua: '#34B2BE',
-  tangerine: '#FBAE17',
+  'indigo-300': 'hsl(272, 49%, 53%)', //'#8B40CD',
+  'indigo-500': 'hsl(272, 59%, 53%)', //'#8B40CD',
+  'indigo-700': 'hsl(272, 79%, 53%)', //'#8B40CD',
+  'ocean-300': 'hsl(219, 70%, 77%)', //'#517ED3',
+  'ocean-500': 'hsl(219, 60%, 57%)', //'#517ED3',
+  'ocean-700': 'hsl(219, 80%, 57%)', //'#517ED3',
+  'forest-300': 'hsl(105, 41%, 33%)', //'#3E7D29',
+  'forest-500': 'hsl(105, 51%, 33%)', //'#3E7D29',
+  'forest-700': 'hsl(105, 61%, 43%)', //'#3E7D29',
+  'cranberry-300': 'hsl(336, 62%, 61%)', //'#E3558E',
+  'cranberry-500': 'hsl(336, 72%, 61%)', //'#E3558E',
+  'cranberry-700': 'hsl(336, 92%, 61%)', //'#E3558E',
+  'aqua-300': 'hsl(185, 47%, 47%)', //'#34B2BE',
+  'aqua-500': 'hsl(185, 57%, 47%)', //'#34B2BE',
+  'aqua-700': 'hsl(185, 77%, 47%)', //'#34B2BE',
+  'tangerine-300': 'hsl(40, 97%, 64%)', //'#FBAE17',
+  'tangerine-500': 'hsl(40, 97%, 54%)', //'#FBAE17',
+  'banana-500': 'hsl(51, 100%, 63%)', //'#FFE441'
+  'banana-700': 'hsl(51, 90%, 53%)', //'#FFE441'
+  'mint-300': 'hsl(131, 58%, 71%)', //'#7DEF91',
+  'mint-500': 'hsl(131, 78%, 71%)', //'#7DEF91',
+  'cotton-candy-500': 'hsl(312, 100%, 85%)', //'#FFB2F0'
+  'cotton-candy-700': 'hsl(312, 90%, 80%)', //'#FFB2F0'
 }
 
 module.exports = {

@@ -6,8 +6,15 @@ import _isObject from 'lodash/isObject'
 import _isNumber from 'lodash/isNumber'
 import _get from 'lodash/get'
 
-const USER_COLORS = ["mr-text-indigo", "mr-text-ocean", "mr-text-forest",
-                     "mr-text-cranberry", "mr-text-aqua", "mr-text-tangerine"]
+const USER_COLORS = ["mr-text-indigo-300", "mr-text-indigo-500", "mr-text-indigo-700",
+                     "mr-text-ocean-300", "mr-text-ocean-500", "mr-text-ocean-700",
+                     "mr-text-forest-300", "mr-text-forest-500", "mr-text-forest-700",
+                     "mr-text-cranberry-300", "mr-text-cranberry-500", "mr-text-cranberry-700",
+                     "mr-text-aqua-300", "mr-text-aqua-500", "mr-text-aqua-700",
+                     "mr-text-tangerine-300", "mr-text-tangerine-500",
+                     "mr-text-banana-500", "mr-text-banana-700",
+                     "mr-text-mint-300", "mr-text-mint-500",
+                     "mr-text-cotton-candy-500", "mr-text-cotton-candy-700"]
 
 /**
  * Provides basic methods for interacting with users.
