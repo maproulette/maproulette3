@@ -19,6 +19,8 @@ export { default as TaskHistoryWidget }
        from './TaskHistoryWidget/TaskHistoryWidget'
 export { default as TaskMoreOptionsWidget }
        from './TaskMoreOptionsWidget/TaskMoreOptionsWidget'
+export { default as TaskPropertiesWidget }
+      from './TaskPropertiesWidget/TaskPropertiesWidget'
 export { default as KeyboardShortcutsWidget }
        from './KeyboardShortcutsWidget/KeyboardShortcutsWidget'
 export { default as TaskLocationWidget }
