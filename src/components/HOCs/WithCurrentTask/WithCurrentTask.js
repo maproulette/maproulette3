@@ -199,7 +199,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         }
       }
 
-      if (taskStatus === TaskStatus.skipped && task.taskStatus !== TaskStatus.created) {
+      if (taskStatus === TaskStatus.skipped && task.status !== TaskStatus.created) {
         // Skipping task that already has a status
         return doAfter()
       }
