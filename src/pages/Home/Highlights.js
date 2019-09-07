@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
+import { FormattedMessage } from 'react-intl'
+import messages from './Messages'
 
 class Highlights extends Component {
   render() {
@@ -11,19 +13,19 @@ class Highlights extends Component {
               <figure>
                 <SvgSymbol sym="illustration-map" viewBox="0 0 150 122" />
               </figure>
-              <h3>Find tasks that address efforts important to you</h3>
+              <h3><FormattedMessage {...messages.filterTagIntro} /></h3>
             </li>
             <li>
               <figure>
                 <SvgSymbol sym="illustration-choose" viewBox="0 0 147 200" />
               </figure>
-              <h3>Work at your own level, from novice to expert</h3>
+              <h3><FormattedMessage {...messages.filterDifficultyIntro} /></h3>
             </li>
             <li>
               <figure>
                 <SvgSymbol sym="illustration-tasks" viewBox="0 0 200 171" />
               </figure>
-              <h3>Create tasks for others to help improve map data</h3>
+              <h3><FormattedMessage {...messages.createChallenges} /></h3>
             </li>
           </ul>
         </div>
