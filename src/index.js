@@ -2,14 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { IntlProvider, addLocaleData } from 'react-intl'
-import en from 'react-intl/locale-data/en'
-import fr from 'react-intl/locale-data/fr'
-import es from 'react-intl/locale-data/es'
-import de from 'react-intl/locale-data/de'
 import af from 'react-intl/locale-data/af'
+import bg from 'react-intl/locale-data/bg'
+import cs from 'react-intl/locale-data/cs'
+import de from 'react-intl/locale-data/de'
+import en from 'react-intl/locale-data/en'
+import es from 'react-intl/locale-data/es'
+import fa from 'react-intl/locale-data/fa'
+import fr from 'react-intl/locale-data/fr'
+import gl from 'react-intl/locale-data/gl'
 import ja from 'react-intl/locale-data/ja'
 import ko from 'react-intl/locale-data/ko'
+import nl from 'react-intl/locale-data/nl'
 import pt from 'react-intl/locale-data/pt'
+import ro from 'react-intl/locale-data/ro'
+import ru from 'react-intl/locale-data/ru'
+import tr from 'react-intl/locale-data/tr'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import PiwikReactRouter from 'piwik-react-router'
@@ -52,7 +60,7 @@ if (!_isEmpty(process.env.REACT_APP_MATOMO_URL) &&
 }
 
 // Attach user's current locale to react-intl IntlProvider
-addLocaleData([...en, ...fr, ...es, ...de, ...af, ...ja, ...ko, ...pt])
+addLocaleData([...af, ...bg, ...cs, ...de, ...en, ...es, ...fa, ...fr, ...gl, ...ja, ...ko, ...nl, ...pt, ...ro, ...ru, ...tr])
 const ConnectedIntl = WithUserLocale(props => (
   <IntlProvider key={props.locale} locale={props.locale} messages={props.messages}>
     {props.children}

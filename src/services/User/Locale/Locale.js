@@ -2,25 +2,48 @@ import _map from 'lodash/map'
 import _isString from 'lodash/isString'
 import _fromPairs from 'lodash/fromPairs'
 import messages from './Messages'
+import afMessages from '../../../lang/af.json'
+import bgMessages from '../../../lang/bg.json'
+import csCZMessages from '../../../lang/cs_CZ.json'
+import deMessages from '../../../lang/de.json'
 import enUSMessages from '../../../lang/en-US.json'
 import esMessages from '../../../lang/es.json'
+import faIRMessages from '../../../lang/fa_IR.json'
+import faMessages from '../../../lang/fa.json'
 import frMessages from '../../../lang/fr.json'
-import deMessages from '../../../lang/de.json'
-import afMessages from '../../../lang/af.json'
+import glMessages from '../../../lang/gl.json'
 import jaMessages from '../../../lang/ja.json'
 import koMessages from '../../../lang/ko.json'
-import ptBRMessages from '../../../lang/pt-BR.json'
+import nlMessages from '../../../lang/nl.json'
+import ptBRMessages from '../../../lang/pt_BR.json'
+import ptPTMessages from '../../../lang/pt_PT.json'
+import roMessages from '../../../lang/ro.json'
+import ruRUMessages from '../../../lang/ru_RU.json'
+import trMessages from '../../../lang/tr.json'
+
+
+
 
 // Supported locales.
 export const Locale = Object.freeze({
+  af: 'af',
+  bg: 'bg',
+  csCZ: 'cs_CZ',
+  de: 'de',
   enUS: 'en-US',
   es: 'es',
+  faIR: 'fa_IR',
+  fa: 'fa',
   fr: 'fr',
-  de: 'de',
-  af: 'af',
+  gl: 'gl',
   ja: 'ja',
   ko: 'ko',
-  'pt-BR': 'pt-BR',
+  nl: 'nl',
+  ptBR: 'pt_BR',
+  ptPT: 'pt_PT',
+  ro: 'ro',
+  ruRU: 'ru_RU',
+  tr: 'tr'
 })
 
 /**
@@ -36,14 +59,25 @@ export const isSupportedLocale = function(locale) {
  * files.
  */
 export const translatedMessages = Object.freeze({
+  [Locale.af]: afMessages,
+  [Locale.bg]: bgMessages,
+  [Locale.csCZ]: csCZMessages,
+  [Locale.de]: deMessages,
   [Locale.enUS]: enUSMessages,
   [Locale.es]: esMessages,
+  [Locale.faIR]: faIRMessages,
+  [Locale.fa]: faMessages,
   [Locale.fr]: frMessages,
-  [Locale.de]: deMessages,
-  [Locale.af]: afMessages,
+  [Locale.gl]: glMessages,
   [Locale.ja]: jaMessages,
   [Locale.ko]: koMessages,
-  [Locale["pt-BR"]]: ptBRMessages,
+  [Locale.nl]: nlMessages,
+  [Locale.ptBR]: ptBRMessages,
+  [Locale.ptPT]: ptPTMessages,
+  [Locale.ro]: roMessages,
+  [Locale.ruRu]: ruRUMessages,
+  [Locale.tr]: trMessages,
+  
 })
 
 /**
