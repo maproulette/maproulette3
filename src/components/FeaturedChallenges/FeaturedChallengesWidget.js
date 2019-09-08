@@ -57,7 +57,7 @@ const FeaturedChallengeList = function(props) {
 
   return challengeItems.length > 0 ?
          <ol className="mr-list-reset">{challengeItems}</ol> :
-         <div className="none">No Challenges</div>
+         <div className="none"><FormattedMessage {...messages.header} /></div>
 }
 
 registerWidgetType(WithFeaturedChallenges(FeaturedChallengesWidget), descriptor)

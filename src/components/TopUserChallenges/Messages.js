@@ -12,6 +12,11 @@ export default defineMessages({
   widgetLabel: {
     id: "TopUserChallenges.widget.label",
     defaultMessage: "Your Top Challenges",
-  }
+  },
+  
+  noChallenges: {
+    id: "Admin.VirtualProject.ChallengeList.noChallenges",
+    defaultMessage: "No Challenges",
+  },
 })
 

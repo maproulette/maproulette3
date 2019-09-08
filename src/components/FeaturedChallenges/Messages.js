@@ -8,4 +8,8 @@ export default defineMessages({
     id: "FeaturedChallenges.header",
     defaultMessage: "Featured Challenges",
   },
+  noChallenges: {
+    id: "Admin.VirtualProject.ChallengeList.noChallenges",
+    defaultMessage: "No Challenges",
+  },
 })

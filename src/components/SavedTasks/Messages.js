@@ -11,5 +11,9 @@ export default defineMessages({
   unsave: {
     id: "Task.unsave.control.tooltip",
     defaultMessage: "Stop Tracking",
+  },
+  noTasks: {
+    id: "Admin.Challenge.tasksNone",
+    defaultMessage: "No Tasks",
   }
 })

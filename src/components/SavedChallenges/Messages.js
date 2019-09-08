@@ -11,5 +11,9 @@ export default defineMessages({
   unsave: {
     id: "Challenge.controls.unsave.tooltip",
     defaultMessage: "Unsave Challenge",
-  }
+  },
+  noChallenges: {
+    id: "Admin.VirtualProject.ChallengeList.noChallenges",
+    defaultMessage: "No Challenges",
+  },
 })
