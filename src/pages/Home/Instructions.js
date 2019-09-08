@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { FormattedMessage } from 'react-intl'
+import messages from './Messages'
 
 class Instructions extends Component {
   render() {
@@ -8,25 +10,18 @@ class Instructions extends Component {
         <div className="mr-max-w-3xl mr-mx-auto">
           <div className="mr-max-w-lg">
             <h2 className="md:mr-text-5xl mr-font-normal mr-text-white">
-              Find Your Challenge
+              <FormattedMessage {...messages.instructionsHeader} />
             </h2>
             <p className="md:mr-text-md mr-my-6">
-              MapRoulette has dozens of mapping Challenges that are created by
-              experienced mappers. Each Challenge is about improving OSM in one
-              very specific way. Do you want to add pedestrian crossings? Fix
-              bridges? Add opening times for shops? There’s a challenge for it.
-              Each challenge has many tasks, perhaps even thousands.
+            <FormattedMessage {...messages.instructionsParagraph1} />
             </p>
 
             <p className="md:mr-text-md mr-mb-8">
-              Do as few or as many as you want. If a challenge is too easy or
-              too hard for you, just jump into something else, knowing that
-              every time you click ‘I fixed it!’, you have made a meaningful
-              contribution to the world’s maps.
+            <FormattedMessage {...messages.instructionsParagraph2} />
             </p>
 
             <Link to="/browse/challenges" className="mr-button">
-              Find Challenges
+            <FormattedMessage {...messages.instructionsButton} />
             </Link>
           </div>
         </div>

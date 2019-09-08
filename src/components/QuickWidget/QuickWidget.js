@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-
+import { FormattedMessage } from 'react-intl'
+import messages from './Messages'
 /**
  * QuickWidget makes creation of widgets easier by encapsulating the needed
  * structure for consistent display of common items (titles, header controls,
@@ -22,7 +23,7 @@ export default class QuickWidget extends Component {
            className="mr-card-widget__delete"
            onClick={this.props.removeWidget}
          >
-           Delete Widget
+           <FormattedMessage {...messages.deleteWidget} />
          </button>
         }
 

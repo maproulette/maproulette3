@@ -14,14 +14,21 @@ export default defineMessages({
     defaultMessage: 'Virtual Challenge',
   },
 
+  featured: {
+    id: "ChallengeDetails.Task.fields.featured.label",
+    defaultMessage: "Featured",
+  },
   saved: {
-    id: "Task.fields.saved.label",
+    id: "ChallengeDetails.Task.fields.saved.label",
     defaultMessage: "Saved",
   },
-
-  featured: {
-    id: "Task.fields.featured.label",
-    defaultMessage: "Featured",
+  popular: {
+    id: "ChallengeDetails.Task.fields.popular.label",
+    defaultMessage: "Popular",
+  },
+  newest: {
+    id: "ChallengeDetails.Task.fields.newest.label",
+    defaultMessage: "Newest",
   },
 
   lastTaskRefreshLabel: {

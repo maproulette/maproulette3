@@ -157,7 +157,9 @@ export class WidgetWorkspace extends Component {
     if (this.isEditing(this.props.currentConfiguration)) {
       editNameBox = (
         <React.Fragment>
-          <label className="mr-text-greener mr-mr-2">Layout Name:</label>
+          <label className="mr-text-greener mr-mr-2">
+            <FormattedMessage {...messages.layoutName} />
+          </label>
           <QuickTextBox suppressControls
                         text={this.state.newConfigurationName}
                         setText={this.setNewName}

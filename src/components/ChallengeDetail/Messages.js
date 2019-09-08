@@ -29,6 +29,18 @@ export default defineMessages({
     id: "ChallengeDetails.Task.fields.featured.label",
     defaultMessage: "Featured",
   },
+  saved: {
+    id: "ChallengeDetails.Task.fields.saved.label",
+    defaultMessage: "Saved",
+  },
+  popular: {
+    id: "ChallengeDetails.Task.fields.popular.label",
+    defaultMessage: "Popular",
+  },
+  newest: {
+    id: "ChallengeDetails.Task.fields.newest.label",
+    defaultMessage: "Newest",
+  },
 
   difficulty: {
     id: 'ChallengeDetails.fields.difficulty.label',

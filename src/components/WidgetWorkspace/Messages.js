@@ -44,6 +44,11 @@ export default defineMessages({
     defaultMessage: "Current layout:",
   },
 
+  layoutName: {
+    id: "WidgetWorkspace.labels.layoutName",
+    defaultMessage: "Layout Name:",
+  },
+
   switchTo: {
     id: "WidgetWorkspace.labels.switchTo",
     defaultMessage: "Switch to:",

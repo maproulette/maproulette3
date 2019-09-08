@@ -35,22 +35,22 @@ export class CardChallenge extends Component {
              <ul className="mr-card-challenge__taxonomy">
                {this.props.isSaved &&
                 <li>
-                  <span className="mr-text-pink-light">Saved</span>
+                  <span className="mr-text-pink-light"><FormattedMessage {...messages.saved} /></span>
                 </li>
                }
                {this.props.challenge.featured &&
                 <li>
-                  <span className="mr-text-turquoise">Featured</span>
+                  <span className="mr-text-turquoise"><FormattedMessage {...messages.featured} /></span>
                 </li>
                }
                {this.props.challenge.popular &&
                 <li>
-                  <span className="mr-text-orange">Popular</span>
+                  <span className="mr-text-orange"><FormattedMessage {...messages.popular} /></span>
                 </li>
                }
                {this.props.challenge.newest &&
                 <li>
-                  <span className="mr-text-yellow">Newest</span>
+                  <span className="mr-text-yellow"><FormattedMessage {...messages.newest} /></span>
                 </li>
                }
              </ul>
