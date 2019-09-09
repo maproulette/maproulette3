@@ -1,12 +1,12 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with TaskMoreOptionsWidget
+ * Internationalized messages for use with TaskPropertiesWidget
  */
 export default defineMessages({
   label: {
     id: "Widgets.TaskPropertiesWidget.label",
-    defaultMessage: "Task Properites",
+    defaultMessage: "Task Properties",
   },
 
   title: {
