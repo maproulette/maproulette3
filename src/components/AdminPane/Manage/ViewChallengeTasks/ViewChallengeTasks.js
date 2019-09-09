@@ -15,6 +15,8 @@ import { TaskReviewStatusWithUnset,
 import { TaskPriority,
          messagesByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
+import { TaskStatusColors }
+       from '../../../../services/Task/TaskStatus/TaskStatus'
 import WithBoundedTasks
        from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
@@ -116,18 +118,6 @@ export class ViewChallengeTasks extends Component {
       )
     }
 
-    // Use CSS Modules once supported by create-react-app
-    const statusColors = {
-      [TaskStatus.created]: '#2281C2',       // $status-created-color
-      [TaskStatus.fixed]: '#61CDBB',         // $status-fixed-color
-      [TaskStatus.falsePositive]: '#F1E15B', // $status-falsePositive-color
-      [TaskStatus.skipped]: '#E8A838',       // $status-skipped-color
-      [TaskStatus.deleted]: '#9D6ADC',       // $status-deleted-color
-      [TaskStatus.alreadyFixed]: '#97E3D5',  // $status-alreadyFixed-color
-      [TaskStatus.tooHard]: '#F47560',       // $status-tooHard-color
-      [TaskStatus.disabled]: '#9D6ADC',       // $status-disabled-color
-    }
-
     const statusFilters = _map(TaskStatus, status => (
       <li key={status}>
         <label className="mr-flex mr-items-center">
@@ -192,7 +182,7 @@ export class ViewChallengeTasks extends Component {
             setChallengeOwnerMapBounds={this.props.setChallengeOwnerMapBounds}
             lastBounds={this.props.mapBounds}
             lastZoom={this.props.mapZoom}
-            statusColors={statusColors}
+            statusColors={TaskStatusColors}
             filterOptions={filterOptions}
             monochromaticClusters
             {...this.props} />

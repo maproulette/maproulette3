@@ -33,7 +33,9 @@ export const TaskStatusColors = Object.freeze({
   [TaskStatus.falsePositive]: '#F1E15B',
   [TaskStatus.skipped]: '#E8A838',
   [TaskStatus.tooHard]: '#F47560',
-  [TaskStatus.created]: 'rgba(0, 0, 0, .25)',
+  [TaskStatus.created]: '#2281C2',
+  [TaskStatus.disabled]: '#9D6ADC',
+  [TaskStatus.deleted]: '#9D6ADC',
 })
 
 /**
