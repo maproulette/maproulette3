@@ -716,6 +716,8 @@
   "Widgets.TaskMapWidget.title": "Task",
   "Widgets.TaskMoreOptionsWidget.label": "More Options",
   "Widgets.TaskMoreOptionsWidget.title": "More Options",
+  "Widgets.TaskPropertiesWidget.label": "Task Properties",
+  "Widgets.TaskPropertiesWidget.title": "Task Properties",
   "Widgets.TaskReviewWidget.label": "Task Review",
   "Widgets.TaskReviewWidget.reviewTaskTitle": "Review",
   "Widgets.TaskStatusWidget.label": "Task Status",

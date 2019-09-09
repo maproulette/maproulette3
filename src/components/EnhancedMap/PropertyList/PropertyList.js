@@ -1,5 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
+import classNames from 'classnames'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
@@ -12,6 +13,9 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 const PropertyList = props => {
+  // Default is lightMode -- only do darkMode if the value is present and false
+  const darkMode = props.lightMode === false
+
   const tagInfo = process.env.REACT_APP_TAGINFO_SERVER_URL
 
   if (_isEmpty(props.featureProperties)) {
@@ -31,20 +35,21 @@ const PropertyList = props => {
     const link =
       !_isEmpty(tagInfo) ?
       <a target="_blank" rel="noopener noreferrer" href={`${tagInfo}/keys/${key}`}>{key}</a> :
-      <span className="not-linked">{key}</span>
+      <span className="not-linked mr-text-grey">{key}</span>
 
     return (
       <tr key={key} className="property">
-        <td className="name">{link}</td>
-        <td className="value">{value}</td>
+        <td className={classNames("name", {"mr-border-none mr-pr-3": darkMode})}>{link}</td>
+        <td className={classNames("value", {"mr-border-none mr-pb-1": darkMode})}>{value}</td>
       </tr>
     )
   }))
 
+  const header = <h3>{props.header ? props.header : <FormattedMessage {...messages.title} />}</h3>
   return (
     <div className="feature-properties">
-      <h3>{props.header ? props.header : <FormattedMessage {...messages.title} />}</h3>
-      <table className="property-list table">
+      {!props.hideHeader && header}
+      <table className={classNames("property-list", {"mr-bg-transparent mr-text-white": darkMode, "table": !darkMode})}>
         <tbody>{rows}</tbody>
       </table>
     </div>
