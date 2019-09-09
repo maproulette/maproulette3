@@ -52,6 +52,7 @@ let colors = {
   'off-white': '#FAF7F2',
   black: '#222',
   'black-10': 'rgba(0, 0, 0, .1)',
+  'black-15': 'rgba(0, 0, 0, .15)',
   'black-50': 'rgba(0, 0, 0, .5)',
   grey: '#737373',
   'grey-light': '#BDB8AE',
@@ -85,6 +86,7 @@ let colors = {
   purple: '#8990E5',
   teal: '#6FB3B8',
   rose: '#F89294',
+  'picton-blue': '#50B7E5',
 
   // Username colors
   'indigo-300': 'hsl(272, 49%, 53%)', //'#8B40CD',

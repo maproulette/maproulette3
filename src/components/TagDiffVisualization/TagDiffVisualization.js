@@ -272,7 +272,7 @@ export class TagDiffVisualization extends Component {
         
     const tagNames = tagChanges.map(change => (
       <li
-        className='mr-my-1 mr-flex mr-h-6 mr-items-center'
+        className='mr-border-2 mr-border-transparent mr-my-2 mr-py-3 mr-flex mr-h-6 mr-items-center'
         key={`${change.name}_name`} 
       >
         {changeSymbol(change)} <div
@@ -289,14 +289,15 @@ export class TagDiffVisualization extends Component {
 
     const tagValues = (tagChanges.map(change => (
       <li
-        className={classNames('mr-rounded-sm mr-my-1 mr-h-6 mr-flex mr-items-center', {
-          'mr-bg-teal': change.status === 'changed',
-          'mr-bg-red': change.status === 'removed',
+        className={classNames('mr-border-2 mr-rounded-sm mr-my-2 mr-py-3 mr-h-6 mr-flex mr-items-center', {
+          'mr-border-orange mr-bg-black-15': change.status === 'changed',
+          'mr-border-rosebud mr-bg-black-15': change.status === 'removed',
+          'mr-border-transparent': (change.status !== 'changed' && change.status !== 'removed'),
         })}
         key={`${change.name}_value`}
       >
         <div
-          className="mr-px-2 mr-overflow-x-hidden mr-truncate"
+          className="mr-px-2 mr-overflow-x-hidden mr-truncate mr-text-base"
           title={change.value}
         >
           {change.value}
@@ -304,7 +305,7 @@ export class TagDiffVisualization extends Component {
       </li>
     )))
     tagValues.unshift(
-      <li key='value_header' className='mr-font-bold mr-pb-1 mr-pl-2 mr-h-6'>
+      <li key='value_header' className='mr-text-base mr-font-bold mr-pb-1 mr-pl-2 mr-h-6'>
         <FormattedMessage {...messages.currentLabel} />
       </li>
     )
@@ -312,10 +313,11 @@ export class TagDiffVisualization extends Component {
     const newValues = (tagChanges.map(change => (
       <li
         className={classNames(
-          'mr-rounded-sm mr-my-1 mr-h-6 mr-flex mr-items-center',
-          this.state.editing ? null : {
-            'mr-bg-teal': change.status === 'changed',
-            'mr-bg-green-light': change.status === 'added',
+          'mr-border-2 mr-rounded-sm mr-my-2 mr-py-3 mr-h-6 mr-flex mr-items-center',
+          this.state.editing ? 'mr-border-transparent' : {
+            'mr-border-picton-blue mr-bg-black-15': change.status === 'added',
+            'mr-border-orange mr-bg-black-15': change.status === 'changed',
+            'mr-border-transparent': (change.status !== 'added' && change.status !== 'changed'),
           }
         )}
         key={`${change.name}_newvalue`}
@@ -352,7 +354,7 @@ export class TagDiffVisualization extends Component {
         }
         {!this.state.editing &&
          <div
-           className="mr-px-2 mr-overflow-x-hidden mr-truncate"
+           className="mr-px-2 mr-overflow-x-hidden mr-truncate mr-text-base"
            title={change.newValue}
          >
            {change.newValue}
@@ -361,13 +363,13 @@ export class TagDiffVisualization extends Component {
       </li>
     )))
     newValues.unshift(
-      <li key='newvalue_header' className='mr-font-bold mr-pb-1 mr-pl-2 mr-flex mr-h-6'>
+      <li key='newvalue_header' className='mr-text-base mr-font-bold mr-pb-1 mr-pl-2 mr-flex mr-h-6'>
         <FormattedMessage {...messages.proposedLabel} />
       </li>
     )
 
     return (
-      <div className="mr-bg-blue-dark mr-py-2 mr-rounded-sm">
+      <div>
         {toolbar}
         <div className="mr-flex mr-justify-between">
           <ul className="mr-w-1/3 mr-px-4 mr-border-r-2 mr-border-white-10">
@@ -421,16 +423,16 @@ export const changeSymbol = change => {
   let changeSymbol = null
   switch(change.status) {
     case 'changed':
-      changeSymbol = <div className="mr-min-w-4 mr-flex-shrink-0 mr-text-teal mr-font-bold">&Delta;</div>
+      changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0 mr-text-orange mr-text-lg mr-font-bold">&Delta;</div>
       break
     case 'removed':
-      changeSymbol = <div className="mr-min-w-4 mr-flex-shrink-0 mr-text-red mr-font-bold">&mdash;</div>
+      changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0 mr-text-rosebud mr-text-lg mr-font-bold">&mdash;</div>
       break
     case 'added':
-      changeSymbol = <div className="mr-min-w-4 mr-flex-shrink-0 mr-text-green-light mr-text-lg mr-leading-none">+</div>
+      changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0 mr-text-picton-blue mr-text-3xl mr-leading-none">+</div>
       break
     default:
-      changeSymbol = <div className="mr-min-w-4 mr-flex-shrink-0">&nbsp;</div>
+      changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0">&nbsp;</div>
       break
   }
 
