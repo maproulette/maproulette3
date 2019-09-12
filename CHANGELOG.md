@@ -18,12 +18,15 @@ This project adheres to
 - A "disabled" task status allowing tasks to be disabled without deleting them
 - Widget that displays the current task's properties
 - Additional username colors for use in various table displays and reports
+- Support for nested task-priority rules during challenge setup
+- Review time column in Create & Manage tasks table for challenge managers
 
 ### Fixed
 - Task features improperly communicated to iD editor for selection (#878)
 - Challenge source not passed to iD editor (#846)
 - Minor display issues in task-properties map popup
 - Task status not always set to skipped after skipping a task
+- Metrics widget in Create & Manage not always honoring active filters
 
 
 ## [v3.3.4] - 2019-08-08
