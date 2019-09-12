@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Form.controls.addPriorityRule.label",
     defaultMessage: "Add a Rule",
   },
+
+  addMustachePreviewNote: {
+    id: "Form.controls.addMustachePreview.note",
+    defaultMessage: "Note: all mustache property tags evaluate to empty in preview."
+  }
 })

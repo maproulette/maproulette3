@@ -56,6 +56,7 @@ export const defaultWorkspaceSetup = function() {
  */
 export class ReviewTaskPane extends Component {
   state = {
+    completionResponses: null
   }
 
   componentDidUpdate(prevProps) {
@@ -63,6 +64,17 @@ export class ReviewTaskPane extends Component {
         this.props.location.search !== prevProps.location.search) {
       window.scrollTo(0, 0)
     }
+
+    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+      this.setState({completionResponses: null})
+    }
+  }
+
+  setCompletionResponse = (propertyName, value) => {
+    const responses = this.state.completionResponses ||
+      JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
+    responses[propertyName] = value
+    this.setState({completionResponses: responses})
   }
 
   render() {
@@ -73,6 +85,9 @@ export class ReviewTaskPane extends Component {
         </div>
       )
     }
+
+    const completionResponses = this.state.completionResponses ||
+                                JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
 
     return (
       <div className='task-pane'>
@@ -96,6 +111,9 @@ export class ReviewTaskPane extends Component {
                 </li>
               </ul>
             }
+            setCompletionResponse={this.setCompletionResponse}
+            completionResponses={completionResponses}
+            disableTemplate={true}
         />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">

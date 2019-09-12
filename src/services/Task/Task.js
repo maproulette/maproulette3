@@ -181,10 +181,10 @@ export const releaseTask = function(taskId) {
  * Mark the given task as completed with the given status.
  */
 export const completeTask = function(taskId, challengeId, taskStatus, needsReview,
-                                     tags, suggestedFixSummary, osmComment) {
+                                     tags, suggestedFixSummary, osmComment, completionResponses) {
   return function(dispatch) {
     return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags,
-                            suggestedFixSummary, osmComment)
+                            suggestedFixSummary, osmComment, completionResponses)
   }
 }
 
@@ -449,7 +449,8 @@ export const deleteChallengeTasks = function(challengeId, statuses=null) {
  * @private
  */
 const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null,
-                                  tags = null, suggestedFixSummary = null, osmComment = null) {
+                                  tags = null, suggestedFixSummary = null,
+                                  osmComment = null, completionResponses = null) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
   dispatch(receiveTasks({
@@ -486,7 +487,8 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
     endpoint = new Endpoint(
       api.task.updateStatus,
       {schema: taskSchema(),
-      variables: {id: taskId, status: newStatus}, params}
+      variables: {id: taskId, status: newStatus}, params,
+      json: completionResponses}
     )
   }
 
