@@ -87,6 +87,7 @@ let colors = {
   teal: '#6FB3B8',
   rose: '#F89294',
   'picton-blue': '#50B7E5',
+  'lavender-rose': '#FF98F7',
 
   // Username colors
   'indigo-300': 'hsl(272, 49%, 53%)', //'#8B40CD',

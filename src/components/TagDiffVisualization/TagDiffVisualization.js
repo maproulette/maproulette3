@@ -291,7 +291,7 @@ export class TagDiffVisualization extends Component {
       <li
         className={classNames('mr-border-2 mr-rounded-sm mr-my-2 mr-py-3 mr-h-6 mr-flex mr-items-center', {
           'mr-border-orange mr-bg-black-15': change.status === 'changed',
-          'mr-border-rosebud mr-bg-black-15': change.status === 'removed',
+          'mr-border-lavender-rose mr-bg-black-15': change.status === 'removed',
           'mr-border-transparent': (change.status !== 'changed' && change.status !== 'removed'),
         })}
         key={`${change.name}_value`}
@@ -426,7 +426,7 @@ export const changeSymbol = change => {
       changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0 mr-text-orange mr-text-lg mr-font-bold">&Delta;</div>
       break
     case 'removed':
-      changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0 mr-text-rosebud mr-text-lg mr-font-bold">&mdash;</div>
+      changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0 mr-text-lavender-rose mr-text-lg mr-font-bold">&mdash;</div>
       break
     case 'added':
       changeSymbol = <div className="mr-min-w-5 mr-mr-1 mr-flex-shrink-0 mr-text-picton-blue mr-text-3xl mr-leading-none">+</div>
