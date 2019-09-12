@@ -16,6 +16,10 @@ export default defineMessages({
     id: "Challenge.sort.popularity",
     defaultMessage: "Popular",
   },
+  has_suggested_fixes: {
+    id: "Challenge.sort.suggestedFix",
+    defaultMessage: "Quick Fix",
+  },
   default: {
     id: "Challenge.sort.default",
     defaultMessage: "Default",

@@ -32,6 +32,7 @@ export default class Endpoint {
     this.params = options.params
     this.jsonBody = options.json
     this.formData = options.formData
+    this.expectXMLResponse = options.expectXMLResponse
   }
 
   /**
@@ -48,7 +49,8 @@ export default class Endpoint {
                            this.url(),
                            this.jsonBody,
                            this.formData,
-                           this.normalizationSchema)
+                           this.normalizationSchema,
+                           this.expectXMLResponse)
       case 'DELETE':
         return deleteContent(this.url())
       default:

@@ -12,6 +12,7 @@ export const TASK_STATUS_SKIPPED = 3
 export const TASK_STATUS_DELETED = 4
 export const TASK_STATUS_ALREADY_FIXED = 5
 export const TASK_STATUS_TOO_HARD = 6
+export const TASK_STATUS_DISABLED = 9
 
 export const TaskStatus = Object.freeze({
   created: TASK_STATUS_CREATED,
@@ -21,6 +22,7 @@ export const TaskStatus = Object.freeze({
   deleted: TASK_STATUS_DELETED,
   alreadyFixed: TASK_STATUS_ALREADY_FIXED,
   tooHard: TASK_STATUS_TOO_HARD,
+  disabled: TASK_STATUS_DISABLED,
 })
 
 export const keysByStatus = Object.freeze(_invert(TaskStatus))
@@ -31,7 +33,9 @@ export const TaskStatusColors = Object.freeze({
   [TaskStatus.falsePositive]: '#F1E15B',
   [TaskStatus.skipped]: '#E8A838',
   [TaskStatus.tooHard]: '#F47560',
-  [TaskStatus.created]: 'rgba(0, 0, 0, .25)',
+  [TaskStatus.created]: '#2281C2',
+  [TaskStatus.disabled]: '#9D6ADC',
+  [TaskStatus.deleted]: '#9D6ADC',
 })
 
 /**
@@ -50,7 +54,8 @@ export const allowedStatusProgressions = function(status, includeSelf = false) {
     case TaskStatus.created:
       progressions = new Set([TaskStatus.fixed, TaskStatus.falsePositive,
                               TaskStatus.skipped, TaskStatus.deleted,
-                              TaskStatus.alreadyFixed, TaskStatus.tooHard])
+                              TaskStatus.alreadyFixed, TaskStatus.tooHard,
+                              TaskStatus.disabled])
       break
     case TaskStatus.fixed:
       progressions = new Set()
@@ -65,7 +70,10 @@ export const allowedStatusProgressions = function(status, includeSelf = false) {
                               TaskStatus.tooHard])
       break
     case TaskStatus.deleted:
-      progressions = new Set([TaskStatus.created])
+      progressions = new Set([TaskStatus.created, TaskStatus.disabled])
+      break
+    case TaskStatus.disabled:
+      progressions = new Set([TaskStatus.created, TaskStatus.deleted])
       break
     case TaskStatus.alreadyFixed:
       progressions = new Set()
@@ -100,7 +108,8 @@ export const isFinalStatus = function(status) {
  */
 export const isCompletionStatus = function(status) {
   return status !== TaskStatus.created &&
-         status !== TaskStatus.deleted
+         status !== TaskStatus.deleted &&
+         status !== TaskStatus.disabled
 }
 
 /**
@@ -110,7 +119,8 @@ export const isCompletionStatus = function(status) {
 export const isReviewableStatus = function(status) {
   return status !== TaskStatus.created &&
          status !== TaskStatus.skipped &&
-         status !== TaskStatus.deleted
+         status !== TaskStatus.deleted &&
+         status !== TaskStatus.disabled
 }
 
 /**

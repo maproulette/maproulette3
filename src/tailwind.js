@@ -52,6 +52,7 @@ let colors = {
   'off-white': '#FAF7F2',
   black: '#222',
   'black-10': 'rgba(0, 0, 0, .1)',
+  'black-15': 'rgba(0, 0, 0, .15)',
   'black-50': 'rgba(0, 0, 0, .5)',
   grey: '#737373',
   'grey-light': '#BDB8AE',
@@ -75,6 +76,7 @@ let colors = {
   turquoise: '#17FFF3',
   pink: '#E87CE0',
   'pink-light': '#FFB2F0',
+  rosebud: '#FFA8A8',
   'pink-light-10': 'rgba(255,178,240,0.1)',
   'pink-light-50': 'rgba(255,178,240,0.5)',
   twitter: '#1DA1F2',
@@ -84,14 +86,33 @@ let colors = {
   purple: '#8990E5',
   teal: '#6FB3B8',
   rose: '#F89294',
+  'picton-blue': '#50B7E5',
+  'lavender-rose': '#FF98F7',
 
   // Username colors
-  indigo: '#8B40CD',
-  ocean: '#517ED3',
-  forest: '#3E7D29',
-  cranberry: '#E3558E',
-  aqua: '#34B2BE',
-  tangerine: '#FBAE17',
+  'indigo-300': 'hsl(272, 49%, 53%)', //'#8B40CD',
+  'indigo-500': 'hsl(272, 59%, 53%)', //'#8B40CD',
+  'indigo-700': 'hsl(272, 79%, 53%)', //'#8B40CD',
+  'ocean-300': 'hsl(219, 70%, 77%)', //'#517ED3',
+  'ocean-500': 'hsl(219, 60%, 57%)', //'#517ED3',
+  'ocean-700': 'hsl(219, 80%, 57%)', //'#517ED3',
+  'forest-300': 'hsl(105, 41%, 33%)', //'#3E7D29',
+  'forest-500': 'hsl(105, 51%, 33%)', //'#3E7D29',
+  'forest-700': 'hsl(105, 61%, 43%)', //'#3E7D29',
+  'cranberry-300': 'hsl(336, 62%, 61%)', //'#E3558E',
+  'cranberry-500': 'hsl(336, 72%, 61%)', //'#E3558E',
+  'cranberry-700': 'hsl(336, 92%, 61%)', //'#E3558E',
+  'aqua-300': 'hsl(185, 47%, 47%)', //'#34B2BE',
+  'aqua-500': 'hsl(185, 57%, 47%)', //'#34B2BE',
+  'aqua-700': 'hsl(185, 77%, 47%)', //'#34B2BE',
+  'tangerine-300': 'hsl(40, 97%, 64%)', //'#FBAE17',
+  'tangerine-500': 'hsl(40, 97%, 54%)', //'#FBAE17',
+  'banana-500': 'hsl(51, 100%, 63%)', //'#FFE441'
+  'banana-700': 'hsl(51, 90%, 53%)', //'#FFE441'
+  'mint-300': 'hsl(131, 58%, 71%)', //'#7DEF91',
+  'mint-500': 'hsl(131, 78%, 71%)', //'#7DEF91',
+  'cotton-candy-500': 'hsl(312, 100%, 85%)', //'#FFB2F0'
+  'cotton-candy-700': 'hsl(312, 90%, 80%)', //'#FFB2F0'
 }
 
 module.exports = {
@@ -529,6 +550,7 @@ module.exports = {
 
   minWidth: {
     '0': '0',
+    '4': '1rem',
     '5': '1.25rem',
     '6': '2rem',
     '8': '2.5rem',
@@ -538,6 +560,7 @@ module.exports = {
     '30': '7.5rem',
     '48': '12rem',
     '60': '15rem',
+    '102': '24rem',
     auto: 'auto',
     full: '100%',
     '1/2': '50vw',
@@ -699,6 +722,7 @@ module.exports = {
     '16': '4rem',
     '20': '5rem',
     '24': '6rem',
+    '31': '7.75rem',
     '32': '8rem',
   },
 
@@ -779,6 +803,7 @@ module.exports = {
   zIndex: {
     auto: 'auto',
     '0': 0,
+    '5': 5,
     '10': 10,
     '20': 20,
     '30': 30,

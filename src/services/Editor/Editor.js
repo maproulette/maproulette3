@@ -3,6 +3,7 @@ import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
 import _find from 'lodash/find'
 import _invert from 'lodash/invert'
+import _get from 'lodash/get'
 import RequestStatus from '../Server/RequestStatus'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import { toLatLngBounds  } from '../MapBounds/MapBounds'
@@ -62,7 +63,7 @@ export const editorOpened = function(editor, taskId, status=RequestStatus.succes
 }
 
 // async action creators
-export const editTask = function(editor, task, mapBounds) {
+export const editTask = function(editor, task, mapBounds, options) {
   return function(dispatch) {
     if (isWebEditor(editor)) {
       // For web editors, if we've already opened an editor window, close it so
@@ -73,10 +74,10 @@ export const editTask = function(editor, task, mapBounds) {
       }
 
       if (editor === ID) {
-        editorWindowReference = window.open(constructIdURI(task, mapBounds))
+        editorWindowReference = window.open(constructIdURI(task, mapBounds, options))
       }
       else if (editor === LEVEL0) {
-        editorWindowReference = window.open(constructLevel0URI(task, mapBounds))
+        editorWindowReference = window.open(constructLevel0URI(task, mapBounds, options))
       }
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
@@ -156,26 +157,32 @@ export const taskCenterPoint = function(mapBounds, task) {
 /**
  * Builds a Id editor URI for editing of the given task
  */
-export const constructIdURI = function(task, mapBounds) {
+export const constructIdURI = function(task, mapBounds, options) {
   const baseUriComponent =
-    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
+    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id&`
 
   const centerPoint = taskCenterPoint(mapBounds, task)
   const mapUriComponent =
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
 
-  const idUriComponent = "id=" + osmObjectParams(task, true)
+  const selectedEntityComponent = osmObjectParams(task, false, '=', '&')
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
+  const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
 
-  return baseUriComponent +
-         [idUriComponent, mapUriComponent, commentUriComponent].join('&')
+  const photoOverlayComponent =
+    _get(options, 'photoOverlay') ? "photo_overlay=" + options.photoOverlay : null;
+
+  return baseUriComponent + _compact(
+    [mapUriComponent, commentUriComponent, sourceComponent,
+      photoOverlayComponent, selectedEntityComponent]
+  ).join('&')
 }
 
 /**
  * Builds a Level0 editor URI for editing of the given task
  */
-export const constructLevel0URI = function(task, mapBounds) {
+export const constructLevel0URI = function(task, mapBounds, options) {
   const baseUriComponent =
     `${process.env.REACT_APP_LEVEL0_EDITOR_SERVER_URL}?`
 
@@ -193,12 +200,18 @@ export const constructLevel0URI = function(task, mapBounds) {
 }
 
 /**
- * Extracts osm identifiers from the given task's features and returns
- * them as a comma-separated string. Features with missing osm ids are
- * skipped, and an empty string is returned if the task has no features
- * or none of its features have osm ids
+ * Extracts osm identifiers from the given task's features and returns them as
+ * a comma-separated string by default. Features with missing osm ids are
+ * skipped, and an empty string is returned if the task has no features or none
+ * of its features have osm ids
+ *
+ * To support varying formats required by different editors, the output string
+ * can optionally be customized with options that control whether the entity
+ * type is abbreviated or not, a separator character to be used between
+ * the type and osm id, and the character used to join together multiple
+ * entities
  */
-export const osmObjectParams = function(task, abbreviated=false) {
+export const osmObjectParams = function(task, abbreviated=false, entitySeparator='', joinSeparator=',') {
   let objects = []
   if (task.geometries && task.geometries.features) {
     objects = _compact(task.geometries.features.map(feature => {
@@ -209,19 +222,19 @@ export const osmObjectParams = function(task, abbreviated=false) {
 
       switch (feature.geometry.type) {
         case 'Point':
-          return `${abbreviated ? 'n' : 'node'}${osmId}`
+          return `${abbreviated ? 'n' : 'node'}${entitySeparator}${osmId}`
         case 'LineString':
         case 'Polygon':
-          return `${abbreviated ? 'w' : 'way'}${osmId}`
+          return `${abbreviated ? 'w' : 'way'}${entitySeparator}${osmId}`
         case 'MultiPolygon':
-          return `${abbreviated ? 'r' : 'relation'}${osmId}`
+          return `${abbreviated ? 'r' : 'relation'}${entitySeparator}${osmId}`
         default:
           return null
       }
     }))
   }
 
-  return objects.join(',')
+  return objects.join(joinSeparator)
 }
 
 /**

@@ -18,7 +18,7 @@
           display: none;
         }
 
-        .field {
+        .field:not(.nested-rule-group) {
           display: inline-block;
           width: auto;
           margin-right: 1em;
@@ -335,4 +335,9 @@ form.rjsf {
     font-size: $size-8;
     color: $danger;
   }
+}
+
+.nested-rule-group > fieldset {
+  display: flex;
+  flex-direction: column;
 }

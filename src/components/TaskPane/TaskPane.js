@@ -12,6 +12,7 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
+import WithSuggestedFix from '../HOCs/WithSuggestedFix/WithSuggestedFix'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import VirtualChallengeNameLink
@@ -35,19 +36,29 @@ export const defaultWorkspaceSetup = function() {
     label: "Task Completion",
     widgets: [
       widgetDescriptor('TaskInstructionsWidget'),
+      widgetDescriptor('TagDiffWidget'),
       widgetDescriptor('TaskMapWidget'),
       widgetDescriptor('TaskCompletionWidget'),
       widgetDescriptor('TaskLocationWidget'),
     ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4},
-      {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 19},
+      {i: generateWidgetId(), x: 4, y: 0, w: 8, h: 5},
+      {i: generateWidgetId(), x: 4, y: 5, w: 8, h: 19},
       {i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7},
       {i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8},
     ],
-    excludeWidgets: [
+    permanentWidgets: [ // Cannot be removed from workspace
+      'TaskMapWidget',
+      'TaskCompletionWidget',
+      'TagDiffWidget',
+    ],
+    excludeWidgets: [ // Cannot be added to workspace
       'TaskReviewWidget',
-    ]
+    ],
+    conditionalWidgets: [ // conditionally displayed
+      'TagDiffWidget',
+    ],
   }
 }
 
@@ -73,9 +84,11 @@ export class TaskPane extends Component {
    * WithCurrentTask, but we intercept the call so that we can manage our
    * transition animation as the task prepares to complete.
    */
-  completeTask = (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview, requestedNextTask) => {
+  completeTask = (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
+                  needsReview, requestedNextTask, osmComment, tagEdits) => {
     this.setState({completingTask: task.id})
-    this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview, requestedNextTask)
+    this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
+                            needsReview, requestedNextTask, osmComment, tagEdits)
   }
 
   clearCompletingTask = () => {
@@ -165,7 +178,9 @@ TaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    injectIntl(TaskPane),
+    WithSuggestedFix(
+      injectIntl(TaskPane)
+    ),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup

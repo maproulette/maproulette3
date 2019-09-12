@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Widgets.TaskCompletionWidget.inspectTitle",
     defaultMessage: "Inspect",
   },
+
+  suggestedFixTitle: {
+    id: "Widgets.TaskCompletionWidget.suggestedFixTitle",
+    defaultMessage: "Proposed Changes",
+  },
 })

@@ -49,10 +49,6 @@ export class TaskConfirmationModal extends Component {
                                           this.handleKeyboardShortcuts)
   }
 
-  handleComment = (event) => {
-    this.props.setComment(event.target.value)
-  }
-
   handleAddTag = (value) => {
     this.props.setTags(!this.props.tags ? value : (this.props.tags + "," + value))
   }
@@ -64,10 +60,12 @@ export class TaskConfirmationModal extends Component {
   render() {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
     const loadingNearby = this.props.loadBy === TaskLoadMethod.proximity
+    const applyingSuggestedFix = this.props.task.suggestedFix && this.props.status === TaskStatus.fixed
 
     return (
       <External>
         <Modal
+          contentClassName="mr-pb-6"
           wide={loadingNearby && !reviewConfirmation}
           narrow={!loadingNearby && !reviewConfirmation}
           medium={reviewConfirmation}
@@ -82,7 +80,7 @@ export class TaskConfirmationModal extends Component {
                 <SvgSymbol
                   sym="illustration-choose"
                   viewBox="0 0 147 200"
-                  className="mr-h-40 mr-max-w-40"
+                  className={applyingSuggestedFix ? "mr-h-30" : "mr-h-40"}
                 />
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
@@ -97,7 +95,7 @@ export class TaskConfirmationModal extends Component {
                     }
 
                   </h2>
-                  {this.props.inReview ?
+                  {this.props.inReview &&
                     <div
                       className={classNames(
                         "mr-uppercase mr-tracking-wide",
@@ -105,7 +103,9 @@ export class TaskConfirmationModal extends Component {
                       )}
                     >
                       <FormattedMessage {...messagesByReviewStatus[this.props.status]} />
-                    </div> :
+                    </div>
+                  }
+                  {!this.props.inReview && !applyingSuggestedFix &&
                     <div
                       className={classNames(
                         "mr-uppercase mr-tracking-wide",
@@ -116,15 +116,44 @@ export class TaskConfirmationModal extends Component {
                     </div>
                   }
 
-                  <div className="mr-mt-2">
+                  {applyingSuggestedFix &&
+                   <React.Fragment>
+                     <p className="mr-my-4 mr-text-grey-light mr-text-sm">
+                       <FormattedMessage
+                         {...messages.osmUploadNotice }
+                       />
+                     </p>
+
+                     <div className="mr-text-base mr-mt-2 mr-text-yellow">
+                       <FormattedMessage {...messages.osmCommentHeader} />
+                     </div>
+
+                     <div>
+                       <textarea
+                         ref={this.commentInputRef}
+                         className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-mt-1"
+                         rows={2}
+                         cols="1"
+                         value={this.props.osmComment}
+                        onChange={e => this.props.setOSMComment(e.target.value)}
+                       />
+                     </div>
+                   </React.Fragment>
+                  }
+                  {applyingSuggestedFix &&
+                     <div className="mr-text-base mr-mt-4 mr-text-yellow">
+                       <FormattedMessage {...messages.mrCommentHeader} />
+                     </div>
+                  }
+                  <div className={classNames({"mr-mt-2": !applyingSuggestedFix})}>
                     <textarea
                       ref={this.commentInputRef}
-                      className="mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-4 mr-mt-6"
-                      rows={4}
+                      className={classNames("mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3", applyingSuggestedFix ? 'mr-mt-1' : 'mr-mt-6')}
+                      rows={applyingSuggestedFix ? 2 : 4}
                       cols="1"
-                      placeholder={this.props.intl.formatMessage(messages.placeholder)}
+                      placeholder={applyingSuggestedFix ? '' : this.props.intl.formatMessage(messages.placeholder)}
                       value={this.props.comment}
-                      onChange={this.handleComment}
+                      onChange={e => this.props.setComment(e.target.value)}
                     />
                     <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
                                          handleAddTag={this.handleAddTag}
@@ -308,6 +337,5 @@ export class TaskConfirmationModal extends Component {
     )
   }
 }
-
 
 export default TaskConfirmationModal

@@ -33,11 +33,16 @@ export default {
   osm: {
     requestTooLarge: messages.osmRequestTooLarge,
     bandwidthExceeded: messages.osmBandwidthExceeded,
+    elementMissing: messages.osmElementMissing,
     fetchFailure: messages.osmFetchFailure,
   },
 
   mapillary: {
     fetchFailure: messages.mapillaryFetchFailure,
+  },
+
+  nominatim: {
+    fetchFailure: messages.nominatimFetchFailure,
   },
 
   clusteredTask: {

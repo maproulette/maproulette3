@@ -75,6 +75,10 @@ export default defineMessages({
     id: 'Errors.osm.bandwidthExceeded',
     defaultMessage: "OpenStreetMap allowed bandwidth exceeded",
   },
+  osmElementMissing: {
+    id: 'Errors.osm.elementMissing',
+    defaultMessage: "Element not found on OpenStreetMap server",
+  },
   osmFetchFailure: {
     id: 'Errors.osm.fetchFailure',
     defaultMessage: "Unable to fetch data from OpenStreetMap",
@@ -83,6 +87,11 @@ export default defineMessages({
   mapillaryFetchFailure: {
     id: 'Errors.mapillary.fetchFailure',
     defaultMessage: "Unable to fetch data from Mapillary",
+  },
+
+  nominatimFetchFailure: {
+    id: 'Errors.nominatim.fetchFailure',
+    defaultMessage: "Unable to fetch data from Nominatim",
   },
 
   clusteredTaskFetchFailure: {

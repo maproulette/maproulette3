@@ -96,7 +96,7 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
         dispatch(receiveReviewMetrics(normalizedResults[0], RequestStatus.success))
       }
 
-      return normalizedResults
+      return normalizedResults[0]
     }).catch((error) => {
       console.log(error.response || error)
     })
@@ -247,6 +247,9 @@ export const setupFilterSearchParameters = (filters, boundingBox, savedChallenge
   }
   if (filters.status && filters.status !== "all") {
     searchParameters.tStatus = filters.status
+  }
+  if (filters.priorities && filters.priorities !== "all") {
+    searchParameters.priorities = filters.priorities
   }
   if (filters.reviewStatus && filters.reviewStatus !== "all") {
     searchParameters.trStatus = filters.reviewStatus

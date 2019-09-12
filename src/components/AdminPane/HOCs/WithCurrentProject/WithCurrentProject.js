@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 import { denormalize } from 'normalizr'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
+import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
 import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _map from 'lodash/map'
-import _indexOf from 'lodash/indexOf'
 import _sortBy from 'lodash/sortBy'
 import { fetchProject,
          fetchProjectActivity } from '../../../../services/Project/Project'
@@ -75,8 +75,10 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
     challengeProjects = (projectId, props) => {
       const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
       return _filter(allChallenges, (challenge) => {
-                        return challenge.parent === projectId ||
-                          _indexOf(challenge.virtualParents, projectId) !== -1
+                      return challenge.parent === projectId ||
+                        _find(challenge.virtualParents, (vp) => {
+                          return (_isObject(vp) ? vp.id === projectId : vp === projectId)
+                        })
                     })
     }
 

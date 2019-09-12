@@ -54,6 +54,11 @@ export default defineMessages({
     defaultMessage: "Reviewed On",
   },
 
+  reviewDurationLabel: {
+    id: "Admin.fields.reviewDuration.label",
+    defaultMessage: "Review Time",
+  },
+
   commentsColumnLabel: {
     id: "Admin.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",

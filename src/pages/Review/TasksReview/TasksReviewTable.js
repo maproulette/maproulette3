@@ -432,18 +432,10 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
             </div>
         }
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-          if (row._original.reviewedBy.id !== props.user.id) {
-            action =
-              <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
-                <FormattedMessage {...messages.resolveTaskLabel} />
-              </div>
-          }
-          else {
-            action =
-              <span className="mr-text-grey-light">
-                <FormattedMessage {...messages.resolveTaskLabel}/>
-              </span>
-          }
+          action =
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+              <FormattedMessage {...messages.resolveTaskLabel} />
+            </div>
         }
       }
 
@@ -459,9 +451,18 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     sortable: false,
     maxWidth: 110,
     Cell: ({row}) =>{
+      let linkTo = `/challenge/${row._original.parent.id}/task/${row.id}`
+      let message = <FormattedMessage {...messages.viewTaskLabel} />
+
+      // The mapper needs to rereview a contested task.
+      if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+        linkTo += "/review"
+        message = <FormattedMessage {...messages.resolveTaskLabel} />
+      }
+
       return <div className="row-controls-column">
-        <div onClick={() => props.history.push(`/challenge/${row._original.parent.id}/task/${row.id}`, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
-          <FormattedMessage {...messages.viewTaskLabel} />
+        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+          {message}
         </div>
       </div>
     }
@@ -474,11 +475,20 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     minWidth: 90,
     maxWidth: 120,
     Cell: ({row}) =>{
+      let linkTo = `/challenge/${row._original.parent.id}/task/${row.id}`
+      let message = row._original.reviewStatus === TaskReviewStatus.rejected ?
+                        <FormattedMessage {...messages.fixTaskLabel} /> :
+                        <FormattedMessage {...messages.viewTaskLabel} />
+
+      // The mapper needs to rereview a contested task.
+      if (row._original.reviewStatus === TaskReviewStatus.disputed) {
+        linkTo += "/review"
+        message = <FormattedMessage {...messages.resolveTaskLabel} />
+      }
+
       return <div className="row-controls-column">
-        <Link to={`/challenge/${row._original.parent.id}/task/${row.id}`}>
-          {row._original.reviewStatus === 2 ?
-              <FormattedMessage {...messages.fixTaskLabel} /> :
-              <FormattedMessage {...messages.viewTaskLabel} /> }
+        <Link to={linkTo}>
+          {message}
         </Link>
       </div>
     }

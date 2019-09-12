@@ -22,7 +22,7 @@ const descriptor = {
   defaultHeight: 7,
 }
 
-const ChallengeProgressWithMetrics = WithChallengeMetrics(ChallengeProgress)
+const ChallengeProgressWithMetrics = WithChallengeMetrics(ChallengeProgress, true)
 
 export default class CompletionProgressWidget extends Component {
   render() {

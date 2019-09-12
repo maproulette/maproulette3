@@ -157,14 +157,13 @@ export class AsManager extends AsEndUser {
       }
 
       _each(challenge.virtualParents, (vp) => {
-        if (projectIds.indexOf(vp) !== -1) {
+        if (projectIds.indexOf(_isObject(vp) ? vp.id : vp) !== -1) {
           if (!projectChallenges.has(challenge)) {
             projectChallenges.add(challenge)
           }
         }
       })
     })
-
     return [...projectChallenges]
   }
 }

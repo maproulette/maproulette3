@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
@@ -77,14 +76,14 @@ export class InspectTaskControls extends Component {
     const manager = AsManager(this.props.user)
     if (!_get(this.props, 'task.parent.parent')) {
       return (
-        <div className={classNames("inspect-task-controls", this.props.className)}>
+        <div className="inspect-task-controls">
           <BusySpinner />
         </div>
       )
     }
 
     return (
-      <div className={classNames("inspect-task-controls", this.props.className)}>
+      <div className="inspect-task-controls">
         <UserEditorSelector {...this.props} className="mr-mb-4" />
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           <TaskEditControl pickEditor={this.pickEditor}

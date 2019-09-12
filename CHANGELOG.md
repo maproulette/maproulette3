@@ -7,6 +7,28 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.4] - 2019-09-12
+### Added
+- "Quick Fix" challenges that include proposed fixes for tasks
+- Nominatum search control on various maps
+- Improved Mapillary integration with iD editor (#845)
+- Allow re-review of contested task reviews by original reviewer
+- Improve UI of task-status bulk-update control for challenge managers
+- Include virtual projects in project searches from challenge discovery
+- A "disabled" task status allowing tasks to be disabled without deleting them
+- Widget that displays the current task's properties
+- Additional username colors for use in various table displays and reports
+- Support for nested task-priority rules during challenge setup
+- Review time column in Create & Manage tasks table for challenge managers
+
+### Fixed
+- Task features improperly communicated to iD editor for selection (#878)
+- Challenge source not passed to iD editor (#846)
+- Minor display issues in task-properties map popup
+- Task status not always set to skipped after skipping a task
+- Metrics widget in Create & Manage not always honoring active filters
+
+
 ## [v3.3.4] - 2019-08-08
 ### Added
 - Support for system notices (e.g. notices of upcoming maintenance)
