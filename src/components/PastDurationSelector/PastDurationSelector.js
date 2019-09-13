@@ -8,6 +8,7 @@ import messages from './Messages'
 import './PastDurationSelector.scss'
 
 export const ALL_TIME = -1
+export const CURRENT_MONTH = 0
 
 /**
  * PastDurationSelector renders an unmanaged dropdown button that can be used
@@ -51,10 +52,13 @@ const DurationButton = function(props) {
     >
       <span className="mr-flex">
         <span className="mr-mr-2">
-          {props.currentMonthsPast >= 0 &&
+          {props.currentMonthsPast > CURRENT_MONTH &&
                  <FormattedMessage {...messages.pastMonthsOption}
                             values={{months: props.currentMonthsPast}} />}
-          {props.currentMonthsPast < 0 &&
+          {props.currentMonthsPast === CURRENT_MONTH &&
+                 <FormattedMessage {...messages.currentMonthOption}
+                            values={{months: props.currentMonthsPast}} />}
+          {props.currentMonthsPast <= ALL_TIME &&
                  <FormattedMessage {...messages.allTimeOption}
                             values={{months: props.currentMonthsPast}} />}
         </span>
@@ -73,8 +77,9 @@ const ListDurationItems = function(props) {
     <li key={months}>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a onClick={() => props.pickDuration(months, props.closeDropdown)}>
-        {months >= 0  && <FormattedMessage {...messages.pastMonthsOption} values={{months}} />}
-        {months < 0  && <FormattedMessage {...messages.allTimeOption} />}
+        {months > CURRENT_MONTH  && <FormattedMessage {...messages.pastMonthsOption} values={{months}} />}
+        {months === CURRENT_MONTH  && <FormattedMessage {...messages.currentMonthOption} />}
+        {months <= ALL_TIME  && <FormattedMessage {...messages.allTimeOption} />}
       </a>
     </li>
   ))
