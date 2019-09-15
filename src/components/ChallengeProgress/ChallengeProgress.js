@@ -86,7 +86,7 @@ export class ChallengeProgress extends Component {
       [localizedStatuses.falsePositive]: TaskStatusColors[TaskStatus.falsePositive],
       [localizedStatuses.skipped]: TaskStatusColors[TaskStatus.skipped],
       [localizedStatuses.tooHard]: TaskStatusColors[TaskStatus.tooHard],
-      [availableLabel]: TaskStatusColors[TaskStatus.created],
+      [availableLabel]: 'rgba(0, 0, 0, .25)',
     }
 
     const completionData = {
