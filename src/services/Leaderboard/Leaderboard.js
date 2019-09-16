@@ -1,10 +1,13 @@
 import { defaultRoutes as api } from '../Server/Server'
 import _isArray from 'lodash/isArray'
 import Endpoint from '../Server/Endpoint'
+import startOfMonth from 'date-fns/start_of_month'
 
 // Default leaderboard count
 export const DEFAULT_LEADERBOARD_COUNT = 10
 
+// Current Month duration
+export const CURRENT_MONTH = 0
 
 /**
  * Retrieve leaderboard data from the server for the given date range and
@@ -46,7 +49,13 @@ export const fetchLeaderboardForUser = function(userId, bracket=0, numberMonths=
 const initializeLeaderboardParams = function (params, numberMonths,
                                               forProjects, forChallenges,
                                               forUsers, forCountries) {
-  params.monthDuration = numberMonths
+  if (numberMonths === CURRENT_MONTH) {
+    params.start = startOfMonth(new Date()).toISOString()
+    params.end = new Date().toISOString()
+  }
+  else {
+    params.monthDuration = numberMonths
+  }
 
   if (_isArray(forProjects)) {
     params.projectIds = forProjects.join(',')

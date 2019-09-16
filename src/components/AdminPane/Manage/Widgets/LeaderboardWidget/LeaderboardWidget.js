@@ -8,6 +8,8 @@ import ChallengeOwnerLeaderboard
        from '../../ChallengeOwnerLeaderboard/ChallengeOwnerLeaderboard'
 import PastDurationSelector
        from '../../../../PastDurationSelector/PastDurationSelector'
+import { CURRENT_MONTH }
+       from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
 import './LeaderboardWidget.scss'
@@ -40,12 +42,12 @@ export default class LeaderboardWidget extends Component {
   }
 
   render() {
-    const monthsPast = this.props.widgetConfiguration.monthsPast || 1
+    const monthsPast = this.props.widgetConfiguration.monthsPast
 
     const selector =
       <PastDurationSelector
         className="mr-button mr-button--blue mr-mr-8"
-        pastMonthsOptions={[1, 3, 6, 12]}
+        pastMonthsOptions={[CURRENT_MONTH, 1, 3, 6, 12]}
         currentMonthsPast={monthsPast}
         selectDuration={this.setMonthsPast}
       />
