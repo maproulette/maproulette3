@@ -62,6 +62,11 @@ const ConnectedIntl = WithUserLocale(props => (
 // Setup the redux store
 const store = initializeStore()
 
+// Start with a default challenge search so users can easily 'load more'
+// results if desired
+const defaultSearch = {}
+store.dispatch(setCompleteSearch('challenges', defaultSearch))
+
 // Check if the user is already logged in
 store.dispatch(setCheckingLoginStatus())
 store.dispatch(
@@ -79,10 +84,6 @@ store.dispatch(pushFetchChallenges(-1))
 store.dispatch(
   fetchPreferredChallenges(5) // 5 each of new, popular, and featured
 ).then(() => {
-  // Start with a default challenge search so users can easily 'load more'
-  // results if desired
-  const defaultSearch = {}
-  store.dispatch(setCompleteSearch('challenges', defaultSearch))
   store.dispatch(performChallengeSearch(defaultSearch))
 }).catch(
   error => console.log(error)

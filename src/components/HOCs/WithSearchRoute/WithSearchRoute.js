@@ -177,7 +177,7 @@ export const updateBoundsOnRoute = (props, searchGroup, bounds, locationFilter, 
   // challenge search results. (ie. 'withinMapBounds' or 'intersectingMapBounds')
   if (!props.isLoading && _get(props, `currentSearch.${searchGroup}`)) {
     if ( locationFilter === 'withinMapBounds' || locationFilter === 'intersectingMapBounds') {
-      addBoundsToRoute(props.history, 'challengeSearch', bounds)
+      addBoundsToRoute(props.history, 'challengeSearch', bounds, locationFilter)
     }
     else if (removeIfNeeded) {
       removeSearchCriteriaFromRoute(props.history, ['challengeSearch'])
@@ -185,9 +185,9 @@ export const updateBoundsOnRoute = (props, searchGroup, bounds, locationFilter, 
   }
 }
 
-export const addBoundsToRoute = (history, boundsType, bounds) => {
+export const addBoundsToRoute = (history, boundsType, bounds, locationFilter) => {
   addSearchCriteriaToRoute(history,
-    {[boundsType]: `${fromLatLngBounds(bounds).join(',')}`})
+    {[boundsType]: `${fromLatLngBounds(bounds).join(',')}`, location: locationFilter})
 }
 
 export const removeSearchCriteriaFromRoute = (history, criteriaKeys) => {
