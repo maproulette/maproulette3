@@ -159,7 +159,7 @@ export const taskCenterPoint = function(mapBounds, task) {
  */
 export const constructIdURI = function(task, mapBounds, options) {
   const baseUriComponent =
-    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id&`
+    `${process.env.REACT_APP_ID_EDITOR_SERVER_URL}?editor=id#`
 
   const centerPoint = taskCenterPoint(mapBounds, task)
   const mapUriComponent =
