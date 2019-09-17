@@ -8,4 +8,9 @@ export default defineMessages({
     id: "Widgets.TaskNearbyMap.currentTaskTooltip",
     defaultMessage: "Current Task",
   },
+
+  noTasksAvailableLabel: {
+    id: "Widgets.TaskNearbyMap.noTasksAvailable.label",
+    defaultMessage: "No nearby tasks are available.",
+  },
 })
