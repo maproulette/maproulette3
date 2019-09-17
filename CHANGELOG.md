@@ -7,7 +7,17 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.4] - 2019-09-12
+## [v3.4.1] - 2019-09-17
+### Added
+- Current Month option to leaderboard (#885)
+
+### Fixed
+- iD editor not always opening to task location (#892)
+- inadvertently modified challenge-progress bar background color
+- map bounds not honored from pasted challenge search URL
+
+
+## [v3.4.0] - 2019-09-12
 ### Added
 - "Quick Fix" challenges that include proposed fixes for tasks
 - Nominatum search control on various maps
@@ -130,7 +140,7 @@ This project adheres to
 - Map layers dropdown now activated/deactivated on click instead of hover
 
 
-## [v3.3] - 2019-04-16
+## [v3.3.0] - 2019-04-16
 ### Added
 - Task reviews
 - In-app notifications with optional emails
