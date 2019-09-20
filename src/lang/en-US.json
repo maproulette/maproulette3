@@ -670,6 +670,7 @@
   "Task.management.controls.inspect.label": "Inspect",
   "Task.management.controls.modify.label": "Modify",
   "Widgets.TaskNearbyMap.currentTaskTooltip": "Current Task",
+  "Widgets.TaskNearbyMap.noTasksAvailable.label": "No nearby tasks are available.",
   "Challenge.controls.taskLoadBy.label": "Load tasks by:",
   "Task.controls.track.label": "Track this Task",
   "Task.controls.untrack.label": "Stop tracking this Task",
