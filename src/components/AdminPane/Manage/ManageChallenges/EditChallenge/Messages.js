@@ -161,7 +161,7 @@ export default defineMessages({
   categoryDescription: {
     id: 'Admin.EditChallenge.form.category.description',
     defaultMessage: "Selecting an appropriate high-level category for your " +
-      "challenge can aid users in quickly discovering challenges that " + 
+      "challenge can aid users in quickly discovering challenges that " +
       "match their interests. Choose the Other category if nothing seems " +
       "appropriate.",
   },
@@ -422,5 +422,17 @@ will not be able to make sense of it.
   customBasemapDescription: {
     id: "Admin.EditChallenge.form.customBasemap.description",
     defaultMessage: "Insert a custom base map URL here. E.g. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy}",
+  },
+
+  exportablePropertiesLabel: {
+    id: 'Admin.EditChallenge.form.exportableProperties.label',
+    defaultMessage: "Properties to export in CSV",
+  },
+
+  exportablePropertiesDescription: {
+    id: 'Admin.EditChallenge.form.exportableProperties.description',
+    defaultMessage: "Any properties included in this comma separated list " +
+      "will be exported as a column in the CSV export and populated with the " +
+      "first matching feature property from each task.",
   },
 })

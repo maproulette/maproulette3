@@ -80,6 +80,10 @@ export const jsSchema = intl => {
         enumNames: _map(defaultBasemapChoices, 'name'),
         default: ChallengeBasemap.none.toString(),
       },
+      exportableProperties: {
+        title: intl.formatMessage(messages.exportablePropertiesLabel),
+        type: "string",
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -143,6 +147,10 @@ export const uiSchema = intl => ({
   customBasemap: {
     "ui:emptyValue": "",
     "ui:help": intl.formatMessage(messages.customBasemapDescription, {dummy: ''}),
+  },
+  exportableProperties: {
+    "ui:emptyValue": "",
+    "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),
   },
 })
 
