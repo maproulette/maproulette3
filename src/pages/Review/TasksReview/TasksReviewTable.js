@@ -480,12 +480,6 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
                         <FormattedMessage {...messages.fixTaskLabel} /> :
                         <FormattedMessage {...messages.viewTaskLabel} />
 
-      // The mapper needs to rereview a contested task.
-      if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-        linkTo += "/review"
-        message = <FormattedMessage {...messages.resolveTaskLabel} />
-      }
-
       return <div className="row-controls-column">
         <Link to={linkTo}>
           {message}
