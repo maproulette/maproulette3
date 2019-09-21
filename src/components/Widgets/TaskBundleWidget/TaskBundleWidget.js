@@ -209,6 +209,22 @@ const BuildBundle = props => {
     )
   }
 
+  if (props.task.suggestedFix) {
+    return (
+      <div className="mr-text-base">
+        <FormattedMessage {...messages.noSuggestedFixes} />
+      </div>
+    )
+  }
+
+  if (props.virtualChallenge || _isFinite(props.virtualChallengeId)) {
+    return (
+      <div className="mr-text-base">
+        <FormattedMessage {...messages.noVirtualChallenges} />
+      </div>
+    )
+  }
+
   // Force the current task to always show as selected
   const selectedTasks = new Map(props.selectedTasks)
   selectedTasks.set(props.task.id, props.task)

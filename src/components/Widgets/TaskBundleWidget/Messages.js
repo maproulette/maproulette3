@@ -79,4 +79,14 @@ export default defineMessages({
     defaultMessage: "You are working on a single task. " +
                     "Task bundles cannot be created on this step.",
   },
+
+  noSuggestedFixes: {
+    id: "Widgets.TaskBundleWidget.noSuggestedFixes",
+    defaultMessage: "Quick-fix tasks cannot be bundled together",
+  },
+
+  noVirtualChallenges: {
+    id: "Widgets.TaskBundleWidget.noVirtualChallenges",
+    defaultMessage: "Tasks in \"virtual\" challenges cannot be bundled together",
+  },
 })
