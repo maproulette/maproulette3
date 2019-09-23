@@ -1,8 +1,10 @@
+import format from 'date-fns/format'
 import _uniqueId from 'lodash/uniqueId'
 import _cloneDeep from 'lodash/cloneDeep'
 import _set from 'lodash/set'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
+import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
@@ -98,6 +100,58 @@ export const parseQueryString = function(rawQueryText) {
     query: queryTokens.join(' '),
     rawQueryText,
   }
+}
+
+/**
+ * Generates, from the given criteria, a search parameters string that the
+ * server accepts for various API endpoints
+ */
+export const generateSearchParametersString = (filters, boundingBox, savedChallengesOnly) => {
+  const searchParameters = {}
+  if (filters.reviewRequestedBy) {
+    searchParameters.o = filters.reviewRequestedBy
+  }
+  if (filters.reviewedBy) {
+    searchParameters.r = filters.reviewedBy
+  }
+  if (filters.challenge) {
+    searchParameters.cs = filters.challenge
+  }
+  if (filters.project) {
+    searchParameters.ps = filters.project
+  }
+  if (filters.status && filters.status !== "all") {
+    searchParameters.tStatus = filters.status
+  }
+  if (filters.priorities && filters.priorities !== "all") {
+    searchParameters.priorities = filters.priorities
+  }
+  if (filters.reviewStatus && filters.reviewStatus !== "all") {
+    searchParameters.trStatus = filters.reviewStatus
+  }
+  if (filters.reviewedAt) {
+    searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
+    searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
+  }
+  if (filters.challengeId) {
+    if (!_isArray(filters.challengeId)) {
+      searchParameters.cid = filters.challengeId
+    }
+    else {
+      searchParameters.cid = filters.challengeId.join(',')
+    }
+  }
+
+  if (boundingBox) {
+    //tbb =>  [left, bottom, right, top]
+    searchParameters.tbb = boundingBox
+  }
+
+  if (savedChallengesOnly) {
+    searchParameters.onlySaved = savedChallengesOnly
+  }
+
+  return searchParameters
 }
 
 // redux action creators

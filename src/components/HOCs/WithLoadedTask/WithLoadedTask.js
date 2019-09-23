@@ -3,9 +3,8 @@ import { denormalize } from 'normalizr'
 import { connect } from 'react-redux'
 import _get from 'lodash/get'
 import _omit from 'lodash/omit'
-import { taskDenormalizationSchema,
-         fetchTask,
-         fetchTaskComments } from '../../../../services/Task/Task'
+import { taskDenormalizationSchema, fetchTask, fetchTaskComments }
+       from '../../../services/Task/Task'
 
 /**
  * WithLoadedTask retrieves a recent copy of the specified task and makes it

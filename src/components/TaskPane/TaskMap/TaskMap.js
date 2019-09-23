@@ -3,12 +3,15 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl, LayerGroup, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
+import { featureCollection } from '@turf/helpers'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
+import _compact from 'lodash/compact'
+import _flatten from 'lodash/flatten'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
@@ -178,6 +181,11 @@ export class TaskMap extends Component {
       return true
     }
 
+    if (!_isEqual(_get(nextProps, 'taskBundle.taskIds'),
+                  _get(this.props, 'taskBundle.taskIds'))) {
+      return true
+    }
+
     if(_get(nextProps, 'task.id') !== _get(this.props, 'task.id')) {
       return true
     }
@@ -261,6 +269,17 @@ export class TaskMap extends Component {
     return <LayerGroup key={Date.now()}>{markers}</LayerGroup>
   }
 
+  taskFeatures = () => {
+    if (_get(this.props, 'taskBundle.tasks.length', 0) > 0) {
+      return featureCollection(
+        _flatten(_compact(_map(this.props.taskBundle.tasks,
+                               task => _get(task, 'geometries.features'))))
+      ).features
+    }
+
+    return _get(this.props.task, 'geometries.features')
+  }
+
   render() {
     if (!this.props.task || !_isObject(this.props.task.parent)) {
       return <BusySpinner />
@@ -294,7 +313,7 @@ export class TaskMap extends Component {
                      mapillaryCount={_get(this.props, 'mapillaryImages.length', 0)} />
         <EnhancedMap center={this.props.centerPoint} zoom={zoom} zoomControl={false}
                      minZoom={minZoom} maxZoom={maxZoom} worldCopyJump={true}
-                     features={_get(this.props.task, 'geometries.features')}
+                     features={this.taskFeatures()}
                      justFitFeatures={!this.state.showTaskFeatures}
                      fitFeaturesOnlyAsNecessary
                      animateFeatures

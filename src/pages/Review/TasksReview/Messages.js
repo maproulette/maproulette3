@@ -138,4 +138,9 @@ export default defineMessages({
     id: "Review.fields.project.label",
     defaultMessage: "Project",
   },
+
+  multipleTasksTooltip: {
+    id: "Review.multipleTasks.tooltip",
+    defaultMessage: "Multiple bundled tasks",
+  },
 })

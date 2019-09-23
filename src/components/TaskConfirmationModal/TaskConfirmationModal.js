@@ -326,6 +326,7 @@ export class TaskConfirmationModal extends Component {
                       {...this.props}
                       onTaskClick={this.props.chooseNextTask}
                       onMapClick={this.props.clearNextTask}
+                      excludeSelfLockedTasks
                     />
                   </div>
                 </div>

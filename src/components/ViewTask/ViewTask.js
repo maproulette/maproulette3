@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
 import jsonLang from 'react-syntax-highlighter/dist/languages/hljs/json'
 import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/github'
-import BusySpinner from '../../../BusySpinner/BusySpinner'
+import BusySpinner from '../BusySpinner/BusySpinner'
 
 SyntaxHighlighter.registerLanguage('json', jsonLang);
 

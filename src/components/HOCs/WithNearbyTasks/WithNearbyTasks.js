@@ -64,17 +64,26 @@ export const WithNearbyTasks = function(WrappedComponent) {
     updateNearbyTasks = props => {
       const challengeId = this.currentChallengeId(props)
       const isVirtual = this.isVirtualChallenge(props)
+      const excludeSelfLockedTasks = !!props.excludeSelfLockedTasks
 
       if (_isFinite(challengeId)) {
         this.setState({nearbyTasks: {loading: true}})
-        props.fetchNearbyTasks(challengeId, isVirtual, props.taskId).then(nearbyTasks => {
-          this.setState({nearbyTasks})
+        props.fetchNearbyTasks(challengeId, isVirtual, props.taskId, excludeSelfLockedTasks).then(nearbyTasks => {
+          this.setState({nearbyTasks: {...nearbyTasks, nearTaskId: props.taskId, loading: false}})
         })
       }
     }
 
     componentDidMount() {
       this.updateNearbyTasks(this.props)
+    }
+
+    componentDidUpdate() {
+      if (this.state.nearbyTasks && !this.state.nearbyTasks.loading &&
+          this.props.taskId !== this.state.nearbyTasks.nearTaskId) {
+        console.log(this.state.nearbyTasks)
+        this.updateNearbyTasks(this.props)
+      }
     }
 
     render() {

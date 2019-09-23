@@ -5,6 +5,8 @@
  */
 
 // Import first-party widgets shipped with MapRoulette
+export { default as TaskBundleWidget }
+       from './TaskBundleWidget/TaskBundleWidget'
 export { default as TagDiffWidget }
        from './TagDiffWidget/TagDiffWidget'
 export { default as TaskMapWidget }

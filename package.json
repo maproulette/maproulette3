@@ -74,6 +74,7 @@
     "route-matcher": "^0.1.0",
     "stale-lru-cache": "^5.1.1",
     "uuid": "^3.3.2",
+    "uuid-time": "^1.0.0",
     "vkbeautify": "^0.99.3",
     "xmltojson": "^1.3.5"
   },

@@ -9,7 +9,7 @@ import _values from 'lodash/values'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
-import { setupFilterSearchParameters } from './TaskReview'
+import { generateSearchParametersString } from '../../Search/Search'
 
 // redux actions
 export const RECEIVE_REVIEWED_TASKS = 'RECEIVE_REVIEWED_TASKS'
@@ -45,7 +45,7 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
   const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
 
-  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}), criteria.boundingBox)
+  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}), criteria.boundingBox)
   const mappers = asMapper ? [userId] : []
   const reviewers = asReviewer ? [userId] : []
 

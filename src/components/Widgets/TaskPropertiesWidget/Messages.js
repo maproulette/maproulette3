@@ -13,4 +13,9 @@ export default defineMessages({
     id: "Widgets.TaskPropertiesWidget.title",
     defaultMessage: "Task Properties",
   },
+
+  taskLabel: {
+    id: "Widgets.TaskPropertiesWidget.task.label",
+    defaultMessage: "Task {taskId}",
+  },
 })

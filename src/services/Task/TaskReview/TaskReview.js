@@ -1,10 +1,10 @@
+import uuidv1 from 'uuid/v1'
+import uuidTime from 'uuid-time'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
-import _uniqueId from 'lodash/uniqueId'
-import format from 'date-fns/format'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
 import { RECEIVE_REVIEW_NEEDED_TASKS } from './TaskReviewNeeded'
@@ -12,7 +12,9 @@ import { RECEIVE_REVIEWED_TASKS,
          RECEIVE_MAPPER_REVIEWED_TASKS,
          RECEIVE_REVIEWED_BY_USER_TASKS } from './TaskReviewed'
 import RequestStatus from '../../Server/RequestStatus'
-import { taskSchema, retrieveChallengeTask, receiveTasks, fetchTask } from '.././Task'
+import { taskSchema, taskBundleSchema, retrieveChallengeTask,
+         receiveTasks, fetchTask } from '../Task'
+import { generateSearchParametersString } from '../../Search/Search'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import { ensureUserLoggedIn } from '../../User/User'
@@ -77,7 +79,7 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
  */
  export const fetchReviewMetrics = function(userId, reviewTasksType, criteria) {
   const type = determineType(reviewTasksType)
-  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
+  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
                                                        _get(criteria, 'savedChallengesOnly'))
 
@@ -106,15 +108,15 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
 /**
  * Retrieve clustered tasks for given review criteria
  */
- export const fetchClusteredReviewTasks = function(reviewTasksType, criteria) {
-  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
-                                                       criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly'))
+export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) {
+  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                          criteria.boundingBox,
+                                                          _get(criteria, 'savedChallengesOnly'))
   return function(dispatch) {
     const type = determineType(reviewTasksType)
-    const fetchId = _uniqueId()
+    const fetchId = uuidv1()
 
-    dispatch(receiveReviewClusters([], RequestStatus.inProgress, fetchId))
+    dispatch(receiveReviewClusters({}, RequestStatus.inProgress, fetchId))
     return new Endpoint(
       api.tasks.fetchReviewClusters,
       {
@@ -128,7 +130,7 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
 
       return normalizedResults.result
     }).catch((error) => {
-      dispatch(receiveReviewClusters([], RequestStatus.error, fetchId))
+      dispatch(receiveReviewClusters({}, RequestStatus.error, fetchId))
       console.log(error.response || error)
     })
   }
@@ -156,7 +158,7 @@ export const loadNextReviewTask = function(criteria={}) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? `${_snakeCase(sortBy)}` : null
-  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
+  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
                                                        _get(criteria, 'savedChallengesOnly')                                                       )
 
@@ -228,55 +230,24 @@ export const completeReview = function(taskId, taskReviewStatus, comment, tags) 
   }
 }
 
-/**
- * Sets up the search parameters that the server expects.
- */
-export const setupFilterSearchParameters = (filters, boundingBox, savedChallengesOnly) => {
-  const searchParameters = {}
-  if (filters.reviewRequestedBy) {
-    searchParameters.o = filters.reviewRequestedBy
+export const completeBundleReview = function(bundleId, taskReviewStatus, comment, tags) {
+  return function(dispatch) {
+    return new Endpoint(api.tasks.bundled.updateReviewStatus, {
+      schema: taskBundleSchema(),
+      variables: {bundleId, status: taskReviewStatus},
+      params:{comment, tags},
+    }).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
   }
-  if (filters.reviewedBy) {
-    searchParameters.r = filters.reviewedBy
-  }
-  if (filters.challenge) {
-    searchParameters.cs = filters.challenge
-  }
-  if (filters.project) {
-    searchParameters.ps = filters.project
-  }
-  if (filters.status && filters.status !== "all") {
-    searchParameters.tStatus = filters.status
-  }
-  if (filters.priorities && filters.priorities !== "all") {
-    searchParameters.priorities = filters.priorities
-  }
-  if (filters.reviewStatus && filters.reviewStatus !== "all") {
-    searchParameters.trStatus = filters.reviewStatus
-  }
-  if (filters.reviewedAt) {
-    searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
-    searchParameters.endDate = format(filters.reviewedAt, 'YYYY-MM-DD')
-  }
-  if (filters.challengeId) {
-    if (!_isArray(filters.challengeId)) {
-      searchParameters.cid = filters.challengeId
-    }
-    else {
-      searchParameters.cid = filters.challengeId.join(',')
-    }
-  }
-
-  if (boundingBox) {
-    //tbb =>  [left, bottom, right, top]
-    searchParameters.tbb = boundingBox
-  }
-
-  if (savedChallengesOnly) {
-    searchParameters.onlySaved = savedChallengesOnly
-  }
-
-  return searchParameters
 }
 
 const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, tags) {
@@ -347,10 +318,14 @@ const updateReduxState = function(state={}, action, listName) {
   }
 
   if (action.type === RECEIVE_REVIEW_CLUSTERS) {
-    const currentFetch = parseInt(_get(state, 'fetchId', 0), 10)
-    if (parseInt(action.fetchId, 10) >= currentFetch) {
-      mergedState.fetchId = action.fetchId
-      mergedState[listName] = action.clusters
+    if (action.fetchId !== state.fetchId || action.status !== state.status) {
+      const fetchTime = parseInt(uuidTime.v1(action.fetchId))
+      const lastFetch = state.fetchId ? parseInt(uuidTime.v1(state.fetchId)) : 0
+
+      if (fetchTime >= lastFetch) {
+        mergedState.fetchId = action.fetchId
+        mergedState[listName] = action.clusters
+      }
     }
 
     return mergedState

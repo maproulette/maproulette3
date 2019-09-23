@@ -3,10 +3,13 @@ import _merge from 'lodash/merge'
 import _isString from 'lodash/isString'
 import _get from 'lodash/get'
 import { completeReview,
+         completeBundleReview,
          cancelReviewClaim,
          loadNextReviewTask,
-         fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
-import { TaskReviewLoadMethod } from '../../../services/Task/TaskReview/TaskReviewLoadMethod'
+         fetchTaskForReview }
+        from '../../../services/Task/TaskReview/TaskReview'
+import { TaskReviewLoadMethod }
+       from '../../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
@@ -21,8 +24,12 @@ const WithTaskReview = WrappedComponent =>
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateTaskReviewStatus: (task, status, comment, tags, loadBy, url) => {
-      dispatch(completeReview(task.id, status, comment, tags)).then(() => {
+    updateTaskReviewStatus: (task, status, comment, tags, loadBy, url, taskBundle) => {
+      const doReview = taskBundle ?
+        completeBundleReview(taskBundle.bundleId, status, comment, tags) :
+        completeReview(task.id, status, comment, tags)
+
+      dispatch(doReview).then(() => {
         let newState = url.location.state
         const searchCriteria = parseSearchCriteria(url, newState)
 

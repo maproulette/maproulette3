@@ -6,4 +6,13 @@
       cursor: pointer;
     }
   }
+
+  a.dropdown-item {
+    color: #91F3A2;
+
+    &:hover {
+      color: white;
+      background-color: transparent;
+    }
+  }
 }

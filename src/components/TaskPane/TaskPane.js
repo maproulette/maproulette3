@@ -15,6 +15,7 @@ import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import WithSuggestedFix from '../HOCs/WithSuggestedFix/WithSuggestedFix'
+import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import VirtualChallengeNameLink
@@ -88,10 +89,11 @@ export class TaskPane extends Component {
    * transition animation as the task prepares to complete.
    */
   completeTask = (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
-                  needsReview, requestedNextTask, osmComment, tagEdits) => {
+                  needsReview, requestedNextTask, osmComment, tagEdits, taskBundle) => {
     this.setState({completingTask: task.id})
     this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
-                            needsReview, requestedNextTask, osmComment, tagEdits, this.state.completionResponses)
+                            needsReview, requestedNextTask, osmComment, tagEdits, this.state.completionResponses, taskBundle)
+    this.props.clearActiveTaskBundle()
   }
 
   clearCompletingTask = () => {
@@ -198,8 +200,10 @@ TaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    WithSuggestedFix(
-      injectIntl(TaskPane)
+    WithTaskBundle(
+      WithSuggestedFix(
+        injectIntl(TaskPane)
+      ),
     ),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,

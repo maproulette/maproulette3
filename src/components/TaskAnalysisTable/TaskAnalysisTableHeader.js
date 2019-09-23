@@ -2,24 +2,25 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import classNames from 'classnames'
-import Modal from '../../../Bulma/Modal'
-import messages from '../ViewChallengeTasks/Messages'
+import Modal from '../Bulma/Modal'
 import _noop from 'lodash/noop'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _join from 'lodash/join'
 import _each from 'lodash/each'
 import _omit from 'lodash/omit'
-import AsManager from '../../../../interactions/User/AsManager'
-import Dropdown from '../../../Dropdown/Dropdown'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
-import TriStateCheckbox from '../../../Bulma/TriStateCheckbox'
-import confirmMessages from '../../../ConfirmAction/Messages'
-import DropdownButton from '../../../Bulma/DropdownButton'
-import WithDeactivateOnOutsideClick from '../../../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
-import { TaskStatus, statusLabels, keysByStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatusWithUnset, reviewStatusLabels, keysByReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
-import { TaskPriority, taskPriorityLabels, keysByPriority } from '../../../../services/Task/TaskPriority/TaskPriority'
+import _isArray from 'lodash/isArray'
+import AsManager from '../../interactions/User/AsManager'
+import Dropdown from '../Dropdown/Dropdown'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import TriStateCheckbox from '../Bulma/TriStateCheckbox'
+import confirmMessages from '../ConfirmAction/Messages'
+import DropdownButton from '../Bulma/DropdownButton'
+import WithDeactivateOnOutsideClick from '../HOCs/WithDeactivateOnOutsideClick/WithDeactivateOnOutsideClick'
+import { TaskStatus, statusLabels, keysByStatus } from '../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatusWithUnset, reviewStatusLabels, keysByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
+import { TaskPriority, taskPriorityLabels, keysByPriority } from '../../services/Task/TaskPriority/TaskPriority'
+import messages from './Messages'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
 
@@ -38,10 +39,14 @@ export class TaskAnalysisTableHeader extends Component {
         else if (action.priorityAction) {
           this.props.selectTasksWithPriority(action.priority)
         }
+        else if (action.shownAction) {
+          this.props.selectTasks(this.props.taskInfo.tasks)
+        }
     }
 
     render() {
         const {countShown, withReviewColumns, toggleReviewColumns} = this.props
+        const selectedCount = this.props.selectedTasks.size
         const totalTaskCount = _get(this.props, 'totalTaskCount', 0)
         const percentShown = Math.round(countShown / totalTaskCount * 100.0)
         const manager = AsManager(this.props.user)
@@ -66,27 +71,44 @@ export class TaskAnalysisTableHeader extends Component {
                              `priority=${_join(taskPriorityQuery, ',')}&` +
                              `reviewStatus=${_join(taskReviewStatusQuery, ',')}`
 
-        const taskSelectionActions =
-            _map(TaskStatus, status => ({
+
+        const taskSelectionStatuses = _isArray(this.props.taskSelectionStatuses) ?
+                                      this.props.taskSelectionStatuses :
+                                      TaskStatus
+
+        const taskSelectionReviewStatuses = _isArray(this.props.taskSelectionReviewStatuses) ?
+                                            this.props.taskSelectionReviewStatuses :
+                                            TaskReviewStatusWithUnset
+
+        const taskSelectionPriorities = _isArray(this.props.taskSelectionPriorities) ?
+                                        this.props.taskSelectionPriorities :
+                                        TaskPriority
+
+        const taskSelectionActions = [{
+          key: 'shown-tasks',
+          text: this.props.intl.formatMessage(messages.shownLabel),
+          shownAction: true,
+        }].concat(
+          _map(taskSelectionStatuses, status => ({
             key: `status-${status}`,
             text: localizedStatusLabels[keysByStatus[status]],
             status,
             statusAction: true,
-            })
+          }))
         ).concat(
-            _map(TaskReviewStatusWithUnset, status => ({
+          _map(taskSelectionReviewStatuses, status => ({
             key: `review-status-${status}`,
             text: localizedReviewStatusLabels[keysByReviewStatus[status]],
             status,
             statusAction: true,
-            }))
+          }))
         ).concat(
-            _map(TaskPriority, priority => ({
+          _map(taskSelectionPriorities, priority => ({
             key: `priority-${priority}`,
             text: `${localizedPriorityLabels[keysByPriority[priority]]} ${this.props.intl.formatMessage(messages.priorityLabel)}`,
             priority,
             priorityAction: true,
-            }))
+          }))
         )
 
 
@@ -126,9 +148,9 @@ export class TaskAnalysisTableHeader extends Component {
                 <div className="mr-flex mr-items-center">
                     {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
                         <div className="admin__manage-tasks__task-controls mr-mr-4">
-                            <div className="admin__manage-tasks__task-controls__selection mr-m-0"
+                            <div className="admin__manage-tasks__task-controls__selection mr-m-0 mr-flex mr-pb-2 mr-pt-1 mr-items-baseline"
                                     title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}>
-                                <label className="checkbox">
+                                <label className="checkbox mr-mb-0">
                                 <TriStateCheckbox
                                     checked={this.props.allTasksAreSelected()}
                                     indeterminate={this.props.someTasksAreSelected()}
@@ -138,13 +160,23 @@ export class TaskAnalysisTableHeader extends Component {
                                 </label>
                                 <DeactivatableDropdownButton options={taskSelectionActions}
                                                                 onSelect={this.takeTaskSelectionAction}>
-                                <div className="basic-dropdown-indicator" />
+                                <div className="basic-dropdown-indicator mr-pin-t" />
                                 </DeactivatableDropdownButton>
                             </div>
                         </div>
                     }
 
-                    <h2 className="mr-text-md mr-uppercase">
+                    <h2 className="mr-flex mr-items-center mr-w-full mr-text-md mr-uppercase mr-text-grey">
+                        <span className="mr-mr-2">
+                          <FormattedMessage
+                            {...messages.taskCountSelectedStatus}
+                            values={{selectedCount}}
+                          />
+                        </span>
+                        <span className="mr-mr-6">
+                          {this.props.customHeaderControls}
+                        </span>
+
                         {totalTaskCount < 1 ? <FormattedMessage {...messages.taskCountShownStatus} values={{countShown}} /> :
                         <FormattedMessage {...messages.taskPercentShownStatus}
                             values={{
@@ -155,6 +187,7 @@ export class TaskAnalysisTableHeader extends Component {
                     </h2>
                 </div>
 
+                {!this.props.suppressManagement &&
                 <Dropdown className="mr-dropdown--right"
                     dropdownButton={dropdown => (
                         <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-light">
@@ -232,6 +265,7 @@ export class TaskAnalysisTableHeader extends Component {
                         </React.Fragment>
                     }
                 />
+                }
             </div>
         )
     }
