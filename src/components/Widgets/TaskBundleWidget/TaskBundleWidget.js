@@ -57,10 +57,12 @@ export default class TaskBundleWidget extends Component {
    * widget map
    */
   initializeClusterFilters(prevProps={}) {
-    // If the challenge id changed, update filter
+    // If the challenge id or task id changed, refetch fresh clusters for now
+    // TODO: use websockets to manage ongoing updates to avoid full refetch
     const challengeId = _get(this.props.task, 'parent.id')
     if (_isFinite(challengeId) &&
-        challengeId !== _get(prevProps.task, 'parent.id')) {
+        (challengeId !== _get(prevProps.task, 'parent.id') ||
+         this.props.task.id !== _get(prevProps, 'task.id'))) {
       this.fetchClusters()
     }
 
