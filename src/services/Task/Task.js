@@ -89,31 +89,41 @@ const onReviewMessage = function(dispatch, messageObject) {
 }
 
 const onChallengeTaskMessage = function(dispatch, messageObject) {
-  const task = messageObject.data.task
+  let task = messageObject.data.task
   switch(messageObject.messageType) {
     case "task-claimed":
+      task = Object.assign({}, task, {lockedBy: _get(messageObject, 'data.byUser.userId')})
+      dispatchTaskUpdateNotification(dispatch, task)
+      break
+    case "task-released":
     case "task-update":
-      dispatch(receiveTasks(simulatedEntities(task)))
-      dispatch(receiveClusteredTasks(
-        task.parent,
-        false,
-        [
-          Object.assign({}, _pick(task, ['id', 'created', 'modified', 'priority', 'status', 'difficulty']), {
-            parentId: task.parent,
-            point: {lng: task.location.coordinates[0], lat: task.location.coordinates[1]},
-            title: task.name,
-            type: 2,
-          })
-        ],
-        RequestStatus.success,
-        uuidv1(),
-        true,
-        true
-      ))
+      dispatchTaskUpdateNotification(dispatch, task)
       break
     default:
       break // Ignore
   }
+}
+
+const dispatchTaskUpdateNotification = function(dispatch, task) {
+  dispatch(receiveTasks(simulatedEntities(task)))
+  dispatch(receiveClusteredTasks(
+    task.parent,
+    false,
+    [Object.assign(
+      {},
+      _pick(task, ['id', 'created', 'modified', 'priority', 'status', 'difficulty', 'lockedBy']),
+      {
+        parentId: task.parent,
+        point: {lng: task.location.coordinates[0], lat: task.location.coordinates[1]},
+        title: task.name,
+        type: 2,
+      }
+    )],
+    RequestStatus.success,
+    uuidv1(),
+    true,
+    true
+  ))
 }
 
 

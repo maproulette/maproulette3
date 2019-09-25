@@ -95,7 +95,12 @@ export class ChallengeTaskMap extends Component {
       return true
     }
 
-    // the clustered tasks changed
+    // the clustered tasks themselves change
+    if (_get(nextProps, 'taskInfo.tasks.length') !==
+        _get(this.props, 'taskInfo.tasks.length')) {
+      return true
+    }
+
     if (_get(nextProps, 'taskInfo.fetchId') !==
         _get(this.props, 'taskInfo.fetchId')) {
       return true

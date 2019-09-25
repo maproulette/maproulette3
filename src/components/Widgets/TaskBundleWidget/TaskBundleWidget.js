@@ -456,7 +456,8 @@ registerWidgetType(
             [TaskStatus.created]: true,
             [TaskStatus.skipped]: true,
             [TaskStatus.tooHard]: true,
-          }
+          },
+          includeLocked: false,
         }
       )
     )
