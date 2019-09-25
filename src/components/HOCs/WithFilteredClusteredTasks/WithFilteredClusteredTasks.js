@@ -32,12 +32,16 @@ import { TaskPriority, keysByPriority }
  */
 export default function WithFilteredClusteredTasks(WrappedComponent,
                                                    tasksProp='clusteredTasks',
-                                                   outputProp) {
+                                                   outputProp,
+                                                   initialFilters) {
   return class extends Component {
     state = {
-      includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
-      includeReviewStatuses: _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true])),
-      includePriorities: _fromPairs(_map(TaskPriority, priority => [priority, true])),
+      includeStatuses: _get(initialFilters, 'statuses',
+                            _fromPairs(_map(TaskStatus, status => [status, true]))),
+      includeReviewStatuses: _get(initialFilters, 'reviewStatuses',
+                                  _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true]))),
+      includePriorities: _get(initialFilters, 'priorities',
+                              _fromPairs(_map(TaskPriority, priority => [priority, true]))),
       selectedTasks: new Map(),
       filteredTasks: {tasks: []},
     }
@@ -321,8 +325,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (_get(prevProps[tasksProp], 'tasks.length', 0) !==
-          _get(this.props[tasksProp], 'tasks.length', 0)) {
+      if (_get(prevProps[tasksProp], 'fetchId') !== _get(this.props[tasksProp], 'fetchId')) {
         this.setState({
           filteredTasks: this.filterTasks(this.state.includeStatuses,
                                           this.state.includeReviewStatuses,

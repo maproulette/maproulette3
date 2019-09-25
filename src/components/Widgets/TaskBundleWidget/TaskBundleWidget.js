@@ -21,6 +21,8 @@ import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import WithWebSocketSubscriptions
+       from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import ChallengeTaskMap from '../../ChallengeTaskMap/ChallengeTaskMap'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
@@ -71,6 +73,14 @@ export default class TaskBundleWidget extends Component {
     if (_get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
         !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)) {
       this.setBoundsToNearbyTask()
+    }
+  }
+
+  initializeWebsocketSubscription(prevProps={}) {
+    const challengeId = _get(this.props.task, 'parent.id')
+    if (_isFinite(challengeId) &&
+       (challengeId !== _get(prevProps.task, 'parent.id'))) {
+      this.props.subscribeToChallengeTaskMessages(challengeId)
     }
   }
 
@@ -126,18 +136,27 @@ export default class TaskBundleWidget extends Component {
   componentDidMount() {
     if (!this.props.taskBundle) {
       this.initializeClusterFilters()
+      this.initializeWebsocketSubscription()
     }
   }
 
   componentDidUpdate(prevProps) {
     if (!this.props.taskBundle) {
       this.initializeClusterFilters(prevProps)
+      this.initializeWebsocketSubscription(prevProps)
     }
 
     if (_isFinite(_get(this.props, 'task.id')) &&
         _isFinite(_get(prevProps, 'task.id')) &&
         this.props.task.id !== prevProps.task.id) {
       this.props.resetSelectedTasks()
+    }
+  }
+
+  componentWillUnmount() {
+    const challengeId = _get(this.props.task, 'parent.id')
+    if (_isFinite(challengeId)) {
+      this.props.unsubscribeFromChallengeTaskMessages(challengeId)
     }
   }
 
@@ -424,12 +443,21 @@ registerWidgetType(
     WithClusteredTasks(
       WithFilteredClusteredTasks(
         WithBoundedTasks(
-          TaskBundleWidget,
+          WithWebSocketSubscriptions(
+            TaskBundleWidget,
+          ),
           'filteredClusteredTasks',
           'taskInfo'
         ),
         'clusteredTasks',
-        'filteredClusteredTasks'
+        'filteredClusteredTasks',
+        {
+          statuses: {
+            [TaskStatus.created]: true,
+            [TaskStatus.skipped]: true,
+            [TaskStatus.tooHard]: true,
+          }
+        }
       )
     )
   ), descriptor
