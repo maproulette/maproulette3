@@ -20,6 +20,7 @@ import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import ChallengeTaskMap from '../../ChallengeTaskMap/ChallengeTaskMap'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
@@ -69,7 +70,9 @@ export default class TaskBundleWidget extends Component {
     // If the nearby tasks loaded, update bounds
     if (_get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
         !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)) {
-      this.setBoundsToNearbyTask()
+      const taskList = _get(this.props, 'nearbyTasks.tasks')
+      taskList.push(AsMappableTask(this.props.task))
+      this.setBoundsToNearbyTask(taskList)
     }
   }
 
@@ -97,13 +100,13 @@ export default class TaskBundleWidget extends Component {
     this.props.augmentClusteredTasks(challengeId, false, {boundingBox: bounds})
   }
 
-  setBoundsToNearbyTask = () => {
-    if (_get(this.props, 'nearbyTasks.tasks.length', 0) === 0) {
+  setBoundsToNearbyTask = (taskList) => {
+    if (taskList.length === 0) {
       return
     }
 
     const nearbyBounds = bbox(featureCollection(
-      this.props.nearbyTasks.tasks.map(t => point([t.point.lng, t.point.lat]))
+      taskList.map(t => point([t.point.lng, t.point.lat]))
     ))
 
     this.updateBounds(
