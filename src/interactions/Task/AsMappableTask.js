@@ -12,7 +12,6 @@ import { latLng } from 'leaflet'
 export class AsMappableTask {
   constructor(task) {
     Object.assign(this, task)
-    this.point = this.calculateCenterPoint()
   }
 
   /**

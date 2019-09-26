@@ -70,9 +70,7 @@ export default class TaskBundleWidget extends Component {
     // If the nearby tasks loaded, update bounds
     if (_get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
         !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)) {
-      const taskList = _get(this.props, 'nearbyTasks.tasks')
-      taskList.push(AsMappableTask(this.props.task))
-      this.setBoundsToNearbyTask(taskList)
+      this.setBoundsToNearbyTask()
     }
   }
 
@@ -100,7 +98,15 @@ export default class TaskBundleWidget extends Component {
     this.props.augmentClusteredTasks(challengeId, false, {boundingBox: bounds})
   }
 
-  setBoundsToNearbyTask = (taskList) => {
+  setBoundsToNearbyTask = () => {
+    const taskList = _get(this.props, 'nearbyTasks.tasks')
+
+    // Add the current task to the task list so that it always shows
+    // up in the bounds.
+    const mappableTask = AsMappableTask(this.props.task)
+    mappableTask.point = mappableTask.calculateCenterPoint()
+    taskList.push(mappableTask)
+
     if (taskList.length === 0) {
       return
     }
