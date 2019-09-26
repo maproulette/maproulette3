@@ -87,6 +87,7 @@ export default class TaskBundleWidget extends Component {
         false,
         [TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard],
         15000,
+        true,
         true
       ).then(() => {
         this.setState({loading: false})

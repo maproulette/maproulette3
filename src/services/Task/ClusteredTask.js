@@ -58,7 +58,8 @@ export const clearClusteredTasks = function() {
 /**
  * Retrieve clustered task data belonging to the given challenge
  */
-export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=false, statuses=[], limit=15000, mergeTasks=false) {
+export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=false, statuses=[], limit=15000, mergeTasks=false,
+                                            excludeLocked=false) {
   return function(dispatch) {
     const fetchId = _uniqueId()
     dispatch(receiveClusteredTasks(
@@ -69,7 +70,7 @@ export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=fals
       (isVirtualChallenge ? api.virtualChallenge : api.challenge).clusteredTasks, {
         schema: [ taskSchema() ],
         variables: {id: challengeId},
-        params: {limit, filter: statuses.join(',')},
+        params: {limit, excludeLocked, filter: statuses.join(',')},
       }
     ).execute().then(normalizedResults => {
       // Add parent field, and copy pointReview fields to top-level for
