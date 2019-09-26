@@ -20,6 +20,7 @@ import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import ChallengeTaskMap from '../../ChallengeTaskMap/ChallengeTaskMap'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
@@ -98,12 +99,20 @@ export default class TaskBundleWidget extends Component {
   }
 
   setBoundsToNearbyTask = () => {
-    if (_get(this.props, 'nearbyTasks.tasks.length', 0) === 0) {
+    const taskList = _get(this.props, 'nearbyTasks.tasks')
+
+    // Add the current task to the task list so that it always shows
+    // up in the bounds.
+    const mappableTask = AsMappableTask(this.props.task)
+    mappableTask.point = mappableTask.calculateCenterPoint()
+    taskList.push(mappableTask)
+
+    if (taskList.length === 0) {
       return
     }
 
     const nearbyBounds = bbox(featureCollection(
-      this.props.nearbyTasks.tasks.map(t => point([t.point.lng, t.point.lat]))
+      taskList.map(t => point([t.point.lng, t.point.lat]))
     ))
 
     this.updateBounds(
