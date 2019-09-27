@@ -14,6 +14,7 @@ import _isArray from 'lodash/isArray'
 import _uniqBy from 'lodash/uniqBy'
 import _cloneDeep from 'lodash/cloneDeep'
 import _set from 'lodash/set'
+import _omit from 'lodash/omit'
 import { fetchBoundedTasks } from './BoundedTask'
 
 // redux actions
@@ -77,10 +78,10 @@ export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=fals
       }
     ).execute().then(normalizedResults => {
       // Add parent field, and copy pointReview fields to top-level for
-      // backward compatibility
+      // backward compatibility (except reviewRequestedBy and reviewedBy)
       let tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
       tasks = _map(tasks, task =>
-        Object.assign(task, {parent: challengeId}, task.pointReview)
+        Object.assign(task, {parent: challengeId}, _omit(task.pointReview, ["reviewRequestedBy", "reviewedBy"]))
       )
 
       dispatch(receiveClusteredTasks(
