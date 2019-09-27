@@ -340,12 +340,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     componentDidUpdate(prevProps, prevState) {
       if (_get(prevProps[tasksProp], 'tasks.length', 0) !== _get(this.props[tasksProp], 'tasks.length', 0) ||
           _get(prevProps[tasksProp], 'fetchId') !== _get(this.props[tasksProp], 'fetchId')) {
-        this.setState({
-          filteredTasks: this.filterTasks(this.state.includeStatuses,
-                                          this.state.includeReviewStatuses,
-                                          this.state.includePriorities,
-                                          this.state.includeLocked)
-        })
+        this.refreshSelectedTasks()
       }
 
       if (!_isEqual(this.state.selectedTasks, prevState.selectedTasks)) {
