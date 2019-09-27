@@ -39,7 +39,7 @@ export const receiveBoundedTasks = function(tasks,
  * criteria, which should at least include a boundingBox field, and may
  * optionally include a filters field with additional constraints
  */
-export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false) {
+export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false, excludeLocked=true) {
   return function(dispatch) {
     const normalizedBounds = toLatLngBounds(criteria.boundingBox)
     if (!normalizedBounds) {
@@ -63,7 +63,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
           right: normalizedBounds.getEast(),
           top: normalizedBounds.getNorth(),
         },
-        params: {limit, page: (page * limit), ...searchParameters},
+        params: {limit, page: (page * limit), excludeLocked, ...searchParameters},
       }
     ).execute().then(normalizedResults => {
       const tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
