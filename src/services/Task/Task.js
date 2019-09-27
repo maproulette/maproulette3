@@ -1,4 +1,5 @@
 import { schema } from 'normalizr'
+import uuidv1 from 'uuid/v1'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -23,6 +24,7 @@ import AppErrors from '../Error/AppErrors'
 import { generateSearchParametersString } from '../Search/Search'
 import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
+import { receiveClusteredTasks } from './ClusteredTask'
 import { TaskStatus } from './TaskStatus/TaskStatus'
 
 /** normalizr schema for tasks */
@@ -51,6 +53,17 @@ export const taskDenormalizationSchema = function() {
   })
 }
 
+export const subscribeToChallengeTaskMessages = function(dispatch, challengeId) {
+  websocketClient.addServerSubscription(
+    "challengeTasks", challengeId, "challengeTaskMessageHandler",
+    messageObject => onChallengeTaskMessage(dispatch, messageObject)
+  )
+}
+
+export const unsubscribeFromChallengeTaskMessages = function(challengeId) {
+  websocketClient.removeServerSubscription("challengeTasks", challengeId, "challengeTaskMessageHandler")
+}
+
 export const subscribeToReviewMessages = function(dispatch) {
   websocketClient.addServerSubscription(
     "reviews", null, "reviewMessageHandler",
@@ -73,6 +86,44 @@ const onReviewMessage = function(dispatch, messageObject) {
     default:
       break // Ignore
   }
+}
+
+const onChallengeTaskMessage = function(dispatch, messageObject) {
+  let task = messageObject.data.task
+  switch(messageObject.messageType) {
+    case "task-claimed":
+      task = Object.assign({}, task, {lockedBy: _get(messageObject, 'data.byUser.userId')})
+      dispatchTaskUpdateNotification(dispatch, task)
+      break
+    case "task-released":
+    case "task-update":
+      dispatchTaskUpdateNotification(dispatch, task)
+      break
+    default:
+      break // Ignore
+  }
+}
+
+const dispatchTaskUpdateNotification = function(dispatch, task) {
+  dispatch(receiveTasks(simulatedEntities(task)))
+  dispatch(receiveClusteredTasks(
+    task.parent,
+    false,
+    [Object.assign(
+      {},
+      _pick(task, ['id', 'created', 'modified', 'priority', 'status', 'difficulty', 'lockedBy']),
+      {
+        parentId: task.parent,
+        point: {lng: task.location.coordinates[0], lat: task.location.coordinates[1]},
+        title: task.name,
+        type: 2,
+      }
+    )],
+    RequestStatus.success,
+    uuidv1(),
+    true,
+    true
+  ))
 }
 
 
@@ -140,15 +191,11 @@ export const fetchTaskTags = function(taskId) {
       {schema: {}, variables: {id: taskId}}
     ).execute().then(normalizedTags => {
       if (_isObject(normalizedTags.result)) {
-        // Inject tags into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              tags: _values(normalizedTags.result),
-            }
-          }
-        }))
+        // Inject tags into task
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          tags: _values(normalizedTags.result),
+        })))
       }
       return normalizedTags
     })
@@ -328,16 +375,12 @@ export const fetchTaskComments = function(taskId) {
       dispatch(receiveComments(normalizedComments.entities))
 
       if (_isObject(normalizedComments.entities.comments)) {
-        // Inject comment ids into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              comments: _map(_keys(normalizedComments.entities.comments),
-                             id => parseInt(id, 10)),
-            }
-          }
-        }))
+        // Inject comment ids into task
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          comments: _map(_keys(normalizedComments.entities.comments),
+                         id => parseInt(id, 10)),
+        })))
       }
 
       return normalizedComments
@@ -355,15 +398,11 @@ export const fetchTaskHistory = function(taskId) {
       {schema: {}, variables: {id: taskId}}
     ).execute().then(normalizedHistory => {
       if (_isObject(normalizedHistory.result)) {
-        // Inject history into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              history: _values(normalizedHistory.result),
-            }
-          }
-        }))
+        // Inject history into task
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          history: _values(normalizedHistory.result),
+        })))
       }
 
       return normalizedHistory
@@ -552,14 +591,10 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
                                   osmComment = null, completionResponses = null) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
-  dispatch(receiveTasks({
-    tasks: {
-      [taskId]: {
-        id: taskId,
-        status: newStatus
-      }
-    }
-  }))
+  dispatch(receiveTasks(simulatedEntities({
+    id: taskId,
+    status: newStatus,
+  })))
 
   const params = {}
   if (requestReview != null) {
@@ -675,14 +710,10 @@ export const fetchTaskPlace = function(task) {
     ).then(normalizedPlaceResults => {
       // Tasks have no natural reference to places, so inject the place id into
       // the task so that later denormalization will work properly.
-      return dispatch(receiveTasks({
-        tasks: {
-          [task.id]: {
-            id: task.id,
-            place: _get(normalizedPlaceResults, 'result'),
-          }
-        }
-      }))
+      return dispatch(receiveTasks(simulatedEntities({
+        id: task.id,
+        place: _get(normalizedPlaceResults, 'result'),
+      })))
     })
   }
 }
@@ -699,14 +730,10 @@ export const updateTaskTags = function(taskId, tags) {
     ).execute().then(normalizedTags => {
       if (_isObject(normalizedTags.result)) {
         // Inject tags into task.
-        dispatch(receiveTasks({
-          tasks: {
-            [taskId]: {
-              id: taskId,
-              tags: _values(normalizedTags.result),
-            }
-          }
-        }))
+        dispatch(receiveTasks(simulatedEntities({
+          id: taskId,
+          tags: _values(normalizedTags.result),
+        })))
       }
       return normalizedTags
     })
@@ -874,6 +901,19 @@ export const retrieveChallengeTask = function(dispatch, endpoint) {
     console.log(error.response || error)
     throw error
   })
+}
+
+/**
+ * Builds a simulated normalized entities representation from the given task
+ *
+ * @private
+ */
+export const simulatedEntities = function(task) {
+  return {
+    tasks: {
+      [task.id]: task,
+    }
+  }
 }
 
 /**

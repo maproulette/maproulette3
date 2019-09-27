@@ -101,6 +101,12 @@ export class ChallengeTaskMap extends Component {
       return true
     }
 
+    if (_get(nextProps, 'taskInfo.fetchId') !==
+        _get(this.props, 'taskInfo.fetchId')) {
+      return true
+    }
+
+    // the selected tasks changed
     if (_get(nextProps, 'selectedTasks.size', 0) !==
         _get(this.props, 'selectedTasks.size', 0)) {
       return true
