@@ -29,6 +29,12 @@ export default defineMessages({
     defaultMessage: "Tasks Refreshed:",
   },
 
+  dataOriginDate: {
+    id: "Widgets.ChallengeOverviewWidget.fields.dataOriginDate.label",
+    defaultMessage: "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
+  },
+
+
   status: {
     id: "Widgets.ChallengeOverviewWidget.fields.status.label",
     defaultMessage: "Status:",

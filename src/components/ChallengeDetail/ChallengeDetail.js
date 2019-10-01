@@ -119,6 +119,11 @@ export class ChallengeDetail extends Component {
       </Link>
     )
 
+    const dataOriginDateText = !challenge.dataOriginDate ? null :
+      this.props.intl.formatMessage(messages.dataOriginDateLabel,
+        {refreshDate: this.props.intl.formatDate(new Date(challenge.lastTaskRefresh)),
+         sourceDate: this.props.intl.formatDate(new Date(challenge.dataOriginDate))})
+
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
         <div className="mr-flex-1">
@@ -171,7 +176,7 @@ export class ChallengeDetail extends Component {
                           {...messagesByDifficulty[challenge.difficulty]}
                         />
                       </li>
-                      <li>
+                      <li title={dataOriginDateText}>
                         <strong className="mr-text-yellow">
                           <FormattedMessage
                             {...messages.lastTaskRefreshLabel}

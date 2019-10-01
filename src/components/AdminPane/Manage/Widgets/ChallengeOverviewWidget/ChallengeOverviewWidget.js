@@ -25,6 +25,12 @@ export default class ChallengeOverviewWidget extends Component {
     const manager = AsManager(this.props.user)
     const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
 
+    const dataOriginDateText = !this.props.challenge.dataOriginDate ? null :
+      this.props.intl.formatMessage(messages.dataOriginDate,
+        {refreshDate: this.props.intl.formatDate(new Date(this.props.challenge.lastTaskRefresh)),
+         sourceDate: this.props.intl.formatDate(new Date(this.props.challenge.dataOriginDate))})
+
+
     return (
       <QuickWidget {...this.props}
                   className="challenge-overview-widget"
@@ -75,11 +81,11 @@ export default class ChallengeOverviewWidget extends Component {
             }
           </div>
 
-          <div>
+          <div title={dataOriginDateText}>
             <FormattedMessage {...messages.tasksRefreshDate} />
           </div>
 
-          <div>
+          <div title={dataOriginDateText}>
             {this.props.challenge.lastTaskRefresh &&
              <FormattedDate value={new Date(this.props.challenge.lastTaskRefresh)}
                             year='numeric' month='long' day='2-digit' />
