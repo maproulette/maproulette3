@@ -21,6 +21,7 @@ export const JOSM = 1
 export const JOSM_LAYER = 2
 export const LEVEL0 = 3
 export const JOSM_FEATURES = 4
+export const RAPID = 5
 
 // Default editor choice if user has not selected an editor
 export const DEFAULT_EDITOR = ID
@@ -41,6 +42,7 @@ export const Editor = Object.freeze({
   josmLayer: JOSM_LAYER,
   josmFeatures: JOSM_FEATURES,
   level0: LEVEL0,
+  rapid: RAPID,
 })
 
 
@@ -81,6 +83,9 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
       }
       else if (editor === LEVEL0) {
         editorWindowReference = window.open(constructLevel0URI(task, mapBounds, options, taskBundle))
+      }
+      else if (editor === RAPID) {
+        editorWindowReference = window.open(constructRapidURI(task, mapBounds, options))
       }
 
       dispatch(editorOpened(editor, task.id, RequestStatus.success))
@@ -135,7 +140,7 @@ export const openEditor = function(state=null, action) {
  * otherwise
  */
 export const isWebEditor = function(editor) {
-  return editor === ID || editor === LEVEL0
+  return editor === ID || editor === LEVEL0 || editor === RAPID
 }
 
 /**
@@ -193,6 +198,31 @@ export const constructIdURI = function(task, mapBounds, options, taskBundle) {
       [mapUriComponent, commentUriComponent, sourceComponent, photoOverlayComponent]
     ).join('&')
   )
+}
+
+/**
+ * Builds a RapiD editor URI for editing of the given task
+ */
+export const constructRapidURI = function(task, mapBounds, options) {
+  const baseUriComponent =
+    `${process.env.REACT_APP_RAPID_EDITOR_SERVER_URL}#`
+
+  const centerPoint = taskCenterPoint(mapBounds, task)
+  const mapUriComponent =
+    "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
+
+  const selectedEntityComponent = "id=" + osmObjectParams(task, true)
+  const commentUriComponent = "comment=" +
+                              encodeURIComponent(task.parent.checkinComment)
+  const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
+
+  const photoOverlayComponent =
+    _get(options, 'photoOverlay') ? "photo_overlay=" + options.photoOverlay : null;
+
+  return baseUriComponent + _compact(
+    [selectedEntityComponent, commentUriComponent, sourceComponent,
+      photoOverlayComponent, mapUriComponent]
+  ).join('&')
 }
 
 /**

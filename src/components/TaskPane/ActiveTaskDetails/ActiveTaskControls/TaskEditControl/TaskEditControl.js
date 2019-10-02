@@ -46,6 +46,9 @@ export default class TaskEditControl extends Component {
       case editShortcuts.editLevel0.key:
         this.props.pickEditor({value: Editor.level0})
         break
+      case editShortcuts.editRapid.key:
+        this.props.pickEditor({value: Editor.rapid})
+        break
       default:
     }
   }
