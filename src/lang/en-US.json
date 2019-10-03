@@ -709,6 +709,7 @@
   "Widgets.ReviewTaskMetricsWidget.title": "Task Status",
   "Widgets.TagDiffWidget.label": "Suggested Fixes",
   "Widgets.TagDiffWidget.title": "Proposed OSM Tag Changes",
+  "Widgets.TagDiffWidget.controls.viewAllTags.label": "Show all Tags",
   "Widgets.TaskBundleWidget.label": "Multi-Task Work",
   "Widgets.TaskBundleWidget.reviewTaskTitle": "Work on Multiple Tasks Together",
   "Widgets.TaskBundleWidget.controls.filterByStatus.label": "Filter by Status",

@@ -11,8 +11,8 @@ class Intro extends Component {
                 Over
               </div>
               <span className="mr-ticker mr-text-4xl lg:mr-text-5xl">
-                <span>2</span>
                 <span>5</span>
+                <span>0</span>
                 <span>0</span>
                 <span>0</span>
                 <span>0</span>
