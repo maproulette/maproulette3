@@ -10,6 +10,7 @@ import _pick from 'lodash/pick'
 import _cloneDeep from 'lodash/cloneDeep'
 import { latLng } from 'leaflet'
 import AsIdentifiableFeature from '../TaskFeature/AsIdentifiableFeature'
+import { supportedSimplestyles } from '../TaskFeature/AsSimpleStyleableFeature'
 
 /**
  * AsMappableTask adds functionality to a Task related to mapping.
@@ -43,20 +44,43 @@ export class AsMappableTask {
    * task's geometries. Later properties will overwrite earlier properties with
    * the same name.
    */
-  allFeatureProperties() {
+  allFeatureProperties(features) {
     if (!this.hasGeometries()) {
       return []
     }
 
+    if (!features) {
+      features = this.geometries.features
+    }
+
     let allProperties = {}
 
-    this.geometries.features.forEach(feature => {
+    features.forEach(feature => {
       if (feature && feature.properties) {
         allProperties = Object.assign(allProperties, feature.properties)
       }
     })
 
     return allProperties
+  }
+
+  /**
+   * Similar to allFeatureProperties, but uses current OSM tags for the feature
+   * properties. If OSM data isn't available, falls back to default behavior of
+   * allFeatureProperties
+   */
+  osmFeatureProperties(osmElements) {
+    if (!this.hasGeometries()) {
+      return []
+    }
+
+    if (!osmElements || osmElements.size === 0) {
+      return this.allFeatureProperties()
+    }
+
+    return this.allFeatureProperties(
+      this.featuresWithTags(this.geometries.features, osmElements, true, supportedSimplestyles)
+    )
   }
 
   /**
