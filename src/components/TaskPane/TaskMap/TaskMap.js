@@ -32,6 +32,9 @@ import WithKeyboardShortcuts
 import WithMapillaryImages from '../../HOCs/WithMapillaryImages/WithMapillaryImages'
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
+import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import { supportedSimplestyles }
+       from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.scss'
 
@@ -221,6 +224,10 @@ export class TaskMap extends Component {
       }
     }
 
+    if (nextProps.loadingOSMData !== this.props.loadingOSMData) {
+      return true
+    }
+
     return false
   }
 
@@ -275,6 +282,18 @@ export class TaskMap extends Component {
         _flatten(_compact(_map(this.props.taskBundle.tasks,
                                task => _get(task, 'geometries.features'))))
       ).features
+    }
+
+    // If current OSM data is available, show the feature's current OSM tags
+    // instead of those bundled with the GeoJSON. We preserve any simplestyle
+    // properties, allowing display colors and what not to be customized
+    if (_get(this.props, 'osmElements.size', 0) > 0) {
+      return AsMappableTask(this.props.task).featuresWithTags(
+        _get(this.props.task, 'geometries.features'),
+        this.props.osmElements,
+        true,
+        supportedSimplestyles,
+      )
     }
 
     return _get(this.props.task, 'geometries.features')

@@ -9,6 +9,7 @@ import _isEmpty from 'lodash/isEmpty'
 import RequestStatus from '../Server/RequestStatus'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import AsMappableBundle from '../../interactions/TaskBundle/AsMappableBundle'
+import AsIdentifiableFeature from '../../interactions/TaskFeature/AsIdentifiableFeature'
 import { toLatLngBounds  } from '../MapBounds/MapBounds'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
@@ -25,12 +26,6 @@ export const RAPID = 5
 
 // Default editor choice if user has not selected an editor
 export const DEFAULT_EDITOR = ID
-
-/**
- * Supported names of properties used to identify an OSM entity associated with
- * a feature.
- */
-export const osmIdentifierFields = ['osmid', 'id', '@id', 'osmIdentifier']
 
 // Reference to open editor window
 let editorWindowReference = null
@@ -264,7 +259,7 @@ export const osmObjectParams = function(task, abbreviated=false, entitySeparator
   allTasks.forEach(task => {
     if (task.geometries && task.geometries.features) {
       objects = objects.concat(_compact(task.geometries.features.map(feature => {
-        const osmId = featureOSMId(feature)
+        const osmId = AsIdentifiableFeature(feature).osmId()
         if (!osmId) {
           return null
         }
@@ -444,24 +439,6 @@ const openJOSM = function(dispatch, editor, task, mapBounds, josmURIFunction, ta
       return dispatch(editorOpened(editor, task.id, RequestStatus.error))
     }
   })
-}
-
-/**
- * Retrieve an OSM identifier for the given task feature, if available
- */
-export const featureOSMId = function(feature) {
-  // Identifiers can live on the feature itself or as a property
-  const osmId = firstTruthyValue(feature, osmIdentifierFields) ||
-                firstTruthyValue(feature.properties, osmIdentifierFields)
-
-  if (!osmId) {
-    return null
-  }
-
-  // id properties may contain additional information, such as a representation
-  // of the feature type. We want to return just the the numerical OSM id
-  const match = /(\d+)/.exec(osmId)
-  return (match && match.length > 1) ? match[1] : null
 }
 
 /**
