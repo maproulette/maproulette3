@@ -246,7 +246,7 @@ const Nav = props => (
 
     <li>
       <a
-        href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"
+        href="https://github.com/osmlab/maproulette3/wiki"
         target="_blank"
         rel="noopener noreferrer"
         onClick={props.closeMobileMenu}>

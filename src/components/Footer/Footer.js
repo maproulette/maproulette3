@@ -28,7 +28,7 @@ class Footer extends Component {
               <ul className="mr-list-reset mr-text-sm">
                 <li>
                   <a
-                    href="https://github.com/osmlab/maproulette3/wiki/Help-and-Resources"
+                    href="https://github.com/osmlab/maproulette3/wiki"
                     target="_blank"
                     rel="noopener noreferrer"
                   ><FormattedMessage {...messages.getHelp} /></a>
