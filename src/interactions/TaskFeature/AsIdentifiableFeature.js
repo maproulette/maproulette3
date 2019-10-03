@@ -4,7 +4,7 @@ import _find from 'lodash/find'
  * The names of feature and property fields that may be used to identify a
  * feature representing an OSM element
  */
-export const featureIdFields = ['@id', 'osmid', 'osmId', 'osmIdentifier', 'id']
+export const featureIdFields = ['@id', 'osmid', 'osmIdentifier', 'id']
 
 /**
  * AsIdentifiableFeature adds functionality to a Task feature related to
