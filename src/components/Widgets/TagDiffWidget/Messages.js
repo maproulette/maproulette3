@@ -13,5 +13,10 @@ export default defineMessages({
     id: "Widgets.TagDiffWidget.title",
     defaultMessage: "Proposed OSM Tag Changes",
   },
+
+  viewAllTagsLabel: {
+    id: "Widgets.TagDiffWidget.controls.viewAllTags.label",
+    defaultMessage: "Show all Tags",
+  },
 })
 

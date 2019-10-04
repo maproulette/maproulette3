@@ -7,6 +7,31 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.4.2] - 2019-10-04
+### Added
+- Completion and review of multiple tasks together
+- Templates for generating forms to be filled by mapper during task completion
+- RapiD editor option by @gaoxm
+- Updated help links by @mvexel
+- Additional resiliency to missing task geometries
+- Option to include specific task properties as columns in CSV exports
+- Minor updates to home page
+
+### Fixed
+- Keyboard shortcuts not correctly accounting for modifier keys
+- Broken profile pics for some users who uploaded their own avatars to OSM
+- Error at end of challenge for users viewing nearby-tasks map
+- Erroneous link that implied mappers could review their own tasks
+- Locked tasks erroneously offered to users when browsing a challenge
+- OSM elements not automatically selected in iD editor (#906)
+- Quick-fix task properties not reflecting current OSM tags (#915)
+- Task reset back to created status not served to recent viewer
+- Potential divide-by-zero error when no results for challenge stats
+
+### Changed
+- Control for viewing all tags on a quick-fix tag diff from icon to text
+
+
 ## [v3.4.1] - 2019-09-17
 ### Added
 - Current Month option to leaderboard (#885)

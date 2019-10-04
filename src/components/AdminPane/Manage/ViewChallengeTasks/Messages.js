@@ -48,44 +48,14 @@ export default defineMessages({
                     "searches until indexing is complete."
   },
 
-  bulkSelectionTooltip: {
-    id: "Admin.manageTasks.controls.bulkSelection.tooltip",
-    defaultMessage: "Select tasks for bulk operation",
-  },
-
-  changeStatusToLabel: {
-    id: "Admin.manageTasks.controls.changeStatusTo.label",
-    defaultMessage: "Change status to ",
-  },
-
-  chooseStatusLabel: {
-    id: "Admin.manageTasks.controls.chooseStatus.label",
-    defaultMessage: "Choose ... ",
-  },
-
   changePriorityLabel: {
     id: "Admin.manageTasks.controls.changePriority.label",
     defaultMessage: "Change Priority",
   },
 
-  showReviewColumnsLabel: {
-    id: "Admin.manageTasks.controls.showReviewColumns.label",
-    defaultMessage: "Show Review Columns",
-  },
-
-  hideReviewColumnsLabel: {
-    id: "Admin.manageTasks.controls.hideReviewColumns.label",
-    defaultMessage: "Hide Review Columns",
-  },
-
   priorityLabel: {
     id: "Admin.manageTasks.priorityLabel",
     defaultMessage: "Priority",
-  },
-
-  exportCSVLabel: {
-    id: "Admin.manageTasks.controls.exportCSV.label",
-    defaultMessage: "Export CSV",
   },
 
   filterByStatusLabel: {
@@ -103,23 +73,28 @@ export default defineMessages({
     defaultMessage: "Filter by Priority",
   },
 
-  exportGeoJSONLabel: {
-    id: "Admin.manageTasks.controls.exportGeoJSON.label",
-    defaultMessage: "Export GeoJSON",
-  },
-
   clearFiltersLabel: {
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",
   },
 
-  taskCountShownStatus: {
-    id: "Admin.TaskAnalysisTableHeader.taskCountStatus",
-    defaultMessage: "Shown: {countShown} Tasks",
+  inspectTaskLabel: {
+    id: "Admin.ChallengeTaskMap.controls.inspectTask.label",
+    defaultMessage: "Inspect Task",
   },
 
-  taskPercentShownStatus: {
-    id: "Admin.TaskAnalysisTableHeader.taskPercentStatus",
-    defaultMessage: "Shown: {percentShown}% ({countShown}) of {countTotal} Tasks",
+  editTaskLabel: {
+    id: "Admin.ChallengeTaskMap.controls.editTask.label",
+    defaultMessage: "Edit Task",
+  },
+
+  nameLabel: {
+    id: "Admin.Task.fields.name.label",
+    defaultMessage: "Task:",
+  },
+
+  statusLabel: {
+    id: "Admin.Task.fields.status.label",
+    defaultMessage: "Status:",
   },
 })

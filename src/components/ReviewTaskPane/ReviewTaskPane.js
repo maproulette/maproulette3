@@ -10,6 +10,7 @@ import WithWidgetWorkspaces
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
+import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from '../TaskPane/TaskMap/TaskMap'
@@ -56,6 +57,7 @@ export const defaultWorkspaceSetup = function() {
  */
 export class ReviewTaskPane extends Component {
   state = {
+    completionResponses: null
   }
 
   componentDidUpdate(prevProps) {
@@ -63,6 +65,17 @@ export class ReviewTaskPane extends Component {
         this.props.location.search !== prevProps.location.search) {
       window.scrollTo(0, 0)
     }
+
+    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+      this.setState({completionResponses: null})
+    }
+  }
+
+  setCompletionResponse = (propertyName, value) => {
+    const responses = this.state.completionResponses ||
+      JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
+    responses[propertyName] = value
+    this.setState({completionResponses: responses})
   }
 
   render() {
@@ -73,6 +86,17 @@ export class ReviewTaskPane extends Component {
         </div>
       )
     }
+
+    if (this.props.task.isBundlePrimary && !this.props.taskBundle) {
+      return (
+        <div className="pane-loading full-screen-height">
+          <BusySpinner />
+        </div>
+      )
+    }
+
+    const completionResponses = this.state.completionResponses ||
+                                JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
 
     return (
       <div className='task-pane'>
@@ -96,6 +120,10 @@ export class ReviewTaskPane extends Component {
                 </li>
               </ul>
             }
+            setCompletionResponse={this.setCompletionResponse}
+            completionResponses={completionResponses}
+            disableTemplate={true}
+            disallowBundleChanges={true}
         />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
@@ -120,7 +148,9 @@ ReviewTaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    ReviewTaskPane,
+    WithTaskBundle(
+      ReviewTaskPane
+    ),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,
     defaultWorkspaceSetup

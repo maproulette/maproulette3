@@ -40,7 +40,7 @@ const doUpdateBoundedTasks =
   _get(process.env, 'REACT_APP_FEATURE_BOUNDED_TASK_BROWSING') === 'enabled' ?
   _debounce((dispatch, bounds) => {
     if (boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
-      dispatch(fetchBoundedTasks(bounds, 1000))
+      dispatch(fetchBoundedTasks({boundingBox: bounds}, 1000))
       // We also need to make sure we have the parent challenges
       // TODO only fetch parents of retrieved tasks
       dispatch(extendedFind({bounds}))

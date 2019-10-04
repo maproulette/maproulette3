@@ -23,4 +23,19 @@ export default defineMessages({
     id: "Widgets.TaskCompletionWidget.suggestedFixTitle",
     defaultMessage: "Proposed Changes",
   },
+
+  simultaneousTasks: {
+    id: "Widgets.TaskCompletionWidget.simultaneousTasks",
+    defaultMessage: "Working on {taskCount, number} tasks together",
+  },
+
+  completeTogether: {
+    id: "Widgets.TaskCompletionWidget.completeTogether",
+    defaultMessage: "Complete Together",
+  },
+
+  cancelSelection: {
+    id: "Widgets.TaskCompletionWidget.cancelSelection",
+    defaultMessage: "Cancel Selection",
+  },
 })

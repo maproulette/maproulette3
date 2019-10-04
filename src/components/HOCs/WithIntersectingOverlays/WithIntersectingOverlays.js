@@ -34,7 +34,7 @@ export const WithIntersectingOverlays = function(WrappedComponent) {
   }
 }
 
-export default (WrappedComponent, mapBoundsField, searchName) => WithSearch(
+export default (WrappedComponent, mapBoundsField) => WithSearch(
     WithLayerSources(WithIntersectingOverlays(WrappedComponent)),
     mapBoundsField
   )

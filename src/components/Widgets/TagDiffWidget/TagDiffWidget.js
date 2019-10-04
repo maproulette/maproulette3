@@ -10,7 +10,6 @@ import { TaskReviewStatus }
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import TagDiffVisualization from '../../TagDiffVisualization/TagDiffVisualization'
 import TagDiffModal from '../../TagDiffVisualization/TagDiffModal'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import messages from './Messages'
 
@@ -37,19 +36,15 @@ export default class TagDiffWidget extends Component {
         noMain
         permanent
         widgetTitle={
-          <div className="mr-flex">
-            <FormattedMessage {...messages.title} />
-            <button
-              className="mr-text-green-lighter mr-ml-4"
-              onClick={() => this.setState({showDiffModal: true})}
-            >
-              <SvgSymbol
-                sym="expand-icon"
-                viewBox="0 0 32 32"
-                className="mr-transition mr-fill-current mr-w-4 mr-h-4"
-              />
-            </button>
-          </div>
+          <FormattedMessage {...messages.title} />
+        }
+        rightHeaderControls={
+          <button
+            className="mr-button mr-button--small"
+            onClick={() => this.setState({showDiffModal: true})}
+          >
+            <FormattedMessage {...messages.viewAllTagsLabel} />
+          </button>
         }
       >
         <TagDiff {...this.props} />

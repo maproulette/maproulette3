@@ -3,7 +3,8 @@ import { Editor,
          featureOSMId,
          josmLoadAndZoomURI,
          constructIdURI,
-         constructLevel0URI } from './Editor'
+         constructLevel0URI,
+         constructRapidURI } from './Editor'
 import _cloneDeep from 'lodash/cloneDeep'
 
 let dispatch = null
@@ -273,7 +274,7 @@ describe('josmLoadAndZoomURI', () => {
   })
 })
 
-describe('constructURI', () => {
+describe('constructIdURI', () => {
   test("the uri specifies the Id editor", () => {
     const uri = constructIdURI(task, mapBounds)
     expect(uri).toEqual(expect.stringContaining("editor=id#"))
@@ -303,7 +304,7 @@ describe('constructURI', () => {
     const uri = constructIdURI(task, mapBounds)
 
     expect(uri).toEqual(
-      expect.stringContaining(`id=n123`)
+      expect.stringContaining(`node=123`)
     )
   })
 
@@ -313,7 +314,7 @@ describe('constructURI', () => {
     const uri = constructIdURI(task, mapBounds)
 
     expect(uri).toEqual(
-      expect.stringContaining(`id=w456`)
+      expect.stringContaining(`way=456`)
     )
   })
 
@@ -323,7 +324,7 @@ describe('constructURI', () => {
     const uri = constructIdURI(task, mapBounds)
 
     expect(uri).toEqual(
-      expect.stringContaining(`id=w789`)
+      expect.stringContaining(`way=789`)
     )
   })
 
@@ -333,7 +334,7 @@ describe('constructURI', () => {
     const uri = constructIdURI(task, mapBounds)
 
     expect(uri).toEqual(
-      expect.stringContaining(`id=r135`)
+      expect.stringContaining(`relation=135`)
     )
   })
 
@@ -343,7 +344,7 @@ describe('constructURI', () => {
     const uri = constructIdURI(task, mapBounds)
 
     expect(uri).not.toEqual(
-      expect.stringContaining('id=n')
+      expect.stringContaining('node=')
     )
   })
 
@@ -351,6 +352,103 @@ describe('constructURI', () => {
     pointFeature.properties['@id'] = '123'
     taskGeometries.features = [ pointFeature ]
     const uri = constructIdURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(`node=123`)
+    )
+  })
+
+  test("multiple features are comma-separated in the id", () => {
+    pointFeature.properties.osmid = '123'
+    lineStringFeature.properties.osmid = '456'
+    multiPolygonFeature.properties.osmid = '135'
+    taskGeometries.features = [ pointFeature, lineStringFeature, multiPolygonFeature ]
+    const uri = constructIdURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(`node=123&way=456&relation=135`)
+    )
+  })
+})
+
+describe('constructRapidURI', () => {
+  test("the uri specifies the RapiD editor", () => {
+    const uri = constructRapidURI(task, mapBounds)
+    expect(uri).toEqual(expect.stringContaining("rapid"))
+  })
+
+  test("the uri includes slash-separated centerpoint and zoom from mapbounds", () => {
+    const uri = constructRapidURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(`map=${mapBounds.zoom}/${centerPoint.lat}/${centerPoint.lng}`)
+    )
+  })
+
+  test("uri includes a URI-encoded checkin comment from the task challenge", () => {
+    const uri = constructRapidURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(
+        `comment=${encodeURI(challenge.checkinComment)}`
+      )
+    )
+  })
+
+  test("uri includes a node id for Point features with an OSM id", () => {
+    pointFeature.properties.osmid = '123'
+    taskGeometries.features = [ pointFeature ]
+    const uri = constructRapidURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(`id=n123`)
+    )
+  })
+
+  test("uri includes a way id for LineString features with an OSM id", () => {
+    lineStringFeature.properties.osmid = '456'
+    taskGeometries.features = [ lineStringFeature ]
+    const uri = constructRapidURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(`id=w456`)
+    )
+  })
+
+  test("uri includes a way id for Polygon features with an OSM id", () => {
+    polygonFeature.properties.osmid = '789'
+    taskGeometries.features = [ polygonFeature ]
+    const uri = constructRapidURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(`id=w789`)
+    )
+  })
+
+  test("uri includes a relation id for MultiPolygon features with an OSM id", () => {
+    multiPolygonFeature.properties.osmid = '135'
+    taskGeometries.features = [ multiPolygonFeature ]
+    const uri = constructRapidURI(task, mapBounds)
+
+    expect(uri).toEqual(
+      expect.stringContaining(`id=r135`)
+    )
+  })
+
+  test("features lacking an OSM id are not selected", () => {
+    delete pointFeature.properties.osmid
+    taskGeometries.features = [ pointFeature ]
+    const uri = constructRapidURI(task, mapBounds)
+
+    expect(uri).not.toEqual(
+      expect.stringContaining('id=n')
+    )
+  })
+
+  test("features using the alternate @id property are still identified", () => {
+    pointFeature.properties['@id'] = '123'
+    taskGeometries.features = [ pointFeature ]
+    const uri = constructRapidURI(task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`id=n123`)
@@ -362,7 +460,7 @@ describe('constructURI', () => {
     lineStringFeature.properties.osmid = '456'
     multiPolygonFeature.properties.osmid = '135'
     taskGeometries.features = [ pointFeature, lineStringFeature, multiPolygonFeature ]
-    const uri = constructIdURI(task, mapBounds)
+    const uri = constructRapidURI(task, mapBounds)
 
     expect(uri).toEqual(
       expect.stringContaining(`id=n123,w456,r135`)

@@ -8,12 +8,13 @@ import _isArray from 'lodash/isArray'
 import _differenceBy from 'lodash/differenceBy'
 import _omit from 'lodash/omit'
 import _isUndefined from 'lodash/isUndefined'
-import { TaskStatus, keysByStatus }
-       from '../../../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatusWithUnset, keysByReviewStatus, REVIEW_STATUS_NOT_SET }
-      from '../../../../services/Task/TaskReview/TaskReviewStatus'
-import { TaskPriority, keysByPriority }
-       from '../../../../services/Task/TaskPriority/TaskPriority'
+import _find from 'lodash/find'
+import _isEqual from 'lodash/isEqual'
+import _isFinite from 'lodash/isFinite'
+import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
+import { TaskReviewStatusWithUnset, REVIEW_STATUS_NOT_SET }
+      from '../../../services/Task/TaskReview/TaskReviewStatus'
+import { TaskPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 
 /**
  * WithFilteredClusteredTasks applies local filters to the given clustered
@@ -30,15 +31,26 @@ import { TaskPriority, keysByPriority }
  */
 export default function WithFilteredClusteredTasks(WrappedComponent,
                                                    tasksProp='clusteredTasks',
-                                                   outputProp) {
+                                                   outputProp,
+                                                   initialFilters) {
   return class extends Component {
-    state = {
-      includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
-      includeReviewStatuses: _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true])),
-      includePriorities: _fromPairs(_map(TaskPriority, priority => [priority, true])),
+    defaultFilters = () => {
+      return {
+        includeStatuses: _get(initialFilters, 'statuses',
+                              _fromPairs(_map(TaskStatus, status => [status, true]))),
+        includeReviewStatuses: _get(initialFilters, 'reviewStatuses',
+                                    _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true]))),
+        includePriorities: _get(initialFilters, 'priorities',
+                                _fromPairs(_map(TaskPriority, priority => [priority, true]))),
+        includeLocked: _get(initialFilters, 'includeLocked', true),
+      }
+    }
+
+    state = Object.assign({}, this.defaultFilters(), {
       selectedTasks: new Map(),
       filteredTasks: {tasks: []},
-    }
+    })
+
 
     /**
      * Toggle filtering on or off for the given task status
@@ -52,7 +64,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       const filteredTasks = this.filterTasks(includeStatuses,
                                              this.state.includeReviewStatuses,
-                                             this.state.includePriorities)
+                                             this.state.includePriorities,
+                                             this.state.includeLocked)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
 
       this.setState({
@@ -74,7 +87,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
                                              includeReviewStatuses,
-                                             this.state.includePriorities)
+                                             this.state.includePriorities,
+                                             this.state.includeLocked)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
 
       this.setState({
@@ -96,7 +110,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
                                              this.state.includeReviewStatuses,
-                                             includePriorities)
+                                             includePriorities,
+                                             this.state.includeLocked)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
       this.setState({
         includePriorities,
@@ -109,14 +124,15 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      * Filters the tasks, returning only those that match both the given
      * statuses and priorites.
      */
-    filterTasks = (includeStatuses, includeReviewStatuses, includePriorities) => {
+    filterTasks = (includeStatuses, includeReviewStatuses, includePriorities, includeLocked) => {
       let results = null
       if (_isArray(_get(this.props[tasksProp], 'tasks'))) {
         results = Object.assign({}, this.props[tasksProp], {
           tasks: _filter(this.props[tasksProp].tasks, task =>
             includeStatuses[task.status] && includePriorities[task.priority] &&
             ((_isUndefined(task.reviewStatus) && includeReviewStatuses[REVIEW_STATUS_NOT_SET]) ||
-              includeReviewStatuses[task.reviewStatus])
+              includeReviewStatuses[task.reviewStatus]) &&
+            (includeLocked || !_isFinite(task.lockedBy) || task.lockedBy === _get(this.props, 'user.id'))
           ),
         })
       }
@@ -128,14 +144,34 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      * Toggle selection of the given task on or off
      */
     toggleTaskSelection = task => {
-      if (this.state.selectedTasks.has(task.id)) {
-        this.state.selectedTasks.delete(task.id)
+      const selected = new Map(this.state.selectedTasks)
+      if (selected.has(task.id)) {
+        selected.delete(task.id)
       }
       else {
-        this.state.selectedTasks.set(task.id, task)
+        selected.set(task.id, task)
       }
 
-      this.setState({selectedTasks: new Map(this.state.selectedTasks)})
+      this.setState({selectedTasks: selected})
+    }
+
+    /**
+     * Toggle selection of the task with the given id on or off. Requires a
+     * search of the tasks, so less optimal than toggleTaskSelection
+     */
+    toggleTaskSelectionById = taskId => {
+      const selected = new Map(this.state.selectedTasks)
+      if (selected.has(taskId)) {
+        selected.delete(taskId)
+      }
+      else {
+        const task = _find(_get(this.props[tasksProp], 'tasks', []), {id: taskId})
+        if (task) {
+          selected.set(task.id, task)
+        }
+      }
+
+      this.setState({selectedTasks: selected})
     }
 
     /**
@@ -166,15 +202,16 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      * @private
      */
     unselectExcludedTasks = filteredTasks => {
-      const excludedTasks = _differenceBy([...this.state.selectedTasks.values()],
+      const selected = new Map(this.state.selectedTasks)
+      const excludedTasks = _differenceBy([...selected.values()],
                                           filteredTasks.tasks,
                                           task => task.id)
 
       for (let i = 0; i < excludedTasks.length; i++) {
-        this.state.selectedTasks.delete(excludedTasks[i].id)
+        selected.delete(excludedTasks[i].id)
       }
 
-      return this.state.selectedTasks
+      return selected
     }
 
     /**
@@ -185,7 +222,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     refreshSelectedTasks = () => {
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
                                              this.state.includeReviewStatuses,
-                                             this.state.includePriorities)
+                                             this.state.includePriorities,
+                                             this.state.includeLocked)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
       this.setState({filteredTasks, selectedTasks})
     }
@@ -196,79 +234,120 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      * all will be unselected.
      */
     toggleAllTasksSelection = () => {
+      const selected = new Map(this.state.selectedTasks)
       if (this.allTasksAreSelected()) {
-        this.state.selectedTasks.clear()
+        selected.clear()
       }
       else {
         let task = null
 
-        this.state.selectedTasks.clear()
+        selected.clear()
         for (let i = 0; i < this.state.filteredTasks.tasks.length; i++) {
           task = this.state.filteredTasks.tasks[i]
-          this.state.selectedTasks.set(task.id, task)
+          selected.set(task.id, task)
         }
       }
 
-      this.setState({selectedTasks: new Map(this.state.selectedTasks)})
+      this.setState({selectedTasks: selected})
+    }
+
+    /**
+     * All will be unselected.
+     */
+    unselectAllTasks = () => {
+      const selected = new Map(this.state.selectedTasks)
+      selected.clear()
+      this.setState({selectedTasks: selected})
     }
 
     /**
      * Select all filtered tasks that match the given status.
      */
     selectTasksWithStatus = status => {
+      const selected = new Map(this.state.selectedTasks)
       let task = null
 
       for (let i = 0; i < this.state.filteredTasks.tasks.length; i++) {
         task = this.state.filteredTasks.tasks[i]
         if (task.status === status) {
-          this.state.selectedTasks.set(task.id, task)
+          selected.set(task.id, task)
         }
       }
 
-      this.setState({selectedTasks: new Map(this.state.selectedTasks)})
+      this.setState({selectedTasks: selected})
     }
 
     /**
      * Select all filtered tasks that match the given status.
      */
     selectTasksWithPriority = priority => {
+      const selected = new Map(this.state.selectedTasks)
       let task = null
 
       for (let i = 0; i < this.state.filteredTasks.tasks.length; i++) {
         task = this.state.filteredTasks.tasks[i]
         if (task.priority === priority) {
-          this.state.selectedTasks.set(task.id, task)
+          selected.set(task.id, task)
         }
       }
 
-      this.setState({selectedTasks: new Map(this.state.selectedTasks)})
+      this.setState({selectedTasks: selected})
+    }
+
+    /**
+     * Select the given tasks. No checks are made to ensure the tasks are
+     * actually included in the filtered results, so take care with this method
+     */
+    selectTasks = tasks => {
+      const selected = new Map(this.state.selectedTasks)
+      for (let i = 0; i < tasks.length; i++) {
+        selected.set(tasks[i].id, tasks[i])
+      }
+
+      this.setState({selectedTasks: selected})
     }
 
     clearAllFilters = () => {
-      const filteredTasks = this.filterTasks(keysByStatus, keysByReviewStatus, keysByPriority)
+      const freshFilters = this.defaultFilters()
+      const filteredTasks = this.filterTasks(freshFilters.includeStatuses,
+                                             freshFilters.includeReviewStatuses,
+                                             freshFilters.includePriorities,
+                                             freshFilters.includeLocked)
       const selectedTasks = this.unselectExcludedTasks(filteredTasks)
 
-      this.setState({filteredTasks, selectedTasks,
-                     includeStatuses: _fromPairs(_map(TaskStatus, status => [status, true])),
-                     includeReviewStatuses: _fromPairs(_map(TaskReviewStatusWithUnset, status => [status, true])),
-                     includePriorities: _fromPairs(_map(TaskPriority, priority => [priority, true])), })
+      this.setState(Object.assign({filteredTasks, selectedTasks}, freshFilters))
+    }
+
+    resetSelectedTasks = () => {
+      this.clearAllFilters()
+      this.setState({selectedTasks: new Map()})
     }
 
     componentDidMount() {
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
                                              this.state.includeReviewStatuses,
-                                             this.state.includePriorities)
+                                             this.state.includePriorities,
+                                             this.state.includeLocked)
       this.setState({filteredTasks})
+
+      // If we have a property that wants the accessor to unselect all tasks
+      // then set it up.
+      if (this.props.setResetSelectedTasksAccessor) {
+        this.props.setResetSelectedTasksAccessor(() => this.resetSelectedTasks())
+      }
     }
 
-    componentDidUpdate(prevProps) {
-      if (_get(prevProps[tasksProp], 'tasks.length', 0) !==
-          _get(this.props[tasksProp], 'tasks.length', 0)) {
-        this.setState({
-          filteredTasks: this.filterTasks(this.state.includeStatuses,
-                                          this.state.includeReviewStatuses,
-                                          this.state.includePriorities)
-        })
+    componentDidUpdate(prevProps, prevState) {
+      if (_get(prevProps[tasksProp], 'tasks.length', 0) !== _get(this.props[tasksProp], 'tasks.length', 0) ||
+          _get(prevProps[tasksProp], 'fetchId') !== _get(this.props[tasksProp], 'fetchId')) {
+        this.refreshSelectedTasks()
+      }
+
+      if (!_isEqual(this.state.selectedTasks, prevState.selectedTasks)) {
+        // If we have a listener for selected tasks let's pass up our changed tasks
+        if (this.props.setSelectedTasks) {
+          this.props.setSelectedTasks(this.state.selectedTasks)
+        }
       }
     }
 
@@ -286,13 +365,16 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                                toggleIncludedTaskReviewStatus={this.toggleIncludedReviewStatus}
                                toggleIncludedTaskPriority={this.toggleIncludedPriority}
                                toggleTaskSelection={this.toggleTaskSelection}
+                               toggleTaskSelectionById={this.toggleTaskSelectionById}
                                toggleAllTasksSelection={this.toggleAllTasksSelection}
                                refreshSelectedTasks={this.refreshSelectedTasks}
                                selectTasksWithStatus={this.selectTasksWithStatus}
                                selectTasksWithPriority={this.selectTasksWithPriority}
+                               selectTasks={this.selectTasks}
                                allTasksAreSelected={this.allTasksAreSelected}
                                someTasksAreSelected={this.someTasksAreSelected}
                                clearAllFilters={this.clearAllFilters}
+                               resetSelectedTasks={this.resetSelectedTasks}
                                {..._omit(this.props, outputProp)} />
     }
   }

@@ -5,6 +5,8 @@ import MediaQuery from 'react-responsive'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
+import { isFinalStatus }
+       from '../../services/Task/TaskStatus/TaskStatus'
 import WithWidgetWorkspaces
        from '../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import AsManager from '../../interactions/User/AsManager'
@@ -13,6 +15,7 @@ import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import WithSuggestedFix from '../HOCs/WithSuggestedFix/WithSuggestedFix'
+import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import VirtualChallengeNameLink
@@ -76,6 +79,7 @@ export class TaskPane extends Component {
      * animation transitions.
      */
     completingTask: null,
+    completionResponses: null
   }
 
   /**
@@ -85,10 +89,11 @@ export class TaskPane extends Component {
    * transition animation as the task prepares to complete.
    */
   completeTask = (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
-                  needsReview, requestedNextTask, osmComment, tagEdits) => {
+                  needsReview, requestedNextTask, osmComment, tagEdits, taskBundle) => {
     this.setState({completingTask: task.id})
     this.props.completeTask(task, challengeId, taskStatus, comment, tags, taskLoadBy, userId,
-                            needsReview, requestedNextTask, osmComment, tagEdits)
+                            needsReview, requestedNextTask, osmComment, tagEdits, this.state.completionResponses, taskBundle)
+    this.props.clearActiveTaskBundle()
   }
 
   clearCompletingTask = () => {
@@ -98,10 +103,21 @@ export class TaskPane extends Component {
     }, 0)
   }
 
+  setCompletionResponse = (propertyName, value) => {
+    const responses = this.state.completionResponses ||
+      JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
+    responses[propertyName] = value
+    this.setState({completionResponses: responses})
+  }
+
   componentDidUpdate(prevProps) {
     if (this.props.location.pathname !== prevProps.location.pathname &&
         this.props.location.search !== prevProps.location.search) {
       window.scrollTo(0, 0)
+    }
+
+    if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
+      this.setState({completionResponses: null})
     }
   }
 
@@ -120,6 +136,9 @@ export class TaskPane extends Component {
 
     const isManageable =
       AsManager(this.props.user).canManageChallenge(_get(this.props, 'task.parent'))
+
+    const completionResponses = this.state.completionResponses ||
+                                JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
 
     return (
       <div className='task-pane'>
@@ -154,6 +173,9 @@ export class TaskPane extends Component {
             }
             completeTask={this.completeTask}
             completingTask={this.state.completingTask}
+            setCompletionResponse={this.setCompletionResponse}
+            completionResponses={completionResponses}
+            disableTemplate={isFinalStatus(this.props.task.status)}
         />
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
@@ -178,8 +200,10 @@ TaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    WithSuggestedFix(
-      injectIntl(TaskPane)
+    WithTaskBundle(
+      WithSuggestedFix(
+        injectIntl(TaskPane)
+      ),
     ),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,

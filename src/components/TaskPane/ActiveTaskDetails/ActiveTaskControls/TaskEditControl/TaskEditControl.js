@@ -23,6 +23,11 @@ export default class TaskEditControl extends Component {
       return
     }
 
+    // Ignore if modifier keys were pressed
+    if (event.metaKey || event.altKey || event.ctrlKey) {
+      return
+    }
+
     const editShortcuts = this.props.keyboardShortcutGroups.openEditor
 
     switch(event.key) {
@@ -40,6 +45,9 @@ export default class TaskEditControl extends Component {
         break
       case editShortcuts.editLevel0.key:
         this.props.pickEditor({value: Editor.level0})
+        break
+      case editShortcuts.editRapid.key:
+        this.props.pickEditor({value: Editor.rapid})
         break
       default:
     }

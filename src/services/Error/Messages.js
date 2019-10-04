@@ -66,6 +66,10 @@ export default defineMessages({
     id: 'Errors.task.alreadyLocked',
     defaultMessage: "Task has already been locked by someone else.",
   },
+  taskBundleFailure: {
+    id: 'Errors.task.bundleFailure',
+    defaultMessage: "Unable to bundling tasks together",
+  },
 
   osmRequestTooLarge: {
     id: 'Errors.osm.requestTooLarge',

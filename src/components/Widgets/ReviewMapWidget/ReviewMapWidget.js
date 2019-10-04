@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
-import ReviewBrowseMap from '../../../pages/Review/ReviewBrowseMap/ReviewBrowseMap'
+import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
 import WithReviewTaskClusters from '../../HOCs/WithReviewTaskClusters/WithReviewTaskClusters'
+import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import messages from './Messages'
 
@@ -17,7 +18,8 @@ const descriptor = {
   defaultHeight: 10,
 }
 
-const BrowseMap = WithReviewTaskClusters(ReviewBrowseMap)
+const BrowseMap =
+  WithReviewTaskClusters(WithTaskClusterMarkers(TaskClusterMap('reviewBrowse')))
 
 export default class ReviewMapWidget extends Component {
   render() {

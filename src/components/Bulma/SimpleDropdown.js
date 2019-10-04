@@ -28,7 +28,7 @@ export class SimpleDropdown extends Component {
 
         <div className="menu-wrapper">
           <div className="dropdown-menu" role='menu'>
-            <div className="dropdown-content">
+            <div className="dropdown-content mr-bg-blue-dark">
               {_isArray(this.props.children) ?
               this.props.children :
               <div className="dropdown-item">{this.props.children}</div>

@@ -39,7 +39,8 @@ export class ReviewTaskControls extends Component {
   onConfirm = () => {
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,
-                                     this.state.loadBy, this.props.history)
+                                     this.state.loadBy, this.props.history,
+                                     this.props.taskBundle)
     this.setState({confirmingTask: false, comment: ""})
   }
 
@@ -69,7 +70,7 @@ export class ReviewTaskControls extends Component {
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
     this.setState({taskBeingCompleted: this.props.task.id})
-    this.props.editTask(value, this.props.task, this.props.mapBounds)
+    this.props.editTask(value, this.props.task, this.props.mapBounds, null, this.props.taskBundle)
   }
 
   render() {

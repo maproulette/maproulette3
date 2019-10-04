@@ -10,6 +10,7 @@ import OriginalSelectWidget
        from 'react-jsonschema-form/lib/components/widgets/SelectWidget'
 import { FormattedMessage } from 'react-intl'
 import MarkdownContent from '../../MarkdownContent/MarkdownContent'
+import MarkdownTemplate from '../../MarkdownContent/MarkdownTemplate'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import 'react-tagsinput/react-tagsinput.css'
@@ -111,6 +112,8 @@ export const CustomSelectWidget = function(props) {
  */
 export class MarkdownEditField extends Component {
   render() {
+    const showMustacheNote = /{{/.test(this.props.formData) // tags present
+
     return (
       <React.Fragment>
         <label className="control-label">
@@ -123,7 +126,18 @@ export class MarkdownEditField extends Component {
           <textarea className="form-control"
                     onChange={e => this.props.onChange(e.target.value)}
                     value={this.props.formData} />
-          <MarkdownContent className="mr-markdown--light" markdown={this.props.formData} />
+          <div>
+            {showMustacheNote &&
+              <div className="mr-italic mr-text-xs">
+                <FormattedMessage {...messages.addMustachePreviewNote} />
+              </div>
+            }
+            <MarkdownTemplate content={this.props.formData || ""}
+                              properties={{}}
+                              completionResponses={{}}
+                              setCompletionResponse={() => {}}
+                              disableTemplate={true}/>
+          </div>
         </div>
       </React.Fragment>
     )

@@ -112,7 +112,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
 
             if (challenge.id !== _get(props, 'clusteredTasks.challengeId') ||
                 isVirtual !== _get(props, 'clusteredTasks.isVirtualChallenge')) {
-              props.fetchClusteredTasks(challenge.id, isVirtual)
+              props.fetchClusteredTasks(challenge.id, isVirtual, undefined, undefined, undefined, true)
             }
           }
           else if (!isVirtual && !_isFinite(this.state.loadingBrowsedChallenge)) {

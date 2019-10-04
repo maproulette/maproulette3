@@ -20,7 +20,7 @@ import WithCurrentChallenge
 import WithWidgetWorkspaces
        from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WithFilteredClusteredTasks
-       from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+       from '../../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import WithChallengeReviewMetrics

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'
 import 'leaflet-vectoricon'
 import { ZoomControl, Marker } from 'react-leaflet'
@@ -127,6 +127,14 @@ export class TaskNearbyMap extends Component {
     const overlayLayers = _map(this.props.visibleOverlays, (layerId, index) =>
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
+
+    if (!coloredMarkers) {
+      return (
+        <div className="mr-h-full">
+          <FormattedMessage {...messages.noTasksAvailableLabel} />
+        </div>
+      )
+    }
 
     return (
       <div className="mr-h-full">

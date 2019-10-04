@@ -6,7 +6,7 @@ import _snakeCase from 'lodash/snakeCase'
 import { defaultRoutes as api } from '../../Server/Server'
 import Endpoint from '../../Server/Endpoint'
 import RequestStatus from '../../Server/RequestStatus'
-import { setupFilterSearchParameters } from './TaskReview'
+import { generateSearchParametersString } from '../../Search/Search'
 import { taskSchema } from '.././Task'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
@@ -41,9 +41,9 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? _snakeCase(sortBy) : null
   const page = _get(criteria, 'page', 0)
-  const searchParameters = setupFilterSearchParameters(_get(criteria, 'filters', {}),
-                                                       criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly'))
+  const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                          criteria.boundingBox,
+                                                          _get(criteria, 'savedChallengesOnly'))
 
   return function(dispatch) {
     return new Endpoint(

@@ -14,7 +14,9 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromVirtualChallenge,
          startTask,
          addTaskComment,
+         addTaskBundleComment,
          completeTask,
+         completeTaskBundle,
          updateTaskTags } from '../../../services/Task/Task'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
@@ -158,10 +160,10 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     /**
-     * Invoke to mark as a task as complete with the given status
+     * Invoke to mark a task as complete with the given status
      */
     completeTask: (task, challengeId, taskStatus, comment, tags, taskLoadBy, userId, needsReview,
-                   requestedNextTask, osmComment, tagEdits) => {
+                   requestedNextTask, osmComment, tagEdits, completionResponses, taskBundle) => {
       const taskId = task.id
 
       // Work to be done after the status is set
@@ -181,7 +183,12 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         }
 
         if (_isString(comment) && comment.length > 0) {
-          dispatch(addTaskComment(taskId, comment, taskStatus))
+          if (taskBundle) {
+            dispatch(addTaskBundleComment(taskBundle.bundleId, taskId, comment, taskStatus))
+          }
+          else {
+            dispatch(addTaskComment(taskId, comment, taskStatus))
+          }
         }
 
         // Update the user in the background to get their latest score
@@ -210,7 +217,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         }
 
         return dispatch(
-          completeTask(taskId, challengeId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment)
+          taskBundle ?
+          completeTaskBundle(taskBundle.bundleId, taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
+          completeTask(taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses)
         ).then(() => doAfter())
       }
     },

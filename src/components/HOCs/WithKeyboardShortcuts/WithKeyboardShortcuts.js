@@ -49,9 +49,13 @@ const mapDispatchToProps = dispatch => {
       dispatch(removeKeyboardShortcut(groupName, shortcutName))
     },
     textInputActive: textInputActive,
-    quickKeyHandler: (key, handler) => (event => {
+    quickKeyHandler: (key, handler, allowModifierKeys=false) => (event => {
       if (textInputActive(event)) {
         return // ignore typing in inputs
+      }
+
+      if (!allowModifierKeys && (event.metaKey || event.altKey || event.ctrlKey)) {
+        return
       }
 
       if (event.key === key) {

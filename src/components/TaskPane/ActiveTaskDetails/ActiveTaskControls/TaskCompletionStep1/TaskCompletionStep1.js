@@ -78,7 +78,7 @@ export default class TaskCompletionStep1 extends Component {
           }
 
           {this.props.needsRevised &&
-            <TaskRevisedControl {...this.props} />
+            <TaskRevisedControl {...this.props} className="" />
           }
         </div>
       </div>

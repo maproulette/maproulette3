@@ -27,5 +27,9 @@ export default defineMessages({
   level0: {
     id: "Editor.level0.label",
     defaultMessage: "Edit in Level0"
+  },
+  rapid: {
+    id: "Editor.rapid.label",
+    defaultMessage: "Edit in RapiD"
   }
 })

@@ -128,7 +128,7 @@ export class TaskReviewTable extends Component {
               </h1>
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
                 <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleShowFavorites()}>
-                  <input type="checkbox" className=""
+                  <input type="checkbox" className="mr-mr-px"
                          checked={!!this.props.reviewCriteria.savedChallengesOnly}
                          onChange={() => null} />
                   <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
@@ -194,7 +194,24 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
   columns.id = {
     id: 'id',
     Header: props.intl.formatMessage(messages.idLabel),
-    accessor: 'id',
+    accessor: t => {
+      if (!t.isBundlePrimary) {
+        return <span>{t.id}</span>
+      }
+      else {
+        return (
+          <span className="mr-flex mr-items-center">
+            <SvgSymbol
+              sym="box-icon"
+              viewBox="0 0 20 20"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-pin-l mr--ml-2"
+              title={props.intl.formatMessage(messages.multipleTasksTooltip)}
+            />
+            {t.id}
+          </span>
+        )
+      }
+    },
     sortable: true,
     exportable: t => t.id,
     maxWidth: 120,
@@ -418,22 +435,22 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     maxWidth: 120,
     minWidth: 110,
     Cell: ({row}) =>{
-      const linkTo =`/challenge/${row._original.parent.id}/task/${row.id}/review`
+      const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/review`
       let action =
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
           <FormattedMessage {...messages.reviewTaskLabel} />
         </div>
 
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </div>
         }
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
               <FormattedMessage {...messages.resolveTaskLabel} />
             </div>
         }
@@ -451,7 +468,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     sortable: false,
     maxWidth: 110,
     Cell: ({row}) =>{
-      let linkTo = `/challenge/${row._original.parent.id}/task/${row.id}`
+      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
       let message = <FormattedMessage {...messages.viewTaskLabel} />
 
       // The mapper needs to rereview a contested task.
@@ -461,7 +478,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       }
 
       return <div className="row-controls-column">
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter mr-cursor-pointer">
+        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
           {message}
         </div>
       </div>
@@ -475,16 +492,10 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     minWidth: 90,
     maxWidth: 120,
     Cell: ({row}) =>{
-      let linkTo = `/challenge/${row._original.parent.id}/task/${row.id}`
+      let linkTo = `/challenge/${row._original.parent.id}/task/${row._original.id}`
       let message = row._original.reviewStatus === TaskReviewStatus.rejected ?
                         <FormattedMessage {...messages.fixTaskLabel} /> :
                         <FormattedMessage {...messages.viewTaskLabel} />
-
-      // The mapper needs to rereview a contested task.
-      if (row._original.reviewStatus === TaskReviewStatus.disputed) {
-        linkTo += "/review"
-        message = <FormattedMessage {...messages.resolveTaskLabel} />
-      }
 
       return <div className="row-controls-column">
         <Link to={linkTo}>
@@ -501,7 +512,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     sortable: false,
     maxWidth: 110,
     Cell: props =>
-      <ViewCommentsButton onClick={() => openComments(props.row.id)} />,
+      <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   }
 
   return columns

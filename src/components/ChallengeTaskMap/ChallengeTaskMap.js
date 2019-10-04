@@ -12,25 +12,21 @@ import _each from 'lodash/each'
 import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
 import _isEqual from 'lodash/isEqual'
+import _cloneDeep from 'lodash/cloneDeep'
 import L, { latLng } from 'leaflet'
 import 'leaflet-vectoricon'
-import { layerSourceWithId }
-       from '../../../../services/VisibleLayer/LayerSources'
-import { messagesByStatus }
-       from '../../../../services/Task/TaskStatus/TaskStatus'
-import { MAPBOX_LIGHT,
-         OPEN_STREET_MAP }
-       from '../../../../services/VisibleLayer/LayerSources'
-import AsManager from '../../../../interactions/User/AsManager'
-import EnhancedMap from '../../../EnhancedMap/EnhancedMap'
-import SourcedTileLayer from '../../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
-import LayerToggle from '../../../EnhancedMap/LayerToggle/LayerToggle'
-import SearchControl from '../../../EnhancedMap/SearchControl/SearchControl'
-import WithVisibleLayer from '../../../HOCs/WithVisibleLayer/WithVisibleLayer'
+import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
+import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
+import EnhancedMap from '../EnhancedMap/EnhancedMap'
+import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
+import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
+import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
+import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
-       from '../../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
-import WithStatus from '../../../HOCs/WithStatus/WithStatus'
-import BusySpinner from '../../../BusySpinner/BusySpinner'
+       from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
+import WithStatus from '../HOCs/WithStatus/WithStatus'
+import BusySpinner from '../BusySpinner/BusySpinner'
+import { colors } from '../../tailwind'
 import messages from './Messages'
 import './ChallengeTaskMap.scss'
 
@@ -48,7 +44,7 @@ const UNCLUSTER_THRESHOLD=1000 // max number of tasks
  */
 export class ChallengeTaskMap extends Component {
   state = {
-    clusterTasks: true,
+    clusterTasks: !this.props.initiallyUnclustered,
   }
 
   currentBounds = null
@@ -105,9 +101,14 @@ export class ChallengeTaskMap extends Component {
       return true
     }
 
-    // If the map bounds have changed
-    if (_get(nextProps, 'currentSearch.challengeOwner.mapBounds.bounds') !==
-        this.currentBounds) {
+    if (_get(nextProps, 'taskInfo.fetchId') !==
+        _get(this.props, 'taskInfo.fetchId')) {
+      return true
+    }
+
+    // the selected tasks changed
+    if (_get(nextProps, 'selectedTasks.size', 0) !==
+        _get(this.props, 'selectedTasks.size', 0)) {
       return true
     }
 
@@ -134,44 +135,17 @@ export class ChallengeTaskMap extends Component {
     }
 
     this.currentBounds = bounds
-    if (this.props.setChallengeOwnerMapBounds) {
-      this.props.setChallengeOwnerMapBounds(this.props.challenge.id,
-                                            bounds, zoom)
+    if (this.props.setMapBounds) {
+      this.props.setMapBounds(this.props.challengeId, bounds, zoom)
     }
   }
 
   clusterIcon = cluster => {
-    let colorScheme = null
-    switch(_get(this.props, 'source.name')) {
-      case MAPBOX_LIGHT:
-        colorScheme = 'monochromatic-blue-cluster'
-        break;
-      case OPEN_STREET_MAP:
-        colorScheme = 'monochromatic-brown-cluster'
-        break;
-      default:
-        colorScheme = 'greyscale-cluster'
-        break;
-    }
-
-    const count = cluster.getChildCount()
-    let clusterSizeClass = ''
-    if (count < 10) {
-      clusterSizeClass = 'few'
-    }
-    else if (count > 100) {
-      clusterSizeClass = 'many'
-    }
-
-    return L.divIcon({
-      html: `<span class="count">${count}</span>`,
-      className: `${colorScheme} ${clusterSizeClass}`,
-      iconSize: L.point(40, 40),
-    })
+    return AsMappableCluster(cluster).leafletMarkerIcon(_get(this.props, 'source.name'))
   }
 
   render() {
-    if (!this.props.challenge) {
+    if (!this.props.challengeId) {
       return null
     }
 
@@ -181,11 +155,12 @@ export class ChallengeTaskMap extends Component {
     const canUncluster =
       _get(this.props, 'taskInfo.tasks.length', 0) <= UNCLUSTER_THRESHOLD
 
-    // Create map markers for the tasks.
+    // Create map markers for the tasks
     const statusIcons = _fromPairs(_map(this.props.statusColors, (color, status) => [
       status,
       L.vectorIcon({
         className: 'location-marker-icon',
+        viewBox: '0 0 20 20',
         svgHeight: 20,
         svgWidth: 20,
         type: 'path',
@@ -194,15 +169,14 @@ export class ChallengeTaskMap extends Component {
         },
         style: {
           fill: color,
-          stroke: '#666',
+          stroke: colors['grey-leaflet'],
           strokeWidth: 0.5,
         },
         iconAnchor: [5, 15], // render tip of SVG near marker location
       })
     ]))
 
-    if (_get(this.props, 'taskInfo.challengeId') ===
-        this.props.challenge.id) {
+    if (_get(this.props, 'taskInfo.challengeId') === this.props.challengeId) {
       loadingClusteredTasks = this.props.taskInfo.loading
 
       if (_get(this.props, 'taskInfo.tasks.length') > 0) {
@@ -220,15 +194,14 @@ export class ChallengeTaskMap extends Component {
       }
     }
 
-    // Get the challenge bounding so we know which part of the map to display.
-    // Right now API double-nests bounding, but that will likely change.
+    // If we have a challenge object, try to get a challenge bounding so we
+    // know which part of the map to display. Right now API double-nests
+    // bounding, but that will likely change
     bounding = _get(this.props, 'challenge.bounding.bounding') ||
                _get(this.props, 'challenge.bounding')
 
-
     // If the challenge doesn't have a bounding polygon, build one from the
-    // markers instead. This is extra work and requires waiting for the clustered
-    // task data to arrive, so not ideal.
+    // markers instead
     if (!bounding && markers.length > 0) {
       bounding = bboxPolygon(
         bbox(featureCollection(
@@ -241,26 +214,40 @@ export class ChallengeTaskMap extends Component {
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
 
+    const renderedMarkers = _map(markers, markerData => {
+      let icon = statusIcons[markerData.options.status]
+      if (this.props.selectedTasks.has(markerData.options.taskId)) {
+        icon = _cloneDeep(icon)
+        icon.options.style.fill = colors.yellow
+      }
 
-    const renderedMarkers = !_get(this.props, 'challenge.parent') ? [] :
-                            _map(markers, markerData => (
-      <Marker
-        key={markerData.options.taskId}
-        {...markerData}
-        icon={statusIcons[markerData.options.status]}
-      >
-        <TaskMarkerPopup {...this.props} marker={markerData} />
-      </Marker>
-    ))
+      if (this.props.highlightPrimaryTask && markerData.options.taskId === this.props.task.id) {
+        // Make marker for current task larger
+        icon = _cloneDeep(icon)
+        icon.options.svgHeight = 40
+        icon.options.svgWidth = 40
+        icon.options.iconAnchor = [5, 25] // adjust position of marker tip for larger size
+      }
+
+      return (
+        <Marker
+          key={markerData.options.taskId}
+          {...markerData}
+          icon={icon}
+        >
+          {this.props.taskMarkerContent && <TaskMarkerPopup {...this.props} marker={markerData} />}
+        </Marker>
+      )
+    })
 
     // Note: would like to enable chunkedLoading, but enabling runs into
     // https://github.com/Leaflet/Leaflet.markercluster/issues/743 on
     // challenges with a large number of tasks. So disable for now.
     return (
-      <div key={this.props.challenge.id}
+      <div key={this.props.challengeId}
            className={classNames('challenge-task-map', this.props.className)}>
         {canUncluster &&
-         <label className="mr-absolute mr-z-10 mr-pin-b mr-pin-l mr-mb-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
+         <label className="mr-absolute mr-z-10 mr-pin-t mr-pin-l mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
             <input type="checkbox" className="mr-mr-2"
               checked={this.state.clusterTasks}
               onChange={this.toggleClusterTasks} />
@@ -271,12 +258,12 @@ export class ChallengeTaskMap extends Component {
         <LayerToggle {...this.props} />
         <SearchControl
           {...this.props}
-          onResultSelected={bounds => this.props.setChallengeOwnerMapBounds(this.props.challenge.id, bounds)}
+          onResultSelected={bounds => this.props.setMapBounds(this.props.challengeId, bounds)}
         />
         <EnhancedMap center={latLng(0, 45)}
                      zoom={_get(this.props.lastZoom, 3)} minZoom={1} maxZoom={18}
                      setInitialBounds={false}
-                     initialBounds = {_get(this.props, 'lastBounds', this.currentBounds)}
+                     initialBounds = {_get(this.props, 'lastBounds.bounds', this.currentBounds)}
                      zoomControl={false} animate={true} worldCopyJump={true}
                      features={this.props.lastBounds ? undefined : bounding}
                      justFitFeatures={false}
@@ -303,54 +290,19 @@ export class ChallengeTaskMap extends Component {
 }
 
 const TaskMarkerPopup = props => {
-  const manager = AsManager(props.user)
-  const taskBaseRoute =
-    `/admin/project/${props.challenge.parent.id}` +
-    `/challenge/${props.challenge.id}/task/${props.marker.options.taskId}`
-
+  const TaskMarkerContent = props.taskMarkerContent
   return (
     <Popup>
       <div className="marker-popup-content">
-        <div>
-          {
-            props.intl.formatMessage(messages.nameLabel)
-          } {
-            props.marker.options.name
-          }
-        </div>
-        <div>
-          {
-            props.intl.formatMessage(messages.statusLabel)
-          } {
-            props.intl.formatMessage(messagesByStatus[props.marker.options.status])
-          }
-        </div>
-
-        <div className="marker-popup-content__links">
-          <div>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => props.history.push(`${taskBaseRoute}/inspect`)}>
-              {props.intl.formatMessage(messages.inspectTaskLabel)}
-            </a>
-          </div>
-
-          {manager.canWriteProject(props.challenge.parent) &&
-            <div>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a onClick={() => props.history.push(`${taskBaseRoute}/edit`)}>
-                {props.intl.formatMessage(messages.editTaskLabel)}
-              </a>
-            </div>
-          }
-        </div>
+        <TaskMarkerContent {...props} />
       </div>
     </Popup>
   )
 }
 
 ChallengeTaskMap.propTypes = {
-  /** The current challenge being shown */
-  challenge: PropTypes.object.isRequired,
+  /** Id of the challenge being shown */
+  challengeId: PropTypes.number.isRequired,
   /** The tasks to map */
   taskInfo: PropTypes.shape({
     challengeId: PropTypes.number,
@@ -362,7 +314,7 @@ ChallengeTaskMap.propTypes = {
   /** Options for filtering displayed tasks */
   filterOptions: PropTypes.object,
   /** Invoked when the user moves or zooms the map */
-  setChallengeOwnerMapBounds: PropTypes.func,
+  setMapBounds: PropTypes.func,
   /** Optional default map layer to display */
   defaultLayer: PropTypes.object,
   /** Set to true to render monochromatic cluster icons */
@@ -372,13 +324,14 @@ ChallengeTaskMap.propTypes = {
 ChallengeTaskMap.defaultProps = {
   filterOptions: {},
   greyscaleClusters: false,
+  initiallyUnclustered: false,
 }
 
-export default WithStatus(
+export default mapBoundsField => WithStatus(
   WithVisibleLayer(
     WithIntersectingOverlays(
       injectIntl(ChallengeTaskMap),
-      'challengeOwner'
+      mapBoundsField
     )
   )
 )
