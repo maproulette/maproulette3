@@ -165,7 +165,7 @@ const AttachedComment = function(props) {
       <p className="mr-text-xs">{props.notification.fromUsername}</p>
       <div className="mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">
         <div className="mr-markdown mr-markdown--longtext">
-          <Markdown markdown={props.notification.extra} />
+          <Markdown allowShortCodes markdown={props.notification.extra} />
         </div>
       </div>
     </React.Fragment>
