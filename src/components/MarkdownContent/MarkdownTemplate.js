@@ -139,7 +139,13 @@ export default class MarkdownTemplate extends Component {
     // simple substitution first.
     let substituted = text
     _keys(properties).forEach(key => {
-      substituted = substituted.replace(RegExp(`{{\\s*${key}\\s*}}`, "g"), properties[key])
+      let safe = properties[key]
+      if (safe) {
+        safe = safe.toString().replace(/</g, '&lt;')
+        safe = safe.toString().replace(/>/g, '&gt;')
+      }
+
+      substituted = substituted.replace(RegExp(`{{\\s*${key}\\s*}}`, "g"), safe)
     })
     return substituted
   }
