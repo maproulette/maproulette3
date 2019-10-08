@@ -442,6 +442,19 @@ const openJOSM = function(dispatch, editor, task, mapBounds, josmURIFunction, ta
 }
 
 /**
+ * Load the given objects into JOSM
+ */
+export const loadObjectsIntoJOSM = function(objectIds, asNewLayer) {
+  const objectIdString = objectIds.join(',')
+  let josmURI = `${josmHost()}load_object?objects=${objectIdString}&layer_name=${objectIdString}`
+  if (asNewLayer) {
+    josmURI += "&new_layer=true"
+  }
+
+  return sendJOSMCommand(josmURI)
+}
+
+/**
  * Returns the first truthy value from the given object that is encountered a
  * given acceptable key, which are attempted in order. If no truthy values are
  * found, or if the given object is null/undefined, then undefined is returned.

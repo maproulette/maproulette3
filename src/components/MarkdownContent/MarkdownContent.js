@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import remark from 'remark'
 import externalLinks from 'remark-external-links'
 import reactRenderer from 'remark-react'
+import { expandShortCodesInJSX } from '../../services/ShortCodes/ShortCodes'
 
 /**
  * MarkdownContent normalizes and renders the content of the given markdown
@@ -19,13 +20,17 @@ export default class MarkdownContent extends Component {
 
     // Replace any occurrences of \r\n with newlines.
     const normalizedMarkdown = this.props.markdown.replace(/\r\n/mg, "\n\n")
+    let parsedMarkdown =
+      remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
+              .use(reactRenderer).processSync(normalizedMarkdown).contents
+
+    if (this.props.allowShortCodes) {
+      parsedMarkdown = expandShortCodesInJSX(parsedMarkdown)
+    }
 
     return (
       <div className={classNames('mr-markdown', this.props.className)}>
-        {
-          remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
-                  .use(reactRenderer).processSync(normalizedMarkdown).contents
-        }
+        {parsedMarkdown}
       </div>
     )
   }
