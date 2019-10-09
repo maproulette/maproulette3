@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _get from 'lodash/get'
-import { editTask, closeEditor, loadObjectsIntoJOSM,
-         josmHost, isJosmEditor, DEFAULT_EDITOR }
+import { editTask, closeEditor, loadObjectsIntoJOSM, zoomJOSM,
+         josmHost, isJosmEditor, viewportToBBox, DEFAULT_EDITOR }
        from '../../../services/Editor/Editor'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
@@ -31,18 +31,24 @@ export const mapStateToProps = state => {
 export const mapDispatchToProps = dispatch => {
   return Object.assign({
     loadObjectsIntoJOSM: (objectIds, asNewLayer) => {
-      return loadObjectsIntoJOSM(objectIds, asNewLayer).then(success => {
-        if (!success) {
-          dispatch(addError(AppErrors.josm.noResponse))
-        }
-      })
+      josmAction(() => loadObjectsIntoJOSM(objectIds, asNewLayer), dispatch)
     },
+    zoomJOSM: bbox => josmAction(() => zoomJOSM(bbox), dispatch),
     isJosmEditor,
     josmHost,
+    viewportToBBox,
   }, bindActionCreators({
     editTask,
     closeEditor,
   }, dispatch))
+}
+
+export const josmAction = function(action, dispatch) {
+  return action().then(success => {
+    if (!success) {
+      dispatch(addError(AppErrors.josm.noResponse))
+    }
+  })
 }
 
 export default WithEditor
