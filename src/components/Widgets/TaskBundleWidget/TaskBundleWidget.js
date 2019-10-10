@@ -295,6 +295,7 @@ const BuildBundle = props => {
               statusColors={statusColors}
               filterOptions={filterOptions}
               taskMarkerContent={TaskMarkerContent}
+              onBulkTaskSelection={props.selectTasksById}
               monochromaticClusters
               highlightPrimaryTask
               initiallyUnclustered
