@@ -184,7 +184,7 @@ export class ChallengeDetail extends Component {
                           :
                         </strong>{' '}
                         <FormattedRelative
-                          value={parse(challenge.lastTaskRefresh)}
+                          value={parse(challenge.dataOriginDate)}
                         />
                       </li>
                       <li>

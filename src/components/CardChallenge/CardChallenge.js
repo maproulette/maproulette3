@@ -37,7 +37,7 @@ export class CardChallenge extends Component {
             </h3>
 
             {this.props.challenge.parent && // virtual challenges don't have projects
-             <Link 
+             <Link
                className="mr-card-challenge__owner"
                onClick={(e) => {e.stopPropagation()}}
                to={`/project/${this.props.challenge.parent.id}/leaderboard`}
@@ -64,7 +64,7 @@ export class CardChallenge extends Component {
                  <strong className="mr-text-yellow">
                    <FormattedMessage {...messages.lastTaskRefreshLabel} />:
                  </strong> <FormattedRelative
-                   value={parse(this.props.challenge.lastTaskRefresh)}
+                   value={parse(this.props.challenge.dataOriginDate)}
                  />
                </li>
                <li>

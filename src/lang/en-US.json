@@ -216,6 +216,7 @@
   "Widgets.ChallengeOverviewWidget.fields.creationDate.label": "Created:",
   "Widgets.ChallengeOverviewWidget.fields.lastModifiedDate.label": "Modified:",
   "Widgets.ChallengeOverviewWidget.fields.tasksRefreshDate.label": "Tasks Refreshed:",
+  "Widgets.ChallengeOverviewWidget.fields.tasksFromDate.label": "Tasks From:",
   "Widgets.ChallengeOverviewWidget.fields.dataOriginDate.label": "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
   "Widgets.ChallengeOverviewWidget.fields.status.label": "Status:",
   "Widgets.ChallengeOverviewWidget.fields.enabled.label": "Visible:",

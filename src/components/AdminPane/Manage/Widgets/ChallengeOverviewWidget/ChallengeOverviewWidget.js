@@ -82,12 +82,12 @@ export default class ChallengeOverviewWidget extends Component {
           </div>
 
           <div title={dataOriginDateText}>
-            <FormattedMessage {...messages.tasksRefreshDate} />
+            <FormattedMessage {...messages.tasksFromDate} />
           </div>
 
           <div title={dataOriginDateText}>
-            {this.props.challenge.lastTaskRefresh &&
-             <FormattedDate value={new Date(this.props.challenge.lastTaskRefresh)}
+            {this.props.challenge.dataOriginDate &&
+             <FormattedDate value={new Date(this.props.challenge.dataOriginDate)}
                             year='numeric' month='long' day='2-digit' />
             }
           </div>
