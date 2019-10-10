@@ -14,7 +14,7 @@ import OSMElementReference
  * Codes are expanded into links that either pull element data into JOSM (if
  * active) or else open a new browser tab to display them in Overpass Turbo
  */
-const OSMElementReferenceCode = {
+const OSMElementHandler = {
   osmElementRegex: "(n|w|r|node|way|rel|relation)[/ ]?(\\d+)[,\\s]*",
 
   elementTypeMap: {
@@ -49,4 +49,4 @@ const OSMElementReferenceCode = {
   }
 }
 
-export default OSMElementReferenceCode
+export default OSMElementHandler

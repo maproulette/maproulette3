@@ -7,9 +7,10 @@ import _isString from 'lodash/isString'
 import _uniqueId from 'lodash/uniqueId'
 
 import OSMElementHandler from './Handlers/OSMElementHandler'
+import OSMViewportHandler from './Handlers/OSMViewportHandler'
 
 // All available short-code handlers
-const shortCodeHandlers = [OSMElementHandler]
+const shortCodeHandlers = [OSMElementHandler, OSMViewportHandler]
 
 // Short codes are surrounded by brackets, but -- to avoid confusion with
 // Markdown links -- cannot be immediately followed by an open parenthesees
