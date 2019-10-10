@@ -44,9 +44,14 @@ export default defineMessages({
     defaultMessage: "Tasks From",
   },
 
+  dataOriginDateLabel: {
+    id: "ChallengeDetails.fields.lastChallengeDetails.DataOriginDate.label",
+    defaultMessage: "Tasks built on {refreshDate} from data sourced on {sourceDate}.",
+  },
+
   viewLeaderboard: {
     id: "ChallengeDetails.fields.viewLeaderboard.label",
     defaultMessage: "View Leaderboard",
   },
-  
+
 })

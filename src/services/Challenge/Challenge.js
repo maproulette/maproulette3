@@ -607,6 +607,10 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
+      if (challengeData.dataOriginDate) {
+        challengeData.dataOriginDate = challengeData.dataOriginDate + 'T00:00'
+      }
+
       challengeData = _pick(challengeData, // fields in alphabetical order
         ['blurb', 'challengeType', 'checkinComment', 'checkinSource', 'customBasemap',
         'defaultBasemap', 'defaultBasemapId', 'defaultPriority', 'defaultZoom',
@@ -614,7 +618,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
-        'exportableProperties'])
+        'exportableProperties', 'dataOriginDate'])
 
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
