@@ -15,14 +15,14 @@ export default class StepNavigation extends Component {
   render() {
     return (
       <div className="step-navigation" key={`step-${this.props.activeStep}`}>
-        <button className="button is-secondary is-outlined"
+        <button type="button" className="button is-secondary is-outlined"
                 onClick={this.props.cancel}>
           <FormattedMessage {...messages.cancel} />
         </button>
 
         <div className="button-group">
           {this.props.activeStep > 0 &&
-            <button className="button is-secondary is-outlined has-svg-icon"
+            <button type="button" className="button is-secondary is-outlined has-svg-icon"
                     onClick={this.props.prevStep}>
               <SvgSymbol viewBox='0 0 20 20' sym="arrow-left-icon" />
               <FormattedMessage {...messages.prev} />
