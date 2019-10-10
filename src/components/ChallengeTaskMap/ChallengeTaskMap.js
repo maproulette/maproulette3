@@ -13,6 +13,7 @@ import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
 import _isEqual from 'lodash/isEqual'
 import _cloneDeep from 'lodash/cloneDeep'
+import _compact from 'lodash/compact'
 import L, { latLng } from 'leaflet'
 import 'leaflet-vectoricon'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
@@ -20,6 +21,8 @@ import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
+import LassoSelectionControl
+       from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
@@ -142,6 +145,13 @@ export class ChallengeTaskMap extends Component {
 
   clusterIcon = cluster => {
     return AsMappableCluster(cluster).leafletMarkerIcon(_get(this.props, 'source.name'))
+  }
+
+  selectTasksInLayers = layers => {
+    if (this.props.onBulkTaskSelection) {
+      const taskIds = _compact(_map(layers, layer => _get(layer, 'options.options.taskId')))
+      this.props.onBulkTaskSelection(taskIds)
+    }
   }
 
   render() {
@@ -269,6 +279,9 @@ export class ChallengeTaskMap extends Component {
                      justFitFeatures={false}
                      onBoundsChange={this.updateBounds}>
           <ZoomControl position='topright' />
+          {this.props.onBulkTaskSelection &&
+           <LassoSelectionControl onLassoSelection={this.selectTasksInLayers} />
+          }
 
           <SourcedTileLayer {...this.props} zIndex={1} />
           {overlayLayers}

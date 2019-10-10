@@ -25,6 +25,7 @@
     "fuse.js": "^3.1.0",
     "handlebars": "^4.2.0",
     "leaflet": "^1.5.1",
+    "leaflet-lasso": "^2.0.4",
     "leaflet-vectoricon": "https://github.com/nrotstan/Leaflet.VectorIcon.git#with-viewbox",
     "leaflet.markercluster": "^1.4.1",
     "localforage": "^1.5.2",

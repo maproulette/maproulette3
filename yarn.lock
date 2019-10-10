@@ -1505,6 +1505,11 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
 
+"@types/geojson@^1.0.0":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.6.tgz#3e02972728c69248c2af08d60a48cbb8680fffdf"
+  integrity sha512-Xqg/lIZMrUd0VRmSRbCAewtwGZiAk3mEUDvV4op1tGl+LvyPcb/MIOSxTl9z+9+J+R4/vpjiCAT4xeKzH9ji1w==
+
 "@types/glob@^7.1.1":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.1.tgz#aa59a1c6e3fbc421e07ccd31a944c30eba521575"
@@ -3558,6 +3563,11 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+circle-to-polygon@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/circle-to-polygon/-/circle-to-polygon-1.0.2.tgz#48e9079e6e96cf34d183ff314039de6a59f60a60"
+  integrity sha512-JuGRbis6++Emc4IAKzQjhq/ltRQ2F1mn1YsQaabYhHeWx8nSRBOevMc/Tf4W7+WFOLl8GbTvcX6+k2p9swxWVg==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -7528,6 +7538,14 @@ lcid@^2.0.0:
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-2.0.0.tgz#6ef5d2df60e52f82eb228a4c373e8d1f397253cf"
   dependencies:
     invert-kv "^2.0.0"
+
+leaflet-lasso@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/leaflet-lasso/-/leaflet-lasso-2.0.4.tgz#38f50c6b6a88c0095563e5621d3030f0cbaceef7"
+  integrity sha512-0nHsR55hSoauPcpqmnEBFcJcRN1+gs1t6Hj2d4S1qMuWG2VYs/unwspLGS6CCPcjSJTqeUVIlVZp+2gVIYr63w==
+  dependencies:
+    circle-to-polygon "^1.0.2"
+    terraformer "^1.0.9"
 
 "leaflet-vectoricon@https://github.com/nrotstan/Leaflet.VectorIcon.git#with-viewbox":
   version "0.2.0"
@@ -11971,6 +11989,13 @@ tar@^4:
     mkdirp "^0.5.0"
     safe-buffer "^5.1.2"
     yallist "^3.0.3"
+
+terraformer@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/terraformer/-/terraformer-1.0.9.tgz#77851fef4a49c90b345dc53cf26809fdf29dcda6"
+  integrity sha512-YlmQ1fsMWTkKGDGibCRWgmLzrpDRUr63Q025LJ/taYQ6j1Yb8q9McKF7NBi6ACAyUXO6F/bl9w6v4MY307y5Ag==
+  optionalDependencies:
+    "@types/geojson" "^1.0.0"
 
 terser-webpack-plugin@1.4.1, terser-webpack-plugin@^1.4.1:
   version "1.4.1"

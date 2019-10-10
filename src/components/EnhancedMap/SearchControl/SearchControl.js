@@ -27,7 +27,7 @@ export class SearchControl extends Component {
 
     return (
       <Dropdown
-        className="mr-dropdown--right mr-absolute mr-z-5 mr-pin-r mr-pin-t mr-mr-2 mr-mt-31"
+        className="mr-dropdown--right mr-absolute mr-z-5 mr-pin-r mr-pin-t mr-mr-2 mr-mt-41"
         dropdownButton={dropdown =>
           <button
             onClick={dropdown.toggleDropdownVisible}
