@@ -123,7 +123,7 @@ export default class EnhancedMap extends Map {
     if (!_isEmpty(newFeatures)) {
       this.currentFeatures = geoJSON(newFeatures, {
         onEachFeature: (feature, layer) => {
-          layer.bindPopup(this.propertyList(feature.properties))
+          layer.bindPopup(() => this.propertyList(feature.properties))
 
           // Animate features when added to map (if requested)
           if (this.props.animateFeatures) {
