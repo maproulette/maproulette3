@@ -24,6 +24,13 @@ export default class AutosuggestTextBox extends Component {
     }
   }
 
+  handleKeyDown = e => {
+    if (e.key === "Enter") {
+      // Don't let enter key potentially submit a form
+      e.preventDefault()
+    }
+  }
+
   /**
    * Generates list of dropdown items from search results, or message indicating
    * there are no results.
@@ -57,6 +64,7 @@ export default class AutosuggestTextBox extends Component {
               <div className="autosuggest-text-box__input-wrapper">
                 <input {...getInputProps()}
                        className={classNames(this.props.inputClassName)}
+                       onKeyDown={this.handleKeyDown}
                        placeholder={this.props.placeholder}
                 />
                 {this.props.isSearching && <BusySpinner inline />}
