@@ -289,14 +289,24 @@ export class EditChallenge extends Component {
       this.state.formData
     )
 
-    // If we're cloning a challenge, reset the id, status, and name.
+    // If we're cloning a challenge, reset the id, status, and name, and remove
+    // #maproulette hashtag from changeset comment as its presence will be
+    // controlled by an explicit option offered to user during setup
     if (this.isCloningChallenge()) {
       delete challengeData.id
       delete challengeData.status
+      delete challengeData.virtualParents
 
       if (_isEmpty(this.state.formData.name)) {
         delete challengeData.name
       }
+
+      challengeData.checkinComment =
+        AsEditableChallenge(challengeData).checkinCommentWithoutMaprouletteHashtag()
+
+      // Reset the default task data origin date to today since user will need to
+      // provide new task data
+      challengeData.dataOriginDate = new Date().toISOString().substring(0, 10)
     }
 
     // The server uses two fields to represent the default basemap: a legacy
