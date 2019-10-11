@@ -7,6 +7,23 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.4.3] - 2019-10-14
+### Added
+- Short-codes in task comments for referencing OSM elements and map viewports
+- Lasso task-selection tool on map when bundling together multiple tasks (#937)
+- New field on challenge for tracking a separate origin date of task data
+- Additional caution around sanitizing mustache tags in markdown
+- [internal] Upgrade various package dependencies
+
+### Fixed
+- Empty popup boxes when clicking OSM data layer features (#910)
+- Inadvertent challenge-creation form submission from keywords input (#911)
+- Failure of certain challenges to build or rebuild due (#933)
+- Don't try to apply task simple-styling to point features
+- Don't attempt to syntax-highlight missing task geometry JSON
+- Ensure all member challenges are retrieved when refreshing a virtual project
+
+
 ## [v3.4.2] - 2019-10-04
 ### Added
 - Completion and review of multiple tasks together
