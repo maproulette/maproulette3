@@ -18,10 +18,11 @@ This project adheres to
 ### Fixed
 - Empty popup boxes when clicking OSM data layer features (#910)
 - Inadvertent challenge-creation form submission from keywords input (#911)
-- Failure of certain challenges to build or rebuild due (#933)
-- Don't try to apply task simple-styling to point features
-- Don't attempt to syntax-highlight missing task geometry JSON
-- Ensure all member challenges are retrieved when refreshing a virtual project
+- Failure of certain challenges to build or rebuild (#933)
+- Inconsistent display of changeset comment when cloning a challenge (#918)
+- Erroneous application of simplestyle styling to task point features
+- Erroneous attempt to syntax-highlight missing task geometry JSON
+- Failure retrieve all member challenges when refreshing a virtual project
 
 
 ## [v3.4.2] - 2019-10-04
