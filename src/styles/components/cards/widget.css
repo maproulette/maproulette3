@@ -72,10 +72,10 @@
     .mr-cards-inverse & {
 
       a {
-        @apply mr-text-green-lighter;
+        @apply mr-text-green-light;
 
         &:hover {
-          @apply mr-text-white;
+          @apply mr-text-blue;
         }
       }
     }
