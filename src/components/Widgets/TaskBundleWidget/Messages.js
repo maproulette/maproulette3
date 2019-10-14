@@ -14,16 +14,6 @@ export default defineMessages({
     defaultMessage: "Work on Multiple Tasks Together",
   },
 
-  filterByStatusLabel: {
-    id: "Widgets.TaskBundleWidget.controls.filterByStatus.label",
-    defaultMessage: "Filter by Status",
-  },
-
-  filterByPriorityLabel: {
-    id: "Widgets.TaskBundleWidget.controls.filterByPriority.label",
-    defaultMessage: "Filter by Priority",
-  },
-
   clearFiltersLabel: {
     id: "Widgets.TaskBundleWidget.controls.clearFilters.label",
     defaultMessage: "Clear Filters",

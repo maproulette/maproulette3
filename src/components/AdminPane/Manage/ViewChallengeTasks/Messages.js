@@ -58,21 +58,6 @@ export default defineMessages({
     defaultMessage: "Priority",
   },
 
-  filterByStatusLabel: {
-    id: "Admin.manageTasks.controls.filterByStatus.label",
-    defaultMessage: "Filter by Status",
-  },
-
-  filterByReviewStatusLabel: {
-    id: "Admin.manageTasks.controls.filterByReviewStatus.label",
-    defaultMessage: "Filter by Review Status",
-  },
-
-  filterByPriorityLabel: {
-    id: "Admin.manageTasks.controls.filterByPriority.label",
-    defaultMessage: "Filter by Priority",
-  },
-
   clearFiltersLabel: {
     id: "Admin.manageTasks.controls.clearFilters.label",
     defaultMessage: "Clear Filters",

@@ -1,62 +1,141 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import _isFinite from 'lodash/isFinite'
 import _omit from 'lodash/omit'
+import _cloneDeep from 'lodash/cloneDeep'
+import _get from 'lodash/get'
+import _isEqual from 'lodash/isEqual'
+import _set from 'lodash/set'
+import _uniqueId from 'lodash/uniqueId'
+import _sum from 'lodash/sum'
+import _map from 'lodash/map'
 import { fromLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import { fetchTaskClusters } from '../../../services/Task/Task'
+import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
+
+import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
 
 /**
  * WithChallengeTaskClusters makes available task clusters, within a challenge,
  * that match specified search/filter criteria
  *
- * @author [Neil Rotstan](https://github.com/nrotstan)
+ * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export const WithChallengeTaskClusters = function(WrappedComponent) {
   return class extends Component {
     state = {
-      clusters: {},
-      filters: {},
-      boundingBox: null,
       loading: false,
+      fetchId: null,
+      clusters: {},
+      showAsClusters: true,
+      taskCount: 0
     }
 
-    setFilters = (filters={}) => {
-      this.setState({filters})
-      this.refreshClusters(filters, this.state.boundingBox)
+    updateBounds = (bounds, zoom) => {
+      if (this.props.criteria.boundingBox !== fromLatLngBounds(bounds).join(',')) {
+        const criteria = _cloneDeep(this.props.criteria)
+        criteria.boundingBox = fromLatLngBounds(bounds).join(',')
+        this.props.updateTaskFilterBounds(bounds, zoom)
+      }
     }
 
-    setBoundingBox = bbox => {
-      const boundingBox = fromLatLngBounds(bbox).join(',')
-      this.setState({boundingBox})
-      this.refreshClusters(this.state.filters, boundingBox)
+    toggleShowAsClusters = () => {
+      this.setState({showAsClusters: !this.state.showAsClusters})
     }
 
-    refreshClusters = (filters, boundingBox) => {
-      if (!_isFinite(filters.challengeId)) {
+    fetchUpdatedClusters() {
+      if (!!_get(this.props, 'nearbyTasks.loading')) {
         return
       }
+      const challengeId = _get(this.props, 'challenge.id', this.props.challengeId)
+      const showAsClusters = ((_get(this.props, 'criteria.zoom', 0) < MAX_ZOOM &&
+                               this.state.showAsClusters) ||
+                              !this.props.criteria.boundingBox) ||
+                             this.state.taskCount > UNCLUSTER_THRESHOLD
 
-      this.setState({loading: true})
-      this.props.fetchTaskClusters({filters, boundingBox}).then(clusters => {
-        this.setState({clusters, loading: false})
-      }).catch(error => {
-        console.log("*** Error updating task clusters:")
-        console.log(error)
-        this.setState({clusters: {}, loading: false})
-      })
+      const currentFetchId = _uniqueId()
+      this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters})
+
+      if (!showAsClusters) {
+        const criteria = _set(this.props.criteria,
+                              'filters.challengeId',
+                              challengeId)
+
+        this.props.fetchBoundedTasks(criteria, 1001, true).then(results => {
+          if (currentFetchId >= this.state.fetchId) {
+            if (results.totalCount > 1000) {
+              this.props.fetchTaskClusters(challengeId, this.props.criteria
+              ).then(clusters => {
+                if (currentFetchId >= this.state.fetchId) {
+                  const taskCount = _sum(_map(clusters, c => c.numberOfPoints))
+                  this.setState({clusters, loading: false,
+                                 taskCount: taskCount, showAsClusters: true})
+                }
+              })
+            }
+            else {
+              this.setState({clusters: results.tasks, loading: false,
+                             taskCount: results.totalCount})
+            }
+          }
+        }).catch(error => {
+          console.log("*** Error updating task clusters:")
+          console.log(error)
+          this.setState({clusters: {}, loading: false, taskCount: 0})
+        })
+      }
+      else {
+        this.props.fetchTaskClusters(challengeId, this.props.criteria
+        ).then(clusters => {
+          if (currentFetchId >= this.state.fetchId) {
+            const taskCount = _sum(_map(clusters, c => c.numberOfPoints))
+            this.setState({clusters, loading: false,
+                           taskCount: taskCount, showAsClusters: true})
+          }
+        }).catch(error => {
+          console.log("*** Error updating task clusters:")
+          console.log(error)
+          this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true})
+        })
+      }
+    }
+
+    componentDidMount() {
+      if (!this.props.skipInitialFetch) {
+        this.fetchUpdatedClusters()
+      }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
+            _omit(this.props.criteria, ['page', 'pageSize']))) {
+        this.fetchUpdatedClusters()
+      }
+
+      if (this.state.showAsClusters !== prevState.showAsClusters) {
+        this.fetchUpdatedClusters()
+      }
+    }
+
+    onBulkTaskSelection = taskIds => {
+      this.props.onBulkTaskSelection(taskIds, this.state.clusters)
     }
 
     render() {
+      const criteriaBounds = _get(this.props, 'criteria.boundingBox', '')
+
       return (
         <WrappedComponent
-          {..._omit(this.props, ['fetchTaskClusters'])}
-          taskClusters={this.state.clusters}
-          challengeTaskClusterFilters={this.state.filters}
-          setChallengeTaskClusterFilters={this.setFilters}
-          challengeTaskClusterBoundingBox={this.state.boundingBox}
-          setChallengeTaskClusterBoundingBox={this.setBoundingBox}
-          challengeTaskClustersLoading={this.state.loading}
+          {..._omit(this.props, ['taskClusters', 'fetchId', 'updateTaskClusters',
+                                 'fetchTaskClusters', 'onBulkTaskSelection'])}
+          taskClusters = {this.state.clusters}
+          boundingBox={criteriaBounds}
+          updateBounds = {this.updateBounds}
+          onBulkTaskSelection = {this.onBulkTaskSelection}
+          loading = {this.state.loading}
+          toggleShowAsClusters = {this.toggleShowAsClusters}
+          showAsClusters = {this.state.showAsClusters}
+          totalTaskCount = {this.state.taskCount}
         />
       )
     }
@@ -64,7 +143,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
 }
 
 export const mapDispatchToProps =
-  dispatch => bindActionCreators({ fetchTaskClusters }, dispatch)
+  dispatch => bindActionCreators({ fetchTaskClusters, fetchBoundedTasks }, dispatch)
 
 export default WrappedComponent =>
   connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent))

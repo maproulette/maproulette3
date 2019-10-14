@@ -517,11 +517,12 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
  * boundingBox string -- see Search.generateSearchParametersString for details
  * of supported filters
  */
-export const fetchTaskClusters = function(criteria, points=25) {
+export const fetchTaskClusters = function(challengeId, criteria, points=25) {
   return function(dispatch) {
     const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                             criteria.boundingBox,
                                                             _get(criteria, 'savedChallengesOnly'))
+    searchParameters.cid = challengeId
     return new Endpoint(
       api.challenge.taskClusters, {
         params: {points, ...searchParameters},

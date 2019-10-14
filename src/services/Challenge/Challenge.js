@@ -552,6 +552,23 @@ export const fetchProjectChallenges = function(projectId, limit=50) {
 }
 
 /**
+ * Fetch all task property keys on the challenge
+ */
+export const fetchPropertyKeys = function(challengeId) {
+  return new Endpoint(
+    api.challenge.propertyKeys,
+    {
+      schema: {},
+      variables: {id: challengeId},
+    }
+  ).execute().then(normalizedResults => {
+    return _get(normalizedResults, 'result.keys', [])
+  }).catch((error) => {
+    console.log(error.response || error)
+  })
+}
+
+/**
  * Fetch data for the given challenge. Normally that data will be added to the
  * redux store, but that can be suppressed with the supressReceive flag.
  */

@@ -15,6 +15,7 @@ import _uniqBy from 'lodash/uniqBy'
 import _cloneDeep from 'lodash/cloneDeep'
 import _set from 'lodash/set'
 import _omit from 'lodash/omit'
+import _join from 'lodash/join'
 import { fetchBoundedTasks } from './BoundedTask'
 
 // redux actions
@@ -32,7 +33,8 @@ export const receiveClusteredTasks = function(challengeId,
                                               status=RequestStatus.success,
                                               fetchId,
                                               mergeTasks=false,
-                                              mergeOrIgnore=false) {
+                                              mergeOrIgnore=false,
+                                              totalCount=null) {
   return {
     type: RECEIVE_CLUSTERED_TASKS,
     status,
@@ -43,6 +45,7 @@ export const receiveClusteredTasks = function(challengeId,
     receivedAt: Date.now(),
     mergeTasks,
     mergeOrIgnore,
+    totalCount
   }
 }
 
@@ -62,19 +65,25 @@ export const clearClusteredTasks = function() {
 /**
  * Retrieve clustered task data belonging to the given challenge
  */
-export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=false, statuses=[], limit=15000, mergeTasks=false,
-                                            excludeLocked=false) {
+export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=false, criteria, limit=15000, mergeTasks=false,
+                                            excludeLocked=false, mergeOrIgnore=false) {
   return function(dispatch) {
     const fetchId = uuidv1()
-    dispatch(receiveClusteredTasks(
-      challengeId, isVirtualChallenge, [], RequestStatus.inProgress, fetchId
-    ))
+
+    if (!mergeOrIgnore) {
+      dispatch(receiveClusteredTasks(
+        challengeId, isVirtualChallenge, [], RequestStatus.inProgress, fetchId
+      ))
+    }
+
+    const statuses = _get(criteria, 'filters.status',[])
+    const bounds = _join(_get(criteria, 'boundingBox'), ',')
 
     return new Endpoint(
       (isVirtualChallenge ? api.virtualChallenge : api.challenge).clusteredTasks, {
         schema: [ taskSchema() ],
         variables: {id: challengeId},
-        params: {limit, excludeLocked, filter: statuses.join(',')},
+        params: {limit, excludeLocked, tStatus: statuses.join(','), tbb: bounds},
       }
     ).execute().then(normalizedResults => {
       // Add parent field, and copy pointReview fields to top-level for
@@ -84,9 +93,11 @@ export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=fals
         Object.assign(task, {parent: challengeId}, _omit(task.pointReview, ["reviewRequestedBy", "reviewedBy"]))
       )
 
-      dispatch(receiveClusteredTasks(
-        challengeId, isVirtualChallenge, tasks, RequestStatus.success, fetchId, mergeTasks
-      ))
+      if (!mergeOrIgnore) {
+        dispatch(receiveClusteredTasks(
+          challengeId, isVirtualChallenge, tasks, RequestStatus.success, fetchId, mergeTasks
+        ))
+      }
 
       return tasks
     }).catch((error) => {
@@ -107,7 +118,8 @@ export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=fals
  * fetched -- when its necessary to ensure tasks in a bbox are included in the
  * clustered tasks
  */
-export const augmentClusteredTasks = function(challengeId, isVirtualChallenge=false, criteria, limit=15000) {
+export const augmentClusteredTasks = function(challengeId, isVirtualChallenge=false, criteria, limit=15000,
+                                              mergeTasks=true) {
   return function(dispatch) {
     if (isVirtualChallenge) {
       return
@@ -116,12 +128,13 @@ export const augmentClusteredTasks = function(challengeId, isVirtualChallenge=fa
     const fetchId = uuidv1()
     const augmentedCriteria = _cloneDeep(criteria)
     _set(augmentedCriteria, 'filters.challengeId', challengeId)
-    return fetchBoundedTasks(augmentedCriteria, limit, true)(dispatch).then(tasks => {
+    return fetchBoundedTasks(augmentedCriteria, limit, true)(dispatch).then(result => {
       // Add parent field
-      _each(tasks, task => task.parent = challengeId)
+      _each(result.tasks, task => task.parent = challengeId)
 
       return dispatch(receiveClusteredTasks(
-        challengeId, isVirtualChallenge, tasks, RequestStatus.success, fetchId, true
+        challengeId, isVirtualChallenge, result.tasks, RequestStatus.success, fetchId,
+        mergeTasks, false, result.totalCount
       ))
     })
   }
@@ -142,7 +155,8 @@ export const currentClusteredTasks = function(state={}, action) {
         isVirtualChallenge: action.isVirtualChallenge,
         loading: action.status === RequestStatus.inProgress,
         fetchId: action.fetchId,
-        tasks: _isArray(action.tasks) ? action.tasks : []
+        tasks: _isArray(action.tasks) ? action.tasks : [],
+        totalCount: action.totalCount
       }
 
       // If a merge is requested and the new clustered tasks are from the same
@@ -152,6 +166,7 @@ export const currentClusteredTasks = function(state={}, action) {
           state.isVirtualChallenge === merged.isVirtualChallenge &&
           state.tasks.length > 0) {
         merged.tasks = _uniqBy(merged.tasks.concat(state.tasks), 'id')
+        merged.totalCount = action.totalCount
       }
       else if (action.mergeOrIgnore) {
         // Ignore update if we can't merge it

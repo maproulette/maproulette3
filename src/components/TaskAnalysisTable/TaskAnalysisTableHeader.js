@@ -47,10 +47,10 @@ export class TaskAnalysisTableHeader extends Component {
     render() {
         const {countShown, withReviewColumns, toggleReviewColumns} = this.props
         const selectedCount = this.props.selectedTasks.size
-        const totalTaskCount = _get(this.props, 'totalTaskCount', 0)
-        const percentShown = Math.round(countShown / totalTaskCount * 100.0)
+        const totalTaskCount = _get(this.props, 'totalTaskCount') || countShown || 0
+        const totalTasksInChallenge = _get(this.props, 'totalTasksInChallenge', 0)
+        const percentShown = Math.round(totalTaskCount / totalTasksInChallenge * 100.0)
         const manager = AsManager(this.props.user)
-
         const localizedStatusLabels = statusLabels(this.props.intl)
         const localizedReviewStatusLabels = reviewStatusLabels(this.props.intl)
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
@@ -177,12 +177,12 @@ export class TaskAnalysisTableHeader extends Component {
                           {this.props.customHeaderControls}
                         </span>
 
-                        {totalTaskCount < 1 ? <FormattedMessage {...messages.taskCountShownStatus} values={{countShown}} /> :
+                        {totalTaskCount < 1 ? <FormattedMessage {...messages.taskCountShownStatus} values={{countShown: totalTaskCount}} /> :
                         <FormattedMessage {...messages.taskPercentShownStatus}
                             values={{
                                 percentShown,
-                                countShown,
-                                countTotal: totalTaskCount,
+                                countShown: totalTaskCount,
+                                countTotal: totalTasksInChallenge,
                             }} />}
                     </h2>
                 </div>

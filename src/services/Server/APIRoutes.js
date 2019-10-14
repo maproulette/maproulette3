@@ -66,6 +66,7 @@ const apiRoutes = factory => {
       'removeKeywords': factory.delete('/challenge/:id/tags'),
       'uploadGeoJSON': factory.put('/challenge/:id/addFileTasks'),
       'delete': factory.delete('/challenge/:id'),
+      'propertyKeys': factory.get('/data/challenge/:id/propertyKeys'),
     },
     'virtualChallenge': {
       'single': factory.get('/virtualchallenge/:id'),

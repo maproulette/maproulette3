@@ -21,6 +21,8 @@ import WithWidgetWorkspaces
        from '../../../HOCs/WithWidgetWorkspaces/WithWidgetWorkspaces'
 import WithFilteredClusteredTasks
        from '../../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
+import WithClusteredTasks
+      from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithChallengeMetrics
        from '../../HOCs/WithChallengeMetrics/WithChallengeMetrics'
 import WithChallengeReviewMetrics
@@ -257,20 +259,22 @@ WithManageableProjects(
     WithSearch(
       WithCurrentChallenge(
         WithWidgetWorkspaces(
-          WithFilteredClusteredTasks(
-            WithChallengeMetrics(
-              WithChallengeReviewMetrics(
-                injectIntl(ChallengeDashboard),
-              )
-            ),
-            'clusteredTasks',
-            'filteredClusteredTasks',
+          WithClusteredTasks(
+            WithFilteredClusteredTasks(
+              WithChallengeMetrics(
+                WithChallengeReviewMetrics(
+                  injectIntl(ChallengeDashboard),
+                )
+              ),
+              'clusteredTasks',
+              'filteredClusteredTasks'
+            )
           ),
           WidgetDataTarget.challenge,
           DASHBOARD_NAME,
           defaultDashboardSetup
         ),
-        true
+        false
       ),
       'challengeOwner'
     )

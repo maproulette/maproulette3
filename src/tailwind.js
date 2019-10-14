@@ -74,6 +74,7 @@ let colors = {
   'blue-darker': '#0e192a',
   yellow: '#FFFD86',
   'yellow-75': 'rgba(255, 253, 134, .75)',
+  'dark-yellow': '#F1E15B',
   turquoise: '#17FFF3',
   pink: '#E87CE0',
   'pink-light': '#FFB2F0',

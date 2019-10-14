@@ -1,35 +1,51 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import _isEqual from 'lodash/isEqual'
-import _map from 'lodash/map'
-import _reverse from 'lodash/reverse'
 import _uniq from 'lodash/uniq'
+import _sum from 'lodash/sum'
+import _values from 'lodash/values'
+import _pick from 'lodash/pick'
+import _omit from 'lodash/omit'
 import bbox from '@turf/bbox'
 import { point, featureCollection } from '@turf/helpers'
-import { TaskStatus, messagesByStatus, TaskStatusColors }
-       from '../../../services/Task/TaskStatus/TaskStatus'
-import { TaskPriority, messagesByPriority }
-       from '../../../services/Task/TaskPriority/TaskPriority'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
+import TaskClusterMap from '../../TaskClusterMap/TaskClusterMap'
+import TaskPropertyFilter from '../../TaskFilters/TaskPropertyFilter'
+import TaskPriorityFilter from '../../TaskFilters/TaskPriorityFilter'
+import TaskStatusFilter from '../../TaskFilters/TaskStatusFilter'
+import WithBrowsedChallenge from '../../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithNearbyTasks from '../../HOCs/WithNearbyTasks/WithNearbyTasks'
+import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
+import WithChallengeTaskClusters from '../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
 import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks'
+import WithFilterCriteria from '../../HOCs/WithFilterCriteria/WithFilterCriteria'
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
+import WithLoadedTask
+      from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import WithWebSocketSubscriptions
        from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
-import ChallengeTaskMap from '../../ChallengeTaskMap/ChallengeTaskMap'
+import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import QuickWidget from '../../QuickWidget/QuickWidget'
-import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../BusySpinner/BusySpinner'
-import Dropdown from '../../Dropdown/Dropdown'
 import TaskAnalysisTable from '../../TaskAnalysisTable/TaskAnalysisTable'
+import TaskMarkerContent from './TaskMarkerContent'
 import messages from './Messages'
+
+const VALID_STATUS_KEYS = ["available", "created", "skipped", "tooHard"]
+const VALID_STATUSES =
+{
+  [TaskStatus.created]: true,
+  [TaskStatus.skipped]: true,
+  [TaskStatus.tooHard]: true,
+}
 
 const descriptor = {
   widgetKey: 'TaskBundleWidget',
@@ -41,13 +57,11 @@ const descriptor = {
   defaultHeight: 14,
 }
 
-const TaskMap = ChallengeTaskMap('taskBundling')
+const ClusterMap = WithChallengeTaskClusters(
+                     WithTaskClusterMarkers(TaskClusterMap('taskBundling')))
+
 
 export default class TaskBundleWidget extends Component {
-  state = {
-    loading: false,
-  }
-
   bundleTasks = () => {
     this.props.createTaskBundle(
       _uniq([this.props.task.id].concat([...this.props.selectedTasks.keys()]))
@@ -60,15 +74,6 @@ export default class TaskBundleWidget extends Component {
    * widget map
    */
   initializeClusterFilters(prevProps={}) {
-    // If the challenge id or task id changed, refetch fresh clusters for now
-    // TODO: use websockets to manage ongoing updates to avoid full refetch
-    const challengeId = _get(this.props.task, 'parent.id')
-    if (_isFinite(challengeId) &&
-        (challengeId !== _get(prevProps.task, 'parent.id') ||
-         this.props.task.id !== _get(prevProps, 'task.id'))) {
-      this.fetchClusters()
-    }
-
     // If the nearby tasks loaded, update bounds
     if (_get(this.props, 'nearbyTasks.tasks.length', 0) > 0 &&
         !_isEqual(this.props.nearbyTasks, prevProps.nearbyTasks)) {
@@ -85,28 +90,12 @@ export default class TaskBundleWidget extends Component {
   }
 
   unbundleTasks = async () => {
-    await this.fetchClusters()
     this.props.removeTaskBundle(this.props.taskBundle.bundleId, this.props.task.id)
     this.props.resetSelectedTasks()
   }
 
-  fetchClusters = () => {
-    this.setState({loading: true})
-    return this.props.fetchClusteredTasks(
-        this.props.task.parent.id,
-        false,
-        [TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard],
-        15000,
-        true,
-        true
-      ).then(() => {
-        this.setState({loading: false})
-      })
-  }
-
   updateBounds = (challengeId, bounds, zoom) => {
-    this.props.updateLocalMapBounds(challengeId, bounds, zoom)
-    this.props.augmentClusteredTasks(challengeId, false, {boundingBox: bounds})
+    this.props.updateTaskFilterBounds(bounds, zoom)
   }
 
   setBoundsToNearbyTask = () => {
@@ -131,7 +120,6 @@ export default class TaskBundleWidget extends Component {
       nearbyBounds,
       _get(this.props, 'mapBounds.zoom', 18)
     )
-    this.setState({loading: false})
   }
 
   componentDidMount() {
@@ -178,11 +166,21 @@ export default class TaskBundleWidget extends Component {
           updateBounds={this.updateBounds}
           bundleTasks={this.bundleTasks}
           unbundleTasks={this.unbundleTasks}
-          loading={this.state.loading}
+          loading={this.props.loading}
+          skipInitialFetch
         />
       </QuickWidget>
     )
   }
+}
+
+const calculateTasksInChallenge = props => {
+  const actions = _get(props, 'browsedChallenge.actions')
+  if (!actions) {
+    return _get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')
+  }
+
+  return _sum(_values(_pick(actions, VALID_STATUS_KEYS)))
 }
 
 const ActiveBundle = props => {
@@ -219,7 +217,9 @@ const ActiveBundle = props => {
           tasks: props.taskBundle.tasks,
         }}
         selectedTasks={new Map()}
-        totalTaskCount={props.taskBundle.taskIds.length}
+        taskData={_get(props, 'taskBundle.tasks')}
+        totalTaskCount={_get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')}
+        totalTasksInChallenge={ calculateTasksInChallenge(props) }
         showColumns={['featureId', 'id', 'status', 'priority']}
         taskSelectionStatuses={[TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]}
         taskSelectionReviewStatuses={[]}
@@ -260,15 +260,6 @@ const BuildBundle = props => {
   const selectedTasks = new Map(props.selectedTasks)
   selectedTasks.set(props.task.id, props.task)
 
-  const statusColors =
-    Object.assign({}, TaskStatusColors, {[TaskStatus.created]: '#2281C2'})
-
-  const filterOptions = {
-    includeStatuses: props.includeTaskStatuses,
-    includeReviewStatuses: props.includeTaskReviewStatuses,
-    withinBounds: props.mapBounds,
-  }
-
   const bundleButton = selectedTasks.size > 1 ? (
     <button
       className="mr-button mr-button--green mr-button--small"
@@ -278,69 +269,48 @@ const BuildBundle = props => {
     </button>
   ) : null
 
+  const showMarkerPopup = (markerData) => {
+    const TaskData = WithLoadedTask(TaskMarkerContent)
+    return (
+      <Popup key={markerData.options.taskId}>
+        <div className="marker-popup-content">
+          <TaskData marker={markerData} taskId={markerData.options.taskId}
+                    selectedTasks={selectedTasks} {..._omit(props, 'selectedTasks')} />
+        </div>
+      </Popup>
+    )
+  }
+
+  const map =
+    <ClusterMap
+      loadingTasks={props.loadingTasks}
+      showMarkerPopup={showMarkerPopup}
+      highlightPrimaryTask={props.task.id}
+      chosenTasks={selectedTasks}
+      boundingBox={_get(props, 'criteria.boundingBox')}
+      onBulkTaskSelection={props.selectTasksById}
+      allowClusterToggle
+      {..._omit(props, 'selectedTasks')}
+    />
+
   return (
     <div className="mr-bg-white mr-pb-2 mr-h-full mr-rounded">
       <div className="mr-h-2/5 mr-max-h-100">
         {props.loading ?
           <BusySpinner lightMode className="mr-h-full mr-flex mr-items-center" /> :
-          <MapPane>
-            <TaskMap
-              {...props}
-              selectedTasks={selectedTasks}
-              taskInfo={props.taskInfo}
-              mapBounds={props.mapBounds}
-              setMapBounds={props.updateBounds}
-              lastBounds={props.mapBounds}
-              lastZoom={props.mapZoom}
-              statusColors={statusColors}
-              filterOptions={filterOptions}
-              taskMarkerContent={TaskMarkerContent}
-              onBulkTaskSelection={props.selectTasksById}
-              monochromaticClusters
-              highlightPrimaryTask
-              initiallyUnclustered
-              className=''
-            />
-          </MapPane>
+          <MapPane showLasso>{map}</MapPane>
         }
       </div>
       <div className="mr-my-4 mr-px-4 xl:mr-flex mr-justify-between">
         <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
           <li className="md:mr-mr-8">
-            <FilterDropdown
-              title={<FormattedMessage {...messages.filterByStatusLabel} />}
-              filters={
-                _map([TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard], status => (
-                  <li key={status}>
-                    <label className="mr-flex mr-items-center">
-                      <input className="mr-mr-2"
-                        type="checkbox"
-                        checked={props.includeTaskStatuses[status]}
-                        onChange={() => props.toggleIncludedTaskStatus(status)} />
-                      <FormattedMessage {...messagesByStatus[status]} />
-                    </label>
-                  </li>
-                ))
-              }
-            />
+            <TaskStatusFilter {...props} />
           </li>
           <li className="md:mr-mr-8">
-            <FilterDropdown
-              title={<FormattedMessage {...messages.filterByPriorityLabel} />}
-              filters={
-                _reverse(_map(TaskPriority, priority => (
-                  <li key={priority}>
-                    <label className="mr-flex mr-items-center">
-                      <input className="mr-mr-2"
-                        type="checkbox"
-                        checked={props.includeTaskPriorities[priority]}
-                        onChange={() => props.toggleIncludedTaskPriority(priority)} />
-                      <FormattedMessage {...messagesByPriority[priority]} />
-                    </label>
-                  </li>
-                )))
-              }
-            />
+            <TaskPriorityFilter {...props} />
+          </li>
+          <li>
+            <TaskPropertyFilter {...props} />
           </li>
         </ul>
       </div>
@@ -348,8 +318,9 @@ const BuildBundle = props => {
         <TaskAnalysisTable
           {...props}
           selectedTasks={selectedTasks}
-          filterOptions={filterOptions}
-          totalTaskCount={_get(props, 'clusteredTasks.tasks.length')}
+          taskData={_get(props, 'taskInfo.tasks')}
+          totalTaskCount={_get(props, 'taskInfo.totalCount') || _get(props, 'taskInfo.tasks.length')}
+          totalTasksInChallenge={ calculateTasksInChallenge(props) }
           showColumns={['selected', 'featureId', 'id', 'status', 'priority']}
           taskSelectionStatuses={[TaskStatus.created, TaskStatus.skipped, TaskStatus.tooHard]}
           taskSelectionReviewStatuses={[]}
@@ -364,101 +335,25 @@ const BuildBundle = props => {
   )
 }
 
-const FilterDropdown = props => {
-  return (
-    <Dropdown
-      className="mr-dropdown--right"
-      dropdownButton={dropdown => (
-        <button
-          className="mr-flex mr-items-center mr-text-blue-light"
-          onClick={dropdown.toggleDropdownVisible}
-        >
-          <span className="mr-text-base mr-uppercase mr-mr-1">
-            {props.title}
-          </span>
-          <SvgSymbol
-            sym="icon-cheveron-down"
-            viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-5 mr-h-5"
-          />
-        </button>
-      )}
-      dropdownContent={() =>
-        <ul className="mr-list-dropdown">
-          {props.filters}
-        </ul>
-      }
-    />
-  )
-}
-
-const TaskMarkerContent = props => {
-  return (
-    <div className="mr-flex mr-justify-center">
-      <div className="mr-flex-col mr-w-full">
-        <div className="mr-flex">
-          <div className="mr-w-1/2 mr-mr-2 mr-text-right"><FormattedMessage {...messages.nameLabel} /></div>
-          <div className="mr-w-1/2 mr-text-left">{props.marker.options.name}</div>
-        </div>
-        <div className="mr-flex">
-          <div className="mr-w-1/2 mr-mr-2 mr-text-right"><FormattedMessage {...messages.taskIdLabel} /></div>
-          <div className="mr-w-1/2 mr-text-left">{props.marker.options.taskId}</div>
-        </div>
-        <div className="mr-flex">
-          <div className="mr-w-1/2 mr-mr-2 mr-text-right"><FormattedMessage {...messages.statusLabel} /></div>
-          <div className="mr-w-1/2 mr-text-left">
-            {props.intl.formatMessage(messagesByStatus[props.marker.options.status])}
-          </div>
-        </div>
-        <div className="mr-flex">
-          <div className="mr-w-1/2 mr-mr-2 mr-text-right"><FormattedMessage {...messages.priorityLabel} /></div>
-          <div className="mr-w-1/2 mr-text-left">
-            {props.intl.formatMessage(messagesByPriority[props.marker.options.priority])}
-          </div>
-        </div>
-        <div className="mr-flex mr-justify-center mr-mt-2">
-          <span>
-            <label>
-              {props.marker.options.taskId !== props.task.id ?
-               <input
-                 type="checkbox"
-                 className="mr-mr-1"
-                 checked={props.selectedTasks.has(props.marker.options.taskId)}
-                 onChange={() => props.toggleTaskSelectionById(props.marker.options.taskId)}
-               /> :
-               <span className="mr-mr-1">✓</span>
-              }
-              <FormattedMessage {...messages.selectedLabel} />
-              {props.marker.options.taskId === props.task.id &&
-                <span className="mr-ml-1"><FormattedMessage {...messages.currentTask} /></span>
-              }
-            </label>
-           </span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 registerWidgetType(
   WithNearbyTasks(
     WithClusteredTasks(
       WithFilteredClusteredTasks(
-        WithBoundedTasks(
-          WithWebSocketSubscriptions(
-            TaskBundleWidget,
-          ),
-          'filteredClusteredTasks',
-          'taskInfo'
+        WithFilterCriteria(
+          WithBoundedTasks(
+            WithBrowsedChallenge(
+              WithWebSocketSubscriptions(
+                TaskBundleWidget,
+              ), false
+            ),
+            'filteredClusteredTasks',
+            'taskInfo'
+          )
         ),
         'clusteredTasks',
         'filteredClusteredTasks',
         {
-          statuses: {
-            [TaskStatus.created]: true,
-            [TaskStatus.skipped]: true,
-            [TaskStatus.tooHard]: true,
-          },
+          statuses: VALID_STATUSES,
           includeLocked: false,
         }
       )
