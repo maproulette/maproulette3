@@ -55,7 +55,7 @@ export default class CommentList extends Component {
           </div>
           <div className={classNames("mr-text-sm mr-rounded-sm mr-p-2",
                                      this.props.lightMode ? "mr-bg-grey-lighter" : "mr-bg-grey-lighter-10")}>
-            <MarkdownContent markdown={comment.comment} />
+            <MarkdownContent allowShortCodes markdown={comment.comment} />
           </div>
 
           {(this.props.includeChallengeNames || this.props.includeTaskLinks) &&

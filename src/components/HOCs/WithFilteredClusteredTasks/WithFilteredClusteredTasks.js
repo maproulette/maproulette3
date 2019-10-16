@@ -11,6 +11,7 @@ import _isUndefined from 'lodash/isUndefined'
 import _find from 'lodash/find'
 import _isEqual from 'lodash/isEqual'
 import _isFinite from 'lodash/isFinite'
+import _each from 'lodash/each'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatusWithUnset, REVIEW_STATUS_NOT_SET }
       from '../../../services/Task/TaskReview/TaskReviewStatus'
@@ -171,6 +172,22 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         }
       }
 
+      this.setState({selectedTasks: selected})
+    }
+
+    /**
+     * Select multiple tasks matching the given task ids
+     */
+    selectTasksById = taskIds => {
+      if (_isEmpty(taskIds)) {
+        return
+      }
+
+      const selected = new Map(this.state.selectedTasks)
+      const tasks = _filter(_get(this.props[tasksProp], 'tasks', []),
+                            task => taskIds.indexOf(task.id) !== -1)
+
+      _each(tasks, task => selected.set(task.id, task))
       this.setState({selectedTasks: selected})
     }
 
@@ -371,6 +388,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                                selectTasksWithStatus={this.selectTasksWithStatus}
                                selectTasksWithPriority={this.selectTasksWithPriority}
                                selectTasks={this.selectTasks}
+                               selectTasksById={this.selectTasksById}
                                allTasksAreSelected={this.allTasksAreSelected}
                                someTasksAreSelected={this.someTasksAreSelected}
                                clearAllFilters={this.clearAllFilters}

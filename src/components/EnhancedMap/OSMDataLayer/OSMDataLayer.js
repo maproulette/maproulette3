@@ -10,7 +10,7 @@ const OSM_DATA_COLOR = "#EA8433" // orange
  * Serves as a react-leaflet adapter for the leaflet-osm package
  */
 export class OSMDataLayer extends Path {
-  popupContent = layer => {
+  popupContent(layer) {
     const header = (
       <a target="_blank"
          rel="noopener noreferrer"

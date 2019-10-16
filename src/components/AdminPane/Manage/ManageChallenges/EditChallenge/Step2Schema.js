@@ -49,6 +49,12 @@ export const jsSchema = (intl, user, challengeData) => {
         title: intl.formatMessage(messages.localGeoJsonLabel),
         type: "string",
       },
+      dataOriginDate: {
+        title: intl.formatMessage(messages.dataOriginDateLabel),
+        type: "string",
+        format: "date",
+        default: new Date().toISOString().substring(0, 10),
+      }
     },
   }
 
@@ -59,6 +65,12 @@ export const jsSchema = (intl, user, challengeData) => {
         title: intl.formatMessage(messages.remoteGeoJsonLabel),
         type: "string",
       },
+      dataOriginDate: {
+        title: intl.formatMessage(messages.dataOriginDateLabel),
+        type: "string",
+        format: "date",
+        default: new Date().toISOString().substring(0, 10),
+      }
     },
   }
 
@@ -92,6 +104,7 @@ export const jsSchema = (intl, user, challengeData) => {
   }
   else if (!_isEmpty(challengeData.overpassQL)) {
     schema.properties = _omit(overpass.properties, ['source'])
+    schema.properties = _omit(overpass.properties, ['dataOriginDate'])
   }
   else if (!_isEmpty(challengeData.remoteGeoJson)) {
     schema.properties = _omit(remoteUrl.properties, ['source'])
@@ -134,6 +147,9 @@ export const uiSchema = (intl, user, challengeData) => {
       "ui:placeholder": intl.formatMessage(messages.remoteGeoJsonPlaceholder),
       "ui:readonly": sourceReadOnly,
       "ui:help": intl.formatMessage(messages.remoteGeoJsonDescription),
+    },
+    dataOriginDate: {
+      "ui:help": intl.formatMessage(messages.dataOriginDateDescription),
     },
     ignoreSourceErrors: {
       "ui:widget": "radio",

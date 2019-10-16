@@ -31,7 +31,7 @@ export class AsSimpleStyleableFeature {
   styleLeafletLayer(layer) {
     if (this.properties) {
       _each(simplestyleLeafletMapping, (leafletStyle, simplestyleProperty) => {
-        if (!_isUndefined(this.properties[simplestyleProperty])) {
+        if (!_isUndefined(this.properties[simplestyleProperty]) && layer.setStyle) {
           layer.setStyle({[leafletStyle]: this.properties[simplestyleProperty]})
         }
       })

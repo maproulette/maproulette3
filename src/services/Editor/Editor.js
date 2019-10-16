@@ -1,3 +1,4 @@
+import geoViewport from '@mapbox/geo-viewport'
 import _compact from 'lodash/compact'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
@@ -439,6 +440,36 @@ const openJOSM = function(dispatch, editor, task, mapBounds, josmURIFunction, ta
       return dispatch(editorOpened(editor, task.id, RequestStatus.error))
     }
   })
+}
+
+/**
+ * Load the given objects into JOSM
+ */
+export const loadObjectsIntoJOSM = function(objectIds, asNewLayer) {
+  const objectIdString = objectIds.join(',')
+  let josmURI = `${josmHost()}load_object?objects=${objectIdString}&layer_name=${objectIdString}`
+  if (asNewLayer) {
+    josmURI += "&new_layer=true"
+  }
+
+  return sendJOSMCommand(josmURI)
+}
+
+/**
+ * Zoom JOSM to the given bounding box
+ */
+export const zoomJOSM = function(bbox) {
+  const bounds = `left=${bbox[0]}&bottom=${bbox[1]}&right=${bbox[2]}&top=${bbox[3]}`
+  const josmURI = `${josmHost()}zoom?${bounds}`
+
+  return sendJOSMCommand(josmURI)
+}
+
+/**
+ * Computes a bbox from the given zoom, lat, lon, and target viewport size
+ */
+export const viewportToBBox = function(zoom, lat, lon, viewportWidth, viewportHeight) {
+  return geoViewport.bounds([lon, lat], zoom, [viewportWidth, viewportHeight])
 }
 
 /**

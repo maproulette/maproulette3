@@ -7,6 +7,26 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.4.3] - 2019-10-16
+### Added
+- Short-codes in task comments for referencing OSM elements and map viewports
+- Lasso task-selection tool on map when bundling together multiple tasks (#937)
+- New field on challenge for tracking a separate origin date of task data
+- Additional caution around sanitizing mustache tags in markdown
+- [internal] Upgrade various package dependencies
+
+### Fixed
+- Empty popup boxes when clicking OSM data layer features (#910)
+- Inadvertent challenge-creation form submission from keywords input (#911)
+- Failure of certain challenges to build or rebuild (#933)
+- Inconsistent display of changeset comment when cloning a challenge (#918)
+- Erroneous application of simplestyle styling to task point features
+- Erroneous attempt to syntax-highlight missing task geometry JSON
+- Failure to retrieve all member challenges in large virtual projects
+- Improper escaping of CSV export fields containing commas
+- Malfunctioning filtering of locked tasks from task clusters
+
+
 ## [v3.4.2] - 2019-10-04
 ### Added
 - Completion and review of multiple tasks together

@@ -290,6 +290,17 @@ will not be able to make sense of it.
     defaultMessage: "https://www.example.com/geojson.json",
   },
 
+  dataOriginDateLabel: {
+    id: 'Admin.EditChallenge.form.dataOriginDate.label',
+    defaultMessage: "Date data was sourced",
+  },
+
+  dataOriginDateDescription: {
+    id: 'Admin.EditChallenge.form.dataOriginDate.description',
+    defaultMessage: "Age of the data. The date the data was " +
+                    "downloaded, generated, etc. "
+  },
+
   ignoreSourceErrorsLabel: {
     id: 'Admin.EditChallenge.form.ignoreSourceErrors.label',
     defaultMessage: "Ignore Errors",
