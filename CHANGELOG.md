@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.4.3] - 2019-10-14
+## [v3.4.3] - 2019-10-16
 ### Added
 - Short-codes in task comments for referencing OSM elements and map viewports
 - Lasso task-selection tool on map when bundling together multiple tasks (#937)
@@ -22,7 +22,9 @@ This project adheres to
 - Inconsistent display of changeset comment when cloning a challenge (#918)
 - Erroneous application of simplestyle styling to task point features
 - Erroneous attempt to syntax-highlight missing task geometry JSON
-- Failure retrieve all member challenges when refreshing a virtual project
+- Failure to retrieve all member challenges in large virtual projects
+- Improper escaping of CSV export fields containing commas
+- Malfunctioning filtering of locked tasks from task clusters
 
 
 ## [v3.4.2] - 2019-10-04
