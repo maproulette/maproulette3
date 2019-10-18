@@ -100,12 +100,45 @@ h4,
     @apply mr-my-2;
   }
 
+  code {
+    @apply mr-text-orange;
+  }
+
+  blockquote {
+    @apply mr-my-2;
+    @apply mr-px-2;
+    @apply mr-py-px;
+    @apply mr-bg-black-5;
+    @apply mr-text-grey-light-more;
+  }
+
   ol, ul {
     @apply mr-ml-6;
   }
 
   ul {
     list-style-type: disc;
+  }
+
+  strong {
+    color: inherit;
+  }
+
+  table {
+    @apply mr-bg-black-5;
+
+    th {
+      color: inherit;
+      @apply mr-p-2;
+    }
+
+    td {
+      @apply mr-px-2;
+    }
+
+    tr:last-child td {
+      @apply mr-pb-2;
+    }
   }
 
   a {
