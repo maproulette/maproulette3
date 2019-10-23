@@ -126,7 +126,7 @@ export default class MarkdownTemplate extends Component {
 
   markdownContent = (content) => {
     let htmlContent = renderToStaticMarkup(
-      <MarkdownContent markdown={content} />
+      <MarkdownContent markdown={content} lightMode={this.props.lightMode} />
     ).replace(/&quot;/g, '"')
 
     return <div dangerouslySetInnerHTML={{

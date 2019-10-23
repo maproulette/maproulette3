@@ -146,6 +146,7 @@ export const uiSchema = (intl, user, challengeData) => {
     description: {
       "ui:field": "markdown",
       "ui:help": intl.formatMessage(messages.descriptionDescription),
+      "ui:lightMode": true,
     },
     blurb: {
       "ui:emptyValue": "",
@@ -154,6 +155,7 @@ export const uiSchema = (intl, user, challengeData) => {
     instruction: {
       "ui:field": "markdown",
       "ui:help": intl.formatMessage(messages.instructionDescription, {dummy: ''}),
+      "ui:lightMode": true,
     },
     difficulty: {
       "ui:widget": "select",
