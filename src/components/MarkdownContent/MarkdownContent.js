@@ -29,7 +29,13 @@ export default class MarkdownContent extends Component {
     }
 
     return (
-      <div className={classNames('mr-markdown', this.props.className)}>
+      <div
+        className={classNames(
+          'mr-markdown',
+          {'mr-markdown--light': this.props.lightMode},
+          this.props.className
+        )}
+      >
         {parsedMarkdown}
       </div>
     )
