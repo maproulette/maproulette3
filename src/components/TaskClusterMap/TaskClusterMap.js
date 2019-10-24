@@ -1,19 +1,25 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl, Marker} from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
+import { point, featureCollection } from '@turf/helpers'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import _debounce from 'lodash/debounce'
 import _noop from  'lodash/noop'
+import _uniqueId from 'lodash/uniqueId'
+import _compact from 'lodash/compact'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
+import LassoSelectionControl
+       from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -21,9 +27,23 @@ import WithStatus from '../HOCs/WithStatus/WithStatus'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
 import './TaskClusterMap.scss'
+import messages from './Messages'
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
+
+export const MAX_ZOOM = 18
+
+/**
+ * An uncluster option will be offered if no more than this number of tasks
+ * will be shown.
+ */
+export const UNCLUSTER_THRESHOLD = 1000 // max number of tasks
+
+/**
+ * The number of clusters to show.
+ */
+export const CLUSTER_POINTS = 25
 
 /**
  * TaskClusterMap allows a user to browse tasks and task clusters
@@ -33,6 +53,7 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
  */
 export class TaskClusterMap extends Component {
   currentBounds = null
+  currentZoom = 2
   skipNextUpdateBounds = false
 
   state = {
@@ -47,7 +68,8 @@ export class TaskClusterMap extends Component {
     }
 
     // the loading status of tasks change
-    if (!!nextProps.loading !== !!this.props.loading) {
+    if (!!nextProps.loading !== !!this.props.loading ||
+        !!nextProps.loadingChallenge !== !!this.props.loadingChallenge) {
       return true
     }
 
@@ -100,13 +122,15 @@ export class TaskClusterMap extends Component {
 
     if (this.skipNextUpdateBounds) {
       this.currentBounds = toLatLngBounds(bounds)
+      this.currentZoom = zoom
       this.skipNextUpdateBounds = false
       return
     }
 
     this.currentBounds = toLatLngBounds(bounds)
-    if (!this.props.loading) {
-      this.debouncedUpdateBounds(bounds)
+    this.currentZoom = zoom
+    if (!this.props.loading && !this.props.loadingTasks) {
+      this.debouncedUpdateBounds(bounds, zoom)
     }
   }
 
@@ -114,26 +138,54 @@ export class TaskClusterMap extends Component {
    * Invoked when an individual task marker is clicked by the user.
    */
   markerClicked = marker => {
-    this.currentBounds = toLatLngBounds(bbox(marker.options.bounding))
-    this.skipNextUpdateBounds = true
-    this.debouncedUpdateBounds(this.currentBounds)
+    if (!this.props.loadingChallenge && !this.props.loading) {
+      if (marker.options.bounding && marker.options.numberOfPoints > 1) {
+        this.currentBounds = toLatLngBounds(bbox(marker.options.bounding))
+        this.skipNextUpdateBounds = true
+        this.debouncedUpdateBounds(this.currentBounds, this.currentZoom)
+
+        // Reset Map so that it zooms to new marker bounds
+        this.setState({mapMarkers: null})
+      }
+    }
   }
 
   debouncedUpdateBounds = _debounce(this.props.updateBounds, 200)
 
   generateMarkers = () => {
     const mapMarkers = _map(this.props.taskMarkers, (mark, index) => {
-      if (mark.icon) {
-        return <Marker key={`marker-${index}`} position={mark.position} icon={mark.icon}
-                        onClick={() => this.markerClicked(mark)} />
+      let onClick = null
+      let popup = null
+      const taskId = mark.options.taskId
+      if (taskId && this.props.showMarkerPopup) {
+        popup = this.props.showMarkerPopup(mark)
       }
       else {
-        return <Marker key={`marker-${index}`} position={mark.position}
-                        onClick={() => this.markerClicked(mark)} />
+        onClick = () => this.markerClicked(mark)
+      }
+
+      const markerId =
+        taskId ? `marker-task-${taskId}` :
+        `marker-cluster-${mark.options.point.lat}-${mark.options.point.lng}-${mark.options.numberOfPoints}`
+
+      if (mark.icon) {
+        return <Marker key={markerId} position={mark.position} icon={mark.icon}
+                        onClick={onClick}>{popup}</Marker>
+      }
+      else {
+        return <Marker key={markerId} position={mark.position}
+                        onClick={onClick}>{popup}</Marker>
       }
     })
 
     this.setState({mapMarkers})
+  }
+
+  selectTasksInLayers = layers => {
+    if (this.props.onBulkTaskSelection) {
+      const taskIds = _compact(_map(layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
+      this.props.onBulkTaskSelection(taskIds)
+    }
   }
 
   render() {
@@ -141,26 +193,54 @@ export class TaskClusterMap extends Component {
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
 
+    const canClusterToggle = !!this.props.allowClusterToggle &&
+      this.props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
+      this.props.totalTaskCount > CLUSTER_POINTS &&
+      this.currentZoom < MAX_ZOOM
+
     if (!this.currentBounds && _get(this.props, 'boundingBox.length', 0) > 0) {
       this.currentBounds = toLatLngBounds(this.props.boundingBox)
+    }
+
+    if (!this.currentBounds && this.state.mapMarkers) {
+      // Set Current Bounds to the minimum bounding box of our markers
+      this.currentBounds = toLatLngBounds(
+        bbox(featureCollection(
+          _map(this.state.mapMarkers, cluster =>
+            point([cluster.props.position[1], cluster.props.position[0]])
+          )
+        ))
+      )
     }
 
     const map =
       <EnhancedMap className="mr-z-0"
                    center={latLng(0, 0)}
-                   zoom={2} minZoom={2} maxZoom={18}
+                   zoom={this.currentZoom} minZoom={2} maxZoom={MAX_ZOOM}
                    setInitialBounds={false}
                    initialBounds = {this.currentBounds}
                    zoomControl={false} animate={false} worldCopyJump={true}
-                   onBoundsChange={this.updateBounds}>
+                   onBoundsChange={this.updateBounds}
+                   justFitFeatures>
         <ZoomControl className="mr-z-10" position='topright' />
+        {this.props.showLasso && this.props.onBulkTaskSelection && !this.props.showAsClusters &&
+         <LassoSelectionControl onLassoSelection={this.selectTasksInLayers} />
+        }
         <VisibleTileLayer {...this.props} zIndex={1} />
         {overlayLayers}
-        {this.state.mapMarkers}
+        <span key={_uniqueId()}>{this.state.mapMarkers}</span>
       </EnhancedMap>
 
     return (
       <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile})}>
+        {canClusterToggle && !this.props.loading &&
+         <label className="mr-absolute mr-z-10 mr-pin-t mr-pin-l mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
+            <input type="checkbox" className="mr-mr-2"
+              checked={this.props.showAsClusters}
+              onChange={this.props.toggleShowAsClusters} />
+            <FormattedMessage {...messages.clusterTasksLabel } />
+          </label>
+        }
         <LayerToggle {...this.props} />
         <SearchControl
           {...this.props}
@@ -170,7 +250,7 @@ export class TaskClusterMap extends Component {
           }}
         />
         {map}
-        {!!this.props.loading && <BusySpinner mapMode />}
+        {(!!this.props.loading || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
       </div>
     )
   }

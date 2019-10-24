@@ -1,37 +1,42 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
+import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
-import _map from 'lodash/map'
-import _reverse from 'lodash/reverse'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
          messagesByStatus }
        from '../../../../services/Task/TaskStatus/TaskStatus'
-import { TaskReviewStatusWithUnset,
-        messagesByReviewStatus }
-      from '../../../../services/Task/TaskReview/TaskReviewStatus'
-import { TaskPriority,
-         messagesByPriority }
+import { messagesByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
-import { TaskStatusColors }
-       from '../../../../services/Task/TaskStatus/TaskStatus'
 import AsManager from '../../../../interactions/User/AsManager'
 import WithBoundedTasks
        from '../../../HOCs/WithBoundedTasks/WithBoundedTasks'
+import WithFilterCriteria
+      from '../../../HOCs/WithFilterCriteria/WithFilterCriteria'
+import WithChallengeTaskClusters
+      from '../../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
+import WithTaskClusterMarkers
+      from '../../../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
+import WithLoadedTask
+      from '../../../HOCs/WithLoadedTask/WithLoadedTask'
+import TaskClusterMap from '../../../TaskClusterMap/TaskClusterMap'
 import MapPane from '../../../EnhancedMap/MapPane/MapPane'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import IntervalRender from '../../../IntervalRender/IntervalRender'
-import ChallengeTaskMap from '../../../ChallengeTaskMap/ChallengeTaskMap'
 import TaskAnalysisTable from '../../../TaskAnalysisTable/TaskAnalysisTable'
+import TaskPriorityFilter from '../../../TaskFilters/TaskPriorityFilter'
+import TaskStatusFilter from '../../../TaskFilters/TaskStatusFilter'
+import TaskReviewStatusFilter from '../../../TaskFilters/TaskReviewStatusFilter'
+import TaskPropertyFilter from '../../../TaskFilters/TaskPropertyFilter'
 import TaskBuildProgress from './TaskBuildProgress'
 import GeographicIndexingNotice from './GeographicIndexingNotice'
 import messages from './Messages'
-import Dropdown from '../../../Dropdown/Dropdown'
 
-const TaskMap = ChallengeTaskMap('challengeOwner')
+const ClusterMap = WithChallengeTaskClusters(
+                     WithTaskClusterMarkers(TaskClusterMap('challengeOwner')))
 
 /**
  * ViewChallengeTasks displays challenge tasks as both a map and a table,
@@ -42,15 +47,6 @@ const TaskMap = ChallengeTaskMap('challengeOwner')
 export class ViewChallengeTasks extends Component {
   state = {
     bulkUpdating: false,
-  }
-
-  componentDidUpdate(prevProps) {
-    // When bulk updating, wait until the tasks have been reloaded before turning
-    // off the bulkUpdating flag and refreshing any selected tasks.
-    if (this.state.bulkUpdating && prevProps.loadingTasks && !this.props.loadingTasks) {
-      this.props.refreshSelectedTasks()
-      this.setState({bulkUpdating: false})
-    }
   }
 
   takeTaskSelectionAction = action => {
@@ -68,7 +64,7 @@ export class ViewChallengeTasks extends Component {
       return
     }
 
-    this.setState({bulkUpdating: true}) // will be reset by componentDidUpdate
+    this.setState({bulkUpdating: true})
     this.props.applyBulkTaskChanges(
       tasks, {status: parseInt(newStatus),
               mappedOn: null,
@@ -77,11 +73,31 @@ export class ViewChallengeTasks extends Component {
               reviewedBy: null,
               reviewedAt: null}
 
-    ).then(() => this.props.refreshChallenge())
+    ).then(() => {
+      this.props.refreshChallenge()
+      this.props.refreshTasks()
+      this.setState({bulkUpdating: false})
+    })
   }
 
   resetMapBounds = () => {
     this.props.clearMapBounds(this.props.searchGroup)
+  }
+
+  mapBoundsUpdated = (challengeId, bounds, zoom) => {
+    this.props.setChallengeOwnerMapBounds(challengeId, bounds, zoom)
+    this.props.updateTaskFilterBounds(bounds, zoom)
+  }
+
+  showMarkerPopup = markerData => {
+    const TaskData = WithLoadedTask(TaskMarkerContent)
+    return (
+      <Popup>
+        <div className="marker-popup-content">
+          <TaskData marker={markerData} taskId={markerData.options.taskId} {...this.props} />
+        </div>
+      </Popup>
+    )
   }
 
   render() {
@@ -121,48 +137,6 @@ export class ViewChallengeTasks extends Component {
       )
     }
 
-    const statusFilters = _map(TaskStatus, status => (
-      <li key={status}>
-        <label className="mr-flex mr-items-center">
-          <input className="mr-mr-2"
-            type="checkbox"
-            checked={this.props.includeTaskStatuses[status]}
-            onChange={() => this.props.toggleIncludedTaskStatus(status)} />
-           <FormattedMessage {...messagesByStatus[status]} />
-        </label>
-      </li>
-    ))
-
-    const reviewStatusFilters = _map(TaskReviewStatusWithUnset, status => (
-      <li key={status}>
-        <label className="mr-flex mr-items-center">
-          <input className="mr-mr-2"
-            type="checkbox"
-            checked={this.props.includeTaskReviewStatuses[status]}
-            onChange={() => this.props.toggleIncludedTaskReviewStatus(status)} />
-          <FormattedMessage {...messagesByReviewStatus[status]} />
-        </label>
-      </li>
-    ))
-
-    const priorityFilters = _reverse(_map(TaskPriority, priority => (
-      <li key={priority}>
-        <label className="mr-flex mr-items-center">
-          <input className="mr-mr-2"
-            type="checkbox"
-            checked={this.props.includeTaskPriorities[priority]}
-            onChange={() => this.props.toggleIncludedTaskPriority(priority)} />
-          <FormattedMessage {...messagesByPriority[priority]} />
-        </label>
-      </li>
-    )))
-
-    const filterOptions = {
-      includeStatuses: this.props.includeTaskStatuses,
-      includeReviewStatuses: this.props.includeTaskReviewStatuses,
-      withinBounds: this.props.mapBounds,
-    }
-
     const clearFiltersControl = (
       <button className="mr-flex mr-items-center mr-text-blue-light"
         onClick={() => {
@@ -176,46 +150,50 @@ export class ViewChallengeTasks extends Component {
       </button>
     )
 
+    const map =
+        <ClusterMap
+          updateBounds={this.mapBoundsUpdated}
+          loadingTasks={this.props.loadingTasks}
+          showMarkerPopup={this.showMarkerPopup}
+          allowClusterToggle
+          {...this.props}
+        />
+
     return (
       <div className='admin__manage-tasks'>
         <GeographicIndexingNotice challenge={this.props.challenge} />
 
         <div className="mr-h-100">
           <MapPane>
-            <TaskMap
-              taskInfo={this.props.taskInfo}
-              setMapBounds={this.props.setChallengeOwnerMapBounds}
-              lastBounds={this.props.mapBounds}
-              lastZoom={this.props.mapZoom}
-              statusColors={TaskStatusColors}
-              filterOptions={filterOptions}
-              taskMarkerContent={TaskMarkerContent}
-              challengeId={this.props.challenge.id}
-              monochromaticClusters
-              {...this.props} />
+            {map}
           </MapPane>
         </div>
 
         <div className="mr-my-4 xl:mr-flex mr-justify-between">
           <ul className="mr-mb-4 xl:mr-mb-0 md:mr-flex">
             <li className="md:mr-mr-8">
-              {buildFilterDropdown("filterByStatusLabel", statusFilters)}
+              <TaskStatusFilter {...this.props} />
             </li>
             <li className="md:mr-mr-8">
-              {buildFilterDropdown("filterByReviewStatusLabel", reviewStatusFilters)}
+              <TaskReviewStatusFilter {...this.props} />
+            </li>
+            <li className="md:mr-mr-8">
+              <TaskPriorityFilter {...this.props} />
             </li>
             <li>
-              {buildFilterDropdown("filterByPriorityLabel", priorityFilters)}
+              <TaskPropertyFilter {...this.props} />
             </li>
           </ul>
 
-            {_get(this.props, 'clusteredTasks.tasks.length') !== _get(this.props, 'taskInfo.tasks.length', 0) ? clearFiltersControl : null}
+            {calculateTasksInChallenge(this.props) !== _get(this.props, 'taskInfo.totalCount', 0) ? clearFiltersControl : null}
           </div>
 
           <TaskAnalysisTable
-            filterOptions={filterOptions}
+            taskData={_get(this.props, 'taskInfo.tasks')}
             changeStatus={this.changeStatus}
-            totalTaskCount={_get(this.props, 'clusteredTasks.tasks.length')}
+            totalTaskCount={_get(this.props, 'taskInfo.totalCount')}
+            totalTasksInChallenge={ calculateTasksInChallenge(this.props) }
+            loading={this.props.loadingChallenge}
             {...this.props}
           />
       </div>
@@ -223,53 +201,50 @@ export class ViewChallengeTasks extends Component {
   }
 }
 
-const buildFilterDropdown = (titleId, filters) => {
-  return (
-    <Dropdown
-      className="mr-dropdown--right"
-      dropdownButton={dropdown => (
-        <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-blue-light">
-          <span className="mr-text-base mr-uppercase mr-mr-1">
-            <FormattedMessage {...messages[titleId]} />
-          </span>
-          <SvgSymbol
-            sym="icon-cheveron-down"
-            viewBox="0 0 20 20"
-            className="mr-fill-current mr-w-5 mr-h-5"
-          />
-        </button>
-      )}
-      dropdownContent={() =>
-        <ul className="mr-list-dropdown">
-          {filters}
-        </ul>
-      }
-    />
-  )
+const calculateTasksInChallenge = props => {
+  const actions = _get(props, 'challenge.actions')
+  if (!actions) {
+    return _get(props, 'taskInfo.totalCount')
+  }
+
+  return actions.total
 }
 
 const TaskMarkerContent = props => {
   const manager = AsManager(props.user)
   const taskBaseRoute =
     `/admin/project/${props.challenge.parent.id}` +
-    `/challenge/${props.challengeId}/task/${props.marker.options.taskId}`
+    `/challenge/${_get(props.challenge, 'id')}/task/${props.marker.options.taskId}`
 
   return (
     <React.Fragment>
-      <div>
+      <div className="mr-text-center mr-mt-5">
         {
           props.intl.formatMessage(messages.nameLabel)
         } {
-          props.marker.options.name
+          (props.marker.options.name || _get(props.task, 'name') || _get(props.task, 'title'))
         }
       </div>
-      <div>
+      <div className="mr-text-center">
         {
           props.intl.formatMessage(messages.statusLabel)
         } {
-          props.intl.formatMessage(messagesByStatus[props.marker.options.status])
+          props.intl.formatMessage(messagesByStatus[props.marker.options.taskStatus])
         }
       </div>
+      <div className="mr-text-center">
+        {
+          props.intl.formatMessage(messages.priorityLabel)
+        }: {
+          props.intl.formatMessage(messagesByPriority[props.marker.options.taskPriority])
+        }
+      </div>
+
+      {props.loading &&
+        <div>
+          <BusySpinner />
+        </div>
+      }
 
       <div className="marker-popup-content__links">
         <div>
@@ -327,6 +302,7 @@ ViewChallengeTasks.defaultProps = {
   loadingChallenge: false,
 }
 
-export default WithBoundedTasks(ViewChallengeTasks,
-                                'filteredClusteredTasks',
-                                'taskInfo')
+export default WithBoundedTasks(
+                  WithFilterCriteria(ViewChallengeTasks),
+                  'filteredClusteredTasks',
+                  'taskInfo')

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _cloneDeep from 'lodash/cloneDeep'
-import _isString from 'lodash/isString'
 import _isUndefined from 'lodash/isUndefined'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
@@ -14,6 +13,7 @@ import { fetchReviewedTasks }
 import { loadNextReviewTask } from '../../../services/Task/TaskReview/TaskReview'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
+import { buildSearchCriteria } from '../../../services/SearchCriteria/SearchCriteria'
 
 
 const DEFAULT_PAGE_SIZE = 20
@@ -87,7 +87,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       const searchParams = this.props.history.location.state
       let pageSize = _get(searchParams, 'pageSize') || DEFAULT_PAGE_SIZE
 
-      const criteria = buildSearchCrteria(searchParams)
+      const criteria = buildSearchCriteria(searchParams, DEFAULT_CRITERIA)
       criteria.pageSize = pageSize
 
       const stateCriteria = this.state.criteria
@@ -164,29 +164,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     })
   }
 })
-
-function buildSearchCrteria(searchParams) {
-  if (searchParams) {
-    let sortBy = _get(searchParams, 'sortBy')
-    let direction = _get(searchParams, 'direction')
-    let filters = _get(searchParams, 'filters', {})
-    const page = _get(searchParams, 'page')
-    const boundingBox = searchParams.boundingBox
-    const savedChallengesOnly = searchParams.savedChallengesOnly
-
-    if (_isString(filters)) {
-      filters = JSON.parse(searchParams.filters)
-    }
-
-    if (searchParams.sortCriteria) {
-      sortBy = _get(searchParams, 'sortCriteria.sortBy')
-      direction = _get(searchParams, 'sortCriteria.direction')
-    }
-
-    return {sortCriteria: {sortBy, direction}, filters, page, boundingBox, savedChallengesOnly}
-  }
-  else return DEFAULT_CRITERIA
-}
 
 export default WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WithCurrentUser(WithReviewTasks(WrappedComponent)))

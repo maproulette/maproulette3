@@ -25,6 +25,10 @@ export const WithTaskClusterMarkers = function(WrappedComponent) {
       if (!_isEqual(this.props.taskClusters, prevProps.taskClusters)) {
         this.updateMapMarkers()
       }
+
+      if (!_isEqual(this.props.chosenTasks, prevProps.chosenTasks)) {
+        this.updateMapMarkers()
+      }
     }
 
     /**
@@ -32,9 +36,10 @@ export const WithTaskClusterMarkers = function(WrappedComponent) {
      */
     updateMapMarkers() {
       const mapLayerName = _get(this.props, 'source.name')
-      const markers = _map(this.props.taskClusters, cluster =>
-        AsMappableCluster(cluster).mapMarker(mapLayerName)
-      )
+      const markers = _map(this.props.taskClusters, cluster => {
+        return AsMappableCluster(cluster).mapMarker(mapLayerName,
+                 this.props.chosenTasks, this.props.highlightPrimaryTask)
+      })
 
       this.setState({taskMarkers: markers})
     }

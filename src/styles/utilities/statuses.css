@@ -3,11 +3,11 @@
 }
 
 .mr-status-false-positive {
-  @apply mr-text-orange;
+  @apply mr-text-dark-yellow;
 }
 
 .mr-status-skipped {
-  @apply mr-text-pink;
+  @apply mr-text-orange;
 }
 
 .mr-status-already-fixed {
@@ -23,6 +23,10 @@
 }
 
 .mr-status-deleted {
+  @apply mr-text-purple;
+}
+
+.mr-status-disabled {
   @apply mr-text-purple;
 }
 
