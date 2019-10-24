@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { ZoomControl, Marker} from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
+import { point, featureCollection } from '@turf/helpers'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
@@ -24,7 +25,7 @@ import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import BusySpinner from '../BusySpinner/BusySpinner'
-import { toLatLngBounds, calculateBoundingBox } from '../../services/MapBounds/MapBounds'
+import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
 import './TaskClusterMap.scss'
 import messages from './Messages'
 
@@ -202,9 +203,14 @@ export class TaskClusterMap extends Component {
     }
 
     if (!this.currentBounds && this.state.mapMarkers) {
-      this.currentBounds = toLatLngBounds(calculateBoundingBox(
-        _map(this.state.mapMarkers, (cluster) => cluster.props.position)
-      ))
+      // Set Current Bounds to the minimum bounding box of our markers
+      this.currentBounds = toLatLngBounds(
+        bbox(featureCollection(
+          _map(this.state.mapMarkers, cluster =>
+            point([cluster.props.position[1], cluster.props.position[0]])
+          )
+        ))
+      )
     }
 
     const map =

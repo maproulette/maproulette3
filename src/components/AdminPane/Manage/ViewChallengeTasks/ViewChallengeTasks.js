@@ -49,9 +49,6 @@ export class ViewChallengeTasks extends Component {
     bulkUpdating: false,
   }
 
-  componentDidUpdate(prevProps) {
-  }
-
   takeTaskSelectionAction = action => {
     if (action.statusAction) {
       this.props.selectTasksWithStatus(action.status)

@@ -30,7 +30,7 @@ export default class TaskPropertyFilter extends Component {
                       defaultValue={this.state.propertySelect || ""}
                       className="select mr-min-w-20 mr-bg-grey-lighter mr-rounded mr-px-1 mr-text-xs mr-pl-2">
                 <option key="none" value="">
-                  None
+                  {this.props.intl.formatMessage(messages.noneOption)}
                 </option>
                 {_map(this.props.taskPropertyKeys, (value) =>
                   <option key={value} value={value}>{value}</option>
@@ -47,7 +47,7 @@ export default class TaskPropertyFilter extends Component {
                     onClick={() => {
                       this.props.updateTaskPropertyCriteria(this.state.propertySelect, this.state.propertyValue)
                     }}>
-                    Search
+                    <FormattedMessage {...messages.searchButton} />
                   </button>
                 </div>
               }

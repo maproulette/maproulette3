@@ -33,13 +33,14 @@ import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import WithWebSocketSubscriptions
        from '../../HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
+import { TaskAction } from '../../../services/Task/TaskAction/TaskAction'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import TaskAnalysisTable from '../../TaskAnalysisTable/TaskAnalysisTable'
 import TaskMarkerContent from './TaskMarkerContent'
 import messages from './Messages'
 
-const VALID_STATUS_KEYS = ["available", "created", "skipped", "tooHard"]
+const VALID_STATUS_KEYS = [TaskAction.available, TaskAction.skipped, TaskAction.tooHard]
 const VALID_STATUSES =
 {
   [TaskStatus.created]: true,

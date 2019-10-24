@@ -61,9 +61,9 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
                               'filters.challengeId',
                               challengeId)
 
-        this.props.fetchBoundedTasks(criteria, 1001, true).then(results => {
+        this.props.fetchBoundedTasks(criteria, UNCLUSTER_THRESHOLD + 1, true).then(results => {
           if (currentFetchId >= this.state.fetchId) {
-            if (results.totalCount > 1000) {
+            if (results.totalCount > UNCLUSTER_THRESHOLD) {
               this.props.fetchTaskClusters(challengeId, this.props.criteria
               ).then(clusters => {
                 if (currentFetchId >= this.state.fetchId) {
@@ -79,7 +79,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
             }
           }
         }).catch(error => {
-          console.log("*** Error updating task clusters:")
           console.log(error)
           this.setState({clusters: {}, loading: false, taskCount: 0})
         })
@@ -93,7 +92,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
                            taskCount: taskCount, showAsClusters: true})
           }
         }).catch(error => {
-          console.log("*** Error updating task clusters:")
           console.log(error)
           this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true})
         })

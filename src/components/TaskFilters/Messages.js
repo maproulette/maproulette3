@@ -1,12 +1,17 @@
 import { defineMessages } from 'react-intl'
 
 /**
- * Internationalized messages for use with TaskAnalysisTable
+ * Internationalized messages for use with TaskFilters
  */
 export default defineMessages({
   searchButton: {
     id: "TaskPropertyFilter.controls.search",
     defaultMessage: "Search",
+  },
+
+  noneOption: {
+    id: "TaskPropertyFilter.options.none.label",
+    defaultMessage: "None",
   },
 
   filterByPropertyLabel: {

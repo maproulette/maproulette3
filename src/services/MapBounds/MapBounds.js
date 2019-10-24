@@ -4,7 +4,6 @@ import _isArray from 'lodash/isArray'
 import _max from 'lodash/max'
 import _split from 'lodash/split'
 import _isString from 'lodash/isString'
-import _each from 'lodash/each'
 import { LatLngBounds, LatLng } from 'leaflet'
 
 /** Default map bounds in absence of any state */
@@ -110,27 +109,4 @@ export const boundsWithinDegrees = function(bounds1, bounds2, maxAllowedDegrees)
                Math.abs(normalizedBounds1.getWest() - normalizedBounds2.getWest()),
                Math.abs(normalizedBounds1.getNorth() - normalizedBounds2.getNorth()),
                Math.abs(normalizedBounds1.getSouth() - normalizedBounds2.getSouth())])
-}
-
-
-/**
- * Calculates the best bounding box to incorporate all the given coordinates.
- */
-export const calculateBoundingBox = function(coordinates) {
-  const lats = []
-  const lngs = []
-
-  _each(coordinates, c => {
-    lats.push(c[1])
-    lngs.push(c[0])
-  })
-
-  // calc the min and max lng and lat
-  const minlat = Math.min.apply(null, lats)
-  const maxlat = Math.max.apply(null, lats)
-  const minlng = Math.min.apply(null, lngs)
-  const maxlng = Math.max.apply(null, lngs)
-
-  // create a bounding rectangle that can be used in leaflet
-  return [minlat,minlng,maxlat,maxlng]
 }

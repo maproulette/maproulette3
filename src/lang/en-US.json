@@ -629,6 +629,7 @@
   "TaskConfirmationModal.nextNearby.label": "Select your next nearby task (optional)",
   "TaskConfirmationModal.addTags.placeholder": "Add MR Tags",
   "TaskPropertyFilter.controls.search": "Search",
+  "TaskPropertyFilter.options.none.label": "None",
   "TaskPropertyFilter.label": "Filter By Property",
   "TaskPriorityFilter.label": "Filter by Priority",
   "TaskStatusFilter.label": "Filter by Status",
