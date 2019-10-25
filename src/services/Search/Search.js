@@ -161,6 +161,10 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     searchParameters.tProps =
       _map(filters.taskProperty,
            (value, key) => `${key}:${value}`).join(',')
+
+    if (filters.taskPropertySearchType) {
+      searchParameters.tPropsSearchType = filters.taskPropertySearchType
+    }
   }
 
   if (boundingBox) {

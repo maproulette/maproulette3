@@ -1,4 +1,5 @@
 import L from 'leaflet'
+import 'leaflet-vectoricon'
 import { MAPBOX_LIGHT, OPEN_STREET_MAP }
        from '../../services/VisibleLayer/LayerSources'
 import _isFunction from 'lodash/isFunction'
