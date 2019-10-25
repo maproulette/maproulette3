@@ -44,8 +44,8 @@ export class FilterByKeyword extends Component {
     this.props.setKeywordFilter([keywordString])
   }
 
-  clearOtherKeywords = () => {
-    this.updateFilter({value: null})
+  clearOtherKeywords = closeDropdown => {
+    this.updateFilter({value: null}, closeDropdown)
   }
 
   render() {
@@ -82,7 +82,7 @@ export class FilterByKeyword extends Component {
             activeCategory={activeCategory}
             otherKeyword={otherKeyword}
             setOtherKeywords={this.setOtherKeywords}
-            clearOtherKeywords={this.clearOtherKeywords}
+            clearOtherKeywords={() => this.clearOtherKeywords(dropdown.closeDropdown)}
             updateFilter={this.updateFilter}
             closeDropdown={dropdown.closeDropdown}
           />
@@ -119,6 +119,7 @@ const ListFilterItems = function(props) {
         searchQuery={{query: props.otherKeyword}}
         setSearch={props.setOtherKeywords}
         clearSearch={props.clearOtherKeywords}
+        deactivate={props.closeDropdown}
         placeholder=''
       />
     </li>
