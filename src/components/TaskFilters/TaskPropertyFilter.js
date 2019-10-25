@@ -15,7 +15,7 @@ import messages from './Messages'
  */
 export default class TaskPropertyFilter extends Component {
   state = {
-    searchType: "equals",
+    searchType: TaskPropertySearchType.equals,
   }
 
   render() {
@@ -27,19 +27,19 @@ export default class TaskPropertyFilter extends Component {
             <div className="mr-flex mr-items-center">
               <div className="form-select">
                 <select onChange={e => {
-                          this.setState({propertySelect: e.target.value})
-                          if (e.target.value === "") {
-                            this.props.clearTaskPropertyCriteria()
-                          }
-                        }}
-                        defaultValue={this.state.propertySelect || ""}
-                        className="select form-control mr-min-w-40">
-                  <option key="none" value="">
-                    {this.props.intl.formatMessage(messages.noneOption)}
-                  </option>
-                  {_map(this.props.taskPropertyKeys, (value) =>
-                    <option key={value} value={value}>{value}</option>
-                  )}
+                    this.setState({propertySelect: e.target.value})
+                    if (e.target.value === "") {
+                      this.props.clearTaskPropertyCriteria()
+                    }
+                  }}
+                  defaultValue={this.state.propertySelect || ""}
+                  className="select form-control mr-min-w-36">
+                    <option key="none" value="">
+                      {this.props.intl.formatMessage(messages.noneOption)}
+                    </option>
+                    {_map(this.props.taskPropertyKeys, (value) =>
+                      <option key={value} value={value}>{value}</option>
+                    )}
                 </select>
                 <div className="mr-pointer-events-none mr-absolute mr-pin-y mr-pin-r mr-flex mr-items-center mr-px-2 mr-text-grey">
                   <SvgSymbol
@@ -53,14 +53,18 @@ export default class TaskPropertyFilter extends Component {
                 <React.Fragment>
                   <div className="form-select mr-pr-2 mr-pl-2 mr-w-40">
                     <select className="select form-control"
-                        onChange={e => {this.setState({searchType: e.target.value})}}
-                        defaultValue={this.state.searchType}>{
+                        onChange={e => {
+                          this.setState({searchType: e.target.value})
+                        }}
+                        defaultValue={this.state.searchType}>
+                    {
                       _map(TaskPropertySearchType, searchType => (
                           <option key={searchType} value={searchType}>
                             {this.props.intl.formatMessage(messagesByPropertySearchType[searchType])}
                           </option>
                         )
-                      )}
+                      )
+                    }
                     </select>
                     <div className="mr-pointer-events-none mr-absolute mr-pin-y mr-pin-r mr-flex mr-items-center mr-px-2 mr-text-grey">
                       <SvgSymbol

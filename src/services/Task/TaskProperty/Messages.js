@@ -13,7 +13,7 @@ export default defineMessages({
     defaultMessage: "doesn't equal"
   },
   contains: {
-    id: "Task.proeprty.searchType.contains",
+    id: "Task.property.searchType.contains",
     defaultMessage: "contains"
   },
 })
