@@ -5,6 +5,7 @@ import _isEqual from 'lodash/isEqual'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _omit from 'lodash/omit'
+import _sortBy from 'lodash/sortBy'
 import { fromLatLngBounds } from '../../../services/MapBounds/MapBounds'
 import { fetchPropertyKeys } from '../../../services/Challenge/Challenge'
 
@@ -51,9 +52,10 @@ export const WithFilterCriteria = function(WrappedComponent) {
        }
      }
 
-     updateTaskPropertyCriteria = (propertyKey, propertyValue) => {
+     updateTaskPropertyCriteria = (propertyKey, propertyValue, searchType) => {
        const criteria = _cloneDeep(this.state.criteria)
        criteria.filters.taskProperty = {[propertyKey]: propertyValue}
+       criteria.filters.taskPropertySearchType = searchType
        this.setState({criteria})
      }
 
@@ -76,18 +78,6 @@ export const WithFilterCriteria = function(WrappedComponent) {
        newCriteria.filters["priorities"] = _keys(_pickBy(this.props.includeTaskPriorities, (p) => p))
 
        this.setState({criteria: newCriteria})
-     }
-
-     fetchClusters = () => {
-       return this.props.fetchClusteredTasks(
-           _get(this.props, 'challenge.id') || this.props.challengeId || _get(this.props, 'task.parent.id'),
-           false,
-           this.state.criteria,
-           15000,
-           false,
-           false,
-           true
-         )
      }
 
      refresh = () => {
@@ -118,8 +108,11 @@ export const WithFilterCriteria = function(WrappedComponent) {
        else if (challengeId && !this.state.loadingPropertyKeys){
          this.setState({loadingPropertyKeys: true})
          fetchPropertyKeys(challengeId).then( (results) => {
-           this.setState({loadingPropertyKeys: false, taskPropertyKeys: results})
+           this.setState({loadingPropertyKeys: false, taskPropertyKeys: _sortBy(results)})
            return results
+         }).catch(error => {
+           console.log(error)
+           this.setState({loadingPropertyKeys: false, taskPropertyKeys: []})
          })
          return []
        }
