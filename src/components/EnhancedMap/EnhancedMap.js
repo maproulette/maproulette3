@@ -42,7 +42,8 @@ export default class EnhancedMap extends Map {
       if (!this.leafletElement.getCenter().equals(this.props.center) ||
           this.leafletElement.getZoom() !== this.props.zoom) {
         this.props.onBoundsChange(this.leafletElement.getBounds(),
-                                  this.leafletElement.getZoom())
+                                  this.leafletElement.getZoom(),
+                                  this.leafletElement.getSize())
       }
     }
   }
