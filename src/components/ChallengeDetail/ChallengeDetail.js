@@ -7,7 +7,7 @@ import _findIndex from 'lodash/findIndex'
 import _isNumber from 'lodash/isNumber'
 import parse from 'date-fns/parse'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
-import ChallengeBrowseMap from '../ChallengeBrowseMap/ChallengeBrowseMap'
+import TaskClusterMap from '../TaskClusterMap/TaskClusterMap'
 import { messagesByDifficulty } from '../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import { isUsableChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import messages from './Messages'
@@ -17,13 +17,18 @@ import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SignInButton from '../SignInButton/SignInButton'
 import AsManager from '../../interactions/User/AsManager'
-import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
+import WithChallengeTaskClusters from '../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
+import WithTaskClusterMarkers from '../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
+import WithFilterCriteria from '../HOCs/WithFilterCriteria/WithFilterCriteria'
 
-const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
+const ClusterMap = WithFilterCriteria(
+                    WithChallengeTaskClusters(
+                      WithTaskClusterMarkers(TaskClusterMap('challengeDetail')))
+                  )
 
 /**
  * ChallengeDetail represents a specific challenge view. It presents an
@@ -124,17 +129,20 @@ export class ChallengeDetail extends Component {
         {refreshDate: this.props.intl.formatDate(new Date(challenge.lastTaskRefresh)),
          sourceDate: this.props.intl.formatDate(new Date(challenge.dataOriginDate))})
 
+   const map =
+       <ClusterMap
+         className="split-pane"
+         onTaskClick={taskId => this.props.startChallengeWithTask(challenge.id, false, taskId)}
+         challenge={challenge}
+         allowClusterToggle={false}
+         skipRefreshTasks
+         {...this.props}
+       />
+
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white lg:mr-flex">
         <div className="mr-flex-1">
-          <MapPane>
-            <BrowseMap
-              className="split-pane"
-              challenge={challenge}
-              onTaskClick={this.props.startChallengeWithTask}
-              {...this.props}
-            />
-          </MapPane>
+          <MapPane>{map}</MapPane>
         </div>
         <div className="mr-flex-1">
           <div className="mr-h-content mr-overflow-auto">

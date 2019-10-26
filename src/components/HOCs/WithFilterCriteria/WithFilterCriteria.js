@@ -166,7 +166,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
          this.updateIncludedFilters(this.props)
        }
 
-       if (!_isEqual(prevState.criteria, this.state.criteria)) {
+       if (!_isEqual(prevState.criteria, this.state.criteria) && !this.props.skipRefreshTasks) {
          if (this.state.criteria.boundingBox) {
            this.refreshTasks()
          }
