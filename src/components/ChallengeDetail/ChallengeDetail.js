@@ -23,12 +23,12 @@ import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeTaskClusters from '../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
 import WithTaskClusterMarkers from '../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
-import WithFilterCriteria from '../HOCs/WithFilterCriteria/WithFilterCriteria'
+import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 
-const ClusterMap = WithFilterCriteria(
+const ClusterMap =
                     WithChallengeTaskClusters(
                       WithTaskClusterMarkers(TaskClusterMap('challengeDetail')))
-                  )
+
 
 /**
  * ChallengeDetail represents a specific challenge view. It presents an
@@ -38,6 +38,9 @@ const ClusterMap = WithFilterCriteria(
  * @author [Ryan Scherler](https://github.com/ryanscherler)
  */
 export class ChallengeDetail extends Component {
+  state = {
+  }
+
   render() {
     const challenge = this.props.browsedChallenge
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
@@ -135,6 +138,8 @@ export class ChallengeDetail extends Component {
          onTaskClick={taskId => this.props.startChallengeWithTask(challenge.id, false, taskId)}
          challenge={challenge}
          allowClusterToggle={false}
+         criteria={{boundingBox: fromLatLngBounds(this.state.bounds), zoom: this.state.zoom}}
+         updateTaskFilterBounds={(bounds, zoom) => this.setState({bounds, zoom})}
          skipRefreshTasks
          {...this.props}
        />
