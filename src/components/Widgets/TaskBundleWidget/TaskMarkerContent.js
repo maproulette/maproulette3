@@ -29,7 +29,7 @@ class TaskMarkerContent extends Component {
           <div className="mr-flex">
             <div className="mr-w-1/2 mr-mr-2 mr-text-right"><FormattedMessage {...messages.statusLabel} /></div>
             <div className="mr-w-1/2 mr-text-left">
-              {this.props.intl.formatMessage(messagesByStatus[this.props.marker.options.status])}
+              {this.props.intl.formatMessage(messagesByStatus[this.props.marker.options.taskStatus])}
             </div>
           </div>
           <div className="mr-flex">

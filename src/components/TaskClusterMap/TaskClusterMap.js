@@ -161,6 +161,9 @@ export class TaskClusterMap extends Component {
         // Reset Map so that it zooms to new marker bounds
         this.setState({mapMarkers: null})
       }
+      else if (this.props.onTaskClick) {
+        this.props.onTaskClick(marker.options.taskId)
+      }
     }
   }
 
@@ -324,10 +327,6 @@ export class TaskClusterMap extends Component {
       this.props.totalTaskCount > CLUSTER_POINTS &&
       this.currentZoom < MAX_ZOOM
 
-    if (!this.currentBounds && _get(this.props, 'boundingBox.length', 0) > 0) {
-      this.currentBounds = toLatLngBounds(this.props.boundingBox)
-    }
-
     if (!this.currentBounds && this.state.mapMarkers) {
       // Set Current Bounds to the minimum bounding box of our markers
       this.currentBounds = toLatLngBounds(
@@ -358,7 +357,7 @@ export class TaskClusterMap extends Component {
       </EnhancedMap>
 
     return (
-      <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile})}>
+      <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile}, this.props.className)}>
         {canClusterToggle && !this.props.loading &&
          <label className="mr-absolute mr-z-10 mr-pin-t mr-pin-l mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
             <input type="checkbox" className="mr-mr-2"

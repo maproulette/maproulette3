@@ -24,7 +24,7 @@ const FRESHNESS_THRESHOLD = 60000 // 1 minute
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithBrowsedChallenge = function(WrappedComponent, includeTasks=true) {
+export const WithBrowsedChallenge = function(WrappedComponent) {
   class _WithBrowsedChallenge extends Component {
     state = {
       browsedChallenge: null,
@@ -109,12 +109,6 @@ export const WithBrowsedChallenge = function(WrappedComponent, includeTasks=true
               loadingBrowsedChallenge: null,
               isVirtual
             })
-
-            if (includeTasks &&
-               (challenge.id !== _get(props, 'clusteredTasks.challengeId') ||
-                isVirtual !== _get(props, 'clusteredTasks.isVirtualChallenge'))) {
-              props.fetchClusteredTasks(challenge.id, isVirtual, undefined, undefined, undefined, true)
-            }
           }
           else if (!isVirtual && !_isFinite(this.state.loadingBrowsedChallenge)) {
             // We don't have the challenge available (and we're not in the middle
