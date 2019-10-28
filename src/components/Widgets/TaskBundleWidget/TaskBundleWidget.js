@@ -345,7 +345,7 @@ registerWidgetType(
             WithBrowsedChallenge(
               WithWebSocketSubscriptions(
                 TaskBundleWidget,
-              ), false
+              )
             ),
             'filteredClusteredTasks',
             'taskInfo'

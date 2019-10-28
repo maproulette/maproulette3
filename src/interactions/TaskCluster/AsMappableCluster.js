@@ -1,4 +1,5 @@
 import L from 'leaflet'
+import 'leaflet-vectoricon'
 import { MAPBOX_LIGHT, OPEN_STREET_MAP }
        from '../../services/VisibleLayer/LayerSources'
 import _isFunction from 'lodash/isFunction'
@@ -6,6 +7,7 @@ import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
+import _get from 'lodash/get'
 import { TaskStatusColors }
       from '../../services/Task/TaskStatus/TaskStatus'
 import { colors } from '../../tailwind'
@@ -67,7 +69,8 @@ export class AsMappableCluster {
    */
   leafletMarkerIcon(mapLayerName, selectedTasks, highlightPrimaryTask) {
     const count = _isFunction(this.rawData.getChildCount) ?
-                  this.rawData.getChildCount() : this.numberOfPoints
+                  this.rawData.getChildCount() :
+                  _get(this.options, 'numberOfPoints', this.numberOfPoints)
     if (count > 1) {
       let colorScheme = null
       switch(mapLayerName) {
