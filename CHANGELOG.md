@@ -12,6 +12,7 @@ This project adheres to
 - Search for tasks by feature property in Create & Manage task map
 - Use backend clustering on Create & Manage task map
 - Use backend clustering on Challenge Details map
+- Use backend clustering on Multi-Task Work Widget map
 - Consolidate visually overlapping clusters from backend
 - Additional resiliency around bad task geometry
 
