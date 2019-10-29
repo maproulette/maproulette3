@@ -381,6 +381,13 @@ export class EditChallenge extends Component {
     delete challengeData.actions
     delete challengeData.ignoreSourceErrors
 
+    if (this.props.challenge && challengeData.dataOriginDate) {
+      // Don't update dataOriginDate if it hasn't changed (otherwise it's timezone could change)
+      if (this.props.challenge.dataOriginDate === challengeData.dataOriginDate) {
+        delete challengeData.dataOriginDate
+      }
+    }
+
     // Parent field should just be id, not object.
     if (_isObject(challengeData.parent)) {
       challengeData.parent = challengeData.parent.id

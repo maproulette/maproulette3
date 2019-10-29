@@ -47,7 +47,7 @@ const WithChallengeManagement = WrappedComponent =>
  *
  * @private
  */
-async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON) {
+async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON, dataOriginDate) {
   ownProps.updateCreatingTasksProgress(true, 0)
   const lineFile = AsLineReadableFile(geoJSON)
   let allLinesRead = false
@@ -61,7 +61,7 @@ async function uploadLineByLine(dispatch, ownProps, challenge, geoJSON) {
     }
 
     await dispatch(
-      uploadChallengeGeoJSON(challenge.id, taskLines.join('\n'), true)
+      uploadChallengeGeoJSON(challenge.id, taskLines.join('\n'), true, false, dataOriginDate)
     )
     totalTasksCreated += taskLines.length
     ownProps.updateCreatingTasksProgress(true, totalTasksCreated)
@@ -140,7 +140,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   deleteIncompleteTasks: challenge => deleteIncompleteTasks(dispatch, ownProps, challenge),
 
-  rebuildChallenge: async (challenge, localFile) => {
+  rebuildChallenge: async (challenge, localFile, dataOriginDate) => {
     ownProps.updateCreatingTasksProgress(true)
 
     try {
@@ -148,11 +148,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       // decide which service call to use
       if (localFile) {
         if (await AsValidatableGeoJSON(localFile).isLineByLine()) {
-          await uploadLineByLine(dispatch, ownProps, challenge, localFile)
+          await uploadLineByLine(dispatch, ownProps, challenge, localFile, dataOriginDate)
         }
         else {
           await dispatch(
-            uploadChallengeGeoJSON(challenge.id, localFile, false)
+            uploadChallengeGeoJSON(challenge.id, localFile, false, false, dataOriginDate)
           )
         }
       }

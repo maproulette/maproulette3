@@ -62,4 +62,9 @@ export default defineMessages({
     id: "RebuildTasksControl.modal.controls.proceed.label",
     defaultMessage: "Proceed"
   },
+
+  dataOriginDateLabel: {
+    id: 'RebuildTasksControl.modal.controls.dataOriginDate.label',
+    defaultMessage: "Date data was sourced",
+  },
 })

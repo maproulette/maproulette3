@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
 import _get from 'lodash/get'
+import parse from 'date-fns/parse'
 import { ChallengeStatus, messagesByStatus }
        from  '../../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { WidgetDataTarget, registerWidgetType }
@@ -27,9 +28,8 @@ export default class ChallengeOverviewWidget extends Component {
 
     const dataOriginDateText = !this.props.challenge.dataOriginDate ? null :
       this.props.intl.formatMessage(messages.dataOriginDate,
-        {refreshDate: this.props.intl.formatDate(new Date(this.props.challenge.lastTaskRefresh)),
-         sourceDate: this.props.intl.formatDate(new Date(this.props.challenge.dataOriginDate))})
-
+        {refreshDate: this.props.intl.formatDate(parse(this.props.challenge.lastTaskRefresh)),
+         sourceDate: this.props.intl.formatDate(parse(this.props.challenge.dataOriginDate))})
 
     return (
       <QuickWidget {...this.props}
@@ -65,7 +65,7 @@ export default class ChallengeOverviewWidget extends Component {
 
           <div>
             {this.props.challenge.created &&
-             <FormattedDate value={new Date(this.props.challenge.created)}
+             <FormattedDate value={parse(this.props.challenge.created)}
                             year='numeric' month='long' day='2-digit' />
             }
           </div>
@@ -76,7 +76,7 @@ export default class ChallengeOverviewWidget extends Component {
 
           <div>
             {this.props.challenge.modified &&
-             <FormattedDate value={new Date(this.props.challenge.modified)}
+             <FormattedDate value={parse(this.props.challenge.modified)}
                             year='numeric' month='long' day='2-digit' />
             }
           </div>
@@ -87,7 +87,7 @@ export default class ChallengeOverviewWidget extends Component {
 
           <div title={dataOriginDateText}>
             {this.props.challenge.dataOriginDate &&
-             <FormattedDate value={new Date(this.props.challenge.dataOriginDate)}
+             <FormattedDate value={parse(this.props.challenge.dataOriginDate)}
                             year='numeric' month='long' day='2-digit' />
             }
           </div>

@@ -170,6 +170,7 @@
   "RebuildTasksControl.modal.controls.removeUnmatched.label": "First remove incomplete tasks",
   "RebuildTasksControl.modal.controls.cancel.label": "Cancel",
   "RebuildTasksControl.modal.controls.proceed.label": "Proceed",
+  "RebuildTasksControl.modal.controls.dataOriginDate.label": "Date data was sourced",
   "StepNavigation.controls.cancel.label": "Cancel",
   "StepNavigation.controls.next.label": "Next",
   "StepNavigation.controls.prev.label": "Prev",
