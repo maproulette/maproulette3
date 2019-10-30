@@ -291,7 +291,6 @@
   "ChallengeProgress.tasks.remaining": "Tasks Remaining: {taskCount, number}",
   "ChallengeProgress.tasks.totalCount": "of {totalCount, number}",
   "ChallengeSearchMap.controls.startChallenge.label": "Start Challenge",
-  "Admin.ChallengeTaskMap.controls.clusterTasks.label": "Cluster",
   "Challenge.indicators.newest.label": "Newest",
   "Challenge.indicators.popular.label": "Popular",
   "Challenge.indicators.featured.label": "Featured",

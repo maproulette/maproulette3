@@ -250,7 +250,8 @@ export class TaskClusterMap extends Component {
                                      currentCluster.options.point.lng]
 
           // Generate a fresh icon that reflects the updated number of points/tasks
-          currentCluster.icon = AsMappableCluster(currentCluster).leafletMarkerIcon()
+          currentCluster.icon =
+            AsMappableCluster(currentCluster).leafletMarkerIcon(this.props.monochromaticClusters)
 
           // Store the combined cluster in the map, and mark the other cluster
           // with a flag so we know it has been combined into a cluster and

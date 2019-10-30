@@ -55,3 +55,8 @@
 .greyscale-cluster {
   @include colored-cluster($grey-dark-less, $grey-light-less, $grey-darkest);
 }
+
+.multicolor-cluster {
+  // yellow, green, orange that match leaflet.markercluster colors
+  @include colored-cluster(rgba(240, 194, 12, 0.6), rgba(110, 204, 57, 0.6), rgba(241, 128, 23, 0.6))
+}

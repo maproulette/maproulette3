@@ -1,7 +1,5 @@
 import L from 'leaflet'
 import 'leaflet-vectoricon'
-import { MAPBOX_LIGHT, OPEN_STREET_MAP }
-       from '../../services/VisibleLayer/LayerSources'
 import _isFunction from 'lodash/isFunction'
 import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
@@ -51,40 +49,27 @@ export class AsMappableCluster {
    * Generates a map marker object suitable for use with a Leaflet map, with
    * optionally customized appearance for the given map layer
    */
-  mapMarker(mapLayerName, selectedTasks, highlightPrimaryTask) {
+  mapMarker(monochromatic, selectedTasks, highlightPrimaryTask) {
     return {
       position: [this.point.lat, this.point.lng],
       options: {...(_merge(this.rawData, {taskStatus: this.rawData.status,
                                           taskPriority: this.rawData.priority,
                                           name: this.rawData.title,
                                           taskId: this.rawData.id}))},
-      icon: this.leafletMarkerIcon(mapLayerName, selectedTasks, highlightPrimaryTask),
+      icon: this.leafletMarkerIcon(monochromatic, selectedTasks, highlightPrimaryTask),
     }
   }
 
   /**
    * Generates a Leaflet Icon object appropriate for the given cluster based on
-   * its size -- including using a standard marker for a single point -- and,
-   * optionally, the map layer currently in use
+   * its size, including using a standard marker for a single point
    */
-  leafletMarkerIcon(mapLayerName, selectedTasks, highlightPrimaryTask) {
+  leafletMarkerIcon(monochromatic=false, selectedTasks, highlightPrimaryTask) {
     const count = _isFunction(this.rawData.getChildCount) ?
                   this.rawData.getChildCount() :
                   _get(this.options, 'numberOfPoints', this.numberOfPoints)
     if (count > 1) {
-      let colorScheme = null
-      switch(mapLayerName) {
-        case MAPBOX_LIGHT:
-          colorScheme = 'monochromatic-blue-cluster'
-          break;
-        case OPEN_STREET_MAP:
-          colorScheme = 'monochromatic-brown-cluster'
-          break;
-        default:
-          colorScheme = 'greyscale-cluster'
-          break;
-      }
-
+      const colorScheme = monochromatic ? 'greyscale-cluster' : 'multicolor-cluster'
       let clusterSizeClass = ''
       if (count < 10) {
         clusterSizeClass = 'few'
