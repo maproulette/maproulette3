@@ -50,7 +50,7 @@ export class RebuildTasksControl extends Component {
                                   Promise.resolve()
 
     deleteStepIfRequested.then(() => {
-      this.props.rebuildChallenge(this.props.challenge, updatedFile)
+      this.props.rebuildChallenge(this.props.challenge, updatedFile, this.state.dataOriginDate)
     })
   }
 
@@ -76,6 +76,22 @@ export class RebuildTasksControl extends Component {
           })
         },
       })
+    }
+
+    let originDateField = null
+    // Only offer an option to change the source origin date if it's a local file
+    // we are uploading.
+    if (challenge.dataSource() === 'local') {
+      originDateField =
+        <div className="form-group field field-string mr-mt-2">
+          <label className="control-label">
+            <FormattedMessage {...messages.dataOriginDateLabel} />
+          </label>
+          <input className="form-control" type="date"
+                 label={this.props.intl.formatMessage(messages.dataOriginDateLabel)}
+                 onChange={e => this.setState({dataOriginDate: e.target.value})}
+                 value={this.state.dataOriginDate || challenge.dataOriginDate} />
+        </div>
     }
 
     return (
@@ -144,6 +160,7 @@ export class RebuildTasksControl extends Component {
                       <form className="rjsf">{fileUploadArea}</form>
                     </div>
                   )}
+                  {originDateField}
                 </div>
 
                 <div className="rebuild-tasks-control__modal-controls">

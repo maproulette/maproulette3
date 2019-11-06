@@ -17,6 +17,8 @@ import _isArray from 'lodash/isArray'
 import _fromPairs from 'lodash/fromPairs'
 import _isUndefined from 'lodash/isUndefined'
 import _groupBy from 'lodash/groupBy'
+import parse from 'date-fns/parse'
+import format from 'date-fns/format'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
@@ -80,6 +82,11 @@ export const challengeResultEntity = function(normalizedChallengeResults) {
  */
 export const receiveChallenges = function(normalizedEntities,
                                           status = RequestStatus.success) {
+  _each(normalizedEntities.challenges, c => {
+    if (c.dataOriginDate) {
+      c.dataOriginDate = format(parse(c.dataOriginDate), 'YYYY-MM-DD')
+    }
+  })
   return {
     type: RECEIVE_CHALLENGES,
     status,
@@ -624,10 +631,6 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
     // We need to remove any old challenge keywords first, prior to the
     // update.
     return removeChallengeKeywords(challengeData.id, challengeData.removedTags).then(() => {
-      if (challengeData.dataOriginDate) {
-        challengeData.dataOriginDate = challengeData.dataOriginDate + 'T00:00'
-      }
-
       challengeData = _pick(challengeData, // fields in alphabetical order
         ['blurb', 'challengeType', 'checkinComment', 'checkinSource', 'customBasemap',
         'defaultBasemap', 'defaultBasemapId', 'defaultPriority', 'defaultZoom',
@@ -682,7 +685,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
  * If removeUnmatchedTasks is set to true, then incomplete tasks will be removed
  * prior to processing of updated sourced data
  */
-export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=true, removeUnmatchedTasks=false) {
+export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=true, removeUnmatchedTasks=false,
+                                               dataOriginDate) {
   return function(dispatch) {
     // Server expects the file in a form part named "json"
     const formData = new FormData()
@@ -694,7 +698,7 @@ export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=
     return new Endpoint(
       api.challenge.uploadGeoJSON, {
         variables: {id: challengeId},
-        params: {lineByLine, removeUnmatched: removeUnmatchedTasks},
+        params: {lineByLine, removeUnmatched: removeUnmatchedTasks, dataOriginDate},
         formData,
       }
     ).execute()
