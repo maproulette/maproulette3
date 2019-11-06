@@ -367,13 +367,15 @@ export class TaskClusterMap extends Component {
           </label>
         }
         <LayerToggle {...this.props} />
-        <SearchControl
-          {...this.props}
-          onResultSelected={bounds => {
-            this.currentBounds = toLatLngBounds(bounds)
-            this.props.updateBounds(bounds)
-          }}
-        />
+        {!this.props.hideSearchControl && 
+          <SearchControl
+            {...this.props}
+            onResultSelected={bounds => {
+              this.currentBounds = toLatLngBounds(bounds)
+              this.props.updateBounds(bounds)
+            }}
+          />
+        }
         {map}
         {(!!this.props.loading || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
       </div>
