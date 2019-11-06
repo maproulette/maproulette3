@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.4.4] - 2019-10-28
+## [v3.4.4] - 2019-11-06
 ### Added
 - Search for tasks by feature property in Create & Manage task map
 - Use backend clustering on Create & Manage task map
