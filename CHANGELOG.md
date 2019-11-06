@@ -7,6 +7,11 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.4.5] - 2019-11-06
+### Fixed
+- Impaired ability to use lasso tool on Multi-Task Work widget
+
+
 ## [v3.4.4] - 2019-11-06
 ### Added
 - Search for tasks by feature property in Create & Manage task map
