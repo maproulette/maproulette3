@@ -121,13 +121,28 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     searchParameters.ps = filters.project
   }
   if (filters.status && filters.status !== "all") {
-    searchParameters.tStatus = filters.status
+    if (Array.isArray(filters.status)){
+      searchParameters.tStatus = filters.status.join(',')
+    }
+    else {
+      searchParameters.tStatus = filters.status
+    }
   }
   if (filters.priorities && filters.priorities !== "all") {
-    searchParameters.priorities = filters.priorities
+    if (Array.isArray(filters.priorities)){
+      searchParameters.priorities = filters.priorities.join(',')
+    }
+    else {
+      searchParameters.priorities = filters.priorities
+    }
   }
   if (filters.reviewStatus && filters.reviewStatus !== "all") {
-    searchParameters.trStatus = filters.reviewStatus
+    if (Array.isArray(filters.reviewStatus)){
+      searchParameters.trStatus = filters.reviewStatus.join(',')
+    }
+    else {
+      searchParameters.trStatus = filters.reviewStatus
+    }
   }
   if (filters.reviewedAt) {
     searchParameters.startDate = format(filters.reviewedAt, 'YYYY-MM-DD')
@@ -142,9 +157,26 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
 
+  if (filters.taskProperty) {
+    searchParameters.tProps =
+      _map(filters.taskProperty,
+           (value, key) => `${key}:${value}`).join(',')
+
+    if (filters.taskPropertySearchType) {
+      searchParameters.tPropsSearchType = filters.taskPropertySearchType
+    }
+  }
+
   if (boundingBox) {
-    //tbb =>  [left, bottom, right, top]
-    searchParameters.tbb = boundingBox
+    //tbb =>  [left, bottom, right, top]  W/S/E/N
+    if (_isArray(boundingBox)) {
+      searchParameters.tbb = boundingBox.join(',')
+    }
+    else {
+      searchParameters.tbb = boundingBox
+    }
+
+
   }
 
   if (savedChallengesOnly) {

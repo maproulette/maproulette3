@@ -3,6 +3,7 @@ import Form from 'react-jsonschema-form'
 import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
+import _isFinite from 'lodash/isFinite'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -77,6 +78,22 @@ export class EditTask extends Component {
   cancel = () => this.rerouteAfterCompletion()
 
   render() {
+    // We may have a task id lying around in redux, but at least make sure we
+    // have a task status and geometries before proceeding to load the form
+    if (!_isFinite(_get(this.props, 'task.status')) ||
+        !_isObject(_get(this.props, 'task.geometries')) ||
+        !this.props.challenge || !this.props.project) {
+      return (
+        <div className="admin__manage edit-task">
+          <div className="admin__manage__pane-wrapper">
+            <div className="admin__manage__primary-content">
+              <BusySpinner />
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     const taskData = _merge({}, this.props.task, this.state.formData)
 
     // Present the geometries as a string rather than object

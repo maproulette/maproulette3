@@ -47,10 +47,15 @@ export default class TaskBuildProgress extends Component {
     ) / 1000
   }
 
+  refresh = () => {
+    this.props.refreshChallenge()
+    this.props.refreshTasks()
+  }
+
   componentDidMount() {
     this.clearTimer()
     this.timerHandle =
-      setInterval(this.props.refreshChallenge, TIMER_INTERVAL)
+      setInterval(this.props.refresh, TIMER_INTERVAL)
 
     if (this.props.challenge.modified) {
       this.setState({startTime: parse(this.props.challenge.modified)})

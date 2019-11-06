@@ -13,6 +13,10 @@ import _isArray from 'lodash/isArray'
 import _isFinite from 'lodash/isFinite'
 import _map from 'lodash/map'
 import _compact from 'lodash/compact'
+import _debounce from 'lodash/debounce'
+import _each from 'lodash/each'
+import _sortBy from 'lodash/sortBy'
+import _reverse from 'lodash/reverse'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -55,6 +59,22 @@ export class TaskAnalysisTable extends Component {
     openComments: null,
   }
 
+  debouncedUpdateTasks = _debounce(this.updateTasks, 100)
+
+  updateTasks(tableState, instance) {
+    const sortCriteria = {
+      sortBy: tableState.sorted[0].id,
+      direction: tableState.sorted[0].desc ? "DESC" : "ASC",
+    }
+
+    const filters = {}
+    _each(tableState.filtered, (pair) => {filters[pair.id] = pair.value})
+
+    this.props.updateCriteria({sortCriteria, filters, page: tableState.page,
+                            boundingBox: this.props.boundingBox})
+  }
+
+
   toggleReviewColumns() {
     this.setState({withReviewColumns: !this.state.withReviewColumns})
   }
@@ -94,8 +114,34 @@ export class TaskAnalysisTable extends Component {
                       `/challenge/${this.props.challenge.id}/task`
     }
 
+    const pageSize = this.props.pageSize
+    const page = this.props.page
+    const totalPages = Math.ceil(_get(this.props, 'totalTaskCount', 0) / pageSize)
+
+    let data = _get(this.props, 'taskData', [])
+    let defaultSorted = [{id: 'name', desc: false}]
+    let defaultFiltered = []
+
+    if (_get(this.props, 'criteria.sortCriteria.sortBy')) {
+      defaultSorted = [{id: this.props.criteria.sortCriteria.sortBy,
+                        desc: this.props.criteria.sortCriteria.direction === "DESC"}]
+
+      if (defaultSorted[0].id === "name") {
+        data = _sortBy(data, (t) => (t.name || t.title))
+      }
+      else {
+        data = _sortBy(data, defaultSorted[0].id)
+      }
+      if (defaultSorted[0].desc) {
+        data = _reverse(data)
+      }
+    }
+    if (_get(this.props, 'criteria.filters')) {
+      defaultFiltered = _map(this.props.criteria.filters,
+                             (value, key) => {return {id: key, value}})
+    }
+
     const manager = AsManager(this.props.user)
-    const data = _get(this.props, 'taskInfo.tasks', [])
     const columns = this.getColumns(manager, taskBaseRoute, data)
 
     return (
@@ -118,8 +164,27 @@ export class TaskAnalysisTable extends Component {
               <ViewTaskSubComponent taskId={props.original.id} />
             }
             collapseOnDataChange={false}
-            defaultSorted={[ {id: 'featureId', desc: false} ]}
+            minRows={1}
+            manual
+            multiSort={false}
+            defaultSorted={defaultSorted}
+            defaultFiltered={defaultFiltered}
             defaultPageSize={this.props.defaultPageSize}
+            pageSize={pageSize}
+            pages={totalPages}
+            onFetchData={(state, instance) => this.debouncedUpdateTasks(state, instance)}
+            onPageSizeChange={(pageSize, pageIndex) => this.props.changePageSize(pageSize)}
+            page={page}
+            getTheadFilterThProps={(state, rowInfo, column) => {
+              return {style: {position: "inherit", overflow: "inherit"}}}
+            }
+            onFilteredChange={filtered => {
+              this.setState({ filtered })
+              if (this.fetchData) {
+                this.fetchData()
+              }
+            }}
+            loading={this.props.loading}
           />
         </section>
         {_isFinite(this.state.openComments) &&
@@ -156,7 +221,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   }
 
   columns.featureId = {
-    id: 'featureId',
+    id: 'name',
     Header: props.intl.formatMessage(messages.featureIdLabel),
     accessor: t => t.name || t.title,
     exportable: t => t.name || t.title,
@@ -369,6 +434,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Header: () => <FormattedMessage {...messages.commentsColumnLabel} />,
     accessor: 'commentID',
     maxWidth: 110,
+    sortable: false,
     Cell: props =>
       <ViewCommentsButton onClick={() => openComments(props.row._original.id)} />,
   }

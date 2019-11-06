@@ -54,7 +54,11 @@ export default class SearchBox extends Component {
       null :
       <button className="button is-clear has-svg-icon search-box--done-button"
               onClick={() => this.props.deactivate && this.props.deactivate()}>
-        <SvgSymbol viewBox='0 0 20 20' sym="outline-arrow-right-icon"/>
+        <SvgSymbol
+          className={this.props.buttonClassName}
+          viewBox='0 0 20 20'
+          sym="outline-arrow-right-icon"
+        />
       </button>
 
 

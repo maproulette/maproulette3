@@ -136,6 +136,7 @@ export class MarkdownEditField extends Component {
                               properties={{}}
                               completionResponses={{}}
                               setCompletionResponse={() => {}}
+                              lightMode={this.props.uiSchema["ui:lightMode"]}
                               disableTemplate={true}/>
           </div>
         </div>
@@ -227,7 +228,7 @@ export const MarkdownDescriptionField = ({id, description}) => {
 
   return (
     <div id={id} className="field-description">
-      <MarkdownContent markdown={description} />
+      <MarkdownContent markdown={description} lightMode />
     </div>
   )
 }

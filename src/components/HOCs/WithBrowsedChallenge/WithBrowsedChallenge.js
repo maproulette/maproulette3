@@ -109,11 +109,6 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
               loadingBrowsedChallenge: null,
               isVirtual
             })
-
-            if (challenge.id !== _get(props, 'clusteredTasks.challengeId') ||
-                isVirtual !== _get(props, 'clusteredTasks.isVirtualChallenge')) {
-              props.fetchClusteredTasks(challenge.id, isVirtual, undefined, undefined, undefined, true)
-            }
           }
           else if (!isVirtual && !_isFinite(this.state.loadingBrowsedChallenge)) {
             // We don't have the challenge available (and we're not in the middle

@@ -94,7 +94,10 @@ export class AsMappableTask {
     // Not all tasks have a center-point. In that case, we try to calculate
     // one ourselves based on the task features.
     if (!centerPoint && this.hasGeometries()) {
-      centerPoint = _get(center(this.geometries), 'geometry.coordinates')
+      try {
+        centerPoint = _get(center(this.geometries), 'geometry.coordinates')
+      }
+      catch(e) {} // Bad geometry can cause turf to blow up
     }
 
     // If all our efforts failed, default to (0, 0).
@@ -111,13 +114,16 @@ export class AsMappableTask {
    * Calculates and returns the bounding box of the task.
    */
   calculateBBox() {
-    if (this.hasGeometries()) {
-      return bbox(this.geometries)
+    try {
+      if (this.hasGeometries()) {
+        return bbox(this.geometries)
+      }
     }
-    else {
-      const centerPoint = this.calculateCenterPoint()
-      return bbox(point([centerPoint.lng, centerPoint.lat]))
-    }
+    catch(e) {} // Bad geometry can cause turf to blow up
+
+    // Fall back to task centerpoint
+    const centerPoint = this.calculateCenterPoint()
+    return bbox(point([centerPoint.lng, centerPoint.lat]))
   }
 
   /**

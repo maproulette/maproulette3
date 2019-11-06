@@ -5,6 +5,7 @@ import _compact from 'lodash/compact'
 import _map from 'lodash/map'
 import _isEmpty from 'lodash/isEmpty'
 import _isObject from 'lodash/isObject'
+import _truncate from 'lodash/truncate'
 import messages from './Messages'
 
 /**
@@ -34,7 +35,14 @@ const PropertyList = props => {
 
     const link =
       !_isEmpty(tagInfo) ?
-      <a target="_blank" rel="noopener noreferrer" href={`${tagInfo}/keys/${key}`}>{key}</a> :
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`${tagInfo}/keys/${key}`}
+        title={key}
+      >
+        {_truncate(key, {length: 20})}
+      </a> :
       <span className="not-linked mr-text-grey">{key}</span>
 
     return (

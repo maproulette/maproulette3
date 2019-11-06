@@ -1,19 +1,32 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { ZoomControl, Marker} from 'react-leaflet'
 import { latLng } from 'leaflet'
 import bbox from '@turf/bbox'
+import bboxPolygon from '@turf/bbox-polygon'
+import distance from '@turf/distance'
+import centroid from '@turf/centroid'
+import { point, featureCollection, geometryCollection } from '@turf/helpers'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _isEqual from 'lodash/isEqual'
 import _debounce from 'lodash/debounce'
 import _noop from  'lodash/noop'
+import _uniqueId from 'lodash/uniqueId'
+import _compact from 'lodash/compact'
+import _cloneDeep from 'lodash/cloneDeep'
+import _isObject from 'lodash/isObject'
+import _omit from 'lodash/omit'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
+import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
+import LassoSelectionControl
+       from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithIntersectingOverlays
        from '../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
@@ -21,9 +34,28 @@ import WithStatus from '../HOCs/WithStatus/WithStatus'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
 import './TaskClusterMap.scss'
+import messages from './Messages'
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
+
+export const MAX_ZOOM = 18
+
+/**
+ * An uncluster option will be offered if no more than this number of tasks
+ * will be shown.
+ */
+export const UNCLUSTER_THRESHOLD = 1000 // max number of tasks
+
+/**
+ * The number of clusters to show.
+ */
+export const CLUSTER_POINTS = 25
+
+/**
+ * The size of cluster marker icons in pixels
+ */
+export const CLUSTER_ICON_PIXELS = 40
 
 /**
  * TaskClusterMap allows a user to browse tasks and task clusters
@@ -33,6 +65,8 @@ const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
  */
 export class TaskClusterMap extends Component {
   currentBounds = null
+  currentSize = null
+  currentZoom = 2
   skipNextUpdateBounds = false
 
   state = {
@@ -47,7 +81,8 @@ export class TaskClusterMap extends Component {
     }
 
     // the loading status of tasks change
-    if (!!nextProps.loading !== !!this.props.loading) {
+    if (!!nextProps.loading !== !!this.props.loading ||
+        !!nextProps.loadingChallenge !== !!this.props.loadingChallenge) {
       return true
     }
 
@@ -92,7 +127,7 @@ export class TaskClusterMap extends Component {
    *
    * @private
    */
-  updateBounds = (bounds, zoom) => {
+  updateBounds = (bounds, zoom, mapSize) => {
     // If the new bounds are the same as the old, do nothing.
     if (this.currentBounds && this.currentBounds.equals(bounds)) {
       return
@@ -100,13 +135,16 @@ export class TaskClusterMap extends Component {
 
     if (this.skipNextUpdateBounds) {
       this.currentBounds = toLatLngBounds(bounds)
+      this.currentZoom = zoom
       this.skipNextUpdateBounds = false
       return
     }
 
     this.currentBounds = toLatLngBounds(bounds)
-    if (!this.props.loading) {
-      this.debouncedUpdateBounds(bounds)
+    this.currentZoom = zoom
+    this.currentSize = mapSize
+    if (!this.props.loading && !this.props.loadingTasks) {
+      this.debouncedUpdateBounds(bounds, zoom)
     }
   }
 
@@ -114,26 +152,169 @@ export class TaskClusterMap extends Component {
    * Invoked when an individual task marker is clicked by the user.
    */
   markerClicked = marker => {
-    this.currentBounds = toLatLngBounds(bbox(marker.options.bounding))
-    this.skipNextUpdateBounds = true
-    this.debouncedUpdateBounds(this.currentBounds)
+    if (!this.props.loadingChallenge && !this.props.loading) {
+      if (marker.options.bounding && marker.options.numberOfPoints > 1) {
+        this.currentBounds = toLatLngBounds(bbox(marker.options.bounding))
+        this.skipNextUpdateBounds = true
+        this.debouncedUpdateBounds(this.currentBounds, this.currentZoom)
+
+        // Reset Map so that it zooms to new marker bounds
+        this.setState({mapMarkers: null})
+      }
+      else if (this.props.onTaskClick) {
+        this.props.onTaskClick(marker.options.taskId)
+      }
+    }
   }
 
   debouncedUpdateBounds = _debounce(this.props.updateBounds, 200)
 
+  consolidateMarkers = markers => {
+    // Make sure conditions are appropriate for consolidation
+    if (!this.props.showAsClusters ||
+        this.props.totalTaskCount <= CLUSTER_POINTS ||
+        !markers || !this.currentBounds || !this.currentSize) {
+      return markers
+    }
+
+    // Our goal is to consolidate clusters that would visually overlap on the
+    // map so that the clustering looks more natural. We do this by calculating
+    // the degrees per pixel based on the current map bounds and map size in
+    // pixels, and then consolidating clusters that are within a "cluster
+    // icon's size" (plus a 20px buffer) of each other
+    //
+    // As one additional consideration, we don't want a cluster to grow to
+    // bigger than 1/4 of the current map bounds or we risk the map not zooming
+    // when we fit the map bounds to the cluster bounds as the result of a user
+    // click
+    const heightDegrees = this.currentBounds.getNorth() - this.currentBounds.getSouth()
+    const widthDegrees = this.currentBounds.getEast() - this.currentBounds.getWest()
+    const degreesPerPixel = heightDegrees / this.currentSize.y
+    const iconSizeDegrees = (CLUSTER_ICON_PIXELS + 20) * degreesPerPixel
+    const maxClusterSize = Math.max(heightDegrees, widthDegrees) / 4.0 // 1/4 of map bounds
+
+    // Track combined clusters in a map. The first cluster receives the
+    // combined data, while we simply mark the other cluster with a flag so we
+    // know it's already been combined into a cluster and shouldn't be
+    // processed independently
+    const combinedClusters = new Map()
+    let currentCluster = null
+    for (let i = 0; i < markers.length - 1; i++) {
+      currentCluster = markers[i]
+
+      // Don't process clusters that have already been combined into a cluster
+      if (combinedClusters.has(currentCluster.options.clusterId)) {
+        continue
+      }
+
+      // Look for clusters to combine into this one
+      for (let j = i + 1; j < markers.length; j++) {
+        // If it's already been combined into a cluster, skip it
+        if (combinedClusters.has(markers[j].options.clusterId)) {
+          continue
+        }
+
+        // Calculate distance between the cluster centerpoints and see if it's
+        // less than the icon size in degrees
+        const currentPosition = point([currentCluster.options.point.lng,
+                                       currentCluster.options.point.lat])
+        const otherPosition = point([markers[j].options.point.lng,
+                                     markers[j].options.point.lat])
+        const markerDistance = distance(currentPosition, otherPosition, {units: 'degrees'})
+        if (markerDistance <= iconSizeDegrees) {
+          const combinedBounds = bbox(geometryCollection([
+            currentCluster.options.bounding,
+            markers[j].options.bounding
+          ]))
+
+          // Make sure combined cluster won't be too large, or the map may not
+          // zoom if we try to fit the map to its bbox
+          if (combinedBounds[3] - combinedBounds[1] > maxClusterSize ||  // North - South
+              combinedBounds[2] - combinedBounds[0] > maxClusterSize) {  // East - West
+            continue
+          }
+
+          // Clone the current cluster and update its data to reflect the
+          // combined bounds, new centerpoint, combined task count, etc.
+          currentCluster = _omit(_cloneDeep(currentCluster),
+                                 ['options.taskId', 'options.taskStatus', 'options.taskPriority'])
+          currentCluster.options.bounding = bboxPolygon(combinedBounds).geometry
+          currentCluster.options.numberOfPoints += markers[j].options.numberOfPoints
+
+          const centerpoint = centroid(currentCluster.options.bounding)
+          currentCluster.options.point = {
+            lat: centerpoint.geometry.coordinates[1],
+            lng: centerpoint.geometry.coordinates[0]
+          }
+          currentCluster.position = [currentCluster.options.point.lat,
+                                     currentCluster.options.point.lng]
+
+          // Generate a fresh icon that reflects the updated number of points/tasks
+          currentCluster.icon = AsMappableCluster(currentCluster).leafletMarkerIcon()
+
+          // Store the combined cluster in the map, and mark the other cluster
+          // with a flag so we know it has been combined into a cluster and
+          // shouldn't be processed independently
+          combinedClusters.set(currentCluster.options.clusterId, currentCluster)
+          combinedClusters.set(markers[j].options.clusterId, true)
+        }
+      }
+    }
+
+    // Generate a list of final clusters by replacing clusters with the combined
+    // versions from the map when appropriate
+    const finalClusters = _compact(_map(markers, marker => {
+      if (!combinedClusters.has(marker.options.clusterId)) {
+        // Wasn't combined, return as-is
+        return marker
+      }
+
+      if (_isObject(combinedClusters.get(marker.options.clusterId))) {
+        // Return the combined version of the cluster
+        return combinedClusters.get(marker.options.clusterId)
+      }
+
+      // Marker was combined into another cluster, discard
+      return null
+    }))
+
+    return finalClusters
+  }
+
   generateMarkers = () => {
-    const mapMarkers = _map(this.props.taskMarkers, (mark, index) => {
-      if (mark.icon) {
-        return <Marker key={`marker-${index}`} position={mark.position} icon={mark.icon}
-                        onClick={() => this.markerClicked(mark)} />
+    const mapMarkers = _map(this.consolidateMarkers(this.props.taskMarkers), mark => {
+      let onClick = null
+      let popup = null
+      const taskId = mark.options.taskId
+      if (taskId && this.props.showMarkerPopup) {
+        popup = this.props.showMarkerPopup(mark)
       }
       else {
-        return <Marker key={`marker-${index}`} position={mark.position}
-                        onClick={() => this.markerClicked(mark)} />
+        onClick = () => this.markerClicked(mark)
+      }
+
+      const markerId =
+        taskId ? `marker-task-${taskId}` :
+        `marker-cluster-${mark.options.point.lat}-${mark.options.point.lng}-${mark.options.numberOfPoints}`
+
+      if (mark.icon) {
+        return <Marker key={markerId} position={mark.position} icon={mark.icon}
+                        onClick={onClick}>{popup}</Marker>
+      }
+      else {
+        return <Marker key={markerId} position={mark.position}
+                        onClick={onClick}>{popup}</Marker>
       }
     })
 
     this.setState({mapMarkers})
+  }
+
+  selectTasksInLayers = layers => {
+    if (this.props.onBulkTaskSelection) {
+      const taskIds = _compact(_map(layers, layer => _get(layer, 'options.icon.options.taskData.taskId')))
+      this.props.onBulkTaskSelection(taskIds)
+    }
   }
 
   render() {
@@ -141,26 +322,50 @@ export class TaskClusterMap extends Component {
       <SourcedTileLayer key={layerId} source={layerSourceWithId(layerId)} zIndex={index + 2} />
     )
 
-    if (!this.currentBounds && _get(this.props, 'boundingBox.length', 0) > 0) {
-      this.currentBounds = toLatLngBounds(this.props.boundingBox)
+    const canClusterToggle = !!this.props.allowClusterToggle &&
+      this.props.totalTaskCount <= UNCLUSTER_THRESHOLD &&
+      this.props.totalTaskCount > CLUSTER_POINTS &&
+      this.currentZoom < MAX_ZOOM
+
+    if (!this.currentBounds && this.state.mapMarkers) {
+      // Set Current Bounds to the minimum bounding box of our markers
+      this.currentBounds = toLatLngBounds(
+        bbox(featureCollection(
+          _map(this.state.mapMarkers, cluster =>
+            point([cluster.props.position[1], cluster.props.position[0]])
+          )
+        ))
+      )
     }
 
     const map =
       <EnhancedMap className="mr-z-0"
                    center={latLng(0, 0)}
-                   zoom={2} minZoom={2} maxZoom={18}
+                   zoom={this.currentZoom} minZoom={2} maxZoom={MAX_ZOOM}
                    setInitialBounds={false}
                    initialBounds = {this.currentBounds}
                    zoomControl={false} animate={false} worldCopyJump={true}
-                   onBoundsChange={this.updateBounds}>
+                   onBoundsChange={this.updateBounds}
+                   justFitFeatures>
         <ZoomControl className="mr-z-10" position='topright' />
+        {this.props.showLasso && this.props.onBulkTaskSelection && !this.props.showAsClusters &&
+         <LassoSelectionControl onLassoSelection={this.selectTasksInLayers} />
+        }
         <VisibleTileLayer {...this.props} zIndex={1} />
         {overlayLayers}
-        {this.state.mapMarkers}
+        <span key={_uniqueId()}>{this.state.mapMarkers}</span>
       </EnhancedMap>
 
     return (
-      <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile})}>
+      <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile}, this.props.className)}>
+        {canClusterToggle && !this.props.loading &&
+         <label className="mr-absolute mr-z-10 mr-pin-t mr-pin-l mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
+            <input type="checkbox" className="mr-mr-2"
+              checked={this.props.showAsClusters}
+              onChange={this.props.toggleShowAsClusters} />
+            <FormattedMessage {...messages.clusterTasksLabel } />
+          </label>
+        }
         <LayerToggle {...this.props} />
         <SearchControl
           {...this.props}
@@ -170,7 +375,7 @@ export class TaskClusterMap extends Component {
           }}
         />
         {map}
-        {!!this.props.loading && <BusySpinner mapMode />}
+        {(!!this.props.loading || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
       </div>
     )
   }

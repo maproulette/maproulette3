@@ -8,4 +8,8 @@ export default defineMessages({
     id: "ReviewMap.metrics.title",
     defaultMessage: "Review Map",
   },
+  clusterTasksLabel: {
+    id: "TaskClusterMap.controls.clusterTasks.label",
+    defaultMessage: "Cluster",
+  },
 })

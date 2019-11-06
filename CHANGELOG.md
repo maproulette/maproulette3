@@ -7,6 +7,27 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.4.4] - 2019-10-28
+### Added
+- Search for tasks by feature property in Create & Manage task map
+- Use backend clustering on Create & Manage task map
+- Use backend clustering on Challenge Details map
+- Use backend clustering on Multi-Task Work Widget map
+- Consolidate visually overlapping clusters from backend
+- Additional resiliency around bad task geometry
+
+### Fixed
+- Challenges with no remaining tasks offered in search results (#934)
+- Challenges containing skipped tasks treated as finished
+- Failure to detect quick-fix setup data on task feature properties (#945)
+- Difficult to read "other" keyword filter on challenge search (#960)
+- Poor appearance of some Markdown elements, especially on light backgrounds
+- Cramped property values in map popups for properties with long names
+- Incorrect task status on Edit Task form in Create & Manage area
+- Inability to navigate directly to Edit Task page in Create & Manage area
+- Escaping of feature properties included as separate columns in CSV exports
+
+
 ## [v3.4.3] - 2019-10-16
 ### Added
 - Short-codes in task comments for referencing OSM elements and map viewports

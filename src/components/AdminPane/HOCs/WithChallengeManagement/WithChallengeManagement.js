@@ -168,9 +168,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     // it all has likely changed as a result of the rebuild
     await ownProps.fetchChallengeActions(challenge.id)
     await ownProps.fetchChallenge(challenge.id)
-    if (ownProps.fetchClusteredTasks) {
-      await ownProps.fetchClusteredTasks(challenge.id)
-    }
 
     // Reset map bounds to avoid potential user confusion after the rebuild
     if (ownProps.clearMapBounds) {
