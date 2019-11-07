@@ -288,23 +288,6 @@ export const setChallengeSearchMapBounds = function(searchName, bounds, fromUser
 }
 
 /**
- * Update the redux store with the given bounds of the challenge (browsing)
- * map.
- *
- * @param bounds - either a LatLngBounds instance or an array of
- *       [west, south, east, north]
- */
-export const setChallengeBrowseMapBounds = function(searchName, challengeId, bounds, zoom) {
-  return {
-    type: SET_CHALLENGE_BROWSE_MAP_BOUNDS,
-    searchName,
-    challengeId,
-    bounds: fromLatLngBounds(bounds),
-    zoom,
-  }
-}
-
-/**
  * Set the given bounds of the task map in the redux store as the current
  * bounds. If the bounds are being altered programatically in direct response
  * to a user action (as opposed to just panning or zooming around the map),

@@ -25,9 +25,8 @@ import WithChallengeTaskClusters from '../HOCs/WithChallengeTaskClusters/WithCha
 import WithTaskClusterMarkers from '../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
 import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 
-const ClusterMap =
-                    WithChallengeTaskClusters(
-                      WithTaskClusterMarkers(TaskClusterMap('challengeDetail')))
+const ClusterMap = WithChallengeTaskClusters(
+                     WithTaskClusterMarkers(TaskClusterMap('challengeDetail')))
 
 
 /**

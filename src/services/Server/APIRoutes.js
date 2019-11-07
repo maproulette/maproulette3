@@ -48,7 +48,6 @@ const apiRoutes = factory => {
     'challenge': {
       'single': factory.get('/challenge/:id'),
       'tasks': factory.get('/challenge/:id/tasks'),
-      'clusteredTasks': factory.get('/challenge/clustered/:id'),
       'taskClusters': factory.get('/taskCluster'),
       'nearbyTasks': factory.get('/challenge/:challengeId/tasksNearby/:taskId'),
       'deleteTasks': factory.delete('/challenge/:id/tasks'),

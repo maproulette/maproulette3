@@ -11,7 +11,7 @@ import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_SUGGESTED_FIX,
          setSort, removeSort, setPage,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
-         setChallengeSearchMapBounds, setChallengeBrowseMapBounds,
+         setChallengeSearchMapBounds,
          setTaskMapBounds, setChallengeOwnerMapBounds, clearMapBounds,
          performSearch }
        from '../../../services/Search/Search'
@@ -208,10 +208,6 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
 
   setChallengeSearchMapBounds: (bounds, fromUserAction=false) => {
     dispatch(setChallengeSearchMapBounds(searchGroup, bounds, fromUserAction))
-  },
-
-  setChallengeBrowseMapBounds: (challengeId, bounds, zoom) => {
-    dispatch(setChallengeBrowseMapBounds(searchGroup, challengeId, bounds, zoom))
   },
 
   setChallengeOwnerMapBounds: (challengeId, bounds, zoom) => {

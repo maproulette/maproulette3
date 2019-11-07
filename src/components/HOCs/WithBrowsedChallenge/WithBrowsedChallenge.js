@@ -193,8 +193,7 @@ export const WithBrowsedChallenge = function(WrappedComponent) {
   }
 
   _WithBrowsedChallenge.propTypes = {
-    clusteredTasks: PropTypes.object,
-    fetchClusteredTasks: PropTypes.func.isRequired,
+    clusteredTasks: PropTypes.object
   }
 
   return _WithBrowsedChallenge

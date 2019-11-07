@@ -4,7 +4,6 @@ import _get from 'lodash/get'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import ChallengeSearchMap from '../ChallengeSearchMap/ChallengeSearchMap'
-import ChallengeBrowseMap from '../ChallengeBrowseMap/ChallengeBrowseMap'
 import CongratulateModal from '../CongratulateModal/CongratulateModal'
 import ChallengeEndModal from '../ChallengeEndModal/ChallengeEndModal'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
@@ -22,7 +21,6 @@ import WithStatus from '../HOCs/WithStatus/WithStatus'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
-const BrowseMap = WithTaskMarkers(ChallengeBrowseMap)
 let SearchMap = null
 
 // If the map-bounded task browsing feature is enabled, set up the ChallengeSearchMap
@@ -63,7 +61,6 @@ export class ChallengePane extends Component {
   }
 
   render() {
-    const Map = this.props.browsedChallenge ? BrowseMap : SearchMap
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50">
         {_get(this.props, 'history.location.state.congratulate', false) &&
@@ -80,7 +77,7 @@ export class ChallengePane extends Component {
           <ChallengeResults {...this.props} />
           <div className="mr-flex-1">
             <MapPane>
-              <Map challenge={this.props.browsedChallenge}
+              <SearchMap challenge={this.props.browsedChallenge}
                     onTaskClick={this.props.startChallengeWithTask}
                     {...this.props} />
             </MapPane>
