@@ -34,6 +34,10 @@ export default class ConfirmAction extends Component {
   }
 
   render() {
+    if (this.props.skipConfirmation) {
+      return this.props.children
+    }
+
     this.originalOnClick = _get(this.props.children, 'props.onClick')
 
     const ControlWithConfirmation =
@@ -76,4 +80,10 @@ export default class ConfirmAction extends Component {
 ConfirmAction.propTypes = {
   title: PropTypes.node,
   prompt: PropTypes.node,
+  /** Skip confirmation step if set to true */
+  skipConfirmation: PropTypes.bool,
+}
+
+ConfirmAction.defaultProps = {
+  skipConfirmation: false,
 }

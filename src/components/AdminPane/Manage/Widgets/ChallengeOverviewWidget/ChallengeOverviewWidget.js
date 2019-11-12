@@ -10,6 +10,7 @@ import AsManager from '../../../../../interactions/User/AsManager'
 import ChallengeKeywords from '../../ChallengeKeywords/ChallengeKeywords'
 import VisibilitySwitch from '../../VisibilitySwitch/VisibilitySwitch'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
+import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 const descriptor = {
@@ -44,14 +45,35 @@ export default class ChallengeOverviewWidget extends Component {
             <FormattedMessage {...messagesByStatus[status]} />
           </div>
 
-          <div>
+          <div className="mr-mt-1">
             <FormattedMessage {...messages.visibleLabel} />
           </div>
 
           <div>
             {this.props.challenge.parent &&
-             <VisibilitySwitch {...this.props}
-                               disabled={!manager.canWriteProject(this.props.challenge.parent)} />
+             <div className="mr-mt-1">
+               <VisibilitySwitch
+                 {...this.props}
+                 disabled={!manager.canWriteProject(this.props.challenge.parent)}
+               />
+               {this.props.challenge.enabled && !this.props.challenge.parent.enabled &&
+                <span className="mr-text-red mr-flex mr-items-center">
+                  <a
+                    href="https://github.com/osmlab/maproulette3/wiki/Challenge-Visibility-and-Discoverability"
+                    className="mr-mr-2 mr-flex mr-items-center"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SvgSymbol
+                      sym="info-icon"
+                      viewBox="0 0 40 40"
+                      className="mr-fill-red mr-w-4 mr-w-4"
+                    />
+                  </a>
+                  <FormattedMessage {...messages.projectDisabledWarning} />
+                </span>
+               }
+             </div>
             }
           </div>
         </div>
