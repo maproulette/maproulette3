@@ -12,4 +12,8 @@ export default defineMessages({
     id: "TaskClusterMap.controls.clusterTasks.label",
     defaultMessage: "Cluster",
   },
+  zoomInForTasksLabel: {
+    id: "TaskClusterMap.message.zoomInForTasks.label",
+    defaultMessage: "Zoom in to view tasks"
+  },
 })

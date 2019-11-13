@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import { injectIntl } from 'react-intl'
 import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
+import { Popup } from 'react-leaflet'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
-import ChallengeSearchMap from '../ChallengeSearchMap/ChallengeSearchMap'
+import TaskClusterMap from '../TaskClusterMap/TaskClusterMap'
 import CongratulateModal from '../CongratulateModal/CongratulateModal'
 import ChallengeEndModal from '../ChallengeEndModal/ChallengeEndModal'
 import ChallengeResultList from './ChallengeResultList/ChallengeResultList'
@@ -15,23 +17,19 @@ import WithChallengeSearch from '../HOCs/WithSearch/WithChallengeSearch'
 import WithSearchResults from '../HOCs/WithSearchResults/WithSearchResults'
 import WithBrowsedChallenge from '../HOCs/WithBrowsedChallenge/WithBrowsedChallenge'
 import WithClusteredTasks from '../HOCs/WithClusteredTasks/WithClusteredTasks'
-import WithTaskMarkers from '../HOCs/WithTaskMarkers/WithTaskMarkers'
 import WithMapBoundedTasks from '../HOCs/WithMapBoundedTasks/WithMapBoundedTasks'
 import WithStatus from '../HOCs/WithStatus/WithStatus'
+import WithChallengeTaskClusters from '../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
+import WithTaskClusterMarkers from '../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
+import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
+import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
+import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
-let SearchMap = null
-
-// If the map-bounded task browsing feature is enabled, set up the ChallengeSearchMap
-// to use it.
-if (_get(process.env,
-         'REACT_APP_FEATURE_BOUNDED_TASK_BROWSING') === 'enabled') {
-  SearchMap = WithTaskMarkers(ChallengeSearchMap, 'mapBoundedTasks')
-}
-else {
-  SearchMap = ChallengeSearchMap
-}
+const ClusterMap = WithChallengeTaskClusters(
+                      WithTaskClusterMarkers(TaskClusterMap('challenge')),
+                      true)
 
 /**
  * ChallengePane represents the top-level view when the user is browsing,
@@ -56,11 +54,35 @@ export class ChallengePane extends Component {
     this.setState({sidebarMinimized: !this.state.sidebarMinimized})
   }
 
+  componentDidUpdate(prevProps) {
+    if (!_isEqual(this.state.bounds, _get(this.props, 'mapBounds.bounds'))) {
+      this.setState({bounds: _get(this.props, 'mapBounds.bounds'),
+                     fromUserAction: _get(this.props, 'mapBounds.fromUserAction')})
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     return !_isEqual(this.props, nextProps) || !_isEqual(this.state, nextState)
   }
 
   render() {
+    const Map = ClusterMap
+    const challengeStatus = [ChallengeStatus.ready,
+                             ChallengeStatus.partiallyLoaded,
+                             ChallengeStatus.none,
+                             ChallengeStatus.empty]
+
+    const showMarkerPopup = (markerData) => {
+      return (
+       <Popup>
+        <TaskChallengeMarkerContent
+          marker={markerData}
+          taskId={markerData.options.taskId}
+          {...this.props}/>
+       </Popup>
+      )
+    }
+
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-min-h-screen-50">
         {_get(this.props, 'history.location.state.congratulate', false) &&
@@ -77,9 +99,18 @@ export class ChallengePane extends Component {
           <ChallengeResults {...this.props} />
           <div className="mr-flex-1">
             <MapPane>
-              <SearchMap challenge={this.props.browsedChallenge}
-                    onTaskClick={this.props.startChallengeWithTask}
-                    {...this.props} />
+              <Map challenge={this.props.browsedChallenge}
+                   showMarkerPopup={showMarkerPopup}
+                   initialBounds={this.state.fromUserAction ? this.state.bounds : null}
+                   criteria={{boundingBox: fromLatLngBounds(this.state.bounds),
+                              zoom: this.state.zoom,
+                              filters: _get(this.props, 'searchCriteria.filters'),
+                              challengeStatus}}
+                   updateTaskFilterBounds={(bounds, zoom) => {
+                     this.props.updateChallengeSearchMapBounds(bounds, false)
+                   }}
+                   allowClusterToggle
+                   {...this.props} />
             </MapPane>
           </div>
         </div>
@@ -91,17 +122,17 @@ export class ChallengePane extends Component {
 export default
   WithChallenges(
     WithChallengeSearch(
-      WithFilteredChallenges(
-        WithSearchResults(
-          WithMapBoundedTasks(
-            WithClusteredTasks(
+      WithClusteredTasks(
+        WithMapBoundedTasks(
+          WithFilteredChallenges(
+            WithSearchResults(
               WithStartChallenge(
-                WithBrowsedChallenge(ChallengePane)
-              )
+                WithBrowsedChallenge(injectIntl(ChallengePane))
+              ),
+              'challenges',
+              'challenges'
             )
-          ),
-          'challenges',
-          'challenges'
+          )
         )
       )
     )

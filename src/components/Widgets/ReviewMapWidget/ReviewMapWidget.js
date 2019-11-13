@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _omit from 'lodash/omit'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import MapPane from '../../EnhancedMap/MapPane/MapPane'
@@ -29,8 +30,8 @@ export default class ReviewMapWidget extends Component {
         className="review-map-widget"
         noMain
       >
-        <MapPane {...this.props}>
-          <BrowseMap {...this.props} />
+        <MapPane>
+          <BrowseMap {..._omit(this.props, ['className'])} />
         </MapPane>
       </QuickWidget>
     )

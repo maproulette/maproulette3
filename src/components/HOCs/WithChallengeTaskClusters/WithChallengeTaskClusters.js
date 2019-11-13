@@ -9,9 +9,11 @@ import _set from 'lodash/set'
 import _uniqueId from 'lodash/uniqueId'
 import _sum from 'lodash/sum'
 import _map from 'lodash/map'
-import { fromLatLngBounds } from '../../../services/MapBounds/MapBounds'
-import { fetchTaskClusters } from '../../../services/Task/Task'
+import { fromLatLngBounds,
+         boundsWithinAllowedMaxDegrees } from '../../../services/MapBounds/MapBounds'
+import { fetchTaskClusters } from '../../../services/Task/TaskClusters'
 import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
+import { maxAllowedDegrees } from '../WithMapBoundedTasks/WithMapBoundedTasks'
 
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
 
@@ -21,7 +23,7 @@ import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterM
  *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
-export const WithChallengeTaskClusters = function(WrappedComponent) {
+export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=false) {
   return class extends Component {
     state = {
       loading: false,
@@ -54,18 +56,31 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
                              this.state.taskCount > UNCLUSTER_THRESHOLD
 
       const currentFetchId = _uniqueId()
-      this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters})
+
+      if (!challengeId) {
+        const bounds = _get(this.props.criteria, 'boundingBox')
+        console.log(bounds)
+        if (!bounds || !boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
+          this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true,
+                         mapToLarge: true})
+          return
+        }
+      }
+
+      this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters, mapToLarge: false})
 
       if (!showAsClusters) {
         const criteria = _set(this.props.criteria,
                               'filters.challengeId',
                               challengeId)
+        criteria.page = 0
 
-        this.props.fetchBoundedTasks(criteria, UNCLUSTER_THRESHOLD + 1, true).then(results => {
+        this.props.fetchBoundedTasks(criteria, UNCLUSTER_THRESHOLD + 1, !storeTasks).then(results => {
           if (currentFetchId >= this.state.fetchId) {
             if (results.totalCount > UNCLUSTER_THRESHOLD) {
               this.props.fetchTaskClusters(challengeId, this.props.criteria
-              ).then(clusters => {
+              ).then(results => {
+                const clusters = results.clusters
                 if (currentFetchId >= this.state.fetchId) {
                   const taskCount = _sum(_map(clusters, c => c.numberOfPoints))
                   this.setState({clusters, loading: false,
@@ -85,7 +100,8 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
       }
       else {
         this.props.fetchTaskClusters(challengeId, this.props.criteria
-        ).then(clusters => {
+        ).then(results => {
+          const clusters = results.clusters
           if (currentFetchId >= this.state.fetchId) {
             const taskCount = _sum(_map(clusters, c => c.numberOfPoints))
             this.setState({clusters, loading: false,
@@ -134,6 +150,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
           toggleShowAsClusters = {this.toggleShowAsClusters}
           showAsClusters = {this.state.showAsClusters}
           totalTaskCount = {this.state.taskCount}
+          mapToLarge = {this.state.mapToLarge}
         />
       )
     }
@@ -143,5 +160,5 @@ export const WithChallengeTaskClusters = function(WrappedComponent) {
 export const mapDispatchToProps =
   dispatch => bindActionCreators({ fetchTaskClusters, fetchBoundedTasks }, dispatch)
 
-export default WrappedComponent =>
-  connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent))
+export default (WrappedComponent, storeTasks) =>
+  connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent, storeTasks))

@@ -18,8 +18,6 @@ import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_SUGGESTED_FIX,
 import { addError } from '../../../services/Error/Error'
 import { toLatLngBounds, DEFAULT_MAP_BOUNDS }
        from '../../../services/MapBounds/MapBounds'
-import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
-  from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import WithUserLocation from '../WithUserLocation/WithUserLocation'
 
 /**
@@ -69,7 +67,7 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
       let prevSearch = _omit(_get(prevProps, `currentSearch.${searchGroup}`), ['meta'])
       let currentSearch = _omit(_get(this.props, `currentSearch.${searchGroup}`), ['meta'])
 
-      if (_get(this.props, 'searchFilters.location') !== CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
+      if (!_get(this.props, 'searchFilters.location')) {
         currentSearch = _omit(currentSearch, 'mapBounds')
         prevSearch = _omit(prevSearch, 'mapBounds')
       }

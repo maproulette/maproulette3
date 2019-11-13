@@ -67,7 +67,6 @@ export class TaskClusterMap extends Component {
   currentBounds = null
   currentSize = null
   currentZoom = 2
-  skipNextUpdateBounds = false
 
   state = {
     mapMarkers: null,
@@ -133,29 +132,19 @@ export class TaskClusterMap extends Component {
       return
     }
 
-    if (this.skipNextUpdateBounds) {
-      this.currentBounds = toLatLngBounds(bounds)
-      this.currentZoom = zoom
-      this.skipNextUpdateBounds = false
-      return
-    }
-
     this.currentBounds = toLatLngBounds(bounds)
     this.currentZoom = zoom
     this.currentSize = mapSize
-    if (!this.props.loading && !this.props.loadingTasks) {
-      this.debouncedUpdateBounds(bounds, zoom)
-    }
+    this.debouncedUpdateBounds(bounds, zoom)
   }
 
   /**
    * Invoked when an individual task marker is clicked by the user.
    */
   markerClicked = marker => {
-    if (!this.props.loadingChallenge && !this.props.loading) {
+    if (!this.props.loadingChallenge) {
       if (marker.options.bounding && marker.options.numberOfPoints > 1) {
         this.currentBounds = toLatLngBounds(bbox(marker.options.bounding))
-        this.skipNextUpdateBounds = true
         this.debouncedUpdateBounds(this.currentBounds, this.currentZoom)
 
         // Reset Map so that it zooms to new marker bounds
@@ -167,7 +156,7 @@ export class TaskClusterMap extends Component {
     }
   }
 
-  debouncedUpdateBounds = _debounce(this.props.updateBounds, 200)
+  debouncedUpdateBounds = _debounce(this.props.updateBounds, 400)
 
   consolidateMarkers = markers => {
     // Make sure conditions are appropriate for consolidation
@@ -338,6 +327,9 @@ export class TaskClusterMap extends Component {
         ))
       )
     }
+    else if (this.props.initialBounds) {
+      this.currentBounds = this.props.initialBounds
+    }
 
     const map =
       <EnhancedMap className="mr-z-0"
@@ -349,7 +341,8 @@ export class TaskClusterMap extends Component {
                    onBoundsChange={this.updateBounds}
                    justFitFeatures>
         <ZoomControl className="mr-z-10" position='topright' />
-        {this.props.showLasso && this.props.onBulkTaskSelection && !this.props.showAsClusters &&
+        {this.props.showLasso && this.props.onBulkTaskSelection &&
+          (!this.props.showAsClusters || this.props.totalTaskCount <= CLUSTER_POINTS) &&
          <LassoSelectionControl onLassoSelection={this.selectTasksInLayers} />
         }
         <VisibleTileLayer {...this.props} zIndex={1} />
@@ -364,11 +357,11 @@ export class TaskClusterMap extends Component {
             <input type="checkbox" className="mr-mr-2"
               checked={this.props.showAsClusters}
               onChange={this.props.toggleShowAsClusters} />
-            <FormattedMessage {...messages.clusterTasksLabel } />
+            <FormattedMessage {...messages.clusterTasksLabel} />
           </label>
         }
         <LayerToggle {...this.props} />
-        {!this.props.hideSearchControl && 
+        {!this.props.hideSearchControl &&
           <SearchControl
             {...this.props}
             onResultSelected={bounds => {
@@ -376,6 +369,13 @@ export class TaskClusterMap extends Component {
               this.props.updateBounds(bounds)
             }}
           />
+        }
+        {!!this.props.mapToLarge &&
+          <div className="mr-absolute mr-pin-t mr-mt-4 mr-z-50 mr-w-full mr-flex mr-justify-center">
+            <div className="mr-bg-black-40 mr-text-white mr-rounded mr-py-1 mr-px-3">
+              <FormattedMessage {...messages.zoomInForTasksLabel} />
+            </div>
+          </div>
         }
         {map}
         {(!!this.props.loading || !!this.props.loadingChallenge) && <BusySpinner mapMode />}

@@ -54,6 +54,7 @@ let colors = {
   'black-5': 'rgba(0, 0, 0, .05)',
   'black-10': 'rgba(0, 0, 0, .1)',
   'black-15': 'rgba(0, 0, 0, .15)',
+  'black-40': 'rgba(0, 0, 0, .4)',
   'black-50': 'rgba(0, 0, 0, .5)',
   grey: '#737373',
   'grey-light': '#BDB8AE',

@@ -13,6 +13,7 @@ const WithClusteredTasks = WrappedComponent =>
 
 export const mapStateToProps = state => ({
   clusteredTasks: state.currentClusteredTasks,
+  taskClusters: state.currentTaskClusters,
 })
 
 export const mapDispatchToProps = dispatch => bindActionCreators({

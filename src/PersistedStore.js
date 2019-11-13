@@ -9,6 +9,7 @@ import { virtualChallengeEntities }
        from './services/VirtualChallenge/VirtualChallenge'
 import { taskEntities } from './services/Task/Task'
 import { currentClusteredTasks } from './services/Task/ClusteredTask'
+import { currentTaskClusters } from './services/Task/TaskClusters'
 import { currentBoundedTasks } from './services/Task/BoundedTask'
 import { currentReviewTasks } from './services/Task/TaskReview/TaskReview'
 import { commentEntities } from './services/Comment/Comment'
@@ -55,6 +56,7 @@ export const initializeStore = function() {
       adminContext,
       currentPreferences,
       currentClusteredTasks,
+      currentTaskClusters,
       currentBoundedTasks,
       currentReviewTasks,
       entities,
