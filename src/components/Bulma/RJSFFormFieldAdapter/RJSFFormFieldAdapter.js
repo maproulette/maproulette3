@@ -148,7 +148,7 @@ export class MarkdownEditField extends Component {
 export const TagsInputField = props => {
   let tags = []
   if (_isArray(props.formData)) {
-    tags = _map(props.formData, (tag) => tag.name)
+    tags = _map(props.formData, (tag) => tag.name ? tag.name : tag)
   }
   else if (_isString(props.formData) && props.formData !== "") {
     tags = props.formData.split(',')
