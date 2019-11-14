@@ -49,4 +49,9 @@ export default defineMessages({
     id: "Widgets.ChallengeOverviewWidget.fields.enabled.label",
     defaultMessage: "Visible:",
   },
+
+  projectDisabledWarning: {
+    id: "Widgets.ChallengeOverviewWidget.projectDisabledWarning",
+    defaultMessage: "project not visible",
+  },
 })

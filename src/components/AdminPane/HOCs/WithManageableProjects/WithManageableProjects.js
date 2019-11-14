@@ -136,6 +136,11 @@ const mapDispatchToProps = dispatch => {
     return dispatch(deleteProject(projectId, immediate))
   }
 
+  actions.toggleProjectEnabled = project => {
+    const updatedProject = Object.assign({}, project, {enabled: !project.enabled})
+    return dispatch(saveProject(updatedProject))
+  }
+
   return actions
 }
 

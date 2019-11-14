@@ -866,6 +866,7 @@ module.exports = {
     grey: colors["grey"],
     'grey-light': colors['grey-light'],
     'red-light': colors['red-light'],
+    red: colors['red'],
     twitter: colors['twitter'],
   },
 
