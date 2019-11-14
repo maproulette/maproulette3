@@ -172,7 +172,7 @@ export class ActiveTaskControls extends Component {
     }
 
     if (this.state.tags === null && _get(this.props, 'task.tags')) {
-      this.setState({tags: _map(this.props.task.tags, (tag) => tag.name).join(', ')})
+      this.setState({tags: _map(this.props.task.tags, (tag) => (tag.name ? tag.name : tag)).join(', ')})
     }
   }
 
