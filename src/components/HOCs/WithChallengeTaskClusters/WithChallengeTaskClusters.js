@@ -59,7 +59,6 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
 
       if (!challengeId) {
         const bounds = _get(this.props.criteria, 'boundingBox')
-        console.log(bounds)
         if (!bounds || !boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
           this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true,
                          mapToLarge: true})

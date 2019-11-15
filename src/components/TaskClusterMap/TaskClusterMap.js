@@ -20,11 +20,14 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
+import { ChallengeLocation}
+       from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
+import LocationSearchBox from '../EnhancedMap/SearchControl/LocationSearchBox'
 import LassoSelectionControl
        from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
@@ -67,6 +70,7 @@ export class TaskClusterMap extends Component {
   currentBounds = null
   currentSize = null
   currentZoom = 2
+  timerHandle = null
 
   state = {
     mapMarkers: null,
@@ -117,6 +121,24 @@ export class TaskClusterMap extends Component {
     if (this.props.taskMarkers &&
         !_isEqual(this.props.taskMarkers, prevProps.taskMarkers)) {
       this.generateMarkers()
+    }
+
+    if (!this.props.loading && prevProps.loading) {
+      // No longer loading. Kick off timer to hide task count message
+      if (this.timerHandle) {
+        clearTimeout(this.timerHandle)
+      }
+      this.timerHandle = setTimeout(() => {
+        this.setState({displayTaskCount: false})
+      }, 3000)
+      this.setState({displayTaskCount: true})
+    }
+    else if (this.props.loading && this.state.displayTaskCount) {
+      this.setState({displayTaskCount: false})
+      if (this.timerHandle) {
+        clearTimeout(this.timerHandle)
+        this.timerHandle = null
+      }
     }
   }
 
@@ -370,15 +392,48 @@ export class TaskClusterMap extends Component {
             }}
           />
         }
-        {!!this.props.mapToLarge &&
-          <div className="mr-absolute mr-pin-t mr-mt-4 mr-z-50 mr-w-full mr-flex mr-justify-center">
-            <div className="mr-bg-black-40 mr-text-white mr-rounded mr-py-1 mr-px-3">
-              <FormattedMessage {...messages.zoomInForTasksLabel} />
+        {!!this.props.mapToLarge && !this.state.locatingToUser &&
+          <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-50 mr-w-full mr-flex mr-justify-center">
+            <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center">
+                <FormattedMessage {...messages.zoomInForTasksLabel} />
+              </div>
+              <div className="mr-flex mr-items-center mr-pb-3 mr-px-3">
+                <button
+                  className="mr-button mr-button--small mr-button--blue-fill"
+                  onClick={() => {
+                    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
+                    this.setState({locatingToUser: true})
+                    this.props.locateMapToUser(this.props.user).then(() => {
+                      this.setState({locatingToUser: false})
+                    })
+                  }}
+                >
+                  <FormattedMessage {...messages.nearMeLabel } />
+                </button>
+                <span className="mr-mx-4 mr-pt-1"><FormattedMessage {...messages.orLabel } /></span>
+                <LocationSearchBox
+                  {...this.props}
+                  onResultSelected={bounds => {
+                    this.currentBounds = toLatLngBounds(bounds)
+                    this.props.updateBounds(bounds)
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        {!!this.props.showTaskCount && this.state.displayTaskCount && !this.props.mapToLarge &&
+          <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-50 mr-w-full mr-flex mr-justify-center">
+            <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center">
+                <FormattedMessage {...messages.taskCountLabel } values={{count: this.props.totalTaskCount}} />
+              </div>
             </div>
           </div>
         }
         {map}
-        {(!!this.props.loading || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
+        {(!!this.props.loading || this.state.locatingToUser || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
       </div>
     )
   }

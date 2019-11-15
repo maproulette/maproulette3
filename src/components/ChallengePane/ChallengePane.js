@@ -28,7 +28,7 @@ import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
 // Setup child components with necessary HOCs
 const ChallengeResults = WithStatus(ChallengeResultList)
 const ClusterMap = WithChallengeTaskClusters(
-                      WithTaskClusterMarkers(TaskClusterMap('challenge')),
+                      WithTaskClusterMarkers(TaskClusterMap('challenges')),
                       true)
 
 /**
@@ -110,6 +110,7 @@ export class ChallengePane extends Component {
                      this.props.updateChallengeSearchMapBounds(bounds, false)
                    }}
                    allowClusterToggle
+                   showTaskCount
                    {...this.props} />
             </MapPane>
           </div>

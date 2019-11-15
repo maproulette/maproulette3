@@ -31,6 +31,7 @@ class Dropdown extends Component {
       closeDropdown: this.closeDropdown
     }
 
+    const arrowLocation = this.props.arrowLocation || "0 0 15 10"
     return (
       <div className={classNames('mr-dropdown', this.props.className)}>
         {this.props.dropdownButton(renderFuncArgs)}
@@ -40,7 +41,7 @@ class Dropdown extends Component {
               <div className="mr-dropdown__inner">
                 <SvgSymbol
                   sym="icon-triangle"
-                  viewBox="0 0 15 10"
+                  viewBox={arrowLocation}
                   className="mr-dropdown__arrow"
                   aria-hidden
                 />

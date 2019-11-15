@@ -221,7 +221,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   },
 
   locateMapToUser: user => {
-    ownProps.getUserBounds(user).then(userBounds => {
+    return ownProps.getUserBounds(user).then(userBounds => {
       dispatch(setChallengeSearchMapBounds(searchGroup, userBounds, true))
     }).catch(locationError => {
       dispatch(addError(locationError))
