@@ -8,9 +8,13 @@ import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
 import _fromPairs from 'lodash/fromPairs'
 import _map from 'lodash/map'
+import _isFinite from 'lodash/isFinite'
 import messages from './Messages'
 
 import { fromLatLngBounds } from '../MapBounds/MapBounds'
+import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
+  from '../Challenge/ChallengeLocation/ChallengeLocation'
+
 
 // redux actions
 export const SET_SEARCH = 'SET_SEARCH'
@@ -106,7 +110,8 @@ export const parseQueryString = function(rawQueryText) {
  * Generates, from the given criteria, a search parameters string that the
  * server accepts for various API endpoints
  */
-export const generateSearchParametersString = (filters, boundingBox, savedChallengesOnly) => {
+export const generateSearchParametersString = (filters, boundingBox, savedChallengesOnly,
+                                               queryString) => {
   const searchParameters = {}
   if (filters.reviewRequestedBy) {
     searchParameters.o = filters.reviewRequestedBy
@@ -167,20 +172,51 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
 
+  if (_isFinite(filters.difficulty)) {
+    searchParameters.cd = filters.difficulty
+  }
+
   if (boundingBox) {
-    //tbb =>  [left, bottom, right, top]  W/S/E/N
-    if (_isArray(boundingBox)) {
-      searchParameters.tbb = boundingBox.join(',')
+    // If we are searching within map bounds we need to ensure the parent
+    // challenge is also within those bounds
+    if (filters.location === CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
+      if (_isArray(boundingBox)) {
+        searchParameters.bb = boundingBox.join(',')
+      }
+      else {
+        searchParameters.bb = boundingBox
+      }
     }
     else {
-      searchParameters.tbb = boundingBox
+      //tbb =>  [left, bottom, right, top]  W/S/E/N
+      if (_isArray(boundingBox)) {
+        searchParameters.tbb = boundingBox.join(',')
+      }
+      else {
+        searchParameters.tbb = boundingBox
+      }
     }
-
-
   }
 
   if (savedChallengesOnly) {
     searchParameters.onlySaved = savedChallengesOnly
+  }
+
+  if (queryString || filters.keywords) {
+    const queryParts = parseQueryString(queryString)
+
+    // Keywords/tags can come from both the the query and the filter, so we need to
+    // combine them into a single keywords array.
+    const keywords =
+      queryParts.tagTokens.concat(_isArray(filters.keywords) ? filters.keywords : [])
+
+    if (keywords.length > 0) {
+      searchParameters.ct = keywords.join(',')
+    }
+
+    if (queryParts.query.length > 0) {
+      searchParameters.cs = queryParts.query
+    }
   }
 
   return searchParameters
@@ -284,23 +320,6 @@ export const setChallengeSearchMapBounds = function(searchName, bounds, fromUser
     searchName,
     bounds: fromLatLngBounds(bounds),
     fromUserAction,
-  }
-}
-
-/**
- * Update the redux store with the given bounds of the challenge (browsing)
- * map.
- *
- * @param bounds - either a LatLngBounds instance or an array of
- *       [west, south, east, north]
- */
-export const setChallengeBrowseMapBounds = function(searchName, challengeId, bounds, zoom) {
-  return {
-    type: SET_CHALLENGE_BROWSE_MAP_BOUNDS,
-    searchName,
-    challengeId,
-    bounds: fromLatLngBounds(bounds),
-    zoom,
   }
 }
 

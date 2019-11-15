@@ -11,15 +11,13 @@ import { SORT_NAME, SORT_CREATED, SORT_POPULARITY, SORT_SUGGESTED_FIX,
          setSort, removeSort, setPage,
          setFilters, removeFilters, clearFilters,
          setSearch, clearSearch,
-         setChallengeSearchMapBounds, setChallengeBrowseMapBounds,
+         setChallengeSearchMapBounds,
          setTaskMapBounds, setChallengeOwnerMapBounds, clearMapBounds,
          performSearch }
        from '../../../services/Search/Search'
 import { addError } from '../../../services/Error/Error'
 import { toLatLngBounds, DEFAULT_MAP_BOUNDS }
        from '../../../services/MapBounds/MapBounds'
-import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
-  from '../../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import WithUserLocation from '../WithUserLocation/WithUserLocation'
 
 /**
@@ -69,7 +67,7 @@ export const _WithSearch = function(WrappedComponent, searchGroup, searchFunctio
       let prevSearch = _omit(_get(prevProps, `currentSearch.${searchGroup}`), ['meta'])
       let currentSearch = _omit(_get(this.props, `currentSearch.${searchGroup}`), ['meta'])
 
-      if (_get(this.props, 'searchFilters.location') !== CHALLENGE_LOCATION_WITHIN_MAPBOUNDS) {
+      if (!_get(this.props, 'searchFilters.location')) {
         currentSearch = _omit(currentSearch, 'mapBounds')
         prevSearch = _omit(prevSearch, 'mapBounds')
       }
@@ -210,10 +208,6 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
     dispatch(setChallengeSearchMapBounds(searchGroup, bounds, fromUserAction))
   },
 
-  setChallengeBrowseMapBounds: (challengeId, bounds, zoom) => {
-    dispatch(setChallengeBrowseMapBounds(searchGroup, challengeId, bounds, zoom))
-  },
-
   setChallengeOwnerMapBounds: (challengeId, bounds, zoom) => {
     dispatch(setChallengeOwnerMapBounds(searchGroup, challengeId, bounds, zoom))
   },
@@ -227,7 +221,7 @@ export const mapDispatchToProps = (dispatch, ownProps, searchGroup) => ({
   },
 
   locateMapToUser: user => {
-    ownProps.getUserBounds(user).then(userBounds => {
+    return ownProps.getUserBounds(user).then(userBounds => {
       dispatch(setChallengeSearchMapBounds(searchGroup, userBounds, true))
     }).catch(locationError => {
       dispatch(addError(locationError))

@@ -75,7 +75,6 @@ test("the browsed challenge from the route match is passed down", () => {
                       entities={basicState.entities}
                       loadChallenge={loadChallenge}
                       loadChallengeActions={loadChallengeActions}
-                      fetchClusteredTasks={fetchTasks}
                       history={history} />
   )
 
@@ -88,7 +87,6 @@ test("clustered task loading is kicked off for a new browsed challenge", async (
                       entities={basicState.entities}
                       loadChallenge={loadChallenge}
                       loadChallengeActions={loadChallengeActions}
-                      fetchClusteredTasks={fetchTasks}
                       history={history} />
   )
 
@@ -104,7 +102,6 @@ test("virtual challenges get virtual=true when fetching tasks", async () => {
                       entities={basicState.entities}
                       loadChallenge={loadChallenge}
                       loadChallengeActions={loadChallengeActions}
-                      fetchClusteredTasks={fetchTasks}
                       history={history}
                       virtualChallenge={challenge} />
   )

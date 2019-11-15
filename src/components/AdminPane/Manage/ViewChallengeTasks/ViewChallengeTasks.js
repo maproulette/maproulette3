@@ -10,6 +10,7 @@ import { TaskStatus,
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority }
        from '../../../../services/Task/TaskPriority/TaskPriority'
+import { toLatLngBounds } from '../../../../services/MapBounds/MapBounds'
 import AsManager from '../../../../interactions/User/AsManager'
 import WithBoundedTasks
        from '../../../HOCs/WithBoundedTasks/WithBoundedTasks'
@@ -47,6 +48,7 @@ const ClusterMap = WithChallengeTaskClusters(
 export class ViewChallengeTasks extends Component {
   state = {
     bulkUpdating: false,
+    boundsReset: false,
   }
 
   takeTaskSelectionAction = action => {
@@ -81,12 +83,14 @@ export class ViewChallengeTasks extends Component {
   }
 
   resetMapBounds = () => {
+    this.setState({boundsReset: true})
     this.props.clearMapBounds(this.props.searchGroup)
   }
 
   mapBoundsUpdated = (challengeId, bounds, zoom) => {
     this.props.setChallengeOwnerMapBounds(challengeId, bounds, zoom)
     this.props.updateTaskFilterBounds(bounds, zoom)
+    this.setState({boundsReset: false})
   }
 
   showMarkerPopup = markerData => {
@@ -156,9 +160,12 @@ export class ViewChallengeTasks extends Component {
           loadingTasks={this.props.loadingTasks}
           showMarkerPopup={this.showMarkerPopup}
           allowClusterToggle
+          initialBounds={this.state.boundsReset ?
+            toLatLngBounds(_get(this.props, 'criteria.boundingBox')) : null}
           {...this.props}
         />
 
+    this.boundsReset = false
     return (
       <div className='admin__manage-tasks'>
         <GeographicIndexingNotice challenge={this.props.challenge} />

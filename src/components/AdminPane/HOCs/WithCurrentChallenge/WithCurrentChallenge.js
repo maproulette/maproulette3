@@ -14,8 +14,6 @@ import { addError } from '../../../../services/Error/Error'
 import AppErrors from '../../../../services/Error/AppErrors'
 import AsManageableChallenge
        from '../../../../interactions/Challenge/AsManageableChallenge'
-import { isUsableChallengeStatus }
-       from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithClusteredTasks
        from '../../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithChallengeManagement
@@ -27,12 +25,10 @@ import WithChallengeManagement
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithCurrentChallenge = function(WrappedComponent,
-                                      includeTasks=false) {
+const WithCurrentChallenge = function(WrappedComponent) {
   return class extends Component {
     state = {
       loadingChallenge: true,
-      loadingTasks: includeTasks,
     }
 
     currentChallengeId = () =>
@@ -53,24 +49,10 @@ const WithCurrentChallenge = function(WrappedComponent,
             this.props.fetchChallengeActivity(challengeId, new Date(challenge.created)),
             this.props.fetchChallengeActions(challengeId),
           ]).then(() => this.setState({loadingChallenge: false}))
-
-          if (includeTasks) {
-            // Only fetch tasks if the challenge is in a usable status. Otherwise
-            // we risk errors if the tasks are still building or failed to build.
-            if (isUsableChallengeStatus(challenge.status, true)) {
-              this.setState({loadingTasks: true})
-              this.props.fetchClusteredTasks(challengeId).then(() =>
-                this.setState({loadingTasks: false})
-              )
-            }
-            else {
-              this.setState({loadingTasks: false})
-            }
-          }
         })
       }
       else {
-        this.setState({loadingChallenge: false, loadingTasks: false})
+        this.setState({loadingChallenge: false})
       }
     }
 
@@ -89,23 +71,16 @@ const WithCurrentChallenge = function(WrappedComponent,
                       challengeDenormalizationSchema(),
                       this.props.entities)
         )
-
-        if (includeTasks &&
-            _get(this.props, 'clusteredTasks.challengeId') === challengeId) {
-          clusteredTasks = this.props.clusteredTasks
-        }
       }
 
       return <WrappedComponent key={challengeId}
                                challenge={challenge}
                                clusteredTasks={clusteredTasks}
                                loadingChallenge={this.state.loadingChallenge}
-                               loadingTasks={this.state.loadingTasks}
                                refreshChallenge={this.loadChallenge}
                                {..._omit(this.props, ['entities',
                                                       'fetchChallenge',
                                                       'fetchChallengeComments',
-                                                      'fetchClusteredTasks',
                                                       'clusteredTasks',
                                                       'fetchChallengeActivity'])} />
     }
@@ -143,11 +118,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
 })
 
-export default (WrappedComponent, includeTasks) =>
+export default (WrappedComponent) =>
   connect(mapStateToProps, mapDispatchToProps)(
     WithClusteredTasks(
       WithChallengeManagement(
-        WithCurrentChallenge(WrappedComponent, includeTasks)
+        WithCurrentChallenge(WrappedComponent)
       )
     )
   )

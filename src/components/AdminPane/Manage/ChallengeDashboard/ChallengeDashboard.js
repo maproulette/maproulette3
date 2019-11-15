@@ -273,8 +273,7 @@ WithManageableProjects(
           WidgetDataTarget.challenge,
           DASHBOARD_NAME,
           defaultDashboardSetup
-        ),
-        false
+        )
       ),
       'challengeOwner'
     )

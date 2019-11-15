@@ -20,11 +20,14 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
+import { ChallengeLocation}
+       from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
+import LocationSearchBox from '../EnhancedMap/SearchControl/LocationSearchBox'
 import LassoSelectionControl
        from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
@@ -67,7 +70,7 @@ export class TaskClusterMap extends Component {
   currentBounds = null
   currentSize = null
   currentZoom = 2
-  skipNextUpdateBounds = false
+  timerHandle = null
 
   state = {
     mapMarkers: null,
@@ -119,6 +122,31 @@ export class TaskClusterMap extends Component {
         !_isEqual(this.props.taskMarkers, prevProps.taskMarkers)) {
       this.generateMarkers()
     }
+
+    if (!this.props.loading && prevProps.loading) {
+      // No longer loading. Kick off timer to hide task count message
+      if (this.timerHandle) {
+        clearTimeout(this.timerHandle)
+      }
+      this.timerHandle = setTimeout(() => {
+        this.setState({displayTaskCount: false})
+      }, 3000)
+      this.setState({displayTaskCount: true})
+    }
+    else if (this.props.loading && this.state.displayTaskCount) {
+      this.setState({displayTaskCount: false})
+      if (this.timerHandle) {
+        clearTimeout(this.timerHandle)
+        this.timerHandle = null
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle)
+      this.timerHandle = null
+    }
   }
 
   /**
@@ -133,29 +161,19 @@ export class TaskClusterMap extends Component {
       return
     }
 
-    if (this.skipNextUpdateBounds) {
-      this.currentBounds = toLatLngBounds(bounds)
-      this.currentZoom = zoom
-      this.skipNextUpdateBounds = false
-      return
-    }
-
     this.currentBounds = toLatLngBounds(bounds)
     this.currentZoom = zoom
     this.currentSize = mapSize
-    if (!this.props.loading && !this.props.loadingTasks) {
-      this.debouncedUpdateBounds(bounds, zoom)
-    }
+    this.debouncedUpdateBounds(bounds, zoom)
   }
 
   /**
    * Invoked when an individual task marker is clicked by the user.
    */
   markerClicked = marker => {
-    if (!this.props.loadingChallenge && !this.props.loading) {
+    if (!this.props.loadingChallenge) {
       if (marker.options.bounding && marker.options.numberOfPoints > 1) {
         this.currentBounds = toLatLngBounds(bbox(marker.options.bounding))
-        this.skipNextUpdateBounds = true
         this.debouncedUpdateBounds(this.currentBounds, this.currentZoom)
 
         // Reset Map so that it zooms to new marker bounds
@@ -167,7 +185,7 @@ export class TaskClusterMap extends Component {
     }
   }
 
-  debouncedUpdateBounds = _debounce(this.props.updateBounds, 200)
+  debouncedUpdateBounds = _debounce(this.props.updateBounds, 400)
 
   consolidateMarkers = markers => {
     // Make sure conditions are appropriate for consolidation
@@ -338,6 +356,9 @@ export class TaskClusterMap extends Component {
         ))
       )
     }
+    else if (this.props.initialBounds) {
+      this.currentBounds = this.props.initialBounds
+    }
 
     const map =
       <EnhancedMap className="mr-z-0"
@@ -349,7 +370,8 @@ export class TaskClusterMap extends Component {
                    onBoundsChange={this.updateBounds}
                    justFitFeatures>
         <ZoomControl className="mr-z-10" position='topright' />
-        {this.props.showLasso && this.props.onBulkTaskSelection && !this.props.showAsClusters &&
+        {this.props.showLasso && this.props.onBulkTaskSelection &&
+          (!this.props.showAsClusters || this.props.totalTaskCount <= CLUSTER_POINTS) &&
          <LassoSelectionControl onLassoSelection={this.selectTasksInLayers} />
         }
         <VisibleTileLayer {...this.props} zIndex={1} />
@@ -364,11 +386,11 @@ export class TaskClusterMap extends Component {
             <input type="checkbox" className="mr-mr-2"
               checked={this.props.showAsClusters}
               onChange={this.props.toggleShowAsClusters} />
-            <FormattedMessage {...messages.clusterTasksLabel } />
+            <FormattedMessage {...messages.clusterTasksLabel} />
           </label>
         }
         <LayerToggle {...this.props} />
-        {!this.props.hideSearchControl && 
+        {!this.props.hideSearchControl &&
           <SearchControl
             {...this.props}
             onResultSelected={bounds => {
@@ -377,8 +399,48 @@ export class TaskClusterMap extends Component {
             }}
           />
         }
+        {!!this.props.mapZoomedOut && !this.state.locatingToUser &&
+          <div className="mr-absolute mr-pin-t mr-mt-3 mr-w-full mr-flex mr-justify-center">
+            <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center">
+                <FormattedMessage {...messages.zoomInForTasksLabel} />
+              </div>
+              <div className="mr-flex mr-items-center mr-pb-3 mr-px-3">
+                <button
+                  className="mr-button mr-button--small mr-button--blue-fill"
+                  onClick={() => {
+                    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
+                    this.setState({locatingToUser: true})
+                    this.props.locateMapToUser(this.props.user).then(() => {
+                      this.setState({locatingToUser: false})
+                    })
+                  }}
+                >
+                  <FormattedMessage {...messages.nearMeLabel } />
+                </button>
+                <span className="mr-mx-4 mr-pt-1"><FormattedMessage {...messages.orLabel } /></span>
+                <LocationSearchBox
+                  {...this.props}
+                  onResultSelected={bounds => {
+                    this.currentBounds = toLatLngBounds(bounds)
+                    this.props.updateBounds(bounds)
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        {!!this.props.showTaskCount && this.state.displayTaskCount && !this.props.mapZoomedOut &&
+          <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
+            <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center">
+                <FormattedMessage {...messages.taskCountLabel } values={{count: this.props.totalTaskCount}} />
+              </div>
+            </div>
+          </div>
+        }
         {map}
-        {(!!this.props.loading || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
+        {(!!this.props.loading || this.state.locatingToUser || !!this.props.loadingChallenge) && <BusySpinner mapMode />}
       </div>
     )
   }

@@ -45,7 +45,7 @@ export class SearchControl extends Component {
                 <input
                   className="mr-input mr-input--green-lighter-outline"
                   type="text"
-                  placeholder="Nominatim Query"
+                  placeholder={this.props.intl.formatMessage(messages.nominatimQuery)}
                   value={this.props.nominatimQuery}
                   onChange={(e) => this.props.updateNominatimQuery(e.target.value)}
                 />
@@ -72,7 +72,7 @@ export class SearchControl extends Component {
               </button>
             </div>
 
-            {this.props.nominatimResults && 
+            {this.props.nominatimResults &&
              <React.Fragment>
                <hr className="mr-h-px mr-my-4 mr-bg-blue" />
                {resultItems.length === 0 ? <FormattedMessage {...messages.noResults } /> :

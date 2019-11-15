@@ -1,21 +1,11 @@
 import uuidv1 from 'uuid/v1'
 import uuidTime from 'uuid-time'
-import { defaultRoutes as api } from '../Server/Server'
-import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
-import { taskSchema } from './Task'
-import { addError } from '../Error/Error'
-import AppErrors from '../Error/AppErrors'
-import _get from 'lodash/get'
-import _map from 'lodash/map'
 import _each from 'lodash/each'
-import _values from 'lodash/values'
 import _isArray from 'lodash/isArray'
 import _uniqBy from 'lodash/uniqBy'
 import _cloneDeep from 'lodash/cloneDeep'
 import _set from 'lodash/set'
-import _omit from 'lodash/omit'
-import _join from 'lodash/join'
 import { fetchBoundedTasks } from './BoundedTask'
 
 // redux actions
@@ -61,54 +51,6 @@ export const clearClusteredTasks = function() {
 
 
 // async action creators
-
-/**
- * Retrieve clustered task data belonging to the given challenge
- */
-export const fetchClusteredTasks = function(challengeId, isVirtualChallenge=false, criteria, limit=15000, mergeTasks=false,
-                                            excludeLocked=false, mergeOrIgnore=false) {
-  return function(dispatch) {
-    const fetchId = uuidv1()
-
-    if (!mergeOrIgnore) {
-      dispatch(receiveClusteredTasks(
-        challengeId, isVirtualChallenge, [], RequestStatus.inProgress, fetchId
-      ))
-    }
-
-    const statuses = _get(criteria, 'filters.status',[])
-    const bounds = _join(_get(criteria, 'boundingBox'), ',')
-
-    return new Endpoint(
-      (isVirtualChallenge ? api.virtualChallenge : api.challenge).clusteredTasks, {
-        schema: [ taskSchema() ],
-        variables: {id: challengeId},
-        params: {limit, excludeLocked, tStatus: statuses.join(','), tbb: bounds},
-      }
-    ).execute().then(normalizedResults => {
-      // Add parent field, and copy pointReview fields to top-level for
-      // backward compatibility (except reviewRequestedBy and reviewedBy)
-      let tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
-      tasks = _map(tasks, task =>
-        Object.assign(task, {parent: challengeId}, _omit(task.pointReview, ["reviewRequestedBy", "reviewedBy"]))
-      )
-
-      if (!mergeOrIgnore) {
-        dispatch(receiveClusteredTasks(
-          challengeId, isVirtualChallenge, tasks, RequestStatus.success, fetchId, mergeTasks
-        ))
-      }
-
-      return tasks
-    }).catch((error) => {
-      dispatch(receiveClusteredTasks(
-        challengeId, isVirtualChallenge, [], RequestStatus.error, fetchId
-      ))
-      dispatch(addError(AppErrors.clusteredTask.fetchFailure))
-      console.log(error.response || error)
-    })
-  }
-}
 
 /**
  * Augment clustered task data with a bounded task fetch for the given
