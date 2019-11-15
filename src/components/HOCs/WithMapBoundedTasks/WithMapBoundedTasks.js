@@ -24,7 +24,7 @@ import AppErrors from '../../../services/Error/AppErrors'
  */
 export const maxAllowedDegrees = function() {
   return _get(process.env, 'REACT_APP_BOUNDED_TASKS_MAX_DIMENSION',
-              2.5) // degrees
+              70) // degrees
 }
 
 /**

@@ -9,10 +9,6 @@ import messages from './Messages'
 class TaskChallengeMarkerContent extends Component {
   render() {
     const markerData = this.props.marker
-    console.log("SHOW MARKER POPUP:")
-    console.log(markerData)
-    console.log(this.props)
-
     return (
       <div className="marker-popup-content">
         <h3>

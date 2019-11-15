@@ -142,6 +142,13 @@ export class TaskClusterMap extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle)
+      this.timerHandle = null
+    }
+  }
+
   /**
    * Signal a change to the current map bounds in response to a
    * change to the map (panning or zooming).
@@ -392,9 +399,9 @@ export class TaskClusterMap extends Component {
             }}
           />
         }
-        {!!this.props.mapToLarge && !this.state.locatingToUser &&
-          <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-50 mr-w-full mr-flex mr-justify-center">
-            <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+        {!!this.props.mapZoomedOut && !this.state.locatingToUser &&
+          <div className="mr-absolute mr-pin-t mr-mt-3 mr-w-full mr-flex mr-justify-center">
+            <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
               <div className="mr-py-2 mr-px-3 mr-text-center">
                 <FormattedMessage {...messages.zoomInForTasksLabel} />
               </div>
@@ -423,8 +430,8 @@ export class TaskClusterMap extends Component {
             </div>
           </div>
         }
-        {!!this.props.showTaskCount && this.state.displayTaskCount && !this.props.mapToLarge &&
-          <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-50 mr-w-full mr-flex mr-justify-center">
+        {!!this.props.showTaskCount && this.state.displayTaskCount && !this.props.mapZoomedOut &&
+          <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
             <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
               <div className="mr-py-2 mr-px-3 mr-text-center">
                 <FormattedMessage {...messages.taskCountLabel } values={{count: this.props.totalTaskCount}} />

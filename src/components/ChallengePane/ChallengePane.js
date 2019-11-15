@@ -66,7 +66,6 @@ export class ChallengePane extends Component {
   }
 
   render() {
-    const Map = ClusterMap
     const challengeStatus = [ChallengeStatus.ready,
                              ChallengeStatus.partiallyLoaded,
                              ChallengeStatus.none,
@@ -99,7 +98,7 @@ export class ChallengePane extends Component {
           <ChallengeResults {...this.props} />
           <div className="mr-flex-1">
             <MapPane>
-              <Map challenge={this.props.browsedChallenge}
+              <ClusterMap challenge={this.props.browsedChallenge}
                    showMarkerPopup={showMarkerPopup}
                    initialBounds={this.state.fromUserAction ? this.state.bounds : null}
                    criteria={{boundingBox: fromLatLngBounds(this.state.bounds),

@@ -56,7 +56,7 @@ export class LocationSearchBox extends Component {
           {this.props.nominatimResults && this.state.showDropdown &&
             <Dropdown
               className="mr-flex"
-              arrowLocation="0 0 65 10"
+              arrowClassName="mr-pr-5"
               toggleVisible
               isVisible
               dropdownButton={() => null}

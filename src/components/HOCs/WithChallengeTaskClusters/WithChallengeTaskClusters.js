@@ -61,12 +61,12 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         const bounds = _get(this.props.criteria, 'boundingBox')
         if (!bounds || !boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
           this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true,
-                         mapToLarge: true})
+                         mapZoomedOut: true})
           return
         }
       }
 
-      this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters, mapToLarge: false})
+      this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters, mapZoomedOut: false})
 
       if (!showAsClusters) {
         const criteria = _set(this.props.criteria,
@@ -149,7 +149,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
           toggleShowAsClusters = {this.toggleShowAsClusters}
           showAsClusters = {this.state.showAsClusters}
           totalTaskCount = {this.state.taskCount}
-          mapToLarge = {this.state.mapToLarge}
+          mapZoomedOut = {this.state.mapZoomedOut}
         />
       )
     }
