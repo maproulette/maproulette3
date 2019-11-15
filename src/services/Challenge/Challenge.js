@@ -640,6 +640,11 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'dataOriginDate'])
 
+      if (challengeData.dataOriginDate) {
+        // Set the timestamp on the dataOriginDate so we get proper timezone info.
+        challengeData.dataOriginDate = parse(challengeData.dataOriginDate).toISOString()
+      }
+
       // Setup the save function to either edit or create the challenge
       // depending on whether it has an id.
       const saveEndpoint = new Endpoint(
@@ -694,6 +699,12 @@ export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=
       'json',
       new File([geoJSON], `challenge_${challengeId}_tasks_${Date.now()}.geojson`)
     )
+
+    if (dataOriginDate) {
+      // Set the timestamp on the dataOriginDate so we get proper timezone info.
+      dataOriginDate = parse(dataOriginDate).toISOString()
+    }
+
 
     return new Endpoint(
       api.challenge.uploadGeoJSON, {
