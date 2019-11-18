@@ -376,7 +376,9 @@ export class TaskClusterMap extends Component {
         }
         <VisibleTileLayer {...this.props} zIndex={1} />
         {overlayLayers}
-        <span key={_uniqueId()}>{this.state.mapMarkers}</span>
+        {!this.props.mapZoomedOut &&
+          <span key={_uniqueId()}>{this.state.mapMarkers}</span>
+        }
       </EnhancedMap>
 
     return (
