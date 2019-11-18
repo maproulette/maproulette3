@@ -5,10 +5,10 @@ import _omit from 'lodash/omit'
 import _cloneDeep from 'lodash/cloneDeep'
 import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
-import _set from 'lodash/set'
 import _uniqueId from 'lodash/uniqueId'
 import _sum from 'lodash/sum'
 import _map from 'lodash/map'
+import _set from 'lodash/set'
 import { fromLatLngBounds,
          boundsWithinAllowedMaxDegrees } from '../../../services/MapBounds/MapBounds'
 import { fetchTaskClusters } from '../../../services/Task/TaskClusters'
@@ -42,21 +42,28 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
     }
 
     toggleShowAsClusters = () => {
-      this.setState({showAsClusters: !this.state.showAsClusters})
+      this.fetchUpdatedClusters(!this.state.showAsClusters)
     }
 
-    fetchUpdatedClusters() {
+    fetchUpdatedClusters(wantToShowAsClusters) {
       if (!!_get(this.props, 'nearbyTasks.loading')) {
         return
       }
       const challengeId = _get(this.props, 'challenge.id', this.props.challengeId)
-      const showAsClusters = ((_get(this.props, 'criteria.zoom', 0) < MAX_ZOOM &&
-                               this.state.showAsClusters) ||
-                              !this.props.criteria.boundingBox) ||
-                             this.state.taskCount > UNCLUSTER_THRESHOLD
+
+      // We need to fetch as clusters if any of the following:
+      // 1. not at max zoom in and
+      //    user wants to see clusters or our task count is greater than our
+      //    threshold (eg. 1000 tasks)
+      // 2. we have no bounding box
+      const showAsClusters = (_get(this.props, 'criteria.zoom', 0) < MAX_ZOOM &&
+        (wantToShowAsClusters || this.state.taskCount > UNCLUSTER_THRESHOLD)) ||
+        !this.props.criteria.boundingBox
 
       const currentFetchId = _uniqueId()
 
+      // If we have no challengeId and no bounding box we need to make sure
+      // we aren't searching the entire map.
       if (!challengeId) {
         const bounds = _get(this.props.criteria, 'boundingBox')
         if (!bounds || !boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
@@ -69,15 +76,23 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       this.setState({loading: true, fetchId: currentFetchId, showAsClusters: showAsClusters, mapZoomedOut: false})
 
       if (!showAsClusters) {
-        const criteria = _set(this.props.criteria,
-                              'filters.challengeId',
-                              challengeId)
-        criteria.page = 0
+        const searchCriteria = _cloneDeep(this.props.criteria)
+        if (challengeId) {
+          _set(searchCriteria,
+              'filters.challengeId',
+               challengeId)
+        }
+        searchCriteria.page = 0
 
-        this.props.fetchBoundedTasks(criteria, UNCLUSTER_THRESHOLD + 1, !storeTasks).then(results => {
+        // Fetch up to threshold+1 individual tasks (eg. 1001 tasks)
+        this.props.fetchBoundedTasks(searchCriteria, UNCLUSTER_THRESHOLD + 1, !storeTasks).then(results => {
           if (currentFetchId >= this.state.fetchId) {
-            if (results.totalCount > UNCLUSTER_THRESHOLD) {
-              this.props.fetchTaskClusters(challengeId, this.props.criteria
+            // If we retrieved 1001 tasks then there might be more tasks and
+            // they should be clustered. So fetch as clusters
+            // (unless we are zoomed all the way in already)
+            if (results.totalCount > UNCLUSTER_THRESHOLD &&
+                _get(this.props, 'criteria.zoom', 0) < MAX_ZOOM) {
+              this.props.fetchTaskClusters(challengeId, searchCriteria
               ).then(results => {
                 const clusters = results.clusters
                 if (currentFetchId >= this.state.fetchId) {
@@ -115,18 +130,14 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
 
     componentDidMount() {
       if (!this.props.skipInitialFetch) {
-        this.fetchUpdatedClusters()
+        this.fetchUpdatedClusters(this.state.showAsClusters)
       }
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
             _omit(this.props.criteria, ['page', 'pageSize']))) {
-        this.fetchUpdatedClusters()
-      }
-
-      if (this.state.showAsClusters !== prevState.showAsClusters) {
-        this.fetchUpdatedClusters()
+        this.fetchUpdatedClusters(this.state.showAsClusters)
       }
     }
 
