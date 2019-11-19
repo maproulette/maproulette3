@@ -128,8 +128,8 @@ export class ChallengeDetail extends Component {
 
     const dataOriginDateText = !challenge.dataOriginDate ? null :
       this.props.intl.formatMessage(messages.dataOriginDateLabel,
-        {refreshDate: this.props.intl.formatDate(new Date(challenge.lastTaskRefresh)),
-         sourceDate: this.props.intl.formatDate(new Date(challenge.dataOriginDate))})
+        {refreshDate: this.props.intl.formatDate(parse(challenge.lastTaskRefresh)),
+         sourceDate: this.props.intl.formatDate(parse(challenge.dataOriginDate))})
 
    const map =
        <ClusterMap
