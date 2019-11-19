@@ -20,14 +20,11 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
-import { ChallengeLocation}
-       from '../../services/Challenge/ChallengeLocation/ChallengeLocation'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
 import SearchControl from '../EnhancedMap/SearchControl/SearchControl'
-import LocationSearchBox from '../EnhancedMap/SearchControl/LocationSearchBox'
 import LassoSelectionControl
        from '../EnhancedMap/LassoSelectionControl/LassoSelectionControl'
 import WithVisibleLayer from '../HOCs/WithVisibleLayer/WithVisibleLayer'
@@ -36,6 +33,7 @@ import WithIntersectingOverlays
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import { toLatLngBounds } from '../../services/MapBounds/MapBounds'
+import ZoomInMessage from './ZoomInMessage'
 import './TaskClusterMap.scss'
 import messages from './Messages'
 
@@ -43,6 +41,7 @@ import messages from './Messages'
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)
 
 export const MAX_ZOOM = 18
+export const MIN_ZOOM = 2
 
 /**
  * An uncluster option will be offered if no more than this number of tasks
@@ -69,7 +68,7 @@ export const CLUSTER_ICON_PIXELS = 40
 export class TaskClusterMap extends Component {
   currentBounds = null
   currentSize = null
-  currentZoom = 2
+  currentZoom = MIN_ZOOM
   timerHandle = null
 
   state = {
@@ -363,7 +362,7 @@ export class TaskClusterMap extends Component {
     const map =
       <EnhancedMap className="mr-z-0"
                    center={latLng(0, 0)}
-                   zoom={this.currentZoom} minZoom={2} maxZoom={MAX_ZOOM}
+                   zoom={this.currentZoom} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM}
                    setInitialBounds={false}
                    initialBounds = {this.currentBounds}
                    zoomControl={false} animate={false} worldCopyJump={true}
@@ -402,35 +401,7 @@ export class TaskClusterMap extends Component {
           />
         }
         {!!this.props.mapZoomedOut && !this.state.locatingToUser &&
-          <div className="mr-absolute mr-pin-t mr-mt-3 mr-w-full mr-flex mr-justify-center">
-            <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
-              <div className="mr-py-2 mr-px-3 mr-text-center">
-                <FormattedMessage {...messages.zoomInForTasksLabel} />
-              </div>
-              <div className="mr-flex mr-items-center mr-pb-3 mr-px-3">
-                <button
-                  className="mr-button mr-button--small mr-button--blue-fill"
-                  onClick={() => {
-                    this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
-                    this.setState({locatingToUser: true})
-                    this.props.locateMapToUser(this.props.user).then(() => {
-                      this.setState({locatingToUser: false})
-                    })
-                  }}
-                >
-                  <FormattedMessage {...messages.nearMeLabel } />
-                </button>
-                <span className="mr-mx-4 mr-pt-1"><FormattedMessage {...messages.orLabel } /></span>
-                <LocationSearchBox
-                  {...this.props}
-                  onResultSelected={bounds => {
-                    this.currentBounds = toLatLngBounds(bounds)
-                    this.props.updateBounds(bounds)
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+          <ZoomInMessage {...this.props} zoom={this.currentZoom}/>
         }
         {!!this.props.showTaskCount && this.state.displayTaskCount && !this.props.mapZoomedOut &&
           <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
