@@ -4,7 +4,6 @@ import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl'
 import _isObject from 'lodash/isObject'
 import _get from 'lodash/get'
 import _findIndex from 'lodash/findIndex'
-import _isNumber from 'lodash/isNumber'
 import parse from 'date-fns/parse'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskClusterMap from '../TaskClusterMap/TaskClusterMap'
@@ -57,14 +56,7 @@ export class ChallengeDetail extends Component {
     let saveControl = null
     let startControl = null
 
-    let startableChallenge = true
-    const tasksComplete = _isNumber(_get(challenge, 'actions.available')) ?
-                          challenge.actions.available === 0 : false
-
-    if (challenge.deleted || tasksComplete ||
-       !isUsableChallengeStatus(challenge.status)) {
-      startableChallenge = false
-    }
+    const startableChallenge = !challenge.deleted && isUsableChallengeStatus(challenge.status)
 
     if (_isObject(this.props.user) && !challenge.isVirtual) {
       if (
