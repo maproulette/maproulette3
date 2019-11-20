@@ -26,12 +26,14 @@ export class AsIdentifiableFeature {
     }
 
     // Look on the feature itself first, then on its properties
-    let idProp = _find(featureIdFields, name => this[name])
+    let idProp = _find(featureIdFields, name => this[name] &&
+                                                this.isValidId(this[name]))
     if (idProp) {
       return this[idProp]
     }
 
-    idProp = _find(featureIdFields, name => this.properties[name])
+    idProp = _find(featureIdFields, name => this.properties[name] &&
+                                            this.isValidId(this.properties[name]))
     return idProp ? this.properties[idProp] : null
   }
 
@@ -50,6 +52,20 @@ export class AsIdentifiableFeature {
     // numerical OSM id
     const match = /(\d+)/.exec(featureId)
     return (match && match.length > 1) ? match[1] : null
+  }
+
+  isValidId(id) {
+    if (!id) {
+      return false
+    }
+
+    // Ids that are only numeric or start with node/way/relation (eg. 'node/12345')
+    // or start with just a character n/r/w (eg. 'n12345')
+    if (id.match(/^(node|way|relation|n|r|w)?\/?\d+$/)) {
+      return true
+    }
+
+    return false
   }
 }
 
