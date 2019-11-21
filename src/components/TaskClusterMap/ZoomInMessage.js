@@ -69,9 +69,9 @@ export class ZoomInMessage extends Component {
               <span className="mr-mx-4 mr-pt-1"><FormattedMessage {...messages.orLabel } /></span>
               <LocationSearchBox
                 {...this.props}
-                onResultSelected={bounds => {
+                onResultSelected={(bounds, zoom) => {
                   this.currentBounds = toLatLngBounds(bounds)
-                  this.props.updateBounds(bounds)
+                  this.props.updateBounds(bounds, zoom, true)
                 }}
               />
             </div>

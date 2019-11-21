@@ -4,6 +4,7 @@ import _isEqual from 'lodash/isEqual'
 import _get from 'lodash/get'
 import { Popup } from 'react-leaflet'
 import ChallengeFilterSubnav from './ChallengeFilterSubnav/ChallengeFilterSubnav'
+import FilterByLocation from './ChallengeFilterSubnav/FilterByLocation'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskClusterMap from '../TaskClusterMap/TaskClusterMap'
 import CongratulateModal from '../CongratulateModal/CongratulateModal'
@@ -21,6 +22,7 @@ import WithMapBoundedTasks from '../HOCs/WithMapBoundedTasks/WithMapBoundedTasks
 import WithStatus from '../HOCs/WithStatus/WithStatus'
 import WithChallengeTaskClusters from '../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
 import WithTaskClusterMarkers from '../HOCs/WithTaskClusterMarkers/WithTaskClusterMarkers'
+import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import { fromLatLngBounds } from '../../services/MapBounds/MapBounds'
 import { ChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import TaskChallengeMarkerContent from './TaskChallengeMarkerContent'
@@ -30,6 +32,7 @@ const ChallengeResults = WithStatus(ChallengeResultList)
 const ClusterMap = WithChallengeTaskClusters(
                       WithTaskClusterMarkers(TaskClusterMap('challenges')),
                       true)
+const LocationFilter = WithCurrentUser(FilterByLocation)
 
 /**
  * ChallengePane represents the top-level view when the user is browsing,
@@ -95,7 +98,10 @@ export class ChallengePane extends Component {
         <ChallengeFilterSubnav {...this.props} />
 
         <div className="mr-p-6 lg:mr-flex mr-cards-inverse">
-          <ChallengeResults {...this.props} />
+          <div className="mr-flex-0">
+            <LocationFilter {...this.props} />
+            <ChallengeResults {...this.props} />
+          </div>
           <div className="mr-flex-1">
             <MapPane>
               <ClusterMap challenge={this.props.browsedChallenge}
@@ -105,8 +111,8 @@ export class ChallengePane extends Component {
                               zoom: this.state.zoom,
                               filters: _get(this.props, 'searchCriteria.filters'),
                               challengeStatus}}
-                   updateTaskFilterBounds={(bounds, zoom) => {
-                     this.props.updateChallengeSearchMapBounds(bounds, false)
+                   updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
+                     this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
                    }}
                    allowClusterToggle
                    showTaskCount

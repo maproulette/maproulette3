@@ -40,26 +40,26 @@ export const locationLabels = intl => _fromPairs(
  */
 export const challengePassesLocationFilter = function(challengeFilters,
                                                       challenge,
-                                                      searchCriteria) {
+                                                      props) {
   if (challengeFilters.location !== CHALLENGE_LOCATION_WITHIN_MAPBOUNDS &&
       challengeFilters.location !== CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS &&
       challengeFilters.location !== CHALLENGE_LOCATION_NEAR_USER ) {
     return true
   }
 
-  if (_isEmpty(_get(searchCriteria, 'mapBounds.bounds'))) {
+  if (_isEmpty(_get(props.searchCriteria, 'mapBounds.bounds'))) {
     return true
   }
 
-  const challengeSearchMapBounds = toLatLngBounds(searchCriteria.mapBounds.bounds)
+  const challengeSearchMapBounds = toLatLngBounds(props.searchCriteria.mapBounds.bounds)
 
   // Or if the challenge is listed in the TaskClusters or in the Map Bounded Tasks
   let validChallenges = []
-  _each(_get(searchCriteria, 'mapBoundedTasks.tasks'), (task) => {
+  _each(_get(props, 'mapBoundedTasks.tasks'), (task) => {
     validChallenges = _concat(validChallenges, task.parentId)
   })
 
-  _each(_get(searchCriteria, 'taskClusters.clusters'), (cluster) => {
+  _each(_get(props, 'taskClusters.clusters'), (cluster) => {
     validChallenges = _concat(validChallenges, cluster.challengeIds)
   })
 

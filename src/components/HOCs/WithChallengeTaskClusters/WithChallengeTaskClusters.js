@@ -33,11 +33,11 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       taskCount: 0
     }
 
-    updateBounds = (bounds, zoom) => {
+    updateBounds = (bounds, zoom, fromUserAction=false) => {
       if (this.props.criteria.boundingBox !== fromLatLngBounds(bounds).join(',')) {
         const criteria = _cloneDeep(this.props.criteria)
         criteria.boundingBox = fromLatLngBounds(bounds).join(',')
-        this.props.updateTaskFilterBounds(bounds, zoom)
+        this.props.updateTaskFilterBounds(bounds, zoom, fromUserAction)
       }
     }
 
