@@ -28,6 +28,7 @@ export default {
     fetchFailure: messages.taskFetchFailure,
     doesNotExist: messages.taskDoesNotExist,
     locked: messages.taskLocked,
+    lockRefreshFailure: messages.taskLockRefreshFailure,
     bundleFailure: messages.taskBundleFailure,
   },
 

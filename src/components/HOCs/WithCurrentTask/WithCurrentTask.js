@@ -268,7 +268,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         return Promise.reject("Invalid task")
       }
 
-      return dispatch(refreshTaskLock(task.id))
+      return dispatch(refreshTaskLock(task.id)).catch(err => {
+        dispatch(addError(AppErrors.task.lockRefreshFailure))
+      })
     },
   }
 }

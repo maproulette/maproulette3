@@ -66,6 +66,10 @@ export default defineMessages({
     id: 'Errors.task.alreadyLocked',
     defaultMessage: "Task has already been locked by someone else.",
   },
+  taskLockRefreshFailure: {
+    id: 'Errors.task.lockRefreshFailure',
+    defaultMessage: "Unable to extend your task lock. Your lock may have expired. We recommend refreshing the page to try establishing a fresh lock.",
+  },
   taskBundleFailure: {
     id: 'Errors.task.bundleFailure',
     defaultMessage: "Unable to bundling tasks together",
