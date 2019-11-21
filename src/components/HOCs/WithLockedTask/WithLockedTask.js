@@ -40,7 +40,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
   startTask: (task) => {
     dispatch(startTask(task.id)).catch(error => {
       dispatch(addError(AppErrors.task.locked))
-      ownProps.history.push('/browse/challenges')
+      ownProps.history.push(`/browse/challenges/${_get(task, 'parent.id', task.parent)}`)
     })
   },
   releaseTask: (task) => dispatch(releaseTask(task.id)),

@@ -972,6 +972,7 @@
   "Errors.task.fetchFailure": "Unable to fetch a task to work on.",
   "Errors.task.doesNotExist": "That task does not exist.",
   "Errors.task.alreadyLocked": "Task has already been locked by someone else.",
+  "Errors.task.lockRefreshFailure": "Unable to extend your task lock. Your lock may have expired. We recommend refreshing the page to try establishing a fresh lock.",
   "Errors.task.bundleFailure": "Unable to bundling tasks together",
   "Errors.osm.requestTooLarge": "OpenStreetMap data request too large",
   "Errors.osm.bandwidthExceeded": "OpenStreetMap allowed bandwidth exceeded",
