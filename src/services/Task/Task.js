@@ -229,6 +229,18 @@ export const releaseTask = function(taskId) {
 }
 
 /**
+ * Refreshes an active task lock owned by the current user
+ */
+export const refreshTaskLock = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(api.task.refreshLock, {
+      schema: taskSchema(),
+      variables: {id: taskId}
+    }).execute()
+  }
+}
+
+/**
  * Mark the given task as completed with the given status.
  */
 export const completeTask = function(taskId, taskStatus, needsReview,

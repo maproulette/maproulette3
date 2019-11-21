@@ -32,6 +32,9 @@ const MobileTabBar = WithCurrentUser(MobileTaskDetails)
 
 const WIDGET_WORKSPACE_NAME = "taskCompletion"
 
+// How frequently the task lock should be refreshed
+const LOCK_REFRESH_INTERVAL = 600000 // 10 minutes
+
 export const defaultWorkspaceSetup = function() {
   return {
     dataModelVersion: 2,
@@ -73,6 +76,8 @@ export const defaultWorkspaceSetup = function() {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class TaskPane extends Component {
+  lockRefreshInterval = null
+
   state = {
     /**
      * id of task once user initiates completion. This is used to help our
@@ -80,6 +85,16 @@ export class TaskPane extends Component {
      */
     completingTask: null,
     completionResponses: null
+  }
+
+  /**
+   * Clear the lock-refresh timer if one is set
+   */
+  clearLockRefreshInterval = () => {
+    if (this.lockRefreshInterval !== null) {
+      clearInterval(this.lockRefreshInterval)
+      this.lockRefreshInterval = null
+    }
   }
 
   /**
@@ -108,6 +123,19 @@ export class TaskPane extends Component {
       JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
     responses[propertyName] = value
     this.setState({completionResponses: responses})
+  }
+
+  componentDidMount() {
+    // Setup an interval to refresh the task lock every so often so that it
+    // doesn't expire while the mapper is actively working on the task
+    this.clearLockRefreshInterval()
+    this.lockRefreshInterval = setInterval(() => {
+      this.props.refreshTaskLock(this.props.task)
+    }, LOCK_REFRESH_INTERVAL)
+  }
+
+  componentWillUnmount() {
+    this.clearLockRefreshInterval()
   }
 
   componentDidUpdate(prevProps) {

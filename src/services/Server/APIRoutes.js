@@ -98,6 +98,7 @@ const apiRoutes = factory => {
       'single': factory.get('/task/:id'),
       'start': factory.get('/task/:id/start'),
       'release': factory.get('/task/:id/release'),
+      'refreshLock': factory.get('/task/:id/refreshLock'),
       'startReview': factory.get('/task/:id/review/start'),
       'cancelReview': factory.get('/task/:id/review/cancel'),
       'updateStatus': factory.put('/task/:id/:status'),
