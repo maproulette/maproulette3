@@ -26,7 +26,7 @@ export default defineMessages({
 
   searchLabel: {
     id: 'ChallengeFilterSubnav.filter.search.label',
-    defaultMessage: 'Search for a challenge...',
+    defaultMessage: 'Search by name',
   },
 
   clearFiltersLabel: {
@@ -43,4 +43,14 @@ export default defineMessages({
     id: "ChallengeFilterSubnav.filter.keywords.otherLabel",
     defaultMessage: "Other:",
   },
+
+  searchTypeProject: {
+    id: "ChallengeFilterSubnav.query.searchType.project",
+    defaultMessage: "Projects",
+  },
+
+  searchTypeChallenge: {
+    id: "ChallengeFilterSubnav.query.searchType.challenge",
+    defaultMessage: "Challenges"
+  }
 })

@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Challenge.fields.viewLeaderboard.label",
     defaultMessage: "View Leaderboard",
   },
+
+  vpListLabel: {
+    id: "Challenge.fields.vpList.label",
+    defaultMessage: "Also included in:",
+  },
 })

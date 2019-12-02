@@ -242,6 +242,7 @@ export class ChallengeResultItem extends Component {
           unsaveControl={unsaveChallengeControl}
           startControl={startControl}
           manageControl={manageControl}
+          projectQuery={_get(this.props, 'searchFilters.project')}
         />
       </div>
     )
