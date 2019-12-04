@@ -688,6 +688,8 @@
   "ActiveTask.subheading.progress": "Challenge Progress",
   "ActiveTask.subheading.social": "Share",
   "Task.pane.controls.inspect.label": "Inspect",
+  "Task.pane.indicators.locked.label": "Task locked",
+  "Task.pane.controls.unlock.label": "Unlock",
   "MobileTask.subheading.instructions": "Instructions",
   "Task.management.heading": "Management Options",
   "Task.management.controls.inspect.label": "Inspect",
