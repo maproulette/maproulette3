@@ -29,7 +29,7 @@ export class CardChallenge extends Component {
       const virtualParents = _get(this.props.challenge, 'virtualParents', [])
       for (let i = 0; i < virtualParents.length; i++) {
         const vp = virtualParents[i]
-        if (_isObject(vp) && vp.enabled) {
+        if (_isObject(vp) && vp.enabled && vp.id !== this.props.excludeProjectId) {
           if (vp.displayName.toLowerCase().match(this.props.projectQuery.toLowerCase())) {
             vpList.push(
               <span key={vp.id}>
@@ -61,10 +61,11 @@ export class CardChallenge extends Component {
             </h3>
 
             {this.props.challenge.parent && // virtual challenges don't have projects
+             this.props.challenge.parent.id !== this.props.excludeProjectId &&
              <Link
                className="mr-card-challenge__owner"
                onClick={(e) => {e.stopPropagation()}}
-               to={`/project/${this.props.challenge.parent.id}/leaderboard`}
+               to={`/browse/projects/${this.props.challenge.parent.id}`}
              >
                {_get(this.props, 'challenge.parent.displayName')}
              </Link>

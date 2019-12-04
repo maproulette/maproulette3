@@ -43,14 +43,4 @@ export default defineMessages({
     id: "ChallengeFilterSubnav.filter.keywords.otherLabel",
     defaultMessage: "Other:",
   },
-
-  searchTypeProject: {
-    id: "ChallengeFilterSubnav.query.searchType.project",
-    defaultMessage: "Projects",
-  },
-
-  searchTypeChallenge: {
-    id: "ChallengeFilterSubnav.query.searchType.challenge",
-    defaultMessage: "Challenges"
-  }
 })

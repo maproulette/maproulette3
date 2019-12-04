@@ -243,6 +243,7 @@ export class ChallengeResultItem extends Component {
           startControl={startControl}
           manageControl={manageControl}
           projectQuery={_get(this.props, 'searchFilters.project')}
+          excludeProjectId={this.props.excludeProjectId}
         />
       </div>
     )

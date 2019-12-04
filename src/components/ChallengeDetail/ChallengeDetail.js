@@ -163,7 +163,7 @@ export class ChallengeDetail extends Component {
                     onClick={e => {
                       e.stopPropagation()
                     }}
-                    to={`/project/${challenge.parent.id}/leaderboard`}
+                    to={`/browse/projects/${challenge.parent.id}`}
                   >
                     {challenge.parent.displayName}
                   </Link>
