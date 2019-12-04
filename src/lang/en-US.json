@@ -942,7 +942,7 @@
   "Challenge.keywords.any": "Anything",
   "Challenge.location.nearMe": "Near Me",
   "Challenge.location.withinMapBounds": "Within Map Bounds",
-  "Challenge.location.intersectingMapBounds": "Intersects Map",
+  "Challenge.location.intersectingMapBounds": "In Map",
   "Challenge.location.any": "Anywhere",
   "Challenge.status.none": "Not Applicable",
   "Challenge.status.building": "Building",
