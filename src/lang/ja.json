@@ -419,7 +419,6 @@
   "Challenge.keywords.any": "すべて",
   "Challenge.location.nearMe": "自分の近所",
   "Challenge.location.withinMapBounds": "マップの矩形範囲",
-  "Challenge.location.intersectingMapBounds": "交差するマップの矩形",
   "Challenge.location.any": "どこでも",
   "Challenge.status.none": "利用不可",
   "Challenge.status.building": "建物",

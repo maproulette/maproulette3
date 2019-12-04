@@ -646,7 +646,6 @@
   "Challenge.keywords.any": "Qualquer coisa",
   "Challenge.location.nearMe": "Perto de mim",
   "Challenge.location.withinMapBounds": "Dentro dos limites do mapa",
-  "Challenge.location.intersectingMapBounds": "Interseção de limites do mapa",
   "Challenge.location.any": "Em qualquer lugar",
   "Challenge.status.none": "Não aplicável",
   "Challenge.status.building": "Edifício",

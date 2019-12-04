@@ -14,7 +14,7 @@ export default defineMessages({
   },
   intersectingMapBounds: {
     id: "Challenge.location.intersectingMapBounds",
-    defaultMessage: "Intersects Map",
+    defaultMessage: "In Map",
   },
   any: {
     id: "Challenge.location.any",
