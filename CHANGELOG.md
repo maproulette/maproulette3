@@ -7,8 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-
-## [v3.4.6] - 2019-12-05
+## [v3.4.7] - 2019-12-05
 ### Added
 - Task browsing at much lower zoom levels on Find Challenges page
 - Overlay on Find Challenges map with "Near Me" option and nominatum search
@@ -23,6 +22,18 @@ This project adheres to
 
 ### Removed
 - "Within Map Bounds" filter now that task browsing is offered at lower zoom
+
+
+## [v3.4.6] - 2019-11-14
+### Added
+- Option to change task data source date when rebuilding tasks
+- Link to challenge from Challenge Leaderboard (#967)
+- Make challenge discovery status clearer to challenge managers
+- [internal] Compatibility adjustments for backend API changes around task tags
+- [internal] Upgrade various package dependencies
+
+### Fixed
+- Restore colors to task-cluster markers on maps
 
 
 ## [v3.4.5] - 2019-11-06
