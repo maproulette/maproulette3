@@ -110,6 +110,7 @@ export class ChallengePane extends Component {
                    criteria={{boundingBox: fromLatLngBounds(this.state.bounds),
                               zoom: this.state.zoom,
                               filters: _get(this.props, 'searchCriteria.filters'),
+                              searchQuery: _get(this.props, 'searchCriteria.query'),
                               challengeStatus}}
                    updateTaskFilterBounds={(bounds, zoom, fromUserAction) => {
                      this.props.updateChallengeSearchMapBounds(bounds, fromUserAction)
