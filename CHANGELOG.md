@@ -7,7 +7,7 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.4.7] - 2019-12-05
+## [v3.5] - 2019-12-06
 ### Added
 - Task browsing at much lower zoom levels on Find Challenges page
 - Overlay on Find Challenges map with "Near Me" option and nominatum search
