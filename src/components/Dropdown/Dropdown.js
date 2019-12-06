@@ -41,7 +41,7 @@ class Dropdown extends Component {
                 <SvgSymbol
                   sym="icon-triangle"
                   viewBox="0 0 15 10"
-                  className="mr-dropdown__arrow"
+                  className={classNames("mr-dropdown__arrow", this.props.arrowClassName)}
                   aria-hidden
                 />
                 <div className="mr-dropdown__content">

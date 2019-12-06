@@ -4,11 +4,8 @@ import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
-import _debounce from 'lodash/debounce'
 import _map from 'lodash/map'
-import _noop from 'lodash/noop'
-import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
-import { extendedFind } from '../../../services/Challenge/Challenge'
+import _find from 'lodash/find'
 import { createVirtualChallenge }
        from '../../../services/VirtualChallenge/VirtualChallenge'
 import { loadRandomTaskFromVirtualChallenge }
@@ -24,28 +21,11 @@ import AppErrors from '../../../services/Error/AppErrors'
  * task-browsing to be enabled. Uses the REACT_APP_BOUNDED_TASKS_MAX_DIMENSION
  * .env setting or a system default if that hasn't been set.
  *
- * @private
  */
-const maxAllowedDegrees = function() {
+export const maxAllowedDegrees = function() {
   return _get(process.env, 'REACT_APP_BOUNDED_TASKS_MAX_DIMENSION',
-              2.5) // degrees
+              70) // degrees
 }
-
-/**
- * Debounced dispatch of fetchBoundedTasks
- *
- * @private
- */
-const doUpdateBoundedTasks =
-  _get(process.env, 'REACT_APP_FEATURE_BOUNDED_TASK_BROWSING') === 'enabled' ?
-  _debounce((dispatch, bounds) => {
-    if (boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
-      dispatch(fetchBoundedTasks({boundingBox: bounds}, 1000))
-      // We also need to make sure we have the parent challenges
-      // TODO only fetch parents of retrieved tasks
-      dispatch(extendedFind({bounds}))
-    }
-  }, 500) : _noop
 
 /**
  * WithMapBoundedTasks retrieves map-bounded task clusters (regardless of
@@ -79,6 +59,20 @@ export const WithMapBoundedTasks = function(WrappedComponent,
 
       if (bounds && boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
         mapBoundedTasks = this.props.mapBoundedTasks
+
+        // If we have no mapBoundsTasks then we might be dealing with clusters.
+        // If the clusters all represent individual tasks then these should be ok
+        // to work on as a virtual challenge as well.
+        if (_get(mapBoundedTasks, 'tasks.length', 0) === 0) {
+          const clusters = this.props.mapBoundedTaskClusters.clusters
+          const areClustersAllTasks = !(_find(clusters, c => !c.taskId))
+
+          if (areClustersAllTasks && _get(clusters, 'length') > 0) {
+            mapBoundedTasks = {tasks: _map(clusters, cluster => {
+              return {id: cluster.taskId, parentId: cluster.challengeIds[0]}
+            })}
+          }
+        }
       }
 
       if (!matchChallenges || _get(mapBoundedTasks, 'tasks.length', 0) === 0) {
@@ -112,32 +106,12 @@ export const WithMapBoundedTasks = function(WrappedComponent,
       }
     }
 
-    componentWillMount() {
-      const bounds = this.normalizedBounds(this.props)
-
-      if (bounds) {
-        this.props.updateBoundedTasks(bounds)
-      }
-    }
-
-    componentWillReceiveProps(nextProps) {
-      const nextBounds = this.normalizedBounds(nextProps)
-      const currentBounds = this.normalizedBounds(this.props)
-
-      if (nextBounds) {
-        if (!currentBounds || !nextBounds.equals(currentBounds)) {
-          this.props.updateBoundedTasks(nextBounds)
-        }
-      }
-    }
-
     render() {
       return (
         <WrappedComponent mapBoundedTasks={this.allowedTasks()}
                           startMapBoundedTasks={this.startMapBoundedTasks}
                           creatingVirtualChallenge={this.state.creatingVirtualChallenge}
                           {..._omit(this.props, ['mapBoundedTasks',
-                                                 'updateBoundedTasks',
                                                  'startBoundedTasks'])} />)
     }
   }
@@ -145,11 +119,10 @@ export const WithMapBoundedTasks = function(WrappedComponent,
 
 const mapStateToProps = state => ({
   mapBoundedTasks: state.currentBoundedTasks,
+  mapBoundedTaskClusters: state.currentTaskClusters,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateBoundedTasks: bounds => doUpdateBoundedTasks(dispatch, bounds),
-
   startBoundedTasks: (name, taskIds) => {
     return dispatch(
       createVirtualChallenge(name, taskIds)

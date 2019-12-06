@@ -290,7 +290,7 @@ const BuildBundle = props => {
       chosenTasks={selectedTasks}
       boundingBox={_get(props, 'criteria.boundingBox')}
       onBulkTaskSelection={props.selectTasksById}
-      allowClusterToggle
+      allowClusterToggle={false}
       hideSearchControl
       {..._omit(props, 'selectedTasks', 'className')}
     />

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
+import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
@@ -23,6 +24,7 @@ import VirtualChallengeNameLink
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
 import messages from './Messages'
 import './TaskPane.scss'
@@ -31,6 +33,9 @@ import './TaskPane.scss'
 const MobileTabBar = WithCurrentUser(MobileTaskDetails)
 
 const WIDGET_WORKSPACE_NAME = "taskCompletion"
+
+// How frequently the task lock should be refreshed
+const LOCK_REFRESH_INTERVAL = 600000 // 10 minutes
 
 export const defaultWorkspaceSetup = function() {
   return {
@@ -73,6 +78,8 @@ export const defaultWorkspaceSetup = function() {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class TaskPane extends Component {
+  lockRefreshInterval = null
+
   state = {
     /**
      * id of task once user initiates completion. This is used to help our
@@ -80,6 +87,16 @@ export class TaskPane extends Component {
      */
     completingTask: null,
     completionResponses: null
+  }
+
+  /**
+   * Clear the lock-refresh timer if one is set
+   */
+  clearLockRefreshInterval = () => {
+    if (this.lockRefreshInterval !== null) {
+      clearInterval(this.lockRefreshInterval)
+      this.lockRefreshInterval = null
+    }
   }
 
   /**
@@ -108,6 +125,19 @@ export class TaskPane extends Component {
       JSON.parse(_get(this.props, 'task.completionResponses', null)) || {}
     responses[propertyName] = value
     this.setState({completionResponses: responses})
+  }
+
+  componentDidMount() {
+    // Setup an interval to refresh the task lock every so often so that it
+    // doesn't expire while the mapper is actively working on the task
+    this.clearLockRefreshInterval()
+    this.lockRefreshInterval = setInterval(() => {
+      this.props.refreshTaskLock(this.props.task)
+    }, LOCK_REFRESH_INTERVAL)
+  }
+
+  componentWillUnmount() {
+    this.clearLockRefreshInterval()
   }
 
   componentDidUpdate(prevProps) {
@@ -153,23 +183,43 @@ export class TaskPane extends Component {
               </h1>
             }
             workspaceInfo={
-              <ul className="mr-list-ruled mr-text-xs">
-                <li className="mr-links-inverse">
-                  {_get(this.props.task, 'parent.parent.displayName')}
-                </li>
+              <React.Fragment>
+                <div>
+                  <ul className="mr-list-ruled mr-text-xs">
+                    <li className="mr-links-inverse">
+                      {_get(this.props.task, 'parent.parent.displayName')}
+                    </li>
 
-                <li className="mr-links-green-lighter">
-                  <OwnerContactLink {...this.props} />
-                </li>
+                    <li className="mr-links-green-lighter">
+                      <OwnerContactLink {...this.props} />
+                    </li>
 
-                {isManageable && !this.props.inspectTask && (
-                  <li>
-                    <button className="mr-transition mr-text-current hover:mr-text-green-lighter" onClick={() => this.props.history.push(taskInspectRoute)}>
-                      <FormattedMessage {...messages.inspectLabel} />
-                    </button>
-                  </li>
-                )}
-              </ul>
+                    {isManageable && !this.props.inspectTask && (
+                      <li>
+                        <button className="mr-transition mr-text-current hover:mr-text-green-lighter" onClick={() => this.props.history.push(taskInspectRoute)}>
+                          <FormattedMessage {...messages.inspectLabel} />
+                        </button>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+                <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                  <SvgSymbol
+                    sym="locked-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-fill-current mr-w-4 mr-h-4 mr-mr-1"
+                  />
+                  <span className="mr-flex mr-items-baseline">
+                    <FormattedMessage {...messages.taskLockedLabel} />
+                  </span>
+                  <Link
+                    to={`/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`}
+                    className="mr-button mr-button--xsmall mr-ml-3"
+                  >
+                    <FormattedMessage {...messages.taskUnlockLabel} />
+                  </Link>
+                </div>
+              </React.Fragment>
             }
             completeTask={this.completeTask}
             completingTask={this.state.completingTask}

@@ -21,7 +21,6 @@ import { placeSchema, fetchPlace } from '../Place/Place'
 import { commentSchema, receiveComments } from '../Comment/Comment'
 import { addServerError, addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-import { generateSearchParametersString } from '../Search/Search'
 import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
 import { receiveClusteredTasks } from './ClusteredTask'
@@ -226,6 +225,18 @@ export const releaseTask = function(taskId) {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
     })
+  }
+}
+
+/**
+ * Refreshes an active task lock owned by the current user
+ */
+export const refreshTaskLock = function(taskId) {
+  return function(dispatch) {
+    return new Endpoint(api.task.refreshLock, {
+      schema: taskSchema(),
+      variables: {id: taskId}
+    }).execute()
   }
 }
 
@@ -508,26 +519,6 @@ export const fetchChallengeTasks = function(challengeId, limit=50) {
       dispatch(receiveTasks(normalizedResults.entities))
       return normalizedResults
     })
-  }
-}
-
-/**
- * Retrieve task clusters (up to the given number of points) matching the given
- * search criteria. Criteria should contains a filters object and optional
- * boundingBox string -- see Search.generateSearchParametersString for details
- * of supported filters
- */
-export const fetchTaskClusters = function(challengeId, criteria, points=25) {
-  return function(dispatch) {
-    const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
-                                                            criteria.boundingBox,
-                                                            _get(criteria, 'savedChallengesOnly'))
-    searchParameters.cid = challengeId
-    return new Endpoint(
-      api.challenge.taskClusters, {
-        params: {points, ...searchParameters},
-      }
-    ).execute()
   }
 }
 

@@ -7,6 +7,23 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.5] - 2019-12-06
+### Added
+- Task browsing at much lower zoom levels on Find Challenges page
+- Overlay on Find Challenges map with "Near Me" option and nominatum search
+- Relocated location filters on Find Challenges page above search results
+- Automatic refreshing of task locks while mapper is actively working on a task
+- New option to explictly "unlock" (abandon) a task on task-completion page
+
+### Fixed
+- Potential wrong timezone on origin/sourcing date recorded for task data
+- Occasional incorrect challenge-completion status resulting from stale checks
+- Incorrect OSM entity ids sometimes sent to iD and JOSM editors
+
+### Removed
+- "Within Map Bounds" filter now that task browsing is offered at lower zoom
+
+
 ## [v3.4.6] - 2019-11-14
 ### Added
 - Option to change task data source date when rebuilding tasks

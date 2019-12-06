@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import SearchBox from '../../SearchBox/SearchBox'
-import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengeSearch from '../../HOCs/WithSearch/WithChallengeSearch'
 import WithCommandInterpreter from '../../HOCs/WithCommandInterpreter/WithCommandInterpreter'
 import FilterByDifficulty from './FilterByDifficulty'
 import FilterByKeyword from './FilterByKeyword'
-import FilterByLocation from './FilterByLocation'
 import ClearFiltersControl from './ClearFiltersControl'
 import SortChallengesSelector from './SortChallengesSelector'
 import './ChallengeFilterSubnav.scss'
 import messages from './Messages'
 
 // Setup child components with necessary HOCs
-const LocationFilter = WithCurrentUser(FilterByLocation)
 const CommandSearchBox = WithCommandInterpreter(SearchBox)
 
 /**
@@ -49,7 +46,6 @@ export class ChallengeFilterSubnav extends Component {
             <SortChallengesSelector {...this.props} />
             <FilterByKeyword {...this.props} />
             <FilterByDifficulty {...this.props} />
-            <LocationFilter {...this.props} />
             <CommandSearchBox
               {...this.props}
               placeholder={this.props.intl.formatMessage(messages.searchLabel)}

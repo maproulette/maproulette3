@@ -82,8 +82,8 @@ const WithCommandInterpreter = function(WrappedComponent) {
  * @return boolean - Whether this was a typical search or a command search
  */
 export const executeCommand = (props, commandString, setLoading, isComplete=false) => {
-  const command = commandString.length >= 2 ? commandString.substring(0, 2) : null
-  let query = commandString.substring(2)
+  const command = commandString && commandString.length >= 2 ? commandString.substring(0, 2) : null
+  let query = commandString ? commandString.substring(2) : commandString
 
   // Temporary: until we add an Advanced Search dialog where a user can clear a
   // project search filter, we need to do it explicitly here if needed
