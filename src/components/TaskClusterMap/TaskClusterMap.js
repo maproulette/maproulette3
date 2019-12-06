@@ -70,6 +70,7 @@ export class TaskClusterMap extends Component {
   currentSize = null
   currentZoom = MIN_ZOOM
   timerHandle = null
+  skipNextBoundsUpdate = false
 
   state = {
     mapMarkers: null,
@@ -163,6 +164,11 @@ export class TaskClusterMap extends Component {
     this.currentBounds = toLatLngBounds(bounds)
     this.currentZoom = zoom
     this.currentSize = mapSize
+
+    if (this.skipNextBoundsUpdate) {
+      this.skipNextBoundsUpdate = false
+      return
+    }
     this.debouncedUpdateBounds(bounds, zoom)
   }
 
@@ -354,6 +360,8 @@ export class TaskClusterMap extends Component {
           )
         ))
       )
+      // We've calculated the bounds so we don't need to do the next bounds update
+      this.skipNextBoundsUpdate = true
     }
     else if (this.props.initialBounds) {
       this.currentBounds = this.props.initialBounds
