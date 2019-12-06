@@ -9,6 +9,7 @@ import _uniqueId from 'lodash/uniqueId'
 import _sum from 'lodash/sum'
 import _map from 'lodash/map'
 import _set from 'lodash/set'
+import _debounce from 'lodash/debounce'
 import { fromLatLngBounds,
          boundsWithinAllowedMaxDegrees } from '../../../services/MapBounds/MapBounds'
 import { fetchTaskClusters } from '../../../services/Task/TaskClusters'
@@ -134,8 +135,14 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       }
     }
 
+    debouncedFetchClusters =
+      _debounce((showAsClusters) => this.fetchUpdatedClusters(showAsClusters), 400)
+
     componentDidUpdate(prevProps, prevState) {
-      if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
+      if (!_isEqual(_get(prevProps.criteria, 'searchQuery'), _get(this.props.criteria, 'searchQuery'))) {
+        this.debouncedFetchClusters(this.state.showAsClusters)
+      }
+      else if (!_isEqual(_omit(prevProps.criteria, ['page', 'pageSize']),
             _omit(this.props.criteria, ['page', 'pageSize']))) {
         this.fetchUpdatedClusters(this.state.showAsClusters)
       }
