@@ -348,7 +348,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'reviewDuration',
     Header: props.intl.formatMessage(messages.reviewDurationLabel),
     accessor: 'reviewStartedAt',
-    sortable: true,
+    sortable: false,
     defaultSortDesc: true,
     exportable: t => t.reviewStartedAt,
     maxWidth: 120,
