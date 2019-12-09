@@ -10,8 +10,10 @@ import _find from 'lodash/find'
 import _omit from 'lodash/omit'
 import _map from 'lodash/map'
 import _sortBy from 'lodash/sortBy'
+import _each from 'lodash/each'
 import { fetchProject,
-         fetchProjectActivity } from '../../../../services/Project/Project'
+         fetchProjectActivity,
+         fetchProjectsById } from '../../../../services/Project/Project'
 import { challengeDenormalizationSchema,
          fetchProjectChallenges,
          fetchProjectChallengeActions,
@@ -144,7 +146,22 @@ const WithCurrentProject = function(WrappedComponent, options={}) {
 
         if (options.includeChallenges) {
           const retrievals = []
-          retrievals.push(props.fetchProjectChallenges(projectId))
+          retrievals.push(props.fetchProjectChallenges(projectId).then(result => {
+            // If the current project is a virtual project then it's possible
+            // the child challenges have parent projects that haven't been
+            // fetched yet. We need to fetch those so we can show their names.
+            const missingProjects = []
+            _each(_get(result, 'entities.challenges'), (challenge) => {
+              if (!_isObject(challenge.parent)) {
+                if (!this.props.entities.projects[challenge.parent]) {
+                  missingProjects.push(challenge.parent)
+                }
+              }
+            })
+            if (missingProjects.length > 0) {
+              this.props.fetchProjectsById(missingProjects)
+            }
+          }))
 
           if (options.includeActivity) {
             // Used to display completion progress for each challenge
@@ -228,6 +245,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchProjectChallengeActions(projectId)),
   fetchProjectChallengeComments: projectId =>
     dispatch(fetchProjectChallengeComments(projectId)),
+  fetchProjectsById: projectIds =>
+    dispatch(fetchProjectsById(projectIds)),
   notManagerError: () => dispatch(addError(AppErrors.project.notManager)),
 })
 
