@@ -152,8 +152,8 @@ export default class MarkdownTemplate extends Component {
       // representation (and url-encode the substituted property value since
       // it's presumably being used in a URL)
       substituted = substituted.replace(
-        RegExp(`${encodeURIComponent('{{')}\\s*${encodeURIComponent(key)}\\s*${encodeURIComponent('}}')}`, "g"),
-        encodeURIComponent(safe)
+        RegExp(`${encodeURI('{{')}\\s*${encodeURI(key)}\\s*${encodeURI('}}')}`, "g"),
+        encodeURI(safe)
       )
     })
     return substituted
