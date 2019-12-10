@@ -49,6 +49,8 @@ export class ChallengeFilterSubnav extends Component {
             <CommandSearchBox
               {...this.props}
               placeholder={this.props.intl.formatMessage(messages.searchLabel)}
+              showSearchTypeFilter
+              setSearch={this.props.setSearch}
             />
           </div>
 

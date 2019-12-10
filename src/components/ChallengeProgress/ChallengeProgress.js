@@ -186,7 +186,7 @@ export class ChallengeProgress extends Component {
             <FormattedMessage
               {...messages.tasksRemaining}
               values={{taskCount: taskActions.available}}
-            />
+            /><span className="mr-pr-1" />
             {/* eslint-disable-next-line react/style-prop-object */}
             (<FormattedNumber style="percent"
                 value={taskActions.available/taskActions.total}

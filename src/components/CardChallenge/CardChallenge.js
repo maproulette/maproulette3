@@ -8,6 +8,7 @@ import parse from 'date-fns/parse'
 import _isUndefined from 'lodash/isUndefined'
 import _noop from 'lodash/noop'
 import _get from 'lodash/get'
+import _isObject from 'lodash/isObject'
 import { messagesByDifficulty }
        from '../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
@@ -20,6 +21,29 @@ import messages from './Messages'
 
 export class CardChallenge extends Component {
   render() {
+    const vpList = []
+
+    // If we are searching for a project name let's also surface matching
+    // virtual projects.
+    if (this.props.challenge.parent && this.props.projectQuery) {
+      const virtualParents = _get(this.props.challenge, 'virtualParents', [])
+      for (let i = 0; i < virtualParents.length; i++) {
+        const vp = virtualParents[i]
+        if (_isObject(vp) && vp.enabled && vp.id !== this.props.excludeProjectId) {
+          if (vp.displayName.toLowerCase().match(this.props.projectQuery.toLowerCase())) {
+            vpList.push(
+              <span key={vp.id}>
+                {vpList.length > 0 &&
+                  <span className="mr-mr-1 mr-text-grey-light mr-text-xs">,</span>}
+                <span className="mr-text-grey-light mr-text-xs">{vp.displayName}</span>
+              </span>
+            )
+          }
+        }
+      }
+    }
+
+
     return (
       <article
         ref={node => this.node = node}
@@ -37,13 +61,22 @@ export class CardChallenge extends Component {
             </h3>
 
             {this.props.challenge.parent && // virtual challenges don't have projects
+             this.props.challenge.parent.id !== this.props.excludeProjectId &&
              <Link
                className="mr-card-challenge__owner"
                onClick={(e) => {e.stopPropagation()}}
-               to={`/project/${this.props.challenge.parent.id}/leaderboard`}
+               to={`/browse/projects/${this.props.challenge.parent.id}`}
              >
                {_get(this.props, 'challenge.parent.displayName')}
              </Link>
+            }
+            {vpList.length > 0 &&
+              <div className="mr-mt-2 mr-leading-none">
+                <span className="mr-mr-1 mr-text-yellow mr-text-xs">
+                  <FormattedMessage {...messages.vpListLabel} />
+                </span>
+                {vpList}
+              </div>
             }
           </div>
         </header>
