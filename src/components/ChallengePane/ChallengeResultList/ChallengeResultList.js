@@ -4,6 +4,7 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _findIndex from 'lodash/findIndex'
 import _isObject from 'lodash/isObject'
+import _sumBy from 'lodash/sumBy'
 import { FormattedMessage } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
@@ -13,6 +14,17 @@ import PageResultsButton from './PageResultsButton'
 import StartVirtualChallenge from './StartVirtualChallenge'
 import messages from './Messages'
 import './ChallengeResultList.scss'
+
+/**
+ * Returns the maximum allowed tasks when creating a virtual challenge.
+ * Uses the REACT_APP_VIRTUAL_CHALLENGE_MAX_TASKS
+ * .env setting or a system default if that hasn't been set.
+ *
+ */
+export const maxAllowedVCTasks = function() {
+  return _get(process.env, 'REACT_APP_VIRTUAL_CHALLENGE_MAX_TASKS',
+              10000) // tasks
+}
 
 /**
  * ChallengeResultList applies the current challenge filters and the given
@@ -52,18 +64,32 @@ export class ChallengeResultList extends Component {
     // challenge), offer the user an option to start a virtual challenge to
     // work on those mapped tasks.
     let virtualChallengeOption = null
-    if (
-      _get(this.props, 'mapBoundedTasks.tasks.length', 0) > 0 &&
-      !_isObject(this.props.browsedChallenge)
-    ) {
-      virtualChallengeOption = (
-        <StartVirtualChallenge
-          {...this.props}
-          taskCount={this.props.mapBoundedTasks.tasks.length}
-          createVirtualChallenge={this.props.startMapBoundedTasks}
-          creatingVirtualChallenge={this.props.creatingVirtualChallenge}
-        />
-      )
+    if (!_isObject(this.props.browsedChallenge)) {
+      if (_get(this.props, 'mapBoundedTasks.tasks.length', 0) > 0)
+      {
+        virtualChallengeOption = (
+          <StartVirtualChallenge
+            {...this.props}
+            taskCount={this.props.mapBoundedTasks.tasks.length}
+            createVirtualChallenge={this.props.startMapBoundedTasks}
+            creatingVirtualChallenge={this.props.creatingVirtualChallenge}
+          />
+        )
+      }
+      else if (_get(this.props, 'mapBoundedTaskClusters.clusters.length')) {
+        const taskCount = _sumBy(this.props.mapBoundedTaskClusters.clusters,
+                                'numberOfPoints')
+        if (taskCount > 0 && taskCount < maxAllowedVCTasks()) {
+          virtualChallengeOption = (
+            <StartVirtualChallenge
+              {...this.props}
+              taskCount={taskCount}
+              createVirtualChallenge={this.props.startMapBoundedTasks}
+              creatingVirtualChallenge={this.props.creatingVirtualChallenge}
+            />
+          )
+        }
+      }
     }
 
     let results = null
