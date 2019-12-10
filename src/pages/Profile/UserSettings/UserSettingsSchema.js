@@ -82,7 +82,7 @@ export const jsSchema = (intl, user, editor) => {
         title: intl.formatMessage(messages.notificationSubscriptionsLabel),
         type: "array",
         items: _map(NotificationType, (type, name) => ({
-          title: `${localizedNotificationLabels[name]} ${intl.formatMessage(messages.notificationLabel)}`,
+          title: `${localizedNotificationLabels[`${name}Long`] || localizedNotificationLabels[name]} ${intl.formatMessage(messages.notificationLabel)}`,
           type: "number",
           enum: _values(SubscriptionType),
           enumNames: _map(SubscriptionType, (value, key) => localizedSubscriptionLabels[key]),

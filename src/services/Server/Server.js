@@ -144,7 +144,7 @@ export const sendContent = function(method, url, jsonBody, formData, normalizati
           resolve(jsonData)
         }
       }).catch(error => reject(error))
-    })
+    }).catch(error => reject(error))
   })
 }
 

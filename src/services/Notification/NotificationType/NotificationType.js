@@ -9,6 +9,7 @@ export const NOTIFICATION_TYPE_MENTION = 1
 export const NOTIFICATION_TYPE_REVIEW_APPROVED = 2
 export const NOTIFICATION_TYPE_REVIEW_REJECTED = 3
 export const NOTIFICATION_TYPE_REVIEW_AGAIN = 4
+export const NOTIFICATION_TYPE_CHALLENGE_COMPLETED = 5
 
 export const NotificationType = Object.freeze({
   system: NOTIFICATION_TYPE_SYSTEM,
@@ -16,6 +17,7 @@ export const NotificationType = Object.freeze({
   reviewApproved: NOTIFICATION_TYPE_REVIEW_APPROVED,
   reviewRejected: NOTIFICATION_TYPE_REVIEW_REJECTED,
   reviewAgain: NOTIFICATION_TYPE_REVIEW_AGAIN,
+  challengeCompleted: NOTIFICATION_TYPE_CHALLENGE_COMPLETED,
 })
 
 export const keysByNotificationType = Object.freeze(_invert(NotificationType))
