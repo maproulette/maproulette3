@@ -146,6 +146,15 @@ export default class MarkdownTemplate extends Component {
       }
 
       substituted = substituted.replace(RegExp(`{{\\s*${key}\\s*}}`, "g"), safe)
+
+      // If mustache tags appear in a markdown link, the markdown parser will
+      // url-encode them, so do an additional substitution on an url-encoded
+      // representation (and url-encode the substituted property value since
+      // it's presumably being used in a URL)
+      substituted = substituted.replace(
+        RegExp(`${encodeURIComponent('{{')}\\s*${encodeURIComponent(key)}\\s*${encodeURIComponent('}}')}`, "g"),
+        encodeURIComponent(safe)
+      )
     })
     return substituted
   }
