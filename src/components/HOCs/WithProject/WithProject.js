@@ -7,6 +7,8 @@ import _isObject from 'lodash/isObject'
 import _values from 'lodash/values'
 import _filter from 'lodash/filter'
 import _find from 'lodash/find'
+import { isUsableChallengeStatus }
+       from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { fetchProject } from '../../../services/Project/Project'
 import { fetchProjectChallenges,
          fetchProjectChallengeActions }
@@ -33,7 +35,8 @@ const WithProject = function(WrappedComponent, options={}) {
       challengeProjects = (projectId, props) => {
         const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
         return _filter(allChallenges, (challenge) => {
-                        return (challenge.parent === projectId && challenge.enabled) ||
+                        return (challenge.parent === projectId && challenge.enabled &&
+                                isUsableChallengeStatus(challenge.status)) ||
                           _find(challenge.virtualParents, (vp) => {
                             return (_isObject(vp) ? vp.id === projectId : vp === projectId)
                           })
