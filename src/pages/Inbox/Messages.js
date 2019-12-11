@@ -99,6 +99,11 @@ export default defineMessages({
     defaultMessage: "The mapper has revised their work and is requesting an additional review.",
   },
 
+  challengeCompleteNotificationLead: {
+    id: "Inbox.challengeCompleteNotification.lead",
+    defaultMessage: "A challenge you manage has been completed.",
+  },
+
   deleteNotificationLabel: {
     id: "Inbox.notification.controls.deleteNotification.label",
     defaultMessage: "Delete",
@@ -107,5 +112,10 @@ export default defineMessages({
   viewTaskLabel: {
     id: "Inbox.notification.controls.viewTask.label",
     defaultMessage: "View Task",
+  },
+
+  manageChallengeLabel: {
+    id: "Inbox.notification.controls.manageChallenge.label",
+    defaultMessage: "Manage Challenge",
   },
 })

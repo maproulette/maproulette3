@@ -28,6 +28,8 @@ class Notification extends Component {
       case NotificationType.reviewRejected:
       case NotificationType.reviewAgain:
         return <ReviewBody notification={notification} />
+      case NotificationType.challengeCompleted:
+        return <ChallengeCompletionBody notification={notification} />
       default:
         return null
     }
@@ -155,6 +157,20 @@ const ReviewBody = function(props) {
   )
 }
 
+const ChallengeCompletionBody = function(props) {
+  return (
+    <React.Fragment>
+      <p className="mr-mb-8 mr-text-base">
+        <FormattedMessage {...messages.challengeCompleteNotificationLead} />
+      </p>
+
+      <p className="mr-text-md mr-text-yellow">{props.notification.description}</p>
+
+      <ViewChallengeAdmin notification={props.notification} />
+    </React.Fragment>
+  )
+}
+
 const AttachedComment = function(props) {
   if (_isEmpty(props.notification.extra)) {
     return null
@@ -185,6 +201,24 @@ const ViewTask = function(props) {
               state: {fromInbox: true}
             }}>
         <FormattedMessage {...messages.viewTaskLabel} />
+      </Link>
+    </div>
+  )
+}
+
+const ViewChallengeAdmin = function(props) {
+  if (!_isFinite(props.notification.challengeId) ||
+      !_isFinite(props.notification.projectId)) {
+    return null
+  }
+
+  return (
+    <div className="mr-mt-8">
+      <Link to={{
+        pathname: `admin/project/${props.notification.projectId}/challenge/${props.notification.challengeId}`,
+        state: {fromInbox: true}
+      }}>
+        <FormattedMessage {...messages.manageChallengeLabel} />
       </Link>
     </div>
   )
