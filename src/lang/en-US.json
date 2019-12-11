@@ -213,7 +213,6 @@
   "Widgets.ChallengeListWidget.label": "Challenges",
   "Widgets.ChallengeListWidget.title": "Challenges",
   "Widgets.ChallengeListWidget.search.placeholder": "Search",
-  "Admin.manageProjectChallenges.controls.exportCSV.label": "Export CSV",
   "Widgets.ChallengeOverviewWidget.label": "Challenge Overview",
   "Widgets.ChallengeOverviewWidget.title": "Overview",
   "Widgets.ChallengeOverviewWidget.fields.creationDate.label": "Created:",
