@@ -21,6 +21,6 @@ export default defineMessages({
 
   vpListLabel: {
     id: "Challenge.fields.vpList.label",
-    defaultMessage: "Also included in:",
+    defaultMessage: "Also in matching virtual {count,plural, one{project} other{projects}}:"
   },
 })
