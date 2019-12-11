@@ -64,6 +64,7 @@ let colors = {
   'grey-leaflet': '#666',
   green: '#5B937A',
   'green-light': '#7EBC89',
+  'green-light-60': 'rgba(126, 188, 137, .6)',
   'green-lighter': '#91F3A2',
   'green-dark': '#4A7662',
   'green-dark-75': 'rgba(74, 118, 98, .75)',
