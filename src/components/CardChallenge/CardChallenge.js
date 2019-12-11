@@ -73,7 +73,8 @@ export class CardChallenge extends Component {
             {vpList.length > 0 &&
               <div className="mr-mt-2 mr-leading-none">
                 <span className="mr-mr-1 mr-text-yellow mr-text-xs">
-                  <FormattedMessage {...messages.vpListLabel} />
+                  <FormattedMessage {...messages.vpListLabel}
+                    values={{count:_get(vpList, 'length', 0)}} />
                 </span>
                 {vpList}
               </div>

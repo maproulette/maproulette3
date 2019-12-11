@@ -104,6 +104,15 @@ export const WithMapBoundedTasks = function(WrappedComponent,
           _map(tasks, 'id')
         ).catch(e => {}).then(() => this.setState({creatingVirtualChallenge: false}))
       }
+      else {
+        this.setState({creatingVirtualChallenge: true})
+
+        this.props.startBoundedTasks(
+          name,
+          null,
+          this.props.mapBoundedTaskClusters.clusters
+        ).catch(e => {}).then(() => this.setState({creatingVirtualChallenge: false}))
+      }
     }
 
     render() {
@@ -123,9 +132,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  startBoundedTasks: (name, taskIds) => {
+  startBoundedTasks: (name, taskIds, clusters) => {
     return dispatch(
-      createVirtualChallenge(name, taskIds)
+      createVirtualChallenge(name, taskIds, null, clusters)
     ).then(virtualChallenge => {
       dispatch(
         loadRandomTaskFromVirtualChallenge(virtualChallenge.id)
