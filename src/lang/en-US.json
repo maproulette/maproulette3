@@ -15,6 +15,7 @@
   "Admin.ChallengeAnalysisTable.controls.cloneChallenge.label": "Clone",
   "Admin.ChallengeAnalysisTable.controls.showStatusColumns.label": "Include status columns",
   "ChallengeCard.totalTasks": "Total Tasks",
+  "ChallengeCard.controls.visibilityToggle.tooltip": "Toggle challenge visibility",
   "Admin.Challenge.controls.start.label": "Start Challenge",
   "Admin.Challenge.controls.edit.label": "Edit Challenge",
   "Admin.Challenge.controls.move.label": "Move Challenge",
