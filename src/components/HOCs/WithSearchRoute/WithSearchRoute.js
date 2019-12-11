@@ -7,6 +7,7 @@ import _debounce from 'lodash/debounce'
 import queryString from 'query-string'
 import { toLatLngBounds, fromLatLngBounds }
        from '../../../services/MapBounds/MapBounds'
+import { SEARCH_TYPE_PROJECT } from '../../SearchTypeFilter/SearchTypeFilter'
 
 /**
  * WithSearchRoute adds functionality to WithSearch to add/remove values to the URL route
@@ -31,6 +32,7 @@ export const WithSearchRoute = function(WrappedComponent, searchGroup) {
        difficulty: param => this.props.setSearchFilters({difficulty: parseInt(param, 10)}),
        keywords: param => this.props.setKeywordFilter(param.split(',')),
        location: param => this.props.setSearchFilters({location: param}),
+       project: param => this.props.setSearchFilters({project: param, searchType: SEARCH_TYPE_PROJECT}),
        query: param => this.props.setSearch(param),
        challengeSearch: param => this.props.setChallengeSearchMapBounds(toLatLngBounds(param), true)
     }

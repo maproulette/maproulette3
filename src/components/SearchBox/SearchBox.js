@@ -39,12 +39,6 @@ export default class SearchBox extends Component {
     this.props.setSearch(e.target.value, this.getSearchType(this.props))
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.getSearchType(prevProps) !== this.getSearchType(this.props)) {
-      this.props.setSearch(this.getQuery(this.props), this.getSearchType(this.props))
-    }
-  }
-
   getSearchType(props) {
     return _get(props, 'searchFilters.searchType')
   }
