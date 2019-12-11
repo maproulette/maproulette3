@@ -46,7 +46,9 @@ const WithCommandInterpreter = function(WrappedComponent) {
     clearSearch = () => {
       // Temporary: until we add an Advanced Search dialog where a user can
       // clear a project search filter, we need to do it explicitly here
+      this.props.removeSearchFilters(['query'])
       this.props.removeSearchFilters(['project'])
+      this.props.removeSearchFilters(['searchType'])
 
       this.props.clearSearch()
       this.setState({commandString: null, searchType: null, searchActive: true})
@@ -55,6 +57,21 @@ const WithCommandInterpreter = function(WrappedComponent) {
     deactivate = () => {
       executeCommand(this.props, this.state.commandString, this.state.searchType,
                      (loading) => this.setState({mapLoading: loading}), true)
+    }
+
+    componentDidUpdate(prevProps) {
+      if (_get(prevProps, 'searchQuery.filters.searchType') !==
+            _get(this.props, 'searchQuery.filters.searchType')) {
+        // Happens when clearing filters, we are no longer searching projects
+        if (this.state.commandString) {
+          this.setState({commandString: null, searchType: null})
+        }
+        else {
+          // Happens when project query is on url route
+          this.setState({commandString: _get(this.props, 'searchQuery.filters.project'),
+                         searchType: _get(this.props, 'searchQuery.filters.searchType')})
+        }
+      }
     }
 
     render() {

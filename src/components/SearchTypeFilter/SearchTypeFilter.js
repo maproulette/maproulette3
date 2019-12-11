@@ -17,6 +17,7 @@ export const SEARCH_TYPE_CHALLENGE = "challenges"
  */
 export class SearchTypeFilter extends Component {
   updateFilter = (value, closeDropdown) => {
+    this.props.clearSearch()
     this.props.setSearchFilters({searchType: value})
     closeDropdown()
   }
