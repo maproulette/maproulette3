@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import AsManageableChallenge
        from '../../../../interactions/Challenge/AsManageableChallenge'
+import WithChallengeManagement
+       from '../../HOCs/WithChallengeManagement/WithChallengeManagement'
 import ChallengeProgressBorder
        from '../ChallengeProgressBorder/ChallengeProgressBorder'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
@@ -27,20 +29,14 @@ export default class ChallengeCard extends Component {
       return null
     }
 
-    const challengeIcon =
-      AsManageableChallenge(this.props.challenge).isComplete() ?
-      "check-circled-icon" :
-      (this.props.challenge.enabled ? 'visible-icon' : 'hidden-icon')
+    const ChallengeIcon = AsManageableChallenge(this.props.challenge).isComplete() ?
+                          CompleteIcon : VisibilityIcon
 
     return (
       <div className='item-entry mr-pt-4' key={this.props.challenge.id}>
         <div className='columns challenge-list-item mr-items-center'>
           <div className='column is-narrow mr-mr-2'>
-            <SvgSymbol
-              className="mr-fill-grey-light mr-h-6 mr-align-middle"
-              viewBox='0 0 20 20'
-              sym={challengeIcon}
-            />
+            <ChallengeIcon {...this.props} />
           </div>
 
           <div ref={this.nameRef} className='column challenge-name mr-border-grey-lighter mr-border-b-2 mr-relative mr-pl-0'>
@@ -92,6 +88,36 @@ export default class ChallengeCard extends Component {
     )
   }
 }
+
+const CompleteIcon = function(props) {
+  return (
+    <SvgSymbol
+      className="mr-fill-grey-light mr-h-6 mr-align-middle"
+      viewBox='0 0 20 20'
+      sym="check-circled-icon"
+    />
+  )
+}
+
+const VisibilityIcon = WithChallengeManagement(injectIntl(function(props) {
+  const isVisible = props.challenge.enabled
+  return (
+    <span
+      className={classNames(
+        "mr-text-grey-light mr-transition",
+        isVisible ? "hover:mr-text-green-light" : "hover:mr-text-green-light-60"
+      )}
+    >
+      <SvgSymbol
+        className="mr-fill-current mr-h-6 mr-align-middle mr-cursor-pointer"
+        viewBox='0 0 20 20'
+        sym={isVisible ? 'visible-icon' : 'hidden-icon'}
+        onClick={() => props.updateEnabled(props.challenge.id, !isVisible)}
+        title={props.intl.formatMessage(messages.visibilityToogleTooltip)}
+      />
+    </span>
+  )
+}))
 
 ChallengeCard.propTypes = {
   challenge: PropTypes.object.isRequired,

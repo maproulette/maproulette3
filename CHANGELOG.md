@@ -7,7 +7,25 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.5] - 2019-12-06
+## [v3.5.1] - 2019-12-06
+### Added
+- Creation of virtual challenges from task clusters
+- Easier access to searching for challenges by project name
+- Display of matching virtual projects for project-name searches
+- New landing page for projects that lists their challenges (#1020)
+- Notifications of challenge completion for challenge managers
+- Challenge visibility quick-toggle from project management
+
+### Fixed
+- Sorting of task-review columns from challenge management page
+- Failure to substitute task properties included in markdown links
+- Missing challenge parents when viewing a virtual project
+- Failure to filter by task properties containing a colon (#1004)
+- Failure to reprioritize all tasks in some challenges (#999)
+- Erratic map cluster behavior due to tasks with empty geometry
+
+
+## [v3.5.0] - 2019-12-06
 ### Added
 - Task browsing at much lower zoom levels on Find Challenges page
 - Overlay on Find Challenges map with "Near Me" option and nominatum search

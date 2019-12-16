@@ -5,6 +5,7 @@ import _isFunction from 'lodash/isFunction'
 import _get from 'lodash/get'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
+import SearchTypeFilter from '../SearchTypeFilter/SearchTypeFilter'
 import './SearchBox.scss'
 
 /**
@@ -35,11 +36,21 @@ export default class SearchBox extends Component {
    * @private
    */
   queryChanged = (e) => {
-    this.props.setSearch(e.target.value)
+    this.props.setSearch(e.target.value, this.getSearchType(this.props))
+  }
+
+  getSearchType(props) {
+    return _get(props, 'searchFilters.searchType')
+  }
+
+  getQuery(props) {
+    return (props.searchGroup ?
+        _get(props, `searchQueries.${props.searchGroup}.searchQuery.query`) :
+        _get(props, 'searchQuery.query')) || ''
   }
 
   render() {
-    const query = (this.props.searchGroup ? 
+    const query = (this.props.searchGroup ?
       _get(this.props, `searchQueries.${this.props.searchGroup}.searchQuery.query`) :
       _get(this.props, 'searchQuery.query')) || ''
     const isLoading = _get(this.props, 'searchQuery.meta.fetchingResults')
@@ -95,6 +106,9 @@ export default class SearchBox extends Component {
 
         {doneButton}
         {clearButton}
+        {this.props.showSearchTypeFilter &&
+          <SearchTypeFilter {...this.props} />
+        }
       </div>
     )
   }

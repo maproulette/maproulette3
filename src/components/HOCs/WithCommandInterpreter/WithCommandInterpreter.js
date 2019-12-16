@@ -10,6 +10,7 @@ import _debounce from 'lodash/debounce'
 import { fetchPlaceLocation } from '../../../services/Place/Place'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
+import { SEARCH_TYPE_PROJECT } from '../../SearchTypeFilter/SearchTypeFilter'
 
 /**
  * WithCommandInterpreter interprets search strings to
@@ -31,27 +32,46 @@ const WithCommandInterpreter = function(WrappedComponent) {
       mapLoading: false,
     }
 
-    executeSearch = commandString => {
+    executeSearch = (commandString, searchType) => {
       // executeCommmand either runs the command or runs a standard challenge
       // search. It returns true if it ran a search, false if it ran a command
-      const wasStandardSearch = executeCommand(this.props, commandString, false, false)
+      const wasStandardSearch = executeCommand(this.props, commandString, searchType, false, false)
       this.setState({
         commandString: wasStandardSearch ? null : commandString,
+        searchType: searchType,
         searchActive: wasStandardSearch,
       })
     }
 
-    clearSearch = commandString => {
+    clearSearch = () => {
       // Temporary: until we add an Advanced Search dialog where a user can
       // clear a project search filter, we need to do it explicitly here
+      this.props.removeSearchFilters(['query'])
       this.props.removeSearchFilters(['project'])
+      this.props.removeSearchFilters(['searchType'])
 
       this.props.clearSearch()
-      this.setState({commandString: null, searchActive: true})
+      this.setState({commandString: null, searchType: null, searchActive: true})
     }
 
     deactivate = () => {
-      executeCommand(this.props, this.state.commandString, (loading) => this.setState({mapLoading: loading}), true)
+      executeCommand(this.props, this.state.commandString, this.state.searchType,
+                     (loading) => this.setState({mapLoading: loading}), true)
+    }
+
+    componentDidUpdate(prevProps) {
+      if (_get(prevProps, 'searchQuery.filters.searchType') !==
+            _get(this.props, 'searchQuery.filters.searchType')) {
+        // Happens when clearing filters, we are no longer searching projects
+        if (this.state.commandString) {
+          this.setState({commandString: null, searchType: null})
+        }
+        else {
+          // Happens when project query is on url route
+          this.setState({commandString: _get(this.props, 'searchQuery.filters.project'),
+                         searchType: _get(this.props, 'searchQuery.filters.searchType')})
+        }
+      }
     }
 
     render() {
@@ -81,7 +101,12 @@ const WithCommandInterpreter = function(WrappedComponent) {
  *
  * @return boolean - Whether this was a typical search or a command search
  */
-export const executeCommand = (props, commandString, setLoading, isComplete=false) => {
+export const executeCommand = (props, commandString, searchType, setLoading, isComplete=false) => {
+  if (searchType === SEARCH_TYPE_PROJECT) {
+    props.setSearchFilters({project: commandString})
+    return false
+  }
+
   const command = commandString && commandString.length >= 2 ? commandString.substring(0, 2) : null
   let query = commandString ? commandString.substring(2) : commandString
 
