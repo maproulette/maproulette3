@@ -59,14 +59,34 @@ export default defineMessages({
     defaultMessage: "Total: {countShown}"
   },
 
+  configureColumnsLabel: {
+    id: "Review.TaskAnalysisTable.configureColumns",
+    defaultMessage: "Configure columns"
+  },
+
   actionsColumnHeader: {
     id: "Review.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
-  commentsColumnHeader: {
+  viewCommentsLabel: {
     id: "Review.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
+  },
+
+  mapperControlsLabel: {
+    id: "Review.TaskAnalysisTable.mapperControls.label",
+    defaultMessage: "Actions",
+  },
+
+  reviewerControlsLabel: {
+    id: "Review.TaskAnalysisTable.reviewerControls.label",
+    defaultMessage: "Actions",
+  },
+
+  reviewCompleteControlsLabel: {
+    id: "Review.TaskAnalysisTable.reviewCompleteControls.label",
+    defaultMessage: "Actions",
   },
 
   idLabel: {
@@ -84,7 +104,7 @@ export default defineMessages({
     defaultMessage: "Review Status",
   },
 
-  mappedByLabel: {
+  reviewRequestedByLabel: {
     id: "Review.fields.requestedBy.label",
     defaultMessage: "Mapper",
   },
