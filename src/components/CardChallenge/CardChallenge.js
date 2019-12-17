@@ -35,7 +35,14 @@ export class CardChallenge extends Component {
               <span key={vp.id}>
                 {vpList.length > 0 &&
                   <span className="mr-mr-1 mr-text-grey-light mr-text-xs">,</span>}
-                <span className="mr-text-grey-light mr-text-xs">{vp.displayName}</span>
+                <span className="mr-text-grey-light mr-text-xs">
+                  <Link className="hover:mr-text-white"
+                    onClick={(e) => {e.stopPropagation()}}
+                    to={`/browse/projects/${vp.id}`}
+                  >
+                    {vp.displayName}
+                  </Link>
+                </span>
               </span>
             )
           }
