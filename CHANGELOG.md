@@ -7,7 +7,12 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.5.1] - 2019-12-06
+## [v3.5.2] - 2019-12-18
+### Fixed
+- Inability to edit tasks that use non-string OSM id property values
+
+
+## [v3.5.1] - 2019-12-16
 ### Added
 - Creation of virtual challenges from task clusters
 - Easier access to searching for challenges by project name
