@@ -1,4 +1,5 @@
 import _find from 'lodash/find'
+import _isUndefined from 'lodash/isUndefined'
 
 /**
  * The names of feature and property fields that may be used to identify a
@@ -55,17 +56,14 @@ export class AsIdentifiableFeature {
   }
 
   isValidId(id) {
-    if (!id) {
+    if (_isUndefined(id)) {
       return false
     }
 
     // Ids that are only numeric or start with node/way/relation (eg. 'node/12345')
     // or start with just a character n/r/w (eg. 'n12345')
-    if (id.match(/^(node|way|relation|n|r|w)?\/?\d+$/)) {
-      return true
-    }
-
-    return false
+    const re = new RegExp(/^(node|way|relation|n|r|w)?\/?\d+$/)
+    return !!re.exec(id)
   }
 }
 
