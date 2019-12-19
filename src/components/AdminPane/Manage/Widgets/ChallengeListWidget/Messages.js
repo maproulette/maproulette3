@@ -18,4 +18,9 @@ export default defineMessages({
     id: "Widgets.ChallengeListWidget.search.placeholder",
     defaultMessage: "Search",
   },
+
+  exportCSVLabel: {
+    id: "Admin.manageProjectChallenges.controls.exportCSV.label",
+    defaultMessage: "Export CSV",
+  },
 })
