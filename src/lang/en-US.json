@@ -291,6 +291,8 @@
   "Challenge.signIn.label": "Sign in to get started",
   "Challenge.results.heading": "Challenges",
   "Challenge.results.noResults": "No Results",
+  "VirtualChallenge.controls.tooMany.label": "Zoom in to work on mapped tasks",
+  "VirtualChallenge.controls.tooMany.tooltip": "At most {maxTasks, number} tasks can be included in a \"virtual\" challenge",
   "VirtualChallenge.controls.create.label": "Work on {taskCount, number} Mapped Tasks",
   "VirtualChallenge.fields.name.label": "Name your \"virtual\" challenge",
   "Challenge.controls.loadMore.label": "More Results",

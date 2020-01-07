@@ -5,7 +5,7 @@ import _map from 'lodash/map'
 import _findIndex from 'lodash/findIndex'
 import _isObject from 'lodash/isObject'
 import _sumBy from 'lodash/sumBy'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithPagedChallenges from '../../HOCs/WithPagedChallenges/WithPagedChallenges'
@@ -79,15 +79,31 @@ export class ChallengeResultList extends Component {
       else if (_get(this.props, 'mapBoundedTaskClusters.clusters.length')) {
         const taskCount = _sumBy(this.props.mapBoundedTaskClusters.clusters,
                                 'numberOfPoints')
-        if (taskCount > 0 && taskCount < maxAllowedVCTasks()) {
-          virtualChallengeOption = (
-            <StartVirtualChallenge
-              {...this.props}
-              taskCount={taskCount}
-              createVirtualChallenge={this.props.startMapBoundedTasks}
-              creatingVirtualChallenge={this.props.creatingVirtualChallenge}
-            />
-          )
+        if (taskCount > 0) {
+          if (taskCount < maxAllowedVCTasks()) {
+            virtualChallengeOption = (
+              <StartVirtualChallenge
+                {...this.props}
+                taskCount={taskCount}
+                createVirtualChallenge={this.props.startMapBoundedTasks}
+                creatingVirtualChallenge={this.props.creatingVirtualChallenge}
+              />
+            )
+          }
+          else {
+            virtualChallengeOption = (
+              <button
+                disabled
+                className="mr-button mr-button--disabled mr-w-full mr-mb-4"
+                title={
+                  this.props.intl.formatMessage(messages.tooManyTasksTooltip,
+                                                {maxTasks: maxAllowedVCTasks()})
+                }
+              >
+                <FormattedMessage {...messages.tooManyTasksLabel} />
+              </button>
+            )
+          }
         }
       }
     }
@@ -150,6 +166,6 @@ ChallengeResultList.propTypes = {
 
 export default WithCurrentUser(
   WithSortedChallenges(
-    WithPagedChallenges(ChallengeResultList, 'challenges', 'pagedChallenges')
+    WithPagedChallenges(injectIntl(ChallengeResultList), 'challenges', 'pagedChallenges')
   )
 )

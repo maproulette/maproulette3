@@ -61,6 +61,7 @@ let colors = {
   'grey-light-more': '#D8D8D8',
   'grey-lighter': '#F2EFE9',
   'grey-lighter-10': 'rgba(242, 239, 233, .1)',
+  'grey-lighter-50': 'rgba(242, 239, 233, .5)',
   'grey-leaflet': '#666',
   green: '#5B937A',
   'green-light': '#7EBC89',
