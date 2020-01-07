@@ -12,8 +12,10 @@ import _set from 'lodash/set'
 import _debounce from 'lodash/debounce'
 import { fromLatLngBounds,
          boundsWithinAllowedMaxDegrees } from '../../../services/MapBounds/MapBounds'
-import { fetchTaskClusters } from '../../../services/Task/TaskClusters'
-import { fetchBoundedTasks } from '../../../services/Task/BoundedTask'
+import { fetchTaskClusters, clearTaskClusters }
+       from '../../../services/Task/TaskClusters'
+import { fetchBoundedTasks, clearBoundedTasks }
+       from '../../../services/Task/BoundedTask'
 import { maxAllowedDegrees } from '../WithMapBoundedTasks/WithMapBoundedTasks'
 
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
@@ -68,6 +70,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       if (!challengeId) {
         const bounds = _get(this.props.criteria, 'boundingBox')
         if (!bounds || !boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
+          this.props.clearTasksAndClusters()
           this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true,
                          mapZoomedOut: true})
           return
@@ -174,8 +177,16 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
   }
 }
 
-export const mapDispatchToProps =
-  dispatch => bindActionCreators({ fetchTaskClusters, fetchBoundedTasks }, dispatch)
+export const mapDispatchToProps = dispatch => Object.assign(
+  {},
+  bindActionCreators({ fetchTaskClusters, fetchBoundedTasks }, dispatch),
+  {
+    clearTasksAndClusters: () => {
+      dispatch(clearBoundedTasks())
+      dispatch(clearTaskClusters())
+    }
+  }
+)
 
 export default (WrappedComponent, storeTasks) =>
   connect(null, mapDispatchToProps)(WithChallengeTaskClusters(WrappedComponent, storeTasks))
