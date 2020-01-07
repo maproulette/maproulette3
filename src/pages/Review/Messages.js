@@ -21,6 +21,6 @@ export default defineMessages({
 
   allReviewedTasks: {
     id: "Review.Dashboard.allReviewedTasks",
-    defaultMessage: "All Reviewed Tasks",
+    defaultMessage: "All Review-related Tasks",
   },
 })

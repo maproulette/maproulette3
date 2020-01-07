@@ -205,7 +205,7 @@ This project adheres to
 - Notification threading/grouping by task in inbox
 - Export and import of widget workspace layouts
 - Keyboard navigation to task-completion confirmation step
-- Additional task-review tab for All Reviewed Tasks
+- Additional task-review tab for All Review-related Tasks
 - Basic project-name search for mappers
 - Automatically remove newly-excluded widgets from existing workspaces
 - Explanatory message when user has skipped all remaining tasks in challenge
