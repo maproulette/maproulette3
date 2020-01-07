@@ -62,6 +62,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
       return null
     }
 
+    let includeGeometries = (limit <= 100)
     const page = _get(criteria, 'page', 0)
     const sortBy = _get(criteria, 'sortCriteria.sortBy')
     const direction = (_get(criteria, 'sortCriteria.direction') || 'ASC').toUpperCase()
@@ -73,6 +74,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
 
     // If we don't have a challenge Id then we need to do some limiting.
     if (!filters.challengeId) {
+      includeGeometries = false
       const onlyEnabled = _isUndefined(criteria.onlyEnabled) ?
                               true : criteria.onlyEnabled
       const challengeStatus = criteria.challengeStatus
@@ -110,7 +112,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
           top: normalizedBounds.getNorth(),
         },
         params: {limit, page: (page * limit), sort: sortBy, order: direction,
-                 includeTotal: true, excludeLocked, ...searchParameters},
+                 includeTotal: true, excludeLocked, ...searchParameters, includeGeometries},
       }
     ).execute().then(normalizedResults => {
       const totalCount = normalizedResults.result.total

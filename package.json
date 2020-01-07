@@ -42,6 +42,7 @@
     "query-string": "^5.1.0",
     "react": "^16.8.0",
     "react-animate-height": "^2.0.7",
+    "react-beautiful-dnd": "^12.2.0",
     "react-burger-menu": "^2.4.4",
     "react-calendar-heatmap": "^1.6.3",
     "react-clickout": "^3.0.8",

@@ -17,6 +17,8 @@ import _debounce from 'lodash/debounce'
 import _each from 'lodash/each'
 import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
+import _keys from 'lodash/keys'
+import _concat from 'lodash/concat'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -30,10 +32,13 @@ import { messagesByPriority }
 import { mapColors } from '../../interactions/User/AsEndUser'
 import AsManager from '../../interactions/User/AsManager'
 import WithLoadedTask from '../HOCs/WithLoadedTask/WithLoadedTask'
+import WithConfigurableColumns from '../HOCs/WithConfigurableColumns/WithConfigurableColumns'
 import ViewTask from '../ViewTask/ViewTask'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import TaskCommentsModal
        from '../../components/TaskCommentsModal/TaskCommentsModal'
+import ConfigureColumnsModal
+       from '../../components/ConfigureColumnsModal/ConfigureColumnsModal'
 import messages from './Messages'
 import 'react-table/react-table.css'
 import './TaskAnalysisTable.scss'
@@ -41,6 +46,15 @@ import TaskAnalysisTableHeader from './TaskAnalysisTableHeader'
 
 // Setup child components with necessary HOCs
 const ViewTaskSubComponent = WithLoadedTask(ViewTask)
+
+// columns
+const ALL_COLUMNS = {featureId:{}, id:{}, status:{}, priority:{},
+                 reviewStatus:{group:"review"}, reviewRequestedBy:{group:"review"},
+                 reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
+                 reviewDuration:{group:"review"}, controls:{permanent: true},
+                 comments:{}}
+
+const DEFAULT_COLUMNS = ["featureId", "id", "status", "priority", "controls", "comments"]
 
 /**
  * TaskAnalysisTable renders a table of tasks using react-table.  Rendering is
@@ -55,8 +69,8 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
  */
 export class TaskAnalysisTable extends Component {
   state = {
-    withReviewColumns: false,
     openComments: null,
+    showConfigureColumns: false,
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -74,28 +88,41 @@ export class TaskAnalysisTable extends Component {
                             boundingBox: this.props.boundingBox})
   }
 
-
-  toggleReviewColumns() {
-    this.setState({withReviewColumns: !this.state.withReviewColumns})
+  configureColumns() {
+    this.setState({showConfigureColumns: true})
   }
 
   getColumns = (manager, taskBaseRoute, data) => {
-    const columnTypes = setupColumnTypes(this.props, taskBaseRoute, manager, data, taskId => this.setState({openComments: taskId}))
+    const columnTypes = setupColumnTypes(this.props, taskBaseRoute, manager, data,
+                                         taskId => this.setState({openComments: taskId}))
 
     if (_isArray(this.props.showColumns) && this.props.showColumns.length > 0) {
       return _compact(_map(this.props.showColumns, columnId => columnTypes[columnId]))
     }
-    else if (this.state.withReviewColumns) {
-       return [columnTypes.selected, columnTypes.featureId, columnTypes.id,
-               columnTypes.status, columnTypes.priority, columnTypes.mappedOn,
-               columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-               columnTypes.reviewedBy, columnTypes.reviewedAt, columnTypes.reviewDuration,
-               columnTypes.controls, columnTypes.viewComments]
-    }
     else {
-      return [columnTypes.selected, columnTypes.featureId, columnTypes.id,
-              columnTypes.status, columnTypes.priority,
-              columnTypes.controls, columnTypes.viewComments]
+      const findColumn = (column) => {
+        if (column.startsWith(':')) {
+          const key = column.slice(1)
+          return {
+            id: key,
+            Header: key,
+            Cell: ({row}) => {
+              let valueToDisplay = ""
+              if (_get(row._original.geometries, 'features.length', 0) > 0) {
+                valueToDisplay = _get(row._original.geometries.features[0].properties, key)
+              }
+              return (
+                !row._original ? null : <div className="">{valueToDisplay}</div>
+              )
+            }
+          }
+        }
+        else {
+          return columnTypes[column]
+        }
+      }
+      return _concat([columnTypes.selected],
+              _map(_keys(this.props.addedColumns), findColumn))
     }
   }
 
@@ -151,8 +178,7 @@ export class TaskAnalysisTable extends Component {
            <header className="mr-mb-4">
              <TaskAnalysisTableHeader
                countShown={data.length}
-               withReviewColumns={this.state.withReviewColumns}
-               toggleReviewColumns={this.toggleReviewColumns.bind(this)}
+               configureColumns={this.configureColumns.bind(this)}
                {...this.props}
              />
            </header>
@@ -191,6 +217,12 @@ export class TaskAnalysisTable extends Component {
          <TaskCommentsModal
            taskId={this.state.openComments}
            onClose={() => this.setState({openComments: null})}
+         />
+        }
+        {this.state.showConfigureColumns &&
+         <ConfigureColumnsModal
+           {...this.props}
+           onClose={() => this.setState({showConfigureColumns: false})}
          />
         }
       </React.Fragment>
@@ -314,7 +346,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.reviewRequestedBy = {
     id: 'reviewRequestedBy',
-    Header: props.intl.formatMessage(messages.mappedByLabel),
+    Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
     accessor: 'reviewRequestedBy',
     sortable: true,
     exportable: t => _get(t.reviewRequestedBy, 'username') || t.reviewRequestedBy,
@@ -405,7 +437,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.controls = {
     id: 'controls',
-    Header: props.intl.formatMessage(messages.actionsColumnHeader),
+    Header: props.intl.formatMessage(messages.controlsLabel),
     sortable: false,
     minWidth: 150,
     Cell: ({row}) =>
@@ -429,9 +461,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       </div>
   }
 
-  columns.viewComments = {
+  columns.comments = {
     id: 'viewComments',
-    Header: () => <FormattedMessage {...messages.commentsColumnLabel} />,
+    Header: () => <FormattedMessage {...messages.commentsLabel} />,
     accessor: 'commentID',
     maxWidth: 110,
     sortable: false,
@@ -485,4 +517,11 @@ TaskAnalysisTable.propTypes = {
   toggleTaskSelection: PropTypes.func.isRequired,
 }
 
-export default injectIntl(TaskAnalysisTable)
+export default injectIntl(
+  WithConfigurableColumns(
+    TaskAnalysisTable,
+    ALL_COLUMNS,
+    DEFAULT_COLUMNS,
+    messages
+  )
+)

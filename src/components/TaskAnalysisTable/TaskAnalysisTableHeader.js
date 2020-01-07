@@ -45,7 +45,7 @@ export class TaskAnalysisTableHeader extends Component {
     }
 
     render() {
-        const {countShown, withReviewColumns, toggleReviewColumns} = this.props
+        const {countShown, configureColumns} = this.props
         const selectedCount = this.props.selectedTasks.size
         const totalTaskCount = _get(this.props, 'totalTaskCount') || countShown || 0
         const totalTasksInChallenge = _get(this.props, 'totalTasksInChallenge', 0)
@@ -230,10 +230,9 @@ export class TaskAnalysisTableHeader extends Component {
                                     </li>
                                 }
                                 <li>
-                                    <button className="mr-text-current" onClick={() => toggleReviewColumns()}>
-                                        {withReviewColumns ?
-                                          <FormattedMessage {...messages.hideReviewColumnsLabel} /> :
-                                          <FormattedMessage {...messages.showReviewColumnsLabel} />}
+                                    <button className="mr-text-current"
+                                            onClick={() => configureColumns()}>
+                                        <FormattedMessage {...messages.configureColumnsLabel} />
                                     </button>
                                 </li>
                             </ul>
@@ -273,8 +272,7 @@ export class TaskAnalysisTableHeader extends Component {
 
 TaskAnalysisTableHeader.propTypes = {
     countShown: PropTypes.number.isRequired,
-    withReviewColumns: PropTypes.bool.isRequired,
-    toggleReviewColumns: PropTypes.func.isRequired,
+    configureColumns: PropTypes.func.isRequired,
 }
 
 export default injectIntl(TaskAnalysisTableHeader)
