@@ -70,9 +70,9 @@ export default defineMessages({
     defaultMessage: "Start Review",
   },
 
-  stopReview: {
-    id: "Admin.TaskReview.controls.stopReview",
-    defaultMessage: "Cancel Review",
+  skipReview: {
+    id: "Admin.TaskReview.controls.skipReview",
+    defaultMessage: "Skip Review",
   },
 
   resubmit: {

@@ -9,7 +9,6 @@ import { TaskStatus, messagesByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewLoadMethod } from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { messagesByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
-import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
 import WithTaskTags from '../HOCs/WithTaskTags/WithTaskTags'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
 import WithKeyboardShortcuts from '../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
@@ -57,9 +56,11 @@ export class ReviewTaskControls extends Component {
     this.setState({reviewStatus, confirmingTask: true})
   }
 
-  /** Stop Reviewing (release claim) */
-  stopReviewing = () => {
-    this.props.stopReviewing(this.props.task, this.props.history)
+  /** Skip review of this task */
+  skipReview = () => {
+    this.props.skipTaskReview(this.props.task, this.state.loadBy,
+                              this.props.history, this.props.taskBundle)
+    this.setState({confirmingTask: false, comment: ""})
   }
 
   /** Start Reviewing (claim this task) */
@@ -187,8 +188,8 @@ export class ReviewTaskControls extends Component {
             <FormattedMessage {...messages.approvedWithFixes} />
           </button>
           <button className="mr-button mr-button--white"
-                  onClick={() => this.stopReviewing()}>
-            <FormattedMessage {...messages.stopReview} />
+                  onClick={() => this.skipReview()}>
+            <FormattedMessage {...messages.skipReview} />
           </button>
         </div>
 
@@ -222,10 +223,8 @@ ReviewTaskControls.propTypes = {
 export default
   WithSearch(
     WithTaskTags(
-      WithTaskReview(
-        WithEditor(
-          WithKeyboardShortcuts(ReviewTaskControls)
-        )
+      WithEditor(
+        WithKeyboardShortcuts(ReviewTaskControls)
       )
     ),
     'task'
