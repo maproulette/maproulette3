@@ -664,6 +664,7 @@ module.exports = {
     '112': '28rem',
     '115': '28.75rem',
     screen40: '40vh',
+    screen75: '75vh',
     screen80: '80vh',
     '1/3': '33%',
   },

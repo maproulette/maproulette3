@@ -16,4 +16,14 @@ export default defineMessages({
     id: "Task.property.searchType.contains",
     defaultMessage: "contains"
   },
+
+  and: {
+    id: "Task.property.operationType.and",
+    defaultMessage: "and"
+  },
+
+  or: {
+    id: "Task.property.operationType.or",
+    defaultMessage: "or"
+  },
 })
