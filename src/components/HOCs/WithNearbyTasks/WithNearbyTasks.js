@@ -81,7 +81,6 @@ export const WithNearbyTasks = function(WrappedComponent) {
     componentDidUpdate() {
       if (this.state.nearbyTasks && !this.state.nearbyTasks.loading &&
           this.props.taskId !== this.state.nearbyTasks.nearTaskId) {
-        console.log(this.state.nearbyTasks)
         this.updateNearbyTasks(this.props)
       }
     }
