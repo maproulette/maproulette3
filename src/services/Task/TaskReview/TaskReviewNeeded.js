@@ -1,8 +1,6 @@
 import _get from 'lodash/get'
-import _values from 'lodash/values'
-import _sortBy from 'lodash/sortBy'
-import _reverse from 'lodash/reverse'
 import _snakeCase from 'lodash/snakeCase'
+import _map from 'lodash/map'
 import { defaultRoutes as api } from '../../Server/Server'
 import Endpoint from '../../Server/Endpoint'
 import RequestStatus from '../../Server/RequestStatus'
@@ -54,13 +52,8 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
         params: {limit, sort, order, page: (page * limit), ...searchParameters},
       }
     ).execute().then(normalizedResults => {
-      var tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
-      if (sortBy) {
-        tasks = _sortBy(tasks, (t) => t[sortBy])
-        if (order === "DESC") {
-          tasks = _reverse(tasks)
-        }
-      }
+      const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})
+      const tasks = _map(normalizedResults.result.tasks, (id) => unsortedTaskMap[id])
       dispatch(receiveReviewNeededTasks(tasks, RequestStatus.success,
                                         normalizedResults.result.total))
       return tasks
