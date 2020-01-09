@@ -9,6 +9,11 @@ export default defineMessages({
     defaultMessage: "Search",
   },
 
+  clearButton: {
+    id: "TaskPropertyFilter.controls.clear",
+    defaultMessage: "Clear",
+  },
+
   noneOption: {
     id: "TaskPropertyFilter.options.none.label",
     defaultMessage: "None",
@@ -32,5 +37,45 @@ export default defineMessages({
   filterByReviewStatusLabel: {
     id: "TaskReviewStatusFilter.label",
     defaultMessage: "Filter by Review Status",
+  },
+
+  missingRightRule: {
+    id: "TaskPropertyFilter.error.missingRightRule",
+    defaultMessage: "When using a compound rule both parts must be specified.",
+  },
+
+  missingLeftRule: {
+    id: "TaskPropertyFilter.error.missingLeftRule",
+    defaultMessage: "When using a compound rule both parts must be specified.",
+  },
+
+  missingKey: {
+    id: "TaskPropertyFilter.error.missingKey",
+    defaultMessage: "Please select a property name.",
+  },
+
+  missingValue: {
+    id: "TaskPropertyFilter.error.missingValue",
+    defaultMessage: "You must enter a value.",
+  },
+
+  missingPropertyType: {
+    id: "TaskPropertyFilter.error.missingPropertyType",
+    defaultMessage: "Please choose a property type.",
+  },
+
+  stringType: {
+    id: "TaskPropertyFilter.propertyType.stringType",
+    defaultMessage: "string",
+  },
+
+  numberType: {
+    id: "TaskPropertyFilter.propertyType.numberType",
+    defaultMessage: "number",
+  },
+
+  compoundRuleType: {
+    id: "TaskPropertyFilter.propertyType.compoundRuleType",
+    defaultMessage: "compound rule",
   },
 })

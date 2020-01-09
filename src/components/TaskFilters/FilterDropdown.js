@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import _isFunction from 'lodash/isFunction'
 
 export default class FilterDropdown extends Component {
   render() {
@@ -22,9 +23,11 @@ export default class FilterDropdown extends Component {
             />
           </button>
         )}
-        dropdownContent={() =>
+        dropdownContent={dropdown =>
           <ul className="mr-list-dropdown">
-            {this.props.filters}
+            {_isFunction(this.props.filters) ? 
+              this.props.filters(dropdown) : this.props.filters
+            }
           </ul>
         }
       />

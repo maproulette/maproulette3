@@ -70,10 +70,11 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25) {
       searchParameters.ce = onlyEnabled ? 'true' : 'false'
       searchParameters.pe = onlyEnabled ? 'true' : 'false'
     }
-
+    
     return new Endpoint(
       api.challenge.taskClusters, {
         params: {points, ...searchParameters},
+        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute()
     .then(results => {

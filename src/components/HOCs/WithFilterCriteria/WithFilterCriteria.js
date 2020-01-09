@@ -52,16 +52,15 @@ export const WithFilterCriteria = function(WrappedComponent) {
        }
      }
 
-     updateTaskPropertyCriteria = (propertyKey, propertyValue, searchType) => {
+     updateTaskPropertyCriteria = (propertySearch) => {
        const criteria = _cloneDeep(this.state.criteria)
-       criteria.filters.taskProperty = {[propertyKey]: propertyValue}
-       criteria.filters.taskPropertySearchType = searchType
+       criteria.filters.taskPropertySearch = propertySearch
        this.setState({criteria})
      }
 
      clearTaskPropertyCriteria = () => {
        const criteria = _cloneDeep(this.state.criteria)
-       criteria.filters.taskProperty = null
+       criteria.filters.taskPropertySearch = null
        this.setState({criteria})
      }
 

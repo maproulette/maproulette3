@@ -162,16 +162,6 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
 
-  if (filters.taskProperty) {
-    searchParameters.tProps =
-      _map(filters.taskProperty,
-           (value, key) => `${btoa(key)}:${btoa(value)}`).join(',')
-
-    if (filters.taskPropertySearchType) {
-      searchParameters.tPropsSearchType = filters.taskPropertySearchType
-    }
-  }
-
   if (_isFinite(filters.difficulty)) {
     searchParameters.cd = filters.difficulty
   }
