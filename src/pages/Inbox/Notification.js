@@ -164,7 +164,7 @@ const ChallengeCompletionBody = function(props) {
         <FormattedMessage {...messages.challengeCompleteNotificationLead} />
       </p>
 
-      <p className="mr-text-md mr-text-yellow">{props.notification.description}</p>
+      <p className="mr-text-md mr-text-yellow">{props.notification.extra}</p>
 
       <ViewChallengeAdmin notification={props.notification} />
     </React.Fragment>
