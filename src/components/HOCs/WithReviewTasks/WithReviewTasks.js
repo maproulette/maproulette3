@@ -17,7 +17,7 @@ import { buildSearchCriteria } from '../../../services/SearchCriteria/SearchCrit
 
 
 const DEFAULT_PAGE_SIZE = 20
-const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mapped_on', direction: 'ASC'}, pageSize: DEFAULT_PAGE_SIZE}
+const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mappedOn', direction: 'ASC'}, pageSize: DEFAULT_PAGE_SIZE}
 
 /**
  * WithReviewTasks retrieves tasks that need to be Reviewed
