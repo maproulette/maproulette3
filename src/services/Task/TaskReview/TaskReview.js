@@ -5,6 +5,7 @@ import _set from 'lodash/set'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
+import _isFinite from 'lodash/isFinite'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
 import { RECEIVE_REVIEW_NEEDED_TASKS } from './TaskReviewNeeded'
@@ -154,7 +155,7 @@ const determineType = (reviewTasksType) => {
 /**
  * Retrieve the next task to review with the given sort and filter criteria
  */
-export const loadNextReviewTask = function(criteria={}) {
+export const loadNextReviewTask = function(criteria={}, lastTaskId) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? `${_snakeCase(sortBy)}` : null
@@ -163,12 +164,17 @@ export const loadNextReviewTask = function(criteria={}) {
                                                        _get(criteria, 'savedChallengesOnly')                                                       )
 
   return function(dispatch) {
+    const params = {sort, order, ...searchParameters}
+    if (_isFinite(lastTaskId)) {
+      params.lastTaskId = lastTaskId
+    }
+
     return retrieveChallengeTask(dispatch, new Endpoint(
       api.tasks.reviewNext,
       {
         schema: taskSchema(),
         variables: {},
-        params: {sort, order, ...searchParameters},
+        params,
       }
     ))
   }
