@@ -82,7 +82,8 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
   const type = determineType(reviewTasksType)
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly'))
+                                                       _get(criteria, 'savedChallengesOnly'),
+                                                       _get(criteria, 'excludeOtherReviewers'))
 
   const mappers = (reviewTasksType === ReviewTasksType.myReviewedTasks) ? [userId] : []
   const reviewers = (reviewTasksType === ReviewTasksType.reviewedByMe) ? [userId] : []
@@ -112,7 +113,8 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
 export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                           criteria.boundingBox,
-                                                          _get(criteria, 'savedChallengesOnly'))
+                                                          _get(criteria, 'savedChallengesOnly'),
+                                                          _get(criteria, 'excludeOtherReviewers'))
   return function(dispatch) {
     const type = determineType(reviewTasksType)
     const fetchId = uuidv1()
@@ -161,7 +163,8 @@ export const loadNextReviewTask = function(criteria={}, lastTaskId) {
   const sort = sortBy ? `${_snakeCase(sortBy)}` : null
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly')                                                       )
+                                                       _get(criteria, 'savedChallengesOnly'),
+                                                       _get(criteria, 'excludeOtherReviewers'))
 
   return function(dispatch) {
     const params = {sort, order, ...searchParameters}

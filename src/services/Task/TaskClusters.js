@@ -56,6 +56,7 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25) {
     const searchParameters = generateSearchParametersString(filters,
                                                             criteria.boundingBox,
                                                             _get(criteria, 'savedChallengesOnly'),
+                                                            null,
                                                             criteria.searchQuery)
     searchParameters.cid = challengeId
 

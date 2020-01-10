@@ -70,6 +70,12 @@ export class TaskReviewTable extends Component {
     this.props.updateReviewTasks(reviewCriteria)
   }
 
+  toggleExcludeOthers(event) {
+    const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
+    reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers
+    this.props.updateReviewTasks(reviewCriteria)
+  }
+
   componentDidMount() {
     this.setupConfigurableColumns(this.props.reviewTasksType)
   }
@@ -200,11 +206,19 @@ export class TaskReviewTable extends Component {
                 {subheader}
               </h1>
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
-                <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleShowFavorites()}>
-                  <input type="checkbox" className="mr-mr-px"
-                         checked={!!this.props.reviewCriteria.savedChallengesOnly}
-                         onChange={() => null} />
-                  <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+                <div className="mr-flex">
+                  <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
+                    <input type="checkbox" className="mr-mr-px"
+                           checked={!!this.props.reviewCriteria.savedChallengesOnly}
+                           onChange={() => null} />
+                    <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+                  </div>
+                  <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
+                    <input type="checkbox" className="mr-mr-px"
+                           checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+                           onChange={() => null} />
+                    <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
+                  </div>
                 </div>
               }
             </div>

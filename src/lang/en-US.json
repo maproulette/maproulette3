@@ -920,6 +920,7 @@
   "Review.TaskAnalysisTable.refresh": "Refresh",
   "Review.TaskAnalysisTable.startReviewing": "Review these Tasks",
   "Review.TaskAnalysisTable.onlySavedChallenges": "Limit to favorite challenges",
+  "Review.TaskAnalysisTable.excludeOtherReviewers": "Exclude reviews assigned to others",
   "Review.TaskAnalysisTable.noTasksReviewedByMe": "You have not reviewed any tasks.",
   "Review.TaskAnalysisTable.noTasksReviewed": "None of your mapped tasks have been reviewed.",
   "Review.TaskAnalysisTable.tasksToBeReviewed": "Tasks to be Reviewed",

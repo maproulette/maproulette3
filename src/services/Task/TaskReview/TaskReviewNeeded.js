@@ -41,7 +41,8 @@ export const fetchReviewNeededTasks = function(criteria, limit=50) {
   const page = _get(criteria, 'page', 0)
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                           criteria.boundingBox,
-                                                          _get(criteria, 'savedChallengesOnly'))
+                                                          _get(criteria, 'savedChallengesOnly'),
+                                                          _get(criteria, 'excludeOtherReviewers'))
 
   return function(dispatch) {
     return new Endpoint(

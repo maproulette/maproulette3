@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Limit to favorite challenges",
   },
 
+  excludeOtherReviewers: {
+    id: "Review.TaskAnalysisTable.excludeOtherReviewers",
+    defaultMessage: "Exclude reviews assigned to others",
+  },
+
   tasksNoneReviewedByMe: {
     id: "Review.TaskAnalysisTable.noTasksReviewedByMe",
     defaultMessage: "You have not reviewed any tasks.",
