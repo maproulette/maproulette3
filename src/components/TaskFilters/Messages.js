@@ -64,9 +64,14 @@ export default defineMessages({
     defaultMessage: "Please choose a property type.",
   },
 
+  notNumericValue: {
+    id: "TaskPropertyFilter.error.notNumericValue",
+    defaultMessage: "Property value given is not a valid number.",
+  },
+
   stringType: {
     id: "TaskPropertyFilter.propertyType.stringType",
-    defaultMessage: "string",
+    defaultMessage: "text",
   },
 
   numberType: {

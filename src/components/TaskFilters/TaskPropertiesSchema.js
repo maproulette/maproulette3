@@ -95,7 +95,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   operator: {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeNumber),
-                    enumNames: ["=", "≠", "<", ">"],
+                    enumNames: ["=", "≠", ">", "<"],
                     default: "equals",
                   },
                   value: {

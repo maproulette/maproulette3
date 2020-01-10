@@ -9,6 +9,7 @@ import { CustomSelectWidget }
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _head from 'lodash/head'
+import _cloneDeep from 'lodash/cloneDeep'
 import { jsSchema, uiSchema } from './TaskPropertiesSchema'
 import { preparePropertyRulesForSaving,
          validatePropertyRules } from './TaskPropertyRules'
@@ -34,7 +35,44 @@ export default class TaskPropertyFilter extends Component {
 
   /** Receive updates to the form data, along with any validation errors */
   changeHandler = ({formData}) => {
-    this.setState({formData, errors: null})
+    const rootRule = _cloneDeep(_get(formData, 'propertyRules.rootRule'))
+
+    const moveLeft = (data, prevData) => {
+      // We've changed value type to compound rule so
+      // let's move over any assigned key/values.
+      if (data.valueType === "compound rule" &&
+          _get(prevData, 'valueType') !== "compound rule") {
+
+        data.left = {
+          valueType: prevData.valueType,
+          key: prevData.key,
+          value: prevData.value,
+          operator: prevData.operator,
+        }
+        data.key = undefined
+        data.value = undefined
+        data.operator = undefined
+      }
+      else if (data.valueType !== "compound rule" &&
+               _get(prevData, 'valueType') === "compound rule")
+      {
+        data.key = _get(prevData, 'left.key')
+        data.value = _get(prevData, 'left.value')
+        data.operator = _get(prevData, 'left.operator')
+        data.left = undefined
+      }
+      else {
+        if (data.left) {
+          moveLeft(data.left, _get(prevData, 'left'))
+        }
+        if (data.right) {
+          moveLeft(data.right, _get(prevData, 'right'))
+        }
+      }
+    }
+
+    moveLeft(rootRule, _get(this.state.formData, 'propertyRules.rootRule'))
+    this.setState({formData: {propertyRules: {rootRule}}, errors: null})
   }
 
   /** Receive errors from form validation */

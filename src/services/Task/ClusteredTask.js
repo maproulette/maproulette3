@@ -71,13 +71,15 @@ export const augmentClusteredTasks = function(challengeId, isVirtualChallenge=fa
     const augmentedCriteria = _cloneDeep(criteria)
     _set(augmentedCriteria, 'filters.challengeId', challengeId)
     return fetchBoundedTasks(augmentedCriteria, limit, true)(dispatch).then(result => {
-      // Add parent field
-      _each(result.tasks, task => task.parent = challengeId)
+      if (result) {
+        // Add parent field
+        _each(result.tasks, task => task.parent = challengeId)
 
-      return dispatch(receiveClusteredTasks(
-        challengeId, isVirtualChallenge, result.tasks, RequestStatus.success, fetchId,
-        mergeTasks, false, result.totalCount
-      ))
+        return dispatch(receiveClusteredTasks(
+          challengeId, isVirtualChallenge, result.tasks, RequestStatus.success, fetchId,
+          mergeTasks, false, result.totalCount
+        ))
+      }
     })
   }
 }

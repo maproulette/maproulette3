@@ -1,3 +1,7 @@
+import { TaskPropertySearchTypeNumber,
+         TaskPropertySearchTypeString }
+         from '../../services/Task/TaskProperty/TaskProperty'
+import _values from 'lodash/values'
 
 export const PROPERTY_RULE_ERRORS = Object.freeze({
   missingRightRule: "missingRightRule",
@@ -5,6 +9,7 @@ export const PROPERTY_RULE_ERRORS = Object.freeze({
   missingKey: "missingKey",
   missingValue: "missingValue",
   missingPropertyType: "missingPropertyType",
+  notNumericValue: "notNumericValue",
 })
 
 /**
@@ -52,6 +57,16 @@ export const preparePropertyRulesForSaving = rule => {
     rule.condition = "and"
   }
 
+  // Reset to default valid search type
+  if (rule.valueType === "number" &&
+      !_values(TaskPropertySearchTypeNumber).find(o => o === rule.operator)) {
+    rule.operator = "equals"
+  }
+  else if (rule.valueType === "string" &&
+           !_values(TaskPropertySearchTypeString).find(o => o === rule.operator)) {
+    rule.operator = "equals"
+  }
+
   return {
     key: rule.left ? null : rule.key,
     value: rule.left ? null : rule.value,
@@ -97,9 +112,16 @@ export const validatePropertyRules = (rule, errors=[]) => {
         if (!rule.value) {
           errors.push(PROPERTY_RULE_ERRORS.missingValue)
         }
+
+        if (rule.valueType === "number") {
+          if (isNaN(rule.value)) {
+            errors.push(PROPERTY_RULE_ERRORS.notNumericValue)
+          }
+        }
       }
     }
   }
+
 
   return errors
 }

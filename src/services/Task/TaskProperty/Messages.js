@@ -8,8 +8,8 @@ export default defineMessages({
     id: "Task.property.searchType.equals",
     defaultMessage: "equals"
   },
-  notEquals: {
-    id: "Task.property.searchType.notEquals",
+  notEqual: {
+    id: "Task.property.searchType.notEqual",
     defaultMessage: "doesn't equal"
   },
   contains: {
