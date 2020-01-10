@@ -60,6 +60,7 @@ export default class TaskPropertyFilter extends Component {
         data.value = _get(prevData, 'left.value')
         data.operator = _get(prevData, 'left.operator')
         data.left = undefined
+        data.right = undefined
       }
       else {
         if (data.left) {
