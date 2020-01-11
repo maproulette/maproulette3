@@ -1043,7 +1043,7 @@
   "Errors.project.searchFailure": "Unable to search projects.",
   "Errors.project.deleteFailure": "Unable to delete project.",
   "Errors.project.notManager": "You must be a manager of that project to proceed.",
-  "Errors.map.renderFailure": "Unable to render the map. This may be caused by a problematic custom basemap.",
+  "Errors.map.renderFailure": "Unable to render the map{details}. Attempting to fall back to default map layer.",
   "Errors.map.placeNotFound": "No results found by Nominatim.",
   "Errors.widgetWorkspace.renderFailure": "Unable to render workspace. Switching to a working layout.",
   "Errors.widgetWorkspace.importFailure": "Unable to import layout{details}",

@@ -15,7 +15,7 @@ export class MapPane extends Component {
 
   componentDidCatch(error, info) {
     this.setState({hasError: true})
-    this.props.addError(AppErrors.map.renderFailure)
+    this.props.addErrorWithDetails(AppErrors.map.renderFailure, error.message)
   }
 
   render() {
@@ -23,7 +23,7 @@ export class MapPane extends Component {
       return (
         <div className="map-pane">
           <div className="notification">
-            <FormattedMessage {...AppErrors.map.renderFailure} />
+            <FormattedMessage {...AppErrors.map.renderFailure} values={{details: ''}} />
           </div>
         </div>
       )

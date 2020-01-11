@@ -208,9 +208,12 @@ export default class EnhancedMap extends Map {
   }
 
   componentWillUnmount() {
-    this.leafletElement.stop()
-    this.leafletElement.off('zoomend', this.onZoomOrMoveEnd)
-    this.leafletElement.off('moveend', this.onZoomOrMoveEnd)
+    try {
+      this.leafletElement.stop()
+      this.leafletElement.off('zoomend', this.onZoomOrMoveEnd)
+      this.leafletElement.off('moveend', this.onZoomOrMoveEnd)
+    }
+    catch(e) {} // Bad custom basemaps can cause problems when stopping Leaflet
 
     super.componentWillUnmount()
   }
