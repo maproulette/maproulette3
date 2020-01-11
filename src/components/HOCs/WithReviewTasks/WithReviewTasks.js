@@ -55,6 +55,9 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       if (_isUndefined(criteria.savedChallengesOnly)) {
         criteria.savedChallengesOnly = _get(this.state.criteria[this.props.reviewTasksType], "savedChallengesOnly")
       }
+      if (_isUndefined(criteria.excludeOtherReviewers)) {
+        criteria.excludeOtherReviewers = _get(this.state.criteria[this.props.reviewTasksType], "excludeOtherReviewers")
+      }
 
       const typedCriteria = _cloneDeep(this.state.criteria)
       typedCriteria[props.reviewTasksType] = criteria

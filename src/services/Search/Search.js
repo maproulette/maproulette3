@@ -111,7 +111,7 @@ export const parseQueryString = function(rawQueryText) {
  * server accepts for various API endpoints
  */
 export const generateSearchParametersString = (filters, boundingBox, savedChallengesOnly,
-                                               queryString) => {
+                                               excludeOtherReviewers, queryString) => {
   const searchParameters = {}
   if (filters.reviewRequestedBy) {
     searchParameters.o = filters.reviewRequestedBy
@@ -190,6 +190,10 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
 
   if (savedChallengesOnly) {
     searchParameters.onlySaved = savedChallengesOnly
+  }
+
+  if (excludeOtherReviewers) {
+    searchParameters.excludeOtherReviewers = excludeOtherReviewers
   }
 
   if (queryString || filters.keywords) {

@@ -68,6 +68,7 @@ export const parseSearchCriteria = url => {
   let filters = searchParams.filters || {}
   const boundingBox = searchParams.boundingBox
   const savedChallengesOnly = searchParams.savedChallengesOnly
+  const excludeOtherReviewers = searchParams.excludeOtherReviewers
 
   if (_isString(filters)) {
     filters = JSON.parse(searchParams.filters)
@@ -79,8 +80,10 @@ export const parseSearchCriteria = url => {
   }
 
   return {
-    searchCriteria: {sortCriteria: {sortBy, direction}, filters, boundingBox, savedChallengesOnly},
-    newState: {sortBy, direction, filters, boundingBox, savedChallengesOnly}
+    searchCriteria: {sortCriteria: {sortBy, direction}, filters, boundingBox,
+                                    savedChallengesOnly, excludeOtherReviewers},
+    newState: {sortBy, direction, filters, boundingBox, savedChallengesOnly,
+               excludeOtherReviewers}
   }
 }
 
