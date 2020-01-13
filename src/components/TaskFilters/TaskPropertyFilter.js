@@ -41,7 +41,7 @@ export default class TaskPropertyFilter extends Component {
       // We've changed value type to compound rule so
       // let's move over any assigned key/values.
       if (data.valueType === "compound rule" &&
-          _get(prevData, 'valueType') !== "compound rule") {
+          (prevData && _get(prevData, 'valueType') !== "compound rule")) {
 
         data.left = {
           valueType: prevData.valueType,
