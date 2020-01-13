@@ -301,12 +301,12 @@ export class EditChallenge extends Component {
         delete challengeData.name
       }
 
+      if (_isEmpty(this.state.formData.dataOriginDate)) {
+        delete challengeData.dataOriginDate
+      }
+
       challengeData.checkinComment =
         AsEditableChallenge(challengeData).checkinCommentWithoutMaprouletteHashtag()
-
-      // Reset the default task data origin date to today since user will need to
-      // provide new task data
-      challengeData.dataOriginDate = new Date().toISOString().substring(0, 10)
     }
 
     // The server uses two fields to represent the default basemap: a legacy
