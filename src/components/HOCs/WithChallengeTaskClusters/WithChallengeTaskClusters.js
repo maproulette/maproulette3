@@ -89,7 +89,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
         searchCriteria.page = 0
 
         // Fetch up to threshold+1 individual tasks (eg. 1001 tasks)
-        this.props.fetchBoundedTasks(searchCriteria, UNCLUSTER_THRESHOLD + 1, !storeTasks).then(results => {
+        this.props.fetchBoundedTasks(searchCriteria, UNCLUSTER_THRESHOLD + 1, !storeTasks, true, true).then(results => {
           if (currentFetchId >= this.state.fetchId) {
             // If we retrieved 1001 tasks then there might be more tasks and
             // they should be clustered. So fetch as clusters
