@@ -23,4 +23,14 @@ export default defineMessages({
     id: "ChallengeProgress.tasks.totalCount",
     defaultMessage: " of {totalCount, number}"
   },
+
+  byPriorityToggle: {
+    id: "ChallengeProgress.priority.toggle",
+    defaultMessage: "View by Task Priority"
+  },
+
+  priorityLabel: {
+    id: "ChallengeProgress.priority.label",
+    defaultMessage: "{priority} Priority Tasks"
+  },
 })
