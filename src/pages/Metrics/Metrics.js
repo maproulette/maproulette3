@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import SignInButton from '../../components/SignInButton/SignInButton'
-import messages from './Messages'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
 import WithStatus from '../../components/HOCs/WithStatus/WithStatus'
 import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
@@ -13,6 +12,8 @@ import LeaderboardStats from './blocks/LeaderboardStats'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
 import AsAvatarUser from '../../interactions/User/AsAvatarUser'
+import messages from './Messages'
+import messagesAsReviewer from './MessagesAsReviewer'
 
 const ProfileImage = props => {
 
@@ -128,12 +129,32 @@ class Metrics extends Component {
                     </div>
                   }
                 </div>
-                <ReviewStats {...this.props} />
+                <ReviewStats {...this.props}
+                  messages={messages}
+                  title={this.props.intl.formatMessage(messages.reviewedTasksTitle)}
+                  tasksMonthsPast={this.props.tasksReviewedMonthsPast}
+                  setTasksMonthsPast={this.props.setTasksReviewedMonthsPast}
+                />
               </div>
               <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-3">
                 <TaskStats {...this.props} />
                 <LeaderboardStats {...this.props} />
               </div>
+              {this.props.reviewerMetrics &&
+                <div className="mr-mt-8">
+                  <ReviewStats {...this.props}
+                    reviewMetrics={this.props.reviewerMetrics}
+                    tasksMonthsPast={this.props.tasksReviewerMonthsPast}
+                    setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}
+                    messages={messagesAsReviewer}
+                    title={
+                      this.props.targetUser.id !== _get(this.props.user, 'id') ?
+                      this.props.intl.formatMessage(
+                        messagesAsReviewer.reviewerTitle, {username: this.props.targetUser.name}) :
+                      this.props.intl.formatMessage(messagesAsReviewer.reviewerTitleYou)
+                    }/>
+                </div>
+              }
               </React.Fragment>
             }
           </div>
