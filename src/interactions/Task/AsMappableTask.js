@@ -111,6 +111,10 @@ export class AsMappableTask {
   rawCenterPoint() {
     let centerPoint = _get(this, 'location.coordinates')
 
+    if (!centerPoint && _isObject(this.point)) {
+      centerPoint = [this.point.lng, this.point.lat]
+    }
+
     // Not all tasks have a center-point. In that case, we try to calculate
     // one ourselves based on the task features.
     if (!centerPoint && this.hasGeometries()) {

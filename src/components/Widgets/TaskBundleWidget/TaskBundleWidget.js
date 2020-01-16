@@ -25,8 +25,6 @@ import WithChallengeTaskClusters from '../../HOCs/WithChallengeTaskClusters/With
 import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithFilterCriteria from '../../HOCs/WithFilterCriteria/WithFilterCriteria'
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
-import WithLoadedTask
-      from '../../HOCs/WithLoadedTask/WithLoadedTask'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
@@ -271,11 +269,10 @@ const BuildBundle = props => {
   ) : null
 
   const showMarkerPopup = (markerData) => {
-    const TaskData = WithLoadedTask(TaskMarkerContent)
     return (
       <Popup key={markerData.options.taskId}>
         <div className="marker-popup-content">
-          <TaskData marker={markerData} taskId={markerData.options.taskId}
+          <TaskMarkerContent marker={markerData} taskId={markerData.options.taskId}
                     selectedTasks={selectedTasks} {..._omit(props, 'selectedTasks')} />
         </div>
       </Popup>
