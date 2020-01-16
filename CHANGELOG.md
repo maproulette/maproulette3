@@ -7,6 +7,35 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.5.3] - 2020-01-21
+### Added
+- Support for `out center` in Overpass queries by @Zverik
+- Option for project managers to export CSV of tasks in project
+- Compound filtering on task properties for challenge managers
+- Customization of displayed columns and ordering on tasks tables
+- Include more detail in challenge-completion notification emails
+- Indicate when too many tasks are shown to create virtual challenge
+- Snap task map-markers to line strings in task geometry
+- Option to skip review of current task during task review
+- Option to exclude task reviews (likely re-reviews) assigned to others
+- Attempt to fall back to default map layer if custom basemap fails
+- Stats for reviewers to user stats page
+- Minor updates to README
+
+### Fixed
+- Disabled challenges displayed on virtual project pages
+- Erroneous offer to create virtual challenge from stale data
+- Incorrect initial sorting of task review table
+- Incorrect link to project leaderboard (#1044)
+- Duplication of last MR tag when clicking away from tag input
+- Inability to change data sourcing date on cloned challenge
+- Lost "enabled" setting when creating a new virtual project
+
+### Changed
+- Renamed "All Reviewed Tasks" tab to "All Review-related Tasks"
+- Replaced "Cancel Review" review control with "Unlock Task" control
+
+
 ## [v3.5.2] - 2019-12-18
 ### Fixed
 - Inability to edit tasks that use non-string OSM id property values
