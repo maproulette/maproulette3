@@ -43,6 +43,12 @@ const WithChallenge = function(WrappedComponent) {
       this.updateChallenge(this.props)
     }
 
+    componentDidUpdate(prevProps) {
+      if (this.parseChallengeId(this.props) !== this.parseChallengeId(prevProps)) {
+        this.updateChallenge(this.props)
+      }
+    }
+
     render() {
       return (
         <WrappedComponent challenge = {this.state.challenge}

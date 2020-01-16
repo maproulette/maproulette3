@@ -5,6 +5,7 @@ import _set from 'lodash/set'
 import _isArray from 'lodash/isArray'
 import _cloneDeep from 'lodash/cloneDeep'
 import _snakeCase from 'lodash/snakeCase'
+import _isFinite from 'lodash/isFinite'
 import Endpoint from '../../Server/Endpoint'
 import { defaultRoutes as api, isSecurityError } from '../../Server/Server'
 import { RECEIVE_REVIEW_NEEDED_TASKS } from './TaskReviewNeeded'
@@ -81,7 +82,8 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
   const type = determineType(reviewTasksType)
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly'))
+                                                       _get(criteria, 'savedChallengesOnly'),
+                                                       _get(criteria, 'excludeOtherReviewers'))
 
   const mappers = (reviewTasksType === ReviewTasksType.myReviewedTasks) ? [userId] : []
   const reviewers = (reviewTasksType === ReviewTasksType.reviewedByMe) ? [userId] : []
@@ -111,7 +113,8 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
 export const fetchClusteredReviewTasks = function(reviewTasksType, criteria={}) {
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                           criteria.boundingBox,
-                                                          _get(criteria, 'savedChallengesOnly'))
+                                                          _get(criteria, 'savedChallengesOnly'),
+                                                          _get(criteria, 'excludeOtherReviewers'))
   return function(dispatch) {
     const type = determineType(reviewTasksType)
     const fetchId = uuidv1()
@@ -154,21 +157,27 @@ const determineType = (reviewTasksType) => {
 /**
  * Retrieve the next task to review with the given sort and filter criteria
  */
-export const loadNextReviewTask = function(criteria={}) {
+export const loadNextReviewTask = function(criteria={}, lastTaskId) {
   const sortBy = _get(criteria, 'sortCriteria.sortBy')
   const order = (_get(criteria, 'sortCriteria.direction') || 'DESC').toUpperCase()
   const sort = sortBy ? `${_snakeCase(sortBy)}` : null
   const searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
                                                        criteria.boundingBox,
-                                                       _get(criteria, 'savedChallengesOnly')                                                       )
+                                                       _get(criteria, 'savedChallengesOnly'),
+                                                       _get(criteria, 'excludeOtherReviewers'))
 
   return function(dispatch) {
+    const params = {sort, order, ...searchParameters}
+    if (_isFinite(lastTaskId)) {
+      params.lastTaskId = lastTaskId
+    }
+
     return retrieveChallengeTask(dispatch, new Endpoint(
       api.tasks.reviewNext,
       {
         schema: taskSchema(),
         variables: {},
-        params: {sort, order, ...searchParameters},
+        params,
       }
     ))
   }

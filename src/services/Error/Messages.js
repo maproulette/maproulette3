@@ -188,7 +188,7 @@ export default defineMessages({
 
   mapRenderFailure: {
     id: 'Errors.map.renderFailure',
-    defaultMessage: "Unable to render the map. This may be caused by a problematic custom basemap.",
+    defaultMessage: "Unable to render the map{details}. Attempting to fall back to default map layer.",
   },
 
   placeNotFound: {

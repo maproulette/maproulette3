@@ -416,10 +416,13 @@ export const fetchUserActivity = function(userId, limit=50) {
 /**
  * Fetch the user's recent metrics.
  */
-export const fetchUserMetrics = function(userId, monthDuration = -1, reviewDuration = -1) {
+export const fetchUserMetrics = function(userId,
+                                         monthDuration = -1,
+                                         reviewDuration = -1,
+                                         reviewerDuration = -1) {
   return new Endpoint(api.user.metrics, {
     variables: {userId},
-    params: {monthDuration, reviewDuration}
+    params: {monthDuration, reviewDuration, reviewerDuration}
   }).execute()
 }
 

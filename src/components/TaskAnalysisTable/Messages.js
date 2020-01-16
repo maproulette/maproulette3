@@ -4,7 +4,7 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with TaskAnalysisTable
  */
 export default defineMessages({
-  actionsColumnHeader: {
+  controlsLabel: {
     id: "Admin.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
@@ -39,7 +39,7 @@ export default defineMessages({
     defaultMessage: "Review Status",
   },
 
-  mappedByLabel: {
+  reviewRequestedByLabel: {
     id: "Task.fields.requestedBy.label",
     defaultMessage: "Mapper",
   },
@@ -59,7 +59,7 @@ export default defineMessages({
     defaultMessage: "Review Time",
   },
 
-  commentsColumnLabel: {
+  commentsLabel: {
     id: "Admin.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
   },
@@ -122,6 +122,11 @@ export default defineMessages({
   hideReviewColumnsLabel: {
     id: "Admin.manageTasks.controls.hideReviewColumns.label",
     defaultMessage: "Hide Review Columns",
+  },
+
+  configureColumnsLabel: {
+    id: "Admin.manageTasks.controls.configureColumns.label",
+    defaultMessage: "Configure Columns",
   },
 
   exportCSVLabel: {

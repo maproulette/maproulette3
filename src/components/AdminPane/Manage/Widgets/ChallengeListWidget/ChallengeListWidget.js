@@ -5,6 +5,8 @@ import classNames from 'classnames'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _difference from 'lodash/difference'
+import _join from 'lodash/join'
+import _isEmpty from 'lodash/isEmpty'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import { extendedFind } from '../../../../../services/Challenge/Challenge'
@@ -15,6 +17,7 @@ import SearchBox from '../../../../SearchBox/SearchBox'
 import ChallengeList from '../../ChallengeList/ChallengeList'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
+import Dropdown from '../../../../Dropdown/Dropdown'
 import messages from './Messages'
 import './ChallengeListWidget.scss'
 
@@ -79,6 +82,9 @@ export default class ChallengeListWidget extends Component {
     const allEnabled = _difference(_map(this.props.challenges, c => c.id), tallied).length === 0
     const someEnabled = tallied.length !== 0
 
+    const selectedChallengeIds = _join(this.props.talliedChallenges(this.props.project.id), ',')
+    const cId = _isEmpty(selectedChallengeIds) ? "" : `cId=${selectedChallengeIds}`
+
     const rightHeaderControls = this.props.projects.length === 0 ? null : (
       <div className=''>
         <div className='item-tally-toggle'>
@@ -87,6 +93,33 @@ export default class ChallengeListWidget extends Component {
                         viewBox='0 0 20 20'
                         sym='chart-icon' />
           </div>
+        </div>
+        <div className="mr-float-right mr-pt-3 mr-pl-4">
+          <Dropdown className="mr-dropdown--right"
+              dropdownButton={dropdown => (
+                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-light">
+                      <SvgSymbol sym="cog-icon"
+                          viewBox="0 0 20 20"
+                          className="mr-fill-current mr-w-5 mr-h-5" />
+                  </button>
+              )}
+              dropdownContent={() =>
+                  <React.Fragment>
+                      <ul className="mr-list-dropdown">
+                        <li>
+                          <a target="_blank"
+                              rel="noopener noreferrer"
+                              href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/project/${_get(this.props, 'project.id')}/tasks/extract?${cId}`}
+                              className="mr-flex mr-items-center"
+                          >
+                              <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                              <FormattedMessage {...messages.exportCSVLabel} />
+                          </a>
+                        </li>
+                      </ul>
+                  </React.Fragment>
+              }
+          />
         </div>
         <ChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm"
                          inputClassName="mr-text-grey mr-leading-normal"

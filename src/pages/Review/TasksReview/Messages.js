@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Limit to favorite challenges",
   },
 
+  excludeOtherReviewers: {
+    id: "Review.TaskAnalysisTable.excludeOtherReviewers",
+    defaultMessage: "Exclude reviews assigned to others",
+  },
+
   tasksNoneReviewedByMe: {
     id: "Review.TaskAnalysisTable.noTasksReviewedByMe",
     defaultMessage: "You have not reviewed any tasks.",
@@ -51,7 +56,7 @@ export default defineMessages({
 
   allReviewedTasks: {
     id: "Review.TaskAnalysisTable.allReviewedTasks",
-    defaultMessage: "All Reviewed Tasks",
+    defaultMessage: "All Review-related Tasks",
   },
 
   totalTasks: {
@@ -59,14 +64,34 @@ export default defineMessages({
     defaultMessage: "Total: {countShown}"
   },
 
+  configureColumnsLabel: {
+    id: "Review.TaskAnalysisTable.configureColumns",
+    defaultMessage: "Configure columns"
+  },
+
   actionsColumnHeader: {
     id: "Review.TaskAnalysisTable.columnHeaders.actions",
     defaultMessage: "Actions",
   },
 
-  commentsColumnHeader: {
+  viewCommentsLabel: {
     id: "Review.TaskAnalysisTable.columnHeaders.comments",
     defaultMessage: "Comments",
+  },
+
+  mapperControlsLabel: {
+    id: "Review.TaskAnalysisTable.mapperControls.label",
+    defaultMessage: "Actions",
+  },
+
+  reviewerControlsLabel: {
+    id: "Review.TaskAnalysisTable.reviewerControls.label",
+    defaultMessage: "Actions",
+  },
+
+  reviewCompleteControlsLabel: {
+    id: "Review.TaskAnalysisTable.reviewCompleteControls.label",
+    defaultMessage: "Actions",
   },
 
   idLabel: {
@@ -84,7 +109,7 @@ export default defineMessages({
     defaultMessage: "Review Status",
   },
 
-  mappedByLabel: {
+  reviewRequestedByLabel: {
     id: "Review.fields.requestedBy.label",
     defaultMessage: "Mapper",
   },

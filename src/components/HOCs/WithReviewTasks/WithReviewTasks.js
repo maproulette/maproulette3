@@ -17,7 +17,7 @@ import { buildSearchCriteria } from '../../../services/SearchCriteria/SearchCrit
 
 
 const DEFAULT_PAGE_SIZE = 20
-const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mapped_on', direction: 'ASC'}, pageSize: DEFAULT_PAGE_SIZE}
+const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'mappedOn', direction: 'ASC'}, pageSize: DEFAULT_PAGE_SIZE}
 
 /**
  * WithReviewTasks retrieves tasks that need to be Reviewed
@@ -54,6 +54,9 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
       if (_isUndefined(criteria.savedChallengesOnly)) {
         criteria.savedChallengesOnly = _get(this.state.criteria[this.props.reviewTasksType], "savedChallengesOnly")
+      }
+      if (_isUndefined(criteria.excludeOtherReviewers)) {
+        criteria.excludeOtherReviewers = _get(this.state.criteria[this.props.reviewTasksType], "excludeOtherReviewers")
       }
 
       const typedCriteria = _cloneDeep(this.state.criteria)

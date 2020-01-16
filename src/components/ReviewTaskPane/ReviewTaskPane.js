@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import MediaQuery from 'react-responsive'
+import { FormattedMessage } from 'react-intl'
 import _isFinite from 'lodash/isFinite'
 import _get from 'lodash/get'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
@@ -10,14 +11,18 @@ import WithWidgetWorkspaces
 import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
+import WithChallenge from '../HOCs/WithChallenge/WithChallenge'
 import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
+import WithTaskReview from '../HOCs/WithTaskReview/WithTaskReview'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from '../TaskPane/TaskMap/TaskMap'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import MobileTaskDetails from '../TaskPane/MobileTaskDetails/MobileTaskDetails'
+import messages from './Messages'
 import './ReviewTaskPane.scss'
 
 // Setup child components with necessary HOCs
@@ -110,15 +115,33 @@ export class ReviewTaskPane extends Component {
               </h1>
             }
             workspaceInfo={
-              <ul className="mr-list-ruled mr-text-xs">
-                <li className="mr-links-inverse">
-                  {_get(this.props.task, 'parent.parent.displayName')}
-                </li>
+              <div>
+                 <ul className="mr-list-ruled mr-text-xs">
+                   <li className="mr-links-inverse">
+                     {_get(this.props.task, 'parent.parent.displayName')}
+                   </li>
 
-                <li className="mr-links-green-lighter">
-                  <OwnerContactLink {...this.props} />
-                </li>
-              </ul>
+                   <li className="mr-links-green-lighter">
+                     <OwnerContactLink {...this.props} />
+                   </li>
+                 </ul>
+                 <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                   <SvgSymbol
+                     sym="locked-icon"
+                     viewBox="0 0 20 20"
+                     className="mr-fill-current mr-w-4 mr-h-4 mr-mr-1"
+                   />
+                   <span className="mr-flex mr-items-baseline">
+                     <FormattedMessage {...messages.taskLockedLabel} />
+                   </span>
+                   <button
+                     onClick={() => this.props.stopReviewing(this.props.task, this.props.history)}
+                     className="mr-button mr-button--xsmall mr-ml-3"
+                   >
+                     <FormattedMessage {...messages.taskUnlockLabel} />
+                   </button>
+                 </div>
+              </div>
             }
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
@@ -148,8 +171,12 @@ ReviewTaskPane.propTypes = {
 export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
-    WithTaskBundle(
-      ReviewTaskPane
+    WithChallenge(
+      WithTaskBundle(
+        WithTaskReview(
+          ReviewTaskPane
+        )
+      )
     ),
     WidgetDataTarget.task,
     WIDGET_WORKSPACE_NAME,

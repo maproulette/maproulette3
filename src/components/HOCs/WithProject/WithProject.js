@@ -35,12 +35,15 @@ const WithProject = function(WrappedComponent, options={}) {
       challengeProjects = (projectId, props) => {
         const allChallenges = _values(_get(this.props, 'entities.challenges', {}))
         return _filter(allChallenges, (challenge) => {
-                        return (challenge.parent === projectId && challenge.enabled &&
-                                isUsableChallengeStatus(challenge.status)) ||
-                          _find(challenge.virtualParents, (vp) => {
-                            return (_isObject(vp) ? vp.id === projectId : vp === projectId)
-                          })
-                      })
+            const matchingVP =
+              _find(challenge.virtualParents, (vp) => {
+                return (_isObject(vp) ? vp.id === projectId : vp === projectId)
+              })
+
+            return ((challenge.parent === projectId || matchingVP)
+                    && challenge.enabled
+                    && isUsableChallengeStatus(challenge.status))
+          })
       }
 
     loadProject = props => {

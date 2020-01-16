@@ -16,6 +16,7 @@ export const WithUserMetrics = function(WrappedComponent) {
       loading: false,
       tasksCompletedMonthsPast: -1,
       tasksReviewedMonthsPast: -1,
+      tasksReviewerMonthsPast: -1,
     }
 
     updateAllMetrics(props) {
@@ -37,9 +38,11 @@ export const WithUserMetrics = function(WrappedComponent) {
            _get(this.props.targetUser, 'id') === _get(this.props.currentUser, 'userId')) {
         fetchUserMetrics(this.props.targetUser.id,
                          this.state.tasksCompletedMonthsPast,
-                         this.state.tasksReviewedMonthsPast).then(metrics => {
+                         this.state.tasksReviewedMonthsPast,
+                         this.state.tasksReviewerMonthsPast).then(metrics => {
           this.setState({taskMetrics: metrics.tasks,
-                         reviewMetrics: metrics.reviewTasks})
+                         reviewMetrics: metrics.reviewTasks,
+                         reviewerMetrics: metrics.asReviewerTasks})
         })
       }
     }
@@ -60,6 +63,14 @@ export const WithUserMetrics = function(WrappedComponent) {
       }
     }
 
+    setTasksReviewerMonthsPast = monthsPast => {
+      if (this.state.tasksReviewerMonthsPast !== monthsPast) {
+        this.setState({
+          tasksReviewerMonthsPast: monthsPast,
+        })
+      }
+    }
+
     componentDidMount() {
       if (this.props.targetUser) {
         this.updateAllMetrics(this.props)
@@ -75,6 +86,10 @@ export const WithUserMetrics = function(WrappedComponent) {
         this.updateUserMetrics(this.props)
       }
 
+      if (prevState.tasksReviewerMonthsPast !== this.state.tasksReviewerMonthsPast) {
+        this.updateUserMetrics(this.props)
+      }
+
       if (prevState.tasksCompletedMonthsPast !== this.state.tasksCompletedMonthsPast) {
         this.updateUserMetrics(this.props)
       }
@@ -85,10 +100,13 @@ export const WithUserMetrics = function(WrappedComponent) {
         <WrappedComponent leaderboardMetrics={this.state.leaderboardMetrics}
                           taskMetrics={this.state.taskMetrics}
                           reviewMetrics={this.state.reviewMetrics}
+                          reviewerMetrics={this.state.reviewerMetrics}
                           tasksCompletedMonthsPast={this.state.tasksCompletedMonthsPast}
                           setTasksCompletedMonthsPast={this.setTasksCompletedMonthsPast}
                           tasksReviewedMonthsPast={this.state.tasksReviewedMonthsPast}
                           setTasksReviewedMonthsPast={this.setTasksReviewedMonthsPast}
+                          tasksReviewerMonthsPast={this.state.tasksReviewerMonthsPast}
+                          setTasksReviewerMonthsPast={this.setTasksReviewerMonthsPast}
                           loading={this.state.loading}
                           {..._omit(this.props, ['updateLeaderboardMetrics'])} />)
     }

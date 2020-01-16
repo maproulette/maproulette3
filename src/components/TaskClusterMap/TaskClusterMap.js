@@ -21,6 +21,7 @@ import _isObject from 'lodash/isObject'
 import _omit from 'lodash/omit'
 import { layerSourceWithId } from '../../services/VisibleLayer/LayerSources'
 import AsMappableCluster from '../../interactions/TaskCluster/AsMappableCluster'
+import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import LayerToggle from '../EnhancedMap/LayerToggle/LayerToggle'
@@ -304,6 +305,7 @@ export class TaskClusterMap extends Component {
       let onClick = null
       let popup = null
       const taskId = mark.options.taskId
+      let position = mark.position
       if (taskId && this.props.showMarkerPopup) {
         popup = this.props.showMarkerPopup(mark)
       }
@@ -315,12 +317,21 @@ export class TaskClusterMap extends Component {
         taskId ? `marker-task-${taskId}` :
         `marker-cluster-${mark.options.point.lat}-${mark.options.point.lng}-${mark.options.numberOfPoints}`
 
+      // If we're rendering an individual task, snap its position to its geometry
+      // if appropriate
+      if (taskId) {
+        const nearestToCenter = AsMappableTask(mark.options).nearestPointToCenter()
+        if (nearestToCenter) {
+          position = [nearestToCenter.geometry.coordinates[1], nearestToCenter.geometry.coordinates[0]]
+        }
+      }
+
       if (mark.icon) {
-        return <Marker key={markerId} position={mark.position} icon={mark.icon}
+        return <Marker key={markerId} position={position} icon={mark.icon}
                         onClick={onClick}>{popup}</Marker>
       }
       else {
-        return <Marker key={markerId} position={mark.position}
+        return <Marker key={markerId} position={position}
                         onClick={onClick}>{popup}</Marker>
       }
     })

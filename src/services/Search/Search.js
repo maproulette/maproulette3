@@ -111,7 +111,7 @@ export const parseQueryString = function(rawQueryText) {
  * server accepts for various API endpoints
  */
 export const generateSearchParametersString = (filters, boundingBox, savedChallengesOnly,
-                                               queryString) => {
+                                               excludeOtherReviewers, queryString) => {
   const searchParameters = {}
   if (filters.reviewRequestedBy) {
     searchParameters.o = filters.reviewRequestedBy
@@ -162,16 +162,6 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
 
-  if (filters.taskProperty) {
-    searchParameters.tProps =
-      _map(filters.taskProperty,
-           (value, key) => `${btoa(key)}:${btoa(value)}`).join(',')
-
-    if (filters.taskPropertySearchType) {
-      searchParameters.tPropsSearchType = filters.taskPropertySearchType
-    }
-  }
-
   if (_isFinite(filters.difficulty)) {
     searchParameters.cd = filters.difficulty
   }
@@ -200,6 +190,10 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
 
   if (savedChallengesOnly) {
     searchParameters.onlySaved = savedChallengesOnly
+  }
+
+  if (excludeOtherReviewers) {
+    searchParameters.excludeOtherReviewers = excludeOtherReviewers
   }
 
   if (queryString || filters.keywords) {

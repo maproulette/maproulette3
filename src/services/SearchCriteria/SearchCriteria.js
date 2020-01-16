@@ -9,6 +9,7 @@ export function buildSearchCriteria(searchParams, defaultCriteria) {
     const page = _get(searchParams, 'page')
     const boundingBox = searchParams.boundingBox
     const savedChallengesOnly = searchParams.savedChallengesOnly
+    const excludeOtherReviewers = searchParams.excludeOtherReviewers
 
     if (_isString(filters)) {
       filters = JSON.parse(searchParams.filters)
@@ -19,7 +20,8 @@ export function buildSearchCriteria(searchParams, defaultCriteria) {
       direction = _get(searchParams, 'sortCriteria.direction')
     }
 
-    return {sortCriteria: {sortBy, direction}, filters, page, boundingBox, savedChallengesOnly}
+    return {sortCriteria: {sortBy, direction}, filters, page, boundingBox,
+            savedChallengesOnly, excludeOtherReviewers}
   }
   else return defaultCriteria
 }
