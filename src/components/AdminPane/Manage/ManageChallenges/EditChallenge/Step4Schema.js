@@ -84,6 +84,10 @@ export const jsSchema = intl => {
         title: intl.formatMessage(messages.exportablePropertiesLabel),
         type: "string",
       },
+      osmIdProperty: {
+        title: intl.formatMessage(messages.osmIdPropertyLabel),
+        type: "string",
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -151,6 +155,10 @@ export const uiSchema = intl => ({
   exportableProperties: {
     "ui:emptyValue": "",
     "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),
+  },
+  osmIdProperty: {
+    "ui:emptyValue": "",
+    "ui:help": intl.formatMessage(messages.osmIdPropertyDescription),
   },
 })
 

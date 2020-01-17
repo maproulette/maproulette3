@@ -641,7 +641,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
-        'exportableProperties', 'dataOriginDate'])
+        'exportableProperties', 'osmIdProperty', 'dataOriginDate'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
