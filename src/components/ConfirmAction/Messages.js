@@ -6,12 +6,12 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   title: {
     id: "ConfirmAction.title",
-    defaultMessage: "Please Confirm",
+    defaultMessage: "Are you sure?",
   },
 
   prompt: {
     id: "ConfirmAction.prompt",
-    defaultMessage: "Are you sure? This cannot be undone.",
+    defaultMessage: "This action cannot be undone",
   },
 
   cancel: {

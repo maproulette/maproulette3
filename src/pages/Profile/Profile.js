@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { FormattedMessage, FormattedDate, injectIntl }
-       from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import UserSettings from './UserSettings/UserSettings'
 import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
@@ -8,7 +7,6 @@ import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import ApiKey from './ApiKey'
 import messages from './Messages'
-import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 
 class Profile extends Component {
   componentDidMount() {
@@ -31,7 +29,6 @@ class Profile extends Component {
     }
 
     let user = this.props.user
-    let osmProfile = AsAvatarUser(user.osmProfile)
 
     if (this.props.showingUserId) {
       user = this.props.targetUser
@@ -60,27 +57,14 @@ class Profile extends Component {
 
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 lg:mr-py-20">
-        <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-p-4 md:mr-p-8 mr-rounded">
-          <header className="mr-max-w-xs mr-mx-auto mr-text-center">
-            <img
-              className="mr-block mr-mx-auto mr-mb-4 mr-rounded-full md:mr-w-32 md:mr-h-32 md:mr--mt-23"
-              src={osmProfile.profilePic(128)}
-              srcSet={`${osmProfile.profilePic(128)} 1x, ${osmProfile.profilePic(256)} 2x"`}
-              alt={osmProfile.displayName}
-            />
-            <h1 className="mr-h3 mr-text-blue mr-mb-1">{osmProfile.displayName}</h1>
-            <p className="mr-text-grey mr-text-sm mr-font-mono">
-              <FormattedMessage {...messages.userSince} /> <b>
-                <FormattedDate
-                  month='long'
-                  year='numeric'
-                  value={new Date(user.created)}
-                />
-              </b>
-            </p>
-          </header>
-
+        <header className="mr-max-w-2xl mr-mx-auto mr-bg-gradient-b-blue-cloudburst-blue-rhino mr-rounded-t mr-pt-6 mr-pb-2 mr-pl-12">
+          <h1 className="mr-h2 mr-text-white mr-py-12 mr-w-full md:mr-w-1/2 mr-bg-settings mr-bg-top-left mr-bg-no-repeat mr-text-center">
+            <FormattedMessage {...messages.pageTitle} />
+          </h1>
+        </header>
+        <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-p-4 md:mr-p-8 mr-rounded mr-rounded-t-none">
           <UserSettings {...this.props} user={user} editor={this.props.user}/>
+          <div className="mr-border-t-2 mr-border-grey-lighter mr-my-12" />
           <ApiKey {...this.props} user={user} />
         </div>
       </div>

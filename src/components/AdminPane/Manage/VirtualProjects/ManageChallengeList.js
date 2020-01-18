@@ -43,6 +43,10 @@ const ChallengeSearchResults =
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 export class manageChallengeList extends Component {
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   done(props) {
     props.history.push(`/admin/project/${props.project.id}`)
   }
@@ -70,7 +74,7 @@ export class manageChallengeList extends Component {
     const breadcrumbs =
       <nav className="breadcrumb mr-mt-2" aria-label="breadcrumbs">
         <ul>
-          <li>
+          <li className="nav-title">
             <Link to='/admin/projects'>
               <FormattedMessage {...manageMessages.manageHeader} />
             </Link>

@@ -10,7 +10,7 @@ export default class FilterDropdown extends Component {
         className="mr-dropdown--right"
         dropdownButton={dropdown => (
           <button
-            className="mr-flex mr-items-center mr-text-blue-light"
+            className="mr-flex mr-items-center mr-text-matisse-blue"
             onClick={dropdown.toggleDropdownVisible}
           >
             <span className="mr-text-base mr-uppercase mr-mr-1">

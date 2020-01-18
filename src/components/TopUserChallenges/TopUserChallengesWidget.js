@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
@@ -25,7 +26,7 @@ const descriptor = {
   defaultHeight: 5,
 }
 
-export default class TopUserChallengesWidget extends Component {
+export class TopUserChallengesWidget extends Component {
   setMonthsPast = monthsPast => {
     if (this.props.widgetConfiguration.monthsPast !== monthsPast) {
       this.props.updateWidgetConfiguration({monthsPast})
@@ -44,7 +45,10 @@ export default class TopUserChallengesWidget extends Component {
         widgetTitle={<FormattedMessage {...messages.header} />}
         rightHeaderControls={
           <PastDurationSelector
-            className="mr-button mr-button--small mr-button--green"
+            className={classNames(
+              "mr-button mr-button--small",
+              this.props.lightMode ? "mr-button--green" : "mr-button--green-lighter"
+            )}
             pastMonthsOptions={[1, 3, 6, 12]}
             currentMonthsPast={monthsPast}
             selectDuration={this.setMonthsPast}
@@ -55,6 +59,10 @@ export default class TopUserChallengesWidget extends Component {
       </QuickWidget>
     )
   }
+}
+
+TopUserChallengesWidget.defaultProps = {
+  lightMode: true,
 }
 
 const TopChallengeList = function(props) {
@@ -80,3 +88,5 @@ const TopChallengeList = function(props) {
 }
 
 registerWidgetType(TopUserChallengesWidget, descriptor)
+
+export default TopUserChallengesWidget

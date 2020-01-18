@@ -1,11 +1,11 @@
 .mr-section {
   @apply mr-my-8;
 
-  &--as-header {
-    @apply mr-my-8 mr-p-4 mr-rounded mr-shadow mr-bg-green-dark mr-text-white;
-  }
+  &--as-header, &__header {
+    @apply mr-my-8 mr-text-matisse-blue mr-uppercase mr-font-medium;
 
-  &__header {
-    @apply mr-flex mr-items-center mr-justify-between mr-my-8 mr-p-4 mr-rounded mr-shadow mr-bg-green-dark mr-text-white;
+    .mr-h4 {
+      @apply mr-font-medium;
+    }
   }
 }

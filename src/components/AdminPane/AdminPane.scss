@@ -147,9 +147,12 @@
         line-height: 16px;
       }
 
-      li.is-active a {
-        color: $white;
-        font-weight: $weight-semibold;
+      li.nav-title a {
+        font-size: 28px;
+      }
+
+      li.is-active:not(.nav-title) a {
+        color: $yellow;
 
         .busy-spinner {
           margin-left: 10px;

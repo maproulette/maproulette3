@@ -53,18 +53,24 @@ export default class ChallengeList extends Component {
         {!this.props.suppressControls && manager.canWriteProject(this.props.project) &&
          <div className="challenge-list__controls has-centered-children">
            {!isVirtual &&
-             <button className="button is-green is-outlined new-challenge"
-                     onClick={() => this.props.history.push(
-                       `/admin/project/${this.props.project.id}/challenges/new`)}>
-               <FormattedMessage {...messages.addChallengeLabel} />
-             </button>
+            <button
+              className="mr-button mr-button--green mr-mt-8"
+              onClick={() =>
+                this.props.history.push(`/admin/project/${this.props.project.id}/challenges/new`)
+              }
+            >
+              <FormattedMessage {...messages.addChallengeLabel} />
+            </button>
            }
            {isVirtual &&
-             <button className="button is-green is-outlined new-challenge"
-                     onClick={() => this.props.history.push(
-                       `/admin/virtual/project/${this.props.project.id}/challenges/manage`)}>
+            <button
+              className="mr-button mr-button--green mr-mt-8"
+              onClick={() =>
+                this.props.history.push(`/admin/virtual/project/${this.props.project.id}/challenges/manage`)
+              }
+            >
                <FormattedMessage {...messages.manageChallengeListLabel} />
-             </button>
+            </button>
            }
          </div>
         }

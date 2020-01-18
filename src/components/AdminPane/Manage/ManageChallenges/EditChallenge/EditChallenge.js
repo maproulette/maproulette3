@@ -115,6 +115,10 @@ export class EditChallenge extends Component {
 
   isFinishing = false
 
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   /**
    * Returns true if this challenge's data is being cloned from another
    * challenge.
@@ -500,7 +504,7 @@ export class EditChallenge extends Component {
             <div className="admin__manage__header">
               <nav className="breadcrumb" aria-label="breadcrumbs">
                 <ul>
-                  <li>
+                  <li className="nav-title">
                     <Link to={'/admin/projects'}>
                       <FormattedMessage {...manageMessages.manageHeader} />
                     </Link>

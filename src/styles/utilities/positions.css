@@ -50,4 +50,13 @@
   .mr--translate-1\/2 {
     transform: translate(-50%, -50%);
   }
+
+  .mr-rotate-10 {
+    transform: rotate(10deg);
+  }
+
+  /* Useful for manipulating the containing block for 'fixed' content */
+  .mr-fixed-containing-block {
+    transform: rotate(0deg);
+  }
 }

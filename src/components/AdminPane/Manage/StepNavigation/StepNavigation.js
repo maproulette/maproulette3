@@ -15,37 +15,63 @@ export default class StepNavigation extends Component {
   render() {
     return (
       <div className="step-navigation" key={`step-${this.props.activeStep}`}>
-        <button type="button" className="button is-secondary is-outlined"
-                onClick={this.props.cancel}>
+        <button
+          type="button"
+          className="mr-button mr-button--grey"
+          onClick={this.props.cancel}
+        >
           <FormattedMessage {...messages.cancel} />
         </button>
 
-        <div className="button-group">
-          {this.props.activeStep > 0 &&
-            <button type="button" className="button is-secondary is-outlined has-svg-icon"
-                    onClick={this.props.prevStep}>
-              <SvgSymbol viewBox='0 0 20 20' sym="arrow-left-icon" />
+        <div className="mr-flex mr-justify-between mr-items-center">
+          <div>
+            {this.props.activeStep > 0 &&
+            <button
+              type="button"
+              className="mr-button mr-button--blue mr-button--with-icon"
+              onClick={this.props.prevStep}
+            >
+              <SvgSymbol
+                viewBox='0 0 20 20'
+                sym="arrow-left-icon"
+                className="mr-fill-current mr-w-4 mr-h-4 mr-mr-2"
+              />
               <FormattedMessage {...messages.prev} />
             </button>
-          }
+            }
+          </div>
 
-          {this.props.activeStep < this.props.steps.length - 1 &&
-            <button type="submit"
-                    className="button is-primary is-outlined has-svg-icon">
+          <div className="mr-flex mr-justify-end mr-items-center">
+            {this.props.activeStep < this.props.steps.length - 1 &&
+            <button
+              type="submit"
+              className="mr-button mr-button--blue mr-button--with-icon mr-ml-4"
+            >
               <FormattedMessage {...messages.next} />
-              <SvgSymbol viewBox='0 0 20 20' sym="arrow-right-icon" />
+              <SvgSymbol
+                viewBox='0 0 20 20'
+                sym="arrow-right-icon"
+                className="mr-fill-current mr-w-4 mr-h-4 mr-ml-2"
+              />
             </button>
-          }
+            }
 
-          {(this.props.activeStep === this.props.steps.length - 1 ||
-            this.props.canFinishEarly) &&
-            <button type="submit"
-                    className="button is-green is-outlined has-svg-icon"
-                    onClick={() => this.props.finish && this.props.finish()}>
-              <SvgSymbol viewBox='0 0 20 20' sym="check-icon" />
-              <FormattedMessage {...messages.finish} />
-            </button>
-          }
+            {(this.props.activeStep === this.props.steps.length - 1 ||
+              this.props.canFinishEarly) &&
+             <button
+               type="submit"
+               className="mr-button mr-button--green mr-button--with-icon mr-ml-4"
+               onClick={() => this.props.finish && this.props.finish()}
+             >
+               <SvgSymbol
+                 viewBox='0 0 20 20'
+                 sym="check-icon"
+                 className="mr-fill-current mr-w-4 mr-h-4 mr-mr-2"
+               />
+               <FormattedMessage {...messages.finish} />
+             </button>
+            }
+          </div>
         </div>
       </div>
     )

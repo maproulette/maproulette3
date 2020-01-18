@@ -19,10 +19,17 @@ export default class AssociatedChallengeList extends Component {
     const challengeCards =
       _map(this.props.challenges, challenge => (
         <div className='mr-flex mr-my-4' key={challenge.id}>
-          <div className='mr-w-8 mr-mr-2 mr-text-green'>
-            <SvgSymbol className={classNames('icon mr-fill-current', {enabled: challenge.enabled})}
-                        viewBox='0 0 20 20'
-                        sym={challenge.enabled ? 'visible-icon' : 'hidden-icon'} />
+          <div
+            className={classNames(
+              "mr-w-8 mr-mr-2 mr-text-grey-light mr-transition",
+              challenge.enabled ? "hover:mr-text-green-light" : "hover:mr-text-green-light-60"
+            )}
+          >
+            <SvgSymbol
+              className="icon mr-fill-current"
+              viewBox='0 0 20 20'
+              sym={challenge.enabled ? 'visible-icon' : 'hidden-icon'}
+            />
           </div>
 
           <div className='mr-flex-grow mr-text-base mr-text-grey'>

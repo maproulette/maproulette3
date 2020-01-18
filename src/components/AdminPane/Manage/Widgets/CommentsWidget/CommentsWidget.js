@@ -34,11 +34,17 @@ export default class CommentsWidget extends Component {
     // Comments can only be exported for single challenges.
     if (comments.length > 0 && _get(this.props, 'challenges.length', 0) === 1) {
       exportControl = (
-        <a target="_blank"
-           rel="noopener noreferrer"
-           href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
-           className="button is-outlined is-green has-svg-icon export-control">
-          <SvgSymbol sym='download-icon' viewBox='0 0 20 20' />
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/comments/extract`}
+          className="mr-button mr-button--blue mr-button--with-icon"
+        >
+          <SvgSymbol
+            sym='download-icon'
+            viewBox='0 0 20 20'
+            className="mr-h-4 mr-w-4 mr-fill-current mr-mr-2"
+          />
           <FormattedMessage {...messages.exportLabel} />
         </a>
       )

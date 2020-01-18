@@ -69,7 +69,7 @@ export class BurndownChart extends Component {
          </p>
         }
         <ResponsiveLine data={burndownMetrics}
-                        colors={["#61CDBB"]}
+                        colors={["#1A688B"]}
                         margin={{
                           top: 20,
                           right: 20,
