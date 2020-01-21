@@ -301,6 +301,8 @@
   "ChallengeProgress.tooltip.label": "Tasks",
   "ChallengeProgress.tasks.remaining": "Tasks Remaining: {taskCount, number}",
   "ChallengeProgress.tasks.totalCount": "of {totalCount, number}",
+  "ChallengeProgress.priority.toggle": "View by Task Priority",
+  "ChallengeProgress.priority.label": "{priority} Priority Tasks",
   "Challenge.indicators.newest.label": "Newest",
   "Challenge.indicators.popular.label": "Popular",
   "Challenge.indicators.featured.label": "Featured",
