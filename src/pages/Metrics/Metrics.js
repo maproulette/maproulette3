@@ -140,7 +140,7 @@ class Metrics extends Component {
                 <TaskStats {...this.props} />
                 <LeaderboardStats {...this.props} />
               </div>
-              {this.props.reviewerMetrics &&
+              {this.props.reviewerMetrics && false &&
                 <div className="mr-mt-8">
                   <ReviewStats {...this.props}
                     reviewMetrics={this.props.reviewerMetrics}
