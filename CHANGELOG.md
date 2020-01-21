@@ -20,6 +20,7 @@ This project adheres to
 - Option to exclude task reviews (likely re-reviews) assigned to others
 - Attempt to fall back to default map layer if custom basemap fails
 - Stats for reviewers to user stats page
+- Ability to see challenge completion progress by task priority
 - Minor updates to README
 
 ### Fixed
