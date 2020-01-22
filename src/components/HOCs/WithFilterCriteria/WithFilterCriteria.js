@@ -6,7 +6,7 @@ import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _omit from 'lodash/omit'
 import _sortBy from 'lodash/sortBy'
-import { fromLatLngBounds } from '../../../services/MapBounds/MapBounds'
+import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
 import { fetchPropertyKeys } from '../../../services/Challenge/Challenge'
 
 const DEFAULT_PAGE_SIZE = 20
@@ -141,8 +141,19 @@ export const WithFilterCriteria = function(WrappedComponent) {
        const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
        this.setState({loading: true})
 
+       const criteria = _cloneDeep(this.state.criteria)
+
+       // If we don't have bounds yet, we still want results so let's fetch all
+       // tasks globally for this challenge.
+       if (!criteria.boundingBox) {
+         if (this.props.skipInitialFetch || !challengeId) {
+           return
+         }
+         criteria.boundingBox = GLOBAL_MAPBOUNDS
+       }
+
        this.props.augmentClusteredTasks(challengeId, false,
-                                        this.state.criteria,
+                                        criteria,
                                         this.state.criteria.pageSize,
                                         false).then((results) => {
          this.setState({loading: false})
@@ -169,6 +180,10 @@ export const WithFilterCriteria = function(WrappedComponent) {
          if (this.state.criteria.boundingBox) {
            this.refreshTasks()
          }
+       }
+       else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||
+                this.props.challengeId !== prevProps.challengeId) {
+         this.refreshTasks()
        }
      }
 
