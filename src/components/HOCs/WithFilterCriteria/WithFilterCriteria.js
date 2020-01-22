@@ -126,6 +126,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
        typedCriteria.filters["reviewStatus"] = _keys(_pickBy(props.includeTaskReviewStatuses, (r) => r))
        typedCriteria.filters["priorities"] = _keys(_pickBy(props.includeTaskPriorities, (p) => p))
        this.setState({criteria: typedCriteria})
+       return typedCriteria
      }
 
      update(props, criteria) {
@@ -137,11 +138,11 @@ export const WithFilterCriteria = function(WrappedComponent) {
        this.setState({criteria: typedCriteria})
      }
 
-     refreshTasks = () => {
+     refreshTasks = (typedCriteria) => {
        const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
        this.setState({loading: true})
 
-       const criteria = _cloneDeep(this.state.criteria)
+       const criteria = typedCriteria || _cloneDeep(this.state.criteria)
 
        // If we don't have bounds yet, we still want results so let's fetch all
        // tasks globally for this challenge.
@@ -161,7 +162,12 @@ export const WithFilterCriteria = function(WrappedComponent) {
      }
 
      componentDidMount() {
-       this.updateIncludedFilters(this.props)
+       const typedCriteria = this.updateIncludedFilters(this.props)
+       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+       if (challengeId) {
+         this.refreshTasks(typedCriteria)
+       }
+
      }
 
      componentDidUpdate(prevProps, prevState) {
@@ -170,20 +176,22 @@ export const WithFilterCriteria = function(WrappedComponent) {
          return
        }
 
+       let typedCriteria = _cloneDeep(this.state.criteria)
+
        if (prevProps.includeTaskStatuses !== this.props.includeTaskStatuses ||
            prevProps.includeTaskReviewStatuses !== this.props.includeTaskReviewStatuses ||
            prevProps.includeTaskPriorities !== this.props.includeTaskPriorities) {
-         this.updateIncludedFilters(this.props)
+         typedCriteria = this.updateIncludedFilters(this.props)
        }
 
        if (!_isEqual(prevState.criteria, this.state.criteria) && !this.props.skipRefreshTasks) {
          if (this.state.criteria.boundingBox) {
-           this.refreshTasks()
+           this.refreshTasks(typedCriteria)
          }
        }
        else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||
                 this.props.challengeId !== prevProps.challengeId) {
-         this.refreshTasks()
+         this.refreshTasks(typedCriteria)
        }
      }
 
