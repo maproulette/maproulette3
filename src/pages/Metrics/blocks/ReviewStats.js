@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
-import messages from '../Messages'
 import QuickWidget from '../../../components/QuickWidget/QuickWidget'
 import PastDurationSelector from '../../../components/PastDurationSelector/PastDurationSelector'
 import {ALL_TIME, CURRENT_MONTH}
@@ -41,15 +40,13 @@ export default class ReviewStats extends Component {
       <QuickWidget
         {...this.props}
         className="mr-card-widget mr-card-widget--padded"
-        widgetTitle={
-          <FormattedMessage {...messages.reviewedTasksTitle} />
-        }
+        widgetTitle={this.props.title}
         rightHeaderControls={
           <PastDurationSelector
             className="mr-button mr-button--small"
             pastMonthsOptions={[1, 3, 6, 9, 12, CURRENT_MONTH, ALL_TIME]}
-            currentMonthsPast={this.props.tasksReviewedMonthsPast}
-            selectDuration={this.props.setTasksReviewedMonthsPast}
+            currentMonthsPast={this.props.tasksMonthsPast}
+            selectDuration={this.props.setTasksMonthsPast}
           />
         }
         noMain
@@ -57,15 +54,15 @@ export default class ReviewStats extends Component {
       >
         <ul className="mr-list-reset mr-my-3 mr-o-3 mr-text-base">
           {this.displayStat(_get(this.props.reviewMetrics, 'approved'),
-                            totalReviewTasks, <FormattedMessage {...messages.approvedReview} />)}
+                            totalReviewTasks, <FormattedMessage {...this.props.messages.approvedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'rejected'),
-                            totalReviewTasks, <FormattedMessage {...messages.rejectedReview} />)}
+                            totalReviewTasks, <FormattedMessage {...this.props.messages.rejectedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'assisted'),
-                            totalReviewTasks, <FormattedMessage {...messages.assistedReview} />)}
+                            totalReviewTasks, <FormattedMessage {...this.props.messages.assistedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'disputed'),
-                            totalReviewTasks, <FormattedMessage {...messages.disputedReview} />)}
+                            totalReviewTasks, <FormattedMessage {...this.props.messages.disputedReview} />)}
           {this.displayStat(_get(this.props.reviewMetrics, 'requested'),
-                            totalReviewTasks, <FormattedMessage {...messages.awaitingReview} />)}
+                            totalReviewTasks, <FormattedMessage {...this.props.messages.awaitingReview} />)}
         </ul>
       </QuickWidget>
     )

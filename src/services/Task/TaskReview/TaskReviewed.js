@@ -5,9 +5,7 @@ import { taskSchema } from '.././Task'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
 import _get from 'lodash/get'
-import _values from 'lodash/values'
-import _sortBy from 'lodash/sortBy'
-import _reverse from 'lodash/reverse'
+import _map from 'lodash/map'
 import _snakeCase from 'lodash/snakeCase'
 import { generateSearchParametersString } from '../../Search/Search'
 
@@ -69,13 +67,8 @@ export const fetchReviewedTasks = function(userId, criteria, asReviewer=false, a
                  allowReviewNeeded: (asReviewer ? false : true), ...searchParameters},
       }
     ).execute().then(normalizedResults => {
-      var tasks = _values(_get(normalizedResults, 'entities.tasks', {}))
-      if (sortBy) {
-        tasks = _sortBy(tasks, (t) => t[sortBy])
-        if (order === "DESC") {
-          tasks = _reverse(tasks)
-        }
-      }
+      const unsortedTaskMap = _get(normalizedResults, 'entities.tasks', {})
+      const tasks = _map(normalizedResults.result.tasks, (id) => unsortedTaskMap[id])
 
       dispatch(receiveReviewedTasks(tasks, dispatchType,
         RequestStatus.success, normalizedResults.result.total))

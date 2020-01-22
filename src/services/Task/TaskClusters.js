@@ -7,6 +7,9 @@ import _isUndefined from 'lodash/isUndefined'
 import { clearBoundedTasks } from './BoundedTask'
 import { generateSearchParametersString } from '../Search/Search'
 import { defaultRoutes as api } from '../Server/Server'
+import { addError } from '../Error/Error'
+import AppErrors from '../Error/AppErrors'
+
 import Endpoint from '../Server/Endpoint'
 
 // redux actions
@@ -53,6 +56,7 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25) {
     const searchParameters = generateSearchParametersString(filters,
                                                             criteria.boundingBox,
                                                             _get(criteria, 'savedChallengesOnly'),
+                                                            null,
                                                             criteria.searchQuery)
     searchParameters.cid = challengeId
 
@@ -74,12 +78,17 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25) {
     return new Endpoint(
       api.challenge.taskClusters, {
         params: {points, ...searchParameters},
+        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute()
     .then(results => {
       return dispatch(receiveTaskClusters(
         results, RequestStatus.success, fetchId,
       ))
+    }).catch((error) => {
+      dispatch(addError(AppErrors.task.fetchFailure))
+      console.log(error.response || error)
+      throw error
     })
   }
 }

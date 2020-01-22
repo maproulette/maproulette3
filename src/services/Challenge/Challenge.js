@@ -317,7 +317,8 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
  * Fetch action metrics for the given challenge (or all challenges
  * if none is given).
  */
-export const fetchChallengeActions = function(challengeId = null, suppressReceive = false, criteria) {
+export const fetchChallengeActions = function(challengeId = null, suppressReceive = false,
+                                              criteria) {
   const searchParameters = {}
   if (criteria) {
     if (criteria.status) {
@@ -334,7 +335,8 @@ export const fetchChallengeActions = function(challengeId = null, suppressReceiv
   return function(dispatch) {
     const challengeActionsEndpoint = new Endpoint(
       _isFinite(challengeId) ? api.challenge.actions : api.challenges.actions,
-      {schema: [ challengeSchema() ], variables: {id: challengeId}, params:{...searchParameters}}
+      {schema: [ challengeSchema() ], variables: {id: challengeId},
+       params:{...searchParameters, includeByPriority: true}}
     )
 
     return challengeActionsEndpoint.execute().then(normalizedResults => {
@@ -378,7 +380,8 @@ export const fetchProjectChallengeActions = function(projectId, onlyEnabled=fals
   return function(dispatch) {
     return new Endpoint(
       api.challenges.actions,
-      {schema: [ challengeSchema() ], params: {projectList: projectId, onlyEnabled}}
+      {schema: [ challengeSchema() ], params: {projectList: projectId, onlyEnabled,
+                                               includeByPriority: true}}
     ).execute().then(normalizedResults => {
       dispatch(receiveChallenges(normalizedResults.entities))
     }).catch(error => {

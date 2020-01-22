@@ -60,6 +60,14 @@
     }
   }
 
+  &--disabled {
+    @apply mr-border-grey-lighter-50 mr-text-grey-lighter-50;
+
+    &:hover {
+      @apply mr-border-grey-lighter-50 mr-text-grey-lighter-50 mr-cursor-not-allowed;
+    }
+  }
+
   &--blue-fill {
     @apply mr-bg-blue mr-border-0 mr-text-white;
 
@@ -67,4 +75,9 @@
       @apply mr-bg-blue-dark;
     }
   }
+}
+
+.mr-expand-available {
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
 }

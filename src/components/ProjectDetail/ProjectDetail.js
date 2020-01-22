@@ -108,7 +108,7 @@ export class ProjectDetail extends Component {
                       <li>
                         <Link
                           className="mr-text-green-lighter hover:mr-text-white"
-                          to={`/challenge/${project.id}/leaderboard`}
+                          to={`/project/${project.id}/leaderboard`}
                         >
                           <FormattedMessage {...messages.viewLeaderboard} />
                         </Link>

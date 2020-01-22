@@ -9,6 +9,9 @@ import _isFinite from 'lodash/isFinite'
 import _kebabCase from 'lodash/kebabCase'
 import _debounce from 'lodash/debounce'
 import _cloneDeep from 'lodash/cloneDeep'
+import _keys from 'lodash/keys'
+import _omit from 'lodash/omit'
+import _pull from 'lodash/pull'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
@@ -16,8 +19,13 @@ import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsRe
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import TaskCommentsModal
        from '../../../components/TaskCommentsModal/TaskCommentsModal'
+import ConfigureColumnsModal
+       from '../../../components/ConfigureColumnsModal/ConfigureColumnsModal'
 import SvgSymbol from '../../../components/SvgSymbol/SvgSymbol'
+import Dropdown from '../../../components/Dropdown/Dropdown'
 import IntlDatePicker from '../../../components/IntlDatePicker/IntlDatePicker'
+import WithConfigurableColumns from '../../../components/HOCs/WithConfigurableColumns/WithConfigurableColumns'
+import WithCurrentUser from '../../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import { mapColors } from '../../../interactions/User/AsEndUser'
 import messages from './Messages'
 
@@ -34,6 +42,7 @@ import ReactTable from 'react-table'
 export class TaskReviewTable extends Component {
   state = {
     openComments: null,
+    showConfigureColumns: false,
   }
 
   debouncedUpdateTasks = _debounce(this.updateTasks, 100)
@@ -61,7 +70,91 @@ export class TaskReviewTable extends Component {
     this.props.updateReviewTasks(reviewCriteria)
   }
 
+  toggleExcludeOthers(event) {
+    const reviewCriteria = _cloneDeep(this.props.reviewCriteria)
+    reviewCriteria.excludeOtherReviewers = !reviewCriteria.excludeOtherReviewers
+    this.props.updateReviewTasks(reviewCriteria)
+  }
+
   componentDidMount() {
+    this.setupConfigurableColumns(this.props.reviewTasksType)
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
+      this.setupConfigurableColumns(this.props.reviewTasksType)
+    }
+  }
+
+  setupConfigurableColumns = (reviewTasksType) => {
+    let columns = {"id":{},
+                   "reviewStatus":{permanent: true},
+                   "reviewRequestedBy":{},
+                   "challenge":{},
+                   "project":{},
+                   "mappedOn":{},
+                   "reviewedBy":{},
+                   "reviewedAt":{},
+                   "status":{},
+                   "reviewCompleteControls":{permanent: true},
+                   "reviewerControls":{permanent: true},
+                   "mapperControls":{permanent: true},
+                   "viewComments":{}}
+
+    let defaultColumns = _keys(columns)
+
+    // Remove any columns not relevant to the current tab.
+    switch(reviewTasksType) {
+      case ReviewTasksType.reviewedByMe:
+        columns = _omit(columns,  ["reviewedBy", "reviewerControls", "mapperControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewedBy", "reviewerControls", "mapperControls"])
+
+        break
+      case ReviewTasksType.toBeReviewed:
+        columns = _omit(columns,  ["reviewCompleteControls", "mapperControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "mapperControls"])
+
+        break
+      case ReviewTasksType.allReviewedTasks:
+        columns = _omit(columns,  ["reviewCompleteControls", "reviewerControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewCompleteControls", "reviewerControls"])
+
+        break
+      case ReviewTasksType.myReviewedTasks:
+      default:
+        columns = _omit(columns,  ["reviewRequestedBy", "reviewCompleteControls", "reviewerControls"])
+        defaultColumns = _pull(defaultColumns, ...["reviewRequestedBy", "reviewCompleteControls", "reviewerControls"])
+
+        break
+    }
+
+    this.props.resetColumnChoices(columns, defaultColumns)
+  }
+
+  gearDropdown = () => {
+    return (
+      <Dropdown className="mr-dropdown--right"
+          dropdownButton={dropdown => (
+              <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-light">
+                  <SvgSymbol sym="cog-icon"
+                      viewBox="0 0 20 20"
+                      className="mr-fill-current mr-w-5 mr-h-5" />
+              </button>
+          )}
+          dropdownContent={() =>
+            <React.Fragment>
+              <ul className="mr-list-dropdown">
+                <li>
+                    <button className="mr-text-current"
+                            onClick={() => this.setState({showConfigureColumns: true})}>
+                        <FormattedMessage {...messages.configureColumnsLabel} />
+                    </button>
+                </li>
+              </ul>
+            </React.Fragment>
+          }
+      />
+    )
   }
 
   render() {
@@ -75,7 +168,7 @@ export class TaskReviewTable extends Component {
     const totalPages = Math.ceil(_get(this.props, 'reviewData.totalCount', 0) / pageSize)
 
     let subheader = null
-    let columns = null
+    const columns = _map(_keys(this.props.addedColumns), (column) => columnTypes[column])
     let defaultSorted = [{id: 'mappedOn', desc: false}]
     let defaultFiltered = []
 
@@ -91,30 +184,16 @@ export class TaskReviewTable extends Component {
     switch( this.props.reviewTasksType ) {
       case ReviewTasksType.reviewedByMe:
         subheader = <FormattedMessage {...messages.tasksReviewedByMe} />
-        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.project, columnTypes.mappedOn, columnTypes.reviewedAt,
-                   columnTypes.status, columnTypes.reviewCompleteControls, columnTypes.viewComments]
         break
       case ReviewTasksType.toBeReviewed:
         subheader = <FormattedMessage {...messages.tasksToBeReviewed} />
-        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.project, columnTypes.mappedOn, columnTypes.reviewedBy,
-                   columnTypes.reviewedAt, columnTypes.status, columnTypes.reviewerControls,
-                   columnTypes.viewComments]
         break
       case ReviewTasksType.allReviewedTasks:
         subheader = <FormattedMessage {...messages.allReviewedTasks} />
-        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.reviewRequestedBy,
-                   columnTypes.challenge, columnTypes.project, columnTypes.mappedOn,  columnTypes.reviewedBy,
-                   columnTypes.reviewedAt, columnTypes.status, columnTypes.mapperControls,
-                   columnTypes.viewComments]
         break
       case ReviewTasksType.myReviewedTasks:
       default:
         subheader = <FormattedMessage {...messages.myReviewTasks} />
-        columns = [columnTypes.id, columnTypes.reviewStatus, columnTypes.challenge, columnTypes.project,
-                   columnTypes.mappedOn, columnTypes.reviewedBy, columnTypes.reviewedAt,
-                   columnTypes.status, columnTypes.mapperControls, columnTypes.viewComments]
         break
     }
 
@@ -127,11 +206,19 @@ export class TaskReviewTable extends Component {
                 {subheader}
               </h1>
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
-                <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleShowFavorites()}>
-                  <input type="checkbox" className="mr-mr-px"
-                         checked={!!this.props.reviewCriteria.savedChallengesOnly}
-                         onChange={() => null} />
-                  <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+                <div className="mr-flex">
+                  <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
+                    <input type="checkbox" className="mr-mr-px"
+                           checked={!!this.props.reviewCriteria.savedChallengesOnly}
+                           onChange={() => null} />
+                    <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
+                  </div>
+                  <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
+                    <input type="checkbox" className="mr-mr-px"
+                           checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+                           onChange={() => null} />
+                    <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
+                  </div>
                 </div>
               }
             </div>
@@ -151,6 +238,7 @@ export class TaskReviewTable extends Component {
               >
                 <FormattedMessage {...messages.refresh} />
               </button>
+              <div className="mr-float-right mr-mt-3 mr-ml-3">{this.gearDropdown()}</div>
             </div>
           </header>
           <div className="mr-mt-6">
@@ -182,6 +270,12 @@ export class TaskReviewTable extends Component {
          <TaskCommentsModal
            taskId={this.state.openComments}
            onClose={() => this.setState({openComments: null})}
+         />
+        }
+        {this.state.showConfigureColumns &&
+         <ConfigureColumnsModal
+           {...this.props}
+           onClose={() => this.setState({showConfigureColumns: false})}
          />
         }
       </React.Fragment>
@@ -261,7 +355,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.reviewRequestedBy = {
     id: 'reviewRequestedBy',
-    Header: props.intl.formatMessage(messages.mappedByLabel),
+    Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
     accessor: 'reviewRequestedBy',
     filterable: true,
     sortable: false,
@@ -507,7 +601,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
 
   columns.viewComments = {
     id: 'viewComments',
-    Header: () => <FormattedMessage {...messages.commentsColumnHeader} />,
+    Header: () => <FormattedMessage {...messages.viewCommentsLabel} />,
     accessor: 'commentID',
     sortable: false,
     maxWidth: 110,
@@ -544,4 +638,5 @@ const ViewCommentsButton = function(props) {
   )
 }
 
-export default TaskReviewTable
+export default WithCurrentUser(WithConfigurableColumns(
+  TaskReviewTable, {}, [], messages, "reviewColumns", "reviewTasksType", false))

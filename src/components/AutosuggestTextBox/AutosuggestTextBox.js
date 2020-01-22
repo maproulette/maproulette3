@@ -24,6 +24,21 @@ export default class AutosuggestTextBox extends Component {
     }
   }
 
+  onChange = (item, downshift) => {
+    if (this.props.onChange) {
+      this.props.onChange(item, downshift)
+    }
+
+    // Downshift does not automatically clear the selected menu item when it's
+    // chosen, so we need to do so ourselves. Otherwise if the user clicks off
+    // the component later, Downshift could choose to re-add the selected item.
+    // Note that this clearing will result in another call to onChange with a
+    // null item
+    if (item && downshift.selectedItem) {
+      downshift.clearSelection()
+    }
+  }
+
   handleKeyDown = e => {
     if (e.key === "Enter") {
       // Don't let enter key potentially submit a form
@@ -55,6 +70,7 @@ export default class AutosuggestTextBox extends Component {
     return (
       <Downshift {...this.props}
                  onInputValueChange={this.inputChanged}
+                 onChange={this.onChange}
                  itemToString={result => result ? this.props.resultLabel(result) : ''}>
         {({getInputProps, getItemProps, getMenuProps, isOpen, inputValue}) => {
           const resultItems = this.dropdownItems(getItemProps, inputValue)

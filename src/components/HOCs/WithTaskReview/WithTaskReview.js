@@ -29,40 +29,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         completeBundleReview(taskBundle.bundleId, status, comment, tags) :
         completeReview(task.id, status, comment, tags)
 
-      dispatch(doReview).then(() => {
-        let newState = url.location.state
-        const searchCriteria = parseSearchCriteria(url, newState)
-
-        dispatch(loadNextReviewTask(searchCriteria)).then((task) => {
-          if (task && loadBy === TaskReviewLoadMethod.next) {
-            url.push({
-              pathname:`/challenge/${task.parentId || task.parent}/task/${task.id}/review`,
-              state: newState
-            })
-          }
-          else if (task && loadBy === TaskReviewLoadMethod.inbox) {
-            url.push({
-              pathname:'/inbox',
-              state: newState
-            })
-          }
-          else {
-            url.push({
-              pathname: '/review',
-              state: newState,
-            })
-          }
-        }).catch(error => {
-          console.log(error)
-          url.push({
-            pathname: '/review',
-            state: newState,
-          })
-        })
-      }).catch(error => {
+      loadNextTaskForReview(dispatch, url, task.id).then(nextTask =>
+        dispatch(doReview).then(() => visitTaskForReview(loadBy, url, nextTask))
+      ).catch(error => {
         console.log(error)
         url.push('/review')
       })
+    },
+
+    skipTaskReview: (task, loadBy, url) => {
+      dispatch(cancelReviewClaim(task.id))
+      loadNextTaskForReview(dispatch, url, task.id).then(nextTask => visitTaskForReview(loadBy, url, nextTask))
     },
 
     stopReviewing: (task, url) => {
@@ -72,7 +49,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
       url.push({
         pathname: '/review',
-        state: parseSearchCriteria(url)
+        state: parseSearchCriteria(url).searchCriteria
       })
     },
 
@@ -84,13 +61,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export const parseSearchCriteria = (url, newState) => {
+export const parseSearchCriteria = url => {
   const searchParams = _merge(new URLSearchParams(url.location.search), url.location.state)
   let sortBy = searchParams.sortBy
   let direction = searchParams.direction
   let filters = searchParams.filters || {}
   const boundingBox = searchParams.boundingBox
   const savedChallengesOnly = searchParams.savedChallengesOnly
+  const excludeOtherReviewers = searchParams.excludeOtherReviewers
 
   if (_isString(filters)) {
     filters = JSON.parse(searchParams.filters)
@@ -101,9 +79,38 @@ export const parseSearchCriteria = (url, newState) => {
     direction = _get(searchParams, 'sortCriteria.direction')
   }
 
-  newState = {sortBy, direction, filters, boundingBox, savedChallengesOnly}
-  return {sortCriteria: {sortBy, direction}, filters, boundingBox, savedChallengesOnly}
+  return {
+    searchCriteria: {sortCriteria: {sortBy, direction}, filters, boundingBox,
+                                    savedChallengesOnly, excludeOtherReviewers},
+    newState: {sortBy, direction, filters, boundingBox, savedChallengesOnly,
+               excludeOtherReviewers}
+  }
 }
 
+export const visitTaskForReview = (loadBy, url, task) => {
+  const newState = parseSearchCriteria(url).newState
+  if (task && loadBy === TaskReviewLoadMethod.next) {
+    url.push({
+      pathname:`/challenge/${_get(task, 'parent.id', task.parent)}/task/${task.id}/review`,
+      state: newState
+    })
+  }
+  else if (task && loadBy === TaskReviewLoadMethod.inbox) {
+    url.push({
+      pathname: '/inbox',
+      state: newState
+    })
+  }
+  else {
+    url.push({
+      pathname: '/review',
+      state: newState,
+    })
+  }
+}
+
+export const loadNextTaskForReview = (dispatch, url, lastTaskId) => {
+  return dispatch(loadNextReviewTask(parseSearchCriteria(url).searchCriteria, lastTaskId))
+}
 
 export default WithTaskReview

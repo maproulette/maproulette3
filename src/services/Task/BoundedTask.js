@@ -48,7 +48,7 @@ export const receiveBoundedTasks = function(tasks,
  * criteria, which should at least include a boundingBox field, and may
  * optionally include a filters field with additional constraints
  */
-export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false, excludeLocked=true) {
+export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false, excludeLocked=true, withGeometries) {
   return function(dispatch) {
     if (!skipDispatch) {
       // The map is either showing task clusters or bounded tasks so we shouldn't
@@ -62,6 +62,7 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
       return null
     }
 
+    let includeGeometries = _isUndefined(withGeometries) ? (limit <= 100) : withGeometries
     const page = _get(criteria, 'page', 0)
     const sortBy = _get(criteria, 'sortCriteria.sortBy')
     const direction = (_get(criteria, 'sortCriteria.direction') || 'ASC').toUpperCase()
@@ -69,10 +70,12 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
     const filters = _get(criteria, 'filters', {})
     const searchParameters = generateSearchParametersString(filters,
                                                             null,
-                                                            _get(criteria, 'savedChallengesOnly'))
+                                                            _get(criteria, 'savedChallengesOnly'),
+                                                            null)
 
     // If we don't have a challenge Id then we need to do some limiting.
     if (!filters.challengeId) {
+      includeGeometries = false
       const onlyEnabled = _isUndefined(criteria.onlyEnabled) ?
                               true : criteria.onlyEnabled
       const challengeStatus = criteria.challengeStatus
@@ -110,7 +113,8 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
           top: normalizedBounds.getNorth(),
         },
         params: {limit, page: (page * limit), sort: sortBy, order: direction,
-                 includeTotal: true, excludeLocked, ...searchParameters},
+                 includeTotal: true, excludeLocked, ...searchParameters, includeGeometries},
+        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
       }
     ).execute().then(normalizedResults => {
       const totalCount = normalizedResults.result.total

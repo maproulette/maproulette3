@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import _isFinite from 'lodash/isFinite'
 import { messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 import messages from './Messages'
@@ -14,6 +15,16 @@ class TaskMarkerContent extends Component {
 
   render() {
     const selected = this.props.selectedTasks.has(this.props.marker.options.taskId)
+    const statusMessage = messagesByStatus[
+      _isFinite(this.props.marker.options.taskStatus) ?
+      this.props.marker.options.taskStatus :
+      this.props.marker.options.status
+    ]
+    const priorityMessage = messagesByPriority[
+      _isFinite(this.props.marker.options.taskPriority) ?
+      this.props.marker.options.taskPriority :
+      this.props.marker.options.priority
+    ]
 
     return (
       <div className="mr-flex mr-justify-center">
@@ -29,13 +40,13 @@ class TaskMarkerContent extends Component {
           <div className="mr-flex">
             <div className="mr-w-1/2 mr-mr-2 mr-text-right"><FormattedMessage {...messages.statusLabel} /></div>
             <div className="mr-w-1/2 mr-text-left">
-              {this.props.intl.formatMessage(messagesByStatus[this.props.marker.options.taskStatus])}
+              {statusMessage ? this.props.intl.formatMessage(statusMessage) : null}
             </div>
           </div>
           <div className="mr-flex">
             <div className="mr-w-1/2 mr-mr-2 mr-text-right"><FormattedMessage {...messages.priorityLabel} /></div>
             <div className="mr-w-1/2 mr-text-left">
-              {this.props.intl.formatMessage(messagesByPriority[this.props.marker.options.priority])}
+              {priorityMessage ? this.props.intl.formatMessage(priorityMessage) : null}
             </div>
           </div>
           <div className="mr-flex mr-justify-center mr-mt-2">
