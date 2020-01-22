@@ -72,7 +72,7 @@ export class ProjectDashboard extends Component {
       <div className="admin__manage__header admin__manage__header--flush">
         <nav className="breadcrumb" aria-label="breadcrumbs">
           <ul>
-            <li>
+            <li className="nav-title">
               <Link to='/admin/projects'>
                 <FormattedMessage {...manageMessages.manageHeader} />
               </Link>
@@ -82,7 +82,7 @@ export class ProjectDashboard extends Component {
               <a aria-current="page">
                 {this.props.project.displayName || this.props.project.name}
                 {isVirtual ?
-                  <span className="mr-mx-4 mr-text-yellow mr-text-sm">
+                  <span className="mr-mx-4 mr-text-pink mr-text-sm">
                     <FormattedMessage {...manageMessages.virtualHeader} />
                   </span> : null}
                 {this.props.loadingProject && <BusySpinner inline />}
@@ -94,21 +94,21 @@ export class ProjectDashboard extends Component {
         <div className="admin__manage__controls mr-flex">
           {manager.canWriteProject(this.props.project) && !isVirtual &&
             <Link to={`/admin/project/${this.props.project.id}/challenges/new`}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                  className="mr-button mr-button--dark mr-button--small mr-mr-4">
               <FormattedMessage {...messages.addChallengeLabel } />
             </Link>
           }
 
           {manager.canWriteProject(this.props.project) && isVirtual &&
             <Link to={`/admin/virtual/project/${this.props.project.id}/challenges/manage`}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                  className="mr-button mr-button--dark mr-button--small mr-mr-4">
               <FormattedMessage {...messages.manageChallengesLabel } />
             </Link>
           }
 
           {manager.canWriteProject(this.props.project) &&
             <Link to={`/admin/project/${this.props.project.id}/edit`}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                  className="mr-button mr-button--dark mr-button--small mr-mr-4">
               <FormattedMessage {...messages.editProjectLabel } />
             </Link>
           }
@@ -117,7 +117,7 @@ export class ProjectDashboard extends Component {
             <ConfirmAction>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a onClick={this.deleteProject}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                 className="mr-button mr-button--dark mr-button--small mr-mr-4">
                 <FormattedMessage {...messages.deleteProjectLabel } />
               </a>
             </ConfirmAction>

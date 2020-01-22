@@ -37,7 +37,7 @@
 
   &-info,
   &--blue {
-    @apply mr-border-blue mr-text-blue;
+    @apply mr-border-matisse-blue mr-text-matisse-blue;
 
     &:hover {
       @apply mr-border-green mr-text-green;
@@ -52,11 +52,27 @@
     }
   }
 
+  &--grey {
+    @apply mr-border-grey mr-text-grey;
+
+    &:hover {
+      @apply mr-border-black mr-text-black;
+    }
+  }
+
   &--orange {
     @apply mr-border-orange mr-text-orange;
 
     &:hover {
       @apply mr-border-green-dark mr-text-green-dark;
+    }
+  }
+
+  &--dark {
+    @apply mr-bg-black-10 mr-text-green-lighter mr-font-normal mr-border-none mr-rounded;
+
+    &:hover {
+      @apply mr-bg-black-40 mr-text-green-lighter;
     }
   }
 
@@ -74,6 +90,10 @@
     &:hover {
       @apply mr-bg-blue-dark;
     }
+  }
+
+  &--with-icon {
+    @apply mr-flex mr-items-center mr-justify-center;
   }
 }
 

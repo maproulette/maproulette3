@@ -113,7 +113,7 @@ export class ChallengeDashboard extends Component {
       <div className="admin__manage__header admin__manage__header--flush">
         <nav className="breadcrumb" aria-label="breadcrumbs">
           <ul>
-            <li>
+            <li className="nav-title">
               <Link to='/admin/projects'>
                 <FormattedMessage {...manageMessages.manageHeader} />
               </Link>
@@ -137,7 +137,7 @@ export class ChallengeDashboard extends Component {
         <div className="admin__manage__controls mr-flex">
           {hasTasks && isUsableChallengeStatus(status, true) &&
             <Link to={`/challenge/${this.props.challenge.id}`}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                  className="mr-button mr-button--dark mr-button--small mr-mr-4">
               <FormattedMessage {...messages.startChallengeLabel} />
             </Link>
           }
@@ -146,7 +146,7 @@ export class ChallengeDashboard extends Component {
             <React.Fragment>
               <Link to={`/admin/project/${projectId}/` +
                         `challenge/${this.props.challenge.id}/edit`}
-                    className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                    className="mr-button mr-button--dark mr-button--small mr-mr-4">
                 <FormattedMessage {...messages.editChallengeLabel } />
               </Link>
 
@@ -156,7 +156,7 @@ export class ChallengeDashboard extends Component {
                   dropdownButton={dropdown => (
                     // eslint-disable-next-line jsx-a11y/anchor-is-valid
                     <a onClick={dropdown.toggleDropdownVisible}
-                       className="mr-text-green-lighter hover:mr-text-white mr-mr-4 mr-flex mr-items-center"
+                       className="mr-button mr-button--dark mr-button--small mr-mr-4 mr-flex mr-items-center"
                     >
                       <FormattedMessage {...messages.moveChallengeLabel} />
                       <SvgSymbol
@@ -183,14 +183,14 @@ export class ChallengeDashboard extends Component {
               <Link to={{pathname: `/admin/project/${projectId}/` +
                                     `challenge/${this.props.challenge.id}/clone`,
                         state: {cloneChallenge: true}}}
-                    className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                    className="mr-button mr-button--dark mr-button--small mr-mr-4">
                 <FormattedMessage {...messages.cloneChallengeLabel } />
               </Link>
 
               <ConfirmAction>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a onClick={this.deleteChallenge}
-                  className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                   className="mr-button mr-button--dark mr-button--small mr-mr-4">
                   <FormattedMessage {...messages.deleteChallengeLabel } />
                 </a>
               </ConfirmAction>

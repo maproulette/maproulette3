@@ -44,7 +44,7 @@ export class CompletionRadar extends Component {
          </p>
         }
         <ResponsiveRadar data={metrics}
-                         colors={["#61CDBB"]}
+                         colors={["#737373"]}
                          keys={["tasks"]}
                          indexBy="status"
                          margin={{

@@ -40,7 +40,7 @@ export class ZoomInMessage extends Component {
   render() {
     return (
       <div className="mr-absolute mr-pin-t mr-mt-3 mr-w-full mr-flex mr-justify-center">
-        <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
+        <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
           <div className="mr-py-2 mr-px-3 mr-text-center">
             <FormattedMessage {...messages.zoomInForTasksLabel} />
             <div className="mr-pl-8 mr-inline-block"

@@ -1,22 +1,29 @@
 @import '../../variables.scss';
 
+$markerColor: #F7BB59;
+$markerTextColor: $white;
+$headingColor: $markerColor;
+$badgeColor: #F2EFE9;
+$badgeTextColor: #737373;
+
 .timeline.activity-timeline {
   .timeline-header {
+    display: none;
     span {
-      color: $white;
-      background-color: $green;
+      color: $markerTextColor;
+      background-color: $markerColor;
     }
   }
 
   .timeline-item {
     .timeline-marker {
-      background-color: $green;
-      border-color: $green;
+      background-color: $markerColor;
+      border-color: $markerColor;
     }
 
     .timeline-content {
       .heading {
-        color: $coral;
+        color: $headingColor;
         margin-top: 2px;
       }
 
@@ -26,14 +33,14 @@
         &::after {
           top: 0;
           left: 0;
-          color: $grey-dark;
-          background-color: $grey-lightest;
+          color: $badgeTextColor;
+          background-color: $badgeColor;
           box-shadow: none;
         }
 
         &.inverted {
           &::after {
-            background-color: $white;
+            background-color: $markerTextColor;
           }
         }
       }

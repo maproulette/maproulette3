@@ -1,6 +1,10 @@
 .mr-timeline {
   @apply mr-list-reset mr-ml-2 mr-py-4 mr-pl-6 mr-border-l mr-border-grey-light;
 
+  &.dark-mode {
+    @apply mr-border-white-15;
+  }
+
   @screen md {
     @apply mr-ml-6;
   }
@@ -15,7 +19,7 @@
   }
 
   &__header {
-    @apply mr-text-xs mr-uppercase mr-mb-4 mr-text-pink;
+    @apply mr-text-sm mr-uppercase mr-mb-4 mr-text-pink;
   }
 
   &__activity {
@@ -47,6 +51,22 @@
 
     .mr-badge {
       @apply mr-mr-1;
+    }
+  }
+
+  .mr-cards-inverse & {
+    .mr-timeline__period {
+      &:before {
+        @apply mr-bg-yellow;
+      }
+
+      .mr-timeline__header {
+        @apply mr-text-yellow;
+      }
+    }
+
+    .mr-badge {
+      @apply mr-bg-white mr-text-blue-dark;
     }
   }
 }

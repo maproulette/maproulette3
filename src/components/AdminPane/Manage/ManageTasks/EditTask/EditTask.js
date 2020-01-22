@@ -117,7 +117,7 @@ export class EditTask extends Component {
             <div className="admin__manage__header">
               <nav className="breadcrumb" aria-label="breadcrumbs">
                 <ul>
-                  <li>
+                  <li className="nav-title">
                     <Link to='/admin/projects'>
                       <FormattedMessage {...manageMessages.manageHeader} />
                     </Link>
@@ -162,16 +162,22 @@ export class EditTask extends Component {
                     onChange={this.changeHandler}
                     onSubmit={this.finish}
                     tagType="tasks">
-                <div className="mr-flex mr-justify-end mr-mt-8">
-                  <button className="mr-button mr-button--green"
-                          disabled={this.state.isSaving}
-                          onClick={this.cancel}>
+                <div className="mr-flex mr-justify-between mr-items-center mr-mt-8">
+                  <button
+                    className="mr-button mr-button--grey"
+                    disabled={this.state.isSaving}
+                    onClick={this.cancel}
+                  >
                     <FormattedMessage {...messages.cancel} />
                   </button>
 
-                  <button className={classNames("mr-button mr-button--green mr-ml-4",
-                                                {"is-loading": this.state.isSaving})}
-                          onClick={this.props.finish}>
+                  <button
+                    className={classNames(
+                      "mr-button mr-button--green mr-ml-4",
+                      {"is-loading": this.state.isSaving}
+                    )}
+                    onClick={this.props.finish}
+                  >
                     <FormattedMessage {...messages.save} />
                   </button>
                 </div>

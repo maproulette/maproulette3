@@ -74,8 +74,8 @@ export default class ProjectListWidget extends Component {
         sym={icon ? icon : `${view}-icon`}
         viewBox="0 0 20 20"
         className={classNames(
-          "mr-h-6 mr-w-6 mr-fill-blue-dark mr-ml-4",
-          {"mr-fill-green-light": this.props.widgetConfiguration.view === view}
+          "mr-h-6 mr-w-6 mr-ml-4",
+          this.props.widgetConfiguration.view === view ? "mr-fill-grey" : "mr-fill-grey-light"
         )}
       />
     </a>
@@ -93,9 +93,12 @@ export default class ProjectListWidget extends Component {
     )
 
     const searchControl = this.props.projects.length === 0 ? null : (
-      <ProjectAndChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm" 
+      <ProjectAndChallengeSearch
+        className="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
         inputClassName="mr-text-grey mr-leading-normal"
-        placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)} />
+        iconClassName="mr-w-5 mr-h-5 mr-mr-2 mr-fill-grey-light"
+        placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
+      />
     )
 
     return (

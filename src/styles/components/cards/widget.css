@@ -2,7 +2,7 @@
   @apply mr-relative mr-bg-white mr-shadow mr-rounded mr-text-grey mr-flex mr-flex-col;
 
   .mr-cards-inverse & {
-    @apply mr-bg-white-10 mr-text-white;
+    @apply mr-bg-black-10 mr-text-white;
   }
 
   &--top-row {
@@ -34,7 +34,7 @@
   }
 
   &__title {
-    @apply mr-font-bold mr-text-lg mr-text-blue-light mr-my-2;
+    @apply mr-font-bold mr-text-lg mr-text-matisse-blue mr-my-2;
 
     &:after {
       content: '';

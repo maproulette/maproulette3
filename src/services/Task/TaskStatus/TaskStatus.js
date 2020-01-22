@@ -2,6 +2,7 @@ import _map from 'lodash/map'
 import _invert from 'lodash/invert'
 import _fromPairs from 'lodash/fromPairs'
 import _startCase from 'lodash/startCase'
+import { colors } from '../../../tailwind'
 import messages from './Messages'
 
 // These statuses are defined on the server
@@ -28,14 +29,14 @@ export const TaskStatus = Object.freeze({
 export const keysByStatus = Object.freeze(_invert(TaskStatus))
 
 export const TaskStatusColors = Object.freeze({
-  [TaskStatus.fixed]: '#61CDBB',
-  [TaskStatus.alreadyFixed]: '#97E3D5',
-  [TaskStatus.falsePositive]: '#F1E15B',
-  [TaskStatus.skipped]: '#E8A838',
-  [TaskStatus.tooHard]: '#F47560',
-  [TaskStatus.created]: '#2281C2',
-  [TaskStatus.disabled]: '#8990E5',
-  [TaskStatus.deleted]: '#8990E5',
+  [TaskStatus.fixed]: colors['green-light'],
+  [TaskStatus.alreadyFixed]: colors['teal'],
+  [TaskStatus.falsePositive]: colors['mango'],
+  [TaskStatus.skipped]: colors['pink'],
+  [TaskStatus.tooHard]: colors['red-light'],
+  [TaskStatus.created]: colors['matisse-blue'],
+  [TaskStatus.disabled]: colors['purple'],
+  [TaskStatus.deleted]: colors['grey'],
 })
 
 /**

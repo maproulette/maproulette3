@@ -66,9 +66,14 @@ export default class ChallengeCard extends Component {
             <div className="item-pinned">
               <div className="clickable"
                   onClick={() => this.props.toggleChallengePin(this.props.challenge.id)}>
-                <SvgSymbol className={classNames('icon', {enabled: this.props.isPinned})}
-                            viewBox='0 0 20 20'
-                            sym='pin-icon' />
+                <SvgSymbol
+                  className={classNames(
+                    "mr-w-4 mr-h-4 mr-rotate-10",
+                    this.props.isPinned ? 'mr-fill-matisse-blue' : 'mr-fill-grey-light'
+                  )}
+                  viewBox='0 0 20 20'
+                  sym='pin-icon'
+                />
               </div>
             </div>
 
