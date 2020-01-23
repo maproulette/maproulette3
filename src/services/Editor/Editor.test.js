@@ -565,35 +565,3 @@ describe('constructLevel0URI', () => {
   })
 })
 
-describe('featureOSMId', () => {
-  test("returns the numerical id from the `osmid` field if it exists", () => {
-    basicFeature.osmid = '"123"'
-
-    expect(featureOSMId(basicFeature)).toEqual('123')
-  })
-
-  test("returns the numerical id from the `@id` field if it exists", () => {
-    basicFeature['@id'] = '"node/1042007773"'
-
-    expect(featureOSMId(basicFeature)).toEqual('1042007773')
-  })
-
-  test("also looks for `osmid` property if no fields match", () => {
-    basicFeature.properties.osmid = '"123"'
-
-    expect(featureOSMId(basicFeature)).toEqual('123')
-  })
-
-  test("also looks for `@id` property if no fields match", () => {
-    basicFeature.properties['@id'] = '"node/1042007773"'
-
-    expect(featureOSMId(basicFeature)).toEqual('1042007773')
-  })
-
-  test("favors osmid over @id if both are present", () => {
-    basicFeature.properties.osmid = '123'
-    basicFeature.properties['@id'] = 'way/456'
-
-    expect(featureOSMId(basicFeature)).toEqual('123')
-  })
-})

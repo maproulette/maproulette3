@@ -185,27 +185,6 @@ Unit tests are built with [Jest](https://facebook.github.io/jest/) +
 
 `yarn test` to run them in watch mode.
 
-## End-to-End Tests
-
-> Note: End-to-End tests are temporarily disabled as the Chimp framework is not
-> compatible with Node 10 LTS.
-
-End-to-end tests are built with [Chimp](https://chimp.readme.io/), which
-combines [Webdriver.io](http://webdriver.io/guide.html) for Selenium +
-[Cucumber](https://cucumber.io/docs/reference) and
-[Jasmine](https://jasmine.github.io/api/3.0/global) for tests.
-
-Prior to running tests locally, you'll need to tell Chimp the URL to your
-MR3 app. Copy `chimp.example.js` to `chimp.js`, edit the file and modify the
-`mr3URL` setting. You only need to do this once.
-
-Then:
-`yarn e2e` to run the tests, or `yarn e2e --watch` to enter watch mode and only
-run tests with a `@watch` tag (useful when working on new tests).
-
-[Sauce Labs](https://saucelabs.com) has also graciously provided us with free
-access to their cross-browser testing platform.
-
 ## CSS Styling and Naming
 
 We are currently in transition between the old styling that used the

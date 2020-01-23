@@ -10,3 +10,4 @@ cache:
     - node_modules
 script:
   - yarn run build
+  - yarn test --maxWorkers=2

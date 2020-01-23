@@ -19,9 +19,11 @@ userDenormalizationSchema.mockImplementation(() => schema)
 
 const isLoggedIn = jest.fn()
 const isSuperUser = jest.fn()
+const hasUnreadNotifications = jest.fn()
 AsEndUser.mockImplementation(() => ({
   isLoggedIn,
   isSuperUser,
+  hasUnreadNotifications,
 }))
 
 
