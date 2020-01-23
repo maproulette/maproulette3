@@ -256,7 +256,7 @@ export class ChallengeProgress extends Component {
         {this.generateProgressBar(taskActions, completionData, statusColors, orderedKeys)}
         {this.generateProgressBarLabel(taskActions)}
 
-        {taskPriorityActions &&
+        {taskPriorityActions && this.props.setShowByPriority &&
           <div className="mr-text-green-light mr-cursor-pointer"
                onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}>
             <span className="mr-align-top">
