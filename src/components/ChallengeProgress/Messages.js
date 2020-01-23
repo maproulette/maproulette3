@@ -33,4 +33,9 @@ export default defineMessages({
     id: "ChallengeProgress.priority.label",
     defaultMessage: "{priority} Priority Tasks"
   },
+
+  reviewStatusLabel: {
+    id: "ChallengeProgress.reviewStatus.label",
+    defaultMessage: "Review Status"
+  }
 })

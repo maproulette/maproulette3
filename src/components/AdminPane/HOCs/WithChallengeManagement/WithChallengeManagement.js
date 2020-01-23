@@ -12,6 +12,8 @@ import { saveChallenge,
          fetchChallenge,
          fetchChallengeActions,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
+import { recordChallengeSnapshot }
+          from '../../../../services/Challenge/ChallengeSnapshot'
 import { bulkUpdateTasks, deleteChallengeTasks }
        from '../../../../services/Task/Task'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
@@ -139,6 +141,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(moveChallenge(challengeId, toProjectId)),
 
   deleteIncompleteTasks: challenge => deleteIncompleteTasks(dispatch, ownProps, challenge),
+
+  recordSnapshot: challengeId => recordChallengeSnapshot(challengeId),
 
   rebuildChallenge: async (challenge, localFile, dataOriginDate) => {
     ownProps.updateCreatingTasksProgress(true)

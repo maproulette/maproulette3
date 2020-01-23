@@ -53,6 +53,8 @@ export { default as ReviewTaskMetricsWidget }
       from './ReviewTaskMetricsWidget/ReviewTaskMetricsWidget'
 export { default as ReviewMapWidget }
       from './ReviewMapWidget/ReviewMapWidget'
+export { default as SnapshotProgressWidget }
+       from './SnapshotProgressWidget/SnapshotProgressWidget'
 
 
 // Import (optional) contributed widgets specific to local installation.

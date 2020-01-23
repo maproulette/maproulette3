@@ -66,6 +66,9 @@ const apiRoutes = factory => {
       'uploadGeoJSON': factory.put('/challenge/:id/addFileTasks'),
       'delete': factory.delete('/challenge/:id'),
       'propertyKeys': factory.get('/data/challenge/:id/propertyKeys'),
+      'snapshotList': factory.get('/snapshot/challenge/:id/list'),
+      'recordSnapshot': factory.get('/snapshot/challenge/:id/record'),
+      'snapshot': factory.get('/snapshot/:id'),
     },
     'virtualChallenge': {
       'single': factory.get('/virtualchallenge/:id'),
