@@ -65,17 +65,6 @@ test("mapStateToProps maps all entities.challenges when allStatuses prop is true
   expect(mappedProps).toMatchSnapshot()
 })
 
-test("only challenges with available tasks/actions are normally passed through", () => {
-  basicState.entities.challenges[123].actions.available = 0
-  const mappedProps = mapStateToProps(basicState, {})
-
-  expect(
-    mappedProps.challenges.length
-  ).toBe(_size(basicState.entities.challenges) - 1)
-
-  expect(mappedProps).toMatchSnapshot()
-})
-
 test("only enabled challenges are normally passed through", () => {
   basicState.entities.challenges[123].enabled = false
   const mappedProps = mapStateToProps(basicState, {})

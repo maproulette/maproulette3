@@ -57,8 +57,8 @@ beforeEach(() => {
     },
   }
 
-  loadRandomTaskFromChallenge.mockClear()
-  loadRandomTaskFromVirtualChallenge.mockClear()
+  loadRandomTaskFromChallenge.mockReset()
+  loadRandomTaskFromVirtualChallenge.mockReset()
   jest.useFakeTimers()
 })
 
@@ -93,7 +93,7 @@ test("mapDispatchToProps completeTask calls completeTask", () => {
 
   mappedProps.completeTask(task, challenge.id, completionStatus)
   expect(dispatch).toBeCalled()
-  expect(completeTask).toBeCalledWith(task.id, challenge.id, completionStatus)
+  expect(completeTask).toBeCalled()
 })
 
 test("completeTask calls addComment if comment present",  async () => {
@@ -106,7 +106,7 @@ test("completeTask calls addComment if comment present",  async () => {
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
   await mappedProps.completeTask(task, challenge.id, completionStatus, comment)
-  expect(addTaskComment).toHaveBeenLastCalledWith(task, comment, completionStatus)
+  expect(addTaskComment).toHaveBeenLastCalledWith(task.id, comment, completionStatus)
 })
 
 test("completeTask does not call addComment if no comment", async () => {
@@ -131,7 +131,7 @@ test("completeTask calls loadRandomTaskFromChallenge without proximate task by d
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  await mappedProps.completeTask(task, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, undefined)
 })
 
@@ -143,8 +143,7 @@ test("completeTask calls loadRandomTaskFromChallenge with task if proximate load
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  await mappedProps.completeTask(task, challenge.id,
-                           completionStatus, "", TaskLoadMethod.proximity)
+  await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.proximity)
   expect(loadRandomTaskFromChallenge).toBeCalledWith(challenge.id, task.id)
 })
 
@@ -155,7 +154,7 @@ test("completeTask calls fetchChallengeActions", () => {
   }
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
-  mappedProps.completeTask(task, challenge.id, completionStatus)
+  mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
   jest.runOnlyPendingTimers()
 
   expect(fetchChallengeActions).toBeCalledWith(challenge.id)
@@ -173,7 +172,7 @@ test("completeTask routes the user to the new task if there is one", async () =>
 
   const mappedProps = mapDispatchToProps(dispatch, {history, challengeId: challenge.id})
 
-  await mappedProps.completeTask(task, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
   expect(history.push).toBeCalledWith(`/challenge/${challenge.id}/task/${nextTask.id}`)
 })
 
@@ -190,11 +189,11 @@ test("completeTask routes the user to the new task in a virtual challenge", asyn
   const mappedProps =
     mapDispatchToProps(dispatch, {history, virtualChallengeId: virtualChallenge.id})
 
-  await mappedProps.completeTask(task, challenge.id, completionStatus)
+  await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
   expect(history.push).toBeCalledWith(`/virtual/${virtualChallenge.id}/task/${nextTask.id}`)
 })
 
-test("completeTask routes the user home if the next task isn't new", async () => {
+test("completeTask routes the user to challenge page if the next task isn't new", async () => {
   const nextTask = {id: task.id} // same as our current task
 
   completeTask.mockReturnValueOnce(Promise.resolve())
@@ -206,11 +205,11 @@ test("completeTask routes the user home if the next task isn't new", async () =>
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(task, challenge.id, completionStatus)
-  expect(history.push).toBeCalledWith('/browse/challenges', {congratulate: true})
+  await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
+  expect(history.push).toBeCalledWith(`/browse/challenges/${challenge.id}`)
 })
 
-test("completeTask routes the user home if there is no next task", async () => {
+test("completeTask routes the user to challenge page if there is no next task", async () => {
   completeTask.mockReturnValueOnce(Promise.resolve())
   loadRandomTaskFromChallenge.mockReturnValueOnce(Promise.resolve(null))
   const dispatch = jest.fn(value => value)
@@ -220,6 +219,6 @@ test("completeTask routes the user home if there is no next task", async () => {
 
   const mappedProps = mapDispatchToProps(dispatch, {history})
 
-  await mappedProps.completeTask(task, challenge.id, completionStatus)
-  expect(history.push).toBeCalledWith('/browse/challenges', {congratulate: true})
+  await mappedProps.completeTask(task, challenge.id, completionStatus, null, null, TaskLoadMethod.random)
+  expect(history.push).toBeCalledWith(`/browse/challenges/${challenge.id}`)
 })

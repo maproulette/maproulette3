@@ -50,8 +50,8 @@ describe("basemapLayerSource", () => {
   })
 
   test("Returns an identified layer if defaultBasemap setting matches", () => {
-    const layer = basemapLayerSource(ChallengeBasemap.identified, 'DigitalGlobe-Premium', null, layerId)
-    expect(layer.id).toEqual('DigitalGlobe-Premium')
+    const layer = basemapLayerSource(ChallengeBasemap.identified, 'osm-mapnik-black_and_white', null, layerId)
+    expect(layer.id).toEqual('osm-mapnik-black_and_white')
   })
 
   test("Returns null if basemap set to none", () => {

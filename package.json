@@ -113,7 +113,6 @@
     "start": "npm-run-all -p update-layers watch-postcss start-js",
     "build": "yarn run build-intl && yarn run update-layers && yarn run build-postcss && react-scripts build",
     "test": "react-scripts test",
-    "e2e": "yarn run chimp",
     "eject": "react-scripts eject"
   },
   "browserslist": [
