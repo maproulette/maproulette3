@@ -17,11 +17,11 @@ import {
   importWorkspaceConfiguration,
   ensurePermanentWidgetsAdded,
 } from '../../../services/Widget/Widget'
+import SignIn from '../../../pages/SignIn/SignIn'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import WithStatus from '../WithStatus/WithStatus'
 import WithErrors from '../WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
-import SignInButton from '../../SignInButton/SignInButton'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 
 /**
@@ -318,12 +318,11 @@ export const WithWidgetWorkspaces = function(WrappedComponent,
     render() {
       if (!_get(this.props, 'user.isLoggedIn')) {
         return (
+          this.props.checkingLoginStatus ?
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
-            {this.props.checkingLoginStatus ?
-             <BusySpinner /> :
-             <SignInButton {...this.props} longForm className='' />
-            }
-          </div>
+           <BusySpinner />
+          </div> :
+          <SignIn {...this.props} />
         )
       }
 

@@ -39,3 +39,7 @@
 .mr-bg-settings {
   background-image: url('./static/images/bg-settings.svg');
 }
+
+.mr-bg-cityscape {
+  background-image: url('./static/images/bg-cityscape.svg');
+}

@@ -607,6 +607,7 @@ module.exports = {
     full: '100%',
     screen: '100vh',
     '48': '12rem',
+    '120': '30rem',
     'screen-50': '50vh',
     'content-no-filters': 'calc(100vh - 103px)',
   },
@@ -747,6 +748,7 @@ module.exports = {
     '31': '7.75rem',
     '32': '8rem',
     '41': '10.25rem',
+    '48': '12rem',
   },
 
   /*
