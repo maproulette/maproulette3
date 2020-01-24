@@ -125,10 +125,10 @@ export class ChallengeProgress extends Component {
                         top: 5,
                         right: 15,
                         bottom: 25,
-                        left: 7,
+                        left: 10,
                       }}
                       layout="horizontal"
-                      colorBy={item => statusColors[item.id]}
+                      colors={item => statusColors[item.id]}
                       borderColor="inherit:darker(1.6)"
                       enableGridY={false}
                       enableLabel={false}
