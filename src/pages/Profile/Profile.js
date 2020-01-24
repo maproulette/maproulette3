@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
+import SignIn from '../../pages/SignIn/SignIn'
 import UserSettings from './UserSettings/UserSettings'
 import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
-import SignInButton from '../../components/SignInButton/SignInButton'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
 import ApiKey from './ApiKey'
 import messages from './Messages'
@@ -19,12 +19,11 @@ class Profile extends Component {
   render() {
     if (!this.props.user) {
       return (
+        this.props.checkingLoginStatus ?
         <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-blue">
-          {this.props.checkingLoginStatus ?
-           <BusySpinner /> :
-           <SignInButton {...this.props} longForm />
-          }
-        </div>
+          <BusySpinner />
+        </div> :
+        <SignIn {...this.props} />
       )
     }
 
