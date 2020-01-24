@@ -108,6 +108,8 @@
   "Admin.EditChallenge.form.customBasemap.description": "Insert a custom base map URL here. E.g. `https://\\{s\\}.tile.openstreetmap.org/\\{z\\}/\\{x\\}/\\{y\\}.png` {dummy}",
   "Admin.EditChallenge.form.exportableProperties.label": "Properties to export in CSV",
   "Admin.EditChallenge.form.exportableProperties.description": "Any properties included in this comma separated list will be exported as a column in the CSV export and populated with the first matching feature property from each task.",
+  "Admin.EditChallenge.form.osmIdProperty.label": "OSM Id Property",
+  "Admin.EditChallenge.form.osmIdProperty.description": "The name of the task feature property to treat as an OpenStreetMap element identifier for tasks. If left blank, MapRoulette will fall back to checking a series of common id properties, including those used by Overpass. If specified, tasks missing the property will be assigned a random identifier even if the task contains those other common id properties.",
   "Admin.ManageChallenges.header": "Challenges",
   "Admin.ManageChallenges.help.info": "Challenges consist of many tasks that all help address a specific problem or shortcoming with OpenStreetMap data. Tasks are typically generated automatically from an overpassQL query you provide when creating a new challenge, but can also be loaded from a local file or remote URL containing GeoJSON features. You can create as many challenges as you'd like.",
   "Admin.ManageChallenges.search.placeholder": "Name",

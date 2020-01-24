@@ -446,4 +446,19 @@ will not be able to make sense of it.
       "will be exported as a column in the CSV export and populated with the " +
       "first matching feature property from each task.",
   },
+
+  osmIdPropertyLabel: {
+    id: 'Admin.EditChallenge.form.osmIdProperty.label',
+    defaultMessage: "OSM Id Property"
+  },
+
+  osmIdPropertyDescription: {
+    id: 'Admin.EditChallenge.form.osmIdProperty.description',
+    defaultMessage: "The name of the task feature property to treat as an " +
+      "OpenStreetMap element identifier for tasks. If left blank, " +
+      "MapRoulette will fall back to checking a series of common id properties, " +
+      "including those used by Overpass. If specified, tasks missing the " +
+      "property will be assigned a random identifier even if the task " +
+      "contains those other common id properties."
+  },
 })
