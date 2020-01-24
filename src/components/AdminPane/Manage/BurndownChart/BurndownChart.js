@@ -93,7 +93,7 @@ export class BurndownChart extends Component {
                           tickRotation: 0,
                         }}
                         enableArea={true}
-                        enableDots={false}
+                        enablePoints={false}
                         dotSize={10}
                         dotColor="inherit"
                         dotBorderWidth={2}
