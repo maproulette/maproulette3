@@ -52,7 +52,7 @@ export default class ProjectManagersWidget extends Component {
     })
 
     this.props.setProjectManagerGroupType(
-      this.props.project.id, managerOsmId, groupType
+      this.props.project.id, managerOsmId, true, groupType
     ).then(() => this.setState({
       updatingManagers: _without(this.state.updatingManagers, managerOsmId)
     }))
@@ -64,7 +64,7 @@ export default class ProjectManagersWidget extends Component {
     })
 
     this.props.removeProjectManager(
-      this.props.project.id, managerOsmId
+      this.props.project.id, managerOsmId, true
     ).then(() => this.setState({
       updatingManagers: _without(this.state.updatingManagers, managerOsmId)
     }))
