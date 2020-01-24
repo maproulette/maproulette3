@@ -11,6 +11,6 @@ export default defineMessages({
 
   startChallenge: {
     id: "Home.FeaturedChallenges.start",
-    defaultMessage: "Start",
+    defaultMessage: "Explore",
   },
 })
