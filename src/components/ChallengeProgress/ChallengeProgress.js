@@ -236,7 +236,12 @@ export class ChallengeProgress extends Component {
 
         return (
           <div className="mr-mt-6" key={priority}>
-            <div className="mr-text-matisse-blue mr-text-md mr-font-medium mr-mb-4">
+            <div
+              className={classNames(
+                "mr-text-md mr-font-medium mr-mb-4",
+                this.props.lightMode ? "mr-text-matisse-blue" : "mr-text-yellow"
+              )}
+            >
               <FormattedMessage
                 {...messages.priorityLabel}
                 values={{priority: localizedPriorityLabels[keysByPriority[priority]]}}
@@ -257,8 +262,13 @@ export class ChallengeProgress extends Component {
         {this.generateProgressBarLabel(taskActions)}
 
         {taskPriorityActions && this.props.setShowByPriority &&
-          <div className="mr-text-green-light mr-cursor-pointer"
-               onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}>
+          <div
+            className={classNames(
+              "mr-cursor-pointer",
+              this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"
+            )}
+            onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}
+          >
             <span className="mr-align-top">
               <FormattedMessage {...messages.byPriorityToggle} />
             </span>

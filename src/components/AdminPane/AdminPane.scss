@@ -50,15 +50,6 @@
       width: auto;
       fill: $grey-lightest;
       vertical-align: middle;
-
-      &.turnOff {
-        fill: $blue;
-      }
-
-      &.partialOn {
-        fill: $blue;
-        opacity: 0.5;
-      }
     }
   }
 

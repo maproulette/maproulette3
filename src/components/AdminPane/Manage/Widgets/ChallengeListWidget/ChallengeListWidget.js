@@ -19,7 +19,6 @@ import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
 import Dropdown from '../../../../Dropdown/Dropdown'
 import messages from './Messages'
-import './ChallengeListWidget.scss'
 
 const descriptor = {
   widgetKey: 'ChallengeListWidget',
@@ -89,9 +88,18 @@ export default class ChallengeListWidget extends Component {
       <div className=''>
         <div className='item-tally-toggle'>
           <div className="clickable" onClick={this.toggleAllTallies}>
-            <SvgSymbol className={classNames('icon', {turnOff: allEnabled, partialOn: someEnabled && !allEnabled})}
-                        viewBox='0 0 20 20'
-                        sym='chart-icon' />
+            <SvgSymbol
+              className={classNames(
+                "mr-w-4 mr-h-4",
+                {
+                  "mr-fill-matisse-blue": allEnabled,
+                  "mr-fill-matisse-blue-50": someEnabled && !allEnabled,
+                  "mr-fill-grey-light-more": !someEnabled && !allEnabled
+                }
+              )}
+              viewBox='0 0 20 20'
+              sym='chart-icon'
+            />
           </div>
         </div>
         <div className="mr-float-right mr-pt-3 mr-pl-4">

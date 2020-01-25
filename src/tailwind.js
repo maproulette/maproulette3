@@ -101,6 +101,7 @@ let colors = {
   'picton-blue': '#50B7E5',
   'lavender-rose': '#FF98F7',
   'matisse-blue': '#1A688B',
+  'matisse-blue-50': 'rgba(26,104,139, 0.5)',
 
   // Username colors
   'indigo-300': 'hsl(272, 49%, 53%)', //'#8B40CD',
@@ -884,6 +885,7 @@ module.exports = {
     red: colors['red'],
     twitter: colors['twitter'],
     'matisse-blue': colors['matisse-blue'],
+    'matisse-blue-50': colors['matisse-blue-50'],
   },
 
   /*
