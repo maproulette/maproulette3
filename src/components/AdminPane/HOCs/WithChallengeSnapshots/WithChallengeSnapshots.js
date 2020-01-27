@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { injectIntl } from 'react-intl'
 import _get from 'lodash/get'
+import _find from 'lodash/find'
+import _values from 'lodash/values'
 import { fetchChallengeSnapshotList,
          recordChallengeSnapshot } from '../../../../services/Challenge/ChallengeSnapshot'
 import WithComputedMetrics from '../../HOCs/WithComputedMetrics/WithComputedMetrics'
@@ -9,7 +11,6 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
   return class extends Component {
     state = {
       loading: false,
-      snapshots: {},
       snapshotList: [],
       selectedSnapshot: null
     }
@@ -20,7 +21,7 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
         this.setState({loading: true})
 
         fetchChallengeSnapshotList(challengeId, true).then(normalizedResults => {
-          let fetchedSnapshots = normalizedResults.result
+          let fetchedSnapshots = _values(normalizedResults.result)
           this.setState({loading: false, snapshotList: fetchedSnapshots})
         })
       }
@@ -37,9 +38,11 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
       }
     }
 
-    getSnapshot = (snapshotId) => {
+    setSelectedSnapshot = (snapshotId) => {
       if (snapshotId) {
-        this.setState({selectedSnapshot: this.state.snapshots[snapshotId]})
+        const snapshot = _find(this.state.snapshotList, s => s.id === snapshotId)
+        this.setState({selectedSnapshot: snapshot})
+
       }
       else {
         this.setState({selectedSnapshot: null})
@@ -50,7 +53,7 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
       this.updateSnapshots(this.props)
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
       const challengeId =_get(this.props.challenge, 'id')
       if (challengeId && challengeId !== _get(prevProps.challenge, 'id')) {
         this.updateSnapshots(this.props)
@@ -74,7 +77,7 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
                {...this.props}
                recordSnapshot={() => this.recordSnapshot(this.props)}
                snapshotList={this.state.snapshotList}
-               getSnapshot={this.getSnapshot}
+               setSelectedSnapshot={this.setSelectedSnapshot}
                currentMetrics={this.props.taskMetrics}
                taskMetrics =
                  {_get(this.state.selectedSnapshot, 'actions') || this.props.taskMetrics}

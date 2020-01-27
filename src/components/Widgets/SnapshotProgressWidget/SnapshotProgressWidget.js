@@ -63,7 +63,7 @@ export default class SnapshotProgressWidget extends Component {
       <li key={snapshot.id}>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => {
-          props.getSnapshot(snapshot.id)
+          props.setSelectedSnapshot(snapshot.id)
           dropdown.closeDropdown()
           this.setState({chosenSnapshot: snapshot})
         }}>
@@ -74,7 +74,7 @@ export default class SnapshotProgressWidget extends Component {
       <li key="current">
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={() => {
-          props.getSnapshot(null)
+          props.setSelectedSnapshot(null)
           dropdown.closeDropdown()
           this.setState({chosenSnapshot: null})
         }}>
