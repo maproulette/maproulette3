@@ -19,7 +19,6 @@ import { taskDenormalizationSchema,
          completeTask,
          completeTaskBundle,
          updateTaskTags } from '../../../services/Task/Task'
-import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { fetchTaskForReview } from '../../../services/Task/TaskReview/TaskReview'
 import { fetchChallenge, fetchParentProject }
        from '../../../services/Challenge/Challenge'
@@ -207,22 +206,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         }
       }
 
-      if (taskStatus === TaskStatus.skipped && task.status !== TaskStatus.created) {
-        // Skipping task that already has a status
-        return doAfter()
+      let suggestedFixSummary = null
+      if (task.suggestedFix) {
+        suggestedFixSummary = AsSuggestedFix(task).tagChangeSummary(tagEdits)
       }
-      else {
-        let suggestedFixSummary = null
-        if (task.suggestedFix) {
-          suggestedFixSummary = AsSuggestedFix(task).tagChangeSummary(tagEdits)
-        }
 
-        return dispatch(
-          taskBundle ?
-          completeTaskBundle(taskBundle.bundleId, taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
-          completeTask(taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses)
-        ).then(() => doAfter())
-      }
+      return dispatch(
+        taskBundle ?
+        completeTaskBundle(taskBundle.bundleId, taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
+        completeTask(taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses)
+      ).then(() => doAfter())
     },
 
     /**
