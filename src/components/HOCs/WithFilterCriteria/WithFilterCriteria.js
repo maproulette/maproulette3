@@ -185,9 +185,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
        }
 
        if (!_isEqual(prevState.criteria, this.state.criteria) && !this.props.skipRefreshTasks) {
-         if (this.state.criteria.boundingBox) {
-           this.refreshTasks(typedCriteria)
-         }
+         this.refreshTasks(typedCriteria)
        }
        else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||
                 this.props.challengeId !== prevProps.challengeId) {
