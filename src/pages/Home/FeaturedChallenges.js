@@ -20,9 +20,11 @@ export class FeaturedChallenges extends Component {
 
     return (
       <Link
-        to={{}}
+        to={{
+          pathname: `/browse/challenges/${challenge.id}`,
+          state: { fromSearch: true },
+        }}
         className="mr-button mr-button--small"
-        onClick={() => this.props.startChallenge(challenge)}
       >
         <FormattedMessage {...messages.startChallenge} />
       </Link>

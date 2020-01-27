@@ -831,7 +831,7 @@
   "Admin.EditChallenge.overpass.errors.noTurboShortcuts": "Overpass Turbo shortcuts are not supported. If you wish to use them, please visit Overpass Turbo and test your query, then choose Export -> Query -> Standalone -> Copy and then paste that here.",
   "Dashboard.header": "Dashboard",
   "Home.FeaturedChallenges.improveOSM": "Start improving OpenStreetMap!",
-  "Home.FeaturedChallenges.start": "Start",
+  "Home.FeaturedChallenges.start": "Explore",
   "Inbox.header": "Notifications",
   "Inbox.controls.refreshNotifications.label": "Refresh",
   "Inbox.controls.manageSubscriptions.label": "Manage Subscriptions",

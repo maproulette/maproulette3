@@ -128,7 +128,7 @@ export class ChallengeResultItem extends Component {
    *
    * @private
    */
-  startBrowsing = () => {
+  viewChallengeDetails = () => {
     this.setState({isBrowsing: true})
     setTimeout(() => {
       this.props.startBrowsingChallenge(this.props.challenge)
@@ -145,15 +145,6 @@ export class ChallengeResultItem extends Component {
   stopBrowsing = () => {
     this.setState({isBrowsing: false})
     setTimeout(() => this.props.stopBrowsingChallenge(), 0)
-  }
-
-  /**
-   * Toggle whether this challeng is being actively browsed
-   *
-   * @private
-   */
-  toggleActive = () => {
-    this.state.isBrowsing ? this.stopBrowsing() : this.startBrowsing()
   }
 
   /**
@@ -234,8 +225,8 @@ export class ChallengeResultItem extends Component {
         <CardChallenge
           className="mr-mb-4"
           challenge={this.props.challenge}
-          isExpanded={this.state.isBrowsing}
-          toggleExpanded={this.toggleActive}
+          isExpanded={false}
+          cardClicked={this.viewChallengeDetails}
           isSaved={isSaved}
           isLoading={this.props.isStarting}
           saveControl={saveChallengeControl}

@@ -60,11 +60,19 @@ export class CardChallenge extends Component {
           {'is-active': this.props.isExpanded}
         )}
       >
-        <header className="mr-card-challenge__header" onClick={this.props.toggleExpanded}>
+        <header className="mr-card-challenge__header" onClick={this.props.cardClicked}>
           <div>
             <ChallengeTaxonomy {...this.props} />
             <h3 className="mr-card-challenge__title">
-              {this.props.challenge.name}
+              <Link
+                to={{
+                  pathname: `/browse/challenges/${this.props.challenge.id}`,
+                  state: { fromSearch: true },
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                {this.props.challenge.name}
+              </Link>
             </h3>
 
             {this.props.challenge.parent && // virtual challenges don't have projects
@@ -161,8 +169,8 @@ CardChallenge.propTypes = {
   startChallenge: PropTypes.func.isRequired,
   /** Set to true if card should be in expanded view */
   isExpanded: PropTypes.bool,
-  /** Invoked to toggle expansion of the card, if provided */
-  toggleExpanded: PropTypes.func,
+  /** Invoked when the card is clicked, if provided */
+  cardClicked: PropTypes.func,
   /** Set to true if this challenge has been saved by the user */
   isSaved: PropTypes.bool,
   /** Optional control to be used for saving the challenge */
@@ -181,7 +189,7 @@ CardChallenge.defaultProps = {
   isExpanded: true,
   isSaved: false,
   isLoading: false,
-  toggleExpanded: _noop,
+  cardClicked: _noop,
 }
 
 export default WithStartChallenge(CardChallenge)

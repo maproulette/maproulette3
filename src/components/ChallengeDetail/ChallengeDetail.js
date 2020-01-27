@@ -39,6 +39,10 @@ export class ChallengeDetail extends Component {
   state = {
   }
 
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   render() {
     const challenge = this.props.browsedChallenge
     if (!_isObject(challenge) || this.props.loadingBrowsedChallenge) {
