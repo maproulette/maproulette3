@@ -24,6 +24,7 @@ import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskCl
 import WithChallengeTaskClusters from '../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
 import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithFilterCriteria from '../../HOCs/WithFilterCriteria/WithFilterCriteria'
+import WithTaskPropertyKeys from '../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys'
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
@@ -338,15 +339,17 @@ registerWidgetType(
   WithNearbyTasks(
     WithClusteredTasks(
       WithFilteredClusteredTasks(
-        WithFilterCriteria(
-          WithBoundedTasks(
-            WithBrowsedChallenge(
-              WithWebSocketSubscriptions(
-                TaskBundleWidget,
-              )
-            ),
-            'filteredClusteredTasks',
-            'taskInfo'
+        WithTaskPropertyKeys(
+          WithFilterCriteria(
+            WithBoundedTasks(
+              WithBrowsedChallenge(
+                WithWebSocketSubscriptions(
+                  TaskBundleWidget,
+                )
+              ),
+              'filteredClusteredTasks',
+              'taskInfo'
+            )
           )
         ),
         'clusteredTasks',

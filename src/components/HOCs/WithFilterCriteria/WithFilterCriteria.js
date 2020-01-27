@@ -5,9 +5,7 @@ import _isEqual from 'lodash/isEqual'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _omit from 'lodash/omit'
-import _sortBy from 'lodash/sortBy'
 import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
-import { fetchPropertyKeys } from '../../../services/Challenge/Challenge'
 
 const DEFAULT_PAGE_SIZE = 20
 const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
@@ -25,7 +23,6 @@ export const WithFilterCriteria = function(WrappedComponent) {
        loading: false,
        criteria: DEFAULT_CRITERIA,
        pageSize: DEFAULT_PAGE_SIZE,
-       taskPropertyKeys: null,
      }
 
      updateCriteria = (newCriteria) => {
@@ -96,28 +93,6 @@ export const WithFilterCriteria = function(WrappedComponent) {
        //Reset Page so it goes back to 0
        typedCriteria.page = 0
        this.setState({criteria: typedCriteria})
-     }
-
-     taskPropertyKeys = () => {
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
-
-       if (this.state.taskPropertyKeys) {
-         return this.state.taskPropertyKeys
-       }
-       else if (challengeId && !this.state.loadingPropertyKeys){
-         this.setState({loadingPropertyKeys: true})
-         fetchPropertyKeys(challengeId).then( (results) => {
-           this.setState({loadingPropertyKeys: false, taskPropertyKeys: _sortBy(results)})
-           return results
-         }).catch(error => {
-           console.log(error)
-           this.setState({loadingPropertyKeys: false, taskPropertyKeys: []})
-         })
-         return []
-       }
-       else {
-         return []
-       }
      }
 
      updateIncludedFilters(props) {
@@ -201,7 +176,6 @@ export const WithFilterCriteria = function(WrappedComponent) {
                            updateReviewTasks={(criteria) => this.update(this.props, criteria)}
                            updateTaskPropertyCriteria={this.updateTaskPropertyCriteria}
                            clearTaskPropertyCriteria={this.clearTaskPropertyCriteria}
-                           taskPropertyKeys={this.taskPropertyKeys()}
                            refresh={this.refresh}
                            criteria={criteria}
                            pageSize={criteria.pageSize}
