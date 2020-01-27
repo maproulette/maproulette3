@@ -712,7 +712,8 @@ export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=
     return new Endpoint(
       api.challenge.uploadGeoJSON, {
         variables: {id: challengeId},
-        params: {lineByLine, removeUnmatched: removeUnmatchedTasks, dataOriginDate},
+        params: {lineByLine, removeUnmatched: removeUnmatchedTasks, dataOriginDate,
+                 skipSnapshot: true},
         formData,
       }
     ).execute()
@@ -751,7 +752,7 @@ export const rebuildChallenge = function(challengeId, removeUnmatchedTasks=false
     return new Endpoint(
       api.challenge.rebuild, {
         variables: {id: challengeId},
-        params: {removeUnmatched: removeUnmatchedTasks},
+        params: {removeUnmatched: removeUnmatchedTasks, skipSnapshot: true},
       }
     ).execute().then(() =>
       fetchChallenge(challengeId)(dispatch) // Refresh challenge data

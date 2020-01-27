@@ -45,6 +45,8 @@ export class RebuildTasksControl extends Component {
     const updatedFile = this.state.localFile ? this.state.localFile.file : null
     this.resetState()
 
+    this.props.recordSnapshot(this.props.challenge.id)
+
     const deleteStepIfRequested = removeUnmatched ?
                                   this.props.deleteIncompleteTasks(this.props.challenge) :
                                   Promise.resolve()
