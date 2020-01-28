@@ -162,6 +162,10 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
     }
   }
 
+  if (filters.id) {
+    searchParameters.tid = filters.id
+  }
+
   if (_isFinite(filters.difficulty)) {
     searchParameters.cd = filters.difficulty
   }

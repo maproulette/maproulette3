@@ -294,6 +294,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
       }
     },
     exportable: t => t.id,
+    filterable: true,
     maxWidth: 120,
   }
 
@@ -349,6 +350,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
     accessor: 'reviewRequestedBy',
     sortable: true,
+    filterable: true,
     exportable: t => _get(t.reviewRequestedBy, 'username') || t.reviewRequestedBy,
     maxWidth: 180,
     Cell: ({row}) =>
@@ -403,6 +405,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     id: 'reviewedBy',
     Header: props.intl.formatMessage(messages.reviewedByLabel),
     accessor: 'reviewedBy',
+    filterable: true,
     sortable: true,
     exportable: t => _get(t.reviewedBy, 'username') || t.reviewedBy,
     maxWidth: 180,

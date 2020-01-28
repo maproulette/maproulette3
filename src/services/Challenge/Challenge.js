@@ -33,7 +33,8 @@ import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE }
        from './ChallengeActions'
 import { ChallengeStatus } from './ChallengeStatus/ChallengeStatus'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
-import { parseQueryString, RESULTS_PER_PAGE, SortOptions }
+import { parseQueryString, RESULTS_PER_PAGE, SortOptions,
+         generateSearchParametersString }
        from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
 
@@ -319,17 +320,10 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
  */
 export const fetchChallengeActions = function(challengeId = null, suppressReceive = false,
                                               criteria) {
-  const searchParameters = {}
+  let searchParameters = {}
   if (criteria) {
-    if (criteria.status) {
-      searchParameters.tStatus = criteria.status
-    }
-    if (criteria.reviewStatus) {
-      searchParameters.trStatus = criteria.reviewStatus
-    }
-    if (criteria.priorities) {
-      searchParameters.priority = criteria.priorities
-    }
+    searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                      criteria.boundingBox)
   }
 
   return function(dispatch) {
