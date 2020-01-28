@@ -13,7 +13,6 @@ import { taskDenormalizationSchema,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          startTask,
-         refreshTaskLock,
          addTaskComment,
          addTaskBundleComment,
          completeTask,
@@ -250,19 +249,6 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
     fetchOSMData: bbox => {
       return fetchOSMData(bbox).catch(error => {
         dispatch(addError(error))
-      })
-    },
-
-    /**
-     * Refresh the lock on the task, extending its allowed duration
-     */
-    refreshTaskLock: task => {
-      if (!task) {
-        return Promise.reject("Invalid task")
-      }
-
-      return dispatch(refreshTaskLock(task.id)).catch(err => {
-        dispatch(addError(AppErrors.task.lockRefreshFailure))
       })
     },
   }

@@ -72,15 +72,11 @@ test("mapStateToProps maps task from the taskId in the route", () => {
   const mappedProps = mapStateToProps(basicState, routeMatchProps)
   expect(mappedProps.task.id).toEqual(task.id)
   expect(denormalize).toHaveBeenCalled()
-
-  expect(mappedProps).toMatchSnapshot()
 })
 
 test("mapDispatchToProps maps some functions", () => {
   const dispatch = jest.fn(() => Promise.resolve())
   const mappedProps = mapDispatchToProps(dispatch, {})
-
-  expect(mappedProps).toMatchSnapshot()
 })
 
 test("mapDispatchToProps completeTask calls completeTask", () => {

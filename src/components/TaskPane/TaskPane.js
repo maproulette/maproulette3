@@ -17,12 +17,14 @@ import WithChallengePreferences
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
 import WithSuggestedFix from '../HOCs/WithSuggestedFix/WithSuggestedFix'
 import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
+import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
 import TaskMap from './TaskMap/TaskMap'
 import VirtualChallengeNameLink
        from '../VirtualChallengeNameLink/VirtualChallengeNameLink'
 import ChallengeNameLink from '../ChallengeNameLink/ChallengeNameLink'
 import OwnerContactLink from '../ChallengeOwnerContactLink/ChallengeOwnerContactLink'
+import BasicDialog from '../BasicDialog/BasicDialog'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import MobileTaskDetails from './MobileTaskDetails/MobileTaskDetails'
@@ -86,7 +88,18 @@ export class TaskPane extends Component {
      * animation transitions.
      */
     completingTask: null,
-    completionResponses: null
+    completionResponses: null,
+    showLockFailureDialog: false,
+  }
+
+  tryLockingTask = () => {
+    this.props.tryLocking(this.props.task).then(success => {
+      this.setState({showLockFailureDialog: !success})
+    })
+  }
+
+  clearLockFailure = () => {
+    this.setState({showLockFailureDialog: false})
   }
 
   /**
@@ -132,7 +145,11 @@ export class TaskPane extends Component {
     // doesn't expire while the mapper is actively working on the task
     this.clearLockRefreshInterval()
     this.lockRefreshInterval = setInterval(() => {
-      this.props.refreshTaskLock(this.props.task)
+      this.props.refreshTaskLock(this.props.task).then(success => {
+        if (!success) {
+          this.setState({showLockFailureDialog: true})
+        }
+      })
     }, LOCK_REFRESH_INTERVAL)
   }
 
@@ -148,6 +165,10 @@ export class TaskPane extends Component {
 
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.setState({completionResponses: null})
+    }
+
+    if (this.props.taskReadOnly && !prevProps.taskReadOnly) {
+      this.setState({showLockFailureDialog: true})
     }
   }
 
@@ -203,22 +224,38 @@ export class TaskPane extends Component {
                     )}
                   </ul>
                 </div>
-                <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
-                  <SvgSymbol
-                    sym="locked-icon"
-                    viewBox="0 0 20 20"
-                    className="mr-fill-current mr-w-4 mr-h-4 mr-mr-1"
-                  />
-                  <span className="mr-flex mr-items-baseline">
-                    <FormattedMessage {...messages.taskLockedLabel} />
-                  </span>
-                  <Link
-                    to={`/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`}
-                    className="mr-button mr-button--xsmall mr-ml-3"
-                  >
-                    <FormattedMessage {...messages.taskUnlockLabel} />
-                  </Link>
-                </div>
+                {this.props.tryingLock ? <BusySpinner inline /> : (
+                 this.props.taskReadOnly ?
+                 <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                   <span className="mr-flex mr-items-baseline mr-text-pink-light">
+                     <FormattedMessage {...messages.taskReadOnlyLabel} />
+                   </span>
+                   <button
+                     type="button"
+                     className="mr-button mr-button--xsmall mr-ml-3"
+                     onClick={() => this.tryLockingTask()}
+                   >
+                     <FormattedMessage {...messages.taskTryLockLabel} />
+                   </button>
+                 </div> :
+
+                 <div className="mr-links-green-lighter mr-text-sm mr-flex mr-items-center mr-mt-2">
+                   <SvgSymbol
+                     sym="locked-icon"
+                     viewBox="0 0 20 20"
+                     className="mr-fill-current mr-w-4 mr-h-4 mr-mr-1"
+                   />
+                   <span className="mr-flex mr-items-baseline">
+                     <FormattedMessage {...messages.taskLockedLabel} />
+                   </span>
+                   <Link
+                     to={`/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`}
+                     className="mr-button mr-button--xsmall mr-ml-3"
+                   >
+                     <FormattedMessage {...messages.taskUnlockLabel} />
+                   </Link>
+                 </div>
+                )}
               </React.Fragment>
             }
             completeTask={this.completeTask}
@@ -237,6 +274,41 @@ export class TaskPane extends Component {
           </MapPane>
           <MobileTabBar {...this.props} />
         </MediaQuery>
+        {this.state.showLockFailureDialog &&
+         <BasicDialog
+           title={<FormattedMessage {...messages.lockFailedTitle} />}
+           prompt={<FormattedMessage {...messages.lockFailedPrompt} />}
+           icon="unlocked-icon"
+           onClose={() => this.clearLockFailure()}
+           controls = {
+             <React.Fragment>
+               <button
+                 className="mr-button mr-button--green-light mr-mr-4"
+                 onClick={() => this.clearLockFailure()}
+               >
+                 <FormattedMessage {...messages.previewTaskLabel} />
+               </button>
+               {this.props.tryingLock ?
+                <div className="mr-mr-4"><BusySpinner inline /></div> :
+                <button
+                  className="mr-button mr-button--green-light mr-mr-4"
+                  onClick={() => this.tryLockingTask()}
+                >
+                  <FormattedMessage {...messages.retryLockLabel} />
+                </button>
+               }
+               <button
+                 className="mr-button mr-button--white"
+                 onClick={() => {
+                   this.props.history.push(`/browse/challenges/${_get(this.props.task, 'parent.id', this.props.task.parent)}`)
+                 }}
+               >
+                 <FormattedMessage {...messages.browseChallengeLabel} />
+               </button>
+             </React.Fragment>
+           }
+         />
+        }
       </div>
     )
   }
@@ -252,7 +324,9 @@ WithChallengePreferences(
   WithWidgetWorkspaces(
     WithTaskBundle(
       WithSuggestedFix(
-        injectIntl(TaskPane)
+        WithLockedTask(
+          injectIntl(TaskPane)
+        )
       ),
     ),
     WidgetDataTarget.task,

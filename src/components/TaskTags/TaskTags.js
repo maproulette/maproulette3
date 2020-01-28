@@ -63,10 +63,12 @@ export class TaskTags extends Component {
     else if (this.props.tags && this.props.tags !== "") {
       return (
         <div>
-          <div className="mr-float-right mr-text-green-lighter hover:mr-text-white"
-               onClick={() => this.setState({edit: true})}>
-            <FormattedMessage {...messages.updateTags} />
-          </div>
+          {!this.props.taskReadOnly &&
+           <div className="mr-float-right mr-text-green-lighter hover:mr-text-white"
+                onClick={() => this.setState({edit: true})}>
+             <FormattedMessage {...messages.updateTags} />
+           </div>
+          }
           <div className="mr-text-sm mr-text-white">
             <FormattedMessage
               {...messages.taskTags}
@@ -75,13 +77,22 @@ export class TaskTags extends Component {
         </div>
       )
     }
-    else {
+    else if (!this.props.taskReadOnly) {
       return (
         <div>
           <div className="mr-text-green-lighter hover:mr-text-white"
                onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
           </div>
+        </div>
+      )
+    }
+    else {
+      return (
+        <div className="mr-text-sm mr-text-white">
+          <FormattedMessage
+            {...messages.taskTags}
+          />
         </div>
       )
     }
