@@ -217,7 +217,7 @@ usually just a few minutes old. Using
 [Overpass QL](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide),
 the Overpass Query Language, you can define exactly which OSM objects you want
 to load into your Challenge as Tasks.
-[Learn more](https://github.com/maproulette/maproulette2/wiki/Introducing-New-MapRoulette---Part-1.-Creating-and-Maintaining-Challenges#via-overpass).
+(Learn more on the wiki)[https://github.com/maproulette/maproulette2/wiki/Introducing-New-MapRoulette---Part-1.-Creating-and-Maintaining-Challenges#via-overpass].
 
 #### Via Local GeoJSON File
 
@@ -455,10 +455,13 @@ will not be able to make sense of it.
   osmIdPropertyDescription: {
     id: 'Admin.EditChallenge.form.osmIdProperty.description',
     defaultMessage: "The name of the task feature property to treat as an " +
-      "OpenStreetMap element identifier for tasks. If left blank, " +
+      "OpenStreetMap element id for tasks. If left blank, " +
       "MapRoulette will fall back to checking a series of common id properties, " +
-      "including those used by Overpass. If specified, tasks missing the " +
+      "including those used by Overpass. If specified, **be sure that it has a " +
+      "unique value for each feature in your data**. Tasks missing the " +
       "property will be assigned a random identifier even if the task " +
-      "contains those other common id properties."
+      "contains other common id properties. " +
+      "[Learn more on the wiki]" +
+      "(https://github.com/osmlab/maproulette3/wiki/Challenge-Managers:-setting-external-task-IDs-(e.g.-OSM-IDs))."
   },
 })
