@@ -1,3 +1,4 @@
+import React from 'react'
 import { ZOOM_LEVELS,
          MIN_ZOOM,
          MAX_ZOOM,
@@ -12,6 +13,7 @@ import _without from 'lodash/without'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
 import _filter from 'lodash/filter'
+import MarkdownContent from '../../../../MarkdownContent/MarkdownContent'
 import messages from './Messages'
 
 /**
@@ -158,7 +160,7 @@ export const uiSchema = intl => ({
   },
   osmIdProperty: {
     "ui:emptyValue": "",
-    "ui:help": intl.formatMessage(messages.osmIdPropertyDescription),
+    "ui:help": <MarkdownContent lightMode markdown={intl.formatMessage(messages.osmIdPropertyDescription)} />,
   },
 })
 
