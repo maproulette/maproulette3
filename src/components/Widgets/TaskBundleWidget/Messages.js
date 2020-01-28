@@ -79,4 +79,9 @@ export default defineMessages({
     id: "Widgets.TaskBundleWidget.noVirtualChallenges",
     defaultMessage: "Tasks in \"virtual\" challenges cannot be bundled together",
   },
+
+  readOnly: {
+    id: "Widgets.TaskBundleWidget.readOnly",
+    defaultMessage: "Previewing task in read-only mode",
+  },
 })

@@ -13,6 +13,9 @@ export default function() {
         <symbol id="locked-icon" viewBox="0 0 20 20">
           <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
         </symbol>
+        <symbol id="unlocked-icon" viewBox="0 0 20 20">
+          <path d="M4 8V6a6 6 0 1 1 12 0h-3v2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+        </symbol>
         <symbol id="box-icon" viewBox="0 0 20 20">
           <path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2H0V2zm1 3h18v13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5zm6 2v2h6V7H7z"/>
         </symbol>
@@ -36,12 +39,12 @@ export default function() {
         <symbol id="spinner-icon" viewBox="0 0 50 50">
           <path d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
             <animateTransform
-              attributeType="xml"
+              attributeType="XML"
               attributeName="transform"
               type="rotate"
               from="0 25 25"
               to="360 25 25"
-              dur="0.6s"
+              dur="1s"
               repeatCount="indefinite"
             />
           </path>

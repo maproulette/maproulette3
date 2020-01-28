@@ -197,7 +197,7 @@ const ActiveBundle = props => {
             values={{taskCount: props.taskBundle.taskIds.length}}
           />
         </h3>
-        {!props.disallowBundleChanges &&
+        {!props.taskReadOnly && !props.disallowBundleChanges &&
           <button
             className="mr-button mr-button--green mr-button--small"
             onClick={() => {
@@ -232,7 +232,14 @@ const ActiveBundle = props => {
 }
 
 const BuildBundle = props => {
-  if (props.disallowBundleChanges || props.task.reviewStatus) {
+  if (props.taskReadOnly) {
+    return (
+      <div className="mr-text-pink-light mr-text-lg">
+        <FormattedMessage {...messages.readOnly} />
+      </div>
+    )
+  }
+  else if (props.disallowBundleChanges || props.task.reviewStatus) {
     return (
       <div className="mr-text-base">
         <FormattedMessage {...messages.disallowBundling} />

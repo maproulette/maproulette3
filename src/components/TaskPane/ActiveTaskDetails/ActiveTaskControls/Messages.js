@@ -18,4 +18,9 @@ export default defineMessages({
     id: 'Task.awaitingReview.label',
     defaultMessage: "Task is awaiting review.",
   },
+
+  readOnly: {
+    id: 'Task.readonly.message',
+    defaultMessage: "Previewing task in read-only mode",
+  },
 })

@@ -20,4 +20,8 @@ export default defineMessages({
     id: "Admin.TaskInspect.controls.modifyTask.label",
     defaultMessage: "Modify Task",
   },
+  readOnly: {
+    id: 'Admin.TaskInspect.readonly.message',
+    defaultMessage: "Previewing task in read-only mode",
+  },
 })
