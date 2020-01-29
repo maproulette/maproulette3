@@ -43,7 +43,11 @@ export default class TaskCompletionWidget extends Component {
     // but not created with server
     if (!this.props.taskReadOnly &&
         _get(this.props, 'selectedTasks.size') > 0 && taskCount === 0) {
-      taskCount = this.props.selectedTasks.size + 1
+      taskCount = this.props.selectedTasks.size
+      if (!this.props.selectedTasks.has(this.props.task.id)) {
+        taskCount += 1 // Count the current task if needed
+      }
+
       taskControls =
         <div className="mr-pt-2">
           <Button onClick={this.bundleTasks} className="mr-mr-2">
