@@ -4,6 +4,9 @@ import _merge from 'lodash/merge'
 import _get from 'lodash/get'
 import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
+import _filter from 'lodash/filter'
+import _isEmpty from 'lodash/isEmpty'
+import _split from 'lodash/split'
 import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -106,8 +109,22 @@ export class EditTask extends Component {
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
-      tags: (props) => <KeywordAutosuggestInput {...props} tagType={"tasks"}
-        placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />,
+      tags: (props) => {
+        const preferredTags =
+          _filter(
+            _split(_get(this.props.task, 'parent.preferredTags'), ','),
+            (result) => !_isEmpty(result)
+          )
+
+        return (
+          <KeywordAutosuggestInput
+            {...props}
+            tagType={"tasks"}
+            preferredResults={preferredTags}
+            placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
+          />
+        )
+      },
     }
 
     return (

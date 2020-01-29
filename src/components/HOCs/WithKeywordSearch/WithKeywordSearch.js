@@ -76,9 +76,9 @@ const WithKeywordSearch = function(WrappedComponent, includePrefixInResults=true
       this.performSearch(keywordPrefix)
     }
 
-    keywordKey = keyword => keyword.id
+    keywordKey = keyword => (keyword.id || keyword)
 
-    keywordLabel = keyword => keyword.name
+    keywordLabel = keyword => (keyword.name || keyword)
 
     render() {
       return (

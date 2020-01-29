@@ -624,6 +624,10 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
       challengeData.tags = challengeData.tags.join(',')
     }
 
+    if (_isArray(challengeData.preferredTags)) {
+      challengeData.preferredTags = challengeData.preferredTags.join(',')
+    }
+
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
     if (_isString(challengeData.localGeoJSON) &&
@@ -641,7 +645,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
-        'exportableProperties', 'osmIdProperty', 'dataOriginDate'])
+        'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.

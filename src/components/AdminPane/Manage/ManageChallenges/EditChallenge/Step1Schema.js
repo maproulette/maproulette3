@@ -83,6 +83,10 @@ export const jsSchema = (intl, user, challengeData) => {
       additionalKeywords: {
         title: intl.formatMessage(messages.additionalKeywordsLabel),
         type: "string",
+      },
+      taskTags: {
+        title: intl.formatMessage(messages.preferredTagsLabel),
+        type: "string",
       }
     },
     required: ["name", "instruction"],
@@ -130,7 +134,7 @@ export const uiSchema = (intl, user, challengeData) => {
     "ui:order": [
       "featured", "enabled", "name", "description", "blurb", "instruction",
       "checkinComment", "includeCheckinHashtag", "checkinSource",
-      "difficulty", "category", "additionalKeywords",
+      "difficulty", "category", "additionalKeywords", "taskTags",
     ],
     featured: {
       "ui:widget": "radio",
@@ -168,6 +172,10 @@ export const uiSchema = (intl, user, challengeData) => {
     additionalKeywords: {
       "ui:field": "tags",
       "ui:help": intl.formatMessage(messages.additionalKeywordsDescription),
+    },
+    taskTags: {
+      "ui:field": "taskTags",
+      "ui:help": intl.formatMessage(messages.preferredTagsDescription),
     },
     checkinComment: {
       "ui:emptyValue": "",
