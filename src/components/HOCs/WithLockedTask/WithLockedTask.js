@@ -98,7 +98,7 @@ const WithLockedTask = function(WrappedComponent) {
           taskReadOnly={this.state.readOnly}
           tryingLock={this.state.tryingLock}
           tryLocking={this.lockTask}
-          refreshTasklock={this.refreshTaskLock}
+          refreshTaskLock={this.refreshTaskLock}
         />
       )
     }
