@@ -71,7 +71,7 @@
 
     .mr-cards-inverse & {
 
-      a {
+      a::not(.mr-text-green-light) {
         @apply mr-text-green-lighter;
 
         &:hover {

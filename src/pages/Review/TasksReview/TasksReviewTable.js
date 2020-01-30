@@ -593,7 +593,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
                         <FormattedMessage {...messages.viewTaskLabel} />
 
       return <div className="row-controls-column">
-        <Link to={linkTo}>
+        <Link to={linkTo} className="mr-text-green-light">
           {message}
         </Link>
       </div>
