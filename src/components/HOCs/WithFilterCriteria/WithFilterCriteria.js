@@ -29,7 +29,12 @@ export const WithFilterCriteria = function(WrappedComponent) {
        const criteria = _cloneDeep(this.state.criteria)
        criteria.sortCriteria = newCriteria.sortCriteria
        criteria.page = newCriteria.page
+       criteria.filters = newCriteria.filters
+
        this.setState({criteria})
+       if (this.props.setSearchFilters) {
+         this.props.setSearchFilters(criteria)
+       }
      }
 
      updateTaskFilterBounds = (bounds, zoom) => {

@@ -288,6 +288,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
   columns.id = {
     id: 'id',
     Header: props.intl.formatMessage(messages.idLabel),
+    filterable: true,
     accessor: t => {
       if (!t.isBundlePrimary) {
         return <span>{t.id}</span>
