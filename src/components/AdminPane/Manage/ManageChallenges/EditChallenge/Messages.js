@@ -180,6 +180,17 @@ export default defineMessages({
     "#tourism).",
   },
 
+  preferredTagsLabel: {
+    id: 'Admin.EditChallenge.form.preferredTags.label',
+    defaultMessage: "Preferred Tags",
+  },
+
+  preferredTagsDescription: {
+    id: 'Admin.EditChallenge.form.preferredTags.description',
+    defaultMessage: "You can optionally provide a " +
+    "list of preferred tags that you want the user to use when completing a task. ",
+  },
+
   featuredLabel: {
     id: 'Admin.EditChallenge.form.featured.label',
     defaultMessage: "Featured",

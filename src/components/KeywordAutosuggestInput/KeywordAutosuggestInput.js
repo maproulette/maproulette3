@@ -41,10 +41,10 @@ export class KeywordAutosuggestInput extends Component {
                           onChange={keyword => {
                             if (keyword) {
                               if (this.props.handleAddTag) {
-                                this.props.handleAddTag(keyword.name)
+                                this.props.handleAddTag(keyword.name || keyword)
                               }
                               else {
-                                props.addTag(keyword.name)
+                                props.addTag(keyword.name || keyword)
                               }
                             }
                             this.setState({value: ''})

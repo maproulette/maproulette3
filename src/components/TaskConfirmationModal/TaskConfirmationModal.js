@@ -5,6 +5,10 @@ import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
 import _pick from 'lodash/pick'
 import _noop from 'lodash/noop'
+import _split from 'lodash/split'
+import _get from 'lodash/get'
+import _filter from 'lodash/filter'
+import _isEmpty from 'lodash/isEmpty'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { needsReviewType } from '../../services/User/User'
@@ -61,6 +65,11 @@ export class TaskConfirmationModal extends Component {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
     const loadingNearby = this.props.loadBy === TaskLoadMethod.proximity
     const applyingSuggestedFix = this.props.task.suggestedFix && this.props.status === TaskStatus.fixed
+    const preferredTags =
+      _filter(
+        _split(_get(this.props.task.parent, 'preferredTags'), ','),
+        (result) => !_isEmpty(result)
+      )
 
     return (
       <External>
@@ -159,6 +168,7 @@ export class TaskConfirmationModal extends Component {
                                          handleAddTag={this.handleAddTag}
                                          formData={this.props.tags} {...this.props}
                                          tagType={"tasks"}
+                                         preferredResults={preferredTags}
                                          placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
 
                     {this.props.submitComment &&

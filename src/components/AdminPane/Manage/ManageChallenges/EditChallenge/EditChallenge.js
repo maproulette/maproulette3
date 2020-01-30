@@ -367,6 +367,8 @@ export class EditChallenge extends Component {
         _difference(keywords, rawCategoryKeywords).join(',')
     }
 
+    challengeData.taskTags = challengeData.taskTags || challengeData.preferredTags
+
     return challengeData
   }
 
@@ -429,6 +431,16 @@ export class EditChallenge extends Component {
           keyword => !_isEmpty(keyword)
         )
       )
+    }
+
+    if (!_isEmpty(challengeData.taskTags)) {
+      // replace whitespace with commas, split on comma, and filter out any
+      // empty-string tags.
+      challengeData.preferredTags =
+        _filter(
+          challengeData.taskTags.replace(/\s+/, ',').split(/,+/),
+          tag => !_isEmpty(tag)
+        )
     }
 
     // Note any old tags that are to be discarded. Right now a separate API
@@ -494,7 +506,25 @@ export class EditChallenge extends Component {
     const customFields = {
       DescriptionField: MarkdownDescriptionField,
       markdown: MarkdownEditField,
-      tags: KeywordAutosuggestInput,
+      tags: props => {
+        return (
+          <React.Fragment>
+            <label className="control-label">{props.schema.title}</label>
+            <KeywordAutosuggestInput {...props} />
+          </React.Fragment>
+        )
+      },
+      taskTags: props => {
+        return (
+          <React.Fragment>
+            <label className="control-label">{props.schema.title}</label>
+            <KeywordAutosuggestInput {...props}
+              placeholder={"Add MR Tags"}
+              tagType="tasks"
+            />
+          </React.Fragment>
+        )
+      }
     }
 
     return (
