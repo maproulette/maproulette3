@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import FormattedDuration, { TIMER_FORMAT } from 'react-intl-formatted-duration'
-import parse from 'date-fns/parse'
 import _get from 'lodash/get'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
@@ -21,7 +20,7 @@ export default class TaskBuildProgress extends Component {
   timerHandle = null
 
   state = {
-    startTime: new Date(),
+    startTime: Date.now(),
     lastTimerRun: Date.now(),
   }
 
@@ -33,8 +32,7 @@ export default class TaskBuildProgress extends Component {
   }
 
   /**
-   * Returns the total elapsed seconds since the initial start time (usually
-   * the challenge modification date)
+   * Returns the total elapsed seconds since the initial start time
    */
   totalElapsedSeconds = () => {
     return (Date.now() - this.state.startTime) / 1000
@@ -60,10 +58,7 @@ export default class TaskBuildProgress extends Component {
   componentDidMount() {
     this.clearTimer()
     this.timerHandle = setInterval(this.refresh, TIMER_INTERVAL)
-
-    if (this.props.challenge.modified) {
-      this.setState({startTime: parse(this.props.challenge.modified)})
-    }
+    this.setState({startTime: Date.now(), lastTimerRun: Date.now()})
   }
 
   componentWillUnmount() {
