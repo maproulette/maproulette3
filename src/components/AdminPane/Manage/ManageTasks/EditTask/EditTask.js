@@ -80,6 +80,10 @@ export class EditTask extends Component {
   /** Cancel editing */
   cancel = () => this.rerouteAfterCompletion()
 
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   render() {
     // We may have a task id lying around in redux, but at least make sure we
     // have a task status and geometries before proceeding to load the form
@@ -119,6 +123,7 @@ export class EditTask extends Component {
         return (
           <KeywordAutosuggestInput
             {...props}
+            inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
             tagType={"tasks"}
             preferredResults={preferredTags}
             placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}

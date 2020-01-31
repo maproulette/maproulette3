@@ -16,7 +16,7 @@
     }
 
     .error-detail {
-      @apply mr-list-reset mr-text-sm mr-my-2;
+      @apply mr-text-sm mr-my-2;
     }
 
     .field-radio-group {

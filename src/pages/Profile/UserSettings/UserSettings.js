@@ -164,7 +164,7 @@ class UserSettings extends Component {
     return (
       <section className="mr-section mr-mt-0">
         <header className="mr-section__header mr-mt-0">
-          <h2 className="mr-h4">
+          <h2 className="mr-h4 mr-flex mr-items-baseline">
             <FormattedMessage {...messages.header} />
             <span className="mr-ml-4">{saveIndicator}</span>
           </h2>
@@ -188,7 +188,7 @@ class UserSettings extends Component {
         <div className="mr-border-t-2 mr-border-grey-lighter mr-my-12" />
 
         <header className="mr-section__header">
-          <h2 className="mr-h4">
+          <h2 className="mr-h4 mr-flex mr-items-baseline">
             <FormattedMessage {...messages.notificationSubscriptionsLabel} />
             <span className="mr-ml-4">{saveIndicator}</span>
           </h2>

@@ -112,8 +112,8 @@ class Metrics extends Component {
                 <div className="mr-mb-4 md:mr-mb-0 mr-p-8 mr-bg-blue mr-rounded mr-shadow mr-flex mr-items-center">
                   {!this.props.taskMetrics ?
                     <div className="mr-flex-grow mr-text-center"><BusySpinner /></div> :
-                    <div className="mr-flex-grow mr-text-center">
-                      <div className="mr-mb-4">
+                    <div className="mr-flex-grow mr-flex mr-flex-col mr-items-center">
+                      <div className="mr-mb-6">
                         <SvgSymbol
                           sym="illustration-completed-tasks"
                           className="mr-w-32 mr-h-auto"

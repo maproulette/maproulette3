@@ -26,7 +26,7 @@ export class TaskCommentsModal extends Component {
       <External>
         <Modal isActive={true} onClose={this.props.onClose}>
           {this.props.commentsLoading ?
-           <BusySpinner /> :
+           <BusySpinner lightMode={false} /> :
            <div>
              <h2 className="mr-text-yellow mr-mb-6">
                <FormattedMessage {...messages.header} />

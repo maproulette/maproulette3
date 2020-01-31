@@ -211,7 +211,7 @@ const LayoutButton = function(props) {
       className="mr-dropdown__button"
       onClick={props.toggleDropdownVisible}
     >
-      <span className="mr-flex">
+      <span className="mr-flex mr-items-center">
         <b className="mr-mr-1">{props.currentConfiguration.label}</b>
         <SvgSymbol
           sym="cog-icon"

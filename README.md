@@ -194,8 +194,8 @@ CSS](https://tailwindcss.com) with PostCSS. New CSS classes are prefixed with
 transition there are still situations where a mix of both Tailwind and Bulma
 are in play.
 
-Tailwind configuration is controlled with the `src/tailwind.js` file. New CSS
-classes can be found in `src/styles/`
+Tailwind configuration is controlled with the `src/tailwind.config.js` file.
+New CSS classes can be found in `src/styles/`
 
 ## Internationalization and Localization
 

@@ -2,8 +2,11 @@ import _map from 'lodash/map'
 import _invert from 'lodash/invert'
 import _fromPairs from 'lodash/fromPairs'
 import _startCase from 'lodash/startCase'
-import { colors } from '../../../tailwind'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 import messages from './Messages'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 // These statuses are defined on the server
 export const TASK_STATUS_CREATED = 0

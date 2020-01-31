@@ -3,8 +3,8 @@ const tailwindcss = require('tailwindcss')
 module.exports = () => ({
   plugins: [
     require('postcss-import'),
-    tailwindcss('./src/tailwind.js'),
     require('postcss-simple-vars'),
+    tailwindcss('./src/tailwind.config.js'),
     require('postcss-nested'),
     require('autoprefixer'),
   ],

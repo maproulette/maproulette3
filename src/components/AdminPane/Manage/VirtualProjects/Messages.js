@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "No Challenges",
   },
 
+  searchPlaceholder: {
+    id: 'Admin.VirtualProject.ChallengeList.search.placeholder',
+    defaultMessage: "Search",
+  },
+
   currentChallengesLabel: {
     id: 'Admin.VirtualProject.currentChallenges.label',
     defaultMessage: "Challenges in ",

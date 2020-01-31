@@ -16,14 +16,14 @@ export default class ChallengeNameLink extends Component {
       `/browse/challenges/${_get(this.props.task, 'parent.id', '')}`
 
     return (
-      <React.Fragment>
+      <span className="mr-flex mr-items-center">
         <Link to={challengeBrowseRoute}>
           <span className="mr-mr-2">
             {_get(this.props.task, 'parent.name')}
           </span>
         </Link>
         <ShareLink link={challengeBrowseRoute} {...this.props} />
-      </React.Fragment>
+      </span>
     )
   }
 }

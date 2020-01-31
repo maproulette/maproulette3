@@ -510,21 +510,26 @@ export class EditChallenge extends Component {
         return (
           <React.Fragment>
             <label className="control-label">{props.schema.title}</label>
-            <KeywordAutosuggestInput {...props} />
+            <KeywordAutosuggestInput
+              {...props}
+              inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+            />
           </React.Fragment>
         )
       },
-      taskTags: props => {
+      taskTags: injectIntl(props => {
         return (
           <React.Fragment>
             <label className="control-label">{props.schema.title}</label>
-            <KeywordAutosuggestInput {...props}
-              placeholder={"Add MR Tags"}
+            <KeywordAutosuggestInput
+              {...props}
+              inputClassName="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+              placeholder={props.intl.formatMessage(messages.addMRTagsPlaceholder)}
               tagType="tasks"
             />
           </React.Fragment>
         )
-      }
+      })
     }
 
     return (
