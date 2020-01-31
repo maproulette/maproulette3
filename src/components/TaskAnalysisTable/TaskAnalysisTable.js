@@ -114,7 +114,8 @@ export class TaskAnalysisTable extends Component {
               return (
                 !row._original ? null : <div className="">{valueToDisplay}</div>
               )
-            }
+            },
+            sortable: false,
           }
         }
         else {
