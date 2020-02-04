@@ -28,6 +28,15 @@ export const jsSchema = (intl, taskPropertyKeys) => {
       intl.formatMessage(messagesByPropertySearchType[type])
     )
 
+  let propertyKey = { enum: taskPropertyKeys }
+  // If no task property keys are provided then we offer a free-form text field
+  if (!taskPropertyKeys) {
+    propertyKey = {
+      title: "Key",
+      type: "string"
+    }
+  }
+
   return {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -69,9 +78,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   valueType: {
                     enum: ["string"],
                   },
-                  key: {
-                    enum: taskPropertyKeys,
-                  },
+                  key: propertyKey,
                   operator: {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeString),
@@ -89,9 +96,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   valueType: {
                     enum: ["number"],
                   },
-                  key: {
-                    enum: taskPropertyKeys,
-                  },
+                  key: propertyKey,
                   operator: {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeNumber),
@@ -121,9 +126,31 @@ export const jsSchema = (intl, taskPropertyKeys) => {
   }
 }
 
-function buildUISchema(deepness) {
+/**
+ * react-jsonschema-form doesn't currently support uiSchema entries for
+ * definitions, so we define a schema snippet here for the property rules
+ * definition that can be used in the uiSchema without duplicating it over and
+ * over for each field referencing a property rule.
+ *
+ * @private
+ */
+function buildUISchema(deepness, taskPropertyKeys) {
   if (deepness === 0 ) {
     return {}
+  }
+
+  let keyType = {
+    classNames: "inline-selector mr-inline",
+    "ui:widget": "select",
+    "ui:options": { inline: true, label: false },
+  }
+
+  // If no task property keys are provided then we offer a free-form text field
+  if (!taskPropertyKeys) {
+    keyType = {
+      classNames: "inline-selector mr-inline",
+      "ui:options": { inline: true, label: false },
+    }
   }
 
   return {
@@ -138,11 +165,7 @@ function buildUISchema(deepness) {
       "ui:widget": "select",
       "ui:options": { inline: true, label: false },
     },
-    key: {
-      classNames: "inline-selector mr-inline",
-      "ui:widget": "select",
-      "ui:options": { inline: true, label: false },
-    },
+    key: keyType,
     operator: {
       classNames: "inline-selector mr-inline",
       "ui:widget": "select",
@@ -157,15 +180,6 @@ function buildUISchema(deepness) {
   }
 }
 
-/**
- * react-jsonschema-form doesn't currently support uiSchema entries for
- * definitions, so we define a schema snippet here for the property rules
- * definition that can be used in the uiSchema without duplicating it over and
- * over for each field referencing a property rule.
- *
- * @private
- */
- const tagRuleUISchema = buildUISchema(7)
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -177,8 +191,8 @@ function buildUISchema(deepness) {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = intl => ({
+export const uiSchema = (intl, taskPropertyKeys) => ({
   propertyRules: {
-    rootRule: tagRuleUISchema,
+    rootRule: buildUISchema(7, taskPropertyKeys),
   },
 })

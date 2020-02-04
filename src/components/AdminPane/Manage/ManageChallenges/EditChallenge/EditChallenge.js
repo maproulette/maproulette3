@@ -11,8 +11,12 @@ import _filter from 'lodash/filter'
 import _first from 'lodash/first'
 import _difference from 'lodash/difference'
 import _get from 'lodash/get'
+import _remove from 'lodash/remove'
+import _isEqual from 'lodash/isEqual'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
+import External from '../../../../External/External'
+import Modal from '../../../../Modal/Modal'
 import AsLineReadableFile
        from '../../../../../interactions/File/AsLineReadableFile'
 import Steps from '../../../../Bulma/Steps'
@@ -31,6 +35,10 @@ import WithCurrentChallenge
        from '../../../HOCs/WithCurrentChallenge/WithCurrentChallenge'
 import WithCurrentUser
        from '../../../../HOCs/WithCurrentUser/WithCurrentUser'
+import WithTaskPropertyStyleRules
+      from '../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules'
+import { EMPTY_STYLE_RULE }
+      from '../../../HOCs/WithTaskPropertyStyleRules/WithTaskPropertyStyleRules'
 import { ChallengeCategoryKeywords,
          categoryMatchingKeywords,
          rawCategoryKeywords }
@@ -46,6 +54,8 @@ import AsValidatableOverpass
 import TaskUploadingProgress
        from '../../TaskUploadingProgress/TaskUploadingProgress'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
+import TaskPropertyStyleRules
+       from '../../TaskPropertyStyleRules/TaskPropertyStyleRules'
 import { preparePriorityRuleGroupForForm,
          preparePriorityRuleGroupForSaving } from './PriorityRuleGroup'
 import { jsSchema as step1jsSchema,
@@ -241,6 +251,11 @@ export class EditChallenge extends Component {
 
   /** Complete the workflow, saving the challenge data */
   finish = () => {
+    // We cannot continue if the style rules have errors.
+    if (this.hasTaskStyleRuleErrors()) {
+      return
+    }
+
     window.scrollTo(0, 0)
     this.setState({isSaving: true})
 
@@ -369,6 +384,10 @@ export class EditChallenge extends Component {
 
     challengeData.taskTags = challengeData.taskTags || challengeData.preferredTags
 
+    if (_isUndefined(challengeData.customTaskStyles)) {
+      challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles)
+    }
+
     return challengeData
   }
 
@@ -481,7 +500,29 @@ export class EditChallenge extends Component {
       }
     }
 
+    if (challengeData.customTaskStyles) {
+      const styleRules = this.props.taskPropertyStyleRules
+      // Remove all empty style rules
+      _remove(styleRules, (rule) => (_isEmpty(rule) || _isEqual(rule, {}) ||
+        _isEqual(rule, EMPTY_STYLE_RULE) ||
+        (!rule.propertySearch.key && !rule.propertySearch.value &&
+         !rule.propertySearch.left && !rule.propertySearch.right)
+      ))
+      challengeData.taskStyles = styleRules
+    }
+    else {
+      challengeData.taskStyles = []
+    }
+
     return challengeData
+  }
+
+  hasTaskStyleRuleErrors = () => {
+    const useCustom = !_isUndefined(_get(this.state.formData, 'customTaskStyles')) ?
+      _get(this.state.formData, 'customTaskStyles') :
+     !_isEmpty(_get(this.props.challenge, 'taskStyles'))
+
+    return useCustom && this.props.hasAnyStyleRuleErrors
   }
 
   render() {
@@ -529,7 +570,11 @@ export class EditChallenge extends Component {
             />
           </React.Fragment>
         )
-      })
+      }),
+      configureCustomTaskStyles: (props) => {
+        return configureCustomTaskStyles(props,
+          () => this.setState({showTaskStyleRules: true}))
+      }
     }
 
     return (
@@ -575,9 +620,37 @@ export class EditChallenge extends Component {
             </div>
 
             <Steps steps={challengeSteps} activeStep={this.state.activeStep}
-                   onStepClick={AsEditableChallenge(challengeData).isNew() ? undefined : this.jumpToStep}
+                   onStepClick={
+                     (AsEditableChallenge(challengeData).isNew() ||
+                      this.hasTaskStyleRuleErrors()) ? undefined : this.jumpToStep}
             />
             <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+              {this.state.showTaskStyleRules &&
+                <External>
+                  <Modal className=""
+                         isActive wide
+                         onClose={() => this.setState({showTaskStyleRules: false})}>
+                    <div className="mr-overflow-y-auto mr-max-h-screen80 mr-bg-white mr-m-2 mr-p-4">
+                      <TaskPropertyStyleRules {...this.props}>
+                        <button className="mr-button mr-button--green mr-mr-4"
+                          onClick={() => {
+                            this.props.clearStyleRules()
+                          }}>
+                          <FormattedMessage {...messages.taskPropertyStylesClear} />
+                        </button>
+                        {!this.props.hasAnyStyleRuleErrors &&
+                          <button className="mr-button mr-button--green"
+                            onClick={() => {
+                              this.setState({showTaskStyleRules: false})
+                            }}>
+                            <FormattedMessage {...messages.taskPropertyStylesClose} />
+                          </button>
+                        }
+                      </TaskPropertyStyleRules>
+                    </div>
+                  </Modal>
+                </External>
+              }
               <Form schema={currentStep.jsSchema(this.props.intl, this.props.user, challengeData)}
                     className="form"
                     onAsyncValidate={this.validateGeoJSONSource}
@@ -594,6 +667,13 @@ export class EditChallenge extends Component {
                     onSubmit={this.asyncSubmit}
                     onError={this.errorHandler}
               >
+                {this.hasTaskStyleRuleErrors() &&
+                 challengeSteps[this.state.activeStep].name === "Extra" &&
+                  <div className="mr-text-red mr-mb-4">
+                    <FormattedMessage {...messages.customTaskStylesError} />
+                  </div>
+                }
+
                 <StepNavigation steps={challengeSteps} activeStep={this.state.activeStep}
                                 prevStep={this.prevStep} cancel={this.cancel}
                                 finish={() => this.isFinishing = true}
@@ -607,8 +687,59 @@ export class EditChallenge extends Component {
   }
 }
 
+function configureCustomTaskStyles(props, configureTaskStyleRules) {
+  return (
+    <React.Fragment>
+      <label className="control-label">Task Property Styling</label>
+      <div>
+        <div>
+          <input
+            type="radio"
+            name="no-styles"
+            className="mr-mr-1"
+            checked={!props.formData}
+            onChange={(e) => props.onChange(false)}
+          />
+          <label className="mr-ml-1 mr-mr-4 mr-text-grey">
+            Default
+          </label>
+
+          <input
+            type="radio"
+            name="custom-styles"
+            className="mr-mr-1"
+            checked={!!props.formData}
+            onChange={(e) => {
+              props.onChange(true)
+              //this.setState({showTaskStyleRules: true})
+            }}
+          />
+          <label className="mr-ml-1 mr-text-grey">
+            Custom
+          </label>
+        </div>
+        {!!props.formData &&
+          <button className="mr-mt-4 mr-button mr-button--small mr-button--grey"
+                  onClick={(e) => {
+                    configureTaskStyleRules()
+                    e.stopPropagation()
+                    e.preventDefault()
+                  }}>
+            <FormattedMessage {...messages.customTaskStyleButton} />
+          </button>
+        }
+      </div>
+    </React.Fragment>
+  )
+}
+
+
 export default WithCurrentUser(
   WithCurrentProject(
-    WithCurrentChallenge(injectIntl(EditChallenge))
+    WithCurrentChallenge(
+      WithTaskPropertyStyleRules(
+        injectIntl(EditChallenge)
+      )
+    )
   )
 )

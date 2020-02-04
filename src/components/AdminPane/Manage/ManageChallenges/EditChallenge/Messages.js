@@ -480,4 +480,44 @@ will not be able to make sense of it.
       "[Learn more on the wiki]" +
       "(https://github.com/osmlab/maproulette3/wiki/Challenge-Managers:-setting-external-task-IDs-(e.g.-OSM-IDs))."
   },
+
+  customTaskStyleLabel: {
+    id: "Admin.EditChallenge.form.customTaskStyles.label",
+    defaultMessage: "Customize Task Property Styles"
+  },
+
+  customTaskStylesDescription: {
+    id: "Admin.EditChallenge.form.customTaskStyles.description",
+    defaultMessage: "Enable custom task styling based on specific task feature properties."
+  },
+
+  customTaskStylesError: {
+    id: "Admin.EditChallenge.form.customTaskStyles.error",
+    defaultMessage: "Task property style rules are invalid. Please fix before continuing."
+  },
+
+  customTaskStyleButton: {
+    id: "Admin.EditChallenge.form.customTaskStyles.button",
+    defaultMessage: "Configure"
+  },
+
+  taskPropertyStylesLabel: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.label",
+    defaultMessage: "Task Property Style Rules"
+  },
+
+  taskPropertyStylesClose: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.close",
+    defaultMessage: "Done"
+  },
+
+  taskPropertyStylesClear: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.clear",
+    defaultMessage: "Clear"
+  },
+
+  taskPropertyStylesDescription: {
+    id: "Admin.EditChallenge.form.taskPropertyStyles.description",
+    defaultMessage: "Sets up task property style rules......"
+  }
 })

@@ -10,8 +10,11 @@ import _intersection from 'lodash/intersection'
 import _keys from 'lodash/keys'
 import _pick from 'lodash/pick'
 import _merge from 'lodash/merge'
+import _filter from 'lodash/filter'
+import _flatten from 'lodash/flatten'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../tailwind.config.js'
+import AsFilterableFeature from './AsFilterableFeature'
 
 const colors = resolveConfig(tailwindConfig).theme.colors
 
@@ -52,6 +55,31 @@ export class AsSimpleStyleableFeature {
   styleLeafletLayer(layer) {
     if (this.properties) {
       this.styleLeafletLayerWithStyles(layer, this.simplestyleFeatureProperties(), false)
+    }
+  }
+
+  /**
+   * Apply the given styles conditionally based on whether this feature matches
+   * the filters associated with each style. All matching styles (if any) are
+   * combined and applied together on top of any normal styling from
+   * simplestyle properties on this feature
+   */
+  styleLeafletLayerConditionally(layer, conditionalStyles) {
+    const filterableFeature = AsFilterableFeature(this)
+    const matchingStyles = _filter(conditionalStyles, style =>
+      filterableFeature.matchesPropertyFilter(style.propertySearch)
+    )
+
+    if (matchingStyles.length > 0) {
+      // flatten all matching styles into a single object
+      const styleObject = _fromPairs(_flatten(_map(matchingStyles, match =>
+        _map(match.styles, style => [style.styleName, style.styleValue])
+      )))
+
+      this.styleLeafletLayerWithStyles(layer, styleObject)
+    }
+    else {
+      this.styleLeafletLayerWithStyles(layer)
     }
   }
 

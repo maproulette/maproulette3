@@ -1,5 +1,7 @@
 import _map from 'lodash/map'
 import _fromPairs from 'lodash/fromPairs'
+import _compact from 'lodash/compact'
+import _isUndefined from 'lodash/isUndefined'
 import messages from './Messages'
 
 /**
@@ -38,7 +40,12 @@ export const TaskPropertyOperationType = Object.freeze({
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesByPropertySearchType = _fromPairs(
-  _map(messages, (message, key) => [TaskPropertySearchTypeString[key], message])
+  _compact(_map(messages, (message, key) => {
+    if (_isUndefined(TaskPropertySearchTypeString[key])) {
+      return null
+    }
+    return [TaskPropertySearchTypeString[key], message]
+  }))
 )
 
 /**
@@ -46,5 +53,9 @@ export const messagesByPropertySearchType = _fromPairs(
  * messages suitable for use with FormattedMessage or formatMessage.
  */
 export const messagesByPropertyOperationType = _fromPairs(
-  _map(messages, (message, key) => [TaskPropertyOperationType[key], message])
+  _compact(_map(messages, (message, key) =>
+    !_isUndefined(TaskPropertyOperationType[key]) ?
+      [TaskPropertyOperationType[key], message] :
+      null
+  ))
 )
