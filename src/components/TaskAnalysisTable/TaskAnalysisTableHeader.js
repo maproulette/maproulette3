@@ -5,8 +5,6 @@ import classNames from 'classnames'
 import _noop from 'lodash/noop'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
-import _join from 'lodash/join'
-import _each from 'lodash/each'
 import _omit from 'lodash/omit'
 import _isArray from 'lodash/isArray'
 import AsManager from '../../interactions/User/AsManager'
@@ -19,6 +17,7 @@ import WithDeactivateOnOutsideClick from '../HOCs/WithDeactivateOnOutsideClick/W
 import { TaskStatus, statusLabels, keysByStatus } from '../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatusWithUnset, reviewStatusLabels, keysByReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskPriority, taskPriorityLabels, keysByPriority } from '../../services/Task/TaskPriority/TaskPriority'
+import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from '../../services/Challenge/Challenge'
 import messages from './Messages'
 
 const DeactivatableDropdownButton = WithDeactivateOnOutsideClick(DropdownButton)
@@ -53,23 +52,6 @@ export class TaskAnalysisTableHeader extends Component {
         const localizedStatusLabels = statusLabels(this.props.intl)
         const localizedReviewStatusLabels = reviewStatusLabels(this.props.intl)
         const localizedPriorityLabels = taskPriorityLabels(this.props.intl)
-
-        let taskStatusQuery = []
-        _each(this.props.includeTaskStatuses, (include, status) => {
-          if (include) taskStatusQuery.push(status)
-        })
-        let taskPriorityQuery = []
-        _each(this.props.includeTaskPriorities, (include, priority) => {
-          if (include) taskPriorityQuery.push(priority)
-        })
-        let taskReviewStatusQuery = []
-        _each(this.props.includeTaskReviewStatuses, (include, reviewStatus) => {
-          if (include) taskReviewStatusQuery.push(reviewStatus)
-        })
-        const queryFilters = `status=${_join(taskStatusQuery, ',')}&` +
-                             `priority=${_join(taskPriorityQuery, ',')}&` +
-                             `reviewStatus=${_join(taskReviewStatusQuery, ',')}`
-
 
         const taskSelectionStatuses = _isArray(this.props.taskSelectionStatuses) ?
                                       this.props.taskSelectionStatuses :
@@ -210,27 +192,29 @@ export class TaskAnalysisTableHeader extends Component {
                             <hr className="mr-rule-dropdown" />
                             <ul className="mr-list-dropdown">
                               <li>
-                                <a target="_blank"
-                                    rel="noopener noreferrer"
-                                    href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${_get(this.props, 'challenge.id')}/tasks/extract?${queryFilters}`}
-                                    className="mr-flex mr-items-center"
-                                >
+                                <form method="post" action={buildLinkToExportCSV(_get(this.props, 'challenge.id'), this.props.criteria)}>
+                                  <input type="hidden" name="taskPropertySearch"
+                                      value={JSON.stringify(_get(this.props, 'criteria.filters.taskPropertySearch', {}))}
+                                  />
+                                  <button type="submit" className="mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2">
                                     <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                                     <FormattedMessage {...messages.exportCSVLabel} />
-                                </a>
+                                  </button>
+                                </form>
                               </li>
                             </ul>
                             <ul className="mr-list-dropdown">
-                                <li>
-                                  <a target="_blank"
-                                      rel="noopener noreferrer"
-                                      href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/${_get(this.props, 'challenge.id')}?${queryFilters}`}
-                                      className="mr-flex mr-items-center"
-                                   >
-                                     <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                                     <FormattedMessage {...messages.exportGeoJSONLabel} />
-                                   </a>
-                                </li>
+                              <li>
+                                <form method="post" action={buildLinkToExportGeoJSON(_get(this.props, 'challenge.id'), this.props.criteria)}>
+                                  <input type="hidden" name="taskPropertySearch"
+                                      value={JSON.stringify(_get(this.props, 'criteria.filters.taskPropertySearch', {}))}
+                                  />
+                                  <button type="submit" className="mr-text-green-lighter mr-bg-transparent mr-align-top">
+                                    <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
+                                    <FormattedMessage {...messages.exportGeoJSONLabel} />
+                                  </button>
+                                </form>
+                              </li>
                             </ul>
                         </React.Fragment>
                     }
