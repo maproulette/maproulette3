@@ -17,6 +17,7 @@ import _isArray from 'lodash/isArray'
 import _fromPairs from 'lodash/fromPairs'
 import _isUndefined from 'lodash/isUndefined'
 import _groupBy from 'lodash/groupBy'
+import _join from 'lodash/join'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
@@ -56,6 +57,36 @@ export const challengeDenormalizationSchema = function() {
 }
 
 // utility functions
+/**
+ * Builds a link to export CSV
+ */
+export const buildLinkToExportCSV = function(challengeId, criteria) {
+  const queryFilters = buildQueryFilters(criteria)
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${challengeId}/tasks/extract?${queryFilters}`
+}
+
+/**
+ * Builds a link to export GeoJSON
+ */
+export const buildLinkToExportGeoJSON = function(challengeId, criteria) {
+  const queryFilters = buildQueryFilters(criteria)
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/${challengeId}?${queryFilters}`
+}
+
+// Helper function to build query filters for export links
+const buildQueryFilters = function(criteria) {
+  const filters = _get(criteria, 'filters', {})
+  const taskId = filters.id
+  const reviewRequestedBy = filters.reviewRequestedBy
+  const reviewedBy = filters.reviewedBy
+  return (
+    `status=${_join(filters.status, ',')}&` +
+    `priority=${_join(filters.priorities, ',')}&` +
+    `reviewStatus=${_join(filters.reviewStatus, ',')}` +
+    `${taskId ? `&tid=${taskId}` : ""}` +
+    `${reviewRequestedBy ? `&o=${reviewRequestedBy}` : ""}` +
+    `${reviewedBy ? `&r=${reviewedBy}` : ""}`)
+}
 
 /**
  * Retrieves the resulting challenge entity object from the given
