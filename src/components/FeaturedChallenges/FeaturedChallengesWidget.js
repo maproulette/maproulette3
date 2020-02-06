@@ -7,8 +7,7 @@ import _isFinite from 'lodash/isFinite'
 import { Link } from 'react-router-dom'
 import { WidgetDataTarget, registerWidgetType }
        from '../../services/Widget/Widget'
-import WithFeaturedChallenges
-       from '../HOCs/WithFeaturedChallenges/WithFeaturedChallenges'
+import WithFeatured from '../HOCs/WithFeatured/WithFeatured'
 import QuickWidget from '../QuickWidget/QuickWidget'
 import messages from './Messages'
 
@@ -32,13 +31,32 @@ export default class FeaturedChallengesWidget extends Component {
         className="featured-challenges-widget"
         widgetTitle={<FormattedMessage {...messages.header} />}
       >
-        <FeaturedChallengeList {...this.props} />
+        <FeaturedList {...this.props} />
       </QuickWidget>
     )
   }
 }
 
-const FeaturedChallengeList = function(props) {
+const FeaturedList = function(props) {
+  const projectItems =
+    _compact(_map(props.featuredProjects, project => {
+      if (!_isFinite(_get(project, 'id'))) {
+        return null
+      }
+
+      return (
+        <li key={`project_${project.id}`} className="mr-pb-1">
+          <Link to={`/browse/projects/${project.id}`}>
+            {project.displayName || project.name}
+          </Link>
+          <span className="mr-text-grey-light mr-text-xs mr-uppercase mr-ml-2">
+            <FormattedMessage {...messages.projectIndicatorLabel} />
+          </span>
+        </li>
+      )
+    }
+  ))
+
   const challengeItems =
     _compact(_map(props.featuredChallenges, challenge => {
       if (!_isFinite(_get(challenge, 'id'))) {
@@ -46,7 +64,7 @@ const FeaturedChallengeList = function(props) {
       }
 
       return (
-        <li key={challenge.id} className="mr-pb-1">
+        <li key={`challenge_${challenge.id}`} className="mr-pb-1">
           <Link to={`/browse/challenges/${challenge.id}`}>
             {challenge.name}
           </Link>
@@ -55,9 +73,13 @@ const FeaturedChallengeList = function(props) {
     }
   ))
 
-  return challengeItems.length > 0 ?
-         <ol className="mr-list-reset">{challengeItems}</ol> :
-         <div className="none">No Challenges</div>
+  const featuredItems = projectItems.concat(challengeItems)
+
+  return featuredItems.length > 0 ?
+         <ol className="mr-list-reset">{featuredItems}</ol> :
+         <div className="none">
+           <FormattedMessage {...messages.nothingFeatured} />
+         </div>
 }
 
-registerWidgetType(WithFeaturedChallenges(FeaturedChallengesWidget), descriptor)
+registerWidgetType(WithFeatured(FeaturedChallengesWidget), descriptor)

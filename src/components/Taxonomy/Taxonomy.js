@@ -3,15 +3,15 @@ import { FormattedMessage } from 'react-intl'
 import messages from './Messages'
 
 /**
- * Displays the taxonomical categories of a challenge, e.g. popular, featured,
- * quick-fix, saved, etc.
+ * Displays the taxonomical categories of a challenge or project, e.g. popular,
+ * featured, quick-fix, saved, etc.
  */
-const ChallengeTaxonomy = props => {
+const Taxonomy = props => {
   if (!props.isSaved &&
-      !props.challenge.featured &&
-      !props.challenge.popular &&
-      !props.challenge.newest &&
-      !props.challenge.hasSuggestedFixes) {
+      !props.featured &&
+      !props.popular &&
+      !props.newest &&
+      !props.hasSuggestedFixes) {
     return null
   }
 
@@ -24,28 +24,28 @@ const ChallengeTaxonomy = props => {
         </span>
       </li>
       }
-      {props.challenge.featured &&
+      {props.featured &&
       <li>
         <span className="mr-text-turquoise">
           <FormattedMessage {...messages.featuredLabel} />
         </span>
       </li>
       }
-      {props.challenge.popular &&
+      {props.popular &&
       <li>
         <span className="mr-text-orange">
           <FormattedMessage {...messages.popularLabel} />
         </span>
       </li>
       }
-      {props.challenge.newest &&
+      {props.newest &&
       <li>
         <span className="mr-text-yellow">
           <FormattedMessage {...messages.newestLabel} />
         </span>
       </li>
       }
-      {props.challenge.hasSuggestedFixes &&
+      {props.hasSuggestedFixes &&
       <li>
         <span className="mr-text-rosebud">
           <FormattedMessage {...messages.suggestedFixLabel} />
@@ -56,4 +56,4 @@ const ChallengeTaxonomy = props => {
   )
 }
 
-export default ChallengeTaxonomy
+export default Taxonomy

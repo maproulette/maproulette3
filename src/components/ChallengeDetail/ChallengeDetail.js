@@ -11,7 +11,7 @@ import { messagesByDifficulty } from '../../services/Challenge/ChallengeDifficul
 import { isUsableChallengeStatus } from '../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import messages from './Messages'
 import BusySpinner from '../BusySpinner/BusySpinner'
-import ChallengeTaxonomy from '../ChallengeTaxonomy/ChallengeTaxonomy'
+import Taxonomy from '../Taxonomy/Taxonomy'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SignInButton from '../SignInButton/SignInButton'
@@ -158,7 +158,7 @@ export class ChallengeDetail extends Component {
                     </button>
                   </div>
                 )}
-                <ChallengeTaxonomy challenge={challenge} isSaved={isSaved} />
+                <Taxonomy {...challenge} isSaved={isSaved} />
                 <h1 className="mr-card-challenge__title">{challenge.name}</h1>
 
                 {challenge.parent && ( // virtual challenges don't have projects

@@ -26,6 +26,7 @@
 @import 'components/lists';
 @import 'components/cards/widget';
 @import 'components/cards/challenge';
+@import 'components/cards/project';
 @import 'components/sections';
 @import 'components/forms';
 @import 'components/ticker';
