@@ -5,6 +5,12 @@ import classNames from 'classnames'
 import Downshift from 'downshift'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
+import _split from 'lodash/split'
+import _difference from 'lodash/difference'
+import _clone from 'lodash/clone'
+import _indexOf from 'lodash/indexOf'
+import _filter from 'lodash/filter'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 import './AutosuggestTextBox.scss'
@@ -72,20 +78,36 @@ export default class AutosuggestTextBox extends Component {
     )
 
     let items = []
-    if (this.props.preferredResults) {
+    const preferredResults = this.getPreferredResults()
+    if (!_isEmpty(preferredResults)) {
       let className = "mr-font-medium"
-      items = items.concat(_map(this.props.preferredResults,
+      items = items.concat(_map(preferredResults,
         (result, index) => {
-          // Add a border bottom to the last entry
-          if (index === this.props.preferredResults.length - 1) {
+          // Add a border bottom to the last entry if there are more
+          // search results.
+          if (index === preferredResults.length - 1) {
             className += " mr-border-b-2 mr-border-grey-lighter mr-mb-2 mr-pb-2"
           }
           return generateResult(result, className)
         }))
     }
 
-    items = items.concat(_map(this.props.searchResults, generateResult))
+    items = items.concat(_map(this.getSearchResults(), generateResult))
     return items
+  }
+
+  getPreferredResults = () => {
+    // Filter out any tags that have already been selected.
+    const preferredResults = _clone(this.props.preferredResults) || []
+    return _difference(preferredResults, _split(this.props.formData, ','))
+  }
+
+  getSearchResults = () => {
+    // Filter out any of our original preferredResults tags so they don't show
+    // in the list twice.
+    return _filter(this.props.searchResults,
+                   t => _indexOf(this.props.preferredResults, t.name) === -1)
+
   }
 
   render() {
