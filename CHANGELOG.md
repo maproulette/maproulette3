@@ -7,7 +7,36 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v3.5.3] - 2020-01-21
+## [v3.5.4] - 2020-02-07
+### Added
+- Ability to designate task property as OSM id in challenge creation
+- Ability to setup preferred task tags during challenge creation
+- Reviewer-related stats on User Metrics page
+- Proper links for challenge names on Find Challenges page (#997)
+- Past Progress historical progress widget for challenges in Create & Manage
+- Ability to filter tasks by id, mapper, and reviewer in Create & Manage
+- Option to view tasks actively locked by a mapper in read-only preview mode
+- Default to excluding task reviews assigned to others on Task Review page
+- Support for basic point/marker "simplestyles" task-feature styling
+- Dedicated sign-in page if user navigates to page requiring sign-in
+- Various app-wide color and styling updates and fixes
+- Minor speed-up to loading of challenge dashboard in Create & Manage
+- [internal] Upgrade various package dependencies
+
+### Fixed
+- Incorrect display of 'view by priority' link on Project Detail page
+- Occasional discrepency in count of tasks completed together (#1086)
+- Erroneous treatment of en-US locale as invalid in User Settings
+- Failure during display of Markdown containing explicit line-breaks
+- Negative timers during task build or rebuild
+- Erroneous option to sort tasks by feature columns, which is not supported
+- Incorrect treatment of Current Month in user metrics
+- Occasional wrong result when searching for certain users (#1061)
+- Potential task loop when skipping tasks at a priority boundary
+- [internal] Update unit tests
+
+
+## [v3.5.3] - 2020-01-22
 ### Added
 - Support for `out center` in Overpass queries by @Zverik
 - Option for project managers to export CSV of tasks in project
