@@ -7,6 +7,7 @@ import { isFinalStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus }
       from '../../../services/Task/TaskReview/TaskReviewStatus'
+import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
 import QuickWidget from '../../QuickWidget/QuickWidget'
 import TagDiffVisualization from '../../TagDiffVisualization/TagDiffVisualization'
 import TagDiffModal from '../../TagDiffVisualization/TagDiffModal'
@@ -29,6 +30,8 @@ export default class TagDiffWidget extends Component {
   }
 
   render() {
+    const newGeometry = AsSuggestedFix(this.props.task).hasNewGeometry()
+
     return (
       <QuickWidget
         {...this.props}
@@ -36,7 +39,7 @@ export default class TagDiffWidget extends Component {
         noMain
         permanent
         widgetTitle={
-          <FormattedMessage {...messages.title} />
+          <FormattedMessage {...(newGeometry ? messages.newGeometryTitle : messages.title)} />
         }
         rightHeaderControls={
           <button

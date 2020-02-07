@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Proposed OSM Tag Changes",
   },
 
+  newGeometryTitle: {
+    id: "Widgets.TagDiffWidget.newGeometryTitle",
+    defaultMessage: "Proposed OSM Tags",
+  },
+
   viewAllTagsLabel: {
     id: "Widgets.TagDiffWidget.controls.viewAllTags.label",
     defaultMessage: "Show all Tags",

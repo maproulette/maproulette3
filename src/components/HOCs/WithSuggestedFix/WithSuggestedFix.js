@@ -6,7 +6,8 @@ import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _values from 'lodash/values'
 import { fetchOSMElement } from '../../../services/OSM/OSM'
-import { fetchSuggestedTagFixChangeset } from '../../../services/Task/Task'
+import { fetchSuggestedTagFixChangeset, fetchSuggestedFixChangeset }
+       from '../../../services/Task/Task'
 import { addError } from '../../../services/Error/Error'
 import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
 
@@ -71,16 +72,22 @@ export const WithSuggestedFix = function(WrappedComponent) {
 
       this.setState({loadingChangeset: true})
 
-      const suggestedFixSummary =
-        AsSuggestedFix(this.props.task).tagChangeSummary(this.state.tagEdits)
+      const taskFix = AsSuggestedFix(this.props.task)
+      const suggestedFixSummary = taskFix.changeSummary(this.state.tagEdits)
+      const fetchChangesetXML =
+        taskFix.hasGeometryFix() ?
+        fetchSuggestedFixChangeset :
+        fetchSuggestedTagFixChangeset
+
       if (_isEmpty(suggestedFixSummary)) {
         this.setState({xmlChangeset: '', loadingChangeset: false})
         return
       }
 
-      return fetchSuggestedTagFixChangeset(suggestedFixSummary).then(xml => {
+      return fetchChangesetXML(suggestedFixSummary).then(xml => {
         this.setState({xmlChangeset: xml, loadingChangeset: false})
       }).catch(error => {
+        console.log(error)
         this.setState({xmlChangeset: '', loadingChangeset: false})
       })
     }

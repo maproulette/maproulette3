@@ -600,14 +600,17 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
   let endpoint = null
   // Suggested fixes that have been approved (fixed status) go to a different endpoint
   if (suggestedFixSummary && newStatus === TaskStatus.fixed) {
-    endpoint = new Endpoint(api.task.applySuggestedFix, {
-      params,
-      variables: { id: taskId },
-      json: {
-        comment: osmComment,
-        changes: suggestedFixSummary,
+    endpoint = new Endpoint(
+      _isEmpty(suggestedFixSummary.creates) ? api.task.applyTagFix : api.task.applySuggestedFix,
+      {
+        params,
+        variables: { id: taskId },
+        json: {
+          comment: osmComment,
+          changes: suggestedFixSummary,
+        }
       }
-    })
+    )
   }
   else {
     endpoint = new Endpoint(
@@ -679,6 +682,16 @@ const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
 
 export const fetchSuggestedTagFixChangeset = function(suggestedFixSummary) {
   const endpoint = new Endpoint(api.task.testTagFix, {
+    params: { changeType: 'osmchange' },
+    json: suggestedFixSummary,
+    expectXMLResponse: true,
+  })
+
+  return endpoint.execute()
+}
+
+export const fetchSuggestedFixChangeset = function(suggestedFixSummary) {
+  const endpoint = new Endpoint(api.task.testSuggestedFix, {
     params: { changeType: 'osmchange' },
     json: suggestedFixSummary,
     expectXMLResponse: true,

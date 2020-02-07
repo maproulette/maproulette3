@@ -6,7 +6,12 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   prompt: {
     id: "SuggestedFixControls.prompt",
-    defaultMessage: "Are all of the OSM tag changes correct?",
+    defaultMessage: "Are the proposed OSM changes correct?",
+  },
+
+  newGeometryPrompt: {
+    id: "SuggestedFixControls.newGeometryPrompt",
+    defaultMessage: "Are the proposed OSM additions correct?",
   },
 
   confirmLabel: {

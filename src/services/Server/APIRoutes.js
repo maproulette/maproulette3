@@ -115,7 +115,9 @@ const apiRoutes = factory => {
       'tags': factory.get('/task/:id/tags'),
       'updateTags': factory.get('/task/:id/tags/update'),
       'testTagFix': factory.post('/change/tag/test'),
-      'applySuggestedFix': factory.post('/task/:id/fix/apply'),
+      'testSuggestedFix': factory.post('/change/test'),
+      'applyTagFix': factory.post('/task/:id/fix/apply'),
+      'applySuggestedFix': factory.post('/task/:id/suggestedFix/apply'),
     },
     'keywords': {
       'find': factory.get('/keywords'),

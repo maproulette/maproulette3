@@ -212,7 +212,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
       let suggestedFixSummary = null
       if (task.suggestedFix) {
-        suggestedFixSummary = AsSuggestedFix(task).tagChangeSummary(tagEdits)
+        suggestedFixSummary = AsSuggestedFix(task).changeSummary(tagEdits)
       }
 
       return dispatch(

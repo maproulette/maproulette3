@@ -216,12 +216,26 @@ export class ActiveTaskControls extends Component {
       return (
         <div>
           {!isEditingTask && isComplete &&
-           <div className="mr-text-white mr-text-md mr-my-4">
-             <FormattedMessage
-               {...messages.markedAs}
-             /> <FormattedMessage
-               {...messagesByStatus[this.props.task.status]}
-             />
+           <div className="mr-text-white mr-text-md mr-my-4 mr-links-green-lighter">
+             <div className="mr-flex mr-justify-between mr-items-center">
+               <span>
+                 <FormattedMessage
+                   {...messages.markedAs}
+                 /> <FormattedMessage
+                   {...messagesByStatus[this.props.task.status]}
+                 />
+               </span>
+               {this.props.task.changesetId > 0 &&
+                <a
+                  href={`${process.env.REACT_APP_OSM_API_SERVER}/changeset/${this.props.task.changesetId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mr-text-base"
+                >
+                  <FormattedMessage {...messages.viewChangesetLabel} />
+                </a>
+               }
+             </div>
              {(this.props.task.reviewStatus === TaskReviewStatus.needed ||
                this.props.task.reviewStatus === TaskReviewStatus.disputed) &&
                 <div className="mr-text-yellow mr-text-sd mr-my-4">
