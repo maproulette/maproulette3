@@ -28,7 +28,7 @@ export class ProjectCard extends Component {
           <Link to={`/admin/project/${project.id}`}>
             {project.displayName || project.name}
             {project.isVirtual ?
-              <span className="mr-mx-4 mr-text-orange mr-text-sm">
+              <span className="mr-mx-4 mr-text-pink mr-text-sm">
                 <FormattedMessage {...messages.virtualHeader} />
               </span> : null}
           </Link>
@@ -69,9 +69,18 @@ export class ProjectCard extends Component {
               title={project.enabled ?
                       this.props.intl.formatMessage(messages.enabledTooltip) :
                       this.props.intl.formatMessage(messages.disabledTooltip)}>
-            <SvgSymbol className={classNames('icon', {enabled: project.enabled})}
-                      viewBox='0 0 20 20'
-                      sym={project.enabled ? 'visible-icon' : 'hidden-icon'} />
+            <span
+              className={classNames(
+                "mr-text-grey-light mr-transition",
+                project.enabled ? "hover:mr-text-green-light" : "hover:mr-text-green-light-60"
+              )}
+            >
+              <SvgSymbol
+                className="mr-fill-current mr-h-6 mr-align-middle mr-cursor-pointer"
+                viewBox='0 0 20 20'
+                sym={project.enabled ? 'visible-icon' : 'hidden-icon'}
+              />
+            </span>
           </div>
 
           {projectNameColumn}
@@ -87,9 +96,14 @@ export class ProjectCard extends Component {
 
           <div className='column is-narrow item-pinned'>
             <div className="clickable" onClick={() => this.props.toggleProjectPin(project.id)}>
-              <SvgSymbol className={classNames('icon', {enabled: this.props.isPinned})}
-                         viewBox='0 0 20 20'
-                         sym='pin-icon' />
+              <SvgSymbol
+                className={classNames(
+                  "mr-w-4 mr-h-4 mr-rotate-10",
+                  this.props.isPinned ? 'mr-fill-matisse-blue' : 'mr-fill-grey-light'
+                )}
+                viewBox='0 0 20 20'
+                sym='pin-icon'
+              />
             </div>
           </div>
         </div>

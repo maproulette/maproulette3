@@ -1,3 +1,4 @@
+import React from 'react'
 import { ZOOM_LEVELS,
          MIN_ZOOM,
          MAX_ZOOM,
@@ -12,6 +13,7 @@ import _without from 'lodash/without'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
 import _filter from 'lodash/filter'
+import MarkdownContent from '../../../../MarkdownContent/MarkdownContent'
 import messages from './Messages'
 
 /**
@@ -84,6 +86,10 @@ export const jsSchema = intl => {
         title: intl.formatMessage(messages.exportablePropertiesLabel),
         type: "string",
       },
+      osmIdProperty: {
+        title: intl.formatMessage(messages.osmIdPropertyLabel),
+        type: "string",
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -151,6 +157,10 @@ export const uiSchema = intl => ({
   exportableProperties: {
     "ui:emptyValue": "",
     "ui:help": intl.formatMessage(messages.exportablePropertiesDescription),
+  },
+  osmIdProperty: {
+    "ui:emptyValue": "",
+    "ui:help": <MarkdownContent lightMode markdown={intl.formatMessage(messages.osmIdPropertyDescription)} />,
   },
 })
 

@@ -1,29 +1,29 @@
 .mr-status-created {
-  @apply mr-text-blue-light;
+  @apply mr-text-matisse-blue;
 }
 
 .mr-status-false-positive {
-  @apply mr-text-dark-yellow;
+  @apply mr-text-mango;
 }
 
 .mr-status-skipped {
-  @apply mr-text-orange;
+  @apply mr-text-pink;
 }
 
 .mr-status-already-fixed {
-  @apply mr-text-green-light;
-}
-
-.mr-status-too-hard {
-  @apply mr-text-red;
-}
-
-.mr-status-fixed {
   @apply mr-text-teal;
 }
 
+.mr-status-too-hard {
+  @apply mr-text-red-light;
+}
+
+.mr-status-fixed {
+  @apply mr-text-green-light;
+}
+
 .mr-status-deleted {
-  @apply mr-text-purple;
+  @apply mr-text-grey;
 }
 
 .mr-status-disabled {

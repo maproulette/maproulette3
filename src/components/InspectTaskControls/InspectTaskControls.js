@@ -84,13 +84,23 @@ export class InspectTaskControls extends Component {
 
     return (
       <div className="inspect-task-controls">
-        <UserEditorSelector {...this.props} className="mr-mb-4" />
+        {this.props.taskReadOnly ?
+         <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+           <FormattedMessage {...messages.readOnly} />
+         </div> :
+         <UserEditorSelector {...this.props} className="mr-mb-4" />
+        }
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
-          <TaskEditControl pickEditor={this.pickEditor}
-                            className="active-task-controls__edit-control"
-                            {..._omit(this.props, 'className')} />
+          {!this.props.taskReadOnly ?
+           <TaskEditControl
+             pickEditor={this.pickEditor}
+             className="active-task-controls__edit-control"
+             {..._omit(this.props, 'className')}
+           /> :
+           <div />
+          }
 
-          {manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
+          {!this.props.taskReadOnly && manager.canWriteProject(_get(this.props, 'task.parent.parent')) ?
            <Link
              to={{pathname: this.modifyTaskRoute(), state: {fromTaskInspect: true}}}
              className="mr-button"

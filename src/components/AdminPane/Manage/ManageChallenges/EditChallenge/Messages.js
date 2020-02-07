@@ -180,6 +180,17 @@ export default defineMessages({
     "#tourism).",
   },
 
+  preferredTagsLabel: {
+    id: 'Admin.EditChallenge.form.preferredTags.label',
+    defaultMessage: "Preferred Tags",
+  },
+
+  preferredTagsDescription: {
+    id: 'Admin.EditChallenge.form.preferredTags.description',
+    defaultMessage: "You can optionally provide a " +
+    "list of preferred tags that you want the user to use when completing a task. ",
+  },
+
   featuredLabel: {
     id: 'Admin.EditChallenge.form.featured.label',
     defaultMessage: "Featured",
@@ -217,7 +228,7 @@ usually just a few minutes old. Using
 [Overpass QL](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide),
 the Overpass Query Language, you can define exactly which OSM objects you want
 to load into your Challenge as Tasks.
-[Learn more](https://github.com/maproulette/maproulette2/wiki/Introducing-New-MapRoulette---Part-1.-Creating-and-Maintaining-Challenges#via-overpass).
+(Learn more on the wiki)[https://github.com/maproulette/maproulette2/wiki/Introducing-New-MapRoulette---Part-1.-Creating-and-Maintaining-Challenges#via-overpass].
 
 #### Via Local GeoJSON File
 
@@ -445,5 +456,23 @@ will not be able to make sense of it.
     defaultMessage: "Any properties included in this comma separated list " +
       "will be exported as a column in the CSV export and populated with the " +
       "first matching feature property from each task.",
+  },
+
+  osmIdPropertyLabel: {
+    id: 'Admin.EditChallenge.form.osmIdProperty.label',
+    defaultMessage: "OSM Id Property"
+  },
+
+  osmIdPropertyDescription: {
+    id: 'Admin.EditChallenge.form.osmIdProperty.description',
+    defaultMessage: "The name of the task feature property to treat as an " +
+      "OpenStreetMap element id for tasks. If left blank, " +
+      "MapRoulette will fall back to checking a series of common id properties, " +
+      "including those used by Overpass. If specified, **be sure that it has a " +
+      "unique value for each feature in your data**. Tasks missing the " +
+      "property will be assigned a random identifier even if the task " +
+      "contains other common id properties. " +
+      "[Learn more on the wiki]" +
+      "(https://github.com/osmlab/maproulette3/wiki/Challenge-Managers:-setting-external-task-IDs-(e.g.-OSM-IDs))."
   },
 })

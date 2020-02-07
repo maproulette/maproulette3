@@ -2,73 +2,107 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
-import Modal from '../Bulma/Modal'
+import _cloneDeep from 'lodash/cloneDeep'
+import Modal from '../Modal/Modal'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './ConfirmAction.scss'
 
 /**
- * ConfirmAction intercepts the onClick control of the immediate child and
- * instead presents a confirmation modal asking the user to confirm their
- * desired action. Upon confirmation, the original onClick function is
- * invoked.
+ * ConfirmAction intercepts the onClick (or other specified action) of the
+ * immediate child and instead presents a confirmation modal asking the user to
+ * confirm their desired action. Upon confirmation, the original onClick or
+ * specified action function is invoked. If desired, a skipConfirmation function
+ * can be provided that will be invoked (and passed the original event) before
+ * each possible interception, causing confirmation to be skipped if the
+ * function returns a truthy value
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export default class ConfirmAction extends Component {
-  originalOnClick = null
+  originalAction = null
 
   state = {
     confirming: false,
   }
 
-  initiateConfirmation = () => this.setState({confirming: true})
+  initiateConfirmation = e => {
+    if (this.props.skipConfirmation && this.props.skipConfirmation(e)) {
+      if (this.originalAction) {
+        this.originalAction(e)
+      }
+    }
+    else {
+      this.setState({confirming: true, originalEvent: _cloneDeep(e)})
+    }
+  }
 
   cancel = () => this.setState({confirming: false})
 
-  proceed = e => {
-    this.setState({confirming: false})
+  proceed = () => {
+    const event = this.state.originalEvent
 
-    if (this.originalOnClick) {
-      this.originalOnClick(e)
+    this.setState({confirming: false, originalEvent: null})
+    if (this.originalAction) {
+      this.originalAction(event)
     }
   }
 
   render() {
-    if (this.props.skipConfirmation) {
-      return this.props.children
-    }
-
-    this.originalOnClick = _get(this.props.children, 'props.onClick')
+    const action = this.props.action ? this.props.action : 'onClick'
+    this.originalAction = _get(this.props.children, `props.${action}`)
 
     const ControlWithConfirmation =
-      React.cloneElement(this.props.children,
-                         {onClick: this.initiateConfirmation})
+      React.cloneElement(this.props.children, {[action]: this.initiateConfirmation})
 
     return (
-      <div className="confirm-action">
+      <div>
         {ControlWithConfirmation}
 
-        <Modal className="confirm-action__modal" onClose={this.cancel} isActive={this.state.confirming}>
-          <article className="message">
-            <div className="message-header mr-bg-blue-dark">
-              {this.props.title || <FormattedMessage {...messages.title} />}
+        <Modal
+          narrow
+          fullBleed
+          onClose={this.cancel}
+          isActive={this.state.confirming}
+        >
+          <article>
+            <div className="mr-pin-t mr-absolute">
+              <SvgSymbol
+                className="mr-fill-white-04 mr-w-48 mr-h-48 mr-mt-4 mr-ml-8"
+                viewBox='0 0 20 20'
+                sym='alert-icon'
+              />
             </div>
-            <div className="message-body">
-              <div className="confirm-action__prompt mr-text-blue-dark">
+            <div className="mr-flex mr-flex-col mr-items-center mr-px-8 mr-pt-12">
+              <div className="mr-w-full mr-flex mr-justify-center mr-mb-4">
+                <SvgSymbol
+                  className="mr-fill-red mr-h-10 mr-h-10"
+                  viewBox='0 0 20 20'
+                  sym='alert-icon'
+                />
+              </div>
+              <div className="mr-text-3xl mr-mb-4">
+                {this.props.title || <FormattedMessage {...messages.title} />}
+              </div>
+              <div className="mr-font-medium">
                 {this.props.prompt || <FormattedMessage {...messages.prompt} />}
               </div>
+            </div>
 
-              <div className="confirm-action__controls">
-                <button className="mr-button mr-button--blue"
-                        onClick={this.cancel}>
-                  <FormattedMessage {...messages.cancel} />
-                </button>
+            <div className="mr-mt-16 mr-bg-blue-cloudburst mr-p-8 mr-flex mr-justify-center mr-items-center">
+              <button
+                className="mr-button mr-button--green-lighter mr-mr-8"
+                onClick={this.cancel}
+              >
+                <FormattedMessage {...messages.cancel} />
+              </button>
 
-                <button className="mr-button mr-button--danger mr-ml-4"
-                        onClick={this.proceed}>
-                  <FormattedMessage {...messages.proceed} />
-                </button>
-              </div>
+              <button
+                className="mr-button mr-button--danger"
+                onClick={this.proceed}
+              >
+                <FormattedMessage {...messages.proceed} />
+              </button>
             </div>
           </article>
         </Modal>
@@ -80,10 +114,8 @@ export default class ConfirmAction extends Component {
 ConfirmAction.propTypes = {
   title: PropTypes.node,
   prompt: PropTypes.node,
-  /** Skip confirmation step if set to true */
-  skipConfirmation: PropTypes.bool,
-}
-
-ConfirmAction.defaultProps = {
-  skipConfirmation: false,
+  /** Skip confirmation step if function returns true */
+  skipConfirmation: PropTypes.func,
+  /** Optional action to intercept. Defaults to onClick */
+  action: PropTypes.string,
 }

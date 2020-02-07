@@ -25,7 +25,7 @@ class CardLeaderboard extends Component {
     return (
       <article
         className={classNames(
-          'mr-relative mr-bg-white-10 mr-text-white mr-rounded mr-p-4 md:mr-p-6 mr-shadow mr-text-center',
+          'mr-relative mr-bg-black-10 mr-text-white mr-rounded mr-p-4 md:mr-p-6 mr-shadow mr-text-center',
           this.props.className
         )}
       >

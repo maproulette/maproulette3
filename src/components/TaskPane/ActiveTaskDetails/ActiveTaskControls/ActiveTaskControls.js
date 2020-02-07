@@ -231,73 +231,83 @@ export class ActiveTaskControls extends Component {
            </div>
           }
 
-          <TaskTags task={this.props.task}
-                         tags={this.state.tags}
-                         setTags={this.setTags}
-                         onConfirm={this.confirmCompletion}
-                         saveTaskTags={this.props.saveTaskTags} />
+          <TaskTags
+            task={this.props.task}
+            tags={this.state.tags}
+            setTags={this.setTags}
+            onConfirm={this.confirmCompletion}
+            saveTaskTags={this.props.saveTaskTags}
+            taskReadOnly={this.props.taskReadOnly}
+          />
 
-          {this.props.task.suggestedFix && (!isFinal || needsRevised) &&
-            <SuggestedFixControls
-              {...this.props}
-              allowedProgressions={allowedProgressions}
-              complete={this.initiateCompletion}
-              nextTask={this.next}
-              needsRevised={needsRevised}
-            />
-          }
-          {!this.props.task.suggestedFix && !isEditingTask && (!isFinal || needsRevised) &&
-           <TaskCompletionStep1
-             {...this.props}
-             allowedProgressions={allowedProgressions}
-             pickEditor={this.pickEditor}
-             complete={this.initiateCompletion}
-             nextTask={this.next}
-             needsRevised={needsRevised}
-           />
-          }
+          {this.props.taskReadOnly ?
+           <div className="mr-mt-4 mr-text-lg mr-text-pink-light">
+            <FormattedMessage {...messages.readOnly} />
+           </div> :
+           <React.Fragment>
+             {this.props.task.suggestedFix && (!isFinal || needsRevised) &&
+               <SuggestedFixControls
+                 {...this.props}
+                 allowedProgressions={allowedProgressions}
+                 complete={this.initiateCompletion}
+                 nextTask={this.next}
+                 needsRevised={needsRevised}
+               />
+             }
+             {!this.props.task.suggestedFix && !isEditingTask && (!isFinal || needsRevised) &&
+             <TaskCompletionStep1
+               {...this.props}
+               allowedProgressions={allowedProgressions}
+               pickEditor={this.pickEditor}
+               complete={this.initiateCompletion}
+               nextTask={this.next}
+               needsRevised={needsRevised}
+             />
+             }
 
-          {isEditingTask &&
-           <TaskCompletionStep2
-             {...this.props}
-             allowedProgressions={allowedProgressions}
-             complete={this.initiateCompletion}
-             cancelEditing={this.cancelEditing}
-             needsRevised={needsRevised}
-           />
-          }
+             {isEditingTask &&
+             <TaskCompletionStep2
+               {...this.props}
+               allowedProgressions={allowedProgressions}
+               complete={this.initiateCompletion}
+               cancelEditing={this.cancelEditing}
+               needsRevised={needsRevised}
+             />
+             }
 
-          {!isEditingTask && isComplete && !needsRevised &&
-           <TaskNextControl
-             {...this.props}
-             className="mr-mt-1"
-             nextTask={this.next}
-           />
-          }
+             {!isEditingTask && isComplete && !needsRevised &&
+             <TaskNextControl
+               {...this.props}
+               className="mr-mt-1"
+               nextTask={this.next}
+             />
+             }
 
-          {this.state.confirmingTask &&
-            <TaskConfirmationModal
-              {...this.props}
-              status={this.state.confirmingStatus}
-              comment={this.state.comment}
-              setComment={this.setComment}
-              osmComment={this.state.osmComment}
-              setOSMComment={this.setOSMComment}
-              tags={this.state.tags}
-              setTags={this.setTags}
-              needsReview={this.getNeedsReviewSetting()}
-              toggleNeedsReview={this.toggleNeedsReview}
-              loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
-              chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
-                                                 this.chooseLoadBy(load)}
-              chooseNextTask={this.chooseNextTask}
-              clearNextTask={this.clearNextTask}
-              requestedNextTask={this.state.requestedNextTask}
-              onConfirm={this.confirmCompletion}
-              onCancel={this.resetConfirmation}
-              needsRevised={this.state.submitRevision}
-              fromInbox={fromInbox}
-            />
+             {this.state.confirmingTask &&
+               <TaskConfirmationModal
+                 {...this.props}
+                 status={this.state.confirmingStatus}
+                 comment={this.state.comment}
+                 setComment={this.setComment}
+                 osmComment={this.state.osmComment}
+                 setOSMComment={this.setOSMComment}
+                 tags={this.state.tags}
+                 setTags={this.setTags}
+                 needsReview={this.getNeedsReviewSetting()}
+                 toggleNeedsReview={this.toggleNeedsReview}
+                 loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
+                 chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
+                                                   this.chooseLoadBy(load)}
+                 chooseNextTask={this.chooseNextTask}
+                 clearNextTask={this.clearNextTask}
+                 requestedNextTask={this.state.requestedNextTask}
+                 onConfirm={this.confirmCompletion}
+                 onCancel={this.resetConfirmation}
+                 needsRevised={this.state.submitRevision}
+                 fromInbox={fromInbox}
+               />
+             }
+           </React.Fragment>
           }
         </div>
       )

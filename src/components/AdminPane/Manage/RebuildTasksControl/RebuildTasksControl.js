@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import AsManageableChallenge from '../../../../interactions/Challenge/AsManageableChallenge'
 import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
-import Modal from '../../../Bulma/Modal'
+import Modal from '../../../Modal/Modal'
+import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import { DropzoneTextUpload } from '../../../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import messages from './Messages'
-import './RebuildTasksControl.scss'
 
 /**
  * RebuildTasksControl displays a control a challenge owner can use to rebuild
@@ -45,6 +45,8 @@ export class RebuildTasksControl extends Component {
     const updatedFile = this.state.localFile ? this.state.localFile.file : null
     this.resetState()
 
+    this.props.recordSnapshot(this.props.challenge.id)
+
     const deleteStepIfRequested = removeUnmatched ?
                                   this.props.deleteIncompleteTasks(this.props.challenge) :
                                   Promise.resolve()
@@ -69,6 +71,7 @@ export class RebuildTasksControl extends Component {
         required: true,
         readonly: false,
         formContext: uploadContext,
+        dropAreaClassName: "mr-text-green-white mr-border-matisse-blue mr-border-2 mr-rounded mr-text-sm mr-p-4 mr-cursor-pointer",
         onChange: filename => {
           this.setState({
             localFilename: filename,
@@ -82,46 +85,49 @@ export class RebuildTasksControl extends Component {
     // Only offer an option to change the source origin date if it's a local file
     // we are uploading.
     if (challenge.dataSource() === 'local') {
-      originDateField =
-        <div className="form-group field field-string mr-mt-2">
-          <label className="control-label">
+      originDateField = (
+        <div>
+          <label className="mr-text-orange mr-mr-2">
             <FormattedMessage {...messages.dataOriginDateLabel} />
           </label>
-          <input className="form-control" type="date"
-                 label={this.props.intl.formatMessage(messages.dataOriginDateLabel)}
-                 onChange={e => this.setState({dataOriginDate: e.target.value})}
-                 value={this.state.dataOriginDate || challenge.dataOriginDate} />
+          <input
+            className="mr-text-white mr-bg-transparent mr-border mr-border-white mr-rounded mr-p-2"
+            type="date"
+            label={this.props.intl.formatMessage(messages.dataOriginDateLabel)}
+            onChange={e => this.setState({dataOriginDate: e.target.value})}
+            value={this.state.dataOriginDate || challenge.dataOriginDate}
+          />
         </div>
+      )
     }
 
     return (
-      <div className="rebuild-tasks-control">
+      <div>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           onClick={this.initiateConfirmation}
-          className="mr-text-green-lighter hover:mr-text-white mr-mr-4"
+          className="mr-button mr-button--dark mr-button--small mr-mr-4"
         >
           <FormattedMessage {...messages.label} />
         </a>
 
         {this.state.confirming && (
           <Modal
-            className="rebuild-tasks-control__modal"
             onClose={this.resetState}
             isActive={this.state.confirming}
           >
-            <article className="message">
-              <div className="message-header">
+            <article className="mr-text-sm">
+              <div className="mr-text-2xl mr-mb-4">
                 <FormattedMessage {...messages.modalTitle} />
               </div>
 
-              <div className="message-body">
-                <div className="rebuild-tasks-control__explanation">
-                  <p className="rebuild-tasks-control__explanation__intro">
+              <div className="mr-text-white">
+                <div>
+                  <p>
                     <FormattedMessage {...messages[challenge.dataSource()]} />
                   </p>
 
-                  <div className="rebuild-tasks-control__explanation__steps">
+                  <div>
                     <MarkdownContent
                       markdown={this.props.intl.formatMessage(
                         messages.explanation
@@ -129,50 +135,59 @@ export class RebuildTasksControl extends Component {
                     />
                   </div>
 
-                  <p className="rebuild-tasks-control__warning">
-                    <FormattedMessage {...messages.warning} />
-                  </p>
-
-                  <div className="rebuild-tasks-control__moreInfo">
-                    <MarkdownContent
-                      markdown={this.props.intl.formatMessage(
-                        messages.moreInfo
-                      )}
-                    />
+                  <div className="mr-bg-white-10 mr-rounded mr-text-orange mr-mt-4 mr-mb-8 mr-px-4 mr-pt-4 mr-pb-3 mr-flex mr-items-center">
+                    <div className="mr-w-20 mr-ml-2 mr-mr-6">
+                      <SvgSymbol
+                        className="mr-fill-red mr-h-10 mr-h-10"
+                        viewBox='0 0 20 20'
+                        sym='alert-icon'
+                      />
+                    </div>
+                    <div>
+                      <FormattedMessage {...messages.warning} />
+                      <MarkdownContent
+                        markdown={this.props.intl.formatMessage(
+                          messages.moreInfo
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="rebuild-tasks-control__options">
-                  <div className="rebuild-tasks-control__remove-unmatched-option">
+                <div className="mr-mt-8">
+                  {fileUploadArea && (
+                    <div>
+                      <form className="rjsf">{fileUploadArea}</form>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mr-w-full mr-flex mr-justify-between mr-items-center mr-mt-2">
+                  <div>
                     <input
                       type="checkbox"
-                      className="mr-mr-1"
+                      className="mr-mr-2"
                       checked={this.state.removeUnmatchedTasks}
                       onChange={this.toggleRemoveUnmatchedTasks}
                     />
-                    <label className="mr-text-blue-light">
+                    <label className="mr-text-orange">
                       <FormattedMessage {...messages.removeUnmatchedLabel} />
                     </label>
                   </div>
 
-                  {fileUploadArea && (
-                    <div className="rebuild-tasks-control__upload-geojson">
-                      <form className="rjsf">{fileUploadArea}</form>
-                    </div>
-                  )}
                   {originDateField}
                 </div>
 
-                <div className="rebuild-tasks-control__modal-controls">
+                <div className="mr-mt-8">
                   <button
-                    className="button is-secondary is-outlined rebuild-tasks-control__cancel-control"
+                    className="mr-button mr-button--white mr-mr-4"
                     onClick={this.resetState}
                   >
                     <FormattedMessage {...messages.cancel} />
                   </button>
 
                   <button
-                    className="button is-danger is-outlined rebuild-tasks-control__proceed-control"
+                    className="mr-button mr-button--danger"
                     onClick={this.proceed}
                   >
                     <FormattedMessage {...messages.proceed} />

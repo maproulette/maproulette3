@@ -36,7 +36,7 @@ export class ChallengeFilterSubnav extends Component {
       this.props.unfilteredChallenges.length > this.props.challenges.length
 
     return (
-      <header className="mr-bg-white-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
+      <header className="mr-bg-black-10 mr-shadow mr-py-4 lg:mr-py-0 mr-px-6 mr-hidden lg:mr-flex mr-items-center mr-justify-between">
         <div className="mr-flex-grow mr-flex mr-items-center mr-justify-between lg:mr-justify-start">
           <h1 className="mr-hidden xl:mr-flex mr-text-3xl mr-leading-tight mr-font-normal mr-mr-6">
             <FormattedMessage {...messages.header} />

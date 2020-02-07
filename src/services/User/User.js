@@ -20,6 +20,7 @@ import { resetCache } from '../Server/RequestCache'
 import Endpoint from '../Server/Endpoint'
 import RequestStatus from '../Server/RequestStatus'
 import genericEntityReducer from '../Server/GenericEntityReducer'
+import { Locale } from './Locale/Locale'
 import { challengeSchema, receiveChallenges } from '../Challenge/Challenge'
 import { taskSchema,
          taskDenormalizationSchema,
@@ -715,6 +716,9 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
   // The generic reduction will merge arrays, creating a union of values. We
   // don't want that for many of our arrays: we want to replace the old ones
   // with new ones (if we have new ones).
+  //
+  // We also normalize the locale, as the server will default to `en` whereas
+  // we use `en-US`
   for (let entity of userEntities) {
     if (_isArray(entity.groups)) {
       mergedState[entity.id].groups = entity.groups
@@ -743,6 +747,11 @@ const reduceUsersFurther = function(mergedState, oldState, userEntities) {
     // Always completely replace app-specific properties with new ones
     if (_isObject(entity.properties)) {
       mergedState[entity.id].properties = entity.properties
+    }
+
+    // Normalize server's default `en` locale to `en-US`
+    if (_get(entity, 'settings.locale') === 'en') {
+      mergedState[entity.id].settings.locale = Locale.enUS
     }
   }
 }

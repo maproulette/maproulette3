@@ -68,7 +68,7 @@ class Leaderboard extends Component {
       <section className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12">
       <div className="mr-max-w-6xl mr-mx-auto mr-bg-fireworks">
         <div className="mr-max-w-2xl mr-mx-auto">
-          <header className="mr-mb-8 mr-rounded mr-bg-white-10 mr-shadow mr-p-4 md:mr-px-6 md:mr-py-8 lg:mr-flex lg:mr-justify-between mr-text-white mr-text-center lg:mr-text-left">
+          <header className="mr-mb-8 mr-rounded mr-bg-black-10 mr-shadow mr-p-4 md:mr-px-6 md:mr-py-8 lg:mr-flex lg:mr-justify-between mr-text-white mr-text-center lg:mr-text-left">
             <div className="mr-max-w-md mr-mb-4 lg:mr-mb-0 lg:mr-pr-8">
               <h1 className="mr-h2 mr-mb-2">
                 {this.props.displayName ?

@@ -17,6 +17,7 @@ import _isArray from 'lodash/isArray'
 import _fromPairs from 'lodash/fromPairs'
 import _isUndefined from 'lodash/isUndefined'
 import _groupBy from 'lodash/groupBy'
+import _join from 'lodash/join'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import { defaultRoutes as api, isSecurityError } from '../Server/Server'
@@ -33,7 +34,8 @@ import { RECEIVE_CHALLENGES, REMOVE_CHALLENGE }
        from './ChallengeActions'
 import { ChallengeStatus } from './ChallengeStatus/ChallengeStatus'
 import { zeroTaskActions } from '../Task/TaskAction/TaskAction'
-import { parseQueryString, RESULTS_PER_PAGE, SortOptions }
+import { parseQueryString, RESULTS_PER_PAGE, SortOptions,
+         generateSearchParametersString }
        from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
 
@@ -55,6 +57,36 @@ export const challengeDenormalizationSchema = function() {
 }
 
 // utility functions
+/**
+ * Builds a link to export CSV
+ */
+export const buildLinkToExportCSV = function(challengeId, criteria) {
+  const queryFilters = buildQueryFilters(criteria)
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/${challengeId}/tasks/extract?${queryFilters}`
+}
+
+/**
+ * Builds a link to export GeoJSON
+ */
+export const buildLinkToExportGeoJSON = function(challengeId, criteria) {
+  const queryFilters = buildQueryFilters(criteria)
+  return `${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/challenge/view/${challengeId}?${queryFilters}`
+}
+
+// Helper function to build query filters for export links
+const buildQueryFilters = function(criteria) {
+  const filters = _get(criteria, 'filters', {})
+  const taskId = filters.id
+  const reviewRequestedBy = filters.reviewRequestedBy
+  const reviewedBy = filters.reviewedBy
+  return (
+    `status=${_join(filters.status, ',')}&` +
+    `priority=${_join(filters.priorities, ',')}&` +
+    `reviewStatus=${_join(filters.reviewStatus, ',')}` +
+    `${taskId ? `&tid=${taskId}` : ""}` +
+    `${reviewRequestedBy ? `&o=${reviewRequestedBy}` : ""}` +
+    `${reviewedBy ? `&r=${reviewedBy}` : ""}`)
+}
 
 /**
  * Retrieves the resulting challenge entity object from the given
@@ -319,17 +351,10 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
  */
 export const fetchChallengeActions = function(challengeId = null, suppressReceive = false,
                                               criteria) {
-  const searchParameters = {}
+  let searchParameters = {}
   if (criteria) {
-    if (criteria.status) {
-      searchParameters.tStatus = criteria.status
-    }
-    if (criteria.reviewStatus) {
-      searchParameters.trStatus = criteria.reviewStatus
-    }
-    if (criteria.priorities) {
-      searchParameters.priority = criteria.priorities
-    }
+    searchParameters = generateSearchParametersString(_get(criteria, 'filters', {}),
+                                                      criteria.boundingBox)
   }
 
   return function(dispatch) {
@@ -624,6 +649,10 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
       challengeData.tags = challengeData.tags.join(',')
     }
 
+    if (_isArray(challengeData.preferredTags)) {
+      challengeData.preferredTags = challengeData.preferredTags.join(',')
+    }
+
     // If there is local GeoJSON content being transmitted as a string, parse
     // it into JSON first.
     if (_isString(challengeData.localGeoJSON) &&
@@ -641,7 +670,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
-        'exportableProperties', 'dataOriginDate'])
+        'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
@@ -712,7 +741,8 @@ export const uploadChallengeGeoJSON = function(challengeId, geoJSON, lineByLine=
     return new Endpoint(
       api.challenge.uploadGeoJSON, {
         variables: {id: challengeId},
-        params: {lineByLine, removeUnmatched: removeUnmatchedTasks, dataOriginDate},
+        params: {lineByLine, removeUnmatched: removeUnmatchedTasks, dataOriginDate,
+                 skipSnapshot: true},
         formData,
       }
     ).execute()
@@ -751,7 +781,7 @@ export const rebuildChallenge = function(challengeId, removeUnmatchedTasks=false
     return new Endpoint(
       api.challenge.rebuild, {
         variables: {id: challengeId},
-        params: {removeUnmatched: removeUnmatchedTasks},
+        params: {removeUnmatched: removeUnmatchedTasks, skipSnapshot: true},
       }
     ).execute().then(() =>
       fetchChallenge(challengeId)(dispatch) // Refresh challenge data

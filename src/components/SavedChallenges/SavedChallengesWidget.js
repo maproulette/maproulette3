@@ -53,7 +53,7 @@ const SavedChallengeList = function(props) {
       return (
         <li key={challenge.id} className="mr-mb-2 mr-flex mr-items-center">
           <button
-            className="mr-mr-2 mr-text-grey-light hover:mr-text-red"
+            className="mr-mr-2 mr-text-pink-light hover:mr-text-red"
             onClick={() => props.unsaveChallenge(props.user.id, challenge.id)}
           >
             <SvgSymbol

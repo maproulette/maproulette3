@@ -288,6 +288,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
   columns.id = {
     id: 'id',
     Header: props.intl.formatMessage(messages.idLabel),
+    filterable: true,
     accessor: t => {
       if (!t.isBundlePrimary) {
         return <span>{t.id}</span>
@@ -592,7 +593,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
                         <FormattedMessage {...messages.viewTaskLabel} />
 
       return <div className="row-controls-column">
-        <Link to={linkTo}>
+        <Link to={linkTo} className="mr-text-green-light">
           {message}
         </Link>
       </div>

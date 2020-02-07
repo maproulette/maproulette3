@@ -31,7 +31,7 @@ export class InspectTask extends Component {
           <div className="admin__manage__header">
             <nav className="breadcrumb" aria-label="breadcrumbs">
               <ul>
-                <li>
+                <li className="nav-title">
                   <Link to='/admin/projects'>
                     <FormattedMessage {...manageMessages.manageHeader} />
                   </Link>

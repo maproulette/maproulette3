@@ -83,13 +83,13 @@ export default class SearchBox extends Component {
           this.props.className
         )}
       >
-        <label className="mr-mr-2" htmlFor="input-search">
+        <label className="mr-mr-2 mr-flex mr-items-center" htmlFor="input-search">
           {!isLoading && !this.props.suppressIcon &&
            <SvgSymbol
              sym="search-icon"
              title="Search"
              viewBox="0 0 20 20"
-             className="mr-fill-current mr-w-5 mr-h-5"
+             className={this.props.iconClassName ? this.props.iconClassName : "mr-fill-current mr-w-5 mr-h-5"}
            />
           }
           {isLoading && <BusySpinner inline />}

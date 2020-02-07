@@ -69,7 +69,7 @@ export class BurndownChart extends Component {
          </p>
         }
         <ResponsiveLine data={burndownMetrics}
-                        colors={["#61CDBB"]}
+                        colors={["#1A688B"]}
                         margin={{
                           top: 20,
                           right: 20,
@@ -93,7 +93,7 @@ export class BurndownChart extends Component {
                           tickRotation: 0,
                         }}
                         enableArea={true}
-                        enableDots={false}
+                        enablePoints={false}
                         dotSize={10}
                         dotColor="inherit"
                         dotBorderWidth={2}

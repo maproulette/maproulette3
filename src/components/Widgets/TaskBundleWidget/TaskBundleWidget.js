@@ -24,6 +24,7 @@ import WithTaskClusterMarkers from '../../HOCs/WithTaskClusterMarkers/WithTaskCl
 import WithChallengeTaskClusters from '../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
 import WithClusteredTasks from '../../HOCs/WithClusteredTasks/WithClusteredTasks'
 import WithFilterCriteria from '../../HOCs/WithFilterCriteria/WithFilterCriteria'
+import WithTaskPropertyKeys from '../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys'
 import WithBoundedTasks from '../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilteredClusteredTasks
        from '../../HOCs/WithFilteredClusteredTasks/WithFilteredClusteredTasks'
@@ -196,7 +197,7 @@ const ActiveBundle = props => {
             values={{taskCount: props.taskBundle.taskIds.length}}
           />
         </h3>
-        {!props.disallowBundleChanges &&
+        {!props.taskReadOnly && !props.disallowBundleChanges &&
           <button
             className="mr-button mr-button--green mr-button--small"
             onClick={() => {
@@ -231,7 +232,14 @@ const ActiveBundle = props => {
 }
 
 const BuildBundle = props => {
-  if (props.disallowBundleChanges || props.task.reviewStatus) {
+  if (props.taskReadOnly) {
+    return (
+      <div className="mr-text-pink-light mr-text-lg">
+        <FormattedMessage {...messages.readOnly} />
+      </div>
+    )
+  }
+  else if (props.disallowBundleChanges || props.task.reviewStatus) {
     return (
       <div className="mr-text-base">
         <FormattedMessage {...messages.disallowBundling} />
@@ -338,15 +346,17 @@ registerWidgetType(
   WithNearbyTasks(
     WithClusteredTasks(
       WithFilteredClusteredTasks(
-        WithFilterCriteria(
-          WithBoundedTasks(
-            WithBrowsedChallenge(
-              WithWebSocketSubscriptions(
-                TaskBundleWidget,
-              )
-            ),
-            'filteredClusteredTasks',
-            'taskInfo'
+        WithTaskPropertyKeys(
+          WithFilterCriteria(
+            WithBoundedTasks(
+              WithBrowsedChallenge(
+                WithWebSocketSubscriptions(
+                  TaskBundleWidget,
+                )
+              ),
+              'filteredClusteredTasks',
+              'taskInfo'
+            )
           )
         ),
         'clusteredTasks',

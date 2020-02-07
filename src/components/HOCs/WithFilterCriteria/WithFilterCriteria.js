@@ -5,9 +5,7 @@ import _isEqual from 'lodash/isEqual'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
 import _omit from 'lodash/omit'
-import _sortBy from 'lodash/sortBy'
-import { fromLatLngBounds } from '../../../services/MapBounds/MapBounds'
-import { fetchPropertyKeys } from '../../../services/Challenge/Challenge'
+import { fromLatLngBounds, GLOBAL_MAPBOUNDS } from '../../../services/MapBounds/MapBounds'
 
 const DEFAULT_PAGE_SIZE = 20
 const DEFAULT_CRITERIA = {sortCriteria: {sortBy: 'name', direction: 'DESC'},
@@ -25,14 +23,18 @@ export const WithFilterCriteria = function(WrappedComponent) {
        loading: false,
        criteria: DEFAULT_CRITERIA,
        pageSize: DEFAULT_PAGE_SIZE,
-       taskPropertyKeys: null,
      }
 
      updateCriteria = (newCriteria) => {
        const criteria = _cloneDeep(this.state.criteria)
        criteria.sortCriteria = newCriteria.sortCriteria
        criteria.page = newCriteria.page
+       criteria.filters = newCriteria.filters
+
        this.setState({criteria})
+       if (this.props.setSearchFilters) {
+         this.props.setSearchFilters(criteria)
+       }
      }
 
      updateTaskFilterBounds = (bounds, zoom) => {
@@ -98,34 +100,13 @@ export const WithFilterCriteria = function(WrappedComponent) {
        this.setState({criteria: typedCriteria})
      }
 
-     taskPropertyKeys = () => {
-       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
-
-       if (this.state.taskPropertyKeys) {
-         return this.state.taskPropertyKeys
-       }
-       else if (challengeId && !this.state.loadingPropertyKeys){
-         this.setState({loadingPropertyKeys: true})
-         fetchPropertyKeys(challengeId).then( (results) => {
-           this.setState({loadingPropertyKeys: false, taskPropertyKeys: _sortBy(results)})
-           return results
-         }).catch(error => {
-           console.log(error)
-           this.setState({loadingPropertyKeys: false, taskPropertyKeys: []})
-         })
-         return []
-       }
-       else {
-         return []
-       }
-     }
-
      updateIncludedFilters(props) {
        const typedCriteria = _cloneDeep(this.state.criteria)
        typedCriteria.filters["status"] = _keys(_pickBy(props.includeTaskStatuses, (s) => s))
        typedCriteria.filters["reviewStatus"] = _keys(_pickBy(props.includeTaskReviewStatuses, (r) => r))
        typedCriteria.filters["priorities"] = _keys(_pickBy(props.includeTaskPriorities, (p) => p))
        this.setState({criteria: typedCriteria})
+       return typedCriteria
      }
 
      update(props, criteria) {
@@ -137,12 +118,23 @@ export const WithFilterCriteria = function(WrappedComponent) {
        this.setState({criteria: typedCriteria})
      }
 
-     refreshTasks = () => {
+     refreshTasks = (typedCriteria) => {
        const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
        this.setState({loading: true})
 
+       const criteria = typedCriteria || _cloneDeep(this.state.criteria)
+
+       // If we don't have bounds yet, we still want results so let's fetch all
+       // tasks globally for this challenge.
+       if (!criteria.boundingBox) {
+         if (this.props.skipInitialFetch || !challengeId) {
+           return
+         }
+         criteria.boundingBox = GLOBAL_MAPBOUNDS
+       }
+
        this.props.augmentClusteredTasks(challengeId, false,
-                                        this.state.criteria,
+                                        criteria,
                                         this.state.criteria.pageSize,
                                         false).then((results) => {
          this.setState({loading: false})
@@ -150,7 +142,12 @@ export const WithFilterCriteria = function(WrappedComponent) {
      }
 
      componentDidMount() {
-       this.updateIncludedFilters(this.props)
+       const typedCriteria = this.updateIncludedFilters(this.props)
+       const challengeId = _get(this.props, 'challenge.id') || this.props.challengeId
+       if (challengeId) {
+         this.refreshTasks(typedCriteria)
+       }
+
      }
 
      componentDidUpdate(prevProps, prevState) {
@@ -159,16 +156,20 @@ export const WithFilterCriteria = function(WrappedComponent) {
          return
        }
 
+       let typedCriteria = _cloneDeep(this.state.criteria)
+
        if (prevProps.includeTaskStatuses !== this.props.includeTaskStatuses ||
            prevProps.includeTaskReviewStatuses !== this.props.includeTaskReviewStatuses ||
            prevProps.includeTaskPriorities !== this.props.includeTaskPriorities) {
-         this.updateIncludedFilters(this.props)
+         typedCriteria = this.updateIncludedFilters(this.props)
        }
 
        if (!_isEqual(prevState.criteria, this.state.criteria) && !this.props.skipRefreshTasks) {
-         if (this.state.criteria.boundingBox) {
-           this.refreshTasks()
-         }
+         this.refreshTasks(typedCriteria)
+       }
+       else if (_get(prevProps, 'challenge.id') !== _get(this.props, 'challenge.id') ||
+                this.props.challengeId !== prevProps.challengeId) {
+         this.refreshTasks(typedCriteria)
        }
      }
 
@@ -180,7 +181,6 @@ export const WithFilterCriteria = function(WrappedComponent) {
                            updateReviewTasks={(criteria) => this.update(this.props, criteria)}
                            updateTaskPropertyCriteria={this.updateTaskPropertyCriteria}
                            clearTaskPropertyCriteria={this.clearTaskPropertyCriteria}
-                           taskPropertyKeys={this.taskPropertyKeys()}
                            refresh={this.refresh}
                            criteria={criteria}
                            pageSize={criteria.pageSize}

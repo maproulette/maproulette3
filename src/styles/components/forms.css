@@ -1,12 +1,18 @@
 .form {
   &-group {
+    @apply mr-text-sm;
+
     &-header,
     legend {
-      @apply mr-block mr-w-full mr-mb-8 mr-p-4 mr-rounded mr-shadow mr-bg-green-dark mr-text-white mr-text-md mr-font-normal mr-leading-tight;
+      @apply mr-block mr-w-full mr-text-matisse-blue mr-uppercase mr-font-medium;
 
       @screen md {
         @apply mr-text-lg;
       }
+    }
+
+    legend#root__title {
+      @apply mr-mb-8;
     }
 
     .error-detail {
@@ -20,6 +26,10 @@
     .array-item-list .array-item {
       @apply mr-mb-4;
     }
+  }
+
+  .no-legend legend {
+    @apply mr-hidden;
   }
 
   .field {
@@ -41,8 +51,12 @@
   }
 }
 
+.control-label {
+  @apply mr-text-base;
+}
+
 .control-label, .form-group.field-boolean label span, .form-group.field-number label span {
-  @apply mr-cursor-pointer mr-inline-block mr-mb-2 mr-font-medium mr-text-blue;
+  @apply mr-cursor-pointer mr-inline-block mr-mb-2 mr-font-medium mr-text-grey;
 
   .field-hide-label & {
     @apply mr-visuallyhidden;
@@ -55,10 +69,10 @@
 
 .mr-input,
 .form-control {
-  @apply mr-appearance-none mr-w-full mr-bg-white mr-border mr-border-grey-light mr-text-grey mr-p-2 mr-rounded-sm mr-leading-tight;
+  @apply mr-appearance-none mr-w-full mr-bg-white mr-border-2 mr-border-grey-light-more mr-text-grey mr-p-2 mr-rounded mr-leading-tight;
 
   &:focus {
-    @apply mr-outline-none mr-border-grey;
+    @apply mr-outline-none mr-border-grey-light;
   }
 
   .has-error & {
@@ -67,6 +81,7 @@
 
   .form-select & {
     @apply mr-pr-8;
+    @apply mr-border-2 mr-border-grey-light-more mr-rounded mr-text-grey;
   }
 
   &--green-lighter-outline {
@@ -85,7 +100,13 @@
 
 .field-description,
 .help-block {
-  @apply mr-block mr-text-sm mr-text-grey;
+  @apply mr-block mr-text-sm mr-text-grey mr-pt-2;
+
+  .mr-markdown {
+    p {
+      margin-bottom: 1em;
+    }
+  }
 }
 
 .help-block {
@@ -103,7 +124,7 @@
 }
 
 .field-radio-group {
-  @apply mr-mb-2;
+  @apply mr-h-4 mr-mb-2;
 }
 
 .checkbox,

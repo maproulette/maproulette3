@@ -16,6 +16,8 @@ import WithBoundedTasks
        from '../../../HOCs/WithBoundedTasks/WithBoundedTasks'
 import WithFilterCriteria
       from '../../../HOCs/WithFilterCriteria/WithFilterCriteria'
+import WithTaskPropertyKeys
+      from '../../../HOCs/WithTaskPropertyKeys/WithTaskPropertyKeys'
 import WithChallengeTaskClusters
       from '../../../HOCs/WithChallengeTaskClusters/WithChallengeTaskClusters'
 import WithTaskClusterMarkers
@@ -310,6 +312,9 @@ ViewChallengeTasks.defaultProps = {
 }
 
 export default WithBoundedTasks(
-                  WithFilterCriteria(ViewChallengeTasks),
-                  'filteredClusteredTasks',
-                  'taskInfo')
+                 WithTaskPropertyKeys(
+                   WithFilterCriteria(ViewChallengeTasks)
+                 ),
+                 'filteredClusteredTasks',
+                 'taskInfo'
+               )

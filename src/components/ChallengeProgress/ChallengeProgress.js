@@ -125,10 +125,10 @@ export class ChallengeProgress extends Component {
                         top: 5,
                         right: 15,
                         bottom: 25,
-                        left: 7,
+                        left: 10,
                       }}
                       layout="horizontal"
-                      colorBy={item => statusColors[item.id]}
+                      colors={item => statusColors[item.id]}
                       borderColor="inherit:darker(1.6)"
                       enableGridY={false}
                       enableLabel={false}
@@ -236,7 +236,12 @@ export class ChallengeProgress extends Component {
 
         return (
           <div className="mr-mt-6" key={priority}>
-            <div className="mr-text-orange mr-text-md mr-font-medium mr-mb-4">
+            <div
+              className={classNames(
+                "mr-text-md mr-font-medium mr-mb-4",
+                this.props.lightMode ? "mr-text-matisse-blue" : "mr-text-yellow"
+              )}
+            >
               <FormattedMessage
                 {...messages.priorityLabel}
                 values={{priority: localizedPriorityLabels[keysByPriority[priority]]}}
@@ -256,9 +261,14 @@ export class ChallengeProgress extends Component {
         {this.generateProgressBar(taskActions, completionData, statusColors, orderedKeys)}
         {this.generateProgressBarLabel(taskActions)}
 
-        {taskPriorityActions &&
-          <div className="mr-text-green-lighter mr-cursor-pointer"
-               onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}>
+        {taskPriorityActions && this.props.setShowByPriority &&
+          <div
+            className={classNames(
+              "mr-cursor-pointer",
+              this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"
+            )}
+            onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}
+          >
             <span className="mr-align-top">
               <FormattedMessage {...messages.byPriorityToggle} />
             </span>

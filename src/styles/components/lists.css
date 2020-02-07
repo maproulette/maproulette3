@@ -59,7 +59,7 @@
 
   &--ruled {
     li + li {
-      @apply mr-mt-0 mr-border-t mr-border-blue;
+      @apply mr-mt-0 mr-border-t mr-border-blue-light-25;
     }
 
     a {

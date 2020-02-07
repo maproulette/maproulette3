@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import _filter from 'lodash/filter'
+import _split from 'lodash/split'
+import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import External from '../External/External'
@@ -26,6 +30,12 @@ export class TaskTags extends Component {
 
   render() {
     if (this.state.edit) {
+      const preferredTags =
+        _filter(
+          _split(_get(this.props.task.parent, 'preferredTags'), ','),
+          (result) => !_isEmpty(result)
+        )
+
       return (
         <External>
           <Modal isActive onClose={() => this.setState({edit: false})}>
@@ -38,6 +48,7 @@ export class TaskTags extends Component {
                                          handleAddTag={this.handleAddTag}
                                          formData={this.props.tags} {...this.props}
                                          tagType={"tasks"}
+                                         preferredResults={preferredTags}
                                          placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
               </div>
               <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
@@ -63,10 +74,12 @@ export class TaskTags extends Component {
     else if (this.props.tags && this.props.tags !== "") {
       return (
         <div>
-          <div className="mr-float-right mr-text-green-lighter hover:mr-text-white"
-               onClick={() => this.setState({edit: true})}>
-            <FormattedMessage {...messages.updateTags} />
-          </div>
+          {!this.props.taskReadOnly &&
+           <div className="mr-float-right mr-text-green-lighter hover:mr-text-white"
+                onClick={() => this.setState({edit: true})}>
+             <FormattedMessage {...messages.updateTags} />
+           </div>
+          }
           <div className="mr-text-sm mr-text-white">
             <FormattedMessage
               {...messages.taskTags}
@@ -75,13 +88,22 @@ export class TaskTags extends Component {
         </div>
       )
     }
-    else {
+    else if (!this.props.taskReadOnly) {
       return (
         <div>
           <div className="mr-text-green-lighter hover:mr-text-white"
                onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
           </div>
+        </div>
+      )
+    }
+    else {
+      return (
+        <div className="mr-text-sm mr-text-white">
+          <FormattedMessage
+            {...messages.taskTags}
+          />
         </div>
       )
     }

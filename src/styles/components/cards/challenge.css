@@ -1,5 +1,5 @@
 .mr-card-challenge {
-  @apply mr-rounded mr-shadow mr-bg-white-10 mr-text-white mr-p-4;
+  @apply mr-rounded mr-shadow mr-bg-black-10 mr-text-white mr-p-4;
 
   &--featured {
     @apply mr-bg-blue-dark-75;

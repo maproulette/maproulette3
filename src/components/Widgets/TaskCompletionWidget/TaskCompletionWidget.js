@@ -6,7 +6,6 @@ import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithEditor from '../../HOCs/WithEditor/WithEditor'
-import WithLockedTask from '../../HOCs/WithLockedTask/WithLockedTask'
 import ActiveTaskControls
        from '../../TaskPane/ActiveTaskDetails/ActiveTaskControls/ActiveTaskControls'
 import InspectTaskControls from '../../InspectTaskControls/InspectTaskControls'
@@ -42,8 +41,13 @@ export default class TaskCompletionWidget extends Component {
 
     // If we have selected Tasks but no tasks in bundle, a bundle was started
     // but not created with server
-    if (_get(this.props, 'selectedTasks.size') > 0 && taskCount === 0) {
-      taskCount = this.props.selectedTasks.size + 1
+    if (!this.props.taskReadOnly &&
+        _get(this.props, 'selectedTasks.size') > 0 && taskCount === 0) {
+      taskCount = this.props.selectedTasks.size
+      if (!this.props.selectedTasks.has(this.props.task.id)) {
+        taskCount += 1 // Count the current task if needed
+      }
+
       taskControls =
         <div className="mr-pt-2">
           <Button onClick={this.bundleTasks} className="mr-mr-2">
@@ -81,4 +85,4 @@ export default class TaskCompletionWidget extends Component {
   }
 }
 
-registerWidgetType(WithCurrentUser(WithEditor(WithLockedTask(TaskCompletionWidget))), descriptor)
+registerWidgetType(WithCurrentUser(WithEditor(TaskCompletionWidget)), descriptor)

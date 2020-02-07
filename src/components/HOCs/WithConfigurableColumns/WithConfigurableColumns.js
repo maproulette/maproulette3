@@ -6,6 +6,7 @@ import _pull from 'lodash/pull'
 import _get from 'lodash/get'
 import _keys from 'lodash/keys'
 import _find from 'lodash/find'
+import _isEqual from 'lodash/isEqual'
 import _startsWith from 'lodash/startsWith'
 
 /**
@@ -25,6 +26,12 @@ export default function(WrappedComponent, defaultAllColumns, defaultShowColumns=
 
     componentWillMount() {
       this.resetColumnChoices(defaultAllColumns, defaultShowColumns)
+    }
+
+    componentDidUpdate(prevProps) {
+      if (!_isEqual(prevProps.taskPropertyKeys, this.props.taskPropertyKeys)) {
+        this.resetColumnChoices(defaultAllColumns, defaultShowColumns)
+      }
     }
 
     // This will save the column settings to the user's app settings.
@@ -72,7 +79,7 @@ export default function(WrappedComponent, defaultAllColumns, defaultShowColumns=
       })
 
       // Next if we are including task properties as columns we need to add those
-      if (includeTaskPropertyKeys && this.props.taskPropertyKeys) {
+      if (includeTaskPropertyKeys) {
         // For all the task property keys we want to add them to the
         // availableColumns if they are not already in the addedColumns.
         // As we add them, we indicate they are a task property with a : in

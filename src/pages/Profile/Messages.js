@@ -4,9 +4,14 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Profile
  */
 export default defineMessages({
+  pageTitle: {
+    id: "Profile.page.title",
+    defaultMessage: "User Settings",
+  },
+
   header: {
     id: "Profile.settings.header",
-    defaultMessage: "User Settings",
+    defaultMessage: "General",
   },
 
   userNotFound: {
@@ -115,7 +120,10 @@ export default defineMessages({
   emailDescription: {
     id: "Profile.form.email.description",
     defaultMessage: "If you request emails in your Notification Subscriptions, they " +
-                    "will be sent here"
+    "will be sent here.\n\nDecide which MapRoulette notifications you would like to " +
+    "receive, along with whether you would like to be sent " +
+    "an email informing you of the notification (either immediately " +
+    "or as a daily digest)"
   },
 
   notificationLabel: {

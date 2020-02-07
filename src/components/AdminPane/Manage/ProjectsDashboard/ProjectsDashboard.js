@@ -51,7 +51,7 @@ export class ProjectsDashboard extends Component {
       <div className="admin__manage__header admin__manage__header--flush">
         <nav className="breadcrumb" aria-label="breadcrumbs">
           <ul>
-            <li className="is-active">
+            <li className="nav-title is-active">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a aria-current="page">
                 <FormattedMessage {...manageMessages.manageHeader} />
@@ -62,7 +62,7 @@ export class ProjectsDashboard extends Component {
 
         <div className="admin__manage__controls mr-flex">
           <Link to={"/admin/projects/new"}
-                className="mr-text-green-lighter hover:mr-text-white mr-mr-4">
+                className="mr-button mr-button--dark mr-button--small mr-mr-4">
             <FormattedMessage {...messages.newProject } />
           </Link>
         </div>

@@ -41,10 +41,12 @@ class Dashboard extends Component {
     return (
       <WidgetWorkspace
         {...this.props}
-        className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8"
+        className="mr-bg-gradient-r-green-dark-blue mr-text-white mr-px-6 mr-py-8 mr-cards-inverse"
         workspaceTitle={
           <h1 className="mr-h2"><FormattedMessage {...messages.header} /></h1>
         }
+        lightMode={false}
+        darkMode={true}
       />
     )
   }

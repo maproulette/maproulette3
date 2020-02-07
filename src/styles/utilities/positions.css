@@ -19,8 +19,16 @@
     left: 16%;
   }
 
+  .mr-pin-l-20 {
+    left: 20%;
+  }
+
   .mr-pin-l-30 {
     left: 30%;
+  }
+
+  .mr-pin-l-37 {
+    left: 37.5%; /* centers a 25% width content area */
   }
 
   .mr-pin-l-33 {
@@ -49,5 +57,14 @@
 
   .mr--translate-1\/2 {
     transform: translate(-50%, -50%);
+  }
+
+  .mr-rotate-10 {
+    transform: rotate(10deg);
+  }
+
+  /* Useful for manipulating the containing block for 'fixed' content */
+  .mr-fixed-containing-block {
+    transform: rotate(0deg);
   }
 }

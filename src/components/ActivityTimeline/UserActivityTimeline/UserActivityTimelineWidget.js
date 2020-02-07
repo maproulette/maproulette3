@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
@@ -165,7 +166,7 @@ export default class UserActivityTimelineWidget extends Component {
         className="user-timeline-activity-widget"
         widgetTitle={<FormattedMessage {...messages.header} />}
       >
-        <ol className="mr-timeline">
+        <ol className={classNames("mr-timeline", {"dark-mode": this.props.darkMode})}>
           {timelineItems}
         </ol>
       </QuickWidget>

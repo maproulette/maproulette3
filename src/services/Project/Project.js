@@ -194,7 +194,7 @@ export const saveProject = function(projectData) {
       // If we just created the project, add the owner as an admin.
       if (areCreating && project) {
         return setProjectManagerGroupType(
-          project.id, project.owner, GroupType.admin
+          project.id, project.owner, false, GroupType.admin
         )(dispatch).then(() => project)
       }
       else {
@@ -288,10 +288,13 @@ export const fetchProjectManagers = function(projectId) {
 /**
  * Set group type (permissions) for user on project.
  */
-export const setProjectManagerGroupType = function(projectId, userId, groupType) {
+export const setProjectManagerGroupType = function(projectId, userId, isOSMUserId, groupType) {
   return function(dispatch) {
     return new Endpoint(
-      api.project.setManagerPermission, {variables: {userId, projectId, groupType}}
+      api.project.setManagerPermission, {
+        variables: {userId, projectId, groupType},
+        params: {isOSMUserId: isOSMUserId ? 'true' : 'false'},
+      }
     ).execute().then(rawManagers => {
       const normalizedResults = {
         entities: {
@@ -328,7 +331,7 @@ export const addProjectManager = function(projectId, username, groupType) {
         _get(_find(matchingUsers, match => match.displayName === username), 'osmId')
 
       if (_isFinite(osmId)) {
-        return setProjectManagerGroupType(projectId, osmId, groupType)(dispatch)
+        return setProjectManagerGroupType(projectId, osmId, true, groupType)(dispatch)
       }
       else {
         dispatch(addError(AppErrors.user.notFound))
@@ -343,10 +346,13 @@ export const addProjectManager = function(projectId, username, groupType) {
 /**
  * Remove project manager from project
  */
-export const removeProjectManager = function(projectId, userId) {
+export const removeProjectManager = function(projectId, userId, isOSMUserId) {
   return function(dispatch) {
     return new Endpoint(
-      api.project.removeManager, {variables: {userId, projectId}}
+      api.project.removeManager, {
+        variables: {userId, projectId},
+        params: {isOSMUserId: isOSMUserId ? 'true' : 'false'},
+      }
     ).execute().then(
       () => fetchProjectManagers(projectId)(dispatch)
     ).catch(error => {

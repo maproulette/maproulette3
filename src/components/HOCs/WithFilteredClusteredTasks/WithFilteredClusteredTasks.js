@@ -13,6 +13,7 @@ import _isEqual from 'lodash/isEqual'
 import _isFinite from 'lodash/isFinite'
 import _each from 'lodash/each'
 import _merge from 'lodash/merge'
+import _cloneDeep from 'lodash/cloneDeep'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatusWithUnset, REVIEW_STATUS_NOT_SET }
       from '../../../services/Task/TaskReview/TaskReviewStatus'
@@ -144,13 +145,13 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     filterTasks = (includeStatuses, includeReviewStatuses, includePriorities, includeLocked,
                    includeAll = false) => {
       let results = null
-      let tasks = _get(this.props[tasksProp], 'tasks')
+      let tasks = _cloneDeep(_get(this.props[tasksProp], 'tasks'))
       if (_isArray(tasks)) {
         if (includeAll) {
           // In order to include all, we need to include any that are in the
           // selectedTasks that were not in props[tasksProps]
           // (props[taskProps] is limited to only current page of results)
-          tasks = _merge(tasks, Array.from(this.state.selectedTasks.values()))
+          _merge(tasks, Array.from(this.state.selectedTasks.values()))
         }
 
         results = Object.assign({}, this.props[tasksProp], {

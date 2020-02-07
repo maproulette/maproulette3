@@ -18,8 +18,12 @@ export default class MarkdownContent extends Component {
       return null
     }
 
-    // Replace any occurrences of \r\n with newlines.
-    const normalizedMarkdown = this.props.markdown.replace(/\r\n/mg, "\n\n")
+    // Replace any occurrences of \r\n with newlines, and since we don't
+    // support <br> tags replace `  \n` with `\n\n` to generate a new paragraph
+    // instead
+    const normalizedMarkdown =
+      this.props.markdown.replace(/\r\n/mg, "\n\n").replace(/\s{2}\n/mg, "\n\n")
+
     let parsedMarkdown =
       remark().use(externalLinks, {target: '_blank', rel: ['nofollow']})
               .use(reactRenderer).processSync(normalizedMarkdown).contents

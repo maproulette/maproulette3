@@ -14,6 +14,8 @@ export const DEFAULT_MAP_BOUNDS = [
   22.51255695405145, // north
 ]
 
+export const GLOBAL_MAPBOUNDS = [-180, -90, 180, 90]
+
 // utility functions
 
 /**

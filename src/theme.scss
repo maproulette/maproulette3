@@ -412,6 +412,10 @@ code {
   top: 3px;
 }
 
+.switch[type="checkbox"].short-and-wide:checked + label::before {
+  background-color: #1A688B;
+}
+
 .switch[type='checkbox'].short-and-wide:checked + label::after {
   left: 41px;
 }
@@ -427,7 +431,7 @@ code {
   border-radius: 20px;
   padding: 10px 12px;
   background-color: $grey-lightest-more;
-  color: $green;
+  color: #1A688B;
   display: inline-block;
 }
 

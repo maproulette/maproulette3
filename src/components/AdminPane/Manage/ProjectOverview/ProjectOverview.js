@@ -67,7 +67,7 @@ export default class ProjectOverview extends Component {
             <div className="mr-mt-4">
               <ConfirmAction
                 prompt={<FormattedMessage {...messages.confirmDisablePrompt} />}
-                skipConfirmation={!this.props.project.enabled}
+                skipConfirmation={() => !this.props.project.enabled}
               >
                 <div
                   className="mr-mb-2 visibility-switch"

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import FormattedDuration, { TIMER_FORMAT } from 'react-intl-formatted-duration'
-import parse from 'date-fns/parse'
 import _get from 'lodash/get'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
@@ -20,7 +20,8 @@ export default class TaskBuildProgress extends Component {
   timerHandle = null
 
   state = {
-    startTime: new Date(),
+    startTime: Date.now(),
+    lastTimerRun: Date.now(),
   }
 
   clearTimer = () => {
@@ -31,8 +32,7 @@ export default class TaskBuildProgress extends Component {
   }
 
   /**
-   * Returns the total elapsed seconds since the start time (usually the challenge
-   * modification date)
+   * Returns the total elapsed seconds since the initial start time
    */
   totalElapsedSeconds = () => {
     return (Date.now() - this.state.startTime) / 1000
@@ -42,24 +42,23 @@ export default class TaskBuildProgress extends Component {
    * Returns the number of seconds until the next status update
    */
   nextUpdateSeconds = () => {
-    return (
-      new Date(this.props.challenge._meta.fetchedAt + TIMER_INTERVAL).getTime() - Date.now()
+    const secondsRemaining =  (
+      new Date(this.state.lastTimerRun + TIMER_INTERVAL).getTime() - Date.now()
     ) / 1000
+
+    return secondsRemaining
   }
 
   refresh = () => {
     this.props.refreshChallenge()
     this.props.refreshTasks()
+    this.setState({lastTimerRun: Date.now()})
   }
 
   componentDidMount() {
     this.clearTimer()
-    this.timerHandle =
-      setInterval(this.props.refresh, TIMER_INTERVAL)
-
-    if (this.props.challenge.modified) {
-      this.setState({startTime: parse(this.props.challenge.modified)})
-    }
+    this.timerHandle = setInterval(this.refresh, TIMER_INTERVAL)
+    this.setState({startTime: Date.now(), lastTimerRun: Date.now()})
   }
 
   componentWillUnmount() {
@@ -109,4 +108,10 @@ export default class TaskBuildProgress extends Component {
       </div>
     )
   }
+}
+
+TaskBuildProgress.propTypes = {
+  challenge: PropTypes.object.isRequired,
+  refreshChallenge: PropTypes.func.isRequired,
+  refreshTasks: PropTypes.func.isRequired,
 }

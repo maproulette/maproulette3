@@ -1,13 +1,13 @@
 {
   "name": "maproulette3",
-  "version": "3.5.3",
+  "version": "3.5.4",
   "private": true,
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/geojsonhint": "^2.0.1",
-    "@nivo/bar": "^0.52.1",
-    "@nivo/line": "^0.33.0",
-    "@nivo/radar": "^0.33.0",
+    "@nivo/bar": "^0.61.1",
+    "@nivo/line": "^0.61.1",
+    "@nivo/radar": "^0.61.1",
     "@turf/bbox": "^5.1.5",
     "@turf/bbox-polygon": "^5.1.5",
     "@turf/boolean-disjoint": "^5.1.5",
@@ -65,7 +65,7 @@
     "react-redux": "^5.0.5",
     "react-responsive": "^4.1.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "3.2.0",
+    "react-scripts": "3.3.1",
     "react-share": "^1.16.0",
     "react-syntax-highlighter": "^10.3.0",
     "react-table": "^6.7.6",
@@ -113,7 +113,6 @@
     "start": "npm-run-all -p update-layers watch-postcss start-js",
     "build": "yarn run build-intl && yarn run update-layers && yarn run build-postcss && react-scripts build",
     "test": "react-scripts test",
-    "e2e": "yarn run chimp",
     "eject": "react-scripts eject"
   },
   "browserslist": [

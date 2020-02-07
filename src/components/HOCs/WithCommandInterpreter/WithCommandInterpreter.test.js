@@ -11,6 +11,7 @@ let basicProps = {}
 beforeEach(() => {
   basicProps.setSearch = jest.fn()
   basicProps.clearSearch = jest.fn()
+  basicProps.removeSearchFilters = jest.fn()
   basicProps.updateChallengeSearchMapBounds = jest.fn()
 })
 

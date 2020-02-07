@@ -4,6 +4,7 @@ import _omit from 'lodash/omit'
 import _get from 'lodash/get'
 import _keys from 'lodash/keys'
 import _pickBy from 'lodash/pickBy'
+import _merge from 'lodash/merge'
 import { fetchReviewMetrics, ReviewTasksType }
        from '../../../../services/Task/TaskReview/TaskReview'
 import WithCurrentUser from '../../../HOCs/WithCurrentUser/WithCurrentUser'
@@ -22,7 +23,11 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
     updateMetrics(props) {
       this.setState({loading: true})
 
-      const criteria = {filters:{challengeId: _get(props.challenge, 'id')}}
+      const filters = {challengeId: _get(props.challenge, 'id')}
+       _merge(filters, _get(props.searchFilters, 'filters'))
+
+      const criteria = {filters}
+
       if (props.includeTaskStatuses) {
         criteria.filters.status = _keys(_pickBy(props.includeTaskStatuses)).join(',')
       }
@@ -57,6 +62,10 @@ export const WithChallengeReviewMetrics = function(WrappedComponent) {
       }
 
       if (this.props.includeTaskPriorities !== prevProps.includeTaskPriorities) {
+        this.updateMetrics(this.props)
+      }
+
+      if (_get(this.props.searchFilters, 'filters') !== _get(prevProps.searchFilters, 'filters')) {
         this.updateMetrics(this.props)
       }
     }

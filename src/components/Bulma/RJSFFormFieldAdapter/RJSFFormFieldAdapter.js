@@ -173,7 +173,7 @@ export const TagsInputField = props => {
  * `"ui:widget": DropzoneTextUpload`). The form field should be of type string,
  * and it will be set with the text content of the uploaded file.
  */
-export const DropzoneTextUpload = ({id, required, onChange, readonly, formContext}) => {
+export const DropzoneTextUpload = ({id, required, onChange, readonly, formContext, dropAreaClassName}) => {
   if (readonly) {
     return (
       <div className="readonly-file mr-text-pink">
@@ -207,7 +207,9 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
 
         return (
           <div
-            className="dropzone mr-text-grey mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
+            className={
+              dropAreaClassName ? dropAreaClassName : "dropzone mr-text-grey mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
+            }
             {...getRootProps()}
           >
             {body}
