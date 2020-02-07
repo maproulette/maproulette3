@@ -64,7 +64,12 @@ export const WithLoadedComments = function(WrappedComponent) {
     }
 
     render() {
-      return <WrappedComponent {..._omit(this.props, 'fetchTaskComments')} />
+      return (
+        <WrappedComponent
+          {..._omit(this.props, 'fetchTaskComments')}
+          commentsLoading={this.state.commentsLoading}
+        />
+      )
     }
   }
 }

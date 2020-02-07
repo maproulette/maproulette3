@@ -22,7 +22,7 @@ export class ShareLink extends Component {
     const absoluteLink = `${process.env.REACT_APP_URL}${this.props.link}`
 
     return (
-      <div className={classNames('share-link dropdown', {'is-active': this.props.isActive},
+      <div className={classNames('share-link dropdown mr-flex mr-items-center', {'is-active': this.props.isActive},
                                  this.props.className)}>
         <button className='mr-text-white hover:mr-text-green-lighter' onClick={this.props.toggleActive}>
           <SvgSymbol
@@ -35,7 +35,7 @@ export class ShareLink extends Component {
         {this.props.isActive &&
          <div className='menu-wrapper'>
            <div className='dropdown-menu' role='menu'>
-             <div className='mr--mt-2 mr-flex mr-items-center mr-justify-between mr-p-2 mr-bg-blue-dark mr-text-white mr-rounded mr-shadow mr-text-sm'>
+             <div className='mr--mt-7 mr-flex mr-items-center mr-justify-between mr-p-2 mr-bg-blue-dark mr-text-white mr-rounded mr-shadow mr-text-sm'>
                <span className="share-link__text">{absoluteLink}</span>
 
                <CopyToClipboard text={absoluteLink} onCopy={this.props.deactivate}>

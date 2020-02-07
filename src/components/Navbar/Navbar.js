@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import MediaQuery from 'react-responsive'
-import { screens } from '../../tailwind'
 import MobileMenu from 'react-burger-menu/lib/menus/slide'
 import classNames from 'classnames'
 import _get from 'lodash/get'
@@ -11,7 +10,11 @@ import PointsTicker from '../PointsTicker/PointsTicker'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import Dropdown from '../Dropdown/Dropdown'
 import messages from './Messages'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../tailwind.config.js'
 import './Navbar.scss'
+
+const screens = resolveConfig(tailwindConfig).theme.screens
 
 /**
  * Navbar renders the primary top nav in the application, including the brand,
@@ -168,7 +171,7 @@ const UnreadNotificationsIndicator = function(props) {
   return (
     <span
       className={classNames("mr-rounded-full mr-bg-red-light mr-text-white", {
-                            "mr-absolute mr-pin-t mr-pin-l-50 mr-translate-x-1/2 mr-w-3 mr-h-3": !props.inline,
+                            "mr-absolute mr-top-0 mr-left-50 mr-translate-x-1/2 mr-w-3 mr-h-3": !props.inline,
                             "mr-inline-block mr-ml-2 mr-w-2 mr-h-2": props.inline})}
     />
   )

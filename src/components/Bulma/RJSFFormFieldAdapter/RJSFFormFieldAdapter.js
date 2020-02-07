@@ -96,7 +96,7 @@ export const CustomSelectWidget = function(props) {
   return (
     <div className={classNames('form-select', props.className)}>
       <OriginalSelectWidget {...props} />
-      <div className="mr-pointer-events-none mr-absolute mr-pin-y mr-pin-r mr-flex mr-items-center mr-px-2 mr-text-grey">
+      <div className="mr-pointer-events-none mr-absolute mr-inset-y-0 mr-right-0 mr-flex mr-items-center mr-px-2 mr-text-grey">
         <SvgSymbol
           sym="icon-cheveron-down"
           viewBox="0 0 20 20"
@@ -194,7 +194,7 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
     >
       {({acceptedFiles, getRootProps, getInputProps, ...params}) => {
         const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
-          <React.Fragment>
+          <span className="mr-flex mr-items-center">
             <SvgSymbol
               viewBox='0 0 20 20'
               sym="upload-icon"
@@ -202,7 +202,7 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
             />
             <FormattedMessage {...messages.uploadFilePrompt} />
             <input {...getInputProps()} />
-          </React.Fragment>
+          </span>
         )
 
         return (

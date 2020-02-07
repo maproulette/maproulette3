@@ -402,7 +402,7 @@ export class TaskClusterMap extends Component {
     return (
       <div className={classNames('taskcluster-map', {"full-screen-map": this.props.isMobile}, this.props.className)}>
         {canClusterToggle && !this.props.loading &&
-         <label className="mr-absolute mr-z-10 mr-pin-t mr-pin-l mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
+         <label className="mr-absolute mr-z-10 mr-top-0 mr-left-0 mr-mt-2 mr-ml-2 mr-shadow mr-rounded-sm mr-bg-black-50 mr-px-2 mr-py-1 mr-text-white mr-text-xs mr-flex mr-items-center">
             <input type="checkbox" className="mr-mr-2"
               checked={this.props.showAsClusters}
               onChange={this.props.toggleShowAsClusters} />
@@ -423,7 +423,7 @@ export class TaskClusterMap extends Component {
           <ZoomInMessage {...this.props} zoom={this.currentZoom}/>
         }
         {!!this.props.showTaskCount && this.state.displayTaskCount && !this.props.mapZoomedOut &&
-          <div className="mr-absolute mr-pin-t mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
+          <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
             <div className="mr-flex-col mr-items-center mr-bg-black-40 mr-text-white mr-rounded">
               <div className="mr-py-2 mr-px-3 mr-text-center">
                 <FormattedMessage {...messages.taskCountLabel } values={{count: this.props.totalTaskCount}} />

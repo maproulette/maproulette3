@@ -109,7 +109,7 @@ export class TaskAnalysisTableHeader extends Component {
                                 </label>
                                 <DeactivatableDropdownButton options={taskSelectionActions}
                                                                 onSelect={this.takeTaskSelectionAction}>
-                                <div className="basic-dropdown-indicator mr-pin-t" />
+                                <div className="basic-dropdown-indicator mr-top-0" />
                                 </DeactivatableDropdownButton>
                             </div>
                         </div>

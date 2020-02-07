@@ -12,7 +12,6 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
 import { latLng } from 'leaflet'
-import { colors } from '../../../tailwind'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
@@ -23,7 +22,11 @@ import WithIntersectingOverlays
        from '../../HOCs/WithIntersectingOverlays/WithIntersectingOverlays'
 import WithTaskMarkers from '../../HOCs/WithTaskMarkers/WithTaskMarkers'
 import BusySpinner from '../../BusySpinner/BusySpinner'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 import messages from './Messages'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 // Setup child components with necessary HOCs
 const VisibleTileLayer = WithVisibleLayer(SourcedTileLayer)

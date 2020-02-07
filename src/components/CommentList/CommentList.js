@@ -24,7 +24,11 @@ import './CommentList.scss'
 export default class CommentList extends Component {
   render() {
     if (this.props.comments.length === 0) {
-      return <div className="mr-px-4 comment-list none">No Comments</div>
+      return (
+        <div className="mr-px-4 comment-list none">
+          <FormattedMessage {...messages.noComments} />
+        </div>
+      )
     }
 
     const commentDates = new Map()

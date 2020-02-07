@@ -11,7 +11,7 @@
 
 /* Sidebar wrapper styles */
 .bm-menu-wrap {
-  @apply mr-fixed mr-pin-t mr-h-full;
+  @apply mr-fixed mr-top-0 mr-h-full;
 }
 
 /* General sidebar styles */
@@ -31,5 +31,5 @@
 
 /* Styling of overlay */
 .bm-overlay {
-  @apply mr-pin-t mr-pin-l;
+  @apply mr-top-0 mr-left-0;
 }

@@ -20,7 +20,7 @@ export class BasicDialog extends Component {
       >
         <article>
           {this.props.icon &&
-           <div className="mr-pin-t mr-absolute">
+           <div className="mr-top-0 mr-absolute">
              <SvgSymbol
                className="mr-fill-white-04 mr-w-48 mr-h-48 mr-mt-4 mr-ml-8"
                viewBox='0 0 20 20'

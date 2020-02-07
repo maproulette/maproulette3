@@ -24,6 +24,11 @@ export default defineMessages({
     defaultMessage: "Line {line, number}: ",
   },
 
+  addMRTagsPlaceholder: {
+    id: 'Admin.EditChallenge.form.addMRTags.placeholder',
+    defaultMessage: "Add MR Tags",
+  },
+
   step1Label: {
     id: 'Admin.EditChallenge.form.step1.label',
     defaultMessage: "General",

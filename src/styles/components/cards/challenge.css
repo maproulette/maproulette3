@@ -6,7 +6,7 @@
   }
 
   &__taxonomy {
-    @apply mr-list-reset mr-mb-1 mr-inline-flex mr-text-sm mr-leading-none mr-uppercase mr-font-medium;
+    @apply mr-mb-1 mr-inline-flex mr-text-sm mr-leading-none mr-uppercase mr-font-medium;
 
     li + li {
       @apply mr-ml-2 mr-border-l mr-border-white-40 mr-pl-2;
@@ -46,7 +46,7 @@
   }
 
   &__meta {
-    @apply list-reset mr-mb-2 mr-text-sm;
+    @apply mr-mb-2 mr-text-sm;
 
     li {
       @apply mr-mb-1;
@@ -63,7 +63,7 @@
   }
 
   &__actions {
-    @apply mr-list-reset mr-mt-2 mr-flex mr-items-center;
+    @apply mr-mt-2 mr-flex mr-items-center;
 
     li {
       @apply mr-mb-2;

@@ -8,7 +8,7 @@ export class SignIn extends Component {
   render() {
     return (
       <div className="mr-bg-cityscape mr-w-full mr-min-h-120 mr-bg-no-repeat mr-bg-repeat-x">
-        <div className="mr-fixed mr-pin-t mr-w-full mr-mt-48 mr-fixed-containing-block">
+        <div className="mr-fixed mr-top-0 mr-w-full mr-mt-48 mr-fixed-containing-block">
           <Modal
             extraNarrow
             fullBleed

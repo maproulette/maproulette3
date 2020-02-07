@@ -1,5 +1,5 @@
 .mr-timeline {
-  @apply mr-list-reset mr-ml-2 mr-py-4 mr-pl-6 mr-border-l mr-border-grey-light;
+  @apply mr-ml-2 mr-py-4 mr-pl-6 mr-border-l mr-border-grey-light;
 
   &.dark-mode {
     @apply mr-border-white-15;
@@ -14,7 +14,7 @@
 
     &:before {
       content: '';
-      @apply absolute pin-t pin-l mr--ml-8 mr-w-4 mr-h-4 mr-bg-blue-light mr-rounded-full;
+      @apply absolute mr-top-0 mr-left-0 mr--ml-8 mr-w-4 mr-h-4 mr-bg-blue-light mr-rounded-full;
     }
   }
 
@@ -23,8 +23,6 @@
   }
 
   &__activity {
-    @apply mr-list-reset;
-
     > li + li {
       @apply mr-mt-4;
     }
@@ -43,7 +41,7 @@
   }
 
   &__entries {
-    @apply mr-list-reset mr-text-sm;
+    @apply mr-text-sm;
 
     > li + li {
       @apply mr-mt-2;

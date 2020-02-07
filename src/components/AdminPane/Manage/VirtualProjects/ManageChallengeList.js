@@ -57,9 +57,12 @@ export class manageChallengeList extends Component {
     }
 
     const searchControl = this.props.projects.length === 0 ? null : (
-      <ChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm"
-                       inputClassName="mr-text-grey mr-leading-normal"
-                       placeholder={"Search..."} />
+      <ChallengeSearch
+        className="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+        inputClassName="mr-text-grey mr-leading-normal"
+        iconClassName="mr-w-5 mr-h-5 mr-mr-2 mr-fill-grey-light"
+        placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
+      />
     )
 
     const projectName = _get(this.props, 'project.displayName')

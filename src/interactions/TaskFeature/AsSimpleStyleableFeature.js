@@ -10,8 +10,10 @@ import _intersection from 'lodash/intersection'
 import _keys from 'lodash/keys'
 import _pick from 'lodash/pick'
 import _merge from 'lodash/merge'
-import { colors } from '../../tailwind'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../tailwind.config.js'
 
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 const supportedSimplestylePointProperties = [
   'marker-color', 'marker-size',

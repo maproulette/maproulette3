@@ -56,7 +56,7 @@ export default class ChallengeCard extends Component {
             />
 
             {_isFinite(_get(this.props.challenge, 'actions.total')) &&
-             <div className="mr-absolute mr-pin-b mr-pin-r mr-z-50 mr-text-grey-light mr-text-xxs">
+             <div className="mr-absolute mr-bottom-0 mr-right-0 mr-z-50 mr-text-grey-light mr-text-xxs">
                {this.props.challenge.actions.total} <FormattedMessage {...messages.totalTasks} />
              </div>
             }

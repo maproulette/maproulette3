@@ -7,7 +7,7 @@ import React, { Component } from 'react'
 export default class MenuControl extends Component {
   render() {
     return(
-      <div className="widget__menu-controls__control">
+      <div className="widget__menu-controls__control mr-flex mr-justify-end">
         {this.props.children}
       </div>
     )
