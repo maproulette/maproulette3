@@ -10,13 +10,12 @@ import _sum from 'lodash/sum'
 import _map from 'lodash/map'
 import _set from 'lodash/set'
 import _debounce from 'lodash/debounce'
-import { fromLatLngBounds,
-         boundsWithinAllowedMaxDegrees } from '../../../services/MapBounds/MapBounds'
+import { fromLatLngBounds, boundsWithinAllowedMaxDegrees }
+       from '../../../services/MapBounds/MapBounds'
 import { fetchTaskClusters, clearTaskClusters }
        from '../../../services/Task/TaskClusters'
 import { fetchBoundedTasks, clearBoundedTasks }
        from '../../../services/Task/BoundedTask'
-import { maxAllowedDegrees } from '../WithMapBoundedTasks/WithMapBoundedTasks'
 
 import { MAX_ZOOM, UNCLUSTER_THRESHOLD } from '../../TaskClusterMap/TaskClusterMap'
 
@@ -69,7 +68,7 @@ export const WithChallengeTaskClusters = function(WrappedComponent, storeTasks=f
       // we aren't searching the entire map.
       if (!challengeId) {
         const bounds = _get(this.props.criteria, 'boundingBox')
-        if (!bounds || !boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
+        if (!bounds || !boundsWithinAllowedMaxDegrees(bounds)) {
           this.props.clearTasksAndClusters()
           this.setState({clusters: {}, loading: false, taskCount: 0, showAsClusters: true,
                          mapZoomedOut: true})

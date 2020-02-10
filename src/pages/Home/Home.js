@@ -5,7 +5,7 @@ import Hero from './Hero'
 import Highlights from './Highlights'
 import Intro from './Intro'
 import Instructions from './Instructions'
-import FeaturedChallenges from './FeaturedChallenges'
+import Featured from './Featured'
 
 export class Home extends Component {
   render() {
@@ -15,7 +15,7 @@ export class Home extends Component {
         <Highlights {...this.props} />
         <Intro {...this.props} />
         <Instructions {...this.props} />
-        <FeaturedChallenges {...this.props} />
+        <Featured {...this.props} />
       </React.Fragment>
     )
   }

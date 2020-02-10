@@ -1,3 +1,6 @@
+import React from 'react'
+import AsManager from '../../../../interactions/User/AsManager'
+import MarkdownContent from '../../../MarkdownContent/MarkdownContent'
 import messages from './Messages'
 
 /**
@@ -11,7 +14,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const jsSchema = (intl, project) => {
+export const jsSchema = (intl, user, project) => {
   const schemaFields = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -32,6 +35,15 @@ export const jsSchema = (intl, project) => {
       },
     },
     required: ["displayName"],
+  }
+
+  // Only show Featured option to superusers
+  if (AsManager(user).isSuperUser()) {
+    schemaFields.properties.featured = {
+      title: intl.formatMessage(messages.featuredLabel),
+      type: "boolean",
+      default: false,
+    }
   }
 
   // Show 'isVirtual' option only if this is a new project
@@ -56,8 +68,12 @@ export const jsSchema = (intl, project) => {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = (intl, project) => {
+export const uiSchema = (intl, user, project) => {
   const uiSchemaFields = {
+    featured: {
+      "ui:widget": "radio",
+      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.featuredDescription)} />,
+    },
     displayName: {
       "ui:help": intl.formatMessage(messages.displayNameDescription),
     },
@@ -74,7 +90,7 @@ export const uiSchema = (intl, project) => {
       "ui:help": intl.formatMessage(messages.descriptionDescription),
     },
     "ui:order": [
-      "displayName", "enabled", "description", "isVirtual"
+      "featured", "displayName", "enabled", "description", "isVirtual"
     ],
   }
 

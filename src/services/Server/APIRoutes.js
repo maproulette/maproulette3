@@ -19,6 +19,7 @@ const apiRoutes = factory => {
     'projects': {
       'all': factory.get('/projects'),
       'managed': factory.get('/projects/managed'),
+      'featured': factory.get('/projects/featured'),
       'search': factory.get('/projects/find'),
     },
     'project': {

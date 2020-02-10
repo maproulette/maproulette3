@@ -13,9 +13,8 @@ import { messagesByDifficulty }
        from '../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty'
 import WithStartChallenge from '../HOCs/WithStartChallenge/WithStartChallenge'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
-import ChallengeTaxonomy from '../ChallengeTaxonomy/ChallengeTaxonomy'
+import Taxonomy from '../Taxonomy/Taxonomy'
 import ChallengeProgress from '../ChallengeProgress/ChallengeProgress'
-// import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
 
@@ -62,7 +61,7 @@ export class CardChallenge extends Component {
       >
         <header className="mr-card-challenge__header" onClick={this.props.cardClicked}>
           <div>
-            <ChallengeTaxonomy {...this.props} />
+            <Taxonomy {...this.props} {...this.props.challenge} />
             <h3 className="mr-card-challenge__title">
               <Link
                 to={{

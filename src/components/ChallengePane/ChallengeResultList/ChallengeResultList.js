@@ -2,14 +2,21 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _clone from 'lodash/clone'
 import _findIndex from 'lodash/findIndex'
 import _isObject from 'lodash/isObject'
+import _isEmpty from 'lodash/isEmpty'
 import _sumBy from 'lodash/sumBy'
+import _omit from 'lodash/omit'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import { boundsWithinAllowedMaxDegrees }
+       from '../../../services/MapBounds/MapBounds'
 import WithCurrentUser from '../../HOCs/WithCurrentUser/WithCurrentUser'
 import WithSortedChallenges from '../../HOCs/WithSortedChallenges/WithSortedChallenges'
 import WithPagedChallenges from '../../HOCs/WithPagedChallenges/WithPagedChallenges'
+import WithFeatured from '../../HOCs/WithFeatured/WithFeatured'
 import ChallengeResultItem from '../ChallengeResultItem/ChallengeResultItem'
+import ProjectResultItem from '../ProjectResultItem/ProjectResultItem'
 import PageResultsButton from './PageResultsButton'
 import StartVirtualChallenge from './StartVirtualChallenge'
 import messages from './Messages'
@@ -42,21 +49,33 @@ export class ChallengeResultList extends Component {
   }
 
   render() {
-    const challengeResults = this.props.pagedChallenges
+    const challengeResults = _clone(this.props.pagedChallenges)
     const isFetching = _get(this.props, 'fetchingChallenges', []).length > 0
 
-    // If the user is actively browsing a challenge, include that challenge even if
-    // it didn't pass the filters.
-    if (
-      _isObject(this.props.browsedChallenge) &&
-      !this.props.loadingBrowsedChallenge
-    ) {
-      if (
-        this.props.browsedChallenge.isVirtual ||
-        _findIndex(challengeResults, { id: this.props.browsedChallenge.id }) ===
-          -1
-      ) {
-        challengeResults.push(this.props.browsedChallenge)
+    const search = _get(this.props, 'currentSearch.challenges', {})
+    const bounds = _get(search, 'mapBounds.bounds')
+    const locationFilter = _get(search, 'filters.location')
+    const otherFilters = _omit(search.filters, ['location'])
+    const unfiltered =
+      _isEmpty(search.query) &&
+      _isEmpty(otherFilters) &&
+      (_isEmpty(locationFilter) || !bounds || !boundsWithinAllowedMaxDegrees(bounds))
+
+    // If no filters are applied, inject any featured projects
+    if (unfiltered && this.props.featuredProjects.length > 0) {
+      // Try to locate them right above any featured challenges in the results
+      let featuredIndex = _findIndex(challengeResults, {featured: true})
+      if (featuredIndex === -1) {
+        // No featured challenges. If no sorting is in play, inject at top (after any
+        // saved challenges, if present)
+        if (_isEmpty(_get(search, 'sort.sortBy'))) {
+          const savedChallenges = _get(this.props, 'user.savedChallenges', [])
+          featuredIndex =
+            _findIndex(challengeResults, result => _findIndex(savedChallenges, {id: result.id}) === -1)
+        }
+      }
+      if (featuredIndex !== -1) {
+        challengeResults.splice(featuredIndex, 0, ...this.props.featuredProjects)
       }
     }
 
@@ -120,15 +139,23 @@ export class ChallengeResultList extends Component {
         )
       }
     } else {
-      results = _map(challengeResults, challenge => (
+      results = _map(challengeResults, result =>
+        result.parent ?
         <ChallengeResultItem
-          key={challenge.id}
+          key={`challenge_${result.id}`}
           {...this.props}
           className="mr-mb-4"
-          challenge={challenge}
+          challenge={result}
+          listRef={this.listRef}
+        /> :
+        <ProjectResultItem
+          key={`project_${result.id}`}
+          {...this.props}
+          className="mr-mb-4"
+          project={result}
           listRef={this.listRef}
         />
-      ))
+      )
     }
 
     return (
@@ -164,8 +191,12 @@ ChallengeResultList.propTypes = {
   pagedChallenges: PropTypes.array.isRequired,
 }
 
-export default WithCurrentUser(
-  WithSortedChallenges(
-    WithPagedChallenges(injectIntl(ChallengeResultList), 'challenges', 'pagedChallenges')
+export default
+  WithCurrentUser(
+    WithFeatured(
+      WithSortedChallenges(
+        WithPagedChallenges(injectIntl(ChallengeResultList), 'challenges', 'pagedChallenges')
+      ),
+      { excludeChallenges: true } // just featured projects; we already get challenges
+    )
   )
-)
