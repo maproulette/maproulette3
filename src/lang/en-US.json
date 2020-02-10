@@ -950,6 +950,8 @@
   "ReviewStatus.metrics.falsePositive": "NOT AN ISSUE",
   "ReviewStatus.metrics.alreadyFixed": "ALREADY FIXED",
   "ReviewStatus.metrics.tooHard": "TOO HARD",
+  "ReviewStatus.metrics.priority.toggle": "View by Task Priority",
+  "ReviewStatus.metrics.priority.label": "{priority} Priority Tasks",
   "Review.TaskAnalysisTable.noTasks": "No tasks found",
   "Review.TaskAnalysisTable.refresh": "Refresh",
   "Review.TaskAnalysisTable.startReviewing": "Review these Tasks",
