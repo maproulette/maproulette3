@@ -10,6 +10,8 @@ export const PROPERTY_RULE_ERRORS = Object.freeze({
   missingValue: "missingValue",
   missingPropertyType: "missingPropertyType",
   notNumericValue: "notNumericValue",
+  missingStyleName: "missingStyleName",
+  missingStyleValue: "missingStyleValue"
 })
 
 /**
@@ -79,9 +81,46 @@ export const preparePropertyRulesForSaving = rule => {
 }
 
 /**
+ * Tasks setup task property rules and turns them into
+ * the expected form format.
+ */
+export const preparePropertyRulesForForm = data => {
+  if (!data) {
+    return null
+  }
+
+  if (!data.key && !data.value && !data.left && !data.right &&
+           !data.valueType) {
+    // We have an empty rule.
+    return {}
+  }
+
+
+  return {
+    key: data.key ? data.key : undefined,
+    value: data.value ? data.value : undefined,
+    valueType: data.valueType ? data.valueType : (data.left ? "compound rule" : undefined),
+    operator: data.searchType ? data.searchType : undefined,
+    condition: data.operationType ? data.operationType : undefined,
+    left: data.left ? preparePropertyRulesForForm(data.left) : undefined,
+    right: data.right ? preparePropertyRulesForForm(data.right) : undefined
+  }
+}
+
+/**
  * Validates the property rules and returns any errors.
  */
 export const validatePropertyRules = (rule, errors=[]) => {
+  if (!rule) {
+    return errors
+  }
+
+  if (!rule.key && !rule.value && !rule.left && !rule.right &&
+           !rule.valueType) {
+    // We have an empty rule.
+    return errors
+  }
+
   if (!rule.valueType) {
     errors.push(PROPERTY_RULE_ERRORS.missingPropertyType)
   }

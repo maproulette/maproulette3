@@ -670,7 +670,8 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'instruction', 'localGeoJSON', 'lowPriorityRule', 'maxZoom',
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
-        'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags'])
+        'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
+        'taskStyles'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
@@ -938,6 +939,10 @@ const reduceChallengesFurther = function(mergedState, oldState, challengeEntitie
 
     if (_isArray(entity.virtualParents)) {
       mergedState[entity.id].virtualParents = entity.virtualParents
+    }
+
+    if (_isArray(entity.taskStyles)) {
+      mergedState[entity.id].taskStyles = entity.taskStyles
     }
   })
 }

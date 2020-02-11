@@ -90,6 +90,11 @@ export const jsSchema = intl => {
         title: intl.formatMessage(messages.osmIdPropertyLabel),
         type: "string",
       },
+      customTaskStyles: {
+        title: intl.formatMessage(messages.customTaskStyleLabel),
+        type: "boolean",
+        default: false,
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -162,6 +167,10 @@ export const uiSchema = intl => ({
     "ui:emptyValue": "",
     "ui:help": <MarkdownContent lightMode markdown={intl.formatMessage(messages.osmIdPropertyDescription)} />,
   },
+  customTaskStyles: {
+    "ui:field": "configureCustomTaskStyles",
+    "ui:help": intl.formatMessage(messages.customTaskStylesDescription),
+  }
 })
 
 export const numericEnvSetting = (settingName, defaultValue) => {
