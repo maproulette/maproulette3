@@ -1,9 +1,12 @@
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
 import { TaskPropertySearchTypeString,
          TaskPropertySearchTypeNumber, messagesByPropertySearchType,
          TaskPropertyOperationType, messagesByPropertyOperationType }
        from '../../services/Task/TaskProperty/TaskProperty'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 /**
@@ -52,7 +55,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
             enumNames: [intl.formatMessage(messages.stringType),
                         intl.formatMessage(messages.numberType),
                         intl.formatMessage(messages.compoundRuleType)],
-          },
+          }
         },
         dependencies: { // Show operators appropriate to value type
           valueType: {
@@ -87,7 +90,10 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   },
                   value: {
                     title: "Value",
-                    type: "string",
+                    type: "array",
+                    items: {
+                      type: "string"
+                    },
                   },
                 },
               },
@@ -105,7 +111,10 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   },
                   value: {
                     title: "Value",
-                    type: "string",
+                    type: "array",
+                    items: {
+                      type: "string"
+                    },
                   },
                 },
               }
@@ -173,13 +182,50 @@ function buildUISchema(deepness, taskPropertyKeys) {
     },
     value: {
       classNames: "inline-selector mr-inline",
-      "ui:options": { inline: true, label: false },
+      "ui:options": { inline: true, label: false, orderable: false },
     },
     left: buildUISchema(deepness - 1),
     right: buildUISchema(deepness - 1),
   }
 }
 
+/**
+ * Defines an array of multiple input fields
+ */
+export function ArrayFieldTemplate(props) {
+  return (
+    <div className="mr-align-top mr-inline-block">
+      {props.items.map((element, index) => (
+        <div key={index}>
+          <div className="mr-flex">
+            {element.children}
+            {props.items.length > 1 &&
+              <React.Fragment>
+                <button type="button" className="mr-text-red mr-pb-4 mr-pl-2"
+                        onClick={(event) => element.onDropIndexClick(index)(event)}>
+                  <SvgSymbol
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-transition mr-fill-current mr-w-4 mr-h-4"
+                  />
+                </button>
+                {props.items.length !== (index + 1) &&
+                  <span className="mr-text-grey mr-ml-4 mr-align-bottom mr-pt-2">or</span>
+                }
+              </React.Fragment>
+            }
+          </div>
+          {props.canAdd && props.items.length === (index + 1) &&
+            <button type="button" className="mr-text-green"
+                    onClick={props.onAddClick}>
+              <FormattedMessage {...messages.addValueButton} />
+            </button>}
+        </div>
+      ))}
+
+    </div>
+  )
+}
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining

@@ -764,6 +764,7 @@
   "Task.controls.untrack.label": "Stop tracking this Task",
   "TaskPropertyQueryBuilder.controls.search": "Search",
   "TaskPropertyQueryBuilder.controls.clear": "Clear",
+  "TaskPropertyQueryBuilder.controls.addValue": "Add Value",
   "TaskPropertyQueryBuilder.options.none.label": "None",
   "TaskPropertyQueryBuilder.error.missingRightRule": "When using a compound rule both parts must be specified.",
   "TaskPropertyQueryBuilder.error.missingLeftRule": "When using a compound rule both parts must be specified.",
