@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import BusySpinner from '../../components/BusySpinner/BusySpinner'
-import SignInButton from '../../components/SignInButton/SignInButton'
+import SignIn from '../../pages/SignIn/SignIn'
 import SvgSymbol from '../../components/SvgSymbol/SvgSymbol'
 import WithStatus from '../../components/HOCs/WithStatus/WithStatus'
 import WithTargetUser from '../../components/HOCs/WithTargetUser/WithTargetUser'
@@ -22,8 +22,7 @@ const ProfileImage = props => {
   return (
     <img
       className="mr-block mr-mx-auto mr-w-32 mr-h-32 mr-rounded-full mr-mb-4"
-      src={osmProfile.profilePic(128)}
-      srcSet={`${osmProfile.profilePic(128)} 1x, ${osmProfile.profilePic(256)} 2x"`}
+      src={osmProfile.profilePic(256)}
       alt={osmProfile.displayName}
     />
   )
@@ -68,15 +67,11 @@ class Metrics extends Component {
         )
       }
       else {
-        return (
+        return this.props.checkingLoginStatus ? (
           <div className="mr-flex mr-justify-center mr-py-8 mr-w-full mr-bg-gradient-r-green-dark-blue">
-            {this.props.checkingLoginStatus ? (
-              <BusySpinner />
-            ) : (
-              <SignInButton {...this.props} longForm />
-            )}
+            <BusySpinner />
           </div>
-        )
+        ) : <SignIn {...this.props} />
       }
     }
 

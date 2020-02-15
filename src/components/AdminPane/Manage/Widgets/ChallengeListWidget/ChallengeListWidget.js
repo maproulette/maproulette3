@@ -85,70 +85,82 @@ export default class ChallengeListWidget extends Component {
     const cId = _isEmpty(selectedChallengeIds) ? "" : `cId=${selectedChallengeIds}`
 
     const rightHeaderControls = this.props.projects.length === 0 ? null : (
-      <div className=''>
-        <div className='item-tally-toggle'>
-          <div className="clickable" onClick={this.toggleAllTallies}>
-            <SvgSymbol
-              className={classNames(
-                "mr-w-4 mr-h-4",
-                {
-                  "mr-fill-matisse-blue": allEnabled,
-                  "mr-fill-matisse-blue-50": someEnabled && !allEnabled,
-                  "mr-fill-grey-light-more": !someEnabled && !allEnabled
-                }
-              )}
-              viewBox='0 0 20 20'
-              sym='chart-icon'
-            />
-          </div>
-        </div>
-        <div className="mr-float-right mr-pt-3 mr-pl-4">
-          <Dropdown className="mr-dropdown--right"
-              dropdownButton={dropdown => (
-                  <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-light">
-                      <SvgSymbol sym="cog-icon"
-                          viewBox="0 0 20 20"
-                          className="mr-fill-current mr-w-5 mr-h-5" />
-                  </button>
-              )}
-              dropdownContent={() =>
-                  <React.Fragment>
-                      <ul className="mr-list-dropdown">
-                        <li>
-                          <a target="_blank"
-                              rel="noopener noreferrer"
-                              href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/project/${_get(this.props, 'project.id')}/tasks/extract?${cId}`}
-                              className="mr-flex mr-items-center"
-                          >
-                              <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
-                              <FormattedMessage {...messages.exportCSVLabel} />
-                          </a>
-                        </li>
-                      </ul>
-                  </React.Fragment>
-              }
+      <div className="mr-flex mr-justify-end mr-items-center">
+        <div className="mr-pt-2 mr-pl-4">
+          <Dropdown
+            className="mr-dropdown--right"
+            dropdownButton={dropdown => (
+              <button
+                onClick={dropdown.toggleDropdownVisible}
+                className="mr-flex mr-items-center mr-text-green-lighter"
+              >
+                <SvgSymbol
+                  sym="cog-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-5 mr-h-5"
+                />
+              </button>
+            )}
+            dropdownContent={() =>
+              <ul className="mr-list-dropdown">
+                <li>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/project/${_get(this.props, 'project.id')}/tasks/extract?${cId}`}
+                    className="mr-flex mr-items-center"
+                  >
+                    <SvgSymbol
+                      className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
+                      viewBox='0 0 20 20'
+                      sym='download-icon'
+                    />
+                    <FormattedMessage {...messages.exportCSVLabel} />
+                  </a>
+                </li>
+              </ul>
+            }
           />
         </div>
-        <ChallengeSearch 
-          className="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
-          inputClassName="mr-text-grey mr-leading-normal"
-          iconClassName="mr-w-5 mr-h-5 mr-mr-2 mr-fill-grey-light"
-          toggleSearchTallies={this.props.toggleSearchTallies}
-          challenges={this.props.challenges}
-          projectId={this.props.project.id}
-          placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
-        />
-
+        <button className="mr-ml-4" onClick={this.toggleAllTallies}>
+          <SvgSymbol
+            className={classNames(
+              "mr-w-4 mr-h-4",
+              {
+                "mr-fill-mango": allEnabled,
+                "mr-fill-mango-60": someEnabled && !allEnabled,
+                "mr-fill-mango-30": !someEnabled && !allEnabled
+              }
+            )}
+            viewBox='0 0 20 20'
+            sym='chart-icon'
+          />
+        </button>
       </div>
     )
 
+    const searchControl = this.props.challenges.length === 0 ? null : (
+      <ChallengeSearch
+        toggleSearchTallies={this.props.toggleSearchTallies}
+        challenges={this.props.challenges}
+        projectId={this.props.project.id}
+        placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
+      />
+    )
+
     return (
-      <QuickWidget {...this.props}
-                  className="challenge-list-widget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}
-                  rightHeaderControls={rightHeaderControls}>
-        <ChallengeList {...this.props}
-                       challenges={this.props.challenges} />
+      <QuickWidget
+        {...this.props}
+        className=""
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        headerControls={<div className="mr-my-2">{searchControl}</div>}
+        rightHeaderControls={<div className="mr-my-2">{rightHeaderControls}</div>}
+      >
+        <ChallengeList
+          {...this.props}
+          challenges={this.props.challenges}
+          suppressControls
+        />
       </QuickWidget>
     )
   }

@@ -17,8 +17,7 @@ export default class OtherKeywordsOption extends Component {
           suppressIcon
           showDoneButton
           leftAligned
-          className="mr-appearance-none mr-outline-none mr-rounded-none mr-bg-transparent mr-text-white mr-border-b mr-border-green-lighter mr-h-6 mr-pb-1"
-          inputClassName="mr-text-white"
+          short
           buttonClassName="mr-fill-green-lighter"
         />
       </div>

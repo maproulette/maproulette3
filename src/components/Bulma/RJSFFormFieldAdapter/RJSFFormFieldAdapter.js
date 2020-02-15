@@ -80,7 +80,10 @@ export const CustomArrayFieldTemplate = props => {
       {itemFields}
       {props.canAdd &&
        <div className="array-field__block-controls">
-         <button className="button add-item-button" onClick={props.onAddClick}>
+         <button
+           className="mr-button mr-button mr-button--small"
+           onClick={props.onAddClick}
+         >
            <FormattedMessage {...messages.addPriorityRuleLabel} />
          </button>
        </div>
@@ -122,7 +125,7 @@ export class MarkdownEditField extends Component {
            <span className="required">*</span>
           }
         </label>
-        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-8 mr-text-grey">
+        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-8 mr-text-white">
           <textarea className="form-control"
                     onChange={e => this.props.onChange(e.target.value)}
                     value={this.props.formData} />
@@ -136,7 +139,7 @@ export class MarkdownEditField extends Component {
                               properties={{}}
                               completionResponses={{}}
                               setCompletionResponse={() => {}}
-                              lightMode={this.props.uiSchema["ui:lightMode"]}
+                              lightMode={false}
                               disableTemplate={true}/>
           </div>
         </div>
@@ -230,7 +233,7 @@ export const MarkdownDescriptionField = ({id, description}) => {
 
   return (
     <div id={id} className="field-description">
-      <MarkdownContent markdown={description} lightMode />
+      <MarkdownContent markdown={description} lightMode={false} />
     </div>
   )
 }

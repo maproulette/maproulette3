@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Done Editing",
   },
 
+  configurationNameLabel: {
+    id: "WidgetWorkspace.fields.configurationName.label",
+    defaultMessage: "Layout Name:",
+  },
+
   addConfigurationLabel: {
     id: "WidgetWorkspace.controls.addConfiguration.label",
     defaultMessage: "Add New Layout",

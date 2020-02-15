@@ -20,7 +20,6 @@ import ProjectList from '../../ProjectList/ProjectList'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import MenuControl from '../../../../QuickWidget/MenuControl'
 import messages from './Messages'
-import './ProjectListWidget.scss'
 
 const descriptor = {
   widgetKey: 'ProjectListWidget',
@@ -74,8 +73,8 @@ export default class ProjectListWidget extends Component {
         sym={icon ? icon : `${view}-icon`}
         viewBox="0 0 20 20"
         className={classNames(
-          "mr-h-6 mr-w-6 mr-ml-4",
-          this.props.widgetConfiguration.view === view ? "mr-fill-grey" : "mr-fill-grey-light"
+          "mr-h-4 mr-w-4 mr-ml-4",
+          this.props.widgetConfiguration.view === view ? "mr-fill-white" : "mr-fill-white-50"
         )}
       />
     </a>
@@ -83,7 +82,7 @@ export default class ProjectListWidget extends Component {
 
   render() {
     const viewControls = (
-      <div className="project-list-widget__view-controls">
+      <div>
         <MenuControl>
           {this.viewControl("card", "cards-icon")}
           {this.viewControl("mixed")}
@@ -94,24 +93,25 @@ export default class ProjectListWidget extends Component {
 
     const searchControl = this.props.projects.length === 0 ? null : (
       <ProjectAndChallengeSearch
-        className="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
-        inputClassName="mr-text-grey mr-leading-normal"
-        iconClassName="mr-w-5 mr-h-5 mr-mr-2 mr-fill-grey-light"
         placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
       />
     )
 
     return (
-      <QuickWidget {...this.props}
-                  className="project-list-widget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}
-                  headerControls={searchControl}
-                  rightHeaderControls={viewControls}>
-        <ProjectList {...this.props}
-                     projects={this.props.pagedProjects}
-                     expandedView={this.props.widgetConfiguration.view === 'card'}
-                     mixedView={this.props.widgetConfiguration.view === 'mixed'}
-                     showPreview={this.props.adminProjectsSearchActive} />
+      <QuickWidget
+        {...this.props}
+        className=""
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        headerControls={<div className="mr-my-2">{searchControl}</div>}
+        rightHeaderControls={<div className="mr-my-2">{viewControls}</div>}
+      >
+        <ProjectList
+          {...this.props}
+          projects={this.props.pagedProjects}
+          expandedView={this.props.widgetConfiguration.view === 'card'}
+          mixedView={this.props.widgetConfiguration.view === 'mixed'}
+          showPreview={this.props.adminProjectsSearchActive}
+        />
       </QuickWidget>
     )
   }

@@ -149,16 +149,17 @@ export default class ReviewStatusMetrics extends Component {
 }
 
 function buildMetric(amount, total, description, lightMode = false) {
-  return <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
-    <div className={classNames("mr-col-span-1 mr-text-2xl",
-                    lightMode ? "mr-text-pink":"mr-text-yellow")}>
-      {amount === 0 ? 0 : Math.round(amount / total * 100)}%
-    </div>
-    <div className="mr-col-span-4">
-      <div className={classNames(lightMode ? "mr-text-pink":"mr-text-yellow")}>
-        {amount} / {total}
+  return (
+    <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
+      <div className="mr-col-span-1 mr-text-2xl mr-text-yellow">
+        {amount === 0 ? 0 : Math.round(amount / total * 100)}%
       </div>
-      <div>{description}</div>
+      <div className="mr-col-span-4">
+        <div className="mr-text-yellow mr-text-base">
+          {amount}/{total}
+        </div>
+        <div>{description}</div>
+      </div>
     </div>
-  </div>
+  )
 }

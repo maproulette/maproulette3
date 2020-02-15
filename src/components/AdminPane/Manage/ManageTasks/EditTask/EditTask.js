@@ -172,21 +172,24 @@ export class EditTask extends Component {
               </nav>
             </div>
 
-            <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
-              <Form schema={jsSchema(this.props.intl, this.props.task)}
-                    uiSchema={uiSchema(this.props.intl)}
-                    widgets={{SelectWidget: CustomSelectWidget}}
-                    fields={customFields}
-                    liveValidate
-                    noHtml5Validate
-                    showErrorList={false}
-                    formData={taskData}
-                    onChange={this.changeHandler}
-                    onSubmit={this.finish}
-                    tagType="tasks">
+            <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+              <Form
+                schema={jsSchema(this.props.intl, this.props.task)}
+                uiSchema={uiSchema(this.props.intl)}
+                widgets={{SelectWidget: CustomSelectWidget}}
+                className="form"
+                fields={customFields}
+                liveValidate
+                noHtml5Validate
+                showErrorList={false}
+                formData={taskData}
+                onChange={this.changeHandler}
+                onSubmit={this.finish}
+                tagType="tasks"
+              >
                 <div className="mr-flex mr-justify-between mr-items-center mr-mt-8">
                   <button
-                    className="mr-button mr-button--grey"
+                    className="mr-button mr-button--white"
                     disabled={this.state.isSaving}
                     onClick={this.cancel}
                   >
@@ -195,7 +198,7 @@ export class EditTask extends Component {
 
                   <button
                     className={classNames(
-                      "mr-button mr-button--green mr-ml-4",
+                      "mr-button mr-button--green-lighter mr-ml-4",
                       {"is-loading": this.state.isSaving}
                     )}
                     onClick={this.props.finish}

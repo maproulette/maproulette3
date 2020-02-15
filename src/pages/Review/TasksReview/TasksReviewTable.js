@@ -135,7 +135,7 @@ export class TaskReviewTable extends Component {
     return (
       <Dropdown className="mr-dropdown--right"
           dropdownButton={dropdown => (
-              <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-light">
+              <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-lighter">
                   <SvgSymbol sym="cog-icon"
                       viewBox="0 0 20 20"
                       className="mr-fill-current mr-w-5 mr-h-5" />
@@ -143,12 +143,14 @@ export class TaskReviewTable extends Component {
           )}
           dropdownContent={() =>
             <React.Fragment>
-              <ul className="mr-list-dropdown">
+              <ul className="mr-list-dropdown mr-text-green-lighter mr-links-green-lighter">
                 <li>
-                    <button className="mr-text-current"
-                            onClick={() => this.setState({showConfigureColumns: true})}>
-                        <FormattedMessage {...messages.configureColumnsLabel} />
-                    </button>
+                  <button
+                    className="mr-text-current"
+                    onClick={() => this.setState({showConfigureColumns: true})}
+                  >
+                    <FormattedMessage {...messages.configureColumnsLabel} />
+                  </button>
                 </li>
               </ul>
             </React.Fragment>
@@ -199,24 +201,30 @@ export class TaskReviewTable extends Component {
 
     return (
       <React.Fragment>
-        <div className="mr-flex-grow mr-w-full mr-mx-auto mr-bg-white mr-text-black mr-rounded mr-p-6 md:mr-p-8 mr-mb-12">
+        <div className="mr-flex-grow mr-w-full mr-mx-auto mr-text-white mr-rounded mr-py-2 mr-px-6 md:mr-py-2 md:mr-px-8 mr-mb-12">
           <header className="sm:mr-flex sm:mr-items-center sm:mr-justify-between">
             <div>
-              <h1 className="mr-h2 mr-text-blue-light md:mr-mr-4">
+              <h1 className="mr-h2 mr-text-yellow md:mr-mr-4">
                 {subheader}
               </h1>
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed &&
                 <div className="mr-flex">
                   <div className="field favorites-only-switch mr-mt-2 mr-mr-4" onClick={() => this.toggleShowFavorites()}>
-                    <input type="checkbox" className="mr-mr-px"
-                           checked={!!this.props.reviewCriteria.savedChallengesOnly}
-                           onChange={() => null} />
+                    <input
+                      type="checkbox"
+                      className="mr-checkbox-toggle mr-mr-px"
+                      checked={!!this.props.reviewCriteria.savedChallengesOnly}
+                      onChange={() => null}
+                    />
                     <label> {this.props.intl.formatMessage(messages.onlySavedChallenges)}</label>
                   </div>
                   <div className="field favorites-only-switch mr-mt-2" onClick={() => this.toggleExcludeOthers()}>
-                    <input type="checkbox" className="mr-mr-px"
-                           checked={!!this.props.reviewCriteria.excludeOtherReviewers}
-                           onChange={() => null} />
+                    <input
+                      type="checkbox"
+                      className="mr-checkbox-toggle mr-mr-px"
+                      checked={!!this.props.reviewCriteria.excludeOtherReviewers}
+                      onChange={() => null}
+                    />
                     <label> {this.props.intl.formatMessage(messages.excludeOtherReviewers)}</label>
                   </div>
                 </div>
@@ -224,14 +232,14 @@ export class TaskReviewTable extends Component {
             </div>
             <div>
               {this.props.reviewTasksType === ReviewTasksType.toBeReviewed && data.length > 0 &&
-                <button className="mr-button mr-button-small mr-button--green mr-mr-4" onClick={() => this.startReviewing()}>
+                <button className="mr-button mr-button-small mr-button--green-lighter mr-mr-4" onClick={() => this.startReviewing()}>
                   <FormattedMessage {...messages.startReviewing} />
                 </button>
               }
               <button
                 className={classNames(
                   "mr-button mr-button-small", {
-                  "mr-button--green": !_get(this.props, 'reviewData.dataStale', false),
+                  "mr-button--green-lighter": !_get(this.props, 'reviewData.dataStale', false),
                   "mr-button--orange": _get(this.props, 'reviewData.dataStale', false)
                 })}
                 onClick={() => this.props.refresh()}
@@ -378,7 +386,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     minWidth: 120,
     Cell: ({row}) => {
       return (
-        <div className="row-challenge-column mr-text-green">
+        <div className="row-challenge-column mr-text-white">
           {row._original.parent.name}
         </div>
       )
@@ -532,20 +540,20 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     Cell: ({row}) =>{
       const linkTo =`/challenge/${row._original.parent.id}/task/${row._original.id}/review`
       let action =
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
+        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
           <FormattedMessage {...messages.reviewTaskLabel} />
         </div>
 
       if (row._original.reviewedBy) {
         if (row._original.reviewStatus === TaskReviewStatus.needed) {
           action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
               <FormattedMessage {...messages.reviewAgainTaskLabel} />
             </div>
         }
         else if (row._original.reviewStatus === TaskReviewStatus.disputed) {
           action =
-            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
+            <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
               <FormattedMessage {...messages.resolveTaskLabel} />
             </div>
         }
@@ -573,7 +581,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
       }
 
       return <div className="row-controls-column">
-        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-light mr-cursor-pointer">
+        <div onClick={() => props.history.push(linkTo, criteria)} className="mr-text-green-lighter hover:mr-text-white mr-cursor-pointer mr-transition">
           {message}
         </div>
       </div>
@@ -592,8 +600,8 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
                         <FormattedMessage {...messages.fixTaskLabel} /> :
                         <FormattedMessage {...messages.viewTaskLabel} />
 
-      return <div className="row-controls-column">
-        <Link to={linkTo} className="mr-text-green-light">
+      return <div className="row-controls-column mr-links-green-lighter">
+        <Link to={linkTo}>
           {message}
         </Link>
       </div>
@@ -628,7 +636,7 @@ const ViewCommentsButton = function(props) {
   return (
     <button
       onClick={props.onClick}
-      className="mr-inline-flex mr-items-center mr-transition mr-text-green-light hover:mr-text-green"
+      className="mr-inline-flex mr-items-center mr-transition mr-text-green-lighter hover:mr-text-white"
     >
       <SvgSymbol
         sym="comments-icon"

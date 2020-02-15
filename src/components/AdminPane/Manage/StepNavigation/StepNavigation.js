@@ -17,7 +17,7 @@ export default class StepNavigation extends Component {
       <div className="step-navigation" key={`step-${this.props.activeStep}`}>
         <button
           type="button"
-          className="mr-button mr-button--grey"
+          className="mr-button mr-button--white"
           onClick={this.props.cancel}
         >
           <FormattedMessage {...messages.cancel} />
@@ -28,7 +28,7 @@ export default class StepNavigation extends Component {
             {this.props.activeStep > 0 &&
             <button
               type="button"
-              className="mr-button mr-button--blue mr-button--with-icon"
+              className="mr-button mr-button--green-lighter mr-button--with-icon"
               onClick={this.props.prevStep}
             >
               <SvgSymbol
@@ -45,7 +45,7 @@ export default class StepNavigation extends Component {
             {this.props.activeStep < this.props.steps.length - 1 &&
             <button
               type="submit"
-              className="mr-button mr-button--blue mr-button--with-icon mr-ml-4"
+              className="mr-button mr-button--green-lighter mr-button--with-icon mr-ml-4"
             >
               <FormattedMessage {...messages.next} />
               <SvgSymbol
@@ -60,7 +60,7 @@ export default class StepNavigation extends Component {
               this.props.canFinishEarly) &&
              <button
                type="submit"
-               className="mr-button mr-button--green mr-button--with-icon mr-ml-4"
+               className="mr-button mr-button--green-lighter mr-button--with-icon mr-ml-4"
                onClick={() => this.props.finish && this.props.finish()}
              >
                <SvgSymbol

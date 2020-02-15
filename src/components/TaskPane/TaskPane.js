@@ -206,18 +206,23 @@ export class TaskPane extends Component {
             workspaceInfo={
               <React.Fragment>
                 <div>
-                  <ul className="mr-list-ruled mr-text-xs">
-                    <li className="mr-links-inverse">
-                      {_get(this.props.task, 'parent.parent.displayName')}
+                  <ul className="mr-list-ruled mr-text-xs mr-links-green-lighter">
+                    <li>
+                      <Link to={`/browse/projects/${_get(this.props.task, 'parent.parent.id')}`}>
+                        {_get(this.props.task, 'parent.parent.displayName')}
+                      </Link>
                     </li>
 
-                    <li className="mr-links-green-lighter">
+                    <li>
                       <OwnerContactLink {...this.props} />
                     </li>
 
                     {isManageable && !this.props.inspectTask && (
                       <li>
-                        <button className="mr-transition mr-text-current hover:mr-text-green-lighter" onClick={() => this.props.history.push(taskInspectRoute)}>
+                        <button
+                          className="mr-transition mr-text-green-lighter hover:mr-text-current"
+                          onClick={() => this.props.history.push(taskInspectRoute)}
+                        >
                           <FormattedMessage {...messages.inspectLabel} />
                         </button>
                       </li>

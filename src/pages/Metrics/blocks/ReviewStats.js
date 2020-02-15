@@ -19,11 +19,11 @@ export default class ReviewStats extends Component {
   displayStat(count, total, label) {
     return (
       <li className="mr-flex mr-items-center">
-        <strong className="mr-font-light mr-text-5xl mr-min-w-12 mr-text-yellow mr-text-right">
+        <strong className="mr-font-light mr-text-5xl mr-min-w-12 mr-text-pink mr-text-right">
           {this.calculatePercentage(count, total)}%
         </strong>
         <div className="mr-pl-4 mr-leading-tight">
-          <small className="mr-font-normal mr-text-yellow">
+          <small className="mr-font-normal mr-text-pink">
             {count}/{total}
           </small>
           <br />

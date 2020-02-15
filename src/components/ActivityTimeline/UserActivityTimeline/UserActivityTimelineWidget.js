@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _map from 'lodash/map'
@@ -126,7 +125,7 @@ export default class UserActivityTimelineWidget extends Component {
         const challengeName = challengeNames.get(challengeId)
         return (
           <li key={challengeId}>
-            <h2 className="mr-timeline__name">
+            <h2 className="mr-timeline__name mr-links-green-lighter">
               <Link to={`/browse/challenges/${challengeId}`}>
                 {challengeName}
               </Link>
@@ -166,7 +165,7 @@ export default class UserActivityTimelineWidget extends Component {
         className="user-timeline-activity-widget"
         widgetTitle={<FormattedMessage {...messages.header} />}
       >
-        <ol className={classNames("mr-timeline", {"dark-mode": this.props.darkMode})}>
+        <ol className="mr-timeline dark-mode">
           {timelineItems}
         </ol>
       </QuickWidget>

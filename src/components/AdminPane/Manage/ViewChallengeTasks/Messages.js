@@ -21,7 +21,7 @@ export default defineMessages({
 
   tasksCreatedCount: {
     id: "Admin.Challenge.tasksCreatedCount",
-    defaultMessage: "{count, number} tasks created so far",
+    defaultMessage: "tasks created so far.",
   },
 
   totalElapsedTime: {

@@ -163,7 +163,7 @@ function buildUISchema(deepness, taskPropertyKeys) {
   }
 
   return {
-    classNames: "property-rule mr-border mr-border-green-light mr-p-2 mr-m-1 mr-pl-4 mr-flex",
+    classNames: "property-rule mr-border-2 mr-border-white-10 mr-pt-2 mr-pb-3 mr-m-1 mr-pl-4 mr-flex",
     valueType: {
       classNames:  "mr-text-green mr-w-48",
       "ui:widget": "select",
@@ -201,7 +201,7 @@ export function ArrayFieldTemplate(props) {
             {element.children}
             {props.items.length > 1 &&
               <React.Fragment>
-                <button type="button" className="mr-text-red mr-pb-4 mr-pl-2"
+                <button type="button" className="mr-text-red-light mr-pb-4 mr-pl-2"
                         onClick={(event) => element.onDropIndexClick(index)(event)}>
                   <SvgSymbol
                     sym="trash-icon"
@@ -216,7 +216,7 @@ export function ArrayFieldTemplate(props) {
             }
           </div>
           {props.canAdd && props.items.length === (index + 1) &&
-            <button type="button" className="mr-text-green"
+            <button type="button" className="mr-text-green-lighter mr-mt-1"
                     onClick={props.onAddClick}>
               <FormattedMessage {...messages.addValueButton} />
             </button>}

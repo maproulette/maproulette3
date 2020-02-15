@@ -18,8 +18,12 @@ export default class TriStateCheckbox extends Component {
 
   render() {
     return (
-      <input {..._omit(this.props, 'indeterminate')}
-             type="checkbox" ref={el => this.el = el} />
+      <input
+        {..._omit(this.props, 'indeterminate')}
+        type="checkbox"
+        className="mr-checkbox-toggle"
+        ref={el => this.el = el}
+      />
     )
   }
 }

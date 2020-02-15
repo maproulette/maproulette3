@@ -8,7 +8,11 @@ import { TaskStatus,
          statusLabels }
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import _map from 'lodash/map'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../../tailwind.config.js'
 import messages from './Messages'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 /**
  * Renders a radar chart displaying relative completion statuses of tasks.
@@ -43,37 +47,47 @@ export class CompletionRadar extends Component {
                              values={{taskCount: totalEvaluated}} />
          </p>
         }
-        <ResponsiveRadar data={metrics}
-                         colors={["#737373"]}
-                         keys={["tasks"]}
-                         indexBy="status"
-                         margin={{
-                           top: 40,
-                           right: 60,
-                           bottom: 40,
-                           left: 40,
-                         }}
-                         curve="catmullRomClosed"
-                         borderWidth={0}
-                         borderColor="inherit"
-                         gridLevels={5}
-                         gridShape="circular"
-                         gridLabelOffset={16}
-                         enableDots={true}
-                         dotSize={8}
-                         dotColor="inherit"
-                         dotBorderWidth={0}
-                         dotBorderColor="#ffffff"
-                         enableDotLabel={true}
-                         dotLabel="value"
-                         dotLabelYOffset={20}
-                         colorBy="key"
-                         fillOpacity={0.2}
-                         animate={true}
-                         motionStiffness={90}
-                         motionDamping={15}
-                         isInteractive={true}
-          />
+        <ResponsiveRadar
+          data={metrics}
+          theme={{
+            textColor: '#FFF',
+            tooltip: {
+              container: {
+                background: colors["blue-darker"],
+                color: '#FFF',
+              }
+            },
+          }}
+          colors={[colors["blue-dark"]]}
+          keys={["tasks"]}
+          indexBy="status"
+          margin={{
+            top: 40,
+            right: 60,
+            bottom: 40,
+            left: 40,
+          }}
+          curve="catmullRomClosed"
+          borderWidth={0}
+          borderColor="inherit"
+          gridLevels={5}
+          gridShape="circular"
+          gridLabelOffset={16}
+          enableDots={true}
+          dotSize={8}
+          dotColor="#000"
+          dotBorderWidth={2}
+          dotBorderColor={colors["pink"]}
+          enableDotLabel={true}
+          dotLabel="value"
+          dotLabelYOffset={20}
+          colorBy="key"
+          fillOpacity={0.4}
+          animate={true}
+          motionStiffness={90}
+          motionDamping={15}
+          isInteractive={true}
+        />
       </div>
     )
   }

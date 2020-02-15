@@ -195,7 +195,7 @@ const ViewTask = function(props) {
   }
 
   return (
-    <div className="mr-mt-8">
+    <div className="mr-mt-8 mr-links-green-lighter">
       <Link to={{
               pathname: `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`,
               state: {fromInbox: true}
@@ -213,7 +213,7 @@ const ViewChallengeAdmin = function(props) {
   }
 
   return (
-    <div className="mr-mt-8">
+    <div className="mr-mt-8 mr-links-green-lighter">
       <Link to={{
         pathname: `admin/project/${props.notification.projectId}/challenge/${props.notification.challengeId}`,
         state: {fromInbox: true}

@@ -3,15 +3,14 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import _omit from 'lodash/omit'
 import AsManager from '../../../../interactions/User/AsManager'
 import AsManageableProject
        from '../../../../interactions/Project/AsManageableProject'
+import Dropdown from '../../../Dropdown/Dropdown'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import ChallengeList from '../ChallengeList/ChallengeList'
 import messages from './Messages'
-import './ProjectCard.scss'
 
 export class ProjectCard extends Component {
   render() {
@@ -22,90 +21,151 @@ export class ProjectCard extends Component {
     const manager = AsManager(this.props.user)
     const project = AsManageableProject(this.props.project)
 
-    const projectNameColumn = (
-      <div className="column item-link project-list-item__project-name is-active">
-        <div className="level">
-          <Link to={`/admin/project/${project.id}`}>
-            {project.displayName || project.name}
-            {project.isVirtual ?
-              <span className="mr-mx-4 mr-text-pink mr-text-sm">
-                <FormattedMessage {...messages.virtualHeader} />
-              </span> : null}
-          </Link>
-          {this.props.isExpanded && this.props.loadingChallenges && <BusySpinner inline />}
-        </div>
-      </div>
-    )
-
     let projectBody = null
     if (this.props.showPreview) {
       const matchingChallenges = project.childChallenges(this.props.filteredChallenges)
       projectBody = matchingChallenges.length === 0 ? null : (
-        <div className="project-card__project-challenge-preview">
-          <div className="project-card__project-challenge-preview__header">
+        <div className="mr-pr-4">
+          <div className="mr-uppercase mr-mt-2 mr-mb-4 mr-ml-4 mr-text-grey-light">
             <FormattedMessage {...messages.challengePreviewHeader} />
           </div>
 
-          <ChallengeList challenges={matchingChallenges} suppressControls hideTallyControl
-                         {..._omit(this.props, 'challenges')} />
+          <div className="mr-ml-8">
+            <ChallengeList
+              {...this.props}
+              challenges={matchingChallenges}
+              suppressControls
+              hideTallyControl
+            />
+          </div>
         </div>
       )
     }
     else if (this.props.isExpanded) {
       projectBody = (
-        <div className='project-card__project-content'>
-          <ChallengeList challenges={project.childChallenges(this.props.challenges)}
-                         suppressControls={!manager.canWriteProject(project)} hideTallyControl
-                         {..._omit(this.props, 'challenges')} />
+        <div className="mr-border-t mr-border-white-15 mr-mt-6 mr-pt-4 mr-px-4 mr-overflow-y-auto mr-max-h-100">
+          <div className="mr-uppercase mr-text-grey-light mr-mb-4">
+            <FormattedMessage {...messages.challengesTabLabel} />
+          </div>
+          <ChallengeList
+            {...this.props}
+            challenges={project.childChallenges(this.props.challenges)}
+            suppressControls={!manager.canWriteProject(project)}
+            hideTallyControl
+          />
         </div>
       )
     }
 
-    return (
-      <div className={classNames('project-card item-entry',
-                                 {'is-active': this.props.isExpanded})}>
-        <div className='columns list-item project-list-item'>
-          <div className='column is-narrow item-visibility'
-              title={project.enabled ?
-                      this.props.intl.formatMessage(messages.enabledTooltip) :
-                      this.props.intl.formatMessage(messages.disabledTooltip)}>
-            <span
-              className={classNames(
-                "mr-text-grey-light mr-transition",
-                project.enabled ? "hover:mr-text-green-light" : "hover:mr-text-green-light-60"
-              )}
+    const menuOptions = (
+      <div
+        className={classNames(
+          "mr-flex mr-justify-end mr-text-xxs mr-leading-0 mr-flex-grow-0",
+          {"mr-pr-2 mr-pt-2": this.props.isExpanded}
+        )}
+      >
+        <Dropdown
+          className="mr-dropdown--right"
+          dropdownButton={dropdown => (
+            <button
+              onClick={dropdown.toggleDropdownVisible}
+              className="mr-flex mr-items-center mr-text-white"
             >
               <SvgSymbol
-                className="mr-fill-current mr-h-6 mr-align-middle mr-cursor-pointer"
-                viewBox='0 0 20 20'
-                sym={project.enabled ? 'visible-icon' : 'hidden-icon'}
+                sym="navigation-more-icon"
+                viewBox="0 0 20 20"
+                className="mr-fill-current mr-w-5 mr-h-5"
               />
-            </span>
+            </button>
+          )}
+          dropdownContent={() =>
+            <ul className="mr-list-dropdown mr-links-green-lighter">
+              {manager.canWriteProject(project) &&
+                <li>
+                  <Link to={`/admin/project/${project.id}/edit`}>
+                    <FormattedMessage {...messages.editProjectLabel} />
+                  </Link>
+                </li>
+              }
+              <li>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a onClick={() => this.props.toggleProjectPin(project.id)}>
+                  <FormattedMessage
+                    {...(
+                      this.props.isPinned ? messages.unpinProjectLabel : messages.pinProjectLabel
+                    )}
+                  />
+                </a>
+              </li>
+              {manager.canWriteProject(this.props.project) &&
+                <li>
+                  {this.props.project.isVirtual ?
+                  <Link to={`/admin/virtual/project/${this.props.project.id}/challenges/manage`}>
+                    <FormattedMessage {...messages.manageChallengeListLabel} />
+                  </Link> :
+                  <Link to={`/admin/project/${this.props.project.id}/challenges/new`}>
+                    <FormattedMessage {...messages.addChallengeLabel} />
+                  </Link>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        />
+      </div>
+    )
+
+    return (
+      <div
+        className={classNames(
+          "mr-mb-2",
+          this.props.isExpanded ? "mr-bg-black-15 mr-w-96 mr-mr-4 mr-pb-6 mr-mb-6 mr-rounded" : "mr-py-2"
+        )}
+      >
+        {this.props.isExpanded && menuOptions}
+        <div
+          className={classNames(
+            "mr-flex mr-justify-between mr-px-4",
+            this.props.isExpanded ? "mr-items-start mr-h-14 mr-overflow-y-auto" : "mr-items-center"
+          )}
+        >
+          <div className="mr-flex-grow-0 mr-flex mr-items-start">
+            <div
+              className="mr-pt-2-shy"
+              title={
+                project.enabled ?
+                this.props.intl.formatMessage(messages.enabledTooltip) :
+                this.props.intl.formatMessage(messages.disabledTooltip)
+              }
+            >
+              <span className="mr-text-white">
+                <SvgSymbol
+                  className="mr-fill-current mr-h-5 mr-align-middle mr-cursor-pointer"
+                  viewBox='0 0 20 20'
+                  sym={project.enabled ? 'visible-icon' : 'hidden-icon'}
+                />
+              </span>
+            </div>
+
+            <div className="mr-flex mr-items-center mr-links-green-lighter mr-text-lg mr-mx-4">
+              <Link to={`/admin/project/${project.id}`}>
+                {project.displayName || project.name}
+                {project.isVirtual ?
+                  <span className="mr-mx-4 mr-text-pink mr-text-sm">
+                    <FormattedMessage {...messages.virtualHeader} />
+                  </span> :
+                  null
+                }
+              </Link>
+              {this.props.isExpanded && this.props.loadingChallenges && <BusySpinner inline />}
+            </div>
           </div>
 
-          {projectNameColumn}
-
-          {manager.canWriteProject(project) &&
-            <div className='column is-narrow has-text-right controls edit-control'>
-              <Link to={`/admin/project/${project.id}/edit`}
-                    title={this.props.intl.formatMessage(messages.editProjectTooltip)}>
-                <FormattedMessage {...messages.editProjectLabel} />
-              </Link>
-            </div>
+          {!this.props.isExpanded &&
+           <div className="mr-flex-grow mr-border-b mr-border-white-15 mr-mr-4" />
           }
 
-          <div className='column is-narrow item-pinned'>
-            <div className="clickable" onClick={() => this.props.toggleProjectPin(project.id)}>
-              <SvgSymbol
-                className={classNames(
-                  "mr-w-4 mr-h-4 mr-rotate-10 mr-mt-2",
-                  this.props.isPinned ? 'mr-fill-matisse-blue' : 'mr-fill-grey-light'
-                )}
-                viewBox='0 0 20 20'
-                sym='pin-icon'
-              />
-            </div>
-          </div>
+          {!this.props.isExpanded && menuOptions}
         </div>
 
         {projectBody}

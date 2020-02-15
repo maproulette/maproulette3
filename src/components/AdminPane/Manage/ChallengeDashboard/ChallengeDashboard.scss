@@ -1,49 +1,6 @@
 @import 'mixins.scss';
 
 .admin__manage.challenge-dashboard {
-  .challenge-tasks-status {
-    &__building-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    h3 {
-      font-size: $size-3;
-      color: $primary;
-
-      &.is-danger {
-        color: $coral;
-      }
-    }
-
-    &__status-message {
-      font-size: $size-6;
-      white-space: pre-wrap;
-      max-width: 100%;
-      border-radius: $radius-medium;
-    }
-
-    &__build-status {
-      font-size: $size-5;
-    }
-  }
-
-  .admin__manage__challenge-dashboard__indexing-notice {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    svg.icon {
-      min-width: 35px;
-      height: 75px;
-      width: auto;
-      margin-right: 25px;
-      fill: $grey;
-    }
-  }
-
   section {
     margin-bottom: 1em;
   }

@@ -127,7 +127,7 @@ export class ViewChallengeTasks extends Component {
 
     if (_get(this.props, 'challenge.actions.total', 0) === 0) {
       return (
-        <div className="challenge-tasks-status title has-centered-children">
+        <div className="mr-flex mr-justify-center mr-text-grey-lighter">
           <h3>
             <FormattedMessage {...messages.tasksNone} />
           </h3>

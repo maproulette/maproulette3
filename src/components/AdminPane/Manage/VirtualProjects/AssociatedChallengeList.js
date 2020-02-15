@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
-import classNames from 'classnames'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import PageResultsButton from '../../../LoadMoreButton/PageResultsButton'
 import messages from './Messages'
@@ -19,12 +18,7 @@ export default class AssociatedChallengeList extends Component {
     const challengeCards =
       _map(this.props.challenges, challenge => (
         <div className='mr-flex mr-my-4' key={challenge.id}>
-          <div
-            className={classNames(
-              "mr-w-8 mr-mr-2 mr-text-grey-light mr-transition",
-              challenge.enabled ? "hover:mr-text-green-light" : "hover:mr-text-green-light-60"
-            )}
-          >
+          <div className="mr-w-8 mr-mr-2 mr-text-white">
             <SvgSymbol
               className="icon mr-fill-current"
               viewBox='0 0 20 20'
@@ -32,19 +26,23 @@ export default class AssociatedChallengeList extends Component {
             />
           </div>
 
-          <div className='mr-flex-grow mr-text-base mr-text-grey'>
+          <div className='mr-flex-grow mr-text-base mr-text-white'>
             {challenge.name}
             <div className='mr-text-xs mr-text-grey-light'>{_get(challenge.parent, 'displayName')}</div>
           </div>
 
-          <div className="mr-text-sm mr-text-green">
+          <div className="mr-text-sm mr-text-green-lighter">
             {this.props.toBeAdded ?
-              <button className="mr-text-current"
-                    onClick={() => this.props.addChallenge(challenge.id, this.props.project.id)}>
+             <button
+               className="mr-text-current"
+               onClick={() => this.props.addChallenge(challenge.id, this.props.project.id)}
+             >
                 <FormattedMessage {...messages.addLabel} />
               </button> :
-              <button className="mr-text-current"
-                    onClick={() => this.props.removeChallenge(challenge.id, this.props.project.id)}>
+              <button
+                className="mr-text-current"
+                onClick={() => this.props.removeChallenge(challenge.id, this.props.project.id)}
+              >
                 <FormattedMessage {...messages.removeLabel} />
               </button>
             }
@@ -55,14 +53,14 @@ export default class AssociatedChallengeList extends Component {
     return (
       <div className=''>
         {!this.props.loadingChallenges && challengeCards.length === 0 ?
-         <p className="mr-text-grey-light mr-text-base mr-my-4">
+         <p className="mr-text-grey-lighter mr-text-base mr-my-4">
            <FormattedMessage {...messages.noChallenges} />
          </p> :
          challengeCards
         }
         {this.props.setSearchPage &&
           <div className="mr-text-center mr-mt-8">
-            <PageResultsButton className="mr-button--green" {...this.props} />
+            <PageResultsButton className="mr-button--green-lighter" {...this.props} />
           </div>
         }
       </div>

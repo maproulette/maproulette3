@@ -72,12 +72,12 @@ export default class TaskBuildProgress extends Component {
 
     return (
       <div>
-        <div className="challenge-tasks-status">
-          <div className="challenge-tasks-status__building-header">
-            <h3>
+        <div>
+          <div className="mr-flex mr-justify-between mr-items-center mr-w-full mr-mb-8">
+            <h3 className="mr-text-white">
               <FormattedMessage
                 {...messages.tasksBuilding}
-              /> <BusySpinner lightMode inline />
+              /> <BusySpinner inline />
             </h3>
 
             <div>
@@ -87,22 +87,19 @@ export default class TaskBuildProgress extends Component {
             </div>
           </div>
 
-          <div className="challenge-tasks-status__build-status">
-            <p>
-              <FormattedMessage
-                {...messages.tasksCreatedCount}
-                values={{count: _get(this.props.challenge, 'actions.total', 0)}}
-              />
-            </p>
-
-            <p>
-              <FormattedMessage
-                {...messages.refreshStatusLabel}
-              /> <FormattedDuration
+          <div className="mr-text-lg">
+            <span className="mr-text-xl mr-text-pink">
+              {_get(this.props.challenge, 'actions.total', 0)}
+            </span> <FormattedMessage
+              {...messages.tasksCreatedCount}
+            /> <FormattedMessage
+              {...messages.refreshStatusLabel}
+            /> <span className="mr-text-orange">
+              <FormattedDuration
                 seconds={this.nextUpdateSeconds()}
                 format={TIMER_FORMAT}
               />
-            </p>
+            </span>
           </div>
         </div>
       </div>

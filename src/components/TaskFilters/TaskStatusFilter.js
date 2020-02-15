@@ -21,7 +21,8 @@ export default class TaskStatusFilter extends Component {
           _map(_keys(this.props.includeTaskStatuses), status => (
             <li key={status}>
               <label className="mr-flex mr-items-center">
-                <input className="mr-mr-2"
+                <input
+                  className="mr-checkbox-toggle mr-mr-2"
                   type="checkbox"
                   checked={this.props.includeTaskStatuses[status]}
                   onChange={() => this.props.toggleIncludedTaskStatus(status)} />

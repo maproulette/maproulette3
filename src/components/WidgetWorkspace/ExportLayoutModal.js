@@ -39,7 +39,7 @@ export default class ExportLayoutModal extends Component {
               <div className="mr-mt-1">
                 <input
                   type="text"
-                  className="mr-input mr-input--green-lighter-outline"
+                  className="mr-input"
                   value={this.state.exportName}
                   onChange={e => this.setState({exportName: e.target.value})}
                 />

@@ -20,7 +20,10 @@ export class TaskCommentInput extends Component {
     return (
       <div className="mr-mt-2">
         <textarea
-          className={classNames("mr-input mr-input--green-lighter-outline", this.props.className)}
+          className={classNames(
+            "mr-appearance-none mr-outline-none mr-w-full mr-py-2 mr-px-4 mr-border-none mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-w-full",
+            this.props.className
+          )}
           rows={this.props.rows}
           cols="1"
           placeholder={this.props.intl.formatMessage(messages.placeholder)}
