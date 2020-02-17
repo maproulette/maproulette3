@@ -214,7 +214,7 @@ export const saveProject = function(projectData) {
       // If we just created the project, add the owner as an admin.
       if (areCreating && project) {
         return setProjectManagerGroupType(
-          project.id, project.owner, false, GroupType.admin
+          project.id, project.owner, true, GroupType.admin
         )(dispatch).then(() => project)
       }
       else {
