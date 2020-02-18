@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Clear",
   },
 
+  addValueButton: {
+    id: "TaskPropertyQueryBuilder.controls.addValue",
+    defaultMessage: "Add Value",
+  },
+
   noneOption: {
     id: "TaskPropertyQueryBuilder.options.none.label",
     defaultMessage: "None",

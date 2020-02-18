@@ -5,10 +5,9 @@ import { CustomSelectWidget }
        from '../Bulma/RJSFFormFieldAdapter/RJSFFormFieldAdapter'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
-import _isEqual from 'lodash/isEqual'
 import _head from 'lodash/head'
 import _cloneDeep from 'lodash/cloneDeep'
-import { jsSchema, uiSchema } from './TaskPropertiesSchema'
+import { jsSchema, uiSchema, ArrayFieldTemplate } from './TaskPropertiesSchema'
 import { preparePropertyRulesForSaving,
          preparePropertyRulesForForm,
          validatePropertyRules } from './TaskPropertyRules'
@@ -66,14 +65,34 @@ export class TaskPropertyQueryBuilder extends Component {
         if (data.right) {
           moveLeft(data.right, _get(prevData, 'right'))
         }
+        if (data.valueType && data.valueType !== "compound rule") {
+          data.value = data.value || [""]
+        }
       }
     }
 
     moveLeft(rootRule, _get(this.state.formData, 'propertyRules.rootRule'))
     this.setState({formData: {propertyRules: {rootRule}}, errors: null})
 
-    if (!!this.props.updateAsChange && _get(this.state.formData, 'propertyRules.rootRule')) {
-      const rootRule = _get(this.state.formData, 'propertyRules.rootRule')
+    if (!!this.props.updateAsChange && rootRule) {
+      // This is for when an array of values has already been setup and then
+      // someone tries to change the key. If the key goes null or undefined
+      // it will cause the values to be uncompacted (as they no longer have a
+      // key to group by) so instead we set it to "".
+      const checkForEmptyKeys = (rule) => {
+        if (rule.left) {
+          checkForEmptyKeys(rule.left)
+        }
+        if (rule.right) {
+          checkForEmptyKeys(rule.right)
+        }
+        if (_get(rule.value, 'length', 0) > 1) {
+          if (!rule.key) {
+            rule.key = ""
+          }
+        }
+      }
+      checkForEmptyKeys(rootRule)
       const errors = validatePropertyRules(rootRule)
       const preparedData = preparePropertyRulesForSaving(rootRule)
       this.props.updateTaskPropertyQuery(preparedData, errors)
@@ -103,9 +122,10 @@ export class TaskPropertyQueryBuilder extends Component {
   }
 
   setupFormData = (taskPropertyQuery) => {
+    const rules = preparePropertyRulesForForm(taskPropertyQuery)
     this.setState({formData: {
       propertyRules: {
-        rootRule: taskPropertyQuery ? preparePropertyRulesForForm(taskPropertyQuery) : {}
+        rootRule: taskPropertyQuery ? rules : {}
       }
     }})
   }
@@ -122,19 +142,18 @@ export class TaskPropertyQueryBuilder extends Component {
         !_isEmpty(this.state.preparedData)) {
       this.setState({formData: null, preparedData: null})
     }
-    else if (!_isEqual(this.props.taskPropertyQuery, prevProps.taskPropertyQuery)) {
-      this.setupFormData(this.props.taskPropertyQuery)
-    }
   }
 
   render() {
-    const data = this.state.formData
+    const data = this.state.formData || this.props.taskPropertyStyleRules
+
     return (
       <div className="task-properties-form mr-w-full mr-pt-4">
         <Form schema={jsSchema(this.props.intl, this.props.taskPropertyKeys)}
               className="mr-bg-white"
               onAsyncValidate={this.validateGeoJSONSource}
               uiSchema={uiSchema(this.props.intl, this.props.taskPropertyKeys)}
+              ArrayFieldTemplate={ArrayFieldTemplate}
               tagType={"taskProperties"}
               widgets={{SelectWidget: CustomSelectWidget}}
               noHtml5Validate
