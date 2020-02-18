@@ -420,10 +420,14 @@ export const fetchUserActivity = function(userId, limit=50) {
 export const fetchUserMetrics = function(userId,
                                          monthDuration = -1,
                                          reviewDuration = -1,
-                                         reviewerDuration = -1) {
+                                         reviewerDuration = -1,
+                                         start = null, end = null,
+                                         reviewStart = null, reviewEnd = null,
+                                         reviewerStart = null, reviewerEnd = null) {
   return new Endpoint(api.user.metrics, {
     variables: {userId},
-    params: {monthDuration, reviewDuration, reviewerDuration}
+    params: {monthDuration, reviewDuration, reviewerDuration,
+             start, end, reviewStart, reviewEnd, reviewerStart, reviewerEnd}
   }).execute()
 }
 

@@ -134,18 +134,20 @@ class Metrics extends Component {
                   title={this.props.intl.formatMessage(messages.reviewedTasksTitle)}
                   tasksMonthsPast={this.props.tasksReviewedMonthsPast}
                   setTasksMonthsPast={this.props.setTasksReviewedMonthsPast}
+                  setTasksCustomRange={this.props.setTasksReviewedDateRange}
                 />
               </div>
               <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-3">
                 <TaskStats {...this.props} />
                 <LeaderboardStats {...this.props} />
               </div>
-              {this.props.reviewerMetrics && 
+              {this.props.reviewerMetrics &&
                 <div className="mr-mt-8">
                   <ReviewStats {...this.props}
                     reviewMetrics={this.props.reviewerMetrics}
                     tasksMonthsPast={this.props.tasksReviewerMonthsPast}
                     setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}
+                    setTasksCustomRange={this.props.setTasksReviewerDateRange}
                     messages={messagesAsReviewer}
                     title={
                       this.props.targetUser.id !== _get(this.props.user, 'id') ?

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import QuickWidget from '../../../components/QuickWidget/QuickWidget'
 import PastDurationSelector from '../../../components/PastDurationSelector/PastDurationSelector'
-import {ALL_TIME, CURRENT_MONTH}
+import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
        from '../../../components/PastDurationSelector/PastDurationSelector'
 import _get from 'lodash/get'
 
@@ -44,9 +44,10 @@ export default class ReviewStats extends Component {
         rightHeaderControls={
           <PastDurationSelector
             className="mr-button mr-button--small"
-            pastMonthsOptions={[1, 3, 6, 9, 12, CURRENT_MONTH, ALL_TIME]}
+            pastMonthsOptions={[1, 3, 6, 9, 12, CURRENT_MONTH, ALL_TIME, CUSTOM_RANGE]}
             currentMonthsPast={this.props.tasksMonthsPast}
             selectDuration={this.props.setTasksMonthsPast}
+            selectCustomRange={this.props.setTasksCustomRange}
           />
         }
         noMain
