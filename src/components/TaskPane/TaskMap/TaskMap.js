@@ -321,22 +321,30 @@ export class TaskMap extends Component {
 
     return (
       <div className={classNames("task-map task", {"full-screen-map": this.props.isMobile})}>
-        <LayerToggle {...this.props}
-                     showTaskFeatures={this.state.showTaskFeatures}
-                     toggleTaskFeatures={this.toggleTaskFeatureVisibility}
-                     showOSMData={this.state.showOSMData}
-                     toggleOSMData={this.toggleOSMDataVisibility}
-                     osmDataLoading={this.state.osmDataLoading}
-                     toggleMapillary={this.props.isMapillaryEnabled() ? this.toggleMapillaryVisibility : undefined}
-                     showMapillary={this.props.showMapillaryLayer}
-                     mapillaryCount={_get(this.props, 'mapillaryImages.length', 0)} />
-        <EnhancedMap center={this.props.centerPoint} zoom={zoom} zoomControl={false}
-                     minZoom={minZoom} maxZoom={maxZoom} worldCopyJump={true}
-                     features={this.taskFeatures()}
-                     justFitFeatures={!this.state.showTaskFeatures}
-                     fitFeaturesOnlyAsNecessary
-                     animateFeatures
-                     onBoundsChange={this.updateTaskBounds}
+        <LayerToggle
+          {...this.props}
+          showTaskFeatures={this.state.showTaskFeatures}
+          toggleTaskFeatures={this.toggleTaskFeatureVisibility}
+          showOSMData={this.state.showOSMData}
+          toggleOSMData={this.toggleOSMDataVisibility}
+          osmDataLoading={this.state.osmDataLoading}
+          toggleMapillary={this.props.isMapillaryEnabled() ? this.toggleMapillaryVisibility : undefined}
+          showMapillary={this.props.showMapillaryLayer}
+          mapillaryCount={_get(this.props, 'mapillaryImages.length', 0)}
+        />
+        <EnhancedMap
+          center={this.props.centerPoint}
+          zoom={zoom}
+          zoomControl={false}
+          minZoom={minZoom}
+          maxZoom={maxZoom}
+          worldCopyJump={true}
+          features={this.taskFeatures()}
+          justFitFeatures={!this.state.showTaskFeatures}
+          fitFeaturesOnlyAsNecessary
+          animateFeatures
+          onBoundsChange={this.updateTaskBounds}
+          conditionalStyles={_get(this.props, 'challenge.taskStyles')}
         >
           <ZoomControl position='topright' />
           <FitBoundsControl />

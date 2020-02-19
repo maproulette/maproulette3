@@ -47,7 +47,7 @@ export default class ImportLayoutModal extends Component {
                    >
                      {({acceptedFiles, getRootProps, getInputProps}) => {
                        const body = acceptedFiles.length > 0 ? <p>{acceptedFiles[0].name}</p> : (
-                         <React.Fragment>
+                         <span className="mr-flex mr-items-center">
                            <SvgSymbol
                              viewBox='0 0 20 20'
                              sym="upload-icon"
@@ -55,7 +55,7 @@ export default class ImportLayoutModal extends Component {
                            />
                            <FormattedMessage {...messages.importModalUploadLabel} />
                            <input {...getInputProps()} />
-                         </React.Fragment>
+                         </span>
                        )
 
                        return (

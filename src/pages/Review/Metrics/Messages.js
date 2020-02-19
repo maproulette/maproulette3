@@ -53,4 +53,15 @@ export default defineMessages({
     id: "ReviewStatus.metrics.tooHard",
     defaultMessage: "TOO HARD",
   },
+
+  byPriorityToggle: {
+    id: "ReviewStatus.metrics.priority.toggle",
+    defaultMessage: "View by Task Priority"
+  },
+
+  priorityLabel: {
+    id: "ReviewStatus.metrics.priority.label",
+    defaultMessage: "{priority} Priority Tasks"
+  },
+
 })

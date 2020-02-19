@@ -299,7 +299,7 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
             <SvgSymbol
               sym="box-icon"
               viewBox="0 0 20 20"
-              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-pin-l mr--ml-2"
+              className="mr-fill-current mr-w-3 mr-h-3 mr-absolute mr-left-0 mr--ml-2"
               title={props.intl.formatMessage(messages.multipleTasksTooltip)}
             />
             {t.id}

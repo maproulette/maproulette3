@@ -65,6 +65,19 @@ export default defineMessages({
       "Visible, you can see your Project as testing ground for Challenges.",
   },
 
+  featuredLabel: {
+    id: 'Admin.EditProject.form.featured.label',
+    defaultMessage: "Featured",
+  },
+
+  featuredDescription: {
+    id: 'Admin.EditProject.form.featured.description',
+    defaultMessage: "Featured projects are shown on the home page and " +
+    "top of the Find Challenges page to bring attention to them. Note " +
+    "that featuring a project does **not** also feature its challenges. " +
+    "Only super-users may mark a project as featured.",
+  },
+
   isVirtualLabel: {
     id: 'Admin.EditProject.form.isVirtual.label',
     defaultMessage: "Virtual",

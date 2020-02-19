@@ -21,11 +21,11 @@
       @apply mr-border-none mr-p-4 mr-text-grey mr-text-xs mr-leading-none mr-font-medium mr-uppercase mr-tracking-wide;
 
       &.-sort-asc {
-        box-shadow: inset 0 2px 0 0 config('colors.blue-light');
+        box-shadow: inset 0 2px 0 0 theme('colors.blue-light');
       }
 
       &.-sort-desc {
-        box-shadow: inset 0 -2px 0 0 config('colors.blue-light');
+        box-shadow: inset 0 -2px 0 0 theme('colors.blue-light');
       }
     }
 
@@ -65,7 +65,7 @@
 
     .-btn {
       @apply mr-py-2 mr-px-4 mr-rounded mr-border-2 mr-bg-transparent mr-font-medium mr-text-green-light mr-transition;
-      border: config('borderWidths.2') solid config('colors.current');
+      border: theme('borderWidths.2') solid theme('colors.current');
 
       &[disabled] {
         @apply mr-opacity-25;

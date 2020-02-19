@@ -109,7 +109,7 @@ export class TaskAnalysisTableHeader extends Component {
                                 </label>
                                 <DeactivatableDropdownButton options={taskSelectionActions}
                                                                 onSelect={this.takeTaskSelectionAction}>
-                                <div className="basic-dropdown-indicator mr-pin-t" />
+                                <div className="basic-dropdown-indicator mr-top-0" />
                                 </DeactivatableDropdownButton>
                             </div>
                         </div>
@@ -166,7 +166,7 @@ export class TaskAnalysisTableHeader extends Component {
                                               <select
                                                 onChange={e => { if (e.target.value !== "") this.props.changeStatus(e.target.value) }}
                                                 defaultValue={this.state.statusChange}
-                                                className="select mr-min-w-20 mr-bg-grey-lighter mr-rounded mr-px-1 mr-text-xs mr-pl-2"
+                                                className="mr-min-w-20 mr-bg-blue-dark mr-w-full mr-rounded mr-px-1 mr-text-xs mr-pl-2"
                                               >
                                                 <option key="choose" value="">
                                                   {this.props.intl.formatMessage(messages.chooseStatusLabel)}
@@ -196,7 +196,7 @@ export class TaskAnalysisTableHeader extends Component {
                                   <input type="hidden" name="taskPropertySearch"
                                       value={JSON.stringify(_get(this.props, 'criteria.filters.taskPropertySearch', {}))}
                                   />
-                                  <button type="submit" className="mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2">
+                                  <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top mr-pb-2">
                                     <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                                     <FormattedMessage {...messages.exportCSVLabel} />
                                   </button>
@@ -209,7 +209,7 @@ export class TaskAnalysisTableHeader extends Component {
                                   <input type="hidden" name="taskPropertySearch"
                                       value={JSON.stringify(_get(this.props, 'criteria.filters.taskPropertySearch', {}))}
                                   />
-                                  <button type="submit" className="mr-text-green-lighter mr-bg-transparent mr-align-top">
+                                  <button type="submit" className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top">
                                     <SvgSymbol sym='download-icon' viewBox='0 0 20 20' className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2" />
                                     <FormattedMessage {...messages.exportGeoJSONLabel} />
                                   </button>

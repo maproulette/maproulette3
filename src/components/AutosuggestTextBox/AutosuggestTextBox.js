@@ -126,7 +126,7 @@ export default class AutosuggestTextBox extends Component {
                                       {"is-active": show})}>
               <div className="autosuggest-text-box__input-wrapper">
                 <input {...getInputProps()}
-                       className={classNames(this.props.inputClassName, "mr-h-full")}
+                       className={classNames(this.props.inputClassName, "mr-h-full mr-outline-none")}
                        onKeyDown={this.handleKeyDown}
                        onFocus={(e) => this.setState({textBoxActive: openOnFocus})}
                        onBlur={(e) => this.setState({textBoxActive: false})}

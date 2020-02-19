@@ -155,7 +155,7 @@ export default class TaskBundleWidget extends Component {
     return (
       <QuickWidget
         {...this.props}
-        className="mr-bg-transparent"
+        className=""
         widgetTitle={
           <FormattedMessage {...messages.title} />
         }

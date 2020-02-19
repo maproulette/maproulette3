@@ -98,7 +98,7 @@ export class ProjectCard extends Component {
             <div className="clickable" onClick={() => this.props.toggleProjectPin(project.id)}>
               <SvgSymbol
                 className={classNames(
-                  "mr-w-4 mr-h-4 mr-rotate-10",
+                  "mr-w-4 mr-h-4 mr-rotate-10 mr-mt-2",
                   this.props.isPinned ? 'mr-fill-matisse-blue' : 'mr-fill-grey-light'
                 )}
                 viewBox='0 0 20 20'

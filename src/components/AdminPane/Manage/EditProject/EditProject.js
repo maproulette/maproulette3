@@ -110,8 +110,8 @@ export class EditProject extends Component {
 
           <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
             <Form
-              schema={jsSchema(this.props.intl, this.props.project)}
-              uiSchema={uiSchema(this.props.intl, this.props.project)}
+              schema={jsSchema(this.props.intl, this.props.user, this.props.project)}
+              uiSchema={uiSchema(this.props.intl, this.props.user, this.props.project)}
               widgets={{SelectWidget: CustomSelectWidget}}
               className="form"
               liveValidate

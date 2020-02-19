@@ -1,9 +1,12 @@
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
 import { TaskPropertySearchTypeString,
          TaskPropertySearchTypeNumber, messagesByPropertySearchType,
          TaskPropertyOperationType, messagesByPropertyOperationType }
        from '../../services/Task/TaskProperty/TaskProperty'
 import _map from 'lodash/map'
 import _values from 'lodash/values'
+import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
 /**
@@ -28,6 +31,15 @@ export const jsSchema = (intl, taskPropertyKeys) => {
       intl.formatMessage(messagesByPropertySearchType[type])
     )
 
+  let propertyKey = { enum: taskPropertyKeys }
+  // If no task property keys are provided then we offer a free-form text field
+  if (!taskPropertyKeys) {
+    propertyKey = {
+      title: "Key",
+      type: "string"
+    }
+  }
+
   return {
     "$schema": "http://json-schema.org/draft-07/schema#",
     type: "object",
@@ -43,7 +55,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
             enumNames: [intl.formatMessage(messages.stringType),
                         intl.formatMessage(messages.numberType),
                         intl.formatMessage(messages.compoundRuleType)],
-          },
+          }
         },
         dependencies: { // Show operators appropriate to value type
           valueType: {
@@ -69,9 +81,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   valueType: {
                     enum: ["string"],
                   },
-                  key: {
-                    enum: taskPropertyKeys,
-                  },
+                  key: propertyKey,
                   operator: {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeString),
@@ -80,7 +90,10 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   },
                   value: {
                     title: "Value",
-                    type: "string",
+                    type: "array",
+                    items: {
+                      type: "string"
+                    },
                   },
                 },
               },
@@ -89,9 +102,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   valueType: {
                     enum: ["number"],
                   },
-                  key: {
-                    enum: taskPropertyKeys,
-                  },
+                  key: propertyKey,
                   operator: {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeNumber),
@@ -100,7 +111,10 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                   },
                   value: {
                     title: "Value",
-                    type: "string",
+                    type: "array",
+                    items: {
+                      type: "string"
+                    },
                   },
                 },
               }
@@ -121,9 +135,31 @@ export const jsSchema = (intl, taskPropertyKeys) => {
   }
 }
 
-function buildUISchema(deepness) {
+/**
+ * react-jsonschema-form doesn't currently support uiSchema entries for
+ * definitions, so we define a schema snippet here for the property rules
+ * definition that can be used in the uiSchema without duplicating it over and
+ * over for each field referencing a property rule.
+ *
+ * @private
+ */
+function buildUISchema(deepness, taskPropertyKeys) {
   if (deepness === 0 ) {
     return {}
+  }
+
+  let keyType = {
+    classNames: "inline-selector mr-inline",
+    "ui:widget": "select",
+    "ui:options": { inline: true, label: false },
+  }
+
+  // If no task property keys are provided then we offer a free-form text field
+  if (!taskPropertyKeys) {
+    keyType = {
+      classNames: "inline-selector mr-inline",
+      "ui:options": { inline: true, label: false },
+    }
   }
 
   return {
@@ -138,11 +174,7 @@ function buildUISchema(deepness) {
       "ui:widget": "select",
       "ui:options": { inline: true, label: false },
     },
-    key: {
-      classNames: "inline-selector mr-inline",
-      "ui:widget": "select",
-      "ui:options": { inline: true, label: false },
-    },
+    key: keyType,
     operator: {
       classNames: "inline-selector mr-inline",
       "ui:widget": "select",
@@ -150,7 +182,7 @@ function buildUISchema(deepness) {
     },
     value: {
       classNames: "inline-selector mr-inline",
-      "ui:options": { inline: true, label: false },
+      "ui:options": { inline: true, label: false, orderable: false },
     },
     left: buildUISchema(deepness - 1),
     right: buildUISchema(deepness - 1),
@@ -158,14 +190,42 @@ function buildUISchema(deepness) {
 }
 
 /**
- * react-jsonschema-form doesn't currently support uiSchema entries for
- * definitions, so we define a schema snippet here for the property rules
- * definition that can be used in the uiSchema without duplicating it over and
- * over for each field referencing a property rule.
- *
- * @private
+ * Defines an array of multiple input fields
  */
- const tagRuleUISchema = buildUISchema(7)
+export function ArrayFieldTemplate(props) {
+  return (
+    <div className="mr-align-top mr-inline-block">
+      {props.items.map((element, index) => (
+        <div key={index}>
+          <div className="mr-flex">
+            {element.children}
+            {props.items.length > 1 &&
+              <React.Fragment>
+                <button type="button" className="mr-text-red mr-pb-4 mr-pl-2"
+                        onClick={(event) => element.onDropIndexClick(index)(event)}>
+                  <SvgSymbol
+                    sym="trash-icon"
+                    viewBox="0 0 20 20"
+                    className="mr-transition mr-fill-current mr-w-4 mr-h-4"
+                  />
+                </button>
+                {props.items.length !== (index + 1) &&
+                  <span className="mr-text-grey mr-ml-4 mr-align-bottom mr-pt-2">or</span>
+                }
+              </React.Fragment>
+            }
+          </div>
+          {props.canAdd && props.items.length === (index + 1) &&
+            <button type="button" className="mr-text-green"
+                    onClick={props.onAddClick}>
+              <FormattedMessage {...messages.addValueButton} />
+            </button>}
+        </div>
+      ))}
+
+    </div>
+  )
+}
 
 /**
  * uiSchema configuration to assist react-jsonschema-form in determining
@@ -177,8 +237,8 @@ function buildUISchema(deepness) {
  * > the form configuration will help the Bulma/RJSFFormFieldAdapter generate the
  * > proper Bulma-compliant markup.
  */
-export const uiSchema = intl => ({
+export const uiSchema = (intl, taskPropertyKeys) => ({
   propertyRules: {
-    rootRule: tagRuleUISchema,
+    rootRule: buildUISchema(7, taskPropertyKeys),
   },
 })

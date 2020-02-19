@@ -8,7 +8,10 @@ import _map from 'lodash/map'
 import _get from 'lodash/get'
 import { TaskStatusColors }
       from '../../services/Task/TaskStatus/TaskStatus'
-import { colors } from '../../tailwind'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../tailwind.config.js'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 const statusIcons = _fromPairs(_map(TaskStatusColors, (color, status) => [
  status,

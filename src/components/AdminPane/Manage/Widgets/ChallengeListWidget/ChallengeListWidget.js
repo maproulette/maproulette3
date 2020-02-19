@@ -129,12 +129,15 @@ export default class ChallengeListWidget extends Component {
               }
           />
         </div>
-        <ChallengeSearch className="mr-p-2 mr-text-grey-light mr-border mr-border-grey-light mr-rounded-sm"
-                         inputClassName="mr-text-grey mr-leading-normal"
-                         toggleSearchTallies={this.props.toggleSearchTallies}
-                         challenges={this.props.challenges}
-                         projectId={this.props.project.id}
-                         placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)} />
+        <ChallengeSearch 
+          className="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
+          inputClassName="mr-text-grey mr-leading-normal"
+          iconClassName="mr-w-5 mr-h-5 mr-mr-2 mr-fill-grey-light"
+          toggleSearchTallies={this.props.toggleSearchTallies}
+          challenges={this.props.challenges}
+          projectId={this.props.project.id}
+          placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
+        />
 
       </div>
     )

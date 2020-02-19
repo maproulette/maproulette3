@@ -72,7 +72,7 @@ export default class MarkdownTemplate extends Component {
     const select =
       <li key={_uniqueId(propertyName)} className="mr-pb-1">
         <select onChange={(e) => this.selectResponse(propertyName, e.target.value)}
-                className="select mr-text-xs"
+                className="select mr-text-black mr-text-xs"
                 defaultValue={this.props.completionResponses[propertyName]}
                 disabled={this.props.disableTemplate}>
           <option key="0" value=""></option>

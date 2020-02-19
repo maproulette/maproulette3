@@ -97,6 +97,7 @@ export class TagDiffVisualization extends Component {
     }
     else {
       tagEdits[tagName].status = 'removed'
+      tagEdits[tagName].newValue = null
     }
 
     this.setState({tagEdits})
@@ -269,7 +270,7 @@ export class TagDiffVisualization extends Component {
         </div>
       )
     }
-        
+
     const tagNames = tagChanges.map(change => (
       <li
         className='mr-border-2 mr-border-transparent mr-my-2 mr-py-3 mr-flex mr-h-6 mr-items-center'
@@ -334,6 +335,7 @@ export class TagDiffVisualization extends Component {
             <React.Fragment>
               <input
                 type="text"
+                className="mr-text-black mr-px-2"
                 value={change.newValue}
                 onChange={e => this.updateTagValue(change.name, e.target.value)}
               />
@@ -455,7 +457,7 @@ export const AddTagControl = props => {
     <div className="mr-flex">
       <input
         type="text"
-        className="mr-mr-2"
+        className="mr-mr-2 mr-text-black mr-px-2"
         value={props.newTagName}
         onChange={e => props.setNewTagName(e.target.value)}
         placeholder={props.intl.formatMessage(messages.tagNamePlaceholder)}

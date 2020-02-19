@@ -17,17 +17,6 @@ import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 
 /**
- * Returns the maximum allowed size, in degrees, of the bounding box for
- * task-browsing to be enabled. Uses the REACT_APP_BOUNDED_TASKS_MAX_DIMENSION
- * .env setting or a system default if that hasn't been set.
- *
- */
-export const maxAllowedDegrees = function() {
-  return _get(process.env, 'REACT_APP_BOUNDED_TASKS_MAX_DIMENSION',
-              70) // degrees
-}
-
-/**
  * WithMapBoundedTasks retrieves map-bounded task clusters (regardless of
  * challenge) within the given mapBounds bounding box when it's of an
  * appropriately small size as determiend by the
@@ -57,7 +46,7 @@ export const WithMapBoundedTasks = function(WrappedComponent,
       const bounds = this.normalizedBounds(this.props)
       let mapBoundedTasks = null
 
-      if (bounds && boundsWithinAllowedMaxDegrees(bounds, maxAllowedDegrees())) {
+      if (bounds && boundsWithinAllowedMaxDegrees(bounds)) {
         mapBoundedTasks = this.props.mapBoundedTasks
 
         // If we have no mapBoundsTasks then we might be dealing with clusters.

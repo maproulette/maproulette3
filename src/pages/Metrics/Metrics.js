@@ -112,8 +112,8 @@ class Metrics extends Component {
                 <div className="mr-mb-4 md:mr-mb-0 mr-p-8 mr-bg-blue mr-rounded mr-shadow mr-flex mr-items-center">
                   {!this.props.taskMetrics ?
                     <div className="mr-flex-grow mr-text-center"><BusySpinner /></div> :
-                    <div className="mr-flex-grow mr-text-center">
-                      <div className="mr-mb-4">
+                    <div className="mr-flex-grow mr-flex mr-flex-col mr-items-center">
+                      <div className="mr-mb-6">
                         <SvgSymbol
                           sym="illustration-completed-tasks"
                           className="mr-w-32 mr-h-auto"
@@ -134,18 +134,20 @@ class Metrics extends Component {
                   title={this.props.intl.formatMessage(messages.reviewedTasksTitle)}
                   tasksMonthsPast={this.props.tasksReviewedMonthsPast}
                   setTasksMonthsPast={this.props.setTasksReviewedMonthsPast}
+                  setTasksCustomRange={this.props.setTasksReviewedDateRange}
                 />
               </div>
               <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-3">
                 <TaskStats {...this.props} />
                 <LeaderboardStats {...this.props} />
               </div>
-              {this.props.reviewerMetrics && 
+              {this.props.reviewerMetrics &&
                 <div className="mr-mt-8">
                   <ReviewStats {...this.props}
                     reviewMetrics={this.props.reviewerMetrics}
                     tasksMonthsPast={this.props.tasksReviewerMonthsPast}
                     setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}
+                    setTasksCustomRange={this.props.setTasksReviewerDateRange}
                     messages={messagesAsReviewer}
                     title={
                       this.props.targetUser.id !== _get(this.props.user, 'id') ?

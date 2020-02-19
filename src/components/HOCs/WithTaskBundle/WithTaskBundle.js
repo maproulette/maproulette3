@@ -21,10 +21,6 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     setupBundle = bundleId => {
-      if (!_isFinite(bundleId)) {
-        return
-      }
-
       this.setState({loading: true})
       this.props.fetchTaskBundle(bundleId).then(taskBundle => {
         this.setState({taskBundle, loading: false})
@@ -37,9 +33,11 @@ export function WithTaskBundle(WrappedComponent) {
       })
     }
 
-    removeTaskBundle = (bundleId, primaryTaskId) => {
+    removeTaskBundle = (bundleId, taskId) => {
       if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId) {
-        this.props.deleteTaskBundle(bundleId, primaryTaskId)
+        // The task id we pass to delete will be left locked, so it needs to be
+        // the current task even if it's not the primary task in the bundle
+        this.props.deleteTaskBundle(bundleId, taskId)
         this.clearActiveTaskBundle()
       }
     }
@@ -49,14 +47,14 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     componentDidMount() {
-      if (_get(this.props, 'task.isBundlePrimary', false)) {
+      if (_isFinite(_get(this.props, 'task.bundleId'))) {
         this.setupBundle(this.props.task.bundleId)
       }
     }
 
     componentDidUpdate(prevProps) {
       if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
-        if (_get(this.props, 'task.isBundlePrimary', false)) {
+        if (_isFinite(_get(this.props, 'task.bundleId'))) {
           this.setupBundle(this.props.task.bundleId)
         }
         else {

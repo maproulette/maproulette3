@@ -195,7 +195,7 @@ const commentEntry = (entry, props, index) => {
       <SvgSymbol
         sym="comments-icon"
         viewBox="0 0 20 20"
-        className="mr-fill-current mr-flex-no-shrink mr-w-4 mr-h-4 mr-mt-3 mr-mr-2"
+        className="mr-fill-current mr-flex-shrink-0 mr-w-4 mr-h-4 mr-mt-3 mr-mr-2"
       />
       <MarkdownContent allowShortCodes markdown={entry.comment} />
     </li>

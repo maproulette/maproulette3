@@ -136,7 +136,12 @@ export default class EnhancedMap extends Map {
           }
 
           // Support [simplestyle](https://github.com/mapbox/simplestyle-spec)
-          AsSimpleStyleableFeature(feature).styleLeafletLayer(layer)
+          if (this.props.conditionalStyles) {
+            AsSimpleStyleableFeature(feature).styleLeafletLayerConditionally(layer, this.props.conditionalStyles)
+          }
+          else {
+            AsSimpleStyleableFeature(feature).styleLeafletLayer(layer)
+          }
         }
       })
 

@@ -9,7 +9,6 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import AsManager
        from '../../../interactions/User/AsManager'
 import CardChallenge from '../../CardChallenge/CardChallenge'
-import SignInButton from '../../SignInButton/SignInButton'
 import messages from './Messages'
 import './ChallengeResultItem.scss'
 
@@ -33,52 +32,10 @@ export class ChallengeResultItem extends Component {
     this.itemRef = React.createRef()
   }
 
-  state = {
-    /**
-     * Keep track of browsing locally, making UI more responsive. isBrowsing is based
-     * on the browsedChallenge prop, and rendering off that prop would work correctly.
-     * But in a long list of challenge results, there can be a small delay between
-     * updates to the prop and re-renders, which makes the toggle control feel sluggish.
-     * So we instead render based off local state, and toggle local state, while issuing
-     * the prop updates in the background. We implement componentWillReceiveProps to
-     * ensure our state is synced up with any prop changes.
-     **/
-    isBrowsing: _get(this.props, 'browsedChallenge.id') === this.props.challenge.id,
-  }
-
-  reposition = (delay=0) => {
-    if (this.itemRef.current && this.props.listRef.current) {
-      setTimeout(() => {
-        window.scrollTo(0, 0)
-        this.props.listRef.current.scrollTop = this.itemRef.current.offsetTop
-      }, delay)
-    }
-  }
-
-  componentDidMount() {
-    if (_get(this.props, 'browsedChallenge.id') === this.props.challenge.id) {
-      // Scroll this item into view. Wait a second so that other items have a chance
-      // to load, or else they may push us back out of view again
-      this.reposition(1000)
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (_get(this.props, 'browsedChallenge.id') === this.props.challenge.id &&
-        _get(prevProps, 'browsedChallenge.id') !== this.props.challenge.id) {
-      this.reposition()
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     // Only re-render under specific conditions:
 
-    // if our state changed, or
-    if (!_isEqual(nextState, this.state)) {
-      return true
-    }
-
-    // if the user has changed or
+    // if the user has changed
     if (_get(nextProps, 'user.id') !== _get(this.props, 'user.id')) {
       return true
     }
@@ -89,71 +46,26 @@ export class ChallengeResultItem extends Component {
       return true
     }
 
-    // if the challenge object itself changed, or
+    // if the challenge object itself changed
     if (!_isEqual(nextProps.challenge, this.props.challenge)) {
       return true
-    }
-
-    // if the browsedChallenge or its loading status changed and it either
-    // references our challenge now or used to before.
-    if (_get(nextProps, 'browsedChallenge.id') === this.props.challenge.id ||
-        _get(this.props, 'browsedChallenge.id') === this.props.challenge.id) {
-      if (_get(nextProps, 'browsedChallenge.id') !==
-          _get(this.props, 'browsedChallenge.id')) {
-        return true
-      }
-
-      if (nextProps.loadingBrowsedChallenge !== this.props.loadingBrowsedChallenge) {
-        return true
-      }
     }
 
     return false
   }
 
-  componentWillReceiveProps(nextProps) {
-    // Ensure isBrowsing state stays synced with browsedChallenge prop.
-    const isBrowsing =
-      _get(nextProps, 'browsedChallenge.id') === this.props.challenge.id
-
-    if (this.state.isBrowsing !== isBrowsing) {
-      this.setState({isBrowsing})
-    }
-  }
-
   /**
-   * Invoke to begin browsing this challenge. It will immediately update local state
-   * used for rendering so that the UI is responsive, and then asynchronously
-   * invoke startBrowsingChallenge.
+   * Invoke to begin browsing this challenge
    *
    * @private
    */
-  viewChallengeDetails = () => {
-    this.setState({isBrowsing: true})
-    setTimeout(() => {
-      this.props.startBrowsingChallenge(this.props.challenge)
-    }, 0)
-  }
-
-  /**
-   * Invoke to stop browsing this challenge. It will immediately update local state
-   * used for rendering so that the UI is responsive, and then asynchronously
-   * invoke stopBrowsingChallenge.
-   *
-   * @private
-   */
-  stopBrowsing = () => {
-    this.setState({isBrowsing: false})
-    setTimeout(() => this.props.stopBrowsingChallenge(), 0)
-  }
-
-  /**
-   * Begin the challenge
-   *
-   * @private
-   */
-  startChallenge = () => {
-    this.props.startChallenge(this.props.challenge)
+  browseChallenge = () => {
+    this.props.history.push(
+      `/browse/${
+        this.props.challenge.isVirtual ? 'virtual' : 'challenges'
+      }/${this.props.challenge.id}`,
+      { fromSearch: true }
+    )
   }
 
   render() {
@@ -162,7 +74,6 @@ export class ChallengeResultItem extends Component {
     let isSaved = false
     let unsaveChallengeControl = null
     let saveChallengeControl = null
-    let startControl = null
 
     if (_isObject(this.props.user) && !this.props.challenge.isVirtual) {
       if (_findIndex(this.props.user.savedChallenges,
@@ -191,22 +102,6 @@ export class ChallengeResultItem extends Component {
       }
     }
 
-    // Users need to be signed in to start a challenge
-    if (!_isObject(this.props.user)) {
-      startControl = <SignInButton {...this.props} longForm className='' />
-    }
-    else {
-      startControl = (
-        <Link
-          to={{}}
-          className="mr-button mr-button--small"
-          onClick={() => this.props.startChallenge(this.props.challenge)}
-        >
-          <FormattedMessage {...messages.start} />
-        </Link>
-      )
-    }
-
     // Does this user own (or can manage) the current challenge?
     const isManageable =
       AsManager(this.props.user).canManageChallenge(this.props.challenge)
@@ -226,12 +121,10 @@ export class ChallengeResultItem extends Component {
           className="mr-mb-4"
           challenge={this.props.challenge}
           isExpanded={false}
-          cardClicked={this.viewChallengeDetails}
+          cardClicked={this.browseChallenge}
           isSaved={isSaved}
-          isLoading={this.props.isStarting}
           saveControl={saveChallengeControl}
           unsaveControl={unsaveChallengeControl}
-          startControl={startControl}
           manageControl={manageControl}
           projectQuery={_get(this.props, 'searchFilters.project')}
           excludeProjectId={this.props.excludeProjectId}
@@ -246,20 +139,10 @@ ChallengeResultItem.propTypes = {
   user: PropTypes.object,
   /** The challenge represented by this item */
   challenge: PropTypes.object.isRequired,
-  /** The challenge being actively browsed by the user, if any */
-  browsedChallenge: PropTypes.object,
-  /** Invoked when the user wishes to browse details of this challenge */
-  startBrowsingChallenge: PropTypes.func.isRequired,
-  /** Invoked if the user explicitly minimizes this challenge's details */
-  stopBrowsingChallenge: PropTypes.func.isRequired,
-  /** Invoked when user indicates they wish to start work on a challenge */
-  startChallenge: PropTypes.func.isRequired,
   /** Invoked when a user indicates they wish to save/bookmark a challenge */
   saveChallenge: PropTypes.func.isRequired,
   /** Invoked when a user indicates they wish to unsave/bookmark a challenge */
   unsaveChallenge: PropTypes.func.isRequired,
-  /** Indicates whether the challenge is in the middle of being started */
-  isStarting: PropTypes.bool.isRequired,
 }
 
 export default injectIntl(ChallengeResultItem)

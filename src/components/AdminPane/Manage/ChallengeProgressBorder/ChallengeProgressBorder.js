@@ -54,7 +54,7 @@ export class ChallengeProgressBorder extends Component {
       <div
         key={status}
         className={classNames(overrides.border ? overrides.border : "mr-border-grey-light",
-                             "mr-absolute mr-pin-b mr-mb-n2px mr-border-b-2 mr-h-5px")}
+                             "mr-absolute mr-bottom-0 mr-mb-n2px mr-border-b-2 mr-h-5px")}
         style={{
           left: `${cumulativeWidth}px`,
           width: `${segmentWidth}px`,

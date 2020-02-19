@@ -7,6 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.5.5] - 2020-02-19
+### Added
+- Featured projects
+- Custom task styling based on arbitrary feature properties
+- Simpler OR'ing of multiple values on feature property search
+- Tabulation of Review Status metrics by task priority
+- Custom date range option when viewing user metrics
+- Ability to work on task bundles from any member task
+- [internal] upgrade Tailwind and other package dependencies
+
+### Fixed
+- Users not being made admins of projects they create (#433)
+
+
 ## [v3.5.4] - 2020-02-07
 ### Added
 - Ability to designate task property as OSM id in challenge creation

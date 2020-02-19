@@ -8,11 +8,11 @@ $(self-dropdown) {
   }
 
   &__wrapper {
-    @apply mr-absolute mr-z-90 mr-pin-t-100 mr-pin-l;
+    @apply mr-absolute mr-z-200 mr-top-100 mr-left-0;
 
     @screen md {
       $(self-dropdown)--right & {
-        @apply mr-pin-none mr-pin-t-100 mr-pin-r;
+        @apply mr-inset-auto mr-top-100 mr-right-0;
       }
     }
   }
@@ -38,14 +38,14 @@ $(self-dropdown) {
   }
 
   &__arrow {
-    @apply mr-absolute mr-pin-b-100 mr-ml-2 mr-pin-l mr-h-2 mr-fill-blue-dark;
+    @apply mr-absolute mr-bottom-100 mr-ml-2 mr-left-0 mr-h-2 mr-fill-blue-dark;
 
     $(self-dropdown)--flush & {
       @apply mr-hidden;
     }
 
     $(self-dropdown)--right & {
-      @apply mr-ml-0 mr-mr-2 mr-pin-none mr-pin-b-100 mr-pin-r;
+      @apply mr-ml-0 mr-mr-2 mr-inset-auto mr-bottom-100 mr-right-0;
     }
   }
 

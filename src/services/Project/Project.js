@@ -102,6 +102,26 @@ export const fetchManageableProjects = function(page = null, limit = RESULTS_PER
 }
 
 /**
+ * Retrieve all featured projects, up to the given limit
+ */
+export const fetchFeaturedProjects = function(onlyEnabled=true, limit=RESULTS_PER_PAGE, page=null) {
+  return function(dispatch) {
+    const pageToFetch = _isFinite(page) ? page : 0
+
+    return new Endpoint(api.projects.featured, {
+      schema: [ projectSchema() ],
+      params: {onlyEnabled, limit, page: pageToFetch}
+    }).execute().then(normalizedResults => {
+      dispatch(receiveProjects(normalizedResults.entities))
+      return normalizedResults
+    }).catch(error => {
+      dispatch(addError(AppErrors.project.fetchFailure))
+      console.log(error.response || error)
+    })
+  }
+}
+
+/**
  * Fetch data for the given project.
  */
 export const fetchProject = function(projectId) {
@@ -194,7 +214,7 @@ export const saveProject = function(projectData) {
       // If we just created the project, add the owner as an admin.
       if (areCreating && project) {
         return setProjectManagerGroupType(
-          project.id, project.owner, false, GroupType.admin
+          project.id, project.owner, true, GroupType.admin
         )(dispatch).then(() => project)
       }
       else {

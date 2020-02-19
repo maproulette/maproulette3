@@ -16,7 +16,10 @@ import { TaskStatus, TaskStatusColors, keysByStatus, statusLabels }
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './ChallengeProgress.scss'
-import { colors } from '../../tailwind'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../tailwind.config.js'
+
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 const theme = (lightMode = false) => {
   return {
@@ -141,7 +144,7 @@ export class ChallengeProgress extends Component {
                       tooltipFormat={v => `${v}%`}
                       theme={theme(this.props.lightMode)}
         />
-        {taskActions.total > 0 && taskActions.available && taskActions.available === 0 &&
+        {taskActions.total > 0 && taskActions.available === 0 &&
           <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
                     className="challenge-task-progress__completed-indicator" />
         }
@@ -264,7 +267,7 @@ export class ChallengeProgress extends Component {
         {taskPriorityActions && this.props.setShowByPriority &&
           <div
             className={classNames(
-              "mr-cursor-pointer",
+              "mr-cursor-pointer mr-flex mr-items-center mr-mt-4",
               this.props.lightMode ? "mr-text-green-light" : "mr-text-green-lighter"
             )}
             onClick={(e) => this.props.setShowByPriority(!this.props.showByPriority)}

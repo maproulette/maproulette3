@@ -6,7 +6,6 @@ import _get from 'lodash/get'
 import _each from 'lodash/each'
 import _concat from 'lodash/concat'
 import _indexOf from 'lodash/indexOf'
-import { maxAllowedDegrees } from '../../../components/HOCs/WithMapBoundedTasks/WithMapBoundedTasks'
 import { toLatLngBounds,
          boundsWithinAllowedMaxDegrees } from '../../MapBounds/MapBounds'
 import messages from './Messages'
@@ -68,7 +67,7 @@ export const challengePassesLocationFilter = function(challengeFilters,
   }
 
   if (!challengeSearchMapBounds ||
-      !boundsWithinAllowedMaxDegrees(challengeSearchMapBounds, maxAllowedDegrees())) {
+      !boundsWithinAllowedMaxDegrees(challengeSearchMapBounds)) {
     // If user wants challenges that simply intersect the bounds, then let those
     // pass if we are not analyzing individual tasks.
     if (challengeFilters.location === CHALLENGE_LOCATION_INTERSECTING_MAPBOUNDS &&

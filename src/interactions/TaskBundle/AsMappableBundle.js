@@ -5,6 +5,7 @@ import _get from 'lodash/get'
 import _flatten from 'lodash/flatten'
 import _compact from 'lodash/compact'
 import _map from 'lodash/map'
+import _find from 'lodash/find'
 import { latLng } from 'leaflet'
 
 /**
@@ -13,6 +14,20 @@ import { latLng } from 'leaflet'
 export class AsMappableBundle {
   constructor(taskBundle) {
     Object.assign(this, taskBundle)
+  }
+
+  /**
+   * Returns the primary task for this bundle
+   */
+  primaryTask() {
+    return _find(this.tasks, {isBundlePrimary: true})
+  }
+
+  /**
+   * Returns the id of the primary task for this bundle
+   */
+  primaryTaskId() {
+    return _get(this.primaryTask(), 'id')
   }
 
   /**

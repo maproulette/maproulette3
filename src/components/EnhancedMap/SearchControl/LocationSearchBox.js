@@ -64,7 +64,7 @@ export class LocationSearchBox extends Component {
                <React.Fragment>
                  <div className="mr-text-right">
                    <button
-                     className="mr-pin-t mr-pin-r mr-transition mr-text-green-lighter hover:mr-text-white"
+                     className="mr-top-0 mr-right-0 mr-transition mr-text-green-lighter hover:mr-text-white"
                      onClick={() => {
                        this.props.clearNominatimSearch()
                        this.setState({showDropdown: false})

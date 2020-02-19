@@ -35,7 +35,7 @@ class CardLeaderboard extends Component {
             style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(200)})` }}
           />
           <h2 className="mr-h4 mr-mb-1">
-            <span className="mr-text-4xl mr-font-bold mr-absolute mr-pin-l mr-pin-t mr-mt-6 mr-ml-6">
+            <span className="mr-text-4xl mr-font-bold mr-absolute mr-left-0 mr-top-0 mr-mt-6 mr-ml-6">
               <FormattedNumber value={leader.rank} />
             </span>
             {leader.name}

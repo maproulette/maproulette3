@@ -1,3 +1,4 @@
+import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
 import _isFunction from 'lodash/isFunction'
 import _isArray from 'lodash/isArray'
@@ -15,6 +16,14 @@ export const DEFAULT_MAP_BOUNDS = [
 ]
 
 export const GLOBAL_MAPBOUNDS = [-180, -90, 180, 90]
+
+/**
+ * Maximum allowed size, in degrees, of the bounding box for
+ * task-browsing to be enabled. Uses the REACT_APP_BOUNDED_TASKS_MAX_DIMENSION
+ * .env setting or a system default if that hasn't been set.
+ */
+export const maxAllowedTaskBrowsingDegrees =
+  _get(process.env, 'REACT_APP_BOUNDED_TASKS_MAX_DIMENSION', 70) // degrees
 
 // utility functions
 
@@ -93,7 +102,7 @@ export const toLatLngBounds = function(arrayBounds) {
  * Determines if the largest dimension of the given bounding box is less
  * than the given maxAllowedDegrees.
  */
-export const boundsWithinAllowedMaxDegrees = function(bounds, maxAllowedDegrees) {
+export const boundsWithinAllowedMaxDegrees = function(bounds, maxAllowedDegrees=maxAllowedTaskBrowsingDegrees) {
   const normalizedBounds = toLatLngBounds(bounds)
   return maxAllowedDegrees >
          _max([normalizedBounds.getEast() - normalizedBounds.getWest(),

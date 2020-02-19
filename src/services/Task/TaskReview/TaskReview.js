@@ -93,14 +93,12 @@ export const receiveReviewClusters = function(clusters, status=RequestStatus.suc
       api.tasks.reviewMetrics,
       {
         schema: null,
-        params: {reviewTasksType: type, ...searchParameters, mappers, reviewers},
+        params: {reviewTasksType: type, ...searchParameters, mappers, reviewers,
+                 includeByPriority: true},
       }
     ).execute().then(normalizedResults => {
-      if (normalizedResults.length > 0) {
-        dispatch(receiveReviewMetrics(normalizedResults[0], RequestStatus.success))
-      }
-
-      return normalizedResults[0]
+      dispatch(receiveReviewMetrics(normalizedResults, RequestStatus.success))
+      return normalizedResults
     }).catch((error) => {
       console.log(error.response || error)
     })

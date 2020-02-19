@@ -4,13 +4,13 @@ import { defineMessages } from 'react-intl'
  * Internationalized messages for use with Home page and sub-components
  */
 export default defineMessages({
-  improveOSM: {
-    id: "Home.FeaturedChallenges.improveOSM",
-    defaultMessage: "Start improving OpenStreetMap!",
+  browseFeaturedLabel: {
+    id: "Home.Featured.browse",
+    defaultMessage: "Explore",
   },
 
-  startChallenge: {
-    id: "Home.FeaturedChallenges.start",
-    defaultMessage: "Explore",
+  featuredHeader: {
+    id: "Home.Featured.header",
+    defaultMessage: "Featured",
   },
 })
