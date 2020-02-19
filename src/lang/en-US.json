@@ -657,6 +657,8 @@
   "Task.fields.priority.label": "Priority",
   "Task.fields.mappedOn.label": "Mapped On",
   "Task.fields.reviewStatus.label": "Review Status",
+  "Task.fields.completedBy.label": "Completed By",
+  "Admin.fields.completedDuration.label": "Completion Time",
   "Task.fields.requestedBy.label": "Mapper",
   "Task.fields.reviewedBy.label": "Reviewer",
   "Admin.fields.reviewedAt.label": "Reviewed On",

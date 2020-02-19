@@ -29,9 +29,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         completeBundleReview(taskBundle.bundleId, status, comment, tags) :
         completeReview(task.id, status, comment, tags)
 
-      loadNextTaskForReview(dispatch, url, task.id).then(nextTask =>
-        dispatch(doReview).then(() => visitTaskForReview(loadBy, url, nextTask))
-      ).catch(error => {
+      dispatch(doReview).then(() => {
+        loadNextTaskForReview(dispatch, url, task.id).then(nextTask =>
+          visitTaskForReview(loadBy, url, nextTask))
+      }).catch(error => {
         console.log(error)
         url.push('/review')
       })
