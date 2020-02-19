@@ -90,7 +90,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   unbundleTasks = async () => {
-    this.props.removeTaskBundle(this.props.taskBundle.bundleId, this.props.task.id)
+    this.props.removeTaskBundle(this.props.taskBundle.bundleId)
     this.props.resetSelectedTasks()
   }
 
@@ -155,7 +155,7 @@ export default class TaskBundleWidget extends Component {
     return (
       <QuickWidget
         {...this.props}
-        className="mr-bg-transparent"
+        className=""
         widgetTitle={
           <FormattedMessage {...messages.title} />
         }
