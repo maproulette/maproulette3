@@ -174,7 +174,7 @@ export class TaskAnalysisTable extends Component {
 
     return (
       <React.Fragment>
-        <section className="mr-my-4 mr-fixed-containing-block">
+        <section className="mr-my-4">
           {!this.props.suppressHeader &&
            <header className="mr-mb-4">
              <TaskAnalysisTableHeader

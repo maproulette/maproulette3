@@ -166,7 +166,7 @@ export class TaskAnalysisTableHeader extends Component {
                                               <select
                                                 onChange={e => { if (e.target.value !== "") this.props.changeStatus(e.target.value) }}
                                                 defaultValue={this.state.statusChange}
-                                                className="select mr-min-w-20 mr-bg-grey-lighter mr-rounded mr-px-1 mr-text-xs mr-pl-2"
+                                                className="select mr-min-w-20 mr-bg-black-15 mr-w-full mr-rounded mr-px-1 mr-text-xs mr-pl-2"
                                               >
                                                 <option key="choose" value="">
                                                   {this.props.intl.formatMessage(messages.chooseStatusLabel)}
