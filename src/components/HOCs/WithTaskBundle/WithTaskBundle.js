@@ -6,8 +6,6 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { bundleTasks, deleteTaskBundle, fetchTaskBundle }
        from '../../../services/Task/Task'
-import AsMappableBundle
-       from '../../../interactions/TaskBundle/AsMappableBundle'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -29,24 +27,17 @@ export function WithTaskBundle(WrappedComponent) {
       })
     }
 
-    primaryTaskId = bundleId => {
-      if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId) {
-        return AsMappableBundle(this.state.taskBundle).primaryTaskId()
-      }
-      else {
-        return null
-      }
-    }
-
     createTaskBundle = (taskIds, name) => {
       this.props.bundleTasks(taskIds, name).then(taskBundle => {
         this.setState({taskBundle})
       })
     }
 
-    removeTaskBundle = bundleId => {
+    removeTaskBundle = (bundleId, taskId) => {
       if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId) {
-        this.props.deleteTaskBundle(bundleId, this.primaryTaskId(bundleId))
+        // The task id we pass to delete will be left locked, so it needs to be
+        // the current task even if it's not the primary task in the bundle
+        this.props.deleteTaskBundle(bundleId, taskId)
         this.clearActiveTaskBundle()
       }
     }
@@ -78,7 +69,6 @@ export function WithTaskBundle(WrappedComponent) {
           {..._omit(this.props, ['bundleTasks', 'deleteTaskBundle'])}
           taskBundle={this.state.taskBundle}
           taskBundleLoading={this.state.loading}
-          primaryTaskId={this.primaryTaskId}
           createTaskBundle={this.createTaskBundle}
           removeTaskBundle={this.removeTaskBundle}
           clearActiveTaskBundle={this.clearActiveTaskBundle}

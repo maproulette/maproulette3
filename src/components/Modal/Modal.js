@@ -15,14 +15,14 @@ class Modal extends Component {
       >
         <div
           className={classNames(
-            "mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-40",
+            "mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200",
             {"mr-bg-blue-dark-75": !this.props.transparentOverlay}
           )}
           onClick={() => this.props.onClose && this.props.onClose()}
         />
         <div
           className={classNames(
-            "mr-z-90 mr-fixed mr-top-0 mr-left-0", {
+            "mr-z-250 mr-fixed mr-top-0 mr-left-0", {
             "md:mr-w-2/3 md:mr-top-5 md:mr-left-16": this.props.wide,
             "md:mr-min-w-1/3 md:mr-w-1/3 md:mr-top-5 md:mr-left-33": this.props.narrow,
             "mr-w-full md:mr-w-1/4 md:mr-top-5 md:mr-left-37": this.props.extraNarrow,

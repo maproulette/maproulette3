@@ -8,7 +8,7 @@ $(self-dropdown) {
   }
 
   &__wrapper {
-    @apply mr-absolute mr-z-90 mr-top-100 mr-left-0;
+    @apply mr-absolute mr-z-200 mr-top-100 mr-left-0;
 
     @screen md {
       $(self-dropdown)--right & {

@@ -90,7 +90,7 @@ export default class TaskBundleWidget extends Component {
   }
 
   unbundleTasks = async () => {
-    this.props.removeTaskBundle(this.props.taskBundle.bundleId)
+    this.props.removeTaskBundle(this.props.taskBundle.bundleId, this.props.task.id)
     this.props.resetSelectedTasks()
   }
 
