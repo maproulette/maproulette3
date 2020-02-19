@@ -185,7 +185,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         if (_isString(comment) && comment.length > 0) {
           if (taskBundle) {
             dispatch(addTaskBundleComment(
-              taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId(), comment, taskStatus
+              taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId() || taskId, comment, taskStatus
             ))
           }
           else {
@@ -215,7 +215,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
       return dispatch(
         taskBundle ?
-        completeTaskBundle(taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId(), taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
+        completeTaskBundle(taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId() || taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
         completeTask(taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses)
       ).then(() => doAfter())
     },
