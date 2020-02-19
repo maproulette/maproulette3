@@ -33,6 +33,7 @@ import { CHALLENGE_STATUS_FINISHED }
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
 import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
+import AsMappableBundle from '../../../interactions/TaskBundle/AsMappableBundle'
 
 const TASK_STALE = 30000 // 30 seconds
 const CHALLENGE_STALE = 300000 // 5 minutes
@@ -183,7 +184,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
         if (_isString(comment) && comment.length > 0) {
           if (taskBundle) {
-            dispatch(addTaskBundleComment(taskBundle.bundleId, taskId, comment, taskStatus))
+            dispatch(addTaskBundleComment(
+              taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId(), comment, taskStatus
+            ))
           }
           else {
             dispatch(addTaskComment(taskId, comment, taskStatus))
@@ -212,7 +215,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
 
       return dispatch(
         taskBundle ?
-        completeTaskBundle(taskBundle.bundleId, taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
+        completeTaskBundle(taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId(), taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
         completeTask(taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses)
       ).then(() => doAfter())
     },

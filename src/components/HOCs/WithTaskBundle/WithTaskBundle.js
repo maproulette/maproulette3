@@ -6,6 +6,8 @@ import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
 import { bundleTasks, deleteTaskBundle, fetchTaskBundle }
        from '../../../services/Task/Task'
+import AsMappableBundle
+       from '../../../interactions/TaskBundle/AsMappableBundle'
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -21,14 +23,19 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     setupBundle = bundleId => {
-      if (!_isFinite(bundleId)) {
-        return
-      }
-
       this.setState({loading: true})
       this.props.fetchTaskBundle(bundleId).then(taskBundle => {
         this.setState({taskBundle, loading: false})
       })
+    }
+
+    primaryTaskId = bundleId => {
+      if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId) {
+        return AsMappableBundle(this.state.taskBundle).primaryTaskId()
+      }
+      else {
+        return null
+      }
     }
 
     createTaskBundle = (taskIds, name) => {
@@ -37,9 +44,9 @@ export function WithTaskBundle(WrappedComponent) {
       })
     }
 
-    removeTaskBundle = (bundleId, primaryTaskId) => {
+    removeTaskBundle = bundleId => {
       if (_isFinite(bundleId) && _get(this.state, 'taskBundle.bundleId') === bundleId) {
-        this.props.deleteTaskBundle(bundleId, primaryTaskId)
+        this.props.deleteTaskBundle(bundleId, this.primaryTaskId(bundleId))
         this.clearActiveTaskBundle()
       }
     }
@@ -49,14 +56,14 @@ export function WithTaskBundle(WrappedComponent) {
     }
 
     componentDidMount() {
-      if (_get(this.props, 'task.isBundlePrimary', false)) {
+      if (_isFinite(_get(this.props, 'task.bundleId'))) {
         this.setupBundle(this.props.task.bundleId)
       }
     }
 
     componentDidUpdate(prevProps) {
       if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
-        if (_get(this.props, 'task.isBundlePrimary', false)) {
+        if (_isFinite(_get(this.props, 'task.bundleId'))) {
           this.setupBundle(this.props.task.bundleId)
         }
         else {
@@ -71,6 +78,7 @@ export function WithTaskBundle(WrappedComponent) {
           {..._omit(this.props, ['bundleTasks', 'deleteTaskBundle'])}
           taskBundle={this.state.taskBundle}
           taskBundleLoading={this.state.loading}
+          primaryTaskId={this.primaryTaskId}
           createTaskBundle={this.createTaskBundle}
           removeTaskBundle={this.removeTaskBundle}
           clearActiveTaskBundle={this.clearActiveTaskBundle}
