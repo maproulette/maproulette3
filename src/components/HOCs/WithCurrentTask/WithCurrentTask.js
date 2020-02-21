@@ -6,10 +6,12 @@ import _omit from 'lodash/omit'
 import _isFinite from 'lodash/isFinite'
 import _isString from 'lodash/isString'
 import _isPlainObject from 'lodash/isPlainObject'
+import _each from 'lodash/each'
 import { taskDenormalizationSchema,
          fetchTask,
          fetchTaskComments,
          fetchTaskPlace,
+         fetchTaskBundle,
          loadRandomTaskFromChallenge,
          loadRandomTaskFromVirtualChallenge,
          startTask,
@@ -245,7 +247,16 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Update tags on task.
      */
     saveTaskTags: (task, tags) => {
-      return dispatch(updateTaskTags(task.id, tags))
+      if (task.bundleId) {
+        dispatch(fetchTaskBundle(task.bundleId)).then(taskBundle => {
+          _each(taskBundle.tasks, task => {
+            dispatch(updateTaskTags(task.id, tags))
+          })
+        })
+      }
+      else {
+        dispatch(updateTaskTags(task.id, tags))
+      }
     },
 
     fetchOSMUser,
