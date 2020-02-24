@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import _isFinite from 'lodash/isFinite'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../services/Widget/Widget'
@@ -56,21 +58,31 @@ export default class TaskInstructionsWidget extends Component {
   }
 
   render() {
-    const minimizeControl = (
-      /*
-      // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      <a className="collapsible-icon" aria-label="more options"
-         onClick={this.toggleMinimized}>
-        <span className="icon"></span>
-      </a>
-      */
-      <button className="mr-text-green-lighter" onClick={this.toggleMinimized}>
-        <SvgSymbol
-          sym="icon-cheveron-down"
-          viewBox="0 0 20 20"
-          className="mr-transition mr-fill-current mr-min-w-6 mr-w-6 mr-h-6"
-        />
-      </button>
+    const taskInstructions = !_isEmpty(this.props.task.instruction) ?
+        this.props.task.instruction :
+        _get(this.props.task, 'parent.instruction')
+
+    const rightHeaderControls = (
+      <React.Fragment>
+        <CopyToClipboard text={taskInstructions}>
+          <button className="mr-text-green-lighter hover:mr-text-white mr-ml-1">
+            <SvgSymbol viewBox='0 0 20 20' className="mr-fill-current mr-w-4 mr-h-4" sym="clipboard-icon" />
+          </button>
+        </CopyToClipboard>
+
+        {/* // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <a className="collapsible-icon" aria-label="more options"
+          onClick={this.toggleMinimized}>
+          <span className="icon"></span>
+        </a> */}
+        <button className="mr-text-green-lighter" onClick={this.toggleMinimized}>
+          <SvgSymbol
+            sym="icon-cheveron-down"
+            viewBox="0 0 20 20"
+            className="mr-transition mr-fill-current mr-min-w-6 mr-w-6 mr-h-6"
+          />
+        </button>
+      </React.Fragment>
     )
 
     return (
@@ -79,7 +91,7 @@ export default class TaskInstructionsWidget extends Component {
                       "task-instructions-widget",
                       {"is-expanded": !this.props.collapseInstructions})}
                   widgetTitle={<FormattedMessage {...messages.title} />}
-                  rightHeaderControls={minimizeControl}>
+                  rightHeaderControls={rightHeaderControls}>
         {!this.props.collapseInstructions && <TaskInstructions {...this.props} />}
       </QuickWidget>
     )
