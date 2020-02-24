@@ -1,3 +1,4 @@
+import React from 'react'
 import _map from 'lodash/map'
 import _keys from 'lodash/keys'
 import _values from 'lodash/values'
@@ -10,6 +11,7 @@ import { ChallengeCategoryKeywords,
        from '../../../../../services/Challenge/ChallengeKeywords/ChallengeKeywords'
 import AsEditableChallenge
        from '../../../../../interactions/Challenge/AsEditableChallenge'
+import MarkdownContent from '../../../../MarkdownContent/MarkdownContent'
 import messages from './Messages'
 
 /**
@@ -158,7 +160,7 @@ export const uiSchema = (intl, user, challengeData) => {
     },
     instruction: {
       "ui:field": "markdown",
-      "ui:help": intl.formatMessage(messages.instructionDescription, {dummy: ''}),
+      "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.instructionDescription, {dummy: ''})} />,
       "ui:lightMode": true,
     },
     difficulty: {

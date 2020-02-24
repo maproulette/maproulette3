@@ -35,23 +35,24 @@ export class KeywordAutosuggestInput extends Component {
       this.props.intl.formatMessage(messages.addKeywordPlaceholder)
 
     return (
-      <AutosuggestTextBox {...this.props}
-                          inputValue={this.state.value}
-                          onInputValueChange={value => this.setState({value})}
-                          onChange={keyword => {
-                            if (keyword) {
-                              if (this.props.handleAddTag) {
-                                this.props.handleAddTag(keyword.name || keyword)
-                              }
-                              else {
-                                props.addTag(keyword.name || keyword)
-                              }
-                            }
-                            this.setState({value: ''})
-                          }}
-                          resultClassName={this.keywordClassName}
-                          showNoResults={this.props.existingKeywordCount === 0}
-                          placeholder={placeholder}
+      <AutosuggestTextBox
+        {...this.props}
+        inputValue={this.state.value}
+        inputClassName="mr-py-2 mr-px-4 mr-border-none mr-placeholder-white-50 mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner mr-w-full"
+        onInputValueChange={value => this.setState({value})}
+        onChange={keyword => {
+          if (keyword) {
+            if (this.props.handleAddTag) {
+              this.props.handleAddTag(keyword.name || keyword)
+            }
+            else {
+              props.addTag(keyword.name || keyword)
+            }
+          }
+          this.setState({value: ''})
+        }}
+        resultClassName={this.keywordClassName}
+        placeholder={placeholder}
       />
     )
   }
@@ -73,7 +74,7 @@ export class KeywordAutosuggestInput extends Component {
     else {
       return <TagsInputField {...this.props}
                              renderInput={this.autosuggestInput}
-                             className="keyword-autosuggest-input" />
+                             className="keyword-autosuggest-input dark-mode" />
     }
   }
 }

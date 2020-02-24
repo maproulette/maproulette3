@@ -8,4 +8,9 @@ export default defineMessages({
     id: "PopularChallenges.header",
     defaultMessage: "Popular Challenges",
   },
+
+  noChallenges: {
+    id: "PopularChallenges.none",
+    defaultMessage: "No Challenges",
+  },
 })

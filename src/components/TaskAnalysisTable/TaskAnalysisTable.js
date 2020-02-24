@@ -240,12 +240,13 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     accessor: task => props.selectedTasks.has(task.id),
     Cell: ({value, original}) => (
       props.highlightPrimaryTask && original.id === props.task.id ?
-      <span>✓</span> :
-      <label className="checkbox">
-        <input type="checkbox"
-               checked={value}
-               onChange={() => props.toggleTaskSelection(original)} />
-      </label>
+      <span className="mr-text-green-lighter">✓</span> :
+      <input
+        type="checkbox"
+        className="mr-checkbox-toggle"
+        checked={value}
+        onChange={() => props.toggleTaskSelection(original)}
+      />
     ),
     maxWidth: 25,
     sortable: false,
@@ -445,7 +446,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     sortable: false,
     minWidth: 150,
     Cell: ({row}) =>
-      <div className="row-controls-column">
+      <div className="row-controls-column mr-links-green-lighter">
         <Link to={`${taskBaseRoute}/${row._original.id}/inspect`} className="mr-mr-2">
           <FormattedMessage {...messages.inspectTaskLabel} />
         </Link>

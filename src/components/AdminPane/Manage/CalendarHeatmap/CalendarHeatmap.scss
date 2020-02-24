@@ -11,7 +11,7 @@
   }
 
   .color-empty {
-    fill: $grey-lightest-more;
+    fill: rgba(0, 0, 0, .15);
   }
 
   .react-calendar-heatmap {
@@ -19,7 +19,7 @@
 
     text {
       font-size: 10px;
-      fill: #aaa;
+      fill: #FFF;
     }
 
     .react-calendar-heatmap-small-text {
@@ -36,7 +36,7 @@
 
   &.high-contrast {
     .color-empty {
-      fill: $white;
+      fill: rgba(0, 0, 0, .15);
     }
   }
 }

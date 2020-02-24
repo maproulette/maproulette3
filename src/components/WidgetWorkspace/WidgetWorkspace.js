@@ -108,9 +108,12 @@ export class WidgetWorkspace extends Component {
     if (!this.isEditing()) {
       return (
         <React.Fragment>
-          <Button onClick={() => this.startEditingLayout()}>
+          <button
+            className="mr-button mr-button--small"
+            onClick={() => this.startEditingLayout()}
+          >
             <FormattedMessage {...messages.editConfigurationLabel} />
-          </Button>
+          </button>
           <div className="mr-text-xs mr-flex mr-pt-2 mr-whitespace-no-wrap">
             <span className="mr-mr-1">
               <FormattedMessage {...messages.currentlyUsing} />
@@ -157,7 +160,9 @@ export class WidgetWorkspace extends Component {
     if (this.isEditing(this.props.currentConfiguration)) {
       editNameBox = (
         <React.Fragment>
-          <label className="mr-text-greener mr-mr-2">Layout Name:</label>
+          <label className="mr-text-greener mr-mr-2 mr-ml-8">
+            <FormattedMessage {...messages.configurationNameLabel} />
+          </label>
           <QuickTextBox suppressControls
                         text={this.state.newConfigurationName}
                         setText={this.setNewName}
@@ -247,7 +252,7 @@ const ListLayoutItems = function(props) {
         {configurationItems}
       </ol>
       <hr className="mr-rule-dropdown" />
-      <ol className="mr-list-dropdown mr-links-inverse">
+      <ol className="mr-list-dropdown">
         <li>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => props.addConfiguration(props.closeDropdown)}>

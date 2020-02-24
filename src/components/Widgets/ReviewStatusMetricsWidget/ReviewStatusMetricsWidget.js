@@ -29,7 +29,7 @@ export default class ReviewStatusMetricsWidget extends Component {
     return (
       <QuickWidget
         {...this.props}
-        className="review-status-metrics-widget"
+        className=""
         widgetTitle={
           <FormattedMessage {...messages.title} />
         }

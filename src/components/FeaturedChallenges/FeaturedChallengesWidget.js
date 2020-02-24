@@ -75,11 +75,15 @@ const FeaturedList = function(props) {
 
   const featuredItems = projectItems.concat(challengeItems)
 
-  return featuredItems.length > 0 ?
-         <ol className="mr-list-reset">{featuredItems}</ol> :
-         <div className="none">
-           <FormattedMessage {...messages.nothingFeatured} />
-         </div>
+  return (
+    featuredItems.length > 0 ?
+    <ol className="mr-list-reset mr-links-green-lighter">
+      {featuredItems}
+    </ol> :
+    <div className="mr-text-grey-lighter">
+      <FormattedMessage {...messages.nothingFeatured} />
+    </div>
+  )
 }
 
 registerWidgetType(WithFeatured(FeaturedChallengesWidget), descriptor)

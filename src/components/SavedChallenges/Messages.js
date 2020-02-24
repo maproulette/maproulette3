@@ -8,8 +8,14 @@ export default defineMessages({
     id: "UserProfile.savedChallenges.header",
     defaultMessage: "Saved Challenges",
   },
+
   unsave: {
     id: "Challenge.controls.unsave.tooltip",
     defaultMessage: "Unsave Challenge",
-  }
+  },
+
+  noChallenges: {
+    id: "SavedChallenges.widget.noChallenges",
+    defaultMessage: "No Challenges",
+  },
 })

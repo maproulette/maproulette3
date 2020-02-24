@@ -30,8 +30,11 @@ export class LayerToggle extends Component {
 
     const layerListItems = _map(baseSources, layer => (
       <li key={layer.id}>
-        <button className={this.props.source.id === layer.id ? 'mr-text-green-lighter' : 'mr-text-current'}
-         onClick={() => this.props.changeLayer(layer.id)}
+        <button
+          className={
+            this.props.source.id === layer.id ? 'mr-text-current' : 'mr-text-green-lighter hover:mr-text-current'
+          }
+          onClick={() => this.props.changeLayer(layer.id)}
         >
           {layer.name}
         </button>
@@ -41,10 +44,13 @@ export class LayerToggle extends Component {
     const overlayToggles = _map(this.props.intersectingOverlays, layer => (
       <div key={layer.id} className="layer-toggle__option-controls">
         <div className="mr-flex mr-items-center" onClick={e => this.toggleOverlay(layer.id)}>
-          <input type="checkbox"
-                 checked={this.overlayVisible(layer.id)}
-                 onChange={_noop} />
-          <label className="mr-ml-3">{layer.name}</label>
+          <input
+            type="checkbox"
+            className="mr-checkbox-toggle"
+            checked={this.overlayVisible(layer.id)}
+            onChange={_noop}
+          />
+          <label className="mr-ml-3 mr-text-orange">{layer.name}</label>
         </div>
       </div>
     ))
@@ -69,20 +75,26 @@ export class LayerToggle extends Component {
             {overlayToggles}
             {this.props.toggleTaskFeatures &&
                 <div className="mr-my-4 mr-flex mr-items-center" onClick={this.props.toggleTaskFeatures}>
-                  <input type="checkbox"
+                  <input
+                    type="checkbox"
+                    className="mr-checkbox-toggle"
                     checked={this.props.showTaskFeatures}
                     onChange={_noop}
                   />
-                  <label className="mr-ml-3"><FormattedMessage {...messages.showTaskFeaturesLabel} /></label>
+                  <label className="mr-ml-3 mr-text-orange">
+                    <FormattedMessage {...messages.showTaskFeaturesLabel} />
+                  </label>
                 </div>
               }
               {this.props.toggleOSMData &&
                 <div className="mr-my-4 mr-flex mr-items-center" onClick={this.props.toggleOSMData}>
-                  <input type="checkbox"
-                        checked={this.props.showOSMData}
-                        onChange={_noop}
+                  <input
+                    type="checkbox"
+                    className="mr-checkbox-toggle"
+                    checked={this.props.showOSMData}
+                    onChange={_noop}
                   />
-                  <label className="mr-ml-3">
+                  <label className="mr-ml-3 mr-text-orange">
                     <FormattedMessage
                       {...messages.showOSMDataLabel}
                     /> {this.props.osmDataLoading && <FormattedMessage {...messages.loading} />}
@@ -91,11 +103,13 @@ export class LayerToggle extends Component {
               }
               {this.props.toggleMapillary &&
                 <div className="mr-my-4 mr-flex mr-items-center" onClick={e => this.props.toggleMapillary()}>
-                  <input type="checkbox"
-                        checked={this.props.showMapillary || false}
-                        onChange={_noop}
+                  <input
+                    type="checkbox"
+                    className="mr-checkbox-toggle"
+                    checked={this.props.showMapillary || false}
+                    onChange={_noop}
                   />
-                  <label className="mr-ml-3">
+                  <label className="mr-ml-3 mr-text-orange">
                     <FormattedMessage
                       {...messages.showMapillaryLabel}
                     /> {(this.props.showMapillary && !this.props.mapillaryLoading) &&

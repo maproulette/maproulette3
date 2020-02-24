@@ -43,14 +43,17 @@ export default class ConfigureColumnsModal extends Component {
                  {...provided.draggableProps}
                  {...provided.dragHandleProps}
                >
-                  <div className='mr-flex'>
-                    <div className='mr-flex-grow mr-text-base mr-text-grey mr-my-2'>
+                  <div className="mr-flex">
+                    <div className="mr-flex-grow mr-text-base mr-text-white mr-my-2">
                       {column.message}
                     </div>
 
                     {!column.permanent &&
-                      <div className="mr-text-sm mr-text-green mr-my-2">
-                        <button className="mr-text-current" onClick={() => this.props.removeColumn(key)}>
+                      <div className="mr-text-sm mr-text-green-lighter mr-my-2">
+                        <button
+                          className="mr-text-current"
+                          onClick={() => this.props.removeColumn(key)}
+                        >
                           <FormattedMessage {...messages.removeLabel} />
                         </button>
                       </div>
@@ -65,13 +68,16 @@ export default class ConfigureColumnsModal extends Component {
 
   render() {
     const availableColumns = _map(this.props.availableColumns, (column, key) =>
-      <li key={`available-${key}`} className='mr-flex mr-my-4'>
-        <div className='mr-flex-grow mr-text-base mr-text-grey'>
+      <li key={`available-${key}`} className="mr-flex mr-my-4">
+        <div className="mr-flex-grow mr-text-base mr-text-white">
           {column.message}
         </div>
 
-        <div className="mr-text-sm mr-text-green">
-          <button className="mr-text-current" onClick={() => this.props.addColumn(key)}>
+        <div className="mr-text-sm mr-text-green-lighter">
+          <button
+            className="mr-text-current"
+            onClick={() => this.props.addColumn(key)}
+          >
             <FormattedMessage {...messages.addLabel} />
           </button>
         </div>
@@ -81,13 +87,13 @@ export default class ConfigureColumnsModal extends Component {
     return (
       <External>
         <Modal isActive wide onClose={this.close}>
-          <div className="mr-overflow-y-auto">
+          <div className="mr-overflow-y-auto mr-cards-inverse">
             <h3 className="">
               <FormattedMessage {...messages.configureColumnsHeader} />
             </h3>
             <div className="md:mr-grid md:mr-grid-gap-2 md:mr-grid-columns-2">
-              <div className="mr-h-100 mr-mx-4 mr-bg-white mr-my-4 mr-p-4 mr-rounded">
-                <section className="mr-flex mr-flex-col mr-h-full mr-text-black">
+              <div className="mr-h-100 mr-mx-4 mr-bg-black-15 mr-my-4 mr-p-4 mr-rounded">
+                <section className="mr-flex mr-flex-col mr-h-full mr-text-white">
                   <header className="mr-card-widget__header">
                     <div className="mr-flex mr-items-center mr-justify-between">
                       <h2 className="mr-card-widget__title">
@@ -100,8 +106,8 @@ export default class ConfigureColumnsModal extends Component {
                   </div>
                 </section>
               </div>
-              <div className="mr-h-100 mr-mx-4 mr-bg-white mr-my-4 mr-p-4 mr-rounded">
-                <section className="mr-flex mr-flex-col mr-h-full mr-text-black">
+              <div className="mr-h-100 mr-mx-4 mr-bg-black-15 mr-my-4 mr-p-4 mr-rounded">
+                <section className="mr-flex mr-flex-col mr-h-full mr-text-white">
                   <header className="mr-card-widget__header">
                     <div className="mr-flex mr-items-center mr-justify-between">
                       <h2 className="mr-card-widget__title">
@@ -127,8 +133,10 @@ export default class ConfigureColumnsModal extends Component {
                 </section>
               </div>
             </div>
-            <div className="mr-text-right">
-              <button className="mr-button" onClick={this.close}>Done</button>
+            <div className="mr-flex mr-justify-end">
+              <button className="mr-button" onClick={this.close}>
+                <FormattedMessage {...messages.doneLabel} />
+              </button>
             </div>
           </div>
         </Modal>

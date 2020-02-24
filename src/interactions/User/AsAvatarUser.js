@@ -9,7 +9,9 @@ export class AsAvatarUser {
   }
 
   profilePic(size) {
-    return /user_no_image/.test(this.avatarURL) ? defaultPic : `${this.avatarURL}?s=${size}`
+    const urlParts = this.avatarURL.replace(/\?s=\d+/, '?').split('?')
+    return /user_no_image/.test(this.avatarURL) ? defaultPic :
+           `${urlParts[0]}?s=${size}&${urlParts.slice(1).join('?')}`
   }
 }
 

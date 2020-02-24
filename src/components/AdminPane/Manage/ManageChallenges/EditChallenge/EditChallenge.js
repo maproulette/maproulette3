@@ -624,13 +624,13 @@ export class EditChallenge extends Component {
                      (AsEditableChallenge(challengeData).isNew() ||
                       this.hasTaskStyleRuleErrors()) ? undefined : this.jumpToStep}
             />
-            <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+            <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
               {this.state.showTaskStyleRules &&
                 <External>
                   <Modal className=""
                          isActive wide
                          onClose={() => this.setState({showTaskStyleRules: false})}>
-                    <div className="mr-overflow-y-auto mr-max-h-screen80 mr-bg-white mr-m-2 mr-p-4">
+                    <div className="mr-overflow-y-auto mr-max-h-screen80 mr-bg-black-15 mr-m-2 mr-p-4">
                       <TaskPropertyStyleRules {...this.props}>
                         <button className="mr-button mr-button--green mr-mr-4"
                           onClick={() => {
@@ -669,7 +669,7 @@ export class EditChallenge extends Component {
               >
                 {this.hasTaskStyleRuleErrors() &&
                  challengeSteps[this.state.activeStep].name === "Extra" &&
-                  <div className="mr-text-red mr-mb-4">
+                  <div className="mr-text-red-light mr-mb-4">
                     <FormattedMessage {...messages.customTaskStylesError} />
                   </div>
                 }
@@ -692,39 +692,41 @@ function configureCustomTaskStyles(props, configureTaskStyleRules) {
     <React.Fragment>
       <label className="control-label">Task Property Styling</label>
       <div>
-        <div>
+        <div className="radio">
           <input
             type="radio"
             name="no-styles"
-            className="mr-mr-1"
+            className="mr-mr-1.5"
             checked={!props.formData}
             onChange={(e) => props.onChange(false)}
           />
-          <label className="mr-ml-1 mr-mr-4 mr-text-grey">
+          <label className="mr-mr-2 mr-text-grey-lighter">
             Default
           </label>
-
+        </div>
+        <div className="radio">
           <input
             type="radio"
             name="custom-styles"
-            className="mr-mr-1"
+            className="mr-mr-1.5"
             checked={!!props.formData}
             onChange={(e) => {
               props.onChange(true)
-              //this.setState({showTaskStyleRules: true})
             }}
           />
-          <label className="mr-ml-1 mr-text-grey">
+          <label className="mr-text-grey-lighter">
             Custom
           </label>
         </div>
         {!!props.formData &&
-          <button className="mr-mt-4 mr-button mr-button--small mr-button--grey"
-                  onClick={(e) => {
-                    configureTaskStyleRules()
-                    e.stopPropagation()
-                    e.preventDefault()
-                  }}>
+         <button
+           className="mr-ml-4 mr-button mr-button--small"
+           onClick={(e) => {
+              configureTaskStyleRules()
+              e.stopPropagation()
+              e.preventDefault()
+           }}
+         >
             <FormattedMessage {...messages.customTaskStyleButton} />
           </button>
         }

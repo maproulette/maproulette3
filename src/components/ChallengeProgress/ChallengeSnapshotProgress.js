@@ -29,7 +29,7 @@ export class ChallengeSnapshotProgress extends Component {
       <div className="">
         <ChallengeProgress {...this.props} />
         <div className="">
-          <div className="mr-my-4 mr-text-matisse-blue mr-text-lg mr-font-medium">
+          <div className="mr-my-4 mr-text-turquoise mr-text-lg mr-font-medium">
             <FormattedMessage {...messages.reviewStatusLabel} />
           </div>
           <ReviewStatusMetrics {...this.props} />

@@ -53,11 +53,11 @@ export class FilterByLocation extends Component {
         <span className="mr-mr-4 mr-text-xs mr-uppercase mr-text-white">
           <FormattedMessage {...messages.locationLabel} />:
         </span>
-        <span className="mr-flex mr-items-baseline">
+        <span>
           <input
             type="radio"
             name="intersectsMap"
-            className="mr-mr-1"
+            className="mr-radio mr-mr-1"
             checked={this.props.searchFilters.location === ChallengeLocation.intersectingMapBounds}
             onClick={() => this.updateFilter(ChallengeLocation.intersectingMapBounds)}
             onChange={_noop}
@@ -66,11 +66,11 @@ export class FilterByLocation extends Component {
             {localizedLocationLabels[ChallengeLocation.intersectingMapBounds]}
           </label>
         </span>
-        <span className="mr-flex mr-items-baseline">
+        <span>
           <input
             type="radio"
             name="intersectsMap"
-            className="mr-mr-1"
+            className="mr-radio mr-mr-1"
             checked={this.props.searchFilters.location !== ChallengeLocation.intersectingMapBounds}
             onClick={() => this.updateFilter(null)}
             onChange={_noop}

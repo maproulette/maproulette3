@@ -18,9 +18,11 @@ const descriptor = {
 export default class ChallengeTasksWidget extends Component {
   render() {
     return (
-      <QuickWidget {...this.props}
-                  className="ChallengeTasksWidget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}>
+      <QuickWidget
+        {...this.props}
+        className=""
+        widgetTitle={<FormattedMessage {...messages.title} />}
+      >
         <ViewChallengeTasks {...this.props} />
       </QuickWidget>
     )

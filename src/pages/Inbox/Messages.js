@@ -14,6 +14,11 @@ export default defineMessages({
     defaultMessage: "Refresh",
   },
 
+  groupByTaskLabel: {
+    id: "Inbox.controls.groupByTask.label",
+    defaultMessage: "Group by Task",
+  },
+
   manageSubscriptionsLabel: {
     id: "Inbox.controls.manageSubscriptions.label",
     defaultMessage: "Manage Subscriptions",

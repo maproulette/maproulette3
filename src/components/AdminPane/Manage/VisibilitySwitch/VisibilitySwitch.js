@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _isEmpty from 'lodash/isEmpty'
 import WithChallengeManagement
        from '../../HOCs/WithChallengeManagement/WithChallengeManagement'
 
@@ -18,7 +19,7 @@ export class VisibilitySwitch extends Component {
   }
 
   render() {
-    if (!this.props.challenge) {
+    if (_isEmpty(this.props.challenge)) {
       return null
     }
 
