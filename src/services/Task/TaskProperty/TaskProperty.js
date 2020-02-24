@@ -12,6 +12,8 @@ export const TASK_PROPERTY_SEARCH_TYPE_NOT_EQUAL = "not_equal"
 export const TASK_PRIORITY_SEARCH_TYPE_CONTAINS = "contains"
 export const TASK_PRIORITY_SEARCH_TYPE_GREATER_THAN = "greater_than"
 export const TASK_PRIORITY_SEARCH_TYPE_LESS_THAN = "less_than"
+export const TASK_PRIORITY_SEARCH_TYPE_EXISTS = "exists"
+export const TASK_PRIORITY_SEARCH_TYPE_MISSING = "missing"
 
 export const TASK_PROPERTY_OPERATION_TYPE_AND = "and"
 export const TASK_PROPERTY_OPERATION_TYPE_OR = "or"
@@ -20,6 +22,8 @@ export const TaskPropertySearchTypeString = Object.freeze({
   equals: TASK_PROPERTY_SEARCH_TYPE_EQUALS,
   notEqual: TASK_PROPERTY_SEARCH_TYPE_NOT_EQUAL,
   contains: TASK_PRIORITY_SEARCH_TYPE_CONTAINS,
+  exists: TASK_PRIORITY_SEARCH_TYPE_EXISTS,
+  missing: TASK_PRIORITY_SEARCH_TYPE_MISSING,
 })
 
 export const TaskPropertySearchTypeNumber = Object.freeze({

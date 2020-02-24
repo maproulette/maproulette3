@@ -4,20 +4,28 @@ import _trim from 'lodash/trim'
 import _isString from 'lodash/isString'
 import _isUndefined from 'lodash/isUndefined'
 
+import {TaskPropertySearchTypeString,
+        TaskPropertySearchTypeNumber,
+        TaskPropertyOperationType} from
+       '../../services/Task/TaskProperty/TaskProperty'
+
 // value types (data types)
 const STRING = "string"
 const NUMBER = "number"
 
 // operation types (boolean operators)
-const AND = "and"
-const OR = "or"
+const AND = TaskPropertyOperationType.and
+const OR = TaskPropertyOperationType.or
 
 // search types (comparison operators)
-const EQUALS = "equals"
-const NOT_EQUAL = "not_equal"
-const CONTAINS = "contains"
-const GREATER_THAN = "greater_than"
-const LESS_THAN = "less_than"
+const EQUALS = TaskPropertySearchTypeString.equals
+const NOT_EQUAL = TaskPropertySearchTypeString.notEqual
+const CONTAINS = TaskPropertySearchTypeString.contains
+const EXISTS = TaskPropertySearchTypeString.exists
+const MISSING = TaskPropertySearchTypeString.missing
+const GREATER_THAN = TaskPropertySearchTypeNumber.greaterThan
+const LESS_THAN = TaskPropertySearchTypeNumber.lessThan
+
 
 /**
  * AsFilterableFeature adds functionality for determining if a feature matches
@@ -49,6 +57,9 @@ export class AsFilterableFeature {
       }
     }
 
+    console.log("Matches property filter?")
+    console.log(rules.valueType.toLowerCase())
+
     // Otherwise evaluate the filter based on the value type (data type)
     switch (rules.valueType.toLowerCase()) {
       case STRING:
@@ -64,8 +75,11 @@ export class AsFilterableFeature {
    * Determine if these properties match the given string type filter
    */
   matchesStringFilter(rule) {
-    if (!_isString(rule.value)) {
-      return false
+    if (rule.searchType.toLowerCase() !== TaskPropertySearchTypeString.exists &&
+        rule.searchType.toLowerCase() !== TaskPropertySearchTypeString.missing) {
+      if (!_isString(rule.value)) {
+        return false
+      }
     }
 
     // searchType represents the comparison operation to perform
@@ -75,9 +89,13 @@ export class AsFilterableFeature {
       case CONTAINS:
         return _isString(this.properties[rule.key]) &&
                rule.value.length > 0 &&
-               this.properties[rule.key].includes(rule.value) 
+               this.properties[rule.key].includes(rule.value)
       case NOT_EQUAL:
         return this.properties[rule.key] !== rule.value
+      case EXISTS:
+        return this.properties[rule.key]
+      case MISSING:
+        return !this.properties[rule.key]
       default:
         throw new Error(`Unsupported string operator: ${rule.searchType}`)
     }
@@ -85,7 +103,7 @@ export class AsFilterableFeature {
 
   /**
    * Determine if these properties match the given number type filter
-   */
+s   */
   matchesNumberFilter(rule) {
     // No empty rule values allowed for numeric comparison
     if (_trim(rule.value) === "") {

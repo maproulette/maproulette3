@@ -102,9 +102,18 @@ export const preparePropertyRulesForSaving = rule => {
     return buildOrValues(rule.key, values, rule.valueType, rule.operator)
   }
 
+  /// Assign value if appropriate
+  let value = null
+  if (!rule.left) {
+    if (rule.operator !== TaskPropertySearchTypeString.exists &&
+        rule.operator !== TaskPropertySearchTypeString.missing) {
+      value = _get(rule.value, 'length', 0) < 1 ? null : rule.value[0]
+    }
+  }
+
   return {
     key: rule.left ? null : rule.key,
-    value: rule.left ? null : (_get(rule.value, 'length', 0) < 1 ? null : rule.value[0]),
+    value: value,
     valueType: rule.left ? null : rule.valueType,
     searchType: rule.left ? null : rule.operator,
     operationType: rule.left ? rule.condition : null,
@@ -159,9 +168,12 @@ export const preparePropertyRulesForForm = data => {
     }
   }
 
+  const value = (data.searchType === TaskPropertySearchTypeString.exists ||
+                 data.searchType === TaskPropertySearchTypeString.missing) ?
+                 [""] : (data.value ? [data.value] : [""])
   return {
     key: data.key ? data.key : undefined,
-    value: data.value ? [data.value] : [""],
+    value: value,
     valueType: data.valueType ? data.valueType : (data.left ? "compound rule" : undefined),
     operator: data.searchType ? data.searchType : undefined,
     condition: data.operationType ? data.operationType : undefined,
@@ -211,7 +223,9 @@ export const validatePropertyRules = (rule, errors=[]) => {
           errors.push(PROPERTY_RULE_ERRORS.missingKey)
         }
 
-        if (!rule.value) {
+        if (!rule.value &&
+             rule.searchType !== TaskPropertySearchTypeString.exists &&
+             rule.searchType !== TaskPropertySearchTypeString.missing) {
           errors.push(PROPERTY_RULE_ERRORS.missingValue)
         }
 

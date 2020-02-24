@@ -88,13 +88,6 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     enumNames: searchTypeStringMessages,
                     default: "equals",
                   },
-                  value: {
-                    title: "Value",
-                    type: "array",
-                    items: {
-                      type: "string"
-                    },
-                  },
                 },
               },
               { // numeric values
@@ -119,7 +112,32 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                 },
               }
             ]
-          }
+          },
+          operator: {
+            oneOf: [
+              {
+                properties: {
+                  operator: {
+                    enum: ["equals", "not_equal", "contains"],
+                  },
+                  value: {
+                    title: "Value",
+                    type: "array",
+                    items: {
+                      type: "string"
+                    },
+                  }
+                }
+              },
+              {
+                properties: {
+                  operator: {
+                    enum: ["exists", "missing"],
+                  }
+                }
+              },
+            ],
+          },          
         },
       }
     },
