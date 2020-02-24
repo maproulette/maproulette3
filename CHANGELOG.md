@@ -7,6 +7,13 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.5.6] - 2020-02-24
+### Fixed
+- Trouble adding new managers to projects (#1122)
+- Tags added to a task bundle sometimes not applied to all tasks
+- Visual bug with task-status change confirmation in Create & Manage
+
+
 ## [v3.5.5] - 2020-02-19
 ### Added
 - Featured projects
