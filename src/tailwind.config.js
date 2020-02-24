@@ -293,6 +293,7 @@ module.exports = {
       full: '100%',
       screen: '100vh',
       '48': '12rem',
+      '100': '25rem',
       '120': '30rem',
       'screen-50': '50vh',
       'content-no-filters': 'calc(100vh - 103px)',
