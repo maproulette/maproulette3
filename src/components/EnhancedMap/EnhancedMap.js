@@ -5,6 +5,7 @@ import { Map } from 'react-leaflet'
 import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
+import _isFunction from 'lodash/isFunction'
 import AsSimpleStyleableFeature
        from '../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import PropertyList from './PropertyList/PropertyList'
@@ -135,9 +136,9 @@ export default class EnhancedMap extends Map {
             }
           }
 
-          // Support [simplestyle](https://github.com/mapbox/simplestyle-spec)
-          if (this.props.conditionalStyles) {
-            AsSimpleStyleableFeature(feature).styleLeafletLayerConditionally(layer, this.props.conditionalStyles)
+          // Support custom layer styling
+          if (_isFunction(feature.styleLeafletLayer)) {
+            feature.styleLeafletLayer(layer)
           }
           else {
             AsSimpleStyleableFeature(feature).styleLeafletLayer(layer)
