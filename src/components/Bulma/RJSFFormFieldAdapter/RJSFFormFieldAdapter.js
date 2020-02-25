@@ -211,7 +211,7 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
         return (
           <div
             className={
-              dropAreaClassName ? dropAreaClassName : "dropzone mr-text-grey mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
+              dropAreaClassName ? dropAreaClassName : "dropzone mr-text-grey-lighter mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
             }
             {...getRootProps()}
           >

@@ -104,12 +104,6 @@
 .field-description,
 .help-block {
   @apply mr-block mr-text-sm mr-text-grey-lighter mr-pt-2;
-
-  .mr-markdown {
-    p {
-      margin-bottom: 1em;
-    }
-  }
 }
 
 .help-block {
@@ -175,6 +169,10 @@
       margin-top: 0.1875rem;
       margin-left: 0.1875rem;
     }
+  }
+
+  &:hover {
+    color: inherit;
   }
 }
 
