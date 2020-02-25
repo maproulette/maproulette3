@@ -105,7 +105,7 @@ h4,
   ol,
   ul,
   pre {
-    @apply mr-my-2;
+    @apply mr-my-4;
   }
 
   code {
