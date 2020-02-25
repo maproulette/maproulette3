@@ -11,6 +11,8 @@ import { jsSchema, uiSchema, ArrayFieldTemplate } from './TaskPropertiesSchema'
 import { preparePropertyRulesForSaving,
          preparePropertyRulesForForm,
          validatePropertyRules } from './TaskPropertyRules'
+import { TaskPropertySearchTypeString }
+       from '../../services/Task/TaskProperty/TaskProperty'
 import messages from './Messages'
 import './TaskPropertiesSchema.scss'
 
@@ -67,6 +69,7 @@ export class TaskPropertyQueryBuilder extends Component {
         }
         if (data.valueType && data.valueType !== "compound rule") {
           data.value = data.value || [""]
+          data.operator = data.operator || "equals"
         }
       }
     }
@@ -146,6 +149,29 @@ export class TaskPropertyQueryBuilder extends Component {
 
   render() {
     const data = this.state.formData || this.props.taskPropertyStyleRules
+
+    // We have to clear out any values defined if the operator is "exists" or
+    // "missing" otherwise the schema for will erroneously show the
+    // "comma separate values" checkbox
+    if (_get(data, 'propertyRules.rootRule')) {
+      const clearOutValues = (rule) => {
+        if (rule.valueType === "compound rule") {
+          rule.value = undefined
+        }
+        else if (rule.operator === TaskPropertySearchTypeString.missing ||
+                 rule.operator === TaskPropertySearchTypeString.exists) {
+          rule.value = undefined
+        }
+        if (rule.left) {
+          clearOutValues(rule.left)
+        }
+        if (rule.right) {
+          clearOutValues(rule.right)
+        }
+      }
+
+      clearOutValues(data.propertyRules.rootRule)
+    }
 
     return (
       <div className="task-properties-form mr-w-full mr-pt-4">

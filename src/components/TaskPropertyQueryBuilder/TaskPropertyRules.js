@@ -1,5 +1,6 @@
 import { TaskPropertySearchTypeNumber,
-         TaskPropertySearchTypeString }
+         TaskPropertySearchTypeString,
+         TaskPropertyOperationType }
          from '../../services/Task/TaskProperty/TaskProperty'
 import _values from 'lodash/values'
 import _slice from 'lodash/slice'
@@ -56,50 +57,69 @@ export const preparePropertyRulesForSaving = rule => {
   // don't get populated if the user doesn't change their selection, so we
   // set the defaults here if needed
   if (!rule.operator) {
-    rule.operator = "equals"
+    rule.operator = TaskPropertySearchTypeString.equals
   }
 
   if (!rule.condition) {
-    rule.condition = "and"
+    rule.condition = TaskPropertyOperationType.and
   }
 
   // Reset to default valid search type
   if (rule.valueType === "number" &&
       !_values(TaskPropertySearchTypeNumber).find(o => o === rule.operator)) {
-    rule.operator = "equals"
+    rule.operator = TaskPropertySearchTypeNumber.equals
   }
   else if (rule.valueType === "string" &&
            !_values(TaskPropertySearchTypeString).find(o => o === rule.operator)) {
-    rule.operator = "equals"
+    rule.operator = TaskPropertySearchTypeString.equals
   }
 
   const values = _filter(rule.value, (v) => v !== undefined)
-  if (!rule.left && rule.value && values.length > 1) {
+  if (!rule.left && rule.value && values.length > 0) {
     // We have multiple value so we need to build our own compound rule.
-    const buildOrValues = (key, value, valueType, searchType) => {
+    const buildOrValues = (key, value, valueType, searchType, commaSeparate) => {
       if (value.length === 1) {
-        return {
-          key: key,
-          value: value[0],
-          valueType: valueType,
-          searchType: searchType,
-          operationType: null,
-          left: null,
-          right: null
+        // Comma Separate Value into multiple "or" conditions
+        if (commaSeparate && value[0].indexOf(",") > 0) {
+          return {
+            commaSeparate: commaSeparate,
+            key: null,
+            value: null,
+            valueType: null,
+            searchType: null,
+            operationType: TaskPropertyOperationType.or, // OR values together
+            left: buildOrValues(key, [value[0].substring(0, value[0].indexOf(","))], valueType, searchType, commaSeparate),
+            right: buildOrValues(key, [value[0].slice(value[0].indexOf(",") + 1)], valueType, searchType, commaSeparate)
+          }
+        }
+        // Just handle as single value
+        else {
+          return {
+            commaSeparate: commaSeparate,
+            key: key,
+            value: value[0],
+            valueType: valueType,
+            searchType: searchType,
+            operationType: null,
+            left: null,
+            right: null
+          }
         }
       }
+
+      // Assign first value to left and build right rules with everything else
       return {
         key: null,
         value: null,
         valueType: null,
         searchType: null,
-        operationType: "or", // OR values together
-        left: buildOrValues(key, _slice(value, 0, 1), valueType, searchType),
-        right: buildOrValues(key, _slice(value, 1), valueType, searchType)
+        operationType: TaskPropertyOperationType.or, // OR values together
+        left: buildOrValues(key, _slice(value, 0, 1), valueType, searchType, false),
+        right: buildOrValues(key, _slice(value, 1), valueType, searchType, false)
       }
     }
 
-    return buildOrValues(rule.key, values, rule.valueType, rule.operator)
+    return buildOrValues(rule.key, values, rule.valueType, rule.operator, rule.commaSeparate)
   }
 
   /// Assign value if appropriate
@@ -112,6 +132,7 @@ export const preparePropertyRulesForSaving = rule => {
   }
 
   return {
+    commaSeparate: rule.commaSeparate,
     key: rule.left ? null : rule.key,
     value: value,
     valueType: rule.left ? null : rule.valueType,
@@ -140,10 +161,16 @@ export const preparePropertyRulesForForm = data => {
 
   if (!data.key && data.left && data.right) {
     const compactKey = (rule, values) => {
-      if (rule.operationType === "or") {
+      if (rule.operationType === TaskPropertyOperationType.or) {
         if (_get(rule, 'left.key') === _get(rule, 'right.key')) {
-          values.push(rule.left.value)
-          values.push(rule.right.value)
+          if (rule.commaSeparate) {
+            values[0] = values[0] ? (values[0] + ",") : ""
+            values[0] = values[0] + rule.left.value + "," + rule.right.value
+          }
+          else {
+            values.push(rule.left.value)
+            values.push(rule.right.value)
+          }
           return rule.left.key
         }
 
@@ -160,6 +187,7 @@ export const preparePropertyRulesForForm = data => {
     const compactedKey = compactKey(data, compactedValues)
     if (compactedKey !== null && compactedKey !== undefined) {
       return {
+        commaSeparate: data.commaSeparate,
         key: compactedKey,
         value: compactedValues,
         valueType: data.left.valueType,
@@ -224,8 +252,8 @@ export const validatePropertyRules = (rule, errors=[]) => {
         }
 
         if (!rule.value &&
-             rule.searchType !== TaskPropertySearchTypeString.exists &&
-             rule.searchType !== TaskPropertySearchTypeString.missing) {
+             rule.operator !== TaskPropertySearchTypeString.exists &&
+             rule.operator !== TaskPropertySearchTypeString.missing) {
           errors.push(PROPERTY_RULE_ERRORS.missingValue)
         }
 

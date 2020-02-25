@@ -86,7 +86,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeString),
                     enumNames: searchTypeStringMessages,
-                    default: "equals",
+                    default: TaskPropertySearchTypeString.equals,
                   },
                 },
               },
@@ -100,7 +100,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeNumber),
                     enumNames: ["=", "≠", ">", "<"],
-                    default: "equals",
+                    default: TaskPropertySearchTypeNumber.equals,
                   },
                   value: {
                     title: "Value",
@@ -118,7 +118,9 @@ export const jsSchema = (intl, taskPropertyKeys) => {
               {
                 properties: {
                   operator: {
-                    enum: ["equals", "not_equal", "contains"],
+                    enum: [TaskPropertySearchTypeString.equals,
+                           TaskPropertySearchTypeString.notEqual,
+                           TaskPropertySearchTypeString.contains],
                   },
                   value: {
                     title: "Value",
@@ -126,18 +128,42 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     items: {
                       type: "string"
                     },
-                  }
+                  },
                 }
               },
               {
                 properties: {
                   operator: {
-                    enum: ["exists", "missing"],
-                  }
+                    enum: [TaskPropertySearchTypeString.exists,
+                           TaskPropertySearchTypeString.missing],
+                  },
                 }
               },
             ],
-          },          
+          },
+          value: {
+            oneOf: [
+              {
+                properties: {
+                  value: {
+                    minItems: 2,
+                  },
+                }
+              },
+              {
+                properties: {
+                  value: {
+                    maxItems: 1,
+                  },
+                  commaSeparate: {
+                    title: intl.formatMessage(messages.commaSeparateValues),
+                    type: "boolean",
+                    default: false,
+                  },
+                },
+              }
+            ]
+          }
         },
       }
     },
@@ -201,6 +227,10 @@ function buildUISchema(deepness, taskPropertyKeys) {
     value: {
       classNames: "inline-selector mr-inline",
       "ui:options": { inline: true, label: false, orderable: false },
+    },
+    commaSeparate: {
+      classNames: "inline-selector mr-inline",
+      "ui:options": { inline: true, },
     },
     left: buildUISchema(deepness - 1),
     right: buildUISchema(deepness - 1),

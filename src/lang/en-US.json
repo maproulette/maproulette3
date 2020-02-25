@@ -782,6 +782,7 @@
   "TaskPropertyQueryBuilder.propertyType.compoundRuleType": "compound rule",
   "TaskPropertyQueryBuilder.error.missingStyleValue": "You must enter a style value.",
   "TaskPropertyQueryBuilder.error.missingStyleName": "You must choose a style name.",
+  "TaskPropertyQueryBuilder.commaSeparateValues.label": "Comma separate values",
   "ActiveTask.subheading.status": "Existing Status",
   "ActiveTask.controls.status.tooltip": "Existing Status",
   "ActiveTask.controls.viewChangset.label": "View Changeset",

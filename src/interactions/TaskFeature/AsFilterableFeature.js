@@ -13,20 +13,6 @@ import {TaskPropertySearchTypeString,
 const STRING = "string"
 const NUMBER = "number"
 
-// operation types (boolean operators)
-const AND = TaskPropertyOperationType.and
-const OR = TaskPropertyOperationType.or
-
-// search types (comparison operators)
-const EQUALS = TaskPropertySearchTypeString.equals
-const NOT_EQUAL = TaskPropertySearchTypeString.notEqual
-const CONTAINS = TaskPropertySearchTypeString.contains
-const EXISTS = TaskPropertySearchTypeString.exists
-const MISSING = TaskPropertySearchTypeString.missing
-const GREATER_THAN = TaskPropertySearchTypeNumber.greaterThan
-const LESS_THAN = TaskPropertySearchTypeNumber.lessThan
-
-
 /**
  * AsFilterableFeature adds functionality for determining if a feature matches
  * filter rules
@@ -48,17 +34,14 @@ export class AsFilterableFeature {
     // the results of two sets of rules, a left and right
     if (rules.operationType) {
       switch (rules.operationType.toLowerCase()) {
-        case AND:
+        case TaskPropertyOperationType.and:
           return this.matchesPropertyFilter(rules.left) && this.matchesPropertyFilter(rules.right)
-        case OR:
+        case TaskPropertyOperationType.or:
           return this.matchesPropertyFilter(rules.left) || this.matchesPropertyFilter(rules.right)
         default:
           throw new Error(`Unrecognized filter rule operation type: ${rules.operationType}`)
       }
     }
-
-    console.log("Matches property filter?")
-    console.log(rules.valueType.toLowerCase())
 
     // Otherwise evaluate the filter based on the value type (data type)
     switch (rules.valueType.toLowerCase()) {
@@ -84,17 +67,17 @@ export class AsFilterableFeature {
 
     // searchType represents the comparison operation to perform
     switch (rule.searchType.toLowerCase()) {
-      case EQUALS:
+      case TaskPropertySearchTypeString.equals:
         return this.properties[rule.key] === rule.value
-      case CONTAINS:
+      case TaskPropertySearchTypeString.contains:
         return _isString(this.properties[rule.key]) &&
                rule.value.length > 0 &&
                this.properties[rule.key].includes(rule.value)
-      case NOT_EQUAL:
+      case TaskPropertySearchTypeString.notEqual:
         return this.properties[rule.key] !== rule.value
-      case EXISTS:
+      case TaskPropertySearchTypeString.exists:
         return this.properties[rule.key]
-      case MISSING:
+      case TaskPropertySearchTypeString.missing:
         return !this.properties[rule.key]
       default:
         throw new Error(`Unsupported string operator: ${rule.searchType}`)
@@ -116,7 +99,7 @@ s   */
         this.properties[rule.key] === null ||
         _trim(this.properties[rule.key]) === "") {
 
-      return rule.searchType.toLowerCase() === NOT_EQUAL
+      return rule.searchType.toLowerCase() === TaskPropertySearchTypeString.notEqual
     }
 
     // Make sure we're dealing with finite numbers
@@ -132,13 +115,13 @@ s   */
 
     // searchType represents the comparison operation to perform
     switch (rule.searchType.toLowerCase()) {
-      case EQUALS:
+      case TaskPropertySearchTypeNumber.equals:
         return propertyValue === ruleValue
-      case NOT_EQUAL:
+      case TaskPropertySearchTypeNumber.notEquals:
         return propertyValue !== ruleValue
-      case GREATER_THAN:
+      case  TaskPropertySearchTypeNumber.greaterThan:
         return propertyValue > ruleValue
-      case LESS_THAN:
+      case  TaskPropertySearchTypeNumber.lessThan:
         return propertyValue < ruleValue
       default:
         throw new Error(`Unsupported numeric operator: ${rule.searchType}`)

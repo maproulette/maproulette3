@@ -78,4 +78,9 @@ export default defineMessages({
     id: "TaskPropertyQueryBuilder.error.missingStyleName",
     defaultMessage: "You must choose a style name.",
   },
+
+  commaSeparateValues: {
+    id: "TaskPropertyQueryBuilder.commaSeparateValues.label",
+    defaultMessage: "Comma separate values",
+  },
 })
