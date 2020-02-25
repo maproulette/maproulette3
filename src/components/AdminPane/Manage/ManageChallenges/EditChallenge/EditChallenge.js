@@ -624,11 +624,12 @@ export class EditChallenge extends Component {
                      (AsEditableChallenge(challengeData).isNew() ||
                       this.hasTaskStyleRuleErrors()) ? undefined : this.jumpToStep}
             />
-            <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+
+            <div className="mr-max-w-3xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
               {this.state.showTaskStyleRules &&
                 <External>
                   <Modal className=""
-                         isActive wide
+                         isActive extraWide
                          onClose={() => this.setState({showTaskStyleRules: false})}>
                     <div className="mr-overflow-y-auto mr-max-h-screen80 mr-bg-black-15 mr-m-2 mr-p-4">
                       <TaskPropertyStyleRules {...this.props}>

@@ -8,13 +8,25 @@ export default defineMessages({
     id: "Task.property.searchType.equals",
     defaultMessage: "equals"
   },
+
   notEqual: {
     id: "Task.property.searchType.notEqual",
     defaultMessage: "doesn't equal"
   },
+
   contains: {
     id: "Task.property.searchType.contains",
     defaultMessage: "contains"
+  },
+
+  exists: {
+    id: "Task.property.searchType.exists",
+    defaultMessage: "exists"
+  },
+
+  missing: {
+    id: "Task.property.searchType.missing",
+    defaultMessage: "missing"
   },
 
   and: {
