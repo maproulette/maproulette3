@@ -25,10 +25,16 @@ export default class GeographicIndexingNotice extends Component {
     }
 
     return (
-      <div className="admin__manage__challenge-dashboard__indexing-notice notification">
-        <SvgSymbol sym='hourglass-icon' className='icon' viewBox='0 0 20 20' />
-        <FormattedMessage {...messages.geographicIndexingNotice}
-                          values={{delay: reindexingDelay}} />
+      <div className="mr-flex mr-text-mango mr-text-base mr-mb-8">
+        <SvgSymbol
+          sym="hourglass-icon"
+          className="mr-fill-mango mr-w-16 mr-w-16 mr-mr-4"
+          viewBox="0 0 20 20"
+        />
+        <FormattedMessage
+          {...messages.geographicIndexingNotice}
+          values={{delay: reindexingDelay}}
+        />
       </div>
     )
   }

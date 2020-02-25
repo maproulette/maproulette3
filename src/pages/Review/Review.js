@@ -81,22 +81,42 @@ export class ReviewTasksDashboard extends Component {
     const reviewerTabs =
       <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex">
         <li>
-          <button className={classNames(this.state.showType === 'tasksToBeReviewed' ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.toBeReviewed})}>
+          <button
+            className={classNames(
+              this.state.showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter"
+            )}
+            onClick={() => this.setState({showType: ReviewTasksType.toBeReviewed})}
+          >
             {this.props.intl.formatMessage(messages.tasksToBeReviewed)}
           </button>
         </li>
         <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
-          <button className={classNames(this.state.showType === ReviewTasksType.reviewedByMe ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}>
+          <button
+            className={classNames(
+              this.state.showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter"
+            )}
+            onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}
+          >
             {this.props.intl.formatMessage(messages.tasksReviewedByMe)}
           </button>
         </li>
         <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
-          <button className={classNames(this.state.showType === ReviewTasksType.myReviewedTasks ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})}>
+          <button
+            className={classNames(
+              this.state.showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter"
+            )}
+            onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})}
+          >
             {this.props.intl.formatMessage(messages.myReviewTasks)}
           </button>
         </li>
         <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
-          <button className={classNames(this.state.showType === ReviewTasksType.allReviewedTasks ? "mr-text-green-lighter" : "mr-text-current")} onClick={() => this.setState({showType: ReviewTasksType.allReviewedTasks})}>
+          <button
+            className={classNames(
+              this.state.showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter"
+            )}
+            onClick={() => this.setState({showType: ReviewTasksType.allReviewedTasks})}
+          >
             {this.props.intl.formatMessage(messages.allReviewedTasks)}
           </button>
         </li>

@@ -32,13 +32,13 @@ export const TaskStatus = Object.freeze({
 export const keysByStatus = Object.freeze(_invert(TaskStatus))
 
 export const TaskStatusColors = Object.freeze({
-  [TaskStatus.fixed]: colors['green-light'],
-  [TaskStatus.alreadyFixed]: colors['teal'],
+  [TaskStatus.fixed]: colors['blue-viking'],
+  [TaskStatus.alreadyFixed]: colors['yellow-sand'],
   [TaskStatus.falsePositive]: colors['mango'],
   [TaskStatus.skipped]: colors['pink'],
   [TaskStatus.tooHard]: colors['red-light'],
-  [TaskStatus.created]: colors['matisse-blue'],
-  [TaskStatus.disabled]: colors['purple'],
+  [TaskStatus.created]: colors['purple'],
+  [TaskStatus.disabled]: colors['wild-strawberry'],
   [TaskStatus.deleted]: colors['grey'],
 })
 

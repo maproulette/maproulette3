@@ -45,7 +45,13 @@ const theme = (lightMode = false) => {
         stroke: "#555555"
       }
     },
-    tooltip: {container: {color: colors.black, background: colors.white}}
+    tooltip: {
+      container: {
+        color: lightMode ? colors.black : colors.white,
+        background: lightMode ? colors.white : colors.black,
+        stroke: colors.white,
+      }
+    }
   }
 }
 
@@ -94,18 +100,39 @@ export class ChallengeProgress extends Component {
               {_map(stats, (stat, index2) => (
                 <li className="mr-flex mr-items-center" key={index1 + "-" + index2}>
                   <span
-                    className={classNames("mr-text-lg mr-min-w-8 mr-text-right",
-                                          this.props.lightMode ? "mr-text-pink" : "mr-text-yellow")}
+                    className="mr-text-lg mr-min-w-8 mr-text-right mr-text-pink"
                   >
-                    {isNaN(stat[1].percent) ? '--' :
-                     /* eslint-disable-next-line react/style-prop-object */
-                     <FormattedNumber style="percent" value={stat[1].percent / 100} />
+                    {this.props.prominentCounts ?
+                     <React.Fragment>
+                       {stat[1].count >= 0 ? stat[1].count : '--'}
+                     </React.Fragment> :
+                     <React.Fragment>
+                       {isNaN(stat[1].percent) ? '--' :
+                       /* eslint-disable-next-line react/style-prop-object */
+                       <FormattedNumber style="percent" value={stat[1].percent / 100} />
+                       }
+                     </React.Fragment>
                     }
                   </span>
-                  <span className="mr-ml-2 mr-uppercase">
+                  <span
+                    className={classNames(
+                      "mr-ml-2",
+                      this.props.prominentCounts ? "mr-text-lg" : "mr-uppercase"
+                    )}
+                  >
                     {stat[0]}{' '}
-                    <span className="mr-text-xs">
-                      ({stat[1].count >= 0 ? stat[1].count : '--'}/{taskActions.total >= 0 ? taskActions.total : '--'})
+                    <span className={this.props.prominentCounts ? "mr-text-base" : "mr-text-xs"}>
+                      {this.props.prominentCounts ?
+                       <React.Fragment>
+                         ({isNaN(stat[1].percent) ? '--' :
+                         /* eslint-disable-next-line react/style-prop-object */
+                         <FormattedNumber style="percent" value={stat[1].percent / 100} />
+                         })
+                       </React.Fragment> :
+                       <React.Fragment>
+                        ({stat[1].count >= 0 ? stat[1].count : '--'}/{taskActions.total >= 0 ? taskActions.total : '--'})
+                       </React.Fragment>
+                      }
                     </span>
                   </span>
                 </li>
@@ -145,8 +172,11 @@ export class ChallengeProgress extends Component {
                       theme={theme(this.props.lightMode)}
         />
         {taskActions.total > 0 && taskActions.available === 0 &&
-          <SvgSymbol sym='check-icon' viewBox='0 0 20 20'
-                    className="challenge-task-progress__completed-indicator" />
+         <SvgSymbol
+           sym='check-icon'
+           viewBox='0 0 20 20'
+           className="challenge-task-progress__completed-indicator"
+         />
         }
       </div>
     )

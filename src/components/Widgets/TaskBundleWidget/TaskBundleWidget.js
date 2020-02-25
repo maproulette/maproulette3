@@ -189,7 +189,7 @@ const ActiveBundle = props => {
   }
 
   return (
-    <div className="mr-bg-white mr-p-4 mr-h-full mr-rounded">
+    <div className="mr-p-4 mr-h-full mr-rounded">
       <div className="mr-flex mr-justify-between mr-content-center mr-mb-8">
         <h3 className="mr-text-lg mr-text-blue">
           <FormattedMessage
@@ -199,7 +199,7 @@ const ActiveBundle = props => {
         </h3>
         {!props.taskReadOnly && !props.disallowBundleChanges &&
           <button
-            className="mr-button mr-button--green mr-button--small"
+            className="mr-button mr-button--green-lighter mr-button--small"
             onClick={() => {
               props.unbundleTasks()
             }}
@@ -269,7 +269,7 @@ const BuildBundle = props => {
 
   const bundleButton = selectedTasks.size > 1 ? (
     <button
-      className="mr-button mr-button--green mr-button--small"
+      className="mr-button mr-button--green-lighter mr-button--small"
       onClick={props.bundleTasks}
     >
       <FormattedMessage {...messages.bundleTasksLabel} />
@@ -301,10 +301,10 @@ const BuildBundle = props => {
     />
 
   return (
-    <div className="mr-bg-white mr-pb-2 mr-h-full mr-rounded">
+    <div className="mr-pb-2 mr-h-full mr-rounded">
       <div className="mr-h-2/5 mr-max-h-100">
         {props.loading ?
-          <BusySpinner lightMode className="mr-h-full mr-flex mr-items-center" /> :
+          <BusySpinner className="mr-h-full mr-flex mr-items-center" /> :
           <MapPane showLasso>{map}</MapPane>
         }
       </div>

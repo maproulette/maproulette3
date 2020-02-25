@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage, FormattedDate } from 'react-intl'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import parse from 'date-fns/parse'
 import { ChallengeStatus, messagesByStatus }
        from  '../../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
@@ -24,6 +25,10 @@ const descriptor = {
 
 export default class ChallengeOverviewWidget extends Component {
   render() {
+    if (_isEmpty(this.props.challenge)) {
+      return null
+    }
+
     const manager = AsManager(this.props.user)
     const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
 
@@ -36,82 +41,95 @@ export default class ChallengeOverviewWidget extends Component {
       <QuickWidget {...this.props}
                   className="challenge-overview-widget"
                   widgetTitle={<FormattedMessage {...messages.title} />}>
-        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-2">
-          <div>
-            <FormattedMessage {...messages.status} />
+        <div className="mr-text-base mr-mt-4">
+          <div className="mr-flex mr-items-center">
+            <div className="mr-text-yellow mr-mr-2">
+              <FormattedMessage {...messages.status} />
+            </div>
+
+            <div>
+              <FormattedMessage {...messagesByStatus[status]} />
+            </div>
           </div>
 
-          <div>
-            <FormattedMessage {...messagesByStatus[status]} />
-          </div>
+          <div className="mr-flex mr-items-center">
+            <div className="mr-text-yellow mr-mr-2">
+              <FormattedMessage {...messages.visibleLabel} />
+            </div>
 
-          <div className="mr-mt-1">
-            <FormattedMessage {...messages.visibleLabel} />
+            <div>
+              {this.props.challenge.parent &&
+               <div className="mr-mt-1">
+                 <VisibilitySwitch
+                   {...this.props}
+                   disabled={!manager.canWriteProject(this.props.challenge.parent)}
+                 />
+               </div>
+              }
+            </div>
           </div>
-
-          <div>
-            {this.props.challenge.parent &&
-             <div className="mr-mt-1">
-               <VisibilitySwitch
-                 {...this.props}
-                 disabled={!manager.canWriteProject(this.props.challenge.parent)}
+          {this.props.challenge.enabled && this.props.challenge.parent && !this.props.challenge.parent.enabled &&
+          <div className="mr-text-red-light mr-flex mr-items-center mr-text-base mr-uppercase mr-mt-2">
+             <a
+               href="https://github.com/osmlab/maproulette3/wiki/Challenge-Visibility-and-Discoverability"
+               className="mr-mr-2 mr-flex mr-items-center"
+               target="_blank"
+               rel="noopener noreferrer"
+             >
+               <SvgSymbol
+                 sym="info-icon"
+                 viewBox="0 0 40 40"
+                 className="mr-fill-red mr-w-6 mr-w-6"
                />
-               {this.props.challenge.enabled && !this.props.challenge.parent.enabled &&
-                <span className="mr-text-red mr-flex mr-items-center">
-                  <a
-                    href="https://github.com/osmlab/maproulette3/wiki/Challenge-Visibility-and-Discoverability"
-                    className="mr-mr-2 mr-flex mr-items-center"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <SvgSymbol
-                      sym="info-icon"
-                      viewBox="0 0 40 40"
-                      className="mr-fill-red mr-w-4 mr-w-4"
-                    />
-                  </a>
-                  <FormattedMessage {...messages.projectDisabledWarning} />
-                </span>
-               }
-             </div>
-            }
-          </div>
-        </div>
+             </a>
+             <FormattedMessage {...messages.projectDisabledWarning} />
+           </div>
+          }
 
-        <ChallengeKeywords className="mr-py-4" challenge={this.props.challenge} />
-
-        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-2">
-          <div>
-            <FormattedMessage {...messages.creationDate} />
+          <div className="mr-flex mr-items-baseline">
+            <div className="mr-text-yellow mr-mr-2">
+              <FormattedMessage {...messages.keywordsLabel} />
+            </div>
+            <ChallengeKeywords className="mr-py-4" challenge={this.props.challenge} />
           </div>
 
-          <div>
-            {this.props.challenge.created &&
-             <FormattedDate value={parse(this.props.challenge.created)}
-                            year='numeric' month='long' day='2-digit' />
-            }
+          <div className="mr-flex mr-items-center">
+            <div className="mr-text-yellow mr-mr-2">
+              <FormattedMessage {...messages.creationDate} />
+            </div>
+
+            <div>
+              {this.props.challenge.created &&
+              <FormattedDate value={parse(this.props.challenge.created)}
+                              year='numeric' month='long' day='2-digit' />
+              }
+            </div>
           </div>
 
-          <div>
-            <FormattedMessage {...messages.lastModifiedDate} />
+          <div className="mr-flex mr-items-center">
+            <div className="mr-text-yellow mr-mr-2">
+              <FormattedMessage {...messages.lastModifiedDate} />
+            </div>
+
+            <div>
+              {this.props.challenge.modified &&
+              <FormattedDate value={parse(this.props.challenge.modified)}
+                              year='numeric' month='long' day='2-digit' />
+              }
+            </div>
           </div>
 
-          <div>
-            {this.props.challenge.modified &&
-             <FormattedDate value={parse(this.props.challenge.modified)}
-                            year='numeric' month='long' day='2-digit' />
-            }
-          </div>
+          <div className="mr-flex mr-items-center">
+            <div className="mr-text-yellow mr-mr-2" title={dataOriginDateText}>
+              <FormattedMessage {...messages.tasksFromDate} />
+            </div>
 
-          <div title={dataOriginDateText}>
-            <FormattedMessage {...messages.tasksFromDate} />
-          </div>
-
-          <div title={dataOriginDateText}>
-            {this.props.challenge.dataOriginDate &&
-             <FormattedDate value={parse(this.props.challenge.dataOriginDate)}
-                            year='numeric' month='long' day='2-digit' />
-            }
+            <div title={dataOriginDateText}>
+              {this.props.challenge.dataOriginDate &&
+              <FormattedDate value={parse(this.props.challenge.dataOriginDate)}
+                              year='numeric' month='long' day='2-digit' />
+              }
+            </div>
           </div>
         </div>
       </QuickWidget>

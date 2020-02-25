@@ -169,7 +169,7 @@ class Inbox extends Component {
 
     return (
       <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
-        <section className="mr-flex-grow mr-w-full mr-bg-white mr-p-4 md:mr-p-8 mr-rounded">
+        <section className="mr-flex-grow mr-w-full mr-bg-black-15 mr-p-4 md:mr-p-8 mr-rounded">
           <HeaderNotifications
             notificationsLoading={this.props.notificationsLoading}
             groupByTask={this.state.groupByTask}
@@ -243,6 +243,7 @@ const columns = tableProps => [{
   Header: () => (
     <input
       type="checkbox"
+      className="mr-checkbox-toggle"
       checked={tableProps.allVisibleNotificationsSelected()}
       onChange={() => tableProps.toggleVisibleNotificationsSelected(tableProps.threads)}
     />
@@ -405,7 +406,7 @@ const columns = tableProps => [{
   maxWidth: 120,
   Cell: ({row}) =>{
     return (
-      <ol className="mr-list-reset mr-inline-flex mr-justify-between mr-font-normal">
+      <ol className="mr-list-reset mr-links-green-lighter mr-inline-flex mr-justify-between mr-font-normal">
         <li>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a

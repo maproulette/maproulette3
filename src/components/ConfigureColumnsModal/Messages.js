@@ -27,6 +27,10 @@ export default defineMessages({
   removeLabel: {
     id: "ConfigureColumnsModal.controls.remove",
     defaultMessage: "Remove",
-  }
+  },
 
+  doneLabel: {
+    id: "ConfigureColumnsModal.controls.done.label",
+    defaultMessage: "Done",
+  },
 })

@@ -402,22 +402,26 @@ code {
 
 // Add a short-and-wide variant of the rounded Bulma switch
 .switch[type='checkbox'].is-rounded.short-and-wide + label::before {
+  background-color: rgba(0, 0, 0, .15);
   width: 60px;
   height: 20px;
 }
 
 .switch[type='checkbox'].is-rounded.short-and-wide + label::after {
+  background-color: #FFF;
+  border: 1px solid #FFF;
   height: 14px;
   width: 14px;
   top: 3px;
 }
 
 .switch[type="checkbox"].short-and-wide:checked + label::before {
-  background-color: #1A688B;
+  background-color: #91F3A2;
 }
 
 .switch[type='checkbox'].short-and-wide:checked + label::after {
   left: 41px;
+  border: 1px solid #CCC;
 }
 
 .switch[type='checkbox'].short-and-wide + label {
@@ -430,8 +434,8 @@ code {
   border: none;
   border-radius: 20px;
   padding: 10px 12px;
-  background-color: $grey-lightest-more;
-  color: #1A688B;
+  background-color: rgba(0, 0, 0, 0.15);
+  color: #91F3A2;
   display: inline-block;
 }
 
@@ -442,4 +446,8 @@ html {
   @media (max-width: $app-mobile-break) {
     background-color: $grey-darkest;
   }
+}
+
+strong {
+  color: inherit;
 }

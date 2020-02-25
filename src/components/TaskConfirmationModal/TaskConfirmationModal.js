@@ -217,14 +217,14 @@ export class TaskConfirmationModal extends Component {
 
                   { !reviewConfirmation &&
                     <div className="mr-mt-8">
-                      <div className="form mr-flex mr-items-baseline">
+                      <div className="form">
                         <span className="mr-mr-4">
                           <FormattedMessage {...messages.loadByLabel} />
                         </span>
                         <input
                           type="radio"
                           name="randomnessPreference"
-                          className="mr-mr-1"
+                          className="mr-radio mr-mr-1"
                           checked={this.props.loadBy === TaskLoadMethod.random}
                           onClick={() => this.props.chooseLoadBy(TaskLoadMethod.random)}
                           onChange={_noop}
@@ -236,7 +236,7 @@ export class TaskConfirmationModal extends Component {
                         <input
                           type="radio"
                           name="randomnessPreference"
-                          className="mr-mr-1"
+                          className="mr-radio mr-mr-1"
                           checked={this.props.loadBy === TaskLoadMethod.proximity}
                           onClick={() => this.props.chooseLoadBy(TaskLoadMethod.proximity)}
                           onChange={_noop}

@@ -108,7 +108,7 @@ export class EditProject extends Component {
             </ul>
           </nav>
 
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
+          <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-mt-8 mr-p-4 md:mr-p-8 mr-rounded">
             <Form
               schema={jsSchema(this.props.intl, this.props.user, this.props.project)}
               uiSchema={uiSchema(this.props.intl, this.props.user, this.props.project)}
@@ -123,7 +123,7 @@ export class EditProject extends Component {
             >
               <div className="mr-flex mr-justify-between mr-items-center mr-mt-8">
                 <button
-                  className="mr-button mr-button--grey"
+                  className="mr-button mr-button--white"
                   disabled={this.state.isSaving}
                   onClick={this.cancel}
                 >
@@ -132,7 +132,7 @@ export class EditProject extends Component {
 
                 <button
                   className={classNames(
-                    "mr-button mr-button--green mr-ml-4",
+                    "mr-button mr-button--green-lighter mr-ml-4",
                     {"is-loading": this.state.isSaving}
                   )}
                   onClick={this.props.finish}

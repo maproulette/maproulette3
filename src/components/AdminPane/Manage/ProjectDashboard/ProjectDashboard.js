@@ -130,8 +130,9 @@ export class ProjectDashboard extends Component {
       <div className="admin__manage project-dashboard">
         <WidgetWorkspace
           {...this.props}
-          lightMode
-          className="mr-mt-4"
+          lightMode={false}
+          darkMode
+          className="mr-mt-4 mr-cards-inverse"
           workspaceEyebrow={pageHeader}
           filterComponent={ChallengeFilterGroup}
           activity={this.props.project.activity}

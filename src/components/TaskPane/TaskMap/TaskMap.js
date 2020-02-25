@@ -12,6 +12,7 @@ import _map from 'lodash/map'
 import _pick from 'lodash/pick'
 import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
+import _isEmpty from 'lodash/isEmpty'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
@@ -33,6 +34,10 @@ import WithMapillaryImages from '../../HOCs/WithMapillaryImages/WithMapillaryIma
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
+import AsSimpleStyleableFeature
+       from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
+import AsSuggestedFixFeature
+       from '../../../interactions/TaskFeature/AsSuggestedFixFeature'
 import { supportedSimplestyles }
        from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import BusySpinner from '../../BusySpinner/BusySpinner'
@@ -299,6 +304,28 @@ export class TaskMap extends Component {
     return _get(this.props.task, 'geometries.features')
   }
 
+  applyStyling = taskFeatures => {
+    // If this is a suggested fix task, apply SF styling
+    if (!_isEmpty(this.props.task.suggestedFix)) {
+      return _map(
+        taskFeatures,
+        feature => AsSuggestedFixFeature(feature, this.props.task.suggestedFix, this.props.task.name)
+      )
+    }
+
+    // Otherwise if the challenge has conditional styles, apply those
+    const conditionalStyles = _get(this.props, 'challenge.taskStyles')
+    if (conditionalStyles) {
+      return _map(
+        taskFeatures,
+        feature => AsSimpleStyleableFeature(feature, conditionalStyles)
+      )
+    }
+
+    // Otherwise just give back the features as-is
+    return taskFeatures
+  }
+
   render() {
     if (!this.props.task || !_isObject(this.props.task.parent)) {
       return <BusySpinner />
@@ -339,7 +366,7 @@ export class TaskMap extends Component {
           minZoom={minZoom}
           maxZoom={maxZoom}
           worldCopyJump={true}
-          features={this.taskFeatures()}
+          features={this.applyStyling(this.taskFeatures())}
           justFitFeatures={!this.state.showTaskFeatures}
           fitFeaturesOnlyAsNecessary
           animateFeatures

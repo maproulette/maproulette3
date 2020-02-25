@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import _get from 'lodash/get'
 import { Link, NavLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
+import AsAvatarUser from '../../interactions/User/AsAvatarUser'
 import SignInButton from '../SignInButton/SignInButton'
 import PointsTicker from '../PointsTicker/PointsTicker'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -219,8 +220,7 @@ const ProfileMenu = function(props) {
 const ProfileImage = props => (
   <img
     className="mr-block mr-w-12 mr-h-12 mr-rounded-full mr-mr-2 xl:mr-mr-4"
-    src={props.user.osmProfile.avatarURL}
-    srcSet={`${props.user.osmProfile.avatarURL}?s=48 1x, ${props.user.osmProfile.avatarURL}?s=96 2x"`}
+    src={AsAvatarUser(props.user.osmProfile).profilePic(256)}
     alt=''
   />
 )

@@ -4,6 +4,7 @@ import _filter from 'lodash/filter'
 import _split from 'lodash/split'
 import _get from 'lodash/get'
 import _isEmpty from 'lodash/isEmpty'
+import _map from 'lodash/map'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import External from '../External/External'
@@ -28,6 +29,16 @@ export class TaskTags extends Component {
     this.setState({edit: false})
   }
 
+  tagList = () => {
+    const tags = _map(this.props.tags.split(/,\s*/), tag => (
+      <div className="mr-bg-white-10 mr-text-white mr-mr-2">{tag}</div>
+    ))
+
+    return (
+      <div className="mr-flex mr-text-base mr-ml-2">{tags}</div>
+    )
+  }
+
   render() {
     if (this.state.edit) {
       const preferredTags =
@@ -43,13 +54,15 @@ export class TaskTags extends Component {
               <h2 className="mr-text-yellow mr-text-4xl mr-mb-4">
                 <FormattedMessage {...messages.modifyTags} />
               </h2>
-              <div className="mr-mt-2">
-                <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
-                                         handleAddTag={this.handleAddTag}
-                                         formData={this.props.tags} {...this.props}
-                                         tagType={"tasks"}
-                                         preferredResults={preferredTags}
-                                         placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
+              <div className="mr-mt-2 mr-w-full">
+                <KeywordAutosuggestInput
+                  handleChangeTags={this.handleChangeTags}
+                  handleAddTag={this.handleAddTag}
+                  formData={this.props.tags} {...this.props}
+                  tagType={"tasks"}
+                  preferredResults={preferredTags}
+                  placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
+                />
               </div>
               <div className="mr-flex mr-justify-end mr-items-center mr-mt-8">
                 <button
@@ -75,26 +88,28 @@ export class TaskTags extends Component {
       return (
         <div>
           {!this.props.taskReadOnly &&
-           <div className="mr-float-right mr-text-green-lighter hover:mr-text-white"
-                onClick={() => this.setState({edit: true})}>
-             <FormattedMessage {...messages.updateTags} />
+           <div className="mr-links-green-lighter">
+             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+             <a onClick={() => this.setState({edit: true})}>
+               <FormattedMessage {...messages.updateTags} />
+             </a>
            </div>
           }
-          <div className="mr-text-sm mr-text-white">
+          <div className="mr-text-sm mr-text-white mr-flex mr-items-center">
             <FormattedMessage
               {...messages.taskTags}
-            /> {this.props.tags}
+            /> {this.tagList()}
           </div>
         </div>
       )
     }
     else if (!this.props.taskReadOnly) {
       return (
-        <div>
-          <div className="mr-text-green-lighter hover:mr-text-white"
-               onClick={() => this.setState({edit: true})}>
+        <div className="mr-links-green-lighter">
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a onClick={() => this.setState({edit: true})}>
             <FormattedMessage {...messages.addTags} />
-          </div>
+          </a>
         </div>
       )
     }

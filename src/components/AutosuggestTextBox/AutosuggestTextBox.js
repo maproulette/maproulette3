@@ -11,9 +11,10 @@ import _difference from 'lodash/difference'
 import _clone from 'lodash/clone'
 import _indexOf from 'lodash/indexOf'
 import _filter from 'lodash/filter'
+import _noop from 'lodash/noop'
+import Dropdown from '../Dropdown/Dropdown'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import messages from './Messages'
-import './AutosuggestTextBox.scss'
 
 /**
  * AutosuggestTextBox combines a text input with a dropdown, executing a search
@@ -65,19 +66,22 @@ export default class AutosuggestTextBox extends Component {
    */
   dropdownItems(getItemProps, inputValue) {
     const generateResult = (result, className = "") => (
-      <a {...getItemProps({
-        key: this.props.resultKey(result),
-        item: result,
-        className: classNames("dropdown-item", className ? className :
-                              (this.props.resultClassName ?
-                                this.props.resultClassName(result) :
-                                null)),
-      })}>
+      <a
+        {...getItemProps({
+          key: this.props.resultKey(result),
+          item: result,
+          className: classNames(
+            className ? className :
+            (this.props.resultClassName ? this.props.resultClassName(result) : null)
+          ),
+        })}
+      >
         {this.props.resultLabel(result)}
       </a>
     )
 
     let items = []
+    const searchResults = this.getSearchResults()
     const preferredResults = this.getPreferredResults()
     if (!_isEmpty(preferredResults)) {
       let className = "mr-font-medium"
@@ -85,14 +89,14 @@ export default class AutosuggestTextBox extends Component {
         (result, index) => {
           // Add a border bottom to the last entry if there are more
           // search results.
-          if (index === preferredResults.length - 1) {
-            className += " mr-border-b-2 mr-border-grey-lighter mr-mb-2 mr-pb-2"
+          if (index === preferredResults.length - 1 && searchResults.length > 0) {
+            className += " mr-border-b-2 mr-border-white-50 mr-mb-2 mr-pb-2"
           }
           return generateResult(result, className)
         }))
     }
 
-    items = items.concat(_map(this.getSearchResults(), generateResult))
+    items = items.concat(_map(searchResults, generateResult))
     return items
   }
 
@@ -112,41 +116,62 @@ export default class AutosuggestTextBox extends Component {
 
   render() {
     return (
-      <Downshift {...this.props}
-                 onInputValueChange={this.inputChanged}
-                 onChange={this.onChange}
-                 itemToString={result => result ? this.props.resultLabel(result) : ''}>
-        {({getInputProps, getItemProps, getMenuProps, isOpen, inputValue}) => {
+      <Downshift
+        {...this.props}
+        onInputValueChange={this.inputChanged}
+        onChange={this.onChange}
+        itemToString={result => result ? this.props.resultLabel(result) : ''}
+      >
+        {({getInputProps, getItemProps, getMenuProps, getRootProps, isOpen, inputValue}) => {
           const openOnFocus = _get(this.props.preferredResults, 'length', 0) > 0
           const resultItems = this.dropdownItems(getItemProps, inputValue)
           const show = this.state.textBoxActive || (isOpen && inputValue.length > 0)
 
           return (
-            <div className={classNames("dropdown autosuggest-text-box",
-                                      {"is-active": show})}>
-              <div className="autosuggest-text-box__input-wrapper">
-                <input {...getInputProps()}
-                       className={classNames(this.props.inputClassName, "mr-h-full mr-outline-none")}
-                       onKeyDown={this.handleKeyDown}
-                       onFocus={(e) => this.setState({textBoxActive: openOnFocus})}
-                       onBlur={(e) => this.setState({textBoxActive: false})}
-                       placeholder={this.props.placeholder}
+            <Dropdown
+              className="mr-w-full mr-dropdown--flush"
+              rootProps={getRootProps({}, {suppressRefError: true})}
+              suppressControls
+              isVisible={show}
+              toggleVisible={() => _noop}
+              dropdownButton={dropdown => (
+                <input
+                  {...getInputProps()}
+                  className={classNames(
+                    this.props.inputClassName,
+                    "mr-flex-grow mr-w-full mr-h-full mr-outline-none"
+                  )}
+                  onKeyDown={this.handleKeyDown}
+                  onFocus={(e) => this.setState({textBoxActive: openOnFocus})}
+                  onBlur={(e) => this.setState({textBoxActive: false})}
+                  placeholder={this.props.placeholder}
                 />
-                {this.props.isSearching && <BusySpinner inline />}
-              </div>
-              <div className="dropdown-menu">
-                <div {...getMenuProps({
-                  className: classNames("dropdown-content", {"dropdown-content--fixed": this.props.fixedMenu}),
-                })}>
-                  {resultItems}
-                  {(resultItems.length === 0 || this.props.showNoResults) &&
-                  <div className="autosuggest-text-box__no-results">
-                    <FormattedMessage {...messages.noResults} />
+              )}
+              dropdownContent={() => {
+                if (this.props.isSearching) {
+                  return (
+                    <div
+                      {...getMenuProps({
+                        className: "mr-flex mr-justify-center mr-items-center mr-my-4 mr-w-full"
+                      })}
+                    >
+                      <BusySpinner />
+                    </div>
+                  )
+                }
+
+                return (
+                  <div {...getMenuProps({className: "mr-link-list mr-links-inverse"})}>
+                    {resultItems}
+                    {(resultItems.length === 0 || this.props.showNoResults) &&
+                    <div className="mr-text-grey-lighter mr-p-4 mr-text-sm">
+                      <FormattedMessage {...messages.noResults} />
+                    </div>
+                    }
                   </div>
-                  }
-                </div>
-              </div>
-            </div>
+                )
+              }}
+            />
           )
         }}
       </Downshift>

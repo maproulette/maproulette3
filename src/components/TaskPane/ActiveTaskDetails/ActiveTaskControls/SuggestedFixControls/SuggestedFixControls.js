@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
+import AsSuggestedFix from '../../../../../interactions/Task/AsSuggestedFix'
 import WithSearch from '../../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../../HOCs/WithTaskReview/WithTaskReview'
 import WithTaskTags from '../../../../HOCs/WithTaskTags/WithTaskTags'
@@ -30,13 +31,15 @@ export class SuggestedFixControls extends Component {
       return null
     }
 
+    const newGeometry = AsSuggestedFix(this.props.task).hasNewGeometry()
+
     return (
       <div className="mr-pb-2">
         {this.props.loadingOSMData && <BusySpinner />}
 
         <div className="mr-mt-6 mr-mb-4">
           <p className="mr-text-lg">
-            <FormattedMessage {...messages.prompt} />
+            <FormattedMessage {...(newGeometry ? messages.newGeometryPrompt : messages.prompt)} />
           </p>
 
           <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">

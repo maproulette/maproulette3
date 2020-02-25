@@ -54,18 +54,19 @@ export default class CalendarHeatmap extends Component {
            <FormattedMessage {...messages.heading} />
          </p>
         }
-        <Calendar horizontal={!this.props.vertical}
-                  startDate={subMonths(new Date(), this.props.months)}
-                  endDate={new Date()}
-                  values={calendarData}
-                  classForValue={(value) => { // css class to assign
-                    if (!value) {
-                      return 'color-empty'
-                    }
+        <Calendar
+          horizontal={!this.props.vertical}
+          startDate={subMonths(new Date(), this.props.months)}
+          endDate={new Date()}
+          values={calendarData}
+          classForValue={(value) => { // css class to assign
+            if (!value) {
+              return 'color-empty'
+            }
 
-                    return `color-bucket-${this.colorBucketForCount(value.count)}`
-                  }}
-                  titleForValue={(value) => value ? `${value.date}: ${value.count}` : ''}
+            return `color-bucket-${this.colorBucketForCount(value.count)}`
+          }}
+          titleForValue={(value) => value ? `${value.date}: ${value.count}` : ''}
         />
       </div>
     )

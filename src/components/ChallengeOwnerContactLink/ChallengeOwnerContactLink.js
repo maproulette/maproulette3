@@ -50,20 +50,22 @@ export default class ChallengeOwnerContactLink extends Component {
 
     if (!this.state.contactUrl) {
       return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <a 
-          className="mr-flex mr-items-center"
-          onClick={this.updateContactOwnerUrl}
-        >
-          <SvgSymbol
-            sym="envelope-icon"
-            viewBox="0 0 20 16"
-            className="mr-fill-current mr-w-3 mr-h-3"
-          />
-          <span className="mr-ml-1">
-            <FormattedMessage {...messages.contactOwnerLabel} />
-          </span>
-        </a>
+        <span className="mr-text-green-lighter mr-links-green-lighter">
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a
+            className="mr-flex mr-items-center"
+            onClick={this.updateContactOwnerUrl}
+          >
+            <SvgSymbol
+              sym="envelope-icon"
+              viewBox="0 0 20 16"
+              className="mr-fill-current mr-w-3 mr-h-4"
+            />
+            <span className="mr-ml-1">
+              <FormattedMessage {...messages.contactOwnerLabel} />
+            </span>
+          </a>
+        </span>
       )
     }
 

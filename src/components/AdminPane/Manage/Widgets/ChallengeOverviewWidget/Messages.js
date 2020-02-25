@@ -50,6 +50,11 @@ export default defineMessages({
     defaultMessage: "Visible:",
   },
 
+  keywordsLabel: {
+    id: "Widgets.ChallengeOverviewWidget.fields.keywords.label",
+    defaultMessage: "Keywords:",
+  },
+
   projectDisabledWarning: {
     id: "Widgets.ChallengeOverviewWidget.projectDisabledWarning",
     defaultMessage: "project not visible",

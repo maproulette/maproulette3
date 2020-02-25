@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
 import { WidgetDataTarget, registerWidgetType }
        from '../../../../../services/Widget/Widget'
 import _map from 'lodash/map'
@@ -12,13 +13,11 @@ import { GroupType,
        from '../../../../../services/Project/GroupType/GroupType'
 import WithOSMUserSearch from '../../../HOCs/WithOSMUserSearch/WithOSMUserSearch'
 import AsManager from '../../../../../interactions/User/AsManager'
+import AsAvatarUser from '../../../../../interactions/User/AsAvatarUser'
 import BusySpinner from '../../../../BusySpinner/BusySpinner'
 import AutosuggestTextBox from '../../../../AutosuggestTextBox/AutosuggestTextBox'
-import SvgSymbol from '../../../../SvgSymbol/SvgSymbol'
-import ConfirmAction from '../../../../ConfirmAction/ConfirmAction'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
-import './ProjectManagersWidget.scss'
 
 const descriptor = {
   widgetKey: 'ProjectManagersWidget',
@@ -47,6 +46,11 @@ export default class ProjectManagersWidget extends Component {
   }
 
   updateManagerRole = (managerOsmId, groupType) => {
+    if (groupType === 'remove') {
+      this.removeManager(managerOsmId)
+      return
+    }
+
     this.setState({
       updatingManagers: this.state.updatingManagers.concat([managerOsmId])
     })
@@ -58,7 +62,7 @@ export default class ProjectManagersWidget extends Component {
     }))
   }
 
-  removeManager = managerOsmId => {
+  removeManager = (managerOsmId) => {
     this.setState({
       updatingManagers: this.state.updatingManagers.concat([managerOsmId])
     })
@@ -116,46 +120,54 @@ export default class ProjectManagersWidget extends Component {
       const isProjectOwner = manager.osmId === this.props.project.owner
       const isLastAdmin = managerRole === GroupType.admin && adminManagers.length < 2
 
-      return (
-        <div key={manager.osmId} className="project-managers__manager mr-pr-4">
-          <div className="project-managers__manager__about">
-            <figure className="image is-24x24 project-managers__manager__profile-pic">
-              <img src={manager.avatarURL} alt={manager.displayName} />
-            </figure>
+      // Add remove-manager option to dropdown if appropriate
+      const dropdownOptions =
+        (user.canAdministrateProject(this.props.project) && !isLastAdmin && !isProjectOwner) ?
+        groupTypeOptions.concat([
+          <option key="remove" value="remove">
+            {this.props.intl.formatMessage(messages.removeManagerLabel)}
+          </option>
+        ]) :
+        groupTypeOptions
 
-            <div className="project-managers__manager__name">
-              {manager.displayName}
-            </div>
+      return (
+        <div key={manager.osmId} className="mr-flex mr-items-center mr-pr-4 mr-mt-4">
+          <div className="mr-flex-grow-0 mr-mr-4">
+            <figure className="mr-w-8 mr-h-8">
+              <img
+                src={AsAvatarUser(manager).profilePic(100)}
+                alt=""
+                className="mr-rounded-full"
+              />
+            </figure>
           </div>
 
-          <div className="project-managers__manager__controls">
+          <div className="mr-flex-grow-0 mr-links-green-lighter mr-mr-2">
+            <Link to={`/user/metrics/${manager.userId}`}>
+              {manager.displayName}
+            </Link>
+          </div>
+
+          <div className="mr-flex-grow mr-border-b mr-border-white-15 mr-mr-4" />
+
+          <div className="mr-flex-grow-0">
             {this.state.updatingManagers.indexOf(manager.osmId) !== -1 && <BusySpinner />}
 
             {isLastAdmin || isProjectOwner ?
-             <div className="project-managers__manager__role-placeholder">
+             <div>
                {isProjectOwner ?
                 <FormattedMessage {...messages.projectOwner} /> :
                 <FormattedMessage {...messagesByGroupType[managerRole]} />
                }
              </div> :
-             <select value={managerRole}
-                     disabled={!user.canAdministrateProject(this.props.project)}
-                     onChange={e => this.updateManagerRole(manager.osmId, e.target.value)}
-                     className="select project-managers__manager__role mr-bg-grey-lighter mr-rounded mr-px-1">
-               {groupTypeOptions}
+             <select
+               value={managerRole}
+               disabled={!user.canAdministrateProject(this.props.project)}
+               onChange={e => this.updateManagerRole(manager.osmId, e.target.value)}
+               className="mr-select mr-py-1"
+             >
+               {dropdownOptions}
              </select>
-            }
-
-            {user.canAdministrateProject(this.props.project) &&
-             !isLastAdmin && !isProjectOwner &&
-              <ConfirmAction prompt={this.props.intl.formatMessage(messages.removeManagerConfirmation)}>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a className="button is-clear project-managers__manager__remove-control"
-                   onClick={() => this.removeManager(manager.osmId)}
-                   title={this.props.intl.formatMessage(messages.removeManagerTooltip)}>
-                  <SvgSymbol className="mr-fill-blue-dark mr-h-4" sym="trash-icon" viewBox="0 0 20 20" />
-                </a>
-              </ConfirmAction>
             }
           </div>
         </div>
@@ -164,36 +176,46 @@ export default class ProjectManagersWidget extends Component {
 
     if (managers.length === 0) {
       managers = (
-        <div className="project-managers__none">
+        <div className="mr-text-grey-lighter">
           <FormattedMessage {...messages.noManagers} />
         </div>
       )
     }
 
     const widgetIntro = user.canAdministrateProject(this.props.project) && (
-      <div className="project-managers__add-manager mr-mb-4 mr-px-4">
-        <h3><FormattedMessage {...messages.addManager} /></h3>
+      <div className="mr-mb-4">
+        <h3 className="mr-text-base mr-mb-4">
+          <FormattedMessage {...messages.addManager} />
+        </h3>
 
-        <div className="project-managers__add-manager__form mr-border mr-p-1">
-          <ChooseOSMUser inputValue={this.state.addManagerUsername}
-                         selectedItem={this.state.addManagerOSMUser}
-                         onInputValueChange={username => this.setState({
-                           addManagerUsername: username
-                         })}
-                         onChange={osmUser => this.setState({
-                           addManagerOSMUser: osmUser
-                         })}
-                         placeholder={this.props.intl.formatMessage(messages.osmUsername)}
-                         fixedMenu />
+        <div className="mr-flex mr-justify-between">
+          <div className="mr-mr-4 mr-flex-grow">
+            <ChooseOSMUser
+              inputValue={this.state.addManagerUsername}
+              inputClassName="mr-py-2 mr-px-4 mr-border-none mr-placeholder-white-50 mr-text-white mr-rounded mr-bg-black-15 mr-shadow-inner"
+              selectedItem={this.state.addManagerOSMUser}
+              onInputValueChange={username => this.setState({
+                addManagerUsername: username
+              })}
+              onChange={osmUser => this.setState({
+                addManagerOSMUser: osmUser
+              })}
+              placeholder={this.props.intl.formatMessage(messages.osmUsername)}
+              fixedMenu
+            />
+          </div>
           {this.state.addingManager && <BusySpinner />}
           {!this.state.addingManager && this.state.addManagerOSMUser &&
-            <select onChange={e => this.addManager(e.target.value)}
-                    className="select project-managers__add-manager__group-type mr-min-w-30 mr-bg-grey-lighter mr-rounded mr-px-1">
-                    {[<option key='none' value=''>
-                        {this.props.intl.formatMessage(messages.chooseRole)}
-                      </option>
-                    ].concat(groupTypeOptions)}
-            </select>
+           <select
+             onChange={e => this.addManager(e.target.value)}
+             className="mr-flex-grow-0 mr-min-w-30 mr-select"
+           >
+             {[
+               <option key='none' value=''>
+                 {this.props.intl.formatMessage(messages.chooseRole)}
+               </option>
+             ].concat(groupTypeOptions)}
+           </select>
           }
         </div>
       </div>
@@ -203,10 +225,11 @@ export default class ProjectManagersWidget extends Component {
     return (
       <QuickWidget
         {...this.props}
-        className="project-managers-widget project-managers"
+        className=""
         widgetTitle={<FormattedMessage {...messages.title} />}
-        intro={widgetIntro}
+        noMain
       >
+        {widgetIntro}
         {managers}
       </QuickWidget>
     )

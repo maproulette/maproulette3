@@ -62,7 +62,7 @@ export class TopUserChallengesWidget extends Component {
 }
 
 TopUserChallengesWidget.defaultProps = {
-  lightMode: true,
+  lightMode: false,
 }
 
 const TopChallengeList = function(props) {
@@ -82,9 +82,15 @@ const TopChallengeList = function(props) {
     }
   ))
 
-  return challengeItems.length > 0 ?
-         <ol className="mr-list-reset">{challengeItems}</ol> :
-         <div className="none">No Challenges</div>
+  return (
+    challengeItems.length > 0 ?
+    <ol className="mr-list-reset mr-links-green-lighter">
+      {challengeItems}
+    </ol> :
+    <div className="mr-text-grey-lighter">
+      <FormattedMessage {...messages.noChallenges} />
+    </div>
+  )
 }
 
 registerWidgetType(TopUserChallengesWidget, descriptor)

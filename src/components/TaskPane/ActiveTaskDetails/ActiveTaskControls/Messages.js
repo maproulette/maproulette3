@@ -23,4 +23,9 @@ export default defineMessages({
     id: 'Task.readonly.message',
     defaultMessage: "Previewing task in read-only mode",
   },
+
+  viewChangesetLabel: {
+    id: "Task.controls.viewChangeset.label",
+    defaultMessage: "View Changeset",
+  },
 })

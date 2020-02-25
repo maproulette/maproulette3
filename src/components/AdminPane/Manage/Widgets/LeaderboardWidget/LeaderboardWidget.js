@@ -12,7 +12,6 @@ import { CURRENT_MONTH }
        from '../../../../PastDurationSelector/PastDurationSelector'
 import QuickWidget from '../../../../QuickWidget/QuickWidget'
 import messages from './Messages'
-import './LeaderboardWidget.scss'
 
 const INITIAL_MONTHS_PAST = 1
 
@@ -46,17 +45,18 @@ export default class LeaderboardWidget extends Component {
 
     const selector =
       <PastDurationSelector
-        className="mr-button mr-button--blue mr-mr-8"
+        className="mr-button mr-button--green-lighter mr-button--small mr-dropdown--right"
         pastMonthsOptions={[CURRENT_MONTH, 1, 3, 6, 12]}
         currentMonthsPast={monthsPast}
         selectDuration={this.setMonthsPast}
       />
 
     return (
-      <QuickWidget {...this.props}
-                  className="leaderboard-widget"
-                  widgetTitle={<FormattedMessage {...messages.title} />}
-                  headerControls={selector}
+      <QuickWidget
+        {...this.props}
+        className=""
+        widgetTitle={<FormattedMessage {...messages.title} />}
+        rightHeaderControls={<div className="mr-my-2">{selector}</div>}
       >
         <ChallengeOwnerLeaderboard {...this.props} monthsPast={monthsPast} />
       </QuickWidget>

@@ -157,7 +157,7 @@ export const uiSchema = intl => ({
   },
   customBasemap: {
     "ui:emptyValue": "",
-    "ui:help": intl.formatMessage(messages.customBasemapDescription, {dummy: ''}),
+    "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.customBasemapDescription, {dummy: ''})} />,
   },
   exportableProperties: {
     "ui:emptyValue": "",
@@ -165,7 +165,7 @@ export const uiSchema = intl => ({
   },
   osmIdProperty: {
     "ui:emptyValue": "",
-    "ui:help": <MarkdownContent lightMode markdown={intl.formatMessage(messages.osmIdPropertyDescription)} />,
+    "ui:help": <MarkdownContent markdown={intl.formatMessage(messages.osmIdPropertyDescription)} />,
   },
   customTaskStyles: {
     "ui:field": "configureCustomTaskStyles",

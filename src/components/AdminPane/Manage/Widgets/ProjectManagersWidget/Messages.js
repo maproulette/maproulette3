@@ -24,8 +24,8 @@ export default defineMessages({
     defaultMessage: "Owner"
   },
 
-  removeManagerTooltip: {
-    id: "Admin.ProjectManagers.controls.removeManager.tooltip",
+  removeManagerLabel: {
+    id: "Admin.ProjectManagers.controls.removeManager.label",
     defaultMessage: "Remove Manager"
   },
 

@@ -124,7 +124,7 @@ export default class TaskHistoryList extends Component {
     const historyEntries = _map(combinedLogs, (log, index) => {
       return (
         <article key={'entry-' + index} className="mr-pr-4 mr-mb-8">
-          <div className="mr-list-reset mr-mb-2 mr-text-xs">
+          <div className="mr-list-reset mr-links-green-lighter mr-mb-2 mr-text-xs">
             <div className="mr-flex mr-justify-between">
               <div className="mr-font-medium">
                 <FormattedTime
@@ -146,15 +146,16 @@ export default class TaskHistoryList extends Component {
                 </a>
               }
               {this.props.selectDiffs &&
-                <label className="checkbox">
-                  <input type="checkbox"
-                         checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
-                         onChange={() => this.props.toggleSelection(log.timestamp)} />
-                </label>
+               <input
+                 className="mr-checkbox-toggle"
+                 type="checkbox"
+                 checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
+                 onChange={() => this.props.toggleSelection(log.timestamp)}
+               />
               }
             </div>
           </div>
-          <ol className="mr-list-reset mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">
+          <ol className="mr-list-reset mr-text-sm mr-rounded-sm mr-p-2 mr-bg-black-15">
             {(log.username || log.status) &&
               <li className="mr-mb-4">
                 <div className="mr-flex mr-justify-between">

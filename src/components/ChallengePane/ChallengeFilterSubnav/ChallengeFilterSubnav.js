@@ -42,12 +42,13 @@ export class ChallengeFilterSubnav extends Component {
             <FormattedMessage {...messages.header} />
           </h1>
 
-          <div className="mr-flex">
+          <div className="mr-flex mr-items-center">
             <SortChallengesSelector {...this.props} />
             <FilterByKeyword {...this.props} />
             <FilterByDifficulty {...this.props} />
             <CommandSearchBox
               {...this.props}
+              className="mr-h-12"
               placeholder={this.props.intl.formatMessage(messages.searchLabel)}
               showSearchTypeFilter
               setSearch={this.props.setSearch}
