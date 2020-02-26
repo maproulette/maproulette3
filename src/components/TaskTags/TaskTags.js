@@ -31,7 +31,7 @@ export class TaskTags extends Component {
 
   tagList = () => {
     const tags = _map(this.props.tags.split(/,\s*/), tag => (
-      <div className="mr-bg-white-10 mr-text-white mr-mr-2">{tag}</div>
+      <div className="mr-bg-white-10 mr-text-white mr-mr-2 mr-px-2 mr-rounded">{tag}</div>
     ))
 
     return (
@@ -86,20 +86,21 @@ export class TaskTags extends Component {
     }
     else if (this.props.tags && this.props.tags !== "") {
       return (
-        <div>
+        <div className="mr-flex mr-justify-between mr-items-center mr-mb-2">
+          <div className="mr-text-sm mr-text-white mr-flex mr-items-center mr-flex-grow">
+            <FormattedMessage
+              {...messages.taskTags}
+            /> {this.tagList()}
+          </div>
+
           {!this.props.taskReadOnly &&
-           <div className="mr-links-green-lighter">
+           <div className="mr-links-green-lighter mr-flex-grow-0">
              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
              <a onClick={() => this.setState({edit: true})}>
                <FormattedMessage {...messages.updateTags} />
              </a>
            </div>
           }
-          <div className="mr-text-sm mr-text-white mr-flex mr-items-center">
-            <FormattedMessage
-              {...messages.taskTags}
-            /> {this.tagList()}
-          </div>
         </div>
       )
     }

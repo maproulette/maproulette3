@@ -108,6 +108,14 @@ h4,
     @apply mr-my-2;
   }
 
+  li > p, li > ul, li > ol {
+    @apply mr-my-2;
+  }
+
+  li.task-list-item { /* checklist items */
+    @apply mr-list-none mr--ml-4;
+  }
+
   code {
     @apply mr-text-orange;
   }
@@ -171,7 +179,7 @@ h4,
     @apply mr-text-green-lighter;
 
     &:hover {
-      @apply mr-text-yellow;
+      @apply mr-text-white;
     }
   }
 
