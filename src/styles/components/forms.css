@@ -84,7 +84,7 @@
   }
 
   .form-select & {
-    @apply mr-bg-black-15 mr-border-none mr-rounded mr-shadow-inner;
+    @apply mr-appearance-none mr-outline-none mr-bg-black-15 mr-border-none mr-rounded mr-shadow-inner;
   }
 
   &--green-lighter-outline {
@@ -94,6 +94,11 @@
       @apply mr-border-white;
     }
   }
+}
+
+select option { /* for Firefox select when active */
+  background-color: #1B3338;
+  color: white;
 }
 
 .mr-input-select,
