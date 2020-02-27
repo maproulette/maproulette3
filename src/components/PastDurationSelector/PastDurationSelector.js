@@ -85,8 +85,7 @@ export class PastDurationSelector extends Component {
                           onClick={() => {
                             this.props.selectCustomRange(
                               this.state.customStartDate,
-                              this.state.customEndDate)
-                            this.setState({showChooseCustomDates: false})
+                              this.state.customEndDate)                            
                             dropdown.closeDropdown()
                           }}>
                     <FormattedMessage {...messages.searchLabel} />
