@@ -139,6 +139,7 @@ class Metrics extends Component {
               {this.props.reviewerMetrics &&
                 <div className="mr-mt-8">
                   <ReviewStats {...this.props}
+                    asReviewer
                     reviewMetrics={this.props.reviewerMetrics}
                     tasksMonthsPast={this.props.tasksReviewerMonthsPast}
                     setTasksMonthsPast={this.props.setTasksReviewerMonthsPast}

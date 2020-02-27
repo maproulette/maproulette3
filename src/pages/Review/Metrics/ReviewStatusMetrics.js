@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
+import _get from 'lodash/get'
 import messages from './Messages'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskPriority, keysByPriority, taskPriorityLabels }
@@ -118,9 +119,22 @@ export default class ReviewStatusMetrics extends Component {
       }
     })
 
+    let averageTime = null
+    if (_get(metrics, 'avgReviewTime', 0) > 0) {
+      const seconds = metrics.avgReviewTime / 1000
+      averageTime =
+        <div className="mr-mt-4">
+          <FormattedMessage {...messages.avgTimeSpent} />
+          <span className="mr-pl-2">
+            {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
+          </span>
+        </div>
+    }
+
     return (
       <div className={classNames("review-status-metrics")}>
         {metrics && this.buildReviewStats(type, metrics)}
+        {averageTime}
         {reviewMetricsByPriority && this.props.setShowByPriority &&
           <div
             className={classNames(
