@@ -226,14 +226,21 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
      * Move to the next task without setting any completion status, useful for
      * when a user visits a task that is already complete.
      */
-    nextTask: (challengeId, taskId, taskLoadBy, comment) => {
+    nextTask: (challengeId, taskId, taskLoadBy, comment, requestedNextTask) => {
       if (_isString(comment) && comment.length > 0) {
         dispatch(addTaskComment(taskId, comment))
       }
 
-      nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
-        visitNewTask(dispatch, ownProps, taskId, newTask)
-      )
+      if (taskLoadBy === TaskLoadMethod.proximity && requestedNextTask) {
+        nextRequestedTask(dispatch, ownProps, requestedNextTask).then(newTask =>
+          visitNewTask(dispatch, ownProps, taskId, newTask)
+        )
+      }
+      else {
+        nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then(newTask =>
+          visitNewTask(dispatch, ownProps, taskId, newTask)
+        )
+      }
     },
 
     /**

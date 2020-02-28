@@ -740,6 +740,8 @@
   "Task.controls.fixed.tooltip": "I fixed it!",
   "Task.controls.next.label": "Next Task",
   "Task.controls.next.tooltip": "Next Task",
+  "Task.controls.next.loadBy.label": "Load Next:",
+  "Task.controls.nextNearby.label": "Select next nearby task",
   "Task.controls.revised.label": "Revision Complete",
   "Task.controls.revised.tooltip": "Revision Complete",
   "Task.controls.revised.resubmit": "Resubmit for review",
