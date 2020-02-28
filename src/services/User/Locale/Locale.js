@@ -1,15 +1,8 @@
+import { addLocaleData } from 'react-intl'
 import _map from 'lodash/map'
 import _isString from 'lodash/isString'
 import _fromPairs from 'lodash/fromPairs'
 import messages from './Messages'
-import enUSMessages from '../../../lang/en-US.json'
-import esMessages from '../../../lang/es.json'
-import frMessages from '../../../lang/fr.json'
-import deMessages from '../../../lang/de.json'
-import afMessages from '../../../lang/af.json'
-import jaMessages from '../../../lang/ja.json'
-import koMessages from '../../../lang/ko.json'
-import ptBRMessages from '../../../lang/pt-BR.json'
 
 // Supported locales.
 export const Locale = Object.freeze({
@@ -20,8 +13,88 @@ export const Locale = Object.freeze({
   af: 'af',
   ja: 'ja',
   ko: 'ko',
+  nl: 'nl',
   'pt-BR': 'pt-BR',
+  'cs-CZ': 'cs-CZ',
+  'fa-IR': 'fa-IR',
+  'ru-RU': 'ru-RU',
 })
+
+// Dynamic imports to load locale data and translation files
+const LocaleImports = {
+  [Locale.enUS]: () => {
+    return import('react-intl/locale-data/en').then(en => {
+      addLocaleData([...en.default])
+      return import('../../../lang/en-US.json')
+    })
+  },
+  [Locale.es]: () => {
+    return import('react-intl/locale-data/es').then(es => {
+      addLocaleData([...es.default])
+      return import('../../../lang/es.json')
+    })
+  },
+  [Locale.fr]: () => {
+    return import('react-intl/locale-data/fr').then(fr => {
+      addLocaleData([...fr.default])
+      return import('../../../lang/fr.json')
+    })
+  },
+  [Locale.de]: () => {
+    return import('react-intl/locale-data/de').then(de => {
+      addLocaleData([...de.default])
+      return import('../../../lang/de.json')
+    })
+  },
+  [Locale.af]: () => {
+    return import('react-intl/locale-data/af').then(af => {
+      addLocaleData([...af.default])
+      return import('../../../lang/af.json')
+    })
+  },
+  [Locale.ja]: () => {
+    return import('react-intl/locale-data/ja').then(ja => {
+      addLocaleData([...ja.default])
+      return import('../../../lang/ja.json')
+    })
+  },
+  [Locale.ko]: () => {
+    return import('react-intl/locale-data/ko').then(ko => {
+      addLocaleData([...ko.default])
+      return import('../../../lang/ko.json')
+    })
+  },
+  [Locale.nl]: () => {
+    return import('react-intl/locale-data/nl').then(nl => {
+      addLocaleData([...nl.default])
+      return import('../../../lang/nl.json')
+    })
+  },
+  [Locale["pt-BR"]]: () => {
+    return import('react-intl/locale-data/pt').then(pt => {
+      addLocaleData([...pt.default])
+      return import('../../../lang/pt_BR.json')
+    })
+  },
+  [Locale["cs-CZ"]]: () => {
+    return import('react-intl/locale-data/cs').then(cs => {
+      addLocaleData([...cs.default])
+      return import('../../../lang/cs_CZ.json')
+    })
+  },
+  [Locale["fa-IR"]]: () => {
+    return import('react-intl/locale-data/fa').then(fa => {
+      addLocaleData([...fa.default])
+      return import('../../../lang/fa_IR.json')
+    })
+  },
+  [Locale["ru-RU"]]: () => {
+    return import('react-intl/locale-data/ru').then(ru => {
+      addLocaleData([...ru.default])
+      return import('../../../lang/ru_RU.json')
+    })
+  },
+}
 
 /**
  * Returns true if the given locale matches a supported locale, false
@@ -32,19 +105,16 @@ export const isSupportedLocale = function(locale) {
 }
 
 /**
- * Mapped locales to translated messages loaded from src/lang translation
- * files.
+ * Dynamically load and return the translated messages for the given locale
  */
-export const translatedMessages = Object.freeze({
-  [Locale.enUS]: enUSMessages,
-  [Locale.es]: esMessages,
-  [Locale.fr]: frMessages,
-  [Locale.de]: deMessages,
-  [Locale.af]: afMessages,
-  [Locale.ja]: jaMessages,
-  [Locale.ko]: koMessages,
-  [Locale["pt-BR"]]: ptBRMessages,
-})
+export const loadTranslatedMessages = async function(locale) {
+  if (!isSupportedLocale(locale)) {
+    locale = defaultLocale()
+  }
+
+  const messages = await LocaleImports[locale]()
+  return messages
+}
 
 /**
  * Returns the default locale configured in the .env file, or U.S.  English if
