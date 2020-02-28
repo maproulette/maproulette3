@@ -4,6 +4,7 @@ import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _map from 'lodash/map'
 import _isArray from 'lodash/isArray'
+import _isObject from 'lodash/isObject'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
@@ -161,7 +162,7 @@ export const TagsInputField = props => {
     <div className="tags-field">
       <TagsInput {...props}
                  inputProps={{placeholder: "Add keyword"}}
-                 value={tags}
+                 value={_map(tags, tag => (_isObject(tag) ? tag.name : tag))}
                  onChange={tags => props.onChange(tags.join(','))}
                  addOnBlur />
     </div>

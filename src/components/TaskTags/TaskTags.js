@@ -30,10 +30,13 @@ export class TaskTags extends Component {
   }
 
   tagList = () => {
-    const tags = _map(this.props.tags.split(/,\s*/), tag => {
+    const tags = _map(this.props.tags.split(/,\s*/), (tag, index) => {
       if ( !_isEmpty(tag) ) {
         return (
-          <div className="mr-bg-white-10 mr-text-white mr-mr-2 mr-px-2 mr-rounded">{tag}</div>
+          <div className="mr-bg-white-10 mr-text-white mr-mr-2 mr-px-2 mr-rounded"
+               key={`tag-${index}`}>
+            {tag}
+          </div>
         )
       }
       else {
