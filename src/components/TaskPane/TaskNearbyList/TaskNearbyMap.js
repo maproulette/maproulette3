@@ -13,6 +13,7 @@ import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
 import { latLng } from 'leaflet'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
+import { TaskStatusColors } from '../../../services/Task/TaskStatus/TaskStatus'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
@@ -119,7 +120,8 @@ export class TaskNearbyMap extends Component {
           <Marker
             key={marker.options.taskId}
             {...markerData}
-            icon={markerIconSvg(isRequestedMarker ? colors.yellow : colors['blue-leaflet'])}
+            icon={markerIconSvg(isRequestedMarker ? colors.yellow :
+              TaskStatusColors[_get(marker.options, 'status', 0)])}
             zIndexOffset={isRequestedMarker ? 1000 : undefined}
             onClick={() => this.markerClicked(markerData)}
           />
