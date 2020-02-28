@@ -157,7 +157,8 @@ export class ActiveTaskControls extends Component {
 
   /** Move to the next task without modifying the task status */
   next = (challengeId, taskId) => {
-    this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment)
+    this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment,
+                        this.state.requestedNextTask)
   }
 
   componentDidUpdate(nextProps) {
@@ -294,6 +295,12 @@ export class ActiveTaskControls extends Component {
                {...this.props}
                className="mr-mt-1"
                nextTask={this.next}
+               loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
+               chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
+                                        this.chooseLoadBy(load)}
+               chooseNextTask={this.chooseNextTask}
+               clearNextTask={this.clearNextTask}
+               requestedNextTask={this.state.requestedNextTask}
              />
              }
 
