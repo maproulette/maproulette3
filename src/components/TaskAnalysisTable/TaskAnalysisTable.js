@@ -49,6 +49,7 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 
 // columns
 const ALL_COLUMNS = {featureId:{}, id:{}, status:{}, priority:{},
+                 completedBy:{}, completedDuration:{}, mappedOn:{},
                  reviewStatus:{group:"review"}, reviewRequestedBy:{group:"review"},
                  reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
                  reviewDuration:{group:"review"}, controls:{permanent: true},
@@ -141,7 +142,6 @@ export class TaskAnalysisTable extends Component {
       taskBaseRoute = `/admin/project/${this.props.challenge.parent.id}` +
                       `/challenge/${this.props.challenge.id}/task`
     }
-
     const pageSize = this.props.pageSize
     const page = this.props.page
     const totalPages = Math.ceil(_get(this.props, 'totalTaskCount', 0) / pageSize)
@@ -156,6 +156,14 @@ export class TaskAnalysisTable extends Component {
 
       if (defaultSorted[0].id === "name") {
         data = _sortBy(data, (t) => (t.name || t.title))
+      }
+      else if (defaultSorted[0].id === "reviewDuration") {
+        data = _sortBy(data, (t) => {
+          if (!t.reviewedAt || !t.reviewStartedAt) {
+            return 0
+          }
+          return differenceInSeconds(parse(t.reviewedAt), parse(t.reviewStartedAt))
+        })
       }
       else {
         data = _sortBy(data, defaultSorted[0].id)
@@ -347,6 +355,42 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     )
   }
 
+  columns.completedBy = {
+    id: 'completedBy',
+    Header: props.intl.formatMessage(messages.completedByLabel),
+    accessor: 'completedBy',
+    sortable: true,
+    filterable: true,
+    exportable: t => _get(t.completedBy, 'username') || t.completedBy,
+    maxWidth: 180,
+    Cell: ({row}) =>
+      <div className={classNames("row-user-column",
+                      mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy))}>
+        {_get(row._original.completedBy, 'username') || row._original.completedBy }
+      </div>
+  }
+
+  columns.completedDuration = {
+    id: 'completedTimeSpent',
+    Header: props.intl.formatMessage(messages.completedDurationLabel),
+    accessor: 'completedTimeSpent',
+    sortable: true,
+    defaultSortDesc: true,
+    exportable: t => t.completedTimeSpent,
+    maxWidth: 120,
+    minWidth: 120,
+    Cell: ({row}) => {
+      if (!row._original.completedTimeSpent) return null
+
+      const seconds = row._original.completedTimeSpent / 1000
+      return (
+        <span>
+          {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
+        </span>
+      )
+    }
+  }
+
   columns.reviewRequestedBy = {
     id: 'reviewRequestedBy',
     Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
@@ -383,10 +427,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   columns.reviewDuration = {
     id: 'reviewDuration',
     Header: props.intl.formatMessage(messages.reviewDurationLabel),
-    accessor: 'reviewStartedAt',
-    sortable: false,
+    accessor: 'reviewDuration',
+    sortable: true,
     defaultSortDesc: true,
-    exportable: t => t.reviewStartedAt,
     maxWidth: 120,
     minWidth: 120,
     Cell: ({row}) => {
@@ -456,7 +499,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
          </Link>
         }
         {(!_isUndefined(row._original.reviewStatus)) &&
-         <Link to={`/challenge/${row._original.parent.id}/task/${row._original.id}/review`} className="mr-mr-2">
+         <Link to={`/challenge/${props.challenge.id}/task/${row._original.id}/review`} className="mr-mr-2">
            <FormattedMessage {...messages.reviewTaskLabel} />
          </Link>
         }

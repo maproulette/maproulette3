@@ -37,5 +37,10 @@ export default defineMessages({
   reviewStatusLabel: {
     id: "ChallengeProgress.reviewStatus.label",
     defaultMessage: "Review Status"
-  }
+  },
+
+  avgTimeSpent: {
+    id: "ChallengeProgress.metrics.averageTime.label",
+    defaultMessage: "Avg time per task:"
+  },
 })

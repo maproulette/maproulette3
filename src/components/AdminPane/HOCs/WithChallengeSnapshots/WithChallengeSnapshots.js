@@ -70,7 +70,8 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
         reviewApproved: reviewActions.approved,
         reviewRejected: reviewActions.rejected,
         reviewAssisted: reviewActions.assisted,
-        reviewDisputed: reviewActions.disputed
+        reviewDisputed: reviewActions.disputed,
+        avgReviewTime: reviewActions.avgReviewTime,
       } : this.props.reviewMetrics
 
       return <WrappedComponent

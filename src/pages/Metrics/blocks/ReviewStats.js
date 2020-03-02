@@ -5,6 +5,7 @@ import PastDurationSelector from '../../../components/PastDurationSelector/PastD
 import {ALL_TIME, CURRENT_MONTH, CUSTOM_RANGE}
        from '../../../components/PastDurationSelector/PastDurationSelector'
 import _get from 'lodash/get'
+import messages from '../Messages'
 
 export default class ReviewStats extends Component {
   calculatePercentage(count, total) {
@@ -36,6 +37,19 @@ export default class ReviewStats extends Component {
   render() {
     const totalReviewTasks = _get(this.props.reviewMetrics, 'total') || 0
 
+    let averageTime = null
+    if (!!this.props.asReviewer &&
+        _get(this.props.reviewMetrics, 'avgReviewTime', 0) > 0) {
+      const seconds = this.props.reviewMetrics.avgReviewTime / 1000
+      averageTime =
+        <div className="">
+          <FormattedMessage {...messages.avgReviewTime} />
+          <span className="mr-pl-2">
+            {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
+          </span>
+        </div>
+    }
+
     return (
       <QuickWidget
         {...this.props}
@@ -65,6 +79,8 @@ export default class ReviewStats extends Component {
           {this.displayStat(_get(this.props.reviewMetrics, 'requested'),
                             totalReviewTasks, <FormattedMessage {...this.props.messages.awaitingReview} />)}
         </ul>
+
+        {averageTime}
       </QuickWidget>
     )
   }

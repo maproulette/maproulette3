@@ -121,6 +121,9 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
   if (filters.reviewedBy) {
     searchParameters.r = filters.reviewedBy
   }
+  if (filters.completedBy) {
+    searchParameters.m = filters.completedBy
+  }
   if (filters.challenge) {
     searchParameters.cs = filters.challenge
   }

@@ -64,4 +64,9 @@ export default defineMessages({
     defaultMessage: "{priority} Priority Tasks"
   },
 
+  avgTimeSpent: {
+    id: "ReviewStatus.metrics.averageTime.label",
+    defaultMessage: "Avg time per review:"
+  }
+
 })

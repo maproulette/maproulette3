@@ -240,6 +240,18 @@ export class ChallengeProgress extends Component {
       return null
     }
 
+    let averageTime = null
+    if (_get(taskActions, 'avgTimeSpent', 0) > 0) {
+      const seconds = taskActions.avgTimeSpent / 1000
+      averageTime =
+        <div className="">
+          <FormattedMessage {...messages.avgTimeSpent} />
+          <span className="mr-pl-2">
+            {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
+          </span>
+        </div>
+    }
+
     const localizedStatuses = statusLabels(this.props.intl)
     const availableLabel = this.props.intl.formatMessage(messages.available)
 
@@ -293,6 +305,8 @@ export class ChallengeProgress extends Component {
         {this.generatePercentages(taskActions, _chunk(Object.entries(challengeStats), 3))}
         {this.generateProgressBar(taskActions, completionData, statusColors, orderedKeys)}
         {this.generateProgressBarLabel(taskActions)}
+
+        {averageTime}
 
         {taskPriorityActions && this.props.setShowByPriority &&
           <div
