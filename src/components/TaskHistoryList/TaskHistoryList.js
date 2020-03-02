@@ -11,6 +11,7 @@ import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
 import _indexOf from 'lodash/indexOf'
 import _sortBy from 'lodash/sortBy'
+import _reverse from 'lodash/reverse'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus, TASK_STATUS_CREATED }
@@ -35,18 +36,22 @@ export default class TaskHistoryList extends Component {
       return <div className="mr-px-4 history-list none">No History</div>
     }
 
-    const combinedLogs = []
-    var entries = []
-    var logEntry = null
-    var lastTimestamp = null
-    var username = null
-    var updatedStatus = null
-    var startedAtEntry = null
+    let combinedLogs = []
+    let entries = []
+    let logEntry = null
+    let lastTimestamp = null
+    let username = null
+    let updatedStatus = null
+    let startedAtEntry = null
+    let duration = null
 
-    _each(this.props.taskHistory, (log, index) => {
-      if (lastTimestamp !== null && entries.length > 0 &&
-          new Date(log.timestamp) - lastTimestamp < -1000) {
-        combinedLogs.push({timestamp: new Date(log.timestamp),
+    _each(_sortBy(this.props.taskHistory, h => new Date(h.timestamp)), (log, index) => {
+      // We are moving on to a new set of actions so let's push
+      // this set of entries
+      if (lastTimestamp !== null && (entries.length > 0 || startedAtEntry) &&
+          Math.abs(new Date(log.timestamp) - lastTimestamp) > 1000) {
+        combinedLogs.push({timestamp: lastTimestamp,
+                           duration: duration,
                            entry: entries,
                            username: username,
                            status: updatedStatus})
@@ -56,6 +61,7 @@ export default class TaskHistoryList extends Component {
         }
         entries = []
         updatedStatus = null
+        duration = null
       }
       lastTimestamp = new Date(log.timestamp)
 
@@ -80,6 +86,10 @@ export default class TaskHistoryList extends Component {
                   showDot
                 />
             username = _get(log, 'reviewedBy.username')
+
+            if (log.startedAt) {
+              duration = new Date(log.timestamp) - new Date(log.startedAt)
+            }
           }
           break
         case TaskHistoryAction.status:
@@ -87,8 +97,8 @@ export default class TaskHistoryList extends Component {
           logEntry = null
           username = _get(log, 'user.username')
           updatedStatus = statusEntry(log, this.props, index)
-
           if (log.startedAt || log.oldStatus === TASK_STATUS_CREATED) {
+            // Add a "Started At" entry into the history
             startedAtEntry = {timestamp: (log.startedAt || log.timestamp),
                               ignoreAtticOffset: true,
                               entry: [
@@ -102,6 +112,9 @@ export default class TaskHistoryList extends Component {
                               ]}
           }
 
+          if (log.startedAt) {
+            duration = new Date(log.timestamp) - new Date(log.startedAt)
+          }
           break
 
       }
@@ -110,6 +123,7 @@ export default class TaskHistoryList extends Component {
 
     if (entries.length > 0) {
       combinedLogs.push({timestamp: lastTimestamp,
+                         duration: duration,
                          entry: entries,
                          username: username,
                          status: updatedStatus})
@@ -119,7 +133,7 @@ export default class TaskHistoryList extends Component {
       }
     }
 
-    _sortBy(combinedLogs, ['timestamp'])
+    combinedLogs = _reverse(_sortBy(combinedLogs, log => new Date(log.timestamp)))
 
     const historyEntries = _map(combinedLogs, (log, index) => {
       return (
@@ -137,6 +151,11 @@ export default class TaskHistoryList extends Component {
                   month='long'
                   day='2-digit'
                 />
+                {log.duration &&
+                  <span className="mr-pl-4 mr-text-pink">
+                    {Math.floor(log.duration / 1000 / 60)}m {Math.floor(log.duration / 1000) % 60}s
+                  </span>
+                }
               </div>
               {!this.props.selectDiffs &&
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
