@@ -4,6 +4,10 @@ import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _isEmpty from 'lodash/isEmpty'
+import _remove from 'lodash/remove'
+import _cloneDeep from 'lodash/cloneDeep'
+import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus,
@@ -173,7 +177,18 @@ export class ActiveTaskControls extends Component {
     }
 
     if (this.state.tags === null && _get(this.props, 'task.tags')) {
-      this.setState({tags: _map(this.props.task.tags, (tag) => (tag.name ? tag.name : tag)).join(', ')})
+      const unfilteredTags = _cloneDeep(this.props.task.tags)
+      _remove(unfilteredTags, t => {
+        if (_isEmpty(t)) {
+          return true
+        }
+        else if (_isObject(t)) {
+          return _isEmpty(t.name)
+        }
+      })
+      const tags = _map(unfilteredTags, tag => (tag.name ? tag.name : tag)).join(', ')
+
+      this.setState({tags: tags})
     }
   }
 
