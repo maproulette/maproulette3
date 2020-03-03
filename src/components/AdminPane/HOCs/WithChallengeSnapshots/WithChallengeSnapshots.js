@@ -21,8 +21,10 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
         this.setState({loading: true})
 
         fetchChallengeSnapshotList(challengeId, true).then(normalizedResults => {
-          let fetchedSnapshots = _values(normalizedResults.result)
-          this.setState({loading: false, snapshotList: fetchedSnapshots})
+          if (normalizedResults) {
+            let fetchedSnapshots = _values(normalizedResults.result)
+            this.setState({loading: false, snapshotList: fetchedSnapshots})
+          }
         })
       }
     }
