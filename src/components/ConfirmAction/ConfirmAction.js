@@ -56,7 +56,7 @@ export default class ConfirmAction extends Component {
       React.cloneElement(this.props.children, {[action]: this.initiateConfirmation})
 
     return (
-      <div>
+      <React.Fragment>
         {ControlWithConfirmation}
 
         <Modal
@@ -106,7 +106,7 @@ export default class ConfirmAction extends Component {
             </div>
           </article>
         </Modal>
-      </div>
+      </React.Fragment>
     )
   }
 }

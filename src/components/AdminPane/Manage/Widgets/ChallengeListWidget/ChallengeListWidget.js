@@ -86,6 +86,20 @@ export default class ChallengeListWidget extends Component {
 
     const rightHeaderControls = this.props.projects.length === 0 ? null : (
       <div className="mr-flex mr-justify-end mr-items-center">
+        <button className="mr-ml-4" onClick={this.toggleAllTallies}>
+          <SvgSymbol
+            className={classNames(
+              "mr-w-4 mr-h-4",
+              {
+                "mr-fill-mango": allEnabled,
+                "mr-fill-mango-60": someEnabled && !allEnabled,
+                "mr-fill-mango-30": !someEnabled && !allEnabled
+              }
+            )}
+            viewBox='0 0 20 20'
+            sym='chart-icon'
+          />
+        </button>
         <div className="mr-pt-2 mr-pl-4">
           <Dropdown
             className="mr-dropdown--right"
@@ -122,24 +136,10 @@ export default class ChallengeListWidget extends Component {
             }
           />
         </div>
-        <button className="mr-ml-4" onClick={this.toggleAllTallies}>
-          <SvgSymbol
-            className={classNames(
-              "mr-w-4 mr-h-4",
-              {
-                "mr-fill-mango": allEnabled,
-                "mr-fill-mango-60": someEnabled && !allEnabled,
-                "mr-fill-mango-30": !someEnabled && !allEnabled
-              }
-            )}
-            viewBox='0 0 20 20'
-            sym='chart-icon'
-          />
-        </button>
       </div>
     )
 
-    const searchControl = this.props.challenges.length === 0 ? null : (
+    const searchControl = (
       <ChallengeSearch
         toggleSearchTallies={this.props.toggleSearchTallies}
         challenges={this.props.challenges}
@@ -156,11 +156,13 @@ export default class ChallengeListWidget extends Component {
         headerControls={<div className="mr-my-2">{searchControl}</div>}
         rightHeaderControls={<div className="mr-my-2">{rightHeaderControls}</div>}
       >
-        <ChallengeList
-          {...this.props}
-          challenges={this.props.challenges}
-          suppressControls
-        />
+        <div className="mr-pb-32">
+          <ChallengeList
+            {...this.props}
+            challenges={this.props.challenges}
+            suppressControls
+          />
+        </div>
       </QuickWidget>
     )
   }

@@ -11,6 +11,8 @@ import WithChallengeManagement
        from '../../HOCs/WithChallengeManagement/WithChallengeManagement'
 import ChallengeProgressBorder
        from '../ChallengeProgressBorder/ChallengeProgressBorder'
+import Dropdown from '../../../Dropdown/Dropdown'
+import ChallengeControls from './ChallengeControls'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 
@@ -21,7 +23,7 @@ import messages from './Messages'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export default class ChallengeCard extends Component {
+export class ChallengeCard extends Component {
   nameRef = React.createRef()
 
   render() {
@@ -112,6 +114,30 @@ export default class ChallengeCard extends Component {
               </div>
             </div>
           }
+
+          <Dropdown
+            className="mr-ml-4 mr-dropdown--right mr-mt-1.5"
+            dropdownButton={dropdown => (
+              <button
+                onClick={dropdown.toggleDropdownVisible}
+                className="mr-flex mr-items-center mr-text-white"
+              >
+                <SvgSymbol
+                  sym="navigation-more-icon"
+                  viewBox="0 0 20 20"
+                  className="mr-fill-current mr-w-5 mr-h-5"
+                />
+              </button>
+            )}
+            dropdownContent={dropdown =>
+              <ChallengeControls
+                {...this.props}
+                className="mr-flex mr-flex-col mr-links-green-lighter"
+                controlClassName="mr-my-1"
+                onControlComplete={() => dropdown.closeDropdown()}
+              />
+            }
+          />
         </div>
       </div>
     )
@@ -128,7 +154,7 @@ const CompleteIcon = function(props) {
   )
 }
 
-const VisibilityIcon = WithChallengeManagement(injectIntl(function(props) {
+const VisibilityIcon = injectIntl(function(props) {
   const isVisible = props.challenge.enabled
   return (
     <span
@@ -146,9 +172,11 @@ const VisibilityIcon = WithChallengeManagement(injectIntl(function(props) {
       />
     </span>
   )
-}))
+})
 
 ChallengeCard.propTypes = {
   challenge: PropTypes.object.isRequired,
   isPinned: PropTypes.bool,
 }
+
+export default WithChallengeManagement(ChallengeCard)

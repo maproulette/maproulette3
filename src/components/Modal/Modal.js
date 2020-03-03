@@ -22,13 +22,13 @@ class Modal extends Component {
         />
         <div
           className={classNames(
-            "mr-z-250 mr-fixed mr-top-0 mr-left-0", {
+            "mr-z-250 mr-fixed mr-top-0 mr-left-0 mr-max-w-screen80", {
             "md:mr-w-4/5 md:mr-top-5 md:mr-left-16": this.props.extraWide,
             "md:mr-w-2/3 md:mr-top-5 md:mr-left-16": this.props.wide,
             "md:mr-min-w-1/3 md:mr-w-1/3 md:mr-top-5 md:mr-left-33": this.props.narrow,
             "mr-w-full md:mr-w-1/4 md:mr-top-5 md:mr-left-37": this.props.extraNarrow,
             "md:mr-min-w-2/5 md:mr-w-2/5 md:mr-top-15 md:mr-left-30": this.props.medium,
-            "md:mr-min-w-1/2 mr-w-full lg:mr-w-auto lg:mr-top-50 lg:mr-left-50 lg:mr--translate-1/2":
+            "md:mr-min-w-1/2 lg:mr-max-w-screen60 mr-w-full lg:mr-top-50 lg:mr-left-50 lg:mr--translate-1/2":
               !this.props.extraWide && !this.props.wide && !this.props.narrow &&
               !this.props.extraNarrow && !this.props.medium
           })}
@@ -36,7 +36,7 @@ class Modal extends Component {
           <div
             className={classNames(
               {'mr-p-8': !this.props.fullBleed},
-              'mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-w-full mr-w-md mr-mx-auto mr-overflow-y-auto mr-max-h-screen100 mr-min-w-72',
+              'mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-w-full mr-w-md mr-mx-auto mr-overflow-y-auto mr-max-h-screen80 mr-min-w-72',
               this.props.contentClassName
             )}
           >

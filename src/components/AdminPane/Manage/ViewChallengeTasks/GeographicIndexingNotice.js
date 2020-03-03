@@ -25,10 +25,10 @@ export default class GeographicIndexingNotice extends Component {
     }
 
     return (
-      <div className="mr-flex mr-text-mango mr-text-base mr-mb-8">
+      <div className="mr-flex mr-items-center mr-text-mango mr-text-base mr-mb-8">
         <SvgSymbol
           sym="hourglass-icon"
-          className="mr-fill-mango mr-w-16 mr-w-16 mr-mr-4"
+          className="mr-fill-mango mr-w-16 mr-h-16 mr-mr-4"
           viewBox="0 0 20 20"
         />
         <FormattedMessage
