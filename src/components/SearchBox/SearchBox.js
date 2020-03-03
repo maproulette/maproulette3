@@ -78,8 +78,9 @@ export default class SearchBox extends Component {
         role="search"
         className={classNames(
           "mr-flex mr-items-center mr-border-none mr-text-white-50 mr-rounded mr-bg-black-15 mr-shadow-inner",
-          this.props.leftAligned ? "mr-pr-2" : "lg:ml-ml-6 xl:mr-ml-12 mr-px-4",
+          this.props.narrow ? "mr-px-2" : "mr-px-4",
           {
+            "lg:ml-ml-6 xl:mr-ml-12": !this.props.leftAligned,
             "mr-py-2": !this.props.short,
           },
           this.props.className

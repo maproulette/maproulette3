@@ -18,6 +18,7 @@ export default class OtherKeywordsOption extends Component {
           showDoneButton
           leftAligned
           short
+          narrow
           buttonClassName="mr-fill-green-lighter"
         />
       </div>

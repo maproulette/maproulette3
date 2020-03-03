@@ -175,6 +175,8 @@
   "Admin.Project.controls.visible.label": "Visible:",
   "Admin.Project.controls.visible.confirmation": "Are you sure? No challenges in this project will be discoverable by mappers.",
   "Admin.Project.challengesUndiscoverable": "challenges not discoverable",
+  "ProjectPickerModal.chooseProject": "Choose a Project",
+  "ProjectPickerModal.noProjects": "No projects found",
   "Admin.ProjectsDashboard.newProject": "Add Project",
   "Admin.ProjectsDashboard.help.info": "Projects serve as a means of grouping related challenges together. All challenges must belong to a project.",
   "Admin.ProjectsDashboard.search.placeholder": "Project or Challenge Name",

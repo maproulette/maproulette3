@@ -219,6 +219,7 @@ module.exports = {
       '5': '1.25rem',
       '6': '1.5rem',
       '8': '2rem',
+      '9': '2.25rem',
       '10': '2.5rem',
       '12': '3rem',
       '16': '4rem',
@@ -282,6 +283,7 @@ module.exports = {
       full: '100%',
       half: '50%',
       '2/5': '40%',
+      screen50: '50vh',
       screen: '100vh',
       content: 'calc(100vh - 102px)',
       challenges: 'calc(100vh - 244px)',
@@ -347,6 +349,8 @@ module.exports = {
       '9/10': '90%',
       '1/6': '16.66667%',
       '5/6': '83.33333%',
+      'screen60': '60vw',
+      'screen80': '80vw',
     },
 
     maxHeight: {
