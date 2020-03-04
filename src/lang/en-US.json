@@ -998,6 +998,7 @@
   "Review.Dashboard.tasksReviewedByMe": "Tasks Reviewed by Me",
   "Review.Dashboard.myReviewTasks": "My Reviewed Tasks",
   "Review.Dashboard.allReviewedTasks": "All Review-related Tasks",
+  "Review.Dashboard.volunteerAsReviewer.label": "Volunteer as a Reviewer",
   "ReviewStatus.metrics.title": "Review Status",
   "ReviewStatus.metrics.awaitingReview": "Tasks awaiting review",
   "ReviewStatus.metrics.approvedReview": "Review tasks that passed",
