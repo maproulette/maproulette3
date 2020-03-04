@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
 import classNames from 'classnames'
@@ -122,12 +123,20 @@ export class ReviewTasksDashboard extends Component {
         </li>
       </ol>
 
-    const notReviewerTabs =
-      <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex">
-        <li className="mr-text-green-lighter">
-          {this.props.intl.formatMessage(messages.myReviewTasks)}
-        </li>
-      </ol>
+    const notReviewerTabs = (
+      <div>
+        <ol className="mr-list-reset mr-text-md mr-leading-tight mr-flex mr-links-green-lighter">
+          <li>
+            {this.props.intl.formatMessage(messages.myReviewTasks)}
+          </li>
+          <li className="mr-ml-4 mr-border-l mr-pl-4 mr-border-green">
+            <Link to="/user/profile">
+              {this.props.intl.formatMessage(messages.volunteerAsReviewer)}
+            </Link>
+          </li>
+        </ol>
+      </div>
+    )
 
     return (
       <div className='review-pane'>
