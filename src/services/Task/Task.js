@@ -25,6 +25,7 @@ import { ensureUserLoggedIn } from '../User/User'
 import { markReviewDataStale } from './TaskReview/TaskReview'
 import { receiveClusteredTasks } from './ClusteredTask'
 import { TaskStatus } from './TaskStatus/TaskStatus'
+import { generateSearchParametersString } from '../Search/Search'
 
 /** normalizr schema for tasks */
 export const taskSchema = function() {
@@ -277,6 +278,38 @@ export const bulkUpdateTasks = function(updatedTasks, skipConversion=false) {
 
     return new Endpoint(
       api.tasks.bulkUpdate, {json: taskData}
+    ).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Bulk update task status on tasks that match the given criteria.
+ */
+export const bulkTaskStatusChange = function(newStatus, challengeId, criteria) {
+  return function(dispatch) {
+    const filters = _get(criteria, 'filters', {})
+    const searchParameters = generateSearchParametersString(filters,
+                                                            criteria.boundingBox,
+                                                            _get(criteria, 'savedChallengesOnly'),
+                                                            null,
+                                                            criteria.searchQuery)
+    searchParameters.cid = challengeId
+
+    return new Endpoint(
+      api.tasks.bulkStatusChange, {
+        params: {...searchParameters, newStatus},
+        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
+      }
     ).execute().catch(error => {
       if (isSecurityError(error)) {
         dispatch(ensureUserLoggedIn()).then(() =>

@@ -26,7 +26,10 @@ export default class TaskReviewStatusFilter extends Component {
                   className="mr-checkbox-toggle mr-mr-2"
                   type="checkbox"
                   checked={this.props.includeTaskReviewStatuses[status]}
-                  onChange={() => this.props.toggleIncludedTaskReviewStatus(status)} />
+                  onChange={(e) =>
+                    this.props.toggleIncludedTaskReviewStatus(status,
+                                                              e.nativeEvent.shiftKey)
+                  } />
                 <FormattedMessage {...messagesByReviewStatus[status]} />
               </label>
             </li>

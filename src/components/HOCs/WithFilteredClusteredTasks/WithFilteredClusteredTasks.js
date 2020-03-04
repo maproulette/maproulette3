@@ -14,6 +14,7 @@ import _isFinite from 'lodash/isFinite'
 import _each from 'lodash/each'
 import _merge from 'lodash/merge'
 import _cloneDeep from 'lodash/cloneDeep'
+import _assignWith from 'lodash/assignWith'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatusWithUnset, REVIEW_STATUS_NOT_SET }
       from '../../../services/Task/TaskReview/TaskReviewStatus'
@@ -52,18 +53,25 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     state = Object.assign({}, this.defaultFilters(), {
       selectedTasks: new Map(),
       filteredTasks: {tasks: []},
+      allSelected: false,
     })
 
 
     /**
      * Toggle filtering on or off for the given task status
      */
-    toggleIncludedStatus = status => {
-      const includeStatuses = Object.assign(
-        {},
-        this.state.includeStatuses,
-        {[status]: !this.state.includeStatuses[status]}
-      )
+    toggleIncludedStatus = (status, exclusiveSelect = false) => {
+      const includeStatuses = exclusiveSelect ?
+        _assignWith(
+          {},
+          this.state.includeStatuses,
+          (objValue, srcValue, key) => key === status.toString()
+        ) :
+        Object.assign(
+          {},
+          this.state.includeStatuses,
+          {[status]: !this.state.includeStatuses[status]}
+        )
 
       const filteredTasks = this.filterTasks(includeStatuses,
                                              this.state.includeReviewStatuses,
@@ -80,18 +88,25 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         includeStatuses,
         selectedTasks,
         filteredTasks,
+        allSelected: false,
       })
     }
 
     /**
      * Toggle filtering on or off for the given task review status
      */
-    toggleIncludedReviewStatus = status => {
-      const includeReviewStatuses = Object.assign(
-        {},
-        this.state.includeReviewStatuses,
-        {[status]: !this.state.includeReviewStatuses[status]}
-      )
+    toggleIncludedReviewStatus = (status, exclusiveSelect = false) => {
+      const includeReviewStatuses = exclusiveSelect ?
+        _assignWith(
+          {},
+          this.state.includeReviewStatuses,
+          (objValue, srcValue, key) => key === status.toString()
+        ) :
+        Object.assign(
+          {},
+          this.state.includeReviewStatuses,
+          {[status]: !this.state.includeReviewStatuses[status]}
+        )
 
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
                                              includeReviewStatuses,
@@ -108,18 +123,25 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         includeReviewStatuses,
         selectedTasks,
         filteredTasks,
+        allSelected: false
       })
     }
 
     /**
      * Toggle filtering on or off for the given task priority
      */
-    toggleIncludedPriority = priority => {
-      const includePriorities = Object.assign(
-        {},
-        this.state.includePriorities,
-        {[priority]: !this.state.includePriorities[priority]}
-      )
+    toggleIncludedPriority = (priority, exclusiveSelect) => {
+      const includePriorities = exclusiveSelect ?
+        _assignWith(
+          {},
+          this.state.includePriorities,
+          (objValue, srcValue, key) => key === priority.toString()
+        ) :
+        Object.assign(
+          {},
+          this.state.includePriorities,
+          {[priority]: !this.state.includePriorities[priority]}
+        )
 
       const filteredTasks = this.filterTasks(this.state.includeStatuses,
                                              this.state.includeReviewStatuses,
@@ -135,6 +157,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         includePriorities,
         selectedTasks,
         filteredTasks,
+        allSelected: false
       })
     }
 
@@ -179,7 +202,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         selected.set(task.id, task)
       }
 
-      this.setState({selectedTasks: selected})
+      this.setState({selectedTasks: selected, allSelected: false})
     }
 
     /**
@@ -198,7 +221,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         }
       }
 
-      this.setState({selectedTasks: selected})
+      this.setState({selectedTasks: selected, allSelected: false})
     }
 
     /**
@@ -214,7 +237,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                             task => taskIds.indexOf(task.id) !== -1)
 
       _each(tasks, task => selected.set(task.id, task))
-      this.setState({selectedTasks: selected})
+      this.setState({selectedTasks: selected, allSelected: false})
     }
 
     /**
@@ -222,13 +245,13 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      * simply compares the number of selected tasks and doesn't actually
      * check each task individually.
      */
-    allTasksAreSelected = () => {
+    allTasksAreSelected = (excludeAllSelected = false) => {
       if (this.state.selectedTasks.size === 0) {
         return false
       }
 
-      return this.state.selectedTasks.size ===
-             _get(this.state, 'filteredTasks.tasks.length', 0)
+      const totalTaskCount = _get(this.state, 'filteredTasks.tasks.length', 0)
+      return this.state.selectedTasks.size === totalTaskCount && this.state.allSelected
     }
 
     /**
@@ -274,7 +297,10 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
                                                 this.state.includeLocked,
                                                 true)
       const selectedTasks = this.unselectExcludedTasks(allfilteredTasks)
-      this.setState({filteredTasks, selectedTasks})
+      const allSelected = this.state.allSelected &&
+        selectedTasks.size === _get(this.state, 'filteredTasks.tasks.length', 0)
+
+      this.setState({filteredTasks, selectedTasks, allSelected})
     }
 
     /**
@@ -284,6 +310,8 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
      */
     toggleAllTasksSelection = () => {
       const selected = new Map(this.state.selectedTasks)
+      let allSelected = false
+
       if (this.allTasksAreSelected()) {
         selected.clear()
       }
@@ -295,9 +323,10 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
           task = this.state.filteredTasks.tasks[i]
           selected.set(task.id, task)
         }
+        allSelected = true
       }
 
-      this.setState({selectedTasks: selected})
+      this.setState({selectedTasks: selected, allSelected})
     }
 
     /**
@@ -306,7 +335,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
     unselectAllTasks = () => {
       const selected = new Map(this.state.selectedTasks)
       selected.clear()
-      this.setState({selectedTasks: selected})
+      this.setState({selectedTasks: selected, allSelected: false})
     }
 
     /**
@@ -340,7 +369,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         }
       }
 
-      this.setState({selectedTasks: selected})
+      this.setState({selectedTasks: selected, allSelected: false})
     }
 
     /**
@@ -353,7 +382,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
         selected.set(tasks[i].id, tasks[i])
       }
 
-      this.setState({selectedTasks: selected})
+      this.setState({selectedTasks: selected, allSelected: false})
     }
 
     clearAllFilters = () => {
@@ -374,7 +403,7 @@ export default function WithFilteredClusteredTasks(WrappedComponent,
 
     resetSelectedTasks = () => {
       this.clearAllFilters()
-      this.setState({selectedTasks: new Map()})
+      this.setState({selectedTasks: new Map(), allSelected: false})
     }
 
     componentDidMount() {
