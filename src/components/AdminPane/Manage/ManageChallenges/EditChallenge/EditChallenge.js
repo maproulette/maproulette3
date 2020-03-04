@@ -382,7 +382,10 @@ export class EditChallenge extends Component {
         _difference(keywords, rawCategoryKeywords).join(',')
     }
 
-    challengeData.taskTags = challengeData.taskTags || challengeData.preferredTags
+    challengeData.taskTags =
+      _isString(challengeData.taskTags) ?
+      challengeData.taskTags :
+      challengeData.preferredTags
 
     if (_isUndefined(challengeData.customTaskStyles)) {
       challengeData.customTaskStyles = !_isEmpty(challengeData.taskStyles)
@@ -443,10 +446,9 @@ export class EditChallenge extends Component {
 
     if (!_isEmpty(challengeData.additionalKeywords)) {
       challengeData.tags = challengeData.tags.concat(
-        // replace whitespace with commas, split on comma, and filter out any
-        // empty-string keywords.
+        // split on comma, and filter out any empty-string keywords
         _filter(
-          challengeData.additionalKeywords.replace(/\s+/, ',').split(/,+/),
+          challengeData.additionalKeywords.split(/,+/),
           keyword => !_isEmpty(keyword)
         )
       )
@@ -456,10 +458,7 @@ export class EditChallenge extends Component {
       // replace whitespace with commas, split on comma, and filter out any
       // empty-string tags.
       challengeData.preferredTags =
-        _filter(
-          challengeData.taskTags.replace(/\s+/, ',').split(/,+/),
-          tag => !_isEmpty(tag)
-        )
+        _filter(challengeData.taskTags.split(/,+/), tag => !_isEmpty(tag))
     }
 
     // Note any old tags that are to be discarded. Right now a separate API
