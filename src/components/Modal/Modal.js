@@ -36,7 +36,7 @@ class Modal extends Component {
           <div
             className={classNames(
               {'mr-p-8': !this.props.fullBleed},
-              'mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-w-full mr-w-md mr-mx-auto mr-overflow-y-auto mr-max-h-screen80 mr-min-w-72',
+              'mr-relative mr-bg-blue-dark mr-rounded mr-shadow mr-w-full mr-w-full mr-w-md mr-mx-auto mr-overflow-y-auto mr-max-h-screen90 mr-min-w-72',
               this.props.contentClassName
             )}
           >
