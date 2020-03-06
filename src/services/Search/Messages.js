@@ -20,9 +20,9 @@ export default defineMessages({
     id: "Challenge.sort.popularity",
     defaultMessage: "Popular",
   },
-  has_suggested_fixes: {
-    id: "Challenge.sort.suggestedFix",
-    defaultMessage: "Quick Fix",
+  has_cooperative_work: {
+    id: "Challenge.sort.cooperativeWork",
+    defaultMessage: "Cooperative",
   },
   default: {
     id: "Challenge.sort.default",

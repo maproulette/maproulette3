@@ -11,6 +11,7 @@ import RequestStatus from '../Server/RequestStatus'
 import AsMappableTask from '../../interactions/Task/AsMappableTask'
 import AsMappableBundle from '../../interactions/TaskBundle/AsMappableBundle'
 import AsIdentifiableFeature from '../../interactions/TaskFeature/AsIdentifiableFeature'
+import AsCooperativeWork from '../../interactions/Task/AsCooperativeWork'
 import { toLatLngBounds  } from '../MapBounds/MapBounds'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
@@ -93,11 +94,27 @@ export const editTask = function(editor, task, mapBounds, options, taskBundle) {
         // end up zoomed way out by default. We have to do this as two separate
         // calls to JOSM, with a bit of a delay to give JOSM the chance to load
         // the object before we try to zoom
-        openJOSM(
-          dispatch, editor, task, mapBounds, josmLoadObjectURI, taskBundle
-        ).then(
-          () => setTimeout(() => sendJOSMCommand(josmZoomURI(task, mapBounds)), 1000)
-        )
+        executeJOSMBatch([
+          () => openJOSM(
+            dispatch, editor, task, mapBounds, josmLoadObjectURI, taskBundle
+          ),
+          () => sendJOSMCommand(josmZoomURI(task, mapBounds))
+        ])
+      }
+      else if (AsCooperativeWork(task).isChangeFileType()) {
+        // Cooperative fix with XML change
+        executeJOSMBatch([
+          () => openJOSM(
+            dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle, {
+              layerName: editor === JOSM_LAYER ?
+                        `MR Task ${task.id} OSM Data` : // layers will be separate
+                        `MR Task ${task.id} Changes` // layers will be merged
+            }
+          ),
+          () => sendJOSMCommand(
+            josmImportURI(dispatch, editor, task, mapBounds, taskBundle)
+          )
+        ])
       }
       else {
         openJOSM(dispatch, editor, task, mapBounds, josmLoadAndZoomURI, taskBundle)
@@ -175,7 +192,7 @@ export const constructIdURI = function(task, mapBounds, options, taskBundle) {
     "map=" + [mapBounds.zoom, centerPoint.lat, centerPoint.lng].join('/')
 
   // iD only supports a single selected entity, so don't bother passing bundle
-  const selectedEntityComponent = osmObjectParams(task, false, '=', '&')
+  const selectedEntityComponent = osmObjectParams(task, false, '=', '&', options)
   const commentUriComponent = "comment=" +
                               encodeURIComponent(task.parent.checkinComment)
   const sourceComponent = "source=" + encodeURIComponent(task.parent.checkinSource)
@@ -254,7 +271,7 @@ export const constructLevel0URI = function(task, mapBounds, options, taskBundle)
  * the type and osm id, and the character used to join together multiple
  * entities
  */
-export const osmObjectParams = function(task, abbreviated=false, entitySeparator='', joinSeparator=',') {
+export const osmObjectParams = function(task, abbreviated=false, entitySeparator='', joinSeparator=',', options) {
   const allTasks = _isArray(task) ? task : [ task ]
   let objects = []
   allTasks.forEach(task => {
@@ -295,7 +312,7 @@ export const josmHost = function() {
  * mapBounds, if they match the task, or else the computed bbox from the task
  * itself
  */
-export const josmBoundsParams = function(task, mapBounds, taskBundle) {
+export const josmBoundsParams = function(task, mapBounds, taskBundle, options) {
   let bounds = null
   if (taskBundle) {
     // For task bundles, we currently ignore map bounds
@@ -318,11 +335,13 @@ export const josmBoundsParams = function(task, mapBounds, taskBundle) {
  * Generate appropriate JOSM editor URI layer params for setting up a new layer, if
  * desired, as well as naming the layer
  */
-export const josmLayerParams = function(task, asNewLayer, taskBundle) {
+export const josmLayerParams = function(task, asNewLayer, taskBundle, options={}) {
   const newLayer = asNewLayer ? 'true' : 'false'
-  const layerName = taskBundle ?
-                    `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)` :
-                    `MR Task ${task.id}`
+  const layerName = options.layerName ? options.layerName :
+        (taskBundle ?
+        `MR Bundle ${task.id} (${taskBundle.tasks.length} tasks)` :
+        `MR Task ${task.id}`
+        )
 
   return `new_layer=${newLayer}&layer_name=${encodeURIComponent(layerName)}`
 }
@@ -331,7 +350,7 @@ export const josmLayerParams = function(task, asNewLayer, taskBundle) {
  * Generate appropriate JOSM editor URI changeset params with the comment
  * and source from the given task's challenge
  */
-export const josmChangesetParams = function(task) {
+export const josmChangesetParams = function(task, options) {
   return `changeset_comment=${encodeURIComponent(task.parent.checkinComment)}` +
          `&changeset_source=${encodeURIComponent(task.parent.checkinSource)}`
 }
@@ -341,12 +360,12 @@ export const josmChangesetParams = function(task) {
  *
  * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#load_and_zoom
  */
-export const josmLoadAndZoomURI = function(dispatch, editor, task, mapBounds, taskBundle) {
+export const josmLoadAndZoomURI = function(dispatch, editor, task, mapBounds, taskBundle, options) {
   return josmHost() + 'load_and_zoom?' + [
-    josmBoundsParams(task, mapBounds, taskBundle),
-    josmLayerParams(task, editor === JOSM_LAYER, taskBundle),
-    josmChangesetParams(task),
-    `select=${osmObjectParams(_get(taskBundle, 'tasks', task))}`
+    josmBoundsParams(task, mapBounds, taskBundle, options),
+    josmLayerParams(task, editor === JOSM_LAYER, taskBundle, options),
+    josmChangesetParams(task, options),
+    `select=${osmObjectParams(_get(taskBundle, 'tasks', task), options)}`
   ].join('&')
 }
 
@@ -355,8 +374,8 @@ export const josmLoadAndZoomURI = function(dispatch, editor, task, mapBounds, ta
  *
  * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#zoom
  */
-export const josmZoomURI = function(task, mapBounds) {
-  return josmHost() + 'zoom?' + josmBoundsParams(task, mapBounds)
+export const josmZoomURI = function(task, mapBounds, options) {
+  return josmHost() + 'zoom?' + josmBoundsParams(task, mapBounds, options)
 }
 
 /*
@@ -366,8 +385,8 @@ export const josmZoomURI = function(task, mapBounds) {
  *
  * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#load_object
  */
-export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds, taskBundle) {
-  const objects = osmObjectParams(_get(taskBundle, 'tasks', task))
+export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds, taskBundle, options) {
+  const objects = osmObjectParams(_get(taskBundle, 'tasks', task), options)
 
   // We can't load objects if there are none. This is usually because the
   // task features are missing OSM ids
@@ -378,10 +397,24 @@ export const josmLoadObjectURI = function(dispatch, editor, task, mapBounds, tas
   }
 
   return josmHost() + 'load_object?' + [
-    josmBoundsParams(task, mapBounds, taskBundle),
-    josmLayerParams(task, true, taskBundle),
-    josmChangesetParams(task),
+    josmBoundsParams(task, mapBounds, taskBundle, options),
+    josmLayerParams(task, true, taskBundle, options),
+    josmChangesetParams(task, options),
     `objects=${objects}`
+  ].join('&')
+}
+
+/*
+ * Builds a URI for the JOSM import remote control command, useful for loading
+ * XML change data from a URL
+ *
+ * @see See https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#import
+ */
+export const josmImportURI = function(dispatch, editor, task, mapBounds, taskBundle, options) {
+  return josmHost() + 'import?' + [
+    `new_layer=${editor === JOSM_LAYER ? 'true' : 'false'}`,
+    `layer_name=${encodeURIComponent("MR Task " + task.id + " Changes")}`,
+    `url=${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/task/${task.id}/cooperative/change/task_${task.id}_change.osc`
   ].join('&')
 }
 
@@ -397,16 +430,12 @@ export const sendJOSMCommand = function(uri) {
   // requests via the opening of a separate window instead of AJAX
   if (window.safari) {
     return new Promise((resolve, reject) => {
-      if (editorWindowReference && !editorWindowReference.closed) {
-        editorWindowReference.close()
-      }
-
-      editorWindowReference = window.open(uri)
+      const tab = window.open(uri)
 
       // Close the window after 1 second and resolve the promise
       setTimeout(() => {
-        if (editorWindowReference && !editorWindowReference.closed) {
-          editorWindowReference.close()
+        if (tab && !tab.closed) {
+          tab.close()
         }
         resolve(true)
       }, 1000)
@@ -422,11 +451,32 @@ export const sendJOSMCommand = function(uri) {
 }
 
 /**
+ * Execute a batch of JOSM commands. In most browsers these are executed
+ * asynchronously with a pause in between each of transmissionDelay. For
+ * Safari, however, which does not allow AJAX to JOSM and will treat follow-up
+ * commands opened in tabs as popups to be blocked, all commands are
+ * immediately executed
+ */
+const executeJOSMBatch = async function(commands, transmissionDelay=1000) {
+  // For Safari we execute all the commands immediately
+  if (window.safari) {
+    commands.forEach(command => command())
+    return
+  }
+
+  // Other browsers
+  for(let i = 0; i < commands.length; i++) {
+    await commands[i]()
+    await new Promise(resolve => setTimeout(resolve, transmissionDelay))
+  }
+}
+
+/**
  * Execute an ajax request to open the JOSM editor. The given josmURIFunction
  * will be invoked to generate the remote-control command URI
  */
-const openJOSM = function(dispatch, editor, task, mapBounds, josmURIFunction, taskBundle) {
-  const uri = josmURIFunction(dispatch, editor, task, mapBounds, taskBundle)
+const openJOSM = function(dispatch, editor, task, mapBounds, josmURIFunction, taskBundle, options) {
+  const uri = josmURIFunction(dispatch, editor, task, mapBounds, taskBundle, options)
   if (!uri) {
     return Promise.resolve()
   }

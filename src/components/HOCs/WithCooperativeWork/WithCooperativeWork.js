@@ -6,21 +6,22 @@ import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _values from 'lodash/values'
 import { fetchOSMElement } from '../../../services/OSM/OSM'
-import { fetchSuggestedTagFixChangeset, fetchSuggestedFixChangeset }
+import { fetchCooperativeTagFixChangeset }
        from '../../../services/Task/Task'
 import { addError } from '../../../services/Error/Error'
-import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 
 /**
- * Provides WrappedComponent with details of a task's suggested fix, along with
- * accessory data such as the latest OSM versions of elements referenced by the
- * fix
+ * Provides WrappedComponent with details of a task's cooperative work, along
+ * with accessory data such as the latest OSM versions of elements referenced
+ * by the work
  *
- * Note that only tag changes are currently supported by suggested fixes
+ * There are two supported types of cooperative work: tag fixes and change
+ * files
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-export const WithSuggestedFix = function(WrappedComponent) {
+export const WithCooperativeWork = function(WrappedComponent) {
   return class extends Component {
     state = {
       loadingOSMData: false,
@@ -33,8 +34,8 @@ export const WithSuggestedFix = function(WrappedComponent) {
     }
 
     loadOSMElements = async (task) => {
-      const fix = AsSuggestedFix(task)
-      if (!fix.hasSuggestedFix()) {
+      const fix = AsCooperativeWork(task)
+      if (!fix.hasTagOperations()) {
         return
       }
 
@@ -72,19 +73,15 @@ export const WithSuggestedFix = function(WrappedComponent) {
 
       this.setState({loadingChangeset: true})
 
-      const taskFix = AsSuggestedFix(this.props.task)
-      const suggestedFixSummary = taskFix.changeSummary(this.state.tagEdits)
-      const fetchChangesetXML =
-        taskFix.hasGeometryFix() ?
-        fetchSuggestedFixChangeset :
-        fetchSuggestedTagFixChangeset
+      const taskFix = AsCooperativeWork(this.props.task)
+      const cooperativeWorkSummary = taskFix.tagChangeSummary(this.state.tagEdits)
 
-      if (_isEmpty(suggestedFixSummary)) {
+      if (_isEmpty(cooperativeWorkSummary)) {
         this.setState({xmlChangeset: '', loadingChangeset: false})
         return
       }
 
-      return fetchChangesetXML(suggestedFixSummary).then(xml => {
+      return fetchCooperativeTagFixChangeset(cooperativeWorkSummary).then(xml => {
         this.setState({xmlChangeset: xml, loadingChangeset: false})
       }).catch(error => {
         console.log(error)
@@ -151,4 +148,4 @@ export const mapDispatchToProps = dispatch =>
   bindActionCreators({ addError }, dispatch)
 
 export default WrappedComponent =>
-  connect(null, mapDispatchToProps)(WithSuggestedFix(WrappedComponent))
+  connect(null, mapDispatchToProps)(WithCooperativeWork(WrappedComponent))

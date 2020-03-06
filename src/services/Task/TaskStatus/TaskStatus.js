@@ -83,6 +83,7 @@ export const allowedStatusProgressions = function(status, includeSelf = false) {
       progressions = new Set()
       break
     default:
+      console.log(`Unrecognized task status >>${status}<<`)
       throw new Error("unrecognized-task-status",
                       `Unrecognized task status ${status}`)
   }
