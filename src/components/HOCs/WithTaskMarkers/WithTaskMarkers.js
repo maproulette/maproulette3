@@ -41,7 +41,8 @@ export default function WithTaskMarkers(WrappedComponent,
                 isVirtualChallenge: challengeTasks.isVirtualChallenge,
                 challengeName: task.parentName,
                 taskId: task.id,
-                status: task.status
+                status: task.status,
+                priority: task.priority,
               },
             })
           })

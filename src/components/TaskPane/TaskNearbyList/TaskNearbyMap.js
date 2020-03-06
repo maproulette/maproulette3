@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import L from 'leaflet'
 import 'leaflet-vectoricon'
-import { ZoomControl, Marker } from 'react-leaflet'
+import { ZoomControl, Marker, Tooltip } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { point, featureCollection } from '@turf/helpers'
 import bbox from '@turf/bbox'
@@ -13,7 +13,8 @@ import _map from 'lodash/map'
 import _cloneDeep from 'lodash/cloneDeep'
 import { latLng } from 'leaflet'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
-import { TaskStatusColors } from '../../../services/Task/TaskStatus/TaskStatus'
+import { TaskStatusColors, messagesByStatus } from '../../../services/Task/TaskStatus/TaskStatus'
+import { messagesByPriority } from '../../../services/Task/TaskPriority/TaskPriority'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import SourcedTileLayer from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
@@ -48,10 +49,10 @@ const starIconSvg = L.vectorIcon({
   },
 })
 
-const markerIconSvg = (fillColor=colors['blue-leaflet']) => L.vectorIcon({
+const markerIconSvg = (fillColor=colors['blue-leaflet'], priority) => L.vectorIcon({
   viewBox: '0 0 20 20',
-  svgHeight: 30,
-  svgWidth: 30,
+  svgHeight: 40 - (priority * 10),
+  svgWidth: 40 - (priority * 10),
   type: 'path',
   shape: { // zondicons "location" icon
     d: "M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
@@ -121,10 +122,26 @@ export class TaskNearbyMap extends Component {
             key={marker.options.taskId}
             {...markerData}
             icon={markerIconSvg(isRequestedMarker ? colors.yellow :
-              TaskStatusColors[_get(marker.options, 'status', 0)])}
+              TaskStatusColors[_get(marker.options, 'status', 0)],
+              isRequestedMarker ? undefined : _get(marker.options, 'priority', 0))}
             zIndexOffset={isRequestedMarker ? 1000 : undefined}
             onClick={() => this.markerClicked(markerData)}
-          />
+          >
+            <Tooltip>
+              <div>
+                <FormattedMessage {...messages.priorityLabel} /> {
+                  this.props.intl.formatMessage(
+                    messagesByPriority[_get(marker.options, 'priority', 0)])
+                }
+              </div>
+              <div>
+                <FormattedMessage {...messages.statusLabel} /> {
+                  this.props.intl.formatMessage(
+                    messagesByStatus[_get(marker.options, 'status', 0)])
+                }
+              </div>
+            </Tooltip>
+          </Marker>
         )
       })
     }

@@ -781,6 +781,8 @@
   "Task.management.controls.modify.label": "Modify",
   "Widgets.TaskNearbyMap.currentTaskTooltip": "Current Task",
   "Widgets.TaskNearbyMap.noTasksAvailable.label": "No nearby tasks are available.",
+  "Widgets.TaskNearbyMap.tooltip.priorityLabel": "Priority:",
+  "Widgets.TaskNearbyMap.tooltip.statusLabel": "Status:",
   "Challenge.controls.taskLoadBy.label": "Load tasks by:",
   "Task.controls.track.label": "Track this Task",
   "Task.controls.untrack.label": "Stop tracking this Task",

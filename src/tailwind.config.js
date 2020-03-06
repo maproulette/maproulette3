@@ -351,6 +351,7 @@ module.exports = {
       '5/6': '83.33333%',
       'screen60': '60vw',
       'screen80': '80vw',
+      'screen90': '90vw',
     },
 
     maxHeight: {
