@@ -123,7 +123,7 @@ export class TaskNearbyMap extends Component {
             {...markerData}
             icon={markerIconSvg(isRequestedMarker ? colors.yellow :
               TaskStatusColors[_get(marker.options, 'status', 0)],
-              isRequestedMarker ? undefined : _get(marker.options, 'priority', 0))}
+              _get(marker.options, 'priority', 0))}
             zIndexOffset={isRequestedMarker ? 1000 : undefined}
             onClick={() => this.markerClicked(markerData)}
           >
