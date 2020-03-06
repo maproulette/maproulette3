@@ -19,6 +19,8 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _keys from 'lodash/keys'
 import _concat from 'lodash/concat'
+import _filter from 'lodash/filter'
+import _find from 'lodash/find'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -172,6 +174,16 @@ export class TaskAnalysisTable extends Component {
         data = _reverse(data)
       }
     }
+
+    // It's possible for the props.selectedTasks (which comes from WithFilteredClusteredTasks)
+    // to contain tasks not in our data as our data has been filtered by
+    // bounds and paging also --- so we make sure here to only include tasks
+    // visible on our current page.
+    const selectedDataTasks =
+      _filter([...this.props.selectedTasks.keys()],
+               taskId => _find(data, task => task.id === taskId))
+
+
     if (_get(this.props, 'criteria.filters')) {
       defaultFiltered = _map(this.props.criteria.filters,
                              (value, key) => {return {id: key, value}})
@@ -186,9 +198,10 @@ export class TaskAnalysisTable extends Component {
           {!this.props.suppressHeader &&
            <header className="mr-mb-4">
              <TaskAnalysisTableHeader
+               {...this.props}
                countShown={data.length}
                configureColumns={this.configureColumns.bind(this)}
-               {...this.props}
+               selectedTasks={selectedDataTasks}
              />
            </header>
           }
@@ -245,7 +258,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.selected = {id: 'selected',
     Header: null,
-    accessor: task => props.selectedTasks.has(task.id),
+    accessor: task => (props.selectedTasks.has(task.id) || props.allTasksAreSelected()),
     Cell: ({value, original}) => (
       props.highlightPrimaryTask && original.id === props.task.id ?
       <span className="mr-text-green-lighter">✓</span> :

@@ -26,7 +26,10 @@ export default class TaskPriorityFilter extends Component {
                   className="mr-checkbox-toggle mr-mr-2"
                   type="checkbox"
                   checked={this.props.includeTaskPriorities[priority]}
-                  onChange={() => this.props.toggleIncludedTaskPriority(priority)} />
+                  onChange={(e) =>
+                    this.props.toggleIncludedTaskPriority(priority,
+                                                          e.nativeEvent.shiftKey)
+                  } />
                 <FormattedMessage {...messagesByPriority[priority]} />
               </label>
             </li>

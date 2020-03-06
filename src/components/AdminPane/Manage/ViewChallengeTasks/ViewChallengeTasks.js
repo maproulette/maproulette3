@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Popup } from 'react-leaflet'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
 import { ChallengeStatus }
        from '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { TaskStatus,
@@ -62,26 +63,39 @@ export class ViewChallengeTasks extends Component {
     }
   }
 
-  changeStatus = (newStatus = TaskStatus.created) => {
-    const tasks = [...this.props.selectedTasks.values()]
-    if (tasks.length === 0) {
+  changeStatus = (selectedIds, newStatus = TaskStatus.created) => {
+    if (selectedIds.length === 0) {
       return
     }
+    const tasks = _map(selectedIds, id => this.props.selectedTasks.get(id))
 
     this.setState({bulkUpdating: true})
-    this.props.applyBulkTaskChanges(
-      tasks, {status: parseInt(newStatus),
-              mappedOn: null,
-              reviewStatus: null,
-              reviewRequestedBy: null,
-              reviewedBy: null,
-              reviewedAt: null}
+    // If all tasks are selected (so beyond what is being viewed on current page)
+    if (this.props.allTasksAreSelected()) {
+      this.props.applyBulkTaskStatusChange(
+        parseInt(newStatus), this.props.challenge.id, this.props.criteria
+      ).then(() => {
+        this.props.refreshChallenge()
+        this.props.refreshTasks()
+        this.setState({bulkUpdating: false})
+      })
+    }
+    // Otherwise only apply to selected tasks
+    else {
+      this.props.applyBulkTaskChanges(
+        tasks, {status: parseInt(newStatus),
+                mappedOn: null,
+                reviewStatus: null,
+                reviewRequestedBy: null,
+                reviewedBy: null,
+                reviewedAt: null}
 
-    ).then(() => {
-      this.props.refreshChallenge()
-      this.props.refreshTasks()
-      this.setState({bulkUpdating: false})
-    })
+      ).then(() => {
+        this.props.refreshChallenge()
+        this.props.refreshTasks()
+        this.setState({bulkUpdating: false})
+      })
+    }
   }
 
   resetMapBounds = () => {
@@ -144,7 +158,7 @@ export class ViewChallengeTasks extends Component {
     }
 
     const clearFiltersControl = (
-      <button className="mr-flex mr-items-center mr-text-blue-light"
+      <button className="mr-flex mr-items-center mr-text-green-lighter"
         onClick={() => {
           this.props.clearAllFilters()
           this.resetMapBounds()

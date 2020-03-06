@@ -83,6 +83,7 @@ const apiRoutes = factory => {
       'random': factory.get('/tasks/random', {noCache: true}),
       'withinBounds': factory.put('/tasks/box/:left/:bottom/:right/:top'),
       'bulkUpdate': factory.put('/tasks'),
+      'bulkStatusChange': factory.put('/tasks/changeStatus'),
       'review': factory.get('/tasks/review'),
       'reviewed': factory.get('/tasks/reviewed'),
       'reviewNext': factory.get('/tasks/review/next'),

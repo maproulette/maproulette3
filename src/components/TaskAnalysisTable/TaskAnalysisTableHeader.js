@@ -44,7 +44,8 @@ export class TaskAnalysisTableHeader extends Component {
 
     render() {
         const {countShown, configureColumns} = this.props
-        const selectedCount = this.props.selectedTasks.size
+
+        const selectedCount = this.props.selectedTasks.length
         const totalTaskCount = _get(this.props, 'totalTaskCount') || countShown || 0
         const totalTasksInChallenge = _get(this.props, 'totalTasksInChallenge', 0)
         const percentShown = Math.round(totalTaskCount / totalTasksInChallenge * 100.0)
@@ -127,7 +128,7 @@ export class TaskAnalysisTableHeader extends Component {
                         <span className="mr-mr-2">
                           <FormattedMessage
                             {...messages.taskCountSelectedStatus}
-                            values={{selectedCount}}
+                            values={{selectedCount: (this.props.allTasksAreSelected() ? totalTaskCount : selectedCount)}}
                           />
                         </span>
                         <span className="mr-mr-6">
@@ -176,7 +177,7 @@ export class TaskAnalysisTableHeader extends Component {
                                            skipConfirmation={e => e.target.value === ""}
                                          >
                                            <select
-                                             onChange={e => { if (e.target.value !== "") this.props.changeStatus(e.target.value) }}
+                                             onChange={e => { if (e.target.value !== "") this.props.changeStatus(this.props.selectedTasks, e.target.value) }}
                                              defaultValue={this.state.statusChange}
                                              className="mr-min-w-20 mr-select mr-text-xs"
                                            >

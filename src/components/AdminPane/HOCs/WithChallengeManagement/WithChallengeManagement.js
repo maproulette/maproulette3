@@ -14,7 +14,7 @@ import { saveChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
 import { recordChallengeSnapshot }
           from '../../../../services/Challenge/ChallengeSnapshot'
-import { bulkUpdateTasks, deleteChallengeTasks }
+import { bulkUpdateTasks, deleteChallengeTasks, bulkTaskStatusChange }
        from '../../../../services/Task/Task'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import { addError } from '../../../../services/Error/Error'
@@ -209,6 +209,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     return dispatch(bulkUpdateTasks(alteredTasks, true))
   },
+
+  applyBulkTaskStatusChange: (newStatus, challengeId, searchCriteria) => {
+    return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria))
+  }
 })
 
 export default WithChallengeManagement
