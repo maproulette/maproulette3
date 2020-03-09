@@ -51,7 +51,7 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 
 // columns
 const ALL_COLUMNS = {featureId:{}, id:{}, status:{}, priority:{},
-                 completedBy:{}, completedDuration:{}, mappedOn:{},
+                 completedDuration:{}, mappedOn:{},
                  reviewStatus:{group:"review"}, reviewRequestedBy:{group:"review"},
                  reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
                  reviewDuration:{group:"review"}, controls:{permanent: true},
@@ -126,7 +126,8 @@ export class TaskAnalysisTable extends Component {
         }
       }
       return _concat([columnTypes.selected],
-              _map(_keys(this.props.addedColumns), findColumn))
+              _filter(_map(_keys(this.props.addedColumns), findColumn),
+                      c => !_isUndefined(c)))
     }
   }
 
@@ -368,21 +369,6 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     )
   }
 
-  columns.completedBy = {
-    id: 'completedBy',
-    Header: props.intl.formatMessage(messages.completedByLabel),
-    accessor: 'completedBy',
-    sortable: true,
-    filterable: true,
-    exportable: t => _get(t.completedBy, 'username') || t.completedBy,
-    maxWidth: 180,
-    Cell: ({row}) =>
-      <div className={classNames("row-user-column",
-                      mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy))}>
-        {_get(row._original.completedBy, 'username') || row._original.completedBy }
-      </div>
-  }
-
   columns.completedDuration = {
     id: 'completedTimeSpent',
     Header: props.intl.formatMessage(messages.completedDurationLabel),
@@ -405,17 +391,17 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   }
 
   columns.reviewRequestedBy = {
-    id: 'reviewRequestedBy',
+    id: 'completedBy',
     Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
-    accessor: 'reviewRequestedBy',
+    accessor: 'completedBy',
     sortable: true,
     filterable: true,
-    exportable: t => _get(t.reviewRequestedBy, 'username') || t.reviewRequestedBy,
+    exportable: t => _get(t.completedBy, 'username') || t.completedBy,
     maxWidth: 180,
     Cell: ({row}) =>
       <div className={classNames("row-user-column",
-                      mapColors(_get(row._original.reviewRequestedBy, 'username') || row._original.reviewRequestedBy))}>
-        {_get(row._original.reviewRequestedBy, 'username') || row._original.reviewRequestedBy }
+                      mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy))}>
+        {_get(row._original.completedBy, 'username') || row._original.completedBy }
       </div>
   }
 
