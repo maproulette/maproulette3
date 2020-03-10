@@ -43,6 +43,8 @@ import { supportedSimplestyles }
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.scss'
 
+const shortcutGroup = 'layers'
+
 /**
  * TaskMap renders a map (and controls) appropriate for the given task,
  * including the various map-related features and configuration options set on
@@ -63,11 +65,16 @@ export class TaskMap extends Component {
 
   /** Process keyboard shortcuts for the layers */
   handleKeyboardShortcuts = event => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 
-    const layerShortcuts = this.props.keyboardShortcutGroups.layers
+    const layerShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
     switch(event.key) {
       case layerShortcuts.layerOSMData.key:
         this.toggleOSMDataVisibility()
@@ -153,7 +160,7 @@ export class TaskMap extends Component {
 
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
-      _pick(this.props.keyboardShortcutGroups, 'layers'),
+      _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts)
 
     this.loadMapillaryIfNeeded()
@@ -233,11 +240,15 @@ export class TaskMap extends Component {
       return true
     }
 
+    if (!_isEqual(nextProps.activeKeyboardShortcuts, this.props.activeKeyboardShortcuts)) {
+      return true
+    }
+
     return false
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcutGroup('layers',
+    this.props.deactivateKeyboardShortcutGroup(shortcutGroup,
                                                this.handleKeyboardShortcuts)
   }
 

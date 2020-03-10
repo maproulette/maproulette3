@@ -3,10 +3,13 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _get from 'lodash/get'
 import _pick from 'lodash/pick'
+import _isEmpty from 'lodash/isEmpty'
 import { DEFAULT_EDITOR, Editor }
        from '../../../../../services/Editor/Editor'
 import Button from '../../../../Button/Button'
 import messages from './Messages'
+
+const shortcutGroup = 'openEditor'
 
 /**
  * TaskEditControl renders a control for initiating the editing process for a
@@ -19,6 +22,11 @@ import messages from './Messages'
 export default class TaskEditControl extends Component {
   /** Process keyboard shortcuts for the edit controls */
   handleKeyboardShortcuts = (event) => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
@@ -28,7 +36,7 @@ export default class TaskEditControl extends Component {
       return
     }
 
-    const editShortcuts = this.props.keyboardShortcutGroups.openEditor
+    const editShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
 
     switch(event.key) {
       case editShortcuts.editId.key:
@@ -61,12 +69,12 @@ export default class TaskEditControl extends Component {
 
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
-      _pick(this.props.keyboardShortcutGroups, 'openEditor'),
+      _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts)
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcutGroup('openEditor',
+    this.props.deactivateKeyboardShortcutGroup(shortcutGroup,
                                                this.handleKeyboardShortcuts)
   }
 

@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
-import _pick from 'lodash/pick'
 import _noop from 'lodash/noop'
 import _split from 'lodash/split'
 import _get from 'lodash/get'
@@ -27,14 +26,25 @@ import External from '../External/External'
 import Modal from '../Modal/Modal'
 import messages from './Messages'
 
+const shortcutGroup = 'taskConfirmation'
+
 export class TaskConfirmationModal extends Component {
   commentInputRef = React.createRef()
 
   handleKeyboardShortcuts = event => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (event.key ===
-          this.props.keyboardShortcutGroups.taskCompletion.confirmSubmit.key &&
+        this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
         event.shiftKey) {
       this.props.onConfirm()
+      event.preventDefault()
+    }
+    else if (event.key === this.props.keyboardShortcutGroups.taskConfirmation.cancel.key) {
+      this.props.onCancel()
       event.preventDefault()
     }
   }
@@ -42,15 +52,18 @@ export class TaskConfirmationModal extends Component {
   componentDidMount(prevProps, prevState) {
     this.commentInputRef.current.focus()
 
+    this.props.pauseKeyboardShortcuts()
     this.props.activateKeyboardShortcut(
-      'taskCompletion',
-      _pick(this.props.keyboardShortcutGroups.taskCompletion, 'confirmSubmit'),
-      this.handleKeyboardShortcuts)
+      shortcutGroup,
+      this.props.keyboardShortcutGroups.taskConfirmation,
+      this.handleKeyboardShortcuts
+    )
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcut('taskCompletion', 'confirmSubmit',
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'confirmSubmit',
                                           this.handleKeyboardShortcuts)
+    this.props.resumeKeyboardShortcuts()
   }
 
   handleAddTag = (value) => {
