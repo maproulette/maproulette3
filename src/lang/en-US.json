@@ -165,6 +165,7 @@
   "Admin.Project.controls.manageChallengeList.label": "Manage Challenge List",
   "Admin.Project.headers.challengePreview": "Challenge Matches",
   "Admin.Project.headers.virtual": "Virtual",
+  "Admin.Project.controls.export.label": "Export CSV",
   "Admin.ProjectDashboard.controls.edit.label": "Edit Project",
   "Admin.ProjectDashboard.controls.delete.label": "Delete Project",
   "Admin.ProjectDashboard.controls.addChallenge.label": "Add Challenge",

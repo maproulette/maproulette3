@@ -109,6 +109,15 @@ export class ProjectCard extends Component {
                   }
                 </li>
               }
+              <li>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${process.env.REACT_APP_MAP_ROULETTE_SERVER_URL}/api/v2/project/${this.props.project.id}/tasks/extract`}
+                >
+                  <FormattedMessage {...messages.exportCSVLabel} />
+                </a>
+              </li>
             </ul>
           }
         />
