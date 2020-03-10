@@ -1035,6 +1035,7 @@
   "Review.TaskAnalysisTable.reviewCompleteControls.label": "Actions",
   "Review.Task.fields.id.label": "Internal Id",
   "Review.fields.status.label": "Status",
+  "Review.fields.priority.label": "Priority",
   "Review.fields.reviewStatus.label": "Review Status",
   "Review.fields.requestedBy.label": "Mapper",
   "Review.fields.reviewedBy.label": "Reviewer",
