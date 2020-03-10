@@ -16,7 +16,7 @@ class Modal extends Component {
         <div
           className={classNames(
             "mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200",
-            {"mr-bg-blue-dark-75": !this.props.transparentOverlay}
+            {"mr-bg-blue-firefly-75": !this.props.transparentOverlay}
           )}
           onClick={() => this.props.onClose && this.props.onClose()}
         />
