@@ -67,5 +67,10 @@ export default defineMessages({
   virtualHeader: {
     id: "Admin.Project.headers.virtual",
     defaultMessage: "Virtual",
-  }
+  },
+
+  exportCSVLabel: {
+    id: "Admin.Project.controls.export.label",
+    defaultMessage: "Export CSV",
+  },
 })
