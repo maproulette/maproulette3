@@ -14,6 +14,8 @@ import _omit from 'lodash/omit'
 import _pull from 'lodash/pull'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
+import { TaskPriority, keysByPriority, messagesByPriority }
+      from '../../../services/Task/TaskPriority/TaskPriority'
 import { TaskReviewStatus, keysByReviewStatus, messagesByReviewStatus, isNeedsReviewStatus }
        from '../../../services/Task/TaskReview/TaskReviewStatus'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
@@ -96,6 +98,7 @@ export class TaskReviewTable extends Component {
                    "reviewedBy":{},
                    "reviewedAt":{},
                    "status":{},
+                   "priority":{},
                    "reviewCompleteControls":{permanent: true},
                    "reviewerControls":{permanent: true},
                    "mapperControls":{permanent: true},
@@ -348,6 +351,46 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
             </option>
           )
         }
+      })
+
+      return (
+        <select
+          onChange={event => onChange(event.target.value)}
+          style={{ width: '100%' }}
+          value={filter ? filter.value : 'all'}
+        >
+          {options}
+        </select>
+      )
+    },
+  }
+
+  columns.priority = {
+    id: 'priority',
+    Header: props.intl.formatMessage(messages.priorityLabel),
+    accessor: 'priority',
+    sortable: true,
+    filterable: true,
+    exportable: t => props.intl.formatMessage(messagesByStatus[t.priority]),
+    maxWidth: 140,
+    Cell: props => (
+      <StatusLabel
+        {...props}
+        intlMessage={messagesByPriority[props.value]}
+        className={`mr-status-${_kebabCase(keysByPriority[props.value])}`}
+      />
+    ),
+    Filter: ({ filter, onChange }) => {
+      const options = [
+        <option key="all" value="all">All</option>
+      ]
+
+      _each(TaskPriority, (priority) => {
+        options.push(
+          <option key={keysByPriority[priority]} value={priority}>
+            {props.intl.formatMessage(messagesByPriority[priority])}
+          </option>
+        )
       })
 
       return (
