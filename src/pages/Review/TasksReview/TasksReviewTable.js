@@ -413,10 +413,14 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     sortable: false,
     exportable: t => _get(t.reviewRequestedBy, 'username'),
     maxWidth: 180,
-    Cell: ({row}) =>
-      <div className={classNames("row-user-column", mapColors(_get(row._original.reviewRequestedBy, 'username')))}>
+    Cell: ({row}) => (
+      <div
+        className="row-user-column"
+        style={{color: mapColors(_get(row._original.reviewRequestedBy, 'username'))}}
+      >
         {_get(row._original.reviewRequestedBy, 'username')}
       </div>
+    )
   }
 
   columns.challenge = {
@@ -513,10 +517,14 @@ const setupColumnTypes = (props, openComments, data, criteria, pageSize) => {
     sortable: false,
     exportable: t => _get(t.reviewedBy, 'username'),
     maxWidth: 180,
-    Cell: ({row}) =>
-      <div className={classNames("row-user-column", mapColors(_get(row._original.reviewedBy, 'username')))}>
+    Cell: ({row}) => (
+      <div
+        className="row-user-column"
+        style={{color: mapColors(_get(row._original.reviewedBy, 'username'))}}
+      >
         {row._original.reviewedBy ? row._original.reviewedBy.username : "N/A"}
       </div>
+    )
   }
 
   columns.reviewStatus = {
