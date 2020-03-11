@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
 import jsonLang from 'react-syntax-highlighter/dist/languages/hljs/json'
-import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/github'
+import highlightColors from 'react-syntax-highlighter/dist/styles/hljs/agate'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import _get from 'lodash/get'
 
-SyntaxHighlighter.registerLanguage('json', jsonLang);
+SyntaxHighlighter.registerLanguage('json', jsonLang)
+highlightColors.hljs.background="rgba(0, 0, 0, 0.15)"
 
 export default class ViewTask extends Component {
   render() {

@@ -14,7 +14,7 @@ import { saveChallenge,
          deleteChallenge } from '../../../../services/Challenge/Challenge'
 import { recordChallengeSnapshot }
           from '../../../../services/Challenge/ChallengeSnapshot'
-import { bulkUpdateTasks, deleteChallengeTasks }
+import { bulkUpdateTasks, deleteChallengeTasks, bulkTaskStatusChange }
        from '../../../../services/Task/Task'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
 import { addError } from '../../../../services/Error/Error'
@@ -170,8 +170,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     // Refresh all the challenge data, including clustered tasks if we can, as
     // it all has likely changed as a result of the rebuild
-    await ownProps.fetchChallengeActions(challenge.id)
-    await ownProps.fetchChallenge(challenge.id)
+    await fetchChallengeActions(challenge.id)
+    await fetchChallenge(challenge.id)
 
     // Reset map bounds to avoid potential user confusion after the rebuild
     if (ownProps.clearMapBounds) {
@@ -209,6 +209,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     return dispatch(bulkUpdateTasks(alteredTasks, true))
   },
+
+  applyBulkTaskStatusChange: (newStatus, challengeId, searchCriteria) => {
+    return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria))
+  }
 })
 
 export default WithChallengeManagement

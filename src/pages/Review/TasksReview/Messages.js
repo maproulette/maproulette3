@@ -104,6 +104,11 @@ export default defineMessages({
     defaultMessage: "Status",
   },
 
+  priorityLabel: {
+    id: "Review.fields.priority.label",
+    defaultMessage: "Priority",
+  },
+
   reviewStatusLabel: {
     id: "Review.fields.reviewStatus.label",
     defaultMessage: "Review Status",

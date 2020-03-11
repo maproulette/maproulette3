@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl'
 import _map from 'lodash/map'
 import Dropdown from '../Dropdown/Dropdown'
@@ -38,7 +39,7 @@ export class PastDurationSelector extends Component {
   render() {
     return (
       <Dropdown
-        className={this.props.className}
+        className={classNames("mr-dropdown--right", this.props.className)}
         dropdownButton={dropdown =>
           <DurationButton
             {...this.props}
@@ -50,16 +51,16 @@ export class PastDurationSelector extends Component {
         dropdownContent={dropdown => {
           if (this.state.showChooseCustomDates) {
             return (
-              <div className="mr-pt-2">
-                <div className="mr-text-green-light mr-w-full">
-                  <button className="mr-absolute mr-right-0 mr-top-0"
+              <div className="mr-pt-2 mr-min-w-72">
+                <div className="mr-text-green-lighter mr-w-full">
+                  <button className="mr-absolute mr-right-0 mr-top-0 mr-mt-2"
                     onClick={() => this.setState({showChooseCustomDates: false})}>
                     <SvgSymbol sym="outline-close-icon"
                       viewBox='0 0 20 20'
                       className="mr-fill-current mr-w-5 mr-h-5 mr-mr-1" />
                   </button>
                 </div>
-                <div className="mr-mt-2 mr-pb-2 mr-text-grey">
+                <div className="mr-mt-4 mr-pb-2 mr-text-grey">
                   <div className="mr-inline-block mr-w-20 mr-text-yellow mr-pr-2">
                     <FormattedMessage {...messages.startDate} />
                   </div>
@@ -80,15 +81,14 @@ export class PastDurationSelector extends Component {
                   />
                 </div>
                 {this.state.customStartDate && this.state.customEndDate &&
-                  <button className="mr-button mr-button--small mr-button--green mr-mt-2"
+                  <button className="mr-button mr-button--small mr-button--green-lighter mr-mt-2"
                           onClick={() => {
                             this.props.selectCustomRange(
                               this.state.customStartDate,
-                              this.state.customEndDate)
-                            this.setState({showChooseCustomDates: false})
+                              this.state.customEndDate)                            
                             dropdown.closeDropdown()
                           }}>
-                    Search
+                    <FormattedMessage {...messages.searchLabel} />
                   </button>
                 }
               </div>

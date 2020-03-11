@@ -39,6 +39,16 @@ export default defineMessages({
     defaultMessage: "Review Status",
   },
 
+  completedByLabel: {
+    id: "Task.fields.completedBy.label",
+    defaultMessage: "Completed By",
+  },
+
+  completedDurationLabel: {
+    id: "Admin.fields.completedDuration.label",
+    defaultMessage: "Completion Time",
+  },
+
   reviewRequestedByLabel: {
     id: "Task.fields.requestedBy.label",
     defaultMessage: "Mapper",

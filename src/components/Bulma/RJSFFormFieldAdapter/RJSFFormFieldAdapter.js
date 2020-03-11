@@ -4,6 +4,7 @@ import _get from 'lodash/get'
 import _isString from 'lodash/isString'
 import _map from 'lodash/map'
 import _isArray from 'lodash/isArray'
+import _isObject from 'lodash/isObject'
 import TagsInput from 'react-tagsinput'
 import Dropzone from 'react-dropzone'
 import OriginalSelectWidget
@@ -80,7 +81,10 @@ export const CustomArrayFieldTemplate = props => {
       {itemFields}
       {props.canAdd &&
        <div className="array-field__block-controls">
-         <button className="button add-item-button" onClick={props.onAddClick}>
+         <button
+           className="mr-button mr-button mr-button--small"
+           onClick={props.onAddClick}
+         >
            <FormattedMessage {...messages.addPriorityRuleLabel} />
          </button>
        </div>
@@ -122,7 +126,7 @@ export class MarkdownEditField extends Component {
            <span className="required">*</span>
           }
         </label>
-        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-8 mr-text-grey">
+        <div className="mr-grid mr-grid-columns-2 mr-grid-gap-8 mr-text-white">
           <textarea className="form-control"
                     onChange={e => this.props.onChange(e.target.value)}
                     value={this.props.formData} />
@@ -136,7 +140,7 @@ export class MarkdownEditField extends Component {
                               properties={{}}
                               completionResponses={{}}
                               setCompletionResponse={() => {}}
-                              lightMode={this.props.uiSchema["ui:lightMode"]}
+                              lightMode={false}
                               disableTemplate={true}/>
           </div>
         </div>
@@ -158,7 +162,7 @@ export const TagsInputField = props => {
     <div className="tags-field">
       <TagsInput {...props}
                  inputProps={{placeholder: "Add keyword"}}
-                 value={tags}
+                 value={_map(tags, tag => (_isObject(tag) ? tag.name : tag))}
                  onChange={tags => props.onChange(tags.join(','))}
                  addOnBlur />
     </div>
@@ -208,7 +212,7 @@ export const DropzoneTextUpload = ({id, required, onChange, readonly, formContex
         return (
           <div
             className={
-              dropAreaClassName ? dropAreaClassName : "dropzone mr-text-grey mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
+              dropAreaClassName ? dropAreaClassName : "dropzone mr-text-grey-lighter mr-p-4 mr-border-2 mr-rounded mr-mx-auto"
             }
             {...getRootProps()}
           >
@@ -230,7 +234,7 @@ export const MarkdownDescriptionField = ({id, description}) => {
 
   return (
     <div id={id} className="field-description">
-      <MarkdownContent markdown={description} lightMode />
+      <MarkdownContent markdown={description} lightMode={false} />
     </div>
   )
 }

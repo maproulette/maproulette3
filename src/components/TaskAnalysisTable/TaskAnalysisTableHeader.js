@@ -44,7 +44,8 @@ export class TaskAnalysisTableHeader extends Component {
 
     render() {
         const {countShown, configureColumns} = this.props
-        const selectedCount = this.props.selectedTasks.size
+
+        const selectedCount = this.props.selectedTasks.length
         const totalTaskCount = _get(this.props, 'totalTaskCount') || countShown || 0
         const totalTasksInChallenge = _get(this.props, 'totalTasksInChallenge', 0)
         const percentShown = Math.round(totalTaskCount / totalTasksInChallenge * 100.0)
@@ -96,30 +97,38 @@ export class TaskAnalysisTableHeader extends Component {
             <div className="mr-flex mr-justify-between">
                 <div className="mr-flex mr-items-center">
                     {_get(this.props, 'taskInfo.tasks.length', 0) > 0 &&
-                        <div className="admin__manage-tasks__task-controls mr-mr-4">
-                            <div className="admin__manage-tasks__task-controls__selection mr-m-0 mr-flex mr-pb-2 mr-pt-1 mr-items-baseline"
-                                    title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}>
-                                <label className="checkbox mr-mb-0">
-                                <TriStateCheckbox
-                                    checked={this.props.allTasksAreSelected()}
-                                    indeterminate={this.props.someTasksAreSelected()}
-                                    onClick={() => this.props.toggleAllTasksSelection()}
-                                    onChange={_noop}
+                        <div className="mr-mr-4">
+                          <div
+                            className="mr-m-0 mr-flex mr-py-2 mr-pl-4 mr-pr-8 mr-items-center mr-bg-black-15 mr-rounded mr-relative"
+                            title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}
+                          >
+                            <TriStateCheckbox
+                                checked={this.props.allTasksAreSelected()}
+                                indeterminate={this.props.someTasksAreSelected()}
+                                onClick={() => this.props.toggleAllTasksSelection()}
+                                onChange={_noop}
+                            />
+                            <div className="mr-absolute mr-top-0 mr-right-0 mr-mt-1 mr-mr-2">
+                              <DeactivatableDropdownButton
+                                options={taskSelectionActions}
+                                onSelect={this.takeTaskSelectionAction}
+                              >
+                                <SvgSymbol
+                                  sym="icon-cheveron-down"
+                                  viewBox="0 0 20 20"
+                                  className="mr-fill-green-lighter mr-w-5 mr-h-5"
                                 />
-                                </label>
-                                <DeactivatableDropdownButton options={taskSelectionActions}
-                                                                onSelect={this.takeTaskSelectionAction}>
-                                <div className="basic-dropdown-indicator mr-top-0" />
-                                </DeactivatableDropdownButton>
+                              </DeactivatableDropdownButton>
                             </div>
+                          </div>
                         </div>
                     }
 
-                    <h2 className="mr-flex mr-items-center mr-w-full mr-text-md mr-uppercase mr-text-grey">
+                    <h2 className="mr-flex mr-items-center mr-w-full mr-text-md mr-uppercase mr-text-white">
                         <span className="mr-mr-2">
                           <FormattedMessage
                             {...messages.taskCountSelectedStatus}
-                            values={{selectedCount}}
+                            values={{selectedCount: (this.props.allTasksAreSelected() ? totalTaskCount : selectedCount)}}
                           />
                         </span>
                         <span className="mr-mr-6">
@@ -139,7 +148,7 @@ export class TaskAnalysisTableHeader extends Component {
                 {!this.props.suppressManagement &&
                 <Dropdown className="mr-dropdown--right"
                     dropdownButton={dropdown => (
-                        <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-light">
+                        <button onClick={dropdown.toggleDropdownVisible} className="mr-flex mr-items-center mr-text-green-lighter">
                             <SvgSymbol sym="cog-icon"
                                 viewBox="0 0 20 20"
                                 className="mr-fill-current mr-w-5 mr-h-5" />
@@ -151,42 +160,48 @@ export class TaskAnalysisTableHeader extends Component {
                                 {manager.canWriteProject(this.props.challenge.parent) &&
                                     <li>
                                       <div>
-                                          <button className={classNames("mr-text-current mr-pr-1",
-                                                              (!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) ? "mr-text-grey mr-cursor-default" : "")}
-                                                  disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}>
-                                              <FormattedMessage {...messages.changeStatusToLabel} />
-                                          </button>
-                                          {(!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) &&
-                                            <span className="mr-text-current mr-text-grey">...</span>}
-                                          {(this.props.someTasksAreSelected() || this.props.allTasksAreSelected()) &&
-                                            <ConfirmAction
-                                              action="onChange"
-                                              skipConfirmation={e => e.target.value === ""}
-                                            >
-                                              <select
-                                                onChange={e => { if (e.target.value !== "") this.props.changeStatus(e.target.value) }}
-                                                defaultValue={this.state.statusChange}
-                                                className="mr-min-w-20 mr-bg-blue-dark mr-w-full mr-rounded mr-px-1 mr-text-xs mr-pl-2"
-                                              >
-                                                <option key="choose" value="">
-                                                  {this.props.intl.formatMessage(messages.chooseStatusLabel)}
-                                                </option>
-                                                {_map(_omit(TaskStatus, "deleted"), (value, key) =>
-                                                  <option key={key} value={value}>
-                                                    {localizedStatusLabels[key]}
-                                                  </option>
-                                                )}
-                                              </select>
-                                            </ConfirmAction>
-                                          }
+                                        <button
+                                          className={classNames("mr-text-current mr-pr-1",
+                                            (!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) ? "mr-text-grey-light mr-cursor-default" : ""
+                                          )}
+                                          disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}
+                                        >
+                                          <FormattedMessage {...messages.changeStatusToLabel} />
+                                        </button>
+                                        {(!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) &&
+                                         <span className="mr-text-current mr-text-grey-light">...</span>
+                                        }
+                                        {(this.props.someTasksAreSelected() || this.props.allTasksAreSelected()) &&
+                                         <ConfirmAction
+                                           action="onChange"
+                                           skipConfirmation={e => e.target.value === ""}
+                                         >
+                                           <select
+                                             onChange={e => { if (e.target.value !== "") this.props.changeStatus(this.props.selectedTasks, e.target.value) }}
+                                             defaultValue={this.state.statusChange}
+                                             className="mr-min-w-20 mr-select mr-text-xs"
+                                           >
+                                             <option key="choose" value="">
+                                               {this.props.intl.formatMessage(messages.chooseStatusLabel)}
+                                             </option>
+                                             {_map(_omit(TaskStatus, "deleted"), (value, key) =>
+                                               <option key={key} value={value}>
+                                                 {localizedStatusLabels[key]}
+                                               </option>
+                                             )}
+                                           </select>
+                                         </ConfirmAction>
+                                        }
                                       </div>
                                     </li>
                                 }
                                 <li>
-                                    <button className="mr-text-current"
-                                            onClick={() => configureColumns()}>
-                                        <FormattedMessage {...messages.configureColumnsLabel} />
-                                    </button>
+                                  <button
+                                    className="mr-text-green-lighter"
+                                    onClick={() => configureColumns()}
+                                  >
+                                    <FormattedMessage {...messages.configureColumnsLabel} />
+                                  </button>
                                 </li>
                             </ul>
                             <hr className="mr-rule-dropdown" />

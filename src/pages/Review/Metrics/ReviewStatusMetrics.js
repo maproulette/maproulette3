@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
+import _get from 'lodash/get'
 import messages from './Messages'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskPriority, keysByPriority, taskPriorityLabels }
@@ -118,9 +119,22 @@ export default class ReviewStatusMetrics extends Component {
       }
     })
 
+    let averageTime = null
+    if (_get(metrics, 'avgReviewTime', 0) > 0) {
+      const seconds = metrics.avgReviewTime / 1000
+      averageTime =
+        <div className="mr-mt-4">
+          <FormattedMessage {...messages.avgTimeSpent} />
+          <span className="mr-pl-2">
+            {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
+          </span>
+        </div>
+    }
+
     return (
       <div className={classNames("review-status-metrics")}>
         {metrics && this.buildReviewStats(type, metrics)}
+        {averageTime}
         {reviewMetricsByPriority && this.props.setShowByPriority &&
           <div
             className={classNames(
@@ -149,16 +163,17 @@ export default class ReviewStatusMetrics extends Component {
 }
 
 function buildMetric(amount, total, description, lightMode = false) {
-  return <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
-    <div className={classNames("mr-col-span-1 mr-text-2xl",
-                    lightMode ? "mr-text-pink":"mr-text-yellow")}>
-      {amount === 0 ? 0 : Math.round(amount / total * 100)}%
-    </div>
-    <div className="mr-col-span-4">
-      <div className={classNames(lightMode ? "mr-text-pink":"mr-text-yellow")}>
-        {amount} / {total}
+  return (
+    <div className="mr-grid mr-grid-columns-5 mr-grid-gap-2">
+      <div className="mr-col-span-1 mr-text-2xl mr-text-pink">
+        {amount === 0 ? 0 : Math.round(amount / total * 100)}%
       </div>
-      <div>{description}</div>
+      <div className="mr-col-span-4">
+        <div className="mr-text-pink mr-text-base">
+          {amount}/{total}
+        </div>
+        <div>{description}</div>
+      </div>
     </div>
-  </div>
+  )
 }

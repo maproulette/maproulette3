@@ -73,4 +73,9 @@ export default defineMessages({
     id: 'Metrics.reviewStats.awaiting.label',
     defaultMessage: "Tasks that are awaiting review",
   },
+
+  avgReviewTime: {
+    id: 'Metrics.reviewStats.averageReviewTime.label',
+    defaultMessage: "Average time to review:",
+  }
 })

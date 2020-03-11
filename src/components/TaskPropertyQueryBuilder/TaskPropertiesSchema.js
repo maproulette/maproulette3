@@ -86,14 +86,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeString),
                     enumNames: searchTypeStringMessages,
-                    default: "equals",
-                  },
-                  value: {
-                    title: "Value",
-                    type: "array",
-                    items: {
-                      type: "string"
-                    },
+                    default: TaskPropertySearchTypeString.equals,
                   },
                 },
               },
@@ -107,7 +100,7 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     type: "string",
                     enum: _values(TaskPropertySearchTypeNumber),
                     enumNames: ["=", "≠", ">", "<"],
-                    default: "equals",
+                    default: TaskPropertySearchTypeNumber.equals,
                   },
                   value: {
                     title: "Value",
@@ -115,6 +108,57 @@ export const jsSchema = (intl, taskPropertyKeys) => {
                     items: {
                       type: "string"
                     },
+                  },
+                },
+              }
+            ]
+          },
+          operator: {
+            oneOf: [
+              {
+                properties: {
+                  operator: {
+                    enum: [TaskPropertySearchTypeString.equals,
+                           TaskPropertySearchTypeString.notEqual,
+                           TaskPropertySearchTypeString.contains],
+                  },
+                  value: {
+                    title: "Value",
+                    type: "array",
+                    items: {
+                      type: "string"
+                    },
+                  },
+                }
+              },
+              {
+                properties: {
+                  operator: {
+                    enum: [TaskPropertySearchTypeString.exists,
+                           TaskPropertySearchTypeString.missing],
+                  },
+                }
+              },
+            ],
+          },
+          value: {
+            oneOf: [
+              {
+                properties: {
+                  value: {
+                    minItems: 2,
+                  },
+                }
+              },
+              {
+                properties: {
+                  value: {
+                    maxItems: 1,
+                  },
+                  commaSeparate: {
+                    title: intl.formatMessage(messages.commaSeparateValues),
+                    type: "boolean",
+                    default: false,
                   },
                 },
               }
@@ -163,7 +207,7 @@ function buildUISchema(deepness, taskPropertyKeys) {
   }
 
   return {
-    classNames: "property-rule mr-border mr-border-green-light mr-p-2 mr-m-1 mr-pl-4 mr-flex",
+    classNames: "property-rule mr-border-2 mr-border-white-10 mr-pt-2 mr-pb-3 mr-m-1 mr-pl-4 mr-flex",
     valueType: {
       classNames:  "mr-text-green mr-w-48",
       "ui:widget": "select",
@@ -184,6 +228,10 @@ function buildUISchema(deepness, taskPropertyKeys) {
       classNames: "inline-selector mr-inline",
       "ui:options": { inline: true, label: false, orderable: false },
     },
+    commaSeparate: {
+      classNames: "inline-selector mr-inline",
+      "ui:options": { inline: true, },
+    },
     left: buildUISchema(deepness - 1),
     right: buildUISchema(deepness - 1),
   }
@@ -201,7 +249,7 @@ export function ArrayFieldTemplate(props) {
             {element.children}
             {props.items.length > 1 &&
               <React.Fragment>
-                <button type="button" className="mr-text-red mr-pb-4 mr-pl-2"
+                <button type="button" className="mr-text-red-light mr-pb-4 mr-pl-2"
                         onClick={(event) => element.onDropIndexClick(index)(event)}>
                   <SvgSymbol
                     sym="trash-icon"
@@ -216,7 +264,7 @@ export function ArrayFieldTemplate(props) {
             }
           </div>
           {props.canAdd && props.items.length === (index + 1) &&
-            <button type="button" className="mr-text-green"
+            <button type="button" className="mr-text-green-lighter mr-mt-1"
                     onClick={props.onAddClick}>
               <FormattedMessage {...messages.addValueButton} />
             </button>}

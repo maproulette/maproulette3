@@ -11,6 +11,7 @@ import _each from 'lodash/each'
 import _isUndefined from 'lodash/isUndefined'
 import _indexOf from 'lodash/indexOf'
 import _sortBy from 'lodash/sortBy'
+import _reverse from 'lodash/reverse'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import { keysByStatus, messagesByStatus, TASK_STATUS_CREATED }
@@ -35,18 +36,22 @@ export default class TaskHistoryList extends Component {
       return <div className="mr-px-4 history-list none">No History</div>
     }
 
-    const combinedLogs = []
-    var entries = []
-    var logEntry = null
-    var lastTimestamp = null
-    var username = null
-    var updatedStatus = null
-    var startedAtEntry = null
+    let combinedLogs = []
+    let entries = []
+    let logEntry = null
+    let lastTimestamp = null
+    let username = null
+    let updatedStatus = null
+    let startedAtEntry = null
+    let duration = null
 
-    _each(this.props.taskHistory, (log, index) => {
-      if (lastTimestamp !== null && entries.length > 0 &&
-          new Date(log.timestamp) - lastTimestamp < -1000) {
-        combinedLogs.push({timestamp: new Date(log.timestamp),
+    _each(_sortBy(this.props.taskHistory, h => new Date(h.timestamp)), (log, index) => {
+      // We are moving on to a new set of actions so let's push
+      // this set of entries
+      if (lastTimestamp !== null && (entries.length > 0 || startedAtEntry) &&
+          Math.abs(new Date(log.timestamp) - lastTimestamp) > 1000) {
+        combinedLogs.push({timestamp: lastTimestamp,
+                           duration: duration,
                            entry: entries,
                            username: username,
                            status: updatedStatus})
@@ -56,6 +61,7 @@ export default class TaskHistoryList extends Component {
         }
         entries = []
         updatedStatus = null
+        duration = null
       }
       lastTimestamp = new Date(log.timestamp)
 
@@ -80,6 +86,10 @@ export default class TaskHistoryList extends Component {
                   showDot
                 />
             username = _get(log, 'reviewedBy.username')
+
+            if (log.startedAt) {
+              duration = new Date(log.timestamp) - new Date(log.startedAt)
+            }
           }
           break
         case TaskHistoryAction.status:
@@ -87,14 +97,17 @@ export default class TaskHistoryList extends Component {
           logEntry = null
           username = _get(log, 'user.username')
           updatedStatus = statusEntry(log, this.props, index)
-
           if (log.startedAt || log.oldStatus === TASK_STATUS_CREATED) {
+            // Add a "Started At" entry into the history
             startedAtEntry = {timestamp: (log.startedAt || log.timestamp),
                               ignoreAtticOffset: true,
                               entry: [
                                 <li className="mr-mb-4" key={"start-" + index}>
                                   <div>
-                                    <span className={classNames("mr-mr-2", mapColors(username))}>
+                                    <span
+                                      className="mr-mr-2"
+                                      style={{color: mapColors(username)}}
+                                    >
                                       {username}
                                     </span> <FormattedMessage {...messages.startedOnLabel} />
                                   </div>
@@ -102,6 +115,9 @@ export default class TaskHistoryList extends Component {
                               ]}
           }
 
+          if (log.startedAt) {
+            duration = new Date(log.timestamp) - new Date(log.startedAt)
+          }
           break
 
       }
@@ -110,6 +126,7 @@ export default class TaskHistoryList extends Component {
 
     if (entries.length > 0) {
       combinedLogs.push({timestamp: lastTimestamp,
+                         duration: duration,
                          entry: entries,
                          username: username,
                          status: updatedStatus})
@@ -119,12 +136,12 @@ export default class TaskHistoryList extends Component {
       }
     }
 
-    _sortBy(combinedLogs, ['timestamp'])
+    combinedLogs = _reverse(_sortBy(combinedLogs, log => new Date(log.timestamp)))
 
     const historyEntries = _map(combinedLogs, (log, index) => {
       return (
         <article key={'entry-' + index} className="mr-pr-4 mr-mb-8">
-          <div className="mr-list-reset mr-mb-2 mr-text-xs">
+          <div className="mr-list-reset mr-links-green-lighter mr-mb-2 mr-text-xs">
             <div className="mr-flex mr-justify-between">
               <div className="mr-font-medium">
                 <FormattedTime
@@ -137,6 +154,11 @@ export default class TaskHistoryList extends Component {
                   month='long'
                   day='2-digit'
                 />
+                {log.duration &&
+                  <span className="mr-pl-4 mr-text-pink">
+                    {Math.floor(log.duration / 1000 / 60)}m {Math.floor(log.duration / 1000) % 60}s
+                  </span>
+                }
               </div>
               {!this.props.selectDiffs &&
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
@@ -146,19 +168,22 @@ export default class TaskHistoryList extends Component {
                 </a>
               }
               {this.props.selectDiffs &&
-                <label className="checkbox">
-                  <input type="checkbox"
-                         checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
-                         onChange={() => this.props.toggleSelection(log.timestamp)} />
-                </label>
+               <input
+                 className="mr-checkbox-toggle"
+                 type="checkbox"
+                 checked={_indexOf(this.props.selectedTimestamps, log.timestamp.toString()) !== -1}
+                 onChange={() => this.props.toggleSelection(log.timestamp)}
+               />
               }
             </div>
           </div>
-          <ol className="mr-list-reset mr-text-sm mr-rounded-sm mr-p-2 mr-bg-grey-lighter-10">
+          <ol className="mr-list-reset mr-text-sm mr-rounded-sm mr-p-2 mr-bg-black-15">
             {(log.username || log.status) &&
               <li className="mr-mb-4">
                 <div className="mr-flex mr-justify-between">
-                  <span className={mapColors(log.username)}>{log.username}</span>
+                  <span style={{color: mapColors(log.username)}}>
+                    {log.username}
+                  </span>
                   {log.status}
                 </div>
               </li>

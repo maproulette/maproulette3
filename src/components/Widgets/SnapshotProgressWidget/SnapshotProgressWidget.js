@@ -110,9 +110,9 @@ export default class SnapshotProgressWidget extends Component {
         className="completion-progress-widget"
         widgetTitle={<FormattedMessage {...messages.title} />}
         rightHeaderControls={
-          <div className="mr-flex mr-items-right mr-justify-start">
+          <div className="mr-flex mr-items-right mr-justify-start mr-items-center mr-my-2">
             <Dropdown
-              className="mr-button mr-button--blue mr-mr-2"
+              className="mr-button mr-button--green-lighter mr-button--small mr-mr-4"
               dropdownButton={dropdown => this.snapshotButton(dropdown, this.props)}
               dropdownContent={dropdown => this.snapshotMenuItems(dropdown, this.props)}
             />
@@ -122,12 +122,12 @@ export default class SnapshotProgressWidget extends Component {
               dropdownButton={dropdown => (
                 <button
                   onClick={dropdown.toggleDropdownVisible}
-                  className="mr-flex mr-items-center mr-text-green-light"
+                  className="mr-flex mr-items-center mr-text-green-lighter"
                 >
                   <SvgSymbol
                     sym="cog-icon"
                     viewBox="0 0 20 20"
-                    className="mr-fill-current mr-w-5 mr-h-5"
+                    className="mr-fill-current mr-w-4 mr-h-4"
                   />
                 </button>
               )}

@@ -34,13 +34,13 @@ export default class LeaderboardStats extends Component {
             <FormattedMessage {...messages.totalPoints} />
           </li>
         </ul>
-        <h3 className="mr-text-base mr-pb-3 mr-mb-3 mr-border-b mr-border-white-10">
+        <h3 className="mr-text-base mr-pb-3 mr-border-b mr-border-white-10">
           <FormattedMessage {...messages.topChallenges} />
         </h3>
-        <ol className="mr-list-reset">
+        <ol className="mr-list-reset mr-links-green-lighter">
           {_map(this.props.leaderboardMetrics.topChallenges.slice(0, 4), (challenge, index) => {
             return (
-              <li key={index}>
+              <li key={index} className="mr-mt-3">
                 <a href={"/browse/challenges/" + challenge.id}>{challenge.name}</a>
               </li>
             )

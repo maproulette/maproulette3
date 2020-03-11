@@ -70,9 +70,15 @@ const SavedChallengeList = function(props) {
     }
   ))
 
-  return challengeItems.length > 0 ?
-         <ol className="mr-list-reset">{challengeItems}</ol> :
-         <div className="none">No Challenges</div>
+  return (
+    challengeItems.length > 0 ?
+    <ol className="mr-list-reset mr-links-green-lighter">
+      {challengeItems}
+    </ol> :
+    <div className="mr-text-grey-lighter">
+      <FormattedMessage {...messages.noChallenges} />
+    </div>
+  )
 }
 
 registerWidgetType(SavedChallengesWidget, descriptor)

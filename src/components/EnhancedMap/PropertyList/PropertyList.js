@@ -47,7 +47,7 @@ const PropertyList = props => {
 
     return (
       <tr key={key} className="property">
-        <td className={classNames("name", {"mr-border-none mr-pr-3": darkMode})}>{link}</td>
+        <td className={classNames("name", {"mr-border-none mr-links-green-lighter mr-pr-3": darkMode})}>{link}</td>
         <td className={classNames("value", {"mr-border-none mr-pb-1": darkMode})}>{value}</td>
       </tr>
     )
@@ -55,7 +55,7 @@ const PropertyList = props => {
 
   const header = <h3>{props.header ? props.header : <FormattedMessage {...messages.title} />}</h3>
   return (
-    <div className="feature-properties">
+    <div className="feature-properties mr-ml-2">
       {!props.hideHeader && header}
       <table className={classNames("property-list", {"mr-bg-transparent mr-text-white": darkMode, "table": !darkMode})}>
         <tbody>{rows}</tbody>

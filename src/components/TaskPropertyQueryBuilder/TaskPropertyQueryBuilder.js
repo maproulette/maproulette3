@@ -11,6 +11,8 @@ import { jsSchema, uiSchema, ArrayFieldTemplate } from './TaskPropertiesSchema'
 import { preparePropertyRulesForSaving,
          preparePropertyRulesForForm,
          validatePropertyRules } from './TaskPropertyRules'
+import { TaskPropertySearchTypeString }
+       from '../../services/Task/TaskProperty/TaskProperty'
 import messages from './Messages'
 import './TaskPropertiesSchema.scss'
 
@@ -67,6 +69,7 @@ export class TaskPropertyQueryBuilder extends Component {
         }
         if (data.valueType && data.valueType !== "compound rule") {
           data.value = data.value || [""]
+          data.operator = data.operator || "equals"
         }
       }
     }
@@ -147,10 +150,33 @@ export class TaskPropertyQueryBuilder extends Component {
   render() {
     const data = this.state.formData || this.props.taskPropertyStyleRules
 
+    // We have to clear out any values defined if the operator is "exists" or
+    // "missing" otherwise the schema for will erroneously show the
+    // "comma separate values" checkbox
+    if (_get(data, 'propertyRules.rootRule')) {
+      const clearOutValues = (rule) => {
+        if (rule.valueType === "compound rule") {
+          rule.value = undefined
+        }
+        else if (rule.operator === TaskPropertySearchTypeString.missing ||
+                 rule.operator === TaskPropertySearchTypeString.exists) {
+          rule.value = undefined
+        }
+        if (rule.left) {
+          clearOutValues(rule.left)
+        }
+        if (rule.right) {
+          clearOutValues(rule.right)
+        }
+      }
+
+      clearOutValues(data.propertyRules.rootRule)
+    }
+
     return (
       <div className="task-properties-form mr-w-full mr-pt-4">
         <Form schema={jsSchema(this.props.intl, this.props.taskPropertyKeys)}
-              className="mr-bg-white"
+              className="mr-bg-black-15 mr-p-2"
               onAsyncValidate={this.validateGeoJSONSource}
               uiSchema={uiSchema(this.props.intl, this.props.taskPropertyKeys)}
               ArrayFieldTemplate={ArrayFieldTemplate}
@@ -163,21 +189,25 @@ export class TaskPropertyQueryBuilder extends Component {
               onError={this.errorHandler}
         >
           {this.state.errors &&
-            <div className="mr-ml-4 mr-mb-4 mr-text-red">
+            <div className="mr-ml-4 mr-mb-4 mr-text-red-light">
               {this.props.intl.formatMessage(messages[_head(this.state.errors)])}
             </div>
           }
           {!this.props.updateAsChange &&
-            <React.Fragment>
-              <button className="mr-button mr-button--green mr-ml-4 mr-mb-2"
-                      onClick={this.clearForm}>
+            <div className="mr-pt-2 mr-pb-4 mr-pl-1">
+              <button
+                className="mr-button mr-button--green-lighter mr-mr-4"
+                onClick={this.clearForm}
+              >
                 <FormattedMessage {...messages.clearButton} />
               </button>
-              <button className="mr-button mr-button--green mr-ml-4 mr-mb-2"
-                      onClick={this.finish}>
+              <button
+                className="mr-button mr-button--green-lighter"
+                onClick={this.finish}
+              >
                 <FormattedMessage {...messages.searchButton} />
               </button>
-            </React.Fragment>
+            </div>
           }
         </Form>
       </div>

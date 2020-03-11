@@ -19,6 +19,8 @@ import _sortBy from 'lodash/sortBy'
 import _reverse from 'lodash/reverse'
 import _keys from 'lodash/keys'
 import _concat from 'lodash/concat'
+import _filter from 'lodash/filter'
+import _find from 'lodash/find'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import { messagesByStatus,
@@ -49,6 +51,7 @@ const ViewTaskSubComponent = WithLoadedTask(ViewTask)
 
 // columns
 const ALL_COLUMNS = {featureId:{}, id:{}, status:{}, priority:{},
+                 completedDuration:{}, mappedOn:{},
                  reviewStatus:{group:"review"}, reviewRequestedBy:{group:"review"},
                  reviewedBy:{group:"review"}, reviewedAt:{group:"review"},
                  reviewDuration:{group:"review"}, controls:{permanent: true},
@@ -123,7 +126,8 @@ export class TaskAnalysisTable extends Component {
         }
       }
       return _concat([columnTypes.selected],
-              _map(_keys(this.props.addedColumns), findColumn))
+              _filter(_map(_keys(this.props.addedColumns), findColumn),
+                      c => !_isUndefined(c)))
     }
   }
 
@@ -141,7 +145,6 @@ export class TaskAnalysisTable extends Component {
       taskBaseRoute = `/admin/project/${this.props.challenge.parent.id}` +
                       `/challenge/${this.props.challenge.id}/task`
     }
-
     const pageSize = this.props.pageSize
     const page = this.props.page
     const totalPages = Math.ceil(_get(this.props, 'totalTaskCount', 0) / pageSize)
@@ -157,6 +160,14 @@ export class TaskAnalysisTable extends Component {
       if (defaultSorted[0].id === "name") {
         data = _sortBy(data, (t) => (t.name || t.title))
       }
+      else if (defaultSorted[0].id === "reviewDuration") {
+        data = _sortBy(data, (t) => {
+          if (!t.reviewedAt || !t.reviewStartedAt) {
+            return 0
+          }
+          return differenceInSeconds(parse(t.reviewedAt), parse(t.reviewStartedAt))
+        })
+      }
       else {
         data = _sortBy(data, defaultSorted[0].id)
       }
@@ -164,6 +175,16 @@ export class TaskAnalysisTable extends Component {
         data = _reverse(data)
       }
     }
+
+    // It's possible for the props.selectedTasks (which comes from WithFilteredClusteredTasks)
+    // to contain tasks not in our data as our data has been filtered by
+    // bounds and paging also --- so we make sure here to only include tasks
+    // visible on our current page.
+    const selectedDataTasks =
+      _filter([...this.props.selectedTasks.keys()],
+               taskId => _find(data, task => task.id === taskId))
+
+
     if (_get(this.props, 'criteria.filters')) {
       defaultFiltered = _map(this.props.criteria.filters,
                              (value, key) => {return {id: key, value}})
@@ -178,9 +199,10 @@ export class TaskAnalysisTable extends Component {
           {!this.props.suppressHeader &&
            <header className="mr-mb-4">
              <TaskAnalysisTableHeader
+               {...this.props}
                countShown={data.length}
                configureColumns={this.configureColumns.bind(this)}
-               {...this.props}
+               selectedTasks={selectedDataTasks}
              />
            </header>
           }
@@ -237,15 +259,16 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
 
   columns.selected = {id: 'selected',
     Header: null,
-    accessor: task => props.selectedTasks.has(task.id),
+    accessor: task => (props.selectedTasks.has(task.id) || props.allTasksAreSelected()),
     Cell: ({value, original}) => (
       props.highlightPrimaryTask && original.id === props.task.id ?
-      <span>✓</span> :
-      <label className="checkbox">
-        <input type="checkbox"
-               checked={value}
-               onChange={() => props.toggleTaskSelection(original)} />
-      </label>
+      <span className="mr-text-green-lighter">✓</span> :
+      <input
+        type="checkbox"
+        className="mr-checkbox-toggle"
+        checked={value}
+        onChange={() => props.toggleTaskSelection(original)}
+      />
     ),
     maxWidth: 25,
     sortable: false,
@@ -346,19 +369,43 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     )
   }
 
+  columns.completedDuration = {
+    id: 'completedTimeSpent',
+    Header: props.intl.formatMessage(messages.completedDurationLabel),
+    accessor: 'completedTimeSpent',
+    sortable: true,
+    defaultSortDesc: true,
+    exportable: t => t.completedTimeSpent,
+    maxWidth: 120,
+    minWidth: 120,
+    Cell: ({row}) => {
+      if (!row._original.completedTimeSpent) return null
+
+      const seconds = row._original.completedTimeSpent / 1000
+      return (
+        <span>
+          {Math.floor(seconds / 60)}m {Math.floor(seconds) % 60}s
+        </span>
+      )
+    }
+  }
+
   columns.reviewRequestedBy = {
-    id: 'reviewRequestedBy',
+    id: 'completedBy',
     Header: props.intl.formatMessage(messages.reviewRequestedByLabel),
-    accessor: 'reviewRequestedBy',
+    accessor: 'completedBy',
     sortable: true,
     filterable: true,
-    exportable: t => _get(t.reviewRequestedBy, 'username') || t.reviewRequestedBy,
+    exportable: t => _get(t.completedBy, 'username') || t.completedBy,
     maxWidth: 180,
-    Cell: ({row}) =>
-      <div className={classNames("row-user-column",
-                      mapColors(_get(row._original.reviewRequestedBy, 'username') || row._original.reviewRequestedBy))}>
-        {_get(row._original.reviewRequestedBy, 'username') || row._original.reviewRequestedBy }
+    Cell: ({row}) => (
+      <div
+        className="row-user-column"
+        style={{color: mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy)}}
+      >
+        {_get(row._original.completedBy, 'username') || row._original.completedBy}
       </div>
+    )
   }
 
   columns.reviewedAt = {
@@ -382,10 +429,9 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
   columns.reviewDuration = {
     id: 'reviewDuration',
     Header: props.intl.formatMessage(messages.reviewDurationLabel),
-    accessor: 'reviewStartedAt',
-    sortable: false,
+    accessor: 'reviewDuration',
+    sortable: true,
     defaultSortDesc: true,
-    exportable: t => t.reviewStartedAt,
     maxWidth: 120,
     minWidth: 120,
     Cell: ({row}) => {
@@ -411,11 +457,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     exportable: t => _get(t.reviewedBy, 'username') || t.reviewedBy,
     maxWidth: 180,
     Cell: ({row}) => (
-      !row._original.reviewedBy ? null :
-        <div className={classNames("row-user-column",
-                        mapColors(row._original.reviewedBy.username || row._original.reviewedBy))}>
-          {row._original.reviewedBy.username || row._original.reviewedBy}
-        </div>
+      !row._original.reviewedBy ?
+      null :
+      <div
+        className="row-user-column"
+        style={{color: mapColors(row._original.reviewedBy.username || row._original.reviewedBy)}}
+      >
+        {row._original.reviewedBy.username || row._original.reviewedBy}
+      </div>
     )
   }
 
@@ -445,7 +494,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     sortable: false,
     minWidth: 150,
     Cell: ({row}) =>
-      <div className="row-controls-column">
+      <div className="row-controls-column mr-links-green-lighter">
         <Link to={`${taskBaseRoute}/${row._original.id}/inspect`} className="mr-mr-2">
           <FormattedMessage {...messages.inspectTaskLabel} />
         </Link>
@@ -455,7 +504,7 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
          </Link>
         }
         {(!_isUndefined(row._original.reviewStatus)) &&
-         <Link to={`/challenge/${row._original.parent.id}/task/${row._original.id}/review`} className="mr-mr-2">
+         <Link to={`/challenge/${props.challenge.id}/task/${row._original.id}/review`} className="mr-mr-2">
            <FormattedMessage {...messages.reviewTaskLabel} />
          </Link>
         }

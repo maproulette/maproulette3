@@ -21,8 +21,10 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
         this.setState({loading: true})
 
         fetchChallengeSnapshotList(challengeId, true).then(normalizedResults => {
-          let fetchedSnapshots = _values(normalizedResults.result)
-          this.setState({loading: false, snapshotList: fetchedSnapshots})
+          if (normalizedResults) {
+            let fetchedSnapshots = _values(normalizedResults.result)
+            this.setState({loading: false, snapshotList: fetchedSnapshots})
+          }
         })
       }
     }
@@ -70,7 +72,8 @@ const WithChallengeSnapshots = function(WrappedComponent, applyFilters = false) 
         reviewApproved: reviewActions.approved,
         reviewRejected: reviewActions.rejected,
         reviewAssisted: reviewActions.assisted,
-        reviewDisputed: reviewActions.disputed
+        reviewDisputed: reviewActions.disputed,
+        avgReviewTime: reviewActions.avgReviewTime,
       } : this.props.reviewMetrics
 
       return <WrappedComponent

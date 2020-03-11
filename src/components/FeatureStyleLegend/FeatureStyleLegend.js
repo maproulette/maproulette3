@@ -7,6 +7,9 @@ import _map from 'lodash/map'
 import _join from 'lodash/join'
 import MarkdownContent from '../MarkdownContent/MarkdownContent'
 import messages from './Messages'
+import { TaskPropertySearchTypeString,
+         TaskPropertySearchTypeNumber }
+       from '../../services/Task/TaskProperty/TaskProperty'
 
 /**
  * FeatureStyleLegend displays a legend of custom feature styles setup on the
@@ -17,15 +20,19 @@ import messages from './Messages'
 export class FeatureStyleLegend extends Component {
   compactedComparator = search => {
     switch(search.searchType) {
-      case "equals":
+      case TaskPropertySearchTypeString.equals:
         return "="
-      case "contains":
+      case TaskPropertySearchTypeString.contains:
         return this.props.intl.formatMessage(messages.containsLabel)
-      case "not_equal":
+      case TaskPropertySearchTypeString.exists:
+        return this.props.intl.formatMessage(messages.existsLabel)
+      case TaskPropertySearchTypeString.missing:
+        return this.props.intl.formatMessage(messages.missingLabel)
+      case TaskPropertySearchTypeString.notEqual:
         return "≠"
-      case "greater_than":
+      case TaskPropertySearchTypeNumber.greaterThan:
         return ">"
-      case "less_than":
+      case TaskPropertySearchTypeNumber.lessThan:
         return "<"
       default:
         return search.searchType
@@ -34,7 +41,12 @@ export class FeatureStyleLegend extends Component {
 
   compactedFilter = search => {
     if (!search.operationType) {
-      return `\`${search.key}\` ${this.compactedComparator(search)} \`${search.value}\``
+      let value = `\`${search.value}\``
+      if (search.searchType === TaskPropertySearchTypeString.missing ||
+          search.searchType === TaskPropertySearchTypeString.exists) {
+            value = ""
+      }
+      return `\`${search.key}\` ${this.compactedComparator(search)} ${value}`
     }
     else {
       return `(${this.compactedFilter(search.left)} ${search.operationType.toUpperCase()} ${this.compactedFilter(search.right)})`

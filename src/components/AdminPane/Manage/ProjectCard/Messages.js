@@ -36,7 +36,27 @@ export default defineMessages({
 
   editProjectLabel: {
     id: "Admin.ProjectCard.controls.editProject.label",
-    defaultMessage: "Edit",
+    defaultMessage: "Edit Project",
+  },
+
+  pinProjectLabel: {
+    id: "Admin.ProjectCard.controls.pinProject.label",
+    defaultMessage: "Pin Project",
+  },
+
+  unpinProjectLabel: {
+    id: "Admin.ProjectCard.controls.unpinProject.label",
+    defaultMessage: "Unpin Project",
+  },
+
+  addChallengeLabel: {
+    id: 'Admin.Project.controls.addChallenge.label',
+    defaultMessage: "Add Challenge",
+  },
+
+  manageChallengeListLabel: {
+    id: 'Admin.Project.controls.manageChallengeList.label',
+    defaultMessage: "Manage Challenge List",
   },
 
   challengePreviewHeader: {
@@ -47,5 +67,10 @@ export default defineMessages({
   virtualHeader: {
     id: "Admin.Project.headers.virtual",
     defaultMessage: "Virtual",
-  }
+  },
+
+  exportCSVLabel: {
+    id: "Admin.Project.controls.export.label",
+    defaultMessage: "Export CSV",
+  },
 })

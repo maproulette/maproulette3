@@ -58,9 +58,6 @@ export class manageChallengeList extends Component {
 
     const searchControl = this.props.projects.length === 0 ? null : (
       <ChallengeSearch
-        className="mr-p-2 mr-border-2 mr-border-grey-light-more mr-text-grey mr-rounded"
-        inputClassName="mr-text-grey mr-leading-normal"
-        iconClassName="mr-w-5 mr-h-5 mr-mr-2 mr-fill-grey-light"
         placeholder={this.props.intl.formatMessage(messages.searchPlaceholder)}
       />
     )
@@ -100,7 +97,7 @@ export class manageChallengeList extends Component {
       </nav>
 
     return (
-      <div className="admin__manage edit-project">
+      <div className="admin__manage edit-project mr-cards-inverse">
         <Header
           className="mr-px-8 mr-pt-4"
           eyebrow={breadcrumbs}
@@ -109,18 +106,25 @@ export class manageChallengeList extends Component {
         />
 
         <div className="md:mr-grid md:mr-grid-gap-8 md:mr-grid-columns-2">
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-my-4 mr-p-4 mr-rounded">
-            <QuickWidget {...this.props}
-                        className="challenge-list-widget"
-                        widgetTitle={this.props.intl.formatMessage(messages.findChallengesLabel)}
-                        rightHeaderControls={searchControl}>
-              <ChallengeSearchResults {..._omit(this.props, 'challenges')} toBeAdded
+          <div className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-my-4 mr-p-4 mr-rounded">
+            <QuickWidget
+              {...this.props}
+              className="challenge-list-widget"
+              widgetTitle={this.props.intl.formatMessage(messages.findChallengesLabel)}
+              rightHeaderControls={searchControl}
+            >
+              <ChallengeSearchResults
+                {..._omit(this.props, 'challenges')}
+                toBeAdded
                 challenges={this.props.filteredChallenges || []}
                 excludeChallenges={this.props.challenges}
-                allStatuses={true} />
+                allStatuses={true}
+              />
             </QuickWidget>
           </div>
-          <div className="mr-max-w-2xl mr-mx-auto mr-bg-white mr-my-4 mr-p-4 mr-rounded mr-w-full">
+          <div
+            className="mr-max-w-2xl mr-mx-auto mr-bg-black-15 mr-my-4 mr-p-4 mr-rounded mr-w-full"
+          >
             <QuickWidget {...this.props}
                         className="challenge-list-widget"
                         widgetTitle={listTitle}>

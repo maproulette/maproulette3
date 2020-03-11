@@ -4,6 +4,10 @@ import classNames from 'classnames'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _isEmpty from 'lodash/isEmpty'
+import _remove from 'lodash/remove'
+import _cloneDeep from 'lodash/cloneDeep'
+import _isObject from 'lodash/isObject'
 import _isFinite from 'lodash/isFinite'
 import _isUndefined from 'lodash/isUndefined'
 import { allowedStatusProgressions, isCompletionStatus,
@@ -157,7 +161,8 @@ export class ActiveTaskControls extends Component {
 
   /** Move to the next task without modifying the task status */
   next = (challengeId, taskId) => {
-    this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment)
+    this.props.nextTask(challengeId, taskId, this.props.taskLoadBy, this.state.comment,
+                        this.state.requestedNextTask)
   }
 
   componentDidUpdate(nextProps) {
@@ -172,7 +177,18 @@ export class ActiveTaskControls extends Component {
     }
 
     if (this.state.tags === null && _get(this.props, 'task.tags')) {
-      this.setState({tags: _map(this.props.task.tags, (tag) => (tag.name ? tag.name : tag)).join(', ')})
+      const unfilteredTags = _cloneDeep(this.props.task.tags)
+      _remove(unfilteredTags, t => {
+        if (_isEmpty(t)) {
+          return true
+        }
+        else if (_isObject(t)) {
+          return _isEmpty(t.name)
+        }
+      })
+      const tags = _map(unfilteredTags, tag => (tag.name ? tag.name : tag)).join(', ')
+
+      this.setState({tags: tags})
     }
   }
 
@@ -216,12 +232,26 @@ export class ActiveTaskControls extends Component {
       return (
         <div>
           {!isEditingTask && isComplete &&
-           <div className="mr-text-white mr-text-md mr-my-4">
-             <FormattedMessage
-               {...messages.markedAs}
-             /> <FormattedMessage
-               {...messagesByStatus[this.props.task.status]}
-             />
+           <div className="mr-text-white mr-text-md mr-my-4 mr-links-green-lighter">
+             <div className="mr-flex mr-justify-between mr-items-center">
+               <span>
+                 <FormattedMessage
+                   {...messages.markedAs}
+                 /> <FormattedMessage
+                   {...messagesByStatus[this.props.task.status]}
+                 />
+               </span>
+               {this.props.task.changesetId > 0 &&
+                <a
+                  href={`${process.env.REACT_APP_OSM_API_SERVER}/changeset/${this.props.task.changesetId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mr-text-base"
+                >
+                  <FormattedMessage {...messages.viewChangesetLabel} />
+                </a>
+               }
+             </div>
              {(this.props.task.reviewStatus === TaskReviewStatus.needed ||
                this.props.task.reviewStatus === TaskReviewStatus.disputed) &&
                 <div className="mr-text-yellow mr-text-sd mr-my-4">
@@ -280,6 +310,12 @@ export class ActiveTaskControls extends Component {
                {...this.props}
                className="mr-mt-1"
                nextTask={this.next}
+               loadBy={needsRevised ? this.state.revisionLoadBy : this.props.taskLoadBy}
+               chooseLoadBy={(load) => needsRevised ? this.chooseRevisionLoadBy(load) :
+                                        this.chooseLoadBy(load)}
+               chooseNextTask={this.chooseNextTask}
+               clearNextTask={this.clearNextTask}
+               requestedNextTask={this.state.requestedNextTask}
              />
              }
 

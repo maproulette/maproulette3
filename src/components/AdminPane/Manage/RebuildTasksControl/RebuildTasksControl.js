@@ -102,11 +102,11 @@ export class RebuildTasksControl extends Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           onClick={this.initiateConfirmation}
-          className="mr-button mr-button--dark mr-button--small mr-mr-4"
+          className={this.props.controlClassName}
         >
           <FormattedMessage {...messages.label} />
         </a>
@@ -116,7 +116,7 @@ export class RebuildTasksControl extends Component {
             onClose={this.resetState}
             isActive={this.state.confirming}
           >
-            <article className="mr-text-sm">
+            <article className="mr-text-sm mr-whitespace-normal">
               <div className="mr-text-2xl mr-mb-4">
                 <FormattedMessage {...messages.modalTitle} />
               </div>
@@ -135,7 +135,7 @@ export class RebuildTasksControl extends Component {
                     />
                   </div>
 
-                  <div className="mr-bg-white-10 mr-rounded mr-text-orange mr-mt-4 mr-mb-8 mr-px-4 mr-pt-4 mr-pb-3 mr-flex mr-items-center">
+                  <div className="mr-bg-white-10 mr-rounded mr-text-orange mr-mt-4 mr-mb-8 mr-px-4 mr-pt-4 mr-pb-0 mr-flex mr-items-center">
                     <div className="mr-w-20 mr-ml-2 mr-mr-6">
                       <SvgSymbol
                         className="mr-fill-red mr-h-10 mr-h-10"
@@ -197,7 +197,7 @@ export class RebuildTasksControl extends Component {
             </article>
           </Modal>
         )}
-      </div>
+      </React.Fragment>
     )
   }
 }

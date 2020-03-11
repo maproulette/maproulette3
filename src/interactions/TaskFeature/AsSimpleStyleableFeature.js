@@ -44,8 +44,8 @@ const simplestyleLineToLeafletMapping = {
  * [simplestyle](https://github.com/mapbox/simplestyle-spec) properties
  */
 export class AsSimpleStyleableFeature {
-  constructor(feature) {
-    Object.assign(this, feature)
+  constructor(feature, conditionalStyles) {
+    Object.assign(this, feature, {conditionalStyles})
   }
 
   /**
@@ -53,7 +53,10 @@ export class AsSimpleStyleableFeature {
    * present on this feature
    */
   styleLeafletLayer(layer) {
-    if (this.properties) {
+    if (this.conditionalStyles) {
+      this.styleLeafletLayerConditionally(layer, this.conditionalStyles)
+    }
+    else if (this.properties) {
       this.styleLeafletLayerWithStyles(layer, this.simplestyleFeatureProperties(), false)
     }
   }
@@ -194,4 +197,5 @@ export class AsSimpleStyleableFeature {
   }
 }
 
-export default feature => new AsSimpleStyleableFeature(feature)
+export default (feature, conditionalStyles) =>
+  new AsSimpleStyleableFeature(feature, conditionalStyles)

@@ -33,4 +33,9 @@ export default defineMessages({
     id: "PastDurationSelector.customRange.endDate",
     defaultMessage: "End Date",
   },
+
+  searchLabel: {
+    id: "PastDurationSelector.customRange.controls.search.label",
+    defaultMessage: "Search",
+  },
 })

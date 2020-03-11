@@ -22,10 +22,14 @@ export default class TaskReviewStatusFilter extends Component {
           _map(TaskReviewStatusWithUnset, status => (
             <li key={status}>
               <label className="mr-flex mr-items-center">
-                <input className="mr-mr-2"
+                <input
+                  className="mr-checkbox-toggle mr-mr-2"
                   type="checkbox"
                   checked={this.props.includeTaskReviewStatuses[status]}
-                  onChange={() => this.props.toggleIncludedTaskReviewStatus(status)} />
+                  onChange={(e) =>
+                    this.props.toggleIncludedTaskReviewStatus(status,
+                                                              e.nativeEvent.shiftKey)
+                  } />
                 <FormattedMessage {...messagesByReviewStatus[status]} />
               </label>
             </li>

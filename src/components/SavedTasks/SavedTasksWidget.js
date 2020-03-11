@@ -70,9 +70,15 @@ const SavedTaskList = function(props) {
     }
   ))
 
-  return taskItems.length > 0 ?
-         <ol className="mr-list-reset">{taskItems}</ol> :
-         <div className="none">No Tasks</div>
+  return (
+    taskItems.length > 0 ?
+    <ol className="mr-list-reset mr-links-green-lighter">
+      {taskItems}
+    </ol> :
+    <div className="mr-text-grey-lighter">
+      <FormattedMessage {...messages.noTasks} />
+    </div>
+  )
 }
 
 registerWidgetType(SavedTasksWidget, descriptor)

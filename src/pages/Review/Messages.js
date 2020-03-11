@@ -23,4 +23,9 @@ export default defineMessages({
     id: "Review.Dashboard.allReviewedTasks",
     defaultMessage: "All Review-related Tasks",
   },
+
+  volunteerAsReviewer: {
+    id: "Review.Dashboard.volunteerAsReviewer.label",
+    defaultMessage: "Volunteer as a Reviewer",
+  },
 })

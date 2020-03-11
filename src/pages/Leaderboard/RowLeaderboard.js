@@ -34,14 +34,14 @@ class RowLeaderboard extends Component {
             <div className="md:mr-flex mr-items-center">
               <div
                 className="mr-block mr-w-20 mr-h-20 mr-bg-black mr-bg-cover mr-bg-center mr-mx-auto mr-rounded-full"
-                style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(200)})` }}
+                style={{ backgroundImage: `url(${AsAvatarUser(leader).profilePic(256)})` }}
               />
               <div className="md:mr-pl-8">
                 <h2 className="mr-text-lg mr-font-normal mr-mb-2">
                   {leader.name}
                 </h2>
-                <h4 className="mr-text-md mr-text-green-lighter">
-                  <strong className="mr-text-green-lighter">
+                <h4 className="mr-text-md mr-text-yellow">
+                  <strong className="mr-text-yellow">
                     <FormattedNumber value={leader.score} />
                   </strong> <FormattedMessage {...messages.userPoints} />
                 </h4>
@@ -54,7 +54,7 @@ class RowLeaderboard extends Component {
                <h4 className="mr-text-base mr-font-medium mr-mb-1 mr-inline-block md:mr-block mr-border-b mr-pb-2 md:mr-pb-0 mr-mb-2 mr-border-white-40 md:mr-border-none">
                  <FormattedMessage {...messages.userTopChallenges} />
                </h4>
-               <ol className="mr-list-reset md:mr-list-ruled mr-text-sm mr-links-inverse">
+               <ol className="mr-list-reset md:mr-list-ruled mr-text-sm mr-links-green-lighter">
                  {topChallengeItems}
                </ol>
              </div>

@@ -3,14 +3,8 @@ import PropTypes from 'prop-types'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
-import _map from 'lodash/map'
-import _compact from 'lodash/compact'
-import _isEmpty from 'lodash/isEmpty'
-import AsManager from '../../../../interactions/User/AsManager'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../../../services/Widget/Widget'
-import { ChallengeStatus, isUsableChallengeStatus }
-       from  '../../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import WithManageableProjects
        from '../../HOCs/WithManageableProjects/WithManageableProjects'
 import WithCurrentProject
@@ -29,17 +23,13 @@ import WithChallengeReviewMetrics
       from '../../HOCs/WithChallengeReviewMetrics/WithChallengeReviewMetrics'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WidgetWorkspace from '../../../WidgetWorkspace/WidgetWorkspace'
-import RebuildTasksControl from '../RebuildTasksControl/RebuildTasksControl'
 import TaskUploadingProgress
        from '../TaskUploadingProgress/TaskUploadingProgress'
 import TaskDeletingProgress
        from '../TaskDeletingProgress/TaskDeletingProgress'
-import Dropdown from '../../../Dropdown/Dropdown'
-import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
+import ChallengeControls from '../ChallengeCard/ChallengeControls'
 import BusySpinner from '../../../BusySpinner/BusySpinner'
-import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import manageMessages from '../Messages'
-import messages from './Messages'
 import './ChallengeDashboard.scss'
 
 // The name of this dashboard.
@@ -80,15 +70,6 @@ export const defaultDashboardSetup = function() {
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class ChallengeDashboard extends Component {
-  deleteChallenge = () => {
-    this.props.deleteChallenge(this.props.challenge.parent.id,
-                               this.props.challenge.id)
-  }
-
-  moveChallenge = action => {
-    this.props.moveChallenge(this.props.challenge.id, action.projectId)
-  }
-
   render() {
     if (!this.props.challenge) {
       return <BusySpinner />
@@ -104,10 +85,7 @@ export class ChallengeDashboard extends Component {
       return <TaskUploadingProgress {...this.props} />
     }
 
-    const manager = AsManager(this.props.user)
     const projectId = _get(this.props, 'challenge.parent.id')
-    const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
-    const hasTasks = _get(this.props, 'challenge.actions.total', 0) > 0
 
     const pageHeader = (
       <div className="admin__manage__header admin__manage__header--flush">
@@ -134,69 +112,12 @@ export class ChallengeDashboard extends Component {
           </ul>
         </nav>
 
-        <div className="admin__manage__controls mr-flex">
-          {hasTasks && isUsableChallengeStatus(status, true) &&
-            <Link to={`/challenge/${this.props.challenge.id}`}
-                  className="mr-button mr-button--dark mr-button--small mr-mr-4">
-              <FormattedMessage {...messages.startChallengeLabel} />
-            </Link>
-          }
-
-          {manager.canWriteProject(this.props.challenge.parent) &&
-            <React.Fragment>
-              <Link to={`/admin/project/${projectId}/` +
-                        `challenge/${this.props.challenge.id}/edit`}
-                    className="mr-button mr-button--dark mr-button--small mr-mr-4">
-                <FormattedMessage {...messages.editChallengeLabel } />
-              </Link>
-
-              {_get(this.props, 'projects.length', 0) > 1 &&
-                <Dropdown
-                  className="mr-dropdown--fixed"
-                  dropdownButton={dropdown => (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <a onClick={dropdown.toggleDropdownVisible}
-                       className="mr-button mr-button--dark mr-button--small mr-mr-4 mr-flex mr-items-center"
-                    >
-                      <FormattedMessage {...messages.moveChallengeLabel} />
-                      <SvgSymbol
-                        sym="icon-cheveron-down"
-                        viewBox="0 0 20 20"
-                        className="mr-fill-current mr-w-5 mr-h-5"
-                      />
-                    </a>
-                  )}
-                  dropdownContent={dropdown =>
-                    <ListManagedProjectItems
-                      {...this.props}
-                      currentProjectId={projectId}
-                      manager={manager}
-                    />
-                  }
-                />
-              }
-
-              {this.props.challenge.isRebuildable() &&
-               <RebuildTasksControl {...this.props} />
-              }
-
-              <Link to={{pathname: `/admin/project/${projectId}/` +
-                                    `challenge/${this.props.challenge.id}/clone`,
-                        state: {cloneChallenge: true}}}
-                    className="mr-button mr-button--dark mr-button--small mr-mr-4">
-                <FormattedMessage {...messages.cloneChallengeLabel } />
-              </Link>
-
-              <ConfirmAction>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a onClick={this.deleteChallenge}
-                   className="mr-button mr-button--dark mr-button--small mr-mr-4">
-                  <FormattedMessage {...messages.deleteChallengeLabel } />
-                </a>
-              </ConfirmAction>
-          </React.Fragment>
-          }
-        </div>
+        <ChallengeControls
+          {...this.props}
+          className="admin__manage__controls mr-flex"
+          controlClassName="mr-button mr-button--dark mr-button--small mr-mr-4"
+          onChallengeDashboard
+        />
       </div>
     )
 
@@ -204,8 +125,9 @@ export class ChallengeDashboard extends Component {
       <div className="admin__manage challenge-dashboard">
         <WidgetWorkspace
           {...this.props}
-          lightMode
-          className=""
+          lightMode={false}
+          darkMode
+          className="mr-cards-inverse"
           workspaceEyebrow={pageHeader}
         />
       </div>
@@ -213,32 +135,6 @@ export class ChallengeDashboard extends Component {
   }
 }
 
-const ListManagedProjectItems = function(props) {
-  const projectItems = _compact(_map(props.projects, project => {
-    if (project.id === props.currentProjectId ||
-        !props.manager.canWriteProject(project)) {
-      return null
-    }
-
-    return (
-      <li key={`project-${project.id}`}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a
-          onClick={() => props.moveChallenge(props.challenge.id, project.id)}
-        >
-          {project.displayName ? project.displayName : project.name}
-        </a>
-      </li>
-    )
-  }))
-
-  return _isEmpty(projectItems) ?
-    <FormattedMessage {...messages.noProjects} /> : (
-    <ol className="mr-list-dropdown">
-      {projectItems}
-    </ol>
-  )
-}
 
 ChallengeDashboard.propTypes = {
   /** The parent project of the challenge */

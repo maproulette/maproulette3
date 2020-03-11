@@ -32,7 +32,7 @@ export default class TaskPropertyFilter extends Component {
 
     return (
       <div className="mr-dropdown mr-dropdown--right">
-        <button className="mr-flex mr-items-center mr-text-blue-light"
+        <button className="mr-flex mr-items-center mr-text-mango"
                 onClick={() => this.setState({showForm: !this.state.showForm})}>
           <span className="mr-text-base mr-uppercase mr-mr-1">
             <span><FormattedMessage {...messages.filterByPropertyLabel} /></span>

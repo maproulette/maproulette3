@@ -13,4 +13,14 @@ export default defineMessages({
     id: "FeatureStyleLegend.comparators.contains.label",
     defaultMessage: "contains",
   },
+
+  missingLabel: {
+    id: "FeatureStyleLegend.comparators.missing.label",
+    defaultMessage: "missing",
+  },
+
+  existsLabel: {
+    id: "FeatureStyleLegend.comparators.exists.label",
+    defaultMessage: "exists",
+  },
 })

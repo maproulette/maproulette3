@@ -7,7 +7,6 @@ import ConfirmAction from '../../../ConfirmAction/ConfirmAction'
 import SvgSymbol from '../../../SvgSymbol/SvgSymbol'
 import AsManager from '../../../../interactions/User/AsManager'
 import messages from './Messages'
-import './ProjectOverview.scss'
 
 /**
  * ProjectOverview displays some basic at-a-glance information about a Project
@@ -27,81 +26,91 @@ export default class ProjectOverview extends Component {
     const manager = AsManager(this.props.user)
 
     return (
-      <div className="project-overview">
-        <div className="project-overview__status status-section">
+      <div>
+        <div>
           {!this.props.suppressDescription &&
-           <div className="columns">
-             <div className="column project-overview__description">
+           <div>
+             <div>
                <MarkdownContent markdown={this.props.project.description} />
              </div>
            </div>
           }
 
-          <div className="mr-grid mr-grid-columns-2 mr-grid-gap-2">
-            <div>
-              <FormattedMessage {...messages.creationDate} />
+          <div className="mr-text-base mr-mt-4">
+            <div className="mr-flex mr-items-center">
+              <div className="mr-text-yellow mr-mr-2">
+                <FormattedMessage {...messages.creationDate} />
+              </div>
+
+              <div>
+                <FormattedDate
+                  value={new Date(this.props.project.created)}
+                  year='numeric'
+                  month='long'
+                  day='2-digit'
+                />
+              </div>
             </div>
 
-            <div>
-              <FormattedDate value={new Date(this.props.project.created)}
-                            year='numeric'
-                            month='long'
-                            day='2-digit' />
+            <div className="mr-flex mr-items-center">
+              <div className="mr-text-yellow mr-mr-2">
+                <FormattedMessage {...messages.lastModifiedDate} />
+              </div>
+
+              <div>
+                <FormattedDate
+                  value={new Date(this.props.project.modified)}
+                  year='numeric'
+                  month='long'
+                  day='2-digit'
+                />
+              </div>
             </div>
 
-            <div>
-              <FormattedMessage {...messages.lastModifiedDate} />
-            </div>
+            <div className="mr-flex mr-items-center mr-mt-4">
+              <div className="mr-text-yellow mr-mr-2">
+                <FormattedMessage {...messages.visibleLabel} />
+              </div>
 
-            <div>
-              <FormattedDate value={new Date(this.props.project.modified)}
-                             year='numeric'
-                             month='long'
-                             day='2-digit' />
-            </div>
-
-            <div className="mr-mt-4">
-              <FormattedMessage {...messages.visibleLabel} />
-            </div>
-
-            <div className="mr-mt-4">
-              <ConfirmAction
-                prompt={<FormattedMessage {...messages.confirmDisablePrompt} />}
-                skipConfirmation={() => !this.props.project.enabled}
-              >
-                <div
-                  className="mr-mb-2 visibility-switch"
-                  onClick={() => this.props.toggleProjectEnabled(this.props.project)}
+              <div>
+                <ConfirmAction
+                  prompt={<FormattedMessage {...messages.confirmDisablePrompt} />}
+                  skipConfirmation={() => !this.props.project.enabled}
                 >
-                  <input
-                    type="checkbox"
-                    className="switch is-rounded short-and-wide"
-                    disabled={!manager.canWriteProject(this.props.project)}
-                    checked={this.props.project.enabled}
-                    onChange={() => null}
-                  />
-                  <label />
-                </div>
-              </ConfirmAction>
-              {!this.props.project.enabled &&
-                <span className="mr-text-red mr-flex mr-items-center">
-                  <a
-                    href="https://github.com/osmlab/maproulette3/wiki/Challenge-Visibility-and-Discoverability"
-                    className="mr-mr-2 mr-flex mr-items-center"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <div
+                    className="visibility-switch"
+                    onClick={() => this.props.toggleProjectEnabled(this.props.project)}
                   >
-                    <SvgSymbol
-                      sym="info-icon"
-                      viewBox="0 0 40 40"
-                      className="mr-fill-red mr-w-4 mr-w-4"
+                    <input
+                      type="checkbox"
+                      className="switch is-rounded short-and-wide"
+                      disabled={!manager.canWriteProject(this.props.project)}
+                      checked={this.props.project.enabled}
+                      onChange={() => null}
                     />
-                  </a>
-                  <FormattedMessage {...messages.challengesUndiscoverable} />
-                </span>
-              }
+                    <label />
+                  </div>
+                </ConfirmAction>
+              </div>
             </div>
           </div>
+          {!this.props.project.enabled &&
+            <div className="mr-text-red-light mr-flex mr-items-center mr-text-base mr-uppercase mr-mt-2">
+              <a
+                href="https://github.com/osmlab/maproulette3/wiki/Challenge-Visibility-and-Discoverability"
+                className="mr-mr-2 mr-flex mr-items-center"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SvgSymbol
+                  sym="info-icon"
+                  viewBox="0 0 40 40"
+                  className="mr-fill-red-light mr-w-6 mr-w-6"
+                />
+              </a>
+              <FormattedMessage {...messages.challengesUndiscoverable} />
+            </div>
+          }
         </div>
       </div>
     )

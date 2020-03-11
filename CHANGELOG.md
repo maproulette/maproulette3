@@ -7,6 +7,36 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.5.7] - 2020-03-11
+### Added
+- Dark mode in Create & Manage area
+- Sort challenges by Oldest on Find Challenges page by @brianjor (#935)
+- 'missing' and 'exists' property filter operators
+- Quick-entry of comma-separated property filter values
+- Basic metrics for time spent working on tasks (#762)
+- Time durations to entries in Task History widget
+- Visual representation of status and priority of tasks shown on Nearby map
+- Nearby vs Random option for "Next Task" control on completed tasks
+- Limited challenge controls on Project dashboard in Create & Manage area
+- Limited project controls on All-Projects dashboard in Create & Manage
+- Invitation on Review page for non-reviewers to volunteer as reviewers (#835)
+- Task priority column on Review page tables
+
+### Fixed
+- Date picker switching back to default dates
+- Occasional broken display of empty MR tags on tasks
+- Stale link to wiki documentation when creating a challenge (#912)
+- Don't split challenge preferred tags on spaces (#1123)
+- Status updates to all tasks in Create & Manage not applied to all (#1127)
+- Possible error due to missing historical challenge snapshots
+- Broken task links in exported comments CSV from Create & Manage
+- Task status reset to Created when tasks rebuilt
+- Extraneous quotes sometimes included in generated task names
+
+### Changed
+- Colors used for color-coded usernames shown in various tables
+
+
 ## [v3.5.6] - 2020-02-24
 ### Fixed
 - Trouble adding new managers to projects (#1122)

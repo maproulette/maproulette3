@@ -41,29 +41,31 @@ export default class ProjectList extends Component {
     // For mixed view we display pinned as cards and then others as list
     if (this.props.mixedView) {
       return (
-        <React.Fragment>
-          <div className='admin__manage__managed-item-list project-list'>
+        <div className="mr-pb-24">
+          <div className="mr-flex mr-flex-wrap">
             {pinnedCards}
           </div>
 
-          <div className='admin__manage__managed-item-list project-list compact-view'>
+          <div className='mr-text-green-lighter'>
             {unpinnedCards}
 
-            <div className="after-results">
+            <div className="mr-mt-4 mr-flex mr-justify-center">
               <PageResultsButton {...this.props} />
             </div>
           </div>
-        </React.Fragment>
+        </div>
       )
     }
     else {
       return (
-        <div className={classNames('admin__manage__managed-item-list project-list',
-                                  {"compact-view": !this.props.expandedView})}>
+        <div className={classNames({"mr-flex mr-flex-wrap": this.props.expandedView})}>
           {pinnedCards.concat(unpinnedCards)}
 
-          <div className="after-results">
-            <PageResultsButton {...this.props} className="mr-button--green" />
+          <div className="mr-mt-4 mr-flex mr-justify-center">
+            <PageResultsButton
+              {...this.props}
+              className="mr-button mr-button--green-lighter"
+            />
           </div>
         </div>
       )

@@ -32,18 +32,20 @@ class Dropdown extends Component {
     }
 
     return (
-      <div className={classNames('mr-dropdown', this.props.className)}>
+      <div className={classNames('mr-dropdown', this.props.className)} {...this.props.rootProps}>
         {this.props.dropdownButton(renderFuncArgs)}
         {isDropdownVisible && (
           <div className="mr-dropdown__wrapper">
             <div className="mr-dropdown__main">
               <div className="mr-dropdown__inner">
-                <SvgSymbol
-                  sym="icon-triangle"
-                  viewBox="0 0 15 10"
-                  className={classNames("mr-dropdown__arrow", this.props.arrowClassName)}
-                  aria-hidden
-                />
+                {!this.props.suppressControls &&
+                 <SvgSymbol
+                   sym="icon-triangle"
+                   viewBox="0 0 15 10"
+                   className={classNames("mr-dropdown__arrow", this.props.arrowClassName)}
+                   aria-hidden
+                 />
+                }
                 <div className="mr-dropdown__content">
                   {this.props.dropdownContent(renderFuncArgs)}
                 </div>

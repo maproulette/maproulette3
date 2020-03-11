@@ -22,10 +22,14 @@ export default class TaskPriorityFilter extends Component {
           _reverse(_map(TaskPriority, priority => (
             <li key={priority}>
               <label className="mr-flex mr-items-center">
-                <input className="mr-mr-2"
+                <input
+                  className="mr-checkbox-toggle mr-mr-2"
                   type="checkbox"
                   checked={this.props.includeTaskPriorities[priority]}
-                  onChange={() => this.props.toggleIncludedTaskPriority(priority)} />
+                  onChange={(e) =>
+                    this.props.toggleIncludedTaskPriority(priority,
+                                                          e.nativeEvent.shiftKey)
+                  } />
                 <FormattedMessage {...messagesByPriority[priority]} />
               </label>
             </li>
