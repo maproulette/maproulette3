@@ -104,7 +104,10 @@ export default class TaskHistoryList extends Component {
                               entry: [
                                 <li className="mr-mb-4" key={"start-" + index}>
                                   <div>
-                                    <span className={classNames("mr-mr-2", mapColors(username))}>
+                                    <span
+                                      className="mr-mr-2"
+                                      style={{color: mapColors(username)}}
+                                    >
                                       {username}
                                     </span> <FormattedMessage {...messages.startedOnLabel} />
                                   </div>
@@ -178,7 +181,9 @@ export default class TaskHistoryList extends Component {
             {(log.username || log.status) &&
               <li className="mr-mb-4">
                 <div className="mr-flex mr-justify-between">
-                  <span className={mapColors(log.username)}>{log.username}</span>
+                  <span style={{color: mapColors(log.username)}}>
+                    {log.username}
+                  </span>
                   {log.status}
                 </div>
               </li>

@@ -398,11 +398,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     filterable: true,
     exportable: t => _get(t.completedBy, 'username') || t.completedBy,
     maxWidth: 180,
-    Cell: ({row}) =>
-      <div className={classNames("row-user-column",
-                      mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy))}>
-        {_get(row._original.completedBy, 'username') || row._original.completedBy }
+    Cell: ({row}) => (
+      <div
+        className="row-user-column"
+        style={{color: mapColors(_get(row._original.completedBy, 'username') || row._original.completedBy)}}
+      >
+        {_get(row._original.completedBy, 'username') || row._original.completedBy}
       </div>
+    )
   }
 
   columns.reviewedAt = {
@@ -454,11 +457,14 @@ const setupColumnTypes = (props, taskBaseRoute, manager, data, openComments) => 
     exportable: t => _get(t.reviewedBy, 'username') || t.reviewedBy,
     maxWidth: 180,
     Cell: ({row}) => (
-      !row._original.reviewedBy ? null :
-        <div className={classNames("row-user-column",
-                        mapColors(row._original.reviewedBy.username || row._original.reviewedBy))}>
-          {row._original.reviewedBy.username || row._original.reviewedBy}
-        </div>
+      !row._original.reviewedBy ?
+      null :
+      <div
+        className="row-user-column"
+        style={{color: mapColors(row._original.reviewedBy.username || row._original.reviewedBy)}}
+      >
+        {row._original.reviewedBy.username || row._original.reviewedBy}
+      </div>
     )
   }
 
