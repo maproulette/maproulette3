@@ -121,6 +121,8 @@
   "Admin.EditChallenge.form.taskPropertyStyles.close": "Done",
   "Admin.EditChallenge.form.taskPropertyStyles.clear": "Clear",
   "Admin.EditChallenge.form.taskPropertyStyles.description": "Sets up task property style rules......",
+  "Admin.EditChallenge.form.requiresLocal.label": "Requires Local Knowledge",
+  "Admin.EditChallenge.form.requiresLocal.description": "Tasks require local or on-the-ground knowledge to complete. Note: challenge will not appear in the 'Find challenges' list.",
   "Admin.ManageChallenges.header": "Challenges",
   "Admin.ManageChallenges.help.info": "Challenges consist of many tasks that all help address a specific problem or shortcoming with OpenStreetMap data. Tasks are typically generated automatically from an overpassQL query you provide when creating a new challenge, but can also be loaded from a local file or remote URL containing GeoJSON features. You can create as many challenges as you'd like.",
   "Admin.ManageChallenges.search.placeholder": "Name",

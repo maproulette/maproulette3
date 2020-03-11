@@ -95,6 +95,11 @@ export const jsSchema = intl => {
         type: "boolean",
         default: false,
       },
+      requiresLocal: {
+        title: intl.formatMessage(messages.requiresLocalLabel),
+        type: "boolean",
+        default: false,
+      },
     },
     dependencies: { // Only show customBasemap if defaultBasemap set to Custom
       defaultBasemap: {
@@ -170,6 +175,10 @@ export const uiSchema = intl => ({
   customTaskStyles: {
     "ui:field": "configureCustomTaskStyles",
     "ui:help": intl.formatMessage(messages.customTaskStylesDescription),
+  },
+  requiresLocal: {
+    "ui:widget": "radio",
+    "ui:help": intl.formatMessage(messages.requiesLocalDescription),
   }
 })
 
