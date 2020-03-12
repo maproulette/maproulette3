@@ -154,9 +154,12 @@ export default class EnhancedMap extends Map {
       // However, if we're only supposed to fit the features as necessary, then
       // we do it for initial task (no existing features) or if the new task
       // features wouldn't all be displayed at the present zoom level.
-      if (!this.props.fitFeaturesOnlyAsNecessary ||
-          !hasExistingFeatures ||
-          !this.leafletElement.getBounds().contains(this.currentFeatures.getBounds())) {
+      if (!this.props.skipFit &&
+          (
+            !this.props.fitFeaturesOnlyAsNecessary ||
+            !hasExistingFeatures ||
+            !this.leafletElement.getBounds().contains(this.currentFeatures.getBounds())
+          )) {
         this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
       }
     }

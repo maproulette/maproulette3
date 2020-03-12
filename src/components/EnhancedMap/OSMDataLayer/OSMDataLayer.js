@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom'
 import { Path, withLeaflet } from 'react-leaflet'
 import L from 'leaflet'
 import PropertyList from '../PropertyList/PropertyList'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../../tailwind.config.js'
 
-const OSM_DATA_COLOR = "#EA8433" // orange
+const colors = resolveConfig(tailwindConfig).theme.colors
 
 /**
  * Serves as a react-leaflet adapter for the leaflet-osm package
@@ -36,10 +38,10 @@ export class OSMDataLayer extends Path {
   createLeafletElement(props) {
     const layerGroup = new L.OSM.DataLayer(props.xmlData, {
       styles: {
-        way: { color: OSM_DATA_COLOR },
-        area: { color: OSM_DATA_COLOR },
-        node: { color: OSM_DATA_COLOR },
-        changeset: { color: OSM_DATA_COLOR },
+        way: { color: colors['orange-jaffa'] },
+        area: { color: colors.purple },
+        node: { color: colors.green },
+        changeset: { color: colors.pink },
       },
     })
 

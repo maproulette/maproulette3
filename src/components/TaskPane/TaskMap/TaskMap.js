@@ -61,6 +61,7 @@ export class TaskMap extends Component {
     osmData: null,
     osmDataLoading: false,
     mapillaryViewerImage: null,
+    skipFit: false,
   }
 
   /** Process keyboard shortcuts for the layers */
@@ -103,9 +104,22 @@ export class TaskMap extends Component {
    */
   toggleOSMDataVisibility = () => {
     if (!this.state.showOSMData && !this.state.osmData && !this.state.osmDataLoading) {
+      const showingFeatures = this.state.showTaskFeatures
+
       this.setState({osmDataLoading: true})
       this.props.fetchOSMData(this.props.mapBounds.bounds.toBBoxString()).then(xmlData => {
+        // If features are shown, turn them off while we render the OSM data
+        // layer and then turn them back on so they'll be on top. We also
+        // indicate the map should skip fitting to bounds as the OSM data could
+        // extend beyond the current view and we don't want the map to zoom out
+        if (showingFeatures) {
+          this.setState({showTaskFeatures: false, skipFit: true})
+        }
         this.setState({osmData: xmlData, osmDataLoading: false})
+
+        if (showingFeatures) {
+          setTimeout(() => this.setState({showTaskFeatures: true}), 0)
+        }
       })
     }
     this.setState({showOSMData: !this.state.showOSMData})
@@ -171,6 +185,7 @@ export class TaskMap extends Component {
 
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
+      this.setState({skipFit: false})
     }
   }
 
@@ -379,6 +394,7 @@ export class TaskMap extends Component {
           worldCopyJump={true}
           features={this.applyStyling(this.taskFeatures())}
           justFitFeatures={!this.state.showTaskFeatures}
+          skipFit={this.state.skipFit}
           fitFeaturesOnlyAsNecessary
           animateFeatures
           onBoundsChange={this.updateTaskBounds}
