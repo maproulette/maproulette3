@@ -119,6 +119,11 @@ export default defineMessages({
     defaultMessage: "View Task",
   },
 
+  reviewTaskLabel: {
+    id: "Inbox.notification.controls.reviewTask.label",
+    defaultMessage: "Review Task",
+  },
+
   manageChallengeLabel: {
     id: "Inbox.notification.controls.manageChallenge.label",
     defaultMessage: "Manage Challenge",

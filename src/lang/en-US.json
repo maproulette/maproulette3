@@ -935,6 +935,7 @@
   "Inbox.challengeCompleteNotification.lead": "A challenge you manage has been completed.",
   "Inbox.notification.controls.deleteNotification.label": "Delete",
   "Inbox.notification.controls.viewTask.label": "View Task",
+  "Inbox.notification.controls.reviewTask.label": "Review Task",
   "Inbox.notification.controls.manageChallenge.label": "Manage Challenge",
   "Leaderboard.title": "Leaderboard",
   "Leaderboard.global": "Global",
