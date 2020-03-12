@@ -124,7 +124,7 @@ h4,
     @apply mr-my-2;
     @apply mr-px-2;
     @apply mr-py-px;
-    @apply mr-bg-black-5;
+    @apply mr-bg-black-15;
   }
 
   ol, ul {
@@ -181,6 +181,11 @@ h4,
     &:hover {
       @apply mr-text-white;
     }
+  }
+
+  hr {
+    height: 2px;
+    @apply mr-bg-white-10;
   }
 
   &--longtext {

@@ -19,6 +19,7 @@ import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
        from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import TaskNearbyList from '../TaskPane/TaskNearbyList/TaskNearbyList'
+import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -168,21 +169,25 @@ export class TaskConfirmationModal extends Component {
                      </div>
                   }
                   <div className={classNames({"mr-mt-2": !applyingSuggestedFix})}>
-                    <textarea
-                      ref={this.commentInputRef}
-                      className={classNames("mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3", applyingSuggestedFix ? 'mr-mt-1' : 'mr-mt-6')}
-                      rows={applyingSuggestedFix ? 2 : 4}
-                      cols="1"
-                      placeholder={applyingSuggestedFix ? '' : this.props.intl.formatMessage(messages.placeholder)}
-                      value={this.props.comment}
-                      onChange={e => this.props.setComment(e.target.value)}
+                    <div className={applyingSuggestedFix ? 'mr-mt-1' : 'mr-mt-6'}>
+                      <TaskCommentInput
+                        inputRef={this.commentInputRef}
+                        inputClassName="mr-appearance-none mr-outline-none mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-font-mono mr-text-sm"
+                        previewClassName="mr-border-2 mr-rounded mr-border-grey-lighter-10 mr-p-2 mr-max-h-48 mr-overflow-y-scroll"
+                        rows={applyingSuggestedFix ? 2 : 4}
+                        placeholder={applyingSuggestedFix ? '' : this.props.intl.formatMessage(messages.placeholder)}
+                        value={this.props.comment}
+                        commentChanged={this.props.setComment}
+                      />
+                    </div>
+                    <KeywordAutosuggestInput
+                      handleChangeTags={this.handleChangeTags}
+                      handleAddTag={this.handleAddTag}
+                      formData={this.props.tags} {...this.props}
+                      tagType={"tasks"}
+                      preferredResults={preferredTags}
+                      placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                     />
-                    <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
-                                         handleAddTag={this.handleAddTag}
-                                         formData={this.props.tags} {...this.props}
-                                         tagType={"tasks"}
-                                         preferredResults={preferredTags}
-                                         placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
 
                     {this.props.submitComment &&
                     <div className="mr-my-1 mr-flex mr-justify-end">
