@@ -194,14 +194,25 @@ const ViewTask = function(props) {
     return null
   }
 
+  const path =
+    `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`
+
   return (
     <div className="mr-mt-8 mr-links-green-lighter">
-      <Link to={{
-              pathname: `challenge/${props.notification.challengeId}/task/${props.notification.taskId}`,
-              state: {fromInbox: true}
-            }}>
-        <FormattedMessage {...messages.viewTaskLabel} />
-      </Link>
+      <div className="mr-flex mr-leading-tight">
+        <Link to={{ pathname: path, state: {fromInbox: true} }}>
+          <FormattedMessage {...messages.viewTaskLabel} />
+        </Link>
+
+        {props.review &&
+         <Link
+           to={{ pathname: `${path}/review`, state: {fromInbox: true} }}
+           className="mr-pl-4 mr-ml-4 mr-border-l mr-border-white-10"
+         >
+           <FormattedMessage {...messages.reviewTaskLabel} />
+         </Link>
+        }
+      </div>
     </div>
   )
 }
