@@ -5,11 +5,14 @@ import { Control, Handler, DomUtil, DomEvent, FeatureGroup }
 import { injectIntl } from 'react-intl'
 import { MapControl, withLeaflet } from 'react-leaflet'
 import _pick from 'lodash/pick'
+import _isEmpty from 'lodash/isEmpty'
 import WithKeyboardShortcuts
        from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './FitBoundsControl.scss'
+
+const shortcutGroup = 'taskEditing'
 
 /**
  * Leaflet control for that fits the map bounds to the current features added
@@ -21,7 +24,16 @@ import './FitBoundsControl.scss'
  * @private
  */
 const FitBoundsLeafletControl = Control.extend({
-  fitFeatures: function(map) {
+  fitFeatures: function(map, event) {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.options.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
+    if (this.options.textInputActive(event)) { // ignore typing in inputs
+      return
+    }
+
     const geoJSONFeatures = new FeatureGroup()
 
     map.eachLayer(layer => {
@@ -40,14 +52,14 @@ const FitBoundsLeafletControl = Control.extend({
     map.addHandler(
       'fitBoundsKeyboardHandler',
       keyboardHandler(this.options.keyboardShortcutGroups.taskEditing.fitBounds.key,
-                      () => this.fitFeatures(map))
+                      event => this.fitFeatures(map, event))
     )
 
     // Register the handler so the shortcut will show up on a list of active
     // shortcuts. It's an "external" shortcut because the event is handled
     // externally (here) instead of by WithKeyboardShortcuts
     this.options.addExternalKeyboardShortcut(
-      'taskEditing',
+      shortcutGroup,
       _pick(this.options.keyboardShortcutGroups.taskEditing, 'fitBounds')
     )
 
@@ -72,7 +84,7 @@ const FitBoundsLeafletControl = Control.extend({
       map.fitBoundsKeyboardHandler.disable()
 
       this.options.removeExternalKeyboardShortcut(
-        'taskEditing',
+        shortcutGroup,
         _pick(this.options.keyboardShortcutGroups.taskEditing, 'fitBounds')
       )
     }
@@ -94,7 +106,7 @@ const keyboardHandler = function(key, controlFunction) {
 
     onKeydown: function(event) {
       if (event.key === key) {
-        controlFunction()
+        controlFunction(event)
       }
     }
   })

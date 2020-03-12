@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import _pick from 'lodash/pick'
+import _isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import messages from './Messages'
 import './TaskCancelEditingControl.scss'
+
+const shortcutGroup = 'taskEditing'
 
 /**
  * TaskCancelEditingControl displays a control for cancelling the current
@@ -14,6 +17,11 @@ import './TaskCancelEditingControl.scss'
  */
 export default class TaskCancelEditingControl extends Component {
   handleKeyboardShortcuts = (event) => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
@@ -26,13 +34,13 @@ export default class TaskCancelEditingControl extends Component {
 
   componentDidMount() {
     this.props.activateKeyboardShortcut(
-      'taskEditing',
+      shortcutGroup,
       _pick(this.props.keyboardShortcutGroups.taskEditing, 'cancel'),
       this.handleKeyboardShortcuts)
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcut('taskEditing', 'cancel',
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'cancel',
                                           this.handleKeyboardShortcuts)
   }
 

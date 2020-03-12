@@ -7,6 +7,8 @@ export const ADD_KEYBOARD_SHORTCUT_GROUP = 'ADD_KEYBOARD_SHORTCUT_GROUP'
 export const REMOVE_KEYBOARD_SHORTCUT_GROUP = 'REMOVE_KEYBOARD_SHORTCUT_GROUP'
 export const ADD_KEYBOARD_SHORTCUT = 'ADD_KEYBOARD_SHORTCUT'
 export const REMOVE_KEYBOARD_SHORTCUT = 'REMOVE_KEYBOARD_SHORTCUT'
+export const PAUSE_KEYBOARD_SHORTCUTS = 'PAUSE_KEYBOARD_SHORTCUTS'
+export const RESUME_KEYBOARD_SHORTCUTS = 'RESUME_KEYBOARD_SHORTCUTS'
 export const CLEAR_KEYBOARD_SHORTCUTS = 'CLEAR_KEYBOARD_SHORTCUTS'
 
 // redux action creators
@@ -37,6 +39,18 @@ export const removeKeyboardShortcut = function(groupName, shortcutName) {
     type: REMOVE_KEYBOARD_SHORTCUT,
     groupName,
     shortcutName,
+  }
+}
+
+export const pauseKeyboardShortcuts = function() {
+  return {
+    type: PAUSE_KEYBOARD_SHORTCUTS,
+  }
+}
+
+export const resumeKeyboardShortcuts = function() {
+  return {
+    type: RESUME_KEYBOARD_SHORTCUTS,
   }
 }
 
@@ -86,6 +100,27 @@ export const currentKeyboardShortcuts = function(state={}, action) {
     }
 
     return mergedState
+  }
+  else if (action.type === PAUSE_KEYBOARD_SHORTCUTS) {
+    // If we're already paused, ignore
+    if (!_isEmpty(state.paused)) {
+      return state
+    }
+
+    return {
+      paused: state.groups,
+      groups: {},
+    }
+  }
+  else if (action.type === RESUME_KEYBOARD_SHORTCUTS) {
+    // If nothing is paused, ignore
+    if (_isEmpty(state.paused)) {
+      return state
+    }
+
+    return {
+      groups: Object.assign({}, state.paused)
+    }
   }
   else if (action.type === CLEAR_KEYBOARD_SHORTCUTS) {
     return {groups: {}}
