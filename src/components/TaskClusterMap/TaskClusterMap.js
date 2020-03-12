@@ -373,6 +373,7 @@ export class TaskClusterMap extends Component {
       )
       // We've calculated the bounds so we don't need to do the next bounds update
       this.skipNextBoundsUpdate = true
+      this.props.setInitialBounds && this.props.setInitialBounds(this.currentBounds)
     }
     else if (this.props.initialBounds) {
       this.currentBounds = this.props.initialBounds
