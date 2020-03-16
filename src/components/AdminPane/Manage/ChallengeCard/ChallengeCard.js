@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import _get from 'lodash/get'
 import _isFinite from 'lodash/isFinite'
+import _isObject from 'lodash/isObject'
 import AsManageableChallenge
        from '../../../../interactions/Challenge/AsManageableChallenge'
 import WithChallengeManagement
@@ -29,6 +30,15 @@ export class ChallengeCard extends Component {
   render() {
     if (this.props.challenge.deleted) {
       return null
+    }
+
+    let parent = null
+    if (_isObject(this.props.challenge.parent)) {
+      parent = this.props.challenge.parent
+    }
+    else if (_isFinite(this.props.challenge.parent) &&
+             this.props.challenge.parent === _get(this.props, 'project.id')) {
+      parent = this.props.project
     }
 
     const hasActions = _isFinite(_get(this.props.challenge, 'actions.total'))
@@ -61,7 +71,7 @@ export class ChallengeCard extends Component {
               </Link>
               {this.props.showProjectName &&
                 <div className="mr-text-xs mr-text-grey-light">
-                  {_get(this.props.challenge, 'parent.displayName')}
+                  {_get(parent, 'displayName')}
                 </div>
               }
               {hasActions &&
@@ -115,29 +125,31 @@ export class ChallengeCard extends Component {
             </div>
           }
 
-          <Dropdown
-            className="mr-ml-4 mr-dropdown--right mr-mt-1.5"
-            dropdownButton={dropdown => (
-              <button
-                onClick={dropdown.toggleDropdownVisible}
-                className="mr-flex mr-items-center mr-text-white"
-              >
-                <SvgSymbol
-                  sym="navigation-more-icon"
-                  viewBox="0 0 20 20"
-                  className="mr-fill-current mr-w-5 mr-h-5"
-                />
-              </button>
-            )}
-            dropdownContent={dropdown =>
-              <ChallengeControls
-                {...this.props}
-                className="mr-flex mr-flex-col mr-links-green-lighter"
-                controlClassName="mr-my-1"
-                onControlComplete={() => dropdown.closeDropdown()}
-              />
-            }
-          />
+          {parent &&
+           <Dropdown
+             className="mr-ml-4 mr-dropdown--right mr-mt-1.5"
+             dropdownButton={dropdown => (
+               <button
+                 onClick={dropdown.toggleDropdownVisible}
+                 className="mr-flex mr-items-center mr-text-white"
+               >
+                 <SvgSymbol
+                   sym="navigation-more-icon"
+                   viewBox="0 0 20 20"
+                   className="mr-fill-current mr-w-5 mr-h-5"
+                 />
+               </button>
+             )}
+             dropdownContent={dropdown =>
+               <ChallengeControls
+                 {...this.props}
+                 className="mr-flex mr-flex-col mr-links-green-lighter"
+                 controlClassName="mr-my-1"
+                 onControlComplete={() => dropdown.closeDropdown()}
+               />
+             }
+           />
+          }
         </div>
       </div>
     )

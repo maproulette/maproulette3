@@ -40,7 +40,7 @@ export default class ChallengeList extends Component {
     )
 
     return (
-      <div className="mr-text-base mr-pb-1">
+      <div className="mr-text-base mr-pb-1 mr-pb-36">
 
         {!this.props.loadingChallenges && challengeCards.length === 0 ?
          <div className="mr-flex mr-justify-center mr-text-grey-light">

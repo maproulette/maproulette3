@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get'
+import _isObject from 'lodash/isObject'
+import _isFinite from 'lodash/isFinite'
 import AsManager from '../../../../interactions/User/AsManager'
 import AsManageableChallenge
        from '../../../../interactions/Challenge/AsManageableChallenge'
@@ -29,17 +31,29 @@ export default class ChallengeControls extends Component {
     this.props.onControlComplete && this.props.onControlComplete()
   }
 
-  deleteChallenge = () => {
-    this.props.deleteChallenge(this.props.challenge.parent.id,
-                               this.props.challenge.id)
+  deleteChallenge = parent => {
+    this.props.deleteChallenge(parent.id, this.props.challenge.id)
   }
 
   render() {
+    if (!this.props.challenge) {
+      return null
+    }
+
+    let parent = null
+    if (_isObject(this.props.challenge.parent)) {
+      parent = this.props.challenge.parent
+    }
+    else if (_isFinite(this.props.challenge.parent) &&
+             this.props.challenge.parent === _get(this.props, 'project.id')) {
+      parent = this.props.project
+    }
+
     const inVirtualProject = _get(this.props, 'project.isVirtual', false)
     const manager = AsManager(this.props.user)
-    const projectId = _get(this.props, 'challenge.parent.id')
-    const status = _get(this.props, 'challenge.status', ChallengeStatus.none)
-    const hasTasks = _get(this.props, 'challenge.actions.total', 0) > 0
+    const projectId = _get(this.props.challenge, 'parent.id', this.props.challenge.parent)
+    const status = _get(this.props.challenge, 'status', ChallengeStatus.none)
+    const hasTasks = _get(this.props.challenge, 'actions.total', 0) > 0
 
     return (
       <div className={this.props.className}>
@@ -52,8 +66,7 @@ export default class ChallengeControls extends Component {
           </Link>
         }
 
-        {!inVirtualProject &&
-         manager.canWriteProject(this.props.challenge.parent) &&
+        {!inVirtualProject && manager.canWriteProject(parent) &&
           <React.Fragment>
             <Link
               to={`/admin/project/${projectId}/` +
@@ -63,7 +76,7 @@ export default class ChallengeControls extends Component {
               <FormattedMessage {...messages.editChallengeLabel } />
             </Link>
 
-            {manager.canAdministrateProject(this.props.challenge.parent) &&
+            {manager.canAdministrateProject(parent) &&
              // eslint-disable-next-line jsx-a11y/anchor-is-valid
              <a
                onClick={() => this.setState({pickingProject: true})}
@@ -89,11 +102,11 @@ export default class ChallengeControls extends Component {
               <FormattedMessage {...messages.cloneChallengeLabel } />
             </Link>
 
-            {manager.canAdministrateProject(this.props.challenge.parent) &&
+            {manager.canAdministrateProject(parent) &&
              <ConfirmAction>
                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                <a
-                 onClick={this.deleteChallenge}
+                 onClick={() => this.deleteChallenge(parent)}
                  className={this.props.controlClassName}
                >
                  <FormattedMessage {...messages.deleteChallengeLabel } />
