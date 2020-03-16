@@ -138,7 +138,7 @@ export const generateSearchParametersString = (filters, boundingBox, savedChalle
       searchParameters.tStatus = filters.status
     }
   }
-  if (filters.priority) {
+  if (filters.priority && filters.priority !== "all") {
     searchParameters.tp = filters.priority
   }
   if (filters.priorities && filters.priorities !== "all") {
