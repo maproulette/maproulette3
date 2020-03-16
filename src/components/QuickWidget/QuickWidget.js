@@ -21,7 +21,7 @@ export default class QuickWidget extends Component {
 
     return (
       <section className={classNames("mr-flex mr-flex-col mr-h-full", this.props.className, {"mr-mb-4": this.props.isEditing})}>
-        {this.props.isEditing && !this.props.permanent &&
+        {this.props.isEditing && !this.props.permanent && !this.props.widgetPermanent &&
          <button
            className="mr-card-widget__delete"
            onClick={this.props.removeWidget}
