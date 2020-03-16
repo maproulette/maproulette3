@@ -8,6 +8,8 @@ import _split from 'lodash/split'
 import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _isEmpty from 'lodash/isEmpty'
+import _merge from 'lodash/merge'
+import _clone from 'lodash/clone'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { needsReviewType } from '../../services/User/User'
@@ -25,11 +27,16 @@ import KeywordAutosuggestInput
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
+import AdjustFiltersOverlay from './AdjustFiltersOverlay'
 import messages from './Messages'
 
 const shortcutGroup = 'taskConfirmation'
 
 export class TaskConfirmationModal extends Component {
+  state = {
+    filters: {}
+  }
+
   commentInputRef = React.createRef()
 
   handleKeyboardShortcuts = event => {
@@ -41,7 +48,9 @@ export class TaskConfirmationModal extends Component {
     if (event.key ===
         this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
         event.shiftKey) {
-      this.props.onConfirm()
+      this.props.onConfirm(
+        _merge({}, _get(this.props.history, 'location.state.filters', {}),
+               this.state.filters))
       event.preventDefault()
     }
     else if (event.key === this.props.keyboardShortcutGroups.taskConfirmation.cancel.key) {
@@ -73,6 +82,12 @@ export class TaskConfirmationModal extends Component {
 
   handleChangeTags = (value) => {
     this.props.setTags(value)
+  }
+
+  filterChange = (key, value) => {
+    const filters = _clone(this.state.filters)
+    filters[key] = value
+    this.setState({filters})
   }
 
   render() {
@@ -227,7 +242,9 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className="mr-button mr-px-8"
-                      onClick={() => this.props.onConfirm()}
+                      onClick={() => this.props.onConfirm(
+                        _merge({}, _get(this.props.history, 'location.state.filters', {}),
+                               this.state.filters))}
                     >
                       <FormattedMessage {...messages.submitLabel} />
                     </button>
@@ -267,48 +284,55 @@ export class TaskConfirmationModal extends Component {
                   }
 
                   { reviewConfirmation && _isUndefined(this.props.needsRevised) &&
-                    <div className="form mr-mt-8">
-                        <span className="mr-mr-4">
-                          <FormattedMessage {...messages.loadNextReviewLabel} />
-                        </span>
-                        <input
-                          type="radio"
-                          name="loadReviewPreference"
-                          className="mr-mr-2"
-                          checked={this.props.loadBy === TaskReviewLoadMethod.next}
-                          onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
-                          onChange={_noop}
-                        />
-                        <label className="mr-mr-4">
-                          <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
-                        </label>
-                        { this.props.fromInbox &&
-                          <React.Fragment>
-                            <input
-                              type="radio"
-                              name="loadReviewPreference"
-                              className="mr-mr-2"
-                              checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
-                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
-                              onChange={_noop}
-                            />
-                            <label className="mr-mr-4">
-                              <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
-                            </label>
-                          </React.Fragment>
-                        }
-                        <input
-                          type="radio"
-                          name="loadReviewPreference"
-                          className="mr-mr-2"
-                          checked={this.props.loadBy === TaskReviewLoadMethod.all}
-                          onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
-                          onChange={_noop}
-                        />
-                        <label>
-                          <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
-                        </label>
-                    </div>
+                    <React.Fragment>
+                      <div className="form mr-mt-8">
+                          <span className="mr-mr-4">
+                            <FormattedMessage {...messages.loadNextReviewLabel} />
+                          </span>
+                          <input
+                            type="radio"
+                            name="loadReviewPreference"
+                            className="mr-mr-2"
+                            checked={this.props.loadBy === TaskReviewLoadMethod.next}
+                            onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
+                            onChange={_noop}
+                          />
+                          <label className="mr-mr-4">
+                            <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
+                          </label>
+                          { this.props.fromInbox &&
+                            <React.Fragment>
+                              <input
+                                type="radio"
+                                name="loadReviewPreference"
+                                className="mr-mr-2"
+                                checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                                onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                                onChange={_noop}
+                              />
+                              <label className="mr-mr-4">
+                                <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
+                              </label>
+                            </React.Fragment>
+                          }
+                          <input
+                            type="radio"
+                            name="loadReviewPreference"
+                            className="mr-mr-2"
+                            checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                            onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                            onChange={_noop}
+                          />
+                          <label>
+                            <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
+                          </label>
+                      </div>
+                      <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer">
+                        <div onClick={() => this.setState({showReviewFilters: true})}>
+                          <FormattedMessage {...messages.adjustFilters} />
+                        </div>
+                      </div>
+                    </React.Fragment>
                   }
 
                   { reviewConfirmation && !_isUndefined(this.props.needsRevised) && this.props.fromInbox &&
@@ -361,6 +385,17 @@ export class TaskConfirmationModal extends Component {
               </div>
             }
           </div>
+          { this.props.inReview && this.state.showReviewFilters &&
+            <AdjustFiltersOverlay
+              {...this.props}
+              close={() => this.setState({showReviewFilters: false})}
+              filterChange={this.filterChange}
+              currentFilters={
+                _merge({}, _get(this.props.history, 'location.state.filters', {}),
+                       this.state.filters)
+              }
+            />
+          }
         </Modal>
       </External>
     )

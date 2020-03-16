@@ -36,7 +36,7 @@ export default defineMessages({
 
   next: {
     id: 'Task.review.loadByMethod.next',
-    defaultMessage: "Next Task",
+    defaultMessage: "Next Filtered Task",
   },
 
   all: {

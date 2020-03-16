@@ -93,4 +93,45 @@ export default defineMessages({
     id: 'TaskConfirmationModal.addTags.placeholder',
     defaultMessage: "Add MR Tags",
   },
+
+  adjustFilters: {
+    id: 'TaskConfirmationModal.adjustFilters.label',
+    defaultMessage: "Adjust Filters",
+  },
+
+  doneLabel: {
+    id: 'TaskConfirmationModal.done.label',
+    defaultMessage: "Done",
+  },
+
+  useChallengeLabel: {
+    id: 'TaskConfirmationModal.useChallenge.label',
+    defaultMessage: "Use current challenge",
+  },
+
+  reviewStatusLabel: {
+    id: 'TaskConfirmationModal.reviewStatus.label',
+    defaultMessage: "Review Status:",
+  },
+
+  statusLabel: {
+    id: 'TaskConfirmationModal.status.label',
+    defaultMessage: "Status:",
+  },
+
+  priorityLabel: {
+    id: 'TaskConfirmationModal.priority.label',
+    defaultMessage: "Priority:",
+  },
+
+  challengeLabel: {
+    id: 'TaskConfirmationModal.challenge.label',
+    defaultMessage: "Challenge:",
+  },
+
+  mapperLabel: {
+    id: 'TaskConfirmationModal.mapper.label',
+    defaultMessage: "Mapper:",
+  },
+
 })
