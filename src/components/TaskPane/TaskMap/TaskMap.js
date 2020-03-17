@@ -13,6 +13,7 @@ import _pick from 'lodash/pick'
 import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
+import _clone from 'lodash/clone'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
@@ -58,10 +59,16 @@ export class TaskMap extends Component {
   state = {
     showTaskFeatures: true,
     showOSMData: false,
+    showOSMElements: {
+      nodes: true,
+      ways: true,
+      areas: true,
+    },
     osmData: null,
     osmDataLoading: false,
     mapillaryViewerImage: null,
     skipFit: false,
+    latestZoom: null,
   }
 
   /** Process keyboard shortcuts for the layers */
@@ -95,7 +102,7 @@ export class TaskMap extends Component {
    * task features on or off.
    */
   toggleTaskFeatureVisibility = () => {
-    this.setState({showTaskFeatures: !this.state.showTaskFeatures})
+    this.setState({showTaskFeatures: !this.state.showTaskFeatures, skipFit: true})
   }
 
   /**
@@ -104,25 +111,22 @@ export class TaskMap extends Component {
    */
   toggleOSMDataVisibility = () => {
     if (!this.state.showOSMData && !this.state.osmData && !this.state.osmDataLoading) {
-      const showingFeatures = this.state.showTaskFeatures
-
       this.setState({osmDataLoading: true})
-      this.props.fetchOSMData(this.props.mapBounds.bounds.toBBoxString()).then(xmlData => {
-        // If features are shown, turn them off while we render the OSM data
-        // layer and then turn them back on so they'll be on top. We also
-        // indicate the map should skip fitting to bounds as the OSM data could
+      this.props.fetchOSMData(
+        this.props.mapBounds.bounds.toBBoxString()
+      ).then(xmlData => {
+        // Indicate the map should skip fitting to bounds as the OSM data could
         // extend beyond the current view and we don't want the map to zoom out
-        if (showingFeatures) {
-          this.setState({showTaskFeatures: false, skipFit: true})
-        }
-        this.setState({osmData: xmlData, osmDataLoading: false})
-
-        if (showingFeatures) {
-          setTimeout(() => this.setState({showTaskFeatures: true}), 0)
-        }
+        this.setState({osmData: xmlData, osmDataLoading: false, skipFit: true})
       })
     }
     this.setState({showOSMData: !this.state.showOSMData})
+  }
+
+  toggleOSMElements = element => {
+    const showOSMElements = _clone(this.state.showOSMElements)
+    showOSMElements[element] = !showOSMElements[element]
+    this.setState({showOSMElements})
   }
 
   /**
@@ -200,7 +204,12 @@ export class TaskMap extends Component {
 
     if (nextState.showOSMData !== this.state.showOSMData ||
         nextState.osmDataLoading !== this.state.osmDataLoading ||
-        nextState.osmData !== this.state.osmData) {
+        nextState.osmData !== this.state.osmData ||
+        !_isEqual(nextState.showOSMElements, this.state.showOSMElements)) {
+      return true
+    }
+
+    if (nextState.latestZoom !== this.state.latestZoom) {
       return true
     }
 
@@ -269,6 +278,7 @@ export class TaskMap extends Component {
 
   updateTaskBounds = (bounds, zoom) => {
     this.latestBounds = bounds
+    this.setState({latestZoom: zoom})
 
     // Don't update map bounds if this task is in the process of completing.
     // We don't want to risk sending updates on a stale task as this one gets
@@ -380,6 +390,8 @@ export class TaskMap extends Component {
           toggleTaskFeatures={this.toggleTaskFeatureVisibility}
           showOSMData={this.state.showOSMData}
           toggleOSMData={this.toggleOSMDataVisibility}
+          showOSMElements={this.state.showOSMElements}
+          toggleOSMElements={this.toggleOSMElements}
           osmDataLoading={this.state.osmDataLoading}
           toggleMapillary={this.props.isMapillaryEnabled() ? this.toggleMapillaryVisibility : undefined}
           showMapillary={this.props.showMapillaryLayer}
@@ -405,7 +417,11 @@ export class TaskMap extends Component {
           <SourcedTileLayer maxZoom={maxZoom} {...this.props} zIndex={1} />
           {overlayLayers}
           {this.state.showOSMData && this.state.osmData &&
-            <OSMDataLayer xmlData={this.state.osmData} />
+           <OSMDataLayer
+             xmlData={this.state.osmData}
+             zoom={_isFinite(this.state.latestZoom) ? this.state.latestZoom : zoom}
+             showOSMElements={this.state.showOSMElements}
+           />
           }
           {this.props.showMapillaryLayer && mapillaryMarkers}
         </EnhancedMap>
