@@ -97,6 +97,11 @@ export default defineMessages({
     defaultMessage: "Unable to fetch data from Mapillary",
   },
 
+  openStreetCamFetchFailure: {
+    id: 'Errors.openStreetCam.fetchFailure',
+    defaultMessage: "Unable to fetch data from OpenStreetCam",
+  },
+
   nominatimFetchFailure: {
     id: 'Errors.nominatim.fetchFailure',
     defaultMessage: "Unable to fetch data from Nominatim",

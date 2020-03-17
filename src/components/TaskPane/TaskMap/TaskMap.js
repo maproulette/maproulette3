@@ -17,6 +17,7 @@ import _clone from 'lodash/clone'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
+import OpenStreetCamViewer from '../../OpenStreetCamViewer/OpenStreetCamViewer'
 import SourcedTileLayer
        from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import OSMDataLayer from '../../EnhancedMap/OSMDataLayer/OSMDataLayer'
@@ -32,6 +33,8 @@ import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithMapillaryImages from '../../HOCs/WithMapillaryImages/WithMapillaryImages'
+import WithOpenStreetCamImages
+       from '../../HOCs/WithOpenStreetCamImages/WithOpenStreetCamImages'
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
@@ -67,6 +70,7 @@ export class TaskMap extends Component {
     osmData: null,
     osmDataLoading: false,
     mapillaryViewerImage: null,
+    openStreetCamViewerImage: null,
     skipFit: false,
     latestZoom: null,
   }
@@ -176,16 +180,58 @@ export class TaskMap extends Component {
     }
   }
 
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * OpenStreetCam markers on or off.
+   */
+  toggleOpenStreetCamVisibility = async () => {
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    this.props.challenge.id
+    // If enabling layer, fetch fresh data. This allows users to toggle the
+    // layer off and on to refresh the data, e.g. if they have moved the map
+    // and wish to expand coverage of OpenStreetCam imagery
+    if (!this.props.showOpenStreetCamLayer) {
+      this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, true)
+      await this.props.fetchOpenStreetCamImagery(
+        this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+        this.props.task
+      )
+    }
+    else {
+      this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, !this.props.showOpenStreetCamLayer)
+    }
+  }
+
+  /**
+   * Reloads the task data with OpenStreetCam image info requested if needed
+   */
+  loadOpenStreetCamIfNeeded = async () => {
+    // If we're supposed to show openStreetCam images but don't have them for
+    // this task, go ahead and fetch them
+    if (this.props.task && this.props.showOpenStreetCamLayer) {
+      if (this.props.openStreetCamTaskId !== this.props.taskId ||
+          (!this.props.openStreetCamImages && !this.props.openStreetCamLoading)) {
+        await this.props.fetchOpenStreetCamImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+        )
+      }
+    }
+  }
+
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
       _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts)
 
     this.loadMapillaryIfNeeded()
+    this.loadOpenStreetCamIfNeeded()
   }
 
   componentDidUpdate(prevProps) {
     this.loadMapillaryIfNeeded()
+    this.loadOpenStreetCamIfNeeded()
 
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
@@ -220,6 +266,13 @@ export class TaskMap extends Component {
       return true
     }
 
+    if (nextProps.showOpenStreetCamLayer !== this.props.showOpenStreetCamLayer ||
+        nextProps.openStreetCamLoading !== this.props.openStreetCamLoading ||
+        nextProps.openStreetCamTaskId !== this.props.openStreetCamTaskId ||
+        nextState.openStreetCamViewerImage !== this.state.openStreetCamViewerImage) {
+      return true
+    }
+
     if (!_isEqual(_get(nextProps, 'taskBundle.taskIds'),
                   _get(this.props, 'taskBundle.taskIds'))) {
       return true
@@ -231,6 +284,11 @@ export class TaskMap extends Component {
 
     if(_get(nextProps, 'mapillaryImages.length') !==
        _get(this.props, 'mapillaryImages.length')) {
+      return true
+    }
+
+    if(_get(nextProps, 'openStreetCamImages.length') !==
+       _get(this.props, 'openStreetCamImages.length')) {
       return true
     }
 
@@ -289,7 +347,25 @@ export class TaskMap extends Component {
   }
 
   mapillaryImageMarkers = () => {
-    if (_get(this.props, 'mapillaryImages.length', 0) === 0) {
+    return this.streetLevelImageMarkers(
+      "Mapillary",
+      this.props.mapillaryImages,
+      'mapillaryViewerImage',
+      "#39AF64" // Mapillary green
+    )
+  }
+
+  openStreetCamImageMarkers = () => {
+    return this.streetLevelImageMarkers(
+      "OpenStreetCam",
+      this.props.openStreetCamImages,
+      'openStreetCamViewerImage',
+      "#C851E0" // OpenStreetCam magenta
+    )
+  }
+
+  streetLevelImageMarkers = (serviceName, images, viewerName, markerColor, imageAlt) => {
+    if (!images || images.length === 0) {
       return []
     }
 
@@ -299,17 +375,23 @@ export class TaskMap extends Component {
       viewBox: '0 0 12 12',
       type: 'circle',
       shape: { r: 6, cx: 6, cy: 6 },
-      style: { fill: "#39AF64" }, // mapillary green
+      style: { fill: markerColor },
     })
 
-    const markers = _map(this.props.mapillaryImages, imageInfo =>
-      <Marker key={imageInfo.key} position={[imageInfo.lat, imageInfo.lon]}
-              icon={icon}
-              onMouseover={({target}) => target.openPopup()}
-              onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})}>
+    const markers = _map(images, imageInfo =>
+      <Marker
+        key={imageInfo.key}
+        position={[imageInfo.lat, imageInfo.lon]}
+        icon={icon}
+        onMouseover={({target}) => target.openPopup()}
+        onClick={() => this.setState({[viewerName]: imageInfo.key})}
+      >
         <Popup>
-          <img src={imageInfo.url320} alt="From Mapillary"
-               onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})} />
+          <img
+            src={imageInfo.url}
+            alt={`From ${serviceName}`}
+            onClick={() => this.setState({[viewerName]: imageInfo.key})}
+          />
         </Popup>
       </Marker>
     )
@@ -374,6 +456,9 @@ export class TaskMap extends Component {
     const mapillaryMarkers = this.props.showMapillaryLayer ?
                              this.mapillaryImageMarkers() : []
 
+    const openStreetCamMarkers = this.props.showOpenStreetCamLayer ?
+                                 this.openStreetCamImageMarkers() : []
+
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
     const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
@@ -396,6 +481,9 @@ export class TaskMap extends Component {
           toggleMapillary={this.props.isMapillaryEnabled() ? this.toggleMapillaryVisibility : undefined}
           showMapillary={this.props.showMapillaryLayer}
           mapillaryCount={_get(this.props, 'mapillaryImages.length', 0)}
+          toggleOpenStreetCam={this.props.isOpenStreetCamEnabled() ? this.toggleOpenStreetCamVisibility : undefined}
+          showOpenStreetCam={this.props.showOpenStreetCamLayer}
+          openStreetCamCount={_get(this.props, 'openStreetCamImages.length', 0)}
         />
         <EnhancedMap
           center={this.props.centerPoint}
@@ -424,6 +512,7 @@ export class TaskMap extends Component {
            />
           }
           {this.props.showMapillaryLayer && mapillaryMarkers}
+          {this.props.showOpenStreetCamLayer && openStreetCamMarkers}
         </EnhancedMap>
 
         {this.state.mapillaryViewerImage &&
@@ -431,6 +520,15 @@ export class TaskMap extends Component {
             key={Date.now()}
             initialImageKey={this.state.mapillaryViewerImage}
             onClose={() => this.setState({mapillaryViewerImage: null})}
+         />
+        }
+
+        {this.state.openStreetCamViewerImage &&
+         <OpenStreetCamViewer
+            key={Date.now()}
+            images={this.props.openStreetCamImages}
+            initialImageKey={this.state.openStreetCamViewerImage}
+            onClose={() => this.setState({openStreetCamViewerImage: null})}
          />
         }
       </div>
@@ -454,13 +552,15 @@ TaskMap.propTypes = {
 
 export default WithSearch(
   WithMapillaryImages(
-    WithTaskCenterPoint(
-      WithVisibleLayer(
-        WithIntersectingOverlays(
-          WithKeyboardShortcuts(TaskMap),
-          'task'
+    WithOpenStreetCamImages(
+      WithTaskCenterPoint(
+        WithVisibleLayer(
+          WithIntersectingOverlays(
+            WithKeyboardShortcuts(TaskMap),
+            'task'
+          )
         )
-      )
+      ),
     ),
   ),
   'task'

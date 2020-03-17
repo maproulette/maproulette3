@@ -159,7 +159,40 @@ export class LayerToggle extends Component {
                        this.props.fetchMoreMapillaryImagery()
                      }}
                    >
-                     <FormattedMessage {...messages.moreMapillaryLabel} />
+                     <FormattedMessage {...messages.moreLabel} />
+                   </button>
+                 }
+
+               </label>
+             </div>
+            }
+            {this.props.toggleOpenStreetCam &&
+             <div
+               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
+               onClick={() => this.props.toggleOpenStreetCam()}
+             >
+               <input
+                 type="checkbox"
+                 className="mr-checkbox-toggle"
+                 checked={this.props.showOpenStreetCam || false}
+                 onChange={_noop}
+               />
+               <label className="mr-ml-3 mr-text-orange">
+                 <FormattedMessage
+                   {...messages.showOpenStreetCamLabel}
+                 /> {(this.props.showOpenStreetCam && !this.props.openStreetCamLoading) &&
+                     <FormattedMessage {...messages.imageCount}
+                                       values={{count: this.props.openStreetCamCount}} />
+                 } {this.props.openStreetCamLoading && <FormattedMessage {...messages.loading} />
+                 } {this.props.showOpenStreetCam && this.props.hasMoreOpenStreetCamImagery && !this.props.openStreetCamLoading &&
+                   <button
+                     className="mr-button mr-button--xsmall mr-ml-2"
+                     onClick={e => {
+                       e.stopPropagation()
+                       this.props.fetchMoreOpenStreetCamImagery()
+                     }}
+                   >
+                     <FormattedMessage {...messages.moreLabel} />
                    </button>
                  }
 
