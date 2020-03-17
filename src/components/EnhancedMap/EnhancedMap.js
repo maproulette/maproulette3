@@ -26,6 +26,7 @@ import PropertyList from './PropertyList/PropertyList'
 export default class EnhancedMap extends Map {
   currentFeatures = null
   animationHandle = null
+  mapMoved = false
 
   /**
    * Invoked after the user is finished altering the map bounds, either by
@@ -36,12 +37,14 @@ export default class EnhancedMap extends Map {
    */
   onZoomOrMoveEnd = () => {
     if (this.props.onBoundsChange) {
-      // This method can get called a few times when things are first rendering,
-      // so we make sure the map has actually moved from its initial center or
-      // zoom before recording a bounds change.
-
-      if (!this.leafletElement.getCenter().equals(this.props.center) ||
+      // This method can get called a few times when things are first
+      // rendering, so -- if the map hasn't been moved yet (panned or
+      // zoomed) -- we make sure the map has actually moved from its
+      // initial center or zoom before recording a bounds change
+      if (this.mapMoved ||
+          !this.leafletElement.getCenter().equals(this.props.center) ||
           this.leafletElement.getZoom() !== this.props.zoom) {
+        this.mapMoved = true
         this.props.onBoundsChange(this.leafletElement.getBounds(),
                                   this.leafletElement.getZoom(),
                                   this.leafletElement.getSize())

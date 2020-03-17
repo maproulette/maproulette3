@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Path, withLeaflet } from 'react-leaflet'
 import L from 'leaflet'
+import _isEqual from 'lodash/isEqual'
 import PropertyList from '../PropertyList/PropertyList'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
@@ -12,6 +13,8 @@ const colors = resolveConfig(tailwindConfig).theme.colors
  * Serves as a react-leaflet adapter for the leaflet-osm package
  */
 export class OSMDataLayer extends Path {
+  lastZoom = null
+
   popupContent(layer) {
     const header = (
       <a target="_blank"
@@ -36,13 +39,47 @@ export class OSMDataLayer extends Path {
   }
 
   createLeafletElement(props) {
+    this.lastZoom = props.zoom
+    const osmLayerGroup = this.generateLayer(props)
+    osmLayerGroup.on('add', () => osmLayerGroup.bringToBack())
+    return osmLayerGroup
+  }
+
+  updateLeafletElement(fromProps, toProps) {
+    if (toProps.zoom !== this.lastZoom ||
+        !_isEqual(fromProps.showOSMElements, toProps.showOSMElements)) {
+      this.leafletElement.clearLayers()
+      const newLayers = this.generateLayer(toProps)
+      newLayers.eachLayer(layer => this.leafletElement.addLayer(layer))
+      this.lastZoom = toProps.zoom
+    }
+    this.leafletElement.bringToBack()
+  }
+
+  generateElementStyles(props) {
+    const globalStyleOptions = {
+      // Set stroke weight to 3px when zoomed way in, then 2px and
+      // finally down to 1px at zoom 15
+      weight: props.zoom >= 18 ? 3 : (props.zoom > 15 ? 2 : 1),
+    }
+
+    return {
+      way: Object.assign({}, globalStyleOptions, { color: colors['orange-jaffa'] }),
+      area: Object.assign({}, globalStyleOptions, { color: colors['pink-light'] }),
+      node: Object.assign({}, globalStyleOptions, {
+        color: '#C20534',
+        radius: props.zoom >= 18 ? 10 : 5, // shrink size when zoomed out
+      }),
+      changeset: Object.assign({}, globalStyleOptions, { color: colors.red }),
+    }
+  }
+
+  generateLayer(props) {
     const layerGroup = new L.OSM.DataLayer(props.xmlData, {
-      styles: {
-        way: { color: colors['orange-jaffa'] },
-        area: { color: colors.purple },
-        node: { color: colors.green },
-        changeset: { color: colors.pink },
-      },
+      styles: this.generateElementStyles(props),
+      showNodes: props.showOSMElements.nodes,
+      showWays: props.showOSMElements.ways,
+      showAreas: props.showOSMElements.areas,
     })
 
     layerGroup.eachLayer(layer => layer.options.fill = false)
@@ -64,6 +101,10 @@ export default withLeaflet(OSMDataLayer)
 L.OSM = {};
 L.OSM.DataLayer = L.FeatureGroup.extend({
   options: {
+    showNodes: true,
+    showWays: true,
+    showAreas: true,
+    showChangesets: true,
     areaTags: ['area', 'building', 'leisure', 'tourism', 'ruins', 'historic', 'landuse', 'military', 'natural', 'sport'],
     uninterestingTags: ['source', 'source_ref', 'source:ref', 'history', 'attribution', 'created_by', 'tiger:county', 'tiger:tlid', 'tiger:upload_uuid'],
     styles: {}
@@ -88,9 +129,13 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
       var feature = features[i], layer;
 
       if (feature.type === "changeset") {
-        layer = L.rectangle(feature.latLngBounds, this.options.styles.changeset);
+        if (this.options.showChangesets) {
+          layer = L.rectangle(feature.latLngBounds, this.options.styles.changeset);
+        }
       } else if (feature.type === "node") {
-        layer = L.circleMarker(feature.latLng, this.options.styles.node);
+        if (this.options.showNodes) {
+          layer = L.circleMarker(feature.latLng, this.options.styles.node);
+        }
       } else {
         var latLngs = new Array(feature.nodes.length);
 
@@ -99,15 +144,21 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
         }
 
         if (this.isWayArea(feature)) {
-          latLngs.pop(); // Remove last == first.
-          layer = L.polygon(latLngs, this.options.styles.area);
+          if (this.options.showAreas) {
+            latLngs.pop(); // Remove last == first.
+            layer = L.polygon(latLngs, this.options.styles.area);
+          }
         } else {
-          layer = L.polyline(latLngs, this.options.styles.way);
+          if (this.options.showWays) {
+            layer = L.polyline(latLngs, this.options.styles.way);
+          }
         }
       }
 
-      layer.addTo(this);
-      layer.feature = feature;
+      if (layer) {
+        layer.addTo(this);
+        layer.feature = feature;
+      }
     }
   },
 

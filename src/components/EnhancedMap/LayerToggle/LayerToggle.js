@@ -43,7 +43,10 @@ export class LayerToggle extends Component {
 
     const overlayToggles = _map(this.props.intersectingOverlays, layer => (
       <div key={layer.id} className="layer-toggle__option-controls">
-        <div className="mr-flex mr-items-center" onClick={e => this.toggleOverlay(layer.id)}>
+        <div
+          className="mr-flex mr-items-center mr-leading-none"
+          onClick={e => this.toggleOverlay(layer.id)}
+        >
           <input
             type="checkbox"
             className="mr-checkbox-toggle"
@@ -74,63 +77,95 @@ export class LayerToggle extends Component {
             }
             {overlayToggles}
             {this.props.toggleTaskFeatures &&
-                <div className="mr-my-4 mr-flex mr-items-center" onClick={this.props.toggleTaskFeatures}>
-                  <input
-                    type="checkbox"
-                    className="mr-checkbox-toggle"
-                    checked={this.props.showTaskFeatures}
-                    onChange={_noop}
-                  />
-                  <label className="mr-ml-3 mr-text-orange">
-                    <FormattedMessage {...messages.showTaskFeaturesLabel} />
-                  </label>
-                </div>
-              }
-              {this.props.toggleOSMData &&
-                <div className="mr-my-4 mr-flex mr-items-center" onClick={this.props.toggleOSMData}>
-                  <input
-                    type="checkbox"
-                    className="mr-checkbox-toggle"
-                    checked={this.props.showOSMData}
-                    onChange={_noop}
-                  />
-                  <label className="mr-ml-3 mr-text-orange">
-                    <FormattedMessage
-                      {...messages.showOSMDataLabel}
-                    /> {this.props.osmDataLoading && <FormattedMessage {...messages.loading} />}
-                  </label>
-                </div>
-              }
-              {this.props.toggleMapillary &&
-                <div className="mr-my-4 mr-flex mr-items-center" onClick={e => this.props.toggleMapillary()}>
-                  <input
-                    type="checkbox"
-                    className="mr-checkbox-toggle"
-                    checked={this.props.showMapillary || false}
-                    onChange={_noop}
-                  />
-                  <label className="mr-ml-3 mr-text-orange">
-                    <FormattedMessage
-                      {...messages.showMapillaryLabel}
-                    /> {(this.props.showMapillary && !this.props.mapillaryLoading) &&
-                        <FormattedMessage {...messages.imageCount}
-                                          values={{count: this.props.mapillaryCount}} />
-                    } {this.props.mapillaryLoading && <FormattedMessage {...messages.loading} />
-                    } {this.props.showMapillary && this.props.hasMoreMapillaryImagery && !this.props.mapillaryLoading &&
-                      <button
-                        className="mr-button mr-button--xsmall mr-ml-2"
-                        onClick={e => {
-                          e.stopPropagation()
-                          this.props.fetchMoreMapillaryImagery()
-                        }}
-                      >
-                        <FormattedMessage {...messages.moreMapillaryLabel} />
-                      </button>
-                    }
+             <div
+               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
+               onClick={this.props.toggleTaskFeatures}
+             >
+               <input
+                 type="checkbox"
+                 className="mr-checkbox-toggle"
+                 checked={this.props.showTaskFeatures}
+                 onChange={_noop}
+               />
+               <label className="mr-ml-3 mr-text-orange">
+                 <FormattedMessage {...messages.showTaskFeaturesLabel} />
+               </label>
+             </div>
+            }
+            {this.props.toggleOSMData &&
+             <React.Fragment>
+               <div
+                 className="mr-my-4 mr-flex mr-items-center mr-leading-none"
+                 onClick={this.props.toggleOSMData}
+               >
+                 <input
+                   type="checkbox"
+                   className="mr-checkbox-toggle"
+                   checked={this.props.showOSMData}
+                   onChange={_noop}
+                 />
+                 <label className="mr-ml-3 mr-text-orange">
+                   <FormattedMessage
+                     {...messages.showOSMDataLabel}
+                   /> {this.props.osmDataLoading && <FormattedMessage {...messages.loading} />}
+                 </label>
+               </div>
+               {this.props.showOSMData && !this.props.osmDataLoading && this.props.toggleOSMElements &&
+                <React.Fragment>
+                  {['nodes', 'ways', 'areas'].map(element => (
+                   <div
+                     key={element}
+                     className="mr-my-2 mr-ml-4 mr-flex mr-items-center mr-leading-none"
+                     onClick={() => this.props.toggleOSMElements(element)}
+                   >
+                     <input
+                       type="checkbox"
+                       className="mr-checkbox-toggle"
+                       checked={this.props.showOSMElements[element]}
+                       onChange={_noop}
+                     />
+                     <label className="mr-ml-3 mr-text-orange mr-capitalize">
+                       {element}
+                     </label>
+                   </div>
+                  ))}
+                </React.Fragment>
+               }
+             </React.Fragment>
+            }
+            {this.props.toggleMapillary &&
+             <div
+               className="mr-my-4 mr-flex mr-items-center mr-leading-none"
+               onClick={e => this.props.toggleMapillary()}
+             >
+               <input
+                 type="checkbox"
+                 className="mr-checkbox-toggle"
+                 checked={this.props.showMapillary || false}
+                 onChange={_noop}
+               />
+               <label className="mr-ml-3 mr-text-orange">
+                 <FormattedMessage
+                   {...messages.showMapillaryLabel}
+                 /> {(this.props.showMapillary && !this.props.mapillaryLoading) &&
+                     <FormattedMessage {...messages.imageCount}
+                                       values={{count: this.props.mapillaryCount}} />
+                 } {this.props.mapillaryLoading && <FormattedMessage {...messages.loading} />
+                 } {this.props.showMapillary && this.props.hasMoreMapillaryImagery && !this.props.mapillaryLoading &&
+                   <button
+                     className="mr-button mr-button--xsmall mr-ml-2"
+                     onClick={e => {
+                       e.stopPropagation()
+                       this.props.fetchMoreMapillaryImagery()
+                     }}
+                   >
+                     <FormattedMessage {...messages.moreMapillaryLabel} />
+                   </button>
+                 }
 
-                  </label>
-                </div>
-              }
+               </label>
+             </div>
+            }
           </React.Fragment>
         }
       />
