@@ -9,12 +9,19 @@ import messages from './Messages'
 class TaskChallengeMarkerContent extends Component {
   render() {
     const markerData = this.props.marker
+    let challengeId = markerData.options.parentId ||
+                     _get(this.props.task, 'parent.id')
+    if (!challengeId &&
+        _get(markerData.options, 'challengeIds.length', 0) === 1) {
+      challengeId = markerData.options.challengeIds[0]
+    }
+
     return (
       <div className="marker-popup-content">
         <h3>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a onClick={() => this.props.history.push(
-            `/browse/challenges/${markerData.options.parentId}`
+            `/browse/challenges/${challengeId}`
           )}>
             {markerData.options.parentName || _get(this.props.task, 'parent.name')}
           </a>
@@ -25,7 +32,7 @@ class TaskChallengeMarkerContent extends Component {
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a onClick={() => {
               this.props.startChallengeWithTask(
-                markerData.options.parentId,
+                challengeId,
                 false,
                 markerData.options.taskId)
             }}>

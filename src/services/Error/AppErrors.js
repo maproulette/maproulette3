@@ -43,6 +43,10 @@ export default {
     fetchFailure: messages.mapillaryFetchFailure,
   },
 
+  openStreetCam: {
+    fetchFailure: messages.openStreetCamFetchFailure,
+  },
+
   nominatim: {
     fetchFailure: messages.nominatimFetchFailure,
   },
