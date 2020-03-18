@@ -46,6 +46,10 @@ export class SourcedTileLayer extends Component {
   }
 
   render() {
+    if (!this.props.source) {
+      return null
+    }
+
     if (this.state.layerRenderFailed) {
       // Try rendering the default layer as a fallback. If we *are* the
       // fallback, just render an error message
@@ -89,7 +93,7 @@ export class SourcedTileLayer extends Component {
 
 SourcedTileLayer.propTypes = {
   /** LayerSource to use */
-  source: layerSourceShape.isRequired,
+  source: layerSourceShape,
   /** Set to true to suppress display of source attribution */
   skipAttribution: PropTypes.bool,
 }

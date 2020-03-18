@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import _map from 'lodash/map'
 import _noop from 'lodash/noop'
 import _filter from 'lodash/filter'
+import _get from 'lodash/get'
 import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithLayerSources from '../../HOCs/WithLayerSources/WithLayerSources'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
@@ -42,7 +43,7 @@ export class LayerToggle extends Component {
     ))
 
     const overlayToggles = _map(this.props.intersectingOverlays, layer => (
-      <div key={layer.id} className="layer-toggle__option-controls">
+      <div key={layer.id} className="mr-my-4">
         <div
           className="mr-flex mr-items-center mr-leading-none"
           onClick={e => this.toggleOverlay(layer.id)}
@@ -69,11 +70,11 @@ export class LayerToggle extends Component {
         }
         dropdownContent={() =>
           <React.Fragment>
-            <ol className="mr-o-2">
-              {layerListItems}            
-            </ol>
-            {(overlayToggles.length > 0 || this.props.toggleTaskFeatures) &&
-              <hr className="mr-h-px mr-my-4 mr-bg-blue" />
+            {layerListItems.length > 0 &&
+             <ol className="mr-o-2">{layerListItems}</ol>
+            }
+            {(overlayToggles.length > 0 || this.props.toggleTaskFeatures) && layerListItems.length > 0 &&
+             <hr className="mr-h-px mr-my-4 mr-bg-white-15" />
             }
             {overlayToggles}
             {this.props.toggleTaskFeatures &&
@@ -93,6 +94,7 @@ export class LayerToggle extends Component {
              </div>
             }
             {this.props.toggleOSMData &&
+             _get(process.env, 'REACT_APP_OSM_DATA_OVERLAY', 'enabled') !== 'disabled' &&
              <React.Fragment>
                <div
                  className="mr-my-4 mr-flex mr-items-center mr-leading-none"

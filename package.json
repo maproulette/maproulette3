@@ -109,9 +109,10 @@
     "watch-postcss": "postcss src/styles/index.css -o src/index.css -w",
     "build-intl": "yarn run combine-messages -i './src/**/*.js' -o './src/lang/en-US.json'",
     "update-layers": "node scripts/update_layers.js",
+    "update-layers-prod": "NODE_ENV=production node scripts/update_layers.js",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p update-layers watch-postcss start-js",
-    "build": "yarn run build-intl && yarn run update-layers && yarn run build-postcss && react-scripts build",
+    "build": "yarn run build-intl && yarn run update-layers-prod && yarn run build-postcss && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
