@@ -2,6 +2,7 @@ import { defaultRoutes as api } from '../Server/Server'
 import _isArray from 'lodash/isArray'
 import Endpoint from '../Server/Endpoint'
 import startOfMonth from 'date-fns/start_of_month'
+import { CHALLENGE_INCLUDE_LOCAL } from '../Challenge/Challenge'
 
 // Default leaderboard count
 export const DEFAULT_LEADERBOARD_COUNT = 10
@@ -72,4 +73,7 @@ const initializeLeaderboardParams = function (params, numberMonths,
   if (_isArray(forCountries)) {
     params.countryCodes = forCountries.join(',')
   }
+
+  // We can include work on local challenges
+  params.cLocal = CHALLENGE_INCLUDE_LOCAL
 }

@@ -16,6 +16,8 @@ import { generateSearchParametersString } from '../Search/Search'
 import { clearTaskClusters } from './TaskClusters'
 import { CHALLENGE_LOCATION_WITHIN_MAPBOUNDS }
   from '../Challenge/ChallengeLocation/ChallengeLocation'
+import { CHALLENGE_EXCLUDE_LOCAL, CHALLENGE_INCLUDE_LOCAL }
+  from '../Challenge/Challenge'
 
 
 // redux actions
@@ -87,6 +89,11 @@ export const fetchBoundedTasks = function(criteria, limit=50, skipDispatch=false
       // pe: limit to enabled projects
       searchParameters.ce = onlyEnabled ? 'true' : 'false'
       searchParameters.pe = onlyEnabled ? 'true' : 'false'
+
+      // if we are restricting to onlyEnabled challenges then let's
+      // not show 'local' challenges either.
+      searchParameters.cLocal = onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL :
+                                              CHALLENGE_INCLUDE_LOCAL
     }
 
     // If we are searching within map bounds we need to ensure the parent

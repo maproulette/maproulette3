@@ -9,8 +9,10 @@ import { generateSearchParametersString } from '../Search/Search'
 import { defaultRoutes as api } from '../Server/Server'
 import { addError } from '../Error/Error'
 import AppErrors from '../Error/AppErrors'
-
 import Endpoint from '../Server/Endpoint'
+import { CHALLENGE_EXCLUDE_LOCAL, CHALLENGE_INCLUDE_LOCAL }
+  from '../Challenge/Challenge'
+
 
 // redux actions
 const RECEIVE_TASK_CLUSTERS = 'RECEIVE_TASK_CLUSTERS'
@@ -73,6 +75,11 @@ export const fetchTaskClusters = function(challengeId, criteria, points=25) {
       // pe: limit to enabled projects
       searchParameters.ce = onlyEnabled ? 'true' : 'false'
       searchParameters.pe = onlyEnabled ? 'true' : 'false'
+
+      // if we are restricting to onlyEnabled challenges then let's
+      // not show 'local' challenges either.
+      searchParameters.cLocal = onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL :
+                                              CHALLENGE_INCLUDE_LOCAL
     }
 
     return new Endpoint(

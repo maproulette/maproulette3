@@ -519,5 +519,16 @@ will not be able to make sense of it.
   taskPropertyStylesDescription: {
     id: "Admin.EditChallenge.form.taskPropertyStyles.description",
     defaultMessage: "Sets up task property style rules......"
+  },
+
+  requiresLocalLabel: {
+    id: "Admin.EditChallenge.form.requiresLocal.label",
+    defaultMessage: "Requires Local Knowledge"
+  },
+
+  requiesLocalDescription: {
+    id: "Admin.EditChallenge.form.requiresLocal.description",
+    defaultMessage: "Tasks require local or on-the-ground knowledge to complete." +
+      " Note: challenge will not appear in the 'Find challenges' list."
   }
 })
