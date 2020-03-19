@@ -732,6 +732,7 @@
   "TaskReviewStatusFilter.label": "Filter by Review Status",
   "TaskHistory.fields.startedOn.label": "Started on task",
   "TaskHistory.controls.viewAttic.label": "View Attic",
+  "TaskHistory.fields.taskUpdated.label": "Task updated by challenge manager",
   "Task.markedAs.label": "Task marked as",
   "Task.requestReview.label": "request review?",
   "Task.awaitingReview.label": "Task is awaiting review.",

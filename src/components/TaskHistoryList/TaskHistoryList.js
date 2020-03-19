@@ -92,6 +92,10 @@ export default class TaskHistoryList extends Component {
             }
           }
           break
+        case TaskHistoryAction.update:
+          logEntry = updateEntry(log, this.props, index)
+          username = _get(log, 'user.username')
+          break
         case TaskHistoryAction.status:
         default:
           logEntry = null
@@ -234,6 +238,14 @@ const statusEntry = (entry, props, index) => {
       intlMessage={messagesByStatus[entry.status]}
       className={`mr-status-${_kebabCase(keysByStatus[entry.status])}`}
     />
+  )
+}
+
+const updateEntry = (entry, props, index) => {
+  return (
+    <li key={index} className="mr-flex">
+      <FormattedMessage {...messages.taskUpdatedLabel} />
+    </li>
   )
 }
 
