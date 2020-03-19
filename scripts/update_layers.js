@@ -8,7 +8,7 @@
  *
  * Requires curl and jq to both be installed.
  */
-require('dotenv').config()
+const dotenv = require('dotenv')
 const _get = require('lodash/get')
 const shell = require('shelljs')
 shell.config.silent = true
@@ -31,6 +31,19 @@ if (shell.ls('./src').length === 0) {
   shell.exit(1)
 }
 
+// Load .env configuration files. Try loading .env.production or
+// .env.development.local first (depending on NODE_ENV), and then fill in any
+// gaps from the default .env file
+try {
+  dotenv.config({
+    path: process.env.NODE_ENV === 'production' ?
+    '.env.production' :
+    '.env.development.local'
+  })
+}
+catch(error) {}
+dotenv.config() // fill in from normal .env file
+
 // Additional layers (from the Layer Index) to include in addition to the
 // default layers.
 const additionalIndexLayers =
@@ -43,14 +56,20 @@ if (shell.exec("curl -s https://osmlab.github.io/editor-layer-index/imagery.geoj
   shell.exit(1)
 }
 
-// Extract properties from layers marked as default layers that have global
-// coverage (geometry is null) and save them to `src/defaultLayers.json`. We
-// also include any "additional" layers requested
-shell.echo("Extracting default layers")
-const jqLayerConditionals = additionalIndexLayers.map(layerId => ` or .properties.id == "${layerId}"`).join(' ')
-if (shell.exec("jq '[.features[] | select((.properties.default == true and .properties.geometry == null)" + jqLayerConditionals + ")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
-  shell.echo("Extracting default layers failed")
-  shell.exit(1)
+// Unless default layers are disabled, extract properties from layers marked as
+// default layers that have global coverage (geometry is null) and save them to
+// `src/defaultLayers.json`. We also include any "additional" layers requested
+if (_get(process.env, 'REACT_APP_DEFAULT_MAP_LAYERS', 'enabled') === 'disabled') {
+  shell.echo("Default map layers have been disabled. Ignoring default layers.")
+  shell.echo('[]').to('./src/defaultLayers.json')
+}
+else {
+  shell.echo("Extracting default layers")
+  const jqLayerConditionals = additionalIndexLayers.map(layerId => ` or .properties.id == "${layerId}"`).join(' ')
+  if (shell.exec("jq '[.features[] | select((.properties.default == true and .properties.geometry == null)" + jqLayerConditionals + ")]' ./src/imagery.json > ./src/defaultLayers.json").code !== 0) {
+    shell.echo("Extracting default layers failed")
+    shell.exit(1)
+  }
 }
 
 // Users can add custom layers to `src/customLayers.json`. If the file does not
