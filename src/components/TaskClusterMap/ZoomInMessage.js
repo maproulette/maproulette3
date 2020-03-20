@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
+import BusySpinner from '../BusySpinner/BusySpinner'
 import _isUndefined from 'lodash/isUndefined'
 import LocationSearchBox from '../EnhancedMap/SearchControl/LocationSearchBox'
 import { ChallengeLocation}
@@ -18,6 +19,7 @@ import messages from './Messages'
  */
 export class ZoomInMessage extends Component {
   state = {
+    locatingToUser: false,
   }
 
   componentDidUpdate(prevProps) {
@@ -54,19 +56,22 @@ export class ZoomInMessage extends Component {
           </div>
           {!this.state.minimized &&
             <div className="mr-flex mr-items-center mr-pb-3 mr-px-3">
-              <button
-                className="mr-button mr-button--small mr-button--blue-fill"
-                onClick={() => {
-                  this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
-                  this.setState({locatingToUser: true})
-                  this.props.locateMapToUser(this.props.user).then(() => {
-                    this.setState({locatingToUser: false})
-                  })
-                }}
-              >
-                <FormattedMessage {...messages.nearMeLabel } />
-              </button>
-              <span className="mr-mx-4 mr-pt-1"><FormattedMessage {...messages.orLabel } /></span>
+              {this.state.locatingToUser ?
+               <BusySpinner inline className="mr-static" /> :
+               <button
+                 className="mr-button mr-button--small mr-button--blue-fill"
+                 onClick={() => {
+                   this.props.setSearchFilters({location: ChallengeLocation.intersectingMapBounds})
+                   this.setState({locatingToUser: true})
+                   this.props.locateMapToUser(this.props.user).then(() => {
+                     this.setState({locatingToUser: false})
+                   })
+                 }}
+               >
+                 <FormattedMessage {...messages.nearMeLabel } />
+               </button>
+              }
+              <span className="mr-mx-4"><FormattedMessage {...messages.orLabel } /></span>
               <LocationSearchBox
                 {...this.props}
                 onResultSelected={(bounds, zoom) => {

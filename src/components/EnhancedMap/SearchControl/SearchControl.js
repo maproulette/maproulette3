@@ -3,6 +3,7 @@ import _map from 'lodash/map'
 import { FormattedMessage } from 'react-intl'
 import WithNominatimSearch from '../../HOCs/WithNominatimSearch/WithNominatimSearch'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
+import BusySpinner from '../../BusySpinner/BusySpinner'
 import Dropdown from '../../Dropdown/Dropdown'
 import messages from './Messages'
 
@@ -13,6 +14,20 @@ import messages from './Messages'
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
 export class SearchControl extends Component {
+  /**
+   * Esc clears search, Enter signals completion
+   *
+   * @private
+   */
+  checkForSpecialKeys = (e) => {
+    if (e.key === "Escape") {
+      this.props.clearNominatimSearch()
+    }
+    else if (e.key === "Enter") {
+      this.props.searchNominatim()
+    }
+  }
+
   render() {
     const resultItems = _map(this.props.nominatimResults, result => (
       <li key={result.osmId}>
@@ -48,13 +63,17 @@ export class SearchControl extends Component {
                   placeholder={this.props.intl.formatMessage(messages.nominatimQuery)}
                   value={this.props.nominatimQuery}
                   onChange={(e) => this.props.updateNominatimQuery(e.target.value)}
+                  onKeyDown={this.checkForSpecialKeys}
                 />
-                <button
-                  className="mr-button mr-h-10 mr-py-0 mr-ml-4"
-                  onClick={this.props.searchNominatim}
-                >
-                  <FormattedMessage {...messages.searchLabel } />
-                </button>
+                {this.props.nominatumSearching ?
+                 <BusySpinner inline className="mr-static" /> :
+                 <button
+                   className="mr-button mr-h-10 mr-py-0 mr-ml-4"
+                   onClick={this.props.searchNominatim}
+                 >
+                   <FormattedMessage {...messages.searchLabel } />
+                 </button>
+                }
               </div>
               <button
                 className="mr-ml-4"
