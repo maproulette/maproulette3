@@ -28,4 +28,8 @@ export default defineMessages({
     id: "TaskClusterMap.message.taskCount.label",
     defaultMessage: "{count,plural,=0{No tasks found}one{# task found}other{# tasks found}}"
   },
+  moveMapToRefresh: {
+    id: "TaskClusterMap.message.moveMapToRefresh.label",
+    defaultMessage: "Click to show tasks"
+  },
 })

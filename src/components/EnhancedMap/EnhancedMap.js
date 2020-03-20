@@ -6,6 +6,7 @@ import { geoJSON, LatLngBounds, LatLng, latLng } from 'leaflet'
 import _isEmpty from 'lodash/isEmpty'
 import _isEqual from 'lodash/isEqual'
 import _isFunction from 'lodash/isFunction'
+import _isFinite from 'lodash/isFinite'
 import AsSimpleStyleableFeature
        from '../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import PropertyList from './PropertyList/PropertyList'
@@ -200,13 +201,13 @@ export default class EnhancedMap extends Map {
       }
     }
 
-    if (this.props.initialBounds) {
+    if (this.props.initialBounds && _isFinite(this.props.initialBounds.getNorth())) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.initialBounds) {
+    if (this.props.initialBounds && _isFinite(this.props.initialBounds.getNorth())) {
       this.leafletElement.fitBounds(this.props.initialBounds)
     }
     else if (!this.props.center.equals(prevProps.center)) {

@@ -119,7 +119,7 @@ export class TaskClusterMap extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.taskMarkers &&
+    if (this.props.taskMarkers && !this.props.delayMapLoad &&
         !_isEqual(this.props.taskMarkers, prevProps.taskMarkers)) {
       this.generateMarkers()
     }
@@ -422,6 +422,16 @@ export class TaskClusterMap extends Component {
         }
         {!!this.props.mapZoomedOut && !this.state.locatingToUser &&
           <ZoomInMessage {...this.props} zoom={this.currentZoom}/>
+        }
+        {this.props.delayMapLoad &&
+          <div className="mr-absolute mr-top-0 mr-mt-3 mr-w-full mr-flex mr-justify-center"
+            onClick={() => this.props.forceMapLoad()}>
+            <div className="mr-z-5 mr-flex-col mr-items-center mr-bg-blue-dark-50 mr-text-white mr-rounded">
+              <div className="mr-py-2 mr-px-3 mr-text-center mr-cursor-pointer">
+                <FormattedMessage {...messages.moveMapToRefresh} />
+              </div>
+            </div>
+          </div>
         }
         {!!this.props.showTaskCount && this.state.displayTaskCount && !this.props.mapZoomedOut &&
           <div className="mr-absolute mr-top-0 mr-mt-3 mr-z-5 mr-w-full mr-flex mr-justify-center">
