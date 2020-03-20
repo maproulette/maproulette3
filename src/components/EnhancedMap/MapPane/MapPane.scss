@@ -184,7 +184,7 @@
     }
   }
 
-  .busy-spinner {
+  .busy-spinner:not(.mr-static) {
     @include busy-spinner-color($grey);
     @include busy-spinner-size(30px);
 

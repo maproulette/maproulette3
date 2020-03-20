@@ -38,7 +38,7 @@
 }
 
 .taskcluster-map {
-  .busy-spinner {
+  .busy-spinner:not(.mr-static) {
     position: absolute;
     top: 50%;
     left: 50%;
