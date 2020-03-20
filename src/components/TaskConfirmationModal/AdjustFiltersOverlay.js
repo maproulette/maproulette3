@@ -123,7 +123,7 @@ export default class AdjustFiltersOverlay extends Component {
       </div>
 
     return (
-      <div className="mr-absolute mr-top-20 mr-left-0 mr-bg-blue-darker mr-w-full mr-h-100 mr-mt-32">
+      <div className="mr-absolute mr-bottom-0 mr-left-0 mr-bg-blue-darker mr-w-full mr-h-100 mr-mt-32">
         <div className="mr-mt-12 mr-ml-4">
           {reviewStatusFilter}
           {statusFilter}

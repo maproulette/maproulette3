@@ -24,7 +24,6 @@ import TaskNearbyList from '../TaskPane/TaskNearbyList/TaskNearbyList'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
 import AdjustFiltersOverlay from './AdjustFiltersOverlay'
@@ -115,11 +114,6 @@ export class TaskConfirmationModal extends Component {
                                        {"mr-pr-12": loadingNearby})}>
               <div className={classNames("mr-flex mr-flex-col mr-items-center",
                                          {"mr-max-w-88": !reviewConfirmation})}>
-                <SvgSymbol
-                  sym="illustration-choose"
-                  viewBox="0 0 147 200"
-                  className={applyingSuggestedFix ? "mr-h-30" : "mr-h-40"}
-                />
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
                     {this.props.inReview ?
@@ -285,7 +279,7 @@ export class TaskConfirmationModal extends Component {
 
                   { reviewConfirmation && _isUndefined(this.props.needsRevised) &&
                     <React.Fragment>
-                      <div className="form mr-mt-8">
+                      <div className="form mr-mt-8 mr-text-sm">
                           <span className="mr-mr-4">
                             <FormattedMessage {...messages.loadNextReviewLabel} />
                           </span>
