@@ -4,6 +4,7 @@ import { injectIntl, FormattedMessage } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
 import { BingLayer } from 'react-leaflet-bing'
 import _isEmpty from 'lodash/isEmpty'
+import _get from 'lodash/get'
 import WithErrors from '../../HOCs/WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
 import { layerSourceShape, normalizeLayer, defaultLayerSource }
@@ -43,6 +44,15 @@ export class SourcedTileLayer extends Component {
 
   static getDerivedStateFromError(error) {
     return {layerRenderFailed: true}
+  }
+
+  componentDidUpdate(prevProps) {
+    // If we've switched off a failed layer, reset our failure state
+    const currentLayer = _get(this.props, 'source.id')
+    if (this.state.layerRenderFailed && currentLayer &&
+        currentLayer !== _get(prevProps, 'source.id')) {
+      this.setState({layerRenderFailed: false})
+    }
   }
 
   render() {
