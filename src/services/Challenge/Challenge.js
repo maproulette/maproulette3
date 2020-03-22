@@ -893,6 +893,11 @@ export const findKeyword = function(keywordPrefix, tagType = null) {
  * @returns a Promise
  */
 const removeChallengeKeywords = function(challengeId, oldKeywords=[]) {
+  // If no challenge id, nothing to do
+  if (!_isFinite(challengeId)) {
+    return Promise.resolve()
+  }
+
   // strip empty tags
   const toRemove =
     _compact(_map(oldKeywords, tag => _isEmpty(tag) ? null : tag))
