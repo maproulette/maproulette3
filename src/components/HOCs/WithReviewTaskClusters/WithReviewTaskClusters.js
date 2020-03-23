@@ -19,31 +19,40 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
   return class extends Component {
     state = {
       loading: false,
+      loadMap: false,
     }
 
     updateBounds(bounds) {
+      if (!this.state.loadMap) {
+        this.setState({loadMap: true})
+      }
       const criteria = _cloneDeep(this.props.reviewCriteria)
       criteria.boundingBox = fromLatLngBounds(bounds).join(',')
       this.props.updateReviewTasks(criteria)
     }
 
     fetchUpdatedClusters() {
-      this.setState({loading: true})
+      if (this.state.loadMap) {
+        this.setState({loading: true})
 
-      this.props.fetchClusteredReviewTasks(
-        this.props.reviewTasksType, this.props.reviewCriteria
-      ).catch(e => {}).then(() => this.setState({loading: false}))
+        this.props.fetchClusteredReviewTasks(
+          this.props.reviewTasksType, this.props.reviewCriteria
+        ).catch(e => {}).then(() => this.setState({loading: false}))
+      }
     }
 
     componentDidMount() {
       this.fetchUpdatedClusters()
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
       if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
         this.fetchUpdatedClusters()
       }
       else if (prevProps.reviewCriteria !== this.props.reviewCriteria) {
+        this.fetchUpdatedClusters()
+      }
+      else if (this.state.loadMap !== prevState.loadMap) {
         this.fetchUpdatedClusters()
       }
     }
@@ -57,8 +66,10 @@ export const WithReviewTaskClusters = function(WrappedComponent) {
           {..._omit(this.props, ['reviewClusters', 'fetchId', 'updateReviewClusters'])}
           taskClusters = {this.props.reviewClusters}
           boundingBox={bounds}
-          updateBounds = {bounds => this.updateBounds(bounds)}
-          loading = {this.state.loading}
+          updateBounds={bounds => this.updateBounds(bounds)}
+          loading={this.state.loading}
+          delayMapLoad={!this.state.loadMap}
+          forceMapLoad={() => this.setState({loadMap: true})}
         />
       )
     }
