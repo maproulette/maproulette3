@@ -7,6 +7,42 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.5.8] - 2020-03-25
+### Added
+- OpenStreetCam imagery map overlay during task completion
+- Integration with Transifex for supporting community translations (#734)
+- Additional locales: nl, ru-RU, fa-IR, cs-CZ
+- Option to preview task comment Markdown during composition
+- Link user mentions in comments to mentioned user's metrics page
+- Separate rendering colors for nodes, ways, areas in OSM Data map overlay
+- Control over display of nodes, ways, areas in OSM Data map overlay
+- Enter and ESC keyboard shortcuts in Nominatim search box
+- Show busy spinner while performing Nominatim search
+- Show busy spinner while geolocating user when tasks Near Me requested
+- Show administrative updates to tasks by challenge managers in task history
+- Filtering by task priority in Task Review
+- Ability to adjust task-review filters after each reviewed task
+- Notify task reviewer when re-review requested after follow-up changes
+- Make some widgets permanent in various Create & Manage dashboards
+- Option to export project CSVs from main Create & Manage dashboard
+- URLs to tasks and challenges in Project CSVs
+- Display of mapper in Create & Manage tables for all tasks going forward
+- New color palette for colored usernames shown in various tables
+- Various minor UI and color adjustments
+- Challenge flag indicating that local knowledge is required to work on tasks
+- Server admin configuration option to disable default map layers
+- Server admin configuration option to hide OSM Data map overlay
+
+### Fixed
+- Layer toggle unresponsive after failure to load map layer (#1177)
+- Hiding task-feature map layer can cause map zoom to reset (#1167)
+- Removing keywords from cloned challenge causes save to fail (#1188)
+- Empty options menus for some challenges in Create & Manage
+- Task completion keyboard shortcuts active during confirmation step
+- Erroneous calculation of time spent on task if server clocks different
+- Occasional display of old task review status due to stale cache
+
+
 ## [v3.5.7] - 2020-03-11
 ### Added
 - Dark mode in Create & Manage area
