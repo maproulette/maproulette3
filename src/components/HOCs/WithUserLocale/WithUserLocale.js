@@ -1,8 +1,10 @@
-import { connect } from 'react-redux'
+import React, { Component } from 'react'
 import _get from 'lodash/get'
-import { isSupportedLocale,
-         translatedMessages,
-         defaultLocale } from '../../../services/User/Locale/Locale'
+import {
+  isSupportedLocale,
+  defaultLocale,
+  loadTranslatedMessages,
+} from '../../../services/User/Locale/Locale'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 
 /**
@@ -18,22 +20,49 @@ import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
  *
  * @author [Neil Rotstan](https://github.com/nrotstan)
  */
-const WithUserLocale =
-  WrappedComponent => WithCurrentUser(connect(mapStateToProps)(WrappedComponent))
+export const WithUserLocale = function(WrappedComponent) {
+  return class extends Component {
+    state = {
+      localeMessages: null,
+    }
 
-export const mapStateToProps = (state, ownProps) => {
-  const locale = ownProps.user ?
-                 _get(ownProps.user, `settings.locale`) : null
+    activeLocale = props => {
+      const userLocale = _get(props, 'user.settings.locale')
+      return isSupportedLocale(userLocale) ? userLocale : defaultLocale()
+    }
 
-  if (isSupportedLocale(locale)) {
-    return {locale, messages: translatedMessages[locale]}
-  }
-  else {
-    return {
-      locale: defaultLocale(),
-      messages: translatedMessages[defaultLocale()],
+    loadLocale = () => {
+      loadTranslatedMessages(this.activeLocale(this.props)).then(messages => {
+        this.setState({localeMessages: messages})
+      })
+    }
+
+    componentDidMount() {
+      this.loadLocale()
+    }
+
+    componentDidUpdate(prevProps) {
+      if (this.activeLocale(this.props) !== this.activeLocale(prevProps)) {
+        this.loadLocale()
+      }
+    }
+
+    render() {
+      // Wait until initial locale messages are loaded before showing content
+      if (!this.state.localeMessages) {
+        return null
+      }
+
+      return (
+        <WrappedComponent
+          {...this.props}
+          locale={this.activeLocale(this.props)}
+          messages={this.state.localeMessages}
+        />
+      )
     }
   }
 }
 
-export default WithUserLocale
+export default WrappedComponent =>
+  WithCurrentUser(WithUserLocale(WrappedComponent))

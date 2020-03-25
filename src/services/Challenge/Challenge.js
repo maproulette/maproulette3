@@ -39,6 +39,14 @@ import { parseQueryString, RESULTS_PER_PAGE, SortOptions,
        from '../Search/Search'
 import startOfDay from 'date-fns/start_of_day'
 
+/**
+ * Constants defining searches to include/exclude 'local' challenges.
+ */
+export const CHALLENGE_EXCLUDE_LOCAL = 0
+export const CHALLENGE_INCLUDE_LOCAL = 1
+export const CHALLENGE_ONLY_LOCAL = 2
+
+
 // normalizr schema
 export const challengeSchema = function() {
   return new schema.Entity('challenges', {parent: projectSchema()})
@@ -295,6 +303,8 @@ export const extendedFind = function(criteria, limit=RESULTS_PER_PAGE) {
       limit,
       ce: onlyEnabled ? 'true' : 'false',
       pe: onlyEnabled ? 'true' : 'false',
+      // exclude local challenges if we are only finding enabled
+      cLocal: onlyEnabled ? CHALLENGE_EXCLUDE_LOCAL : CHALLENGE_INCLUDE_LOCAL
     }
 
     if (_isFinite(filters.difficulty)) {
@@ -671,7 +681,7 @@ export const saveChallenge = function(originalChallengeData, storeResponse=true)
         'mediumPriorityRule', 'minZoom', 'name', 'overpassQL', 'parent',
         'remoteGeoJson', 'status', 'tags', 'updateTasks', 'virtualParents',
         'exportableProperties', 'osmIdProperty', 'dataOriginDate', 'preferredTags',
-        'taskStyles'])
+        'taskStyles', 'requiresLocal'])
 
       if (challengeData.dataOriginDate) {
         // Set the timestamp on the dataOriginDate so we get proper timezone info.
@@ -883,6 +893,11 @@ export const findKeyword = function(keywordPrefix, tagType = null) {
  * @returns a Promise
  */
 const removeChallengeKeywords = function(challengeId, oldKeywords=[]) {
+  // If no challenge id, nothing to do
+  if (!_isFinite(challengeId)) {
+    return Promise.resolve()
+  }
+
   // strip empty tags
   const toRemove =
     _compact(_map(oldKeywords, tag => _isEmpty(tag) ? null : tag))

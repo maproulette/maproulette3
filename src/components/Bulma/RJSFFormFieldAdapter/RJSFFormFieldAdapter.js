@@ -122,27 +122,29 @@ export class MarkdownEditField extends Component {
       <React.Fragment>
         <label className="control-label">
           {this.props.schema.title}
-          {this.props.required &&
-           <span className="required">*</span>
-          }
+          {this.props.required && <span className="required">*</span>}
         </label>
         <div className="mr-grid mr-grid-columns-2 mr-grid-gap-8 mr-text-white">
-          <textarea className="form-control"
-                    onChange={e => this.props.onChange(e.target.value)}
-                    value={this.props.formData} />
-          <div>
+          <textarea
+            className="form-control mr-font-mono mr-text-sm"
+            onChange={e => this.props.onChange(e.target.value)}
+            value={this.props.formData}
+          />
+          <React.Fragment>
             {showMustacheNote &&
               <div className="mr-italic mr-text-xs">
                 <FormattedMessage {...messages.addMustachePreviewNote} />
               </div>
             }
-            <MarkdownTemplate content={this.props.formData || ""}
-                              properties={{}}
-                              completionResponses={{}}
-                              setCompletionResponse={() => {}}
-                              lightMode={false}
-                              disableTemplate={true}/>
-          </div>
+            <MarkdownTemplate
+              content={this.props.formData || ""}
+              properties={{}}
+              completionResponses={{}}
+              setCompletionResponse={() => {}}
+              lightMode={false}
+              disableTemplate={true}
+            />
+          </React.Fragment>
         </div>
       </React.Fragment>
     )

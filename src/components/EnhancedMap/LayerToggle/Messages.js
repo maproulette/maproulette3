@@ -19,9 +19,14 @@ export default defineMessages({
     defaultMessage: "Mapillary"
   },
 
-  moreMapillaryLabel: {
-    id: "LayerToggle.controls.moreMapillary.label",
+  moreLabel: {
+    id: "LayerToggle.controls.more.label",
     defaultMessage: "More"
+  },
+
+  showOpenStreetCamLabel: {
+    id: "LayerToggle.controls.showOpenStreetCam.label",
+    defaultMessage: "OpenStreetCam"
   },
 
   imageCount: {

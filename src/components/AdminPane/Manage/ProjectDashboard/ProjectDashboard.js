@@ -42,6 +42,9 @@ export const defaultDashboardSetup = function() {
       widgetDescriptor('ProjectManagersWidget'),
       widgetDescriptor('ChallengeListWidget'),
     ],
+    permanentWidgets: [ // Cannot be removed from workspace
+      'ChallengeListWidget',
+    ],
     layout: [
       {i: generateWidgetId(), x: 0, y: 0, w: 4, h: 7},
       {i: generateWidgetId(), x: 0, y: 7, w: 4, h: 7},

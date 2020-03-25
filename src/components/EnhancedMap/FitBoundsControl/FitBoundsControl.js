@@ -5,11 +5,14 @@ import { Control, Handler, DomUtil, DomEvent, FeatureGroup }
 import { injectIntl } from 'react-intl'
 import { MapControl, withLeaflet } from 'react-leaflet'
 import _pick from 'lodash/pick'
+import _isEmpty from 'lodash/isEmpty'
 import WithKeyboardShortcuts
        from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
 import messages from './Messages'
 import './FitBoundsControl.scss'
+
+const shortcutGroup = 'taskEditing'
 
 /**
  * Leaflet control for that fits the map bounds to the current features added
@@ -21,7 +24,16 @@ import './FitBoundsControl.scss'
  * @private
  */
 const FitBoundsLeafletControl = Control.extend({
-  fitFeatures: function(map) {
+  fitFeatures: function(map, event) {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.options.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
+    if (this.options.textInputActive(event)) { // ignore typing in inputs
+      return
+    }
+
     const geoJSONFeatures = new FeatureGroup()
 
     map.eachLayer(layer => {
@@ -40,14 +52,14 @@ const FitBoundsLeafletControl = Control.extend({
     map.addHandler(
       'fitBoundsKeyboardHandler',
       keyboardHandler(this.options.keyboardShortcutGroups.taskEditing.fitBounds.key,
-                      () => this.fitFeatures(map))
+                      event => this.fitFeatures(map, event))
     )
 
     // Register the handler so the shortcut will show up on a list of active
     // shortcuts. It's an "external" shortcut because the event is handled
     // externally (here) instead of by WithKeyboardShortcuts
     this.options.addExternalKeyboardShortcut(
-      'taskEditing',
+      shortcutGroup,
       _pick(this.options.keyboardShortcutGroups.taskEditing, 'fitBounds')
     )
 
@@ -56,8 +68,16 @@ const FitBoundsLeafletControl = Control.extend({
 
     // build the control button, render it, and return it
     const controlContent = (
-      <button onClick={() => this.fitFeatures(map)} className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter">
-        <SvgSymbol title={this.options.intl.formatMessage(messages.tooltip)} sym="target-icon" className="mr-w-4 mr-h-4 mr-fill-current" viewBox="0 0 20 20" />
+      <button
+        onClick={event => this.fitFeatures(map, event)}
+        className="mr-leading-none mr-p-2 mr-bg-black-50 mr-text-white mr-w-8 mr-h-8 mr-flex mr-items-center mr-shadow mr-rounded-sm mr-transition-normal-in-out-quad hover:mr-text-green-lighter"
+      >
+        <SvgSymbol
+          title={this.options.intl.formatMessage(messages.tooltip)}
+          sym="target-icon"
+          className="mr-w-4 mr-h-4 mr-fill-current"
+          viewBox="0 0 20 20"
+        />
       </button>
     )
 
@@ -72,7 +92,7 @@ const FitBoundsLeafletControl = Control.extend({
       map.fitBoundsKeyboardHandler.disable()
 
       this.options.removeExternalKeyboardShortcut(
-        'taskEditing',
+        shortcutGroup,
         _pick(this.options.keyboardShortcutGroups.taskEditing, 'fitBounds')
       )
     }
@@ -94,7 +114,7 @@ const keyboardHandler = function(key, controlFunction) {
 
     onKeydown: function(event) {
       if (event.key === key) {
-        controlFunction()
+        controlFunction(event)
       }
     }
   })

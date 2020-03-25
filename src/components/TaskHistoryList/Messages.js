@@ -13,4 +13,9 @@ export default defineMessages({
     id: "TaskHistory.controls.viewAttic.label",
     defaultMessage: "View Attic",
   },
+
+  taskUpdatedLabel: {
+    id: "TaskHistory.fields.taskUpdated.label",
+    defaultMessage: "Task updated by challenge manager",
+  }
 })

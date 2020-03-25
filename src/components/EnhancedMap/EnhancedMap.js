@@ -26,6 +26,7 @@ import PropertyList from './PropertyList/PropertyList'
 export default class EnhancedMap extends Map {
   currentFeatures = null
   animationHandle = null
+  mapMoved = false
 
   /**
    * Invoked after the user is finished altering the map bounds, either by
@@ -36,12 +37,14 @@ export default class EnhancedMap extends Map {
    */
   onZoomOrMoveEnd = () => {
     if (this.props.onBoundsChange) {
-      // This method can get called a few times when things are first rendering,
-      // so we make sure the map has actually moved from its initial center or
-      // zoom before recording a bounds change.
-
-      if (!this.leafletElement.getCenter().equals(this.props.center) ||
+      // This method can get called a few times when things are first
+      // rendering, so -- if the map hasn't been moved yet (panned or
+      // zoomed) -- we make sure the map has actually moved from its
+      // initial center or zoom before recording a bounds change
+      if (this.mapMoved ||
+          !this.leafletElement.getCenter().equals(this.props.center) ||
           this.leafletElement.getZoom() !== this.props.zoom) {
+        this.mapMoved = true
         this.props.onBoundsChange(this.leafletElement.getBounds(),
                                   this.leafletElement.getZoom(),
                                   this.leafletElement.getSize())
@@ -154,9 +157,12 @@ export default class EnhancedMap extends Map {
       // However, if we're only supposed to fit the features as necessary, then
       // we do it for initial task (no existing features) or if the new task
       // features wouldn't all be displayed at the present zoom level.
-      if (!this.props.fitFeaturesOnlyAsNecessary ||
-          !hasExistingFeatures ||
-          !this.leafletElement.getBounds().contains(this.currentFeatures.getBounds())) {
+      if (!this.props.skipFit &&
+          (
+            !this.props.fitFeaturesOnlyAsNecessary ||
+            !hasExistingFeatures ||
+            !this.leafletElement.getBounds().contains(this.currentFeatures.getBounds())
+          )) {
         this.leafletElement.fitBounds(this.currentFeatures.getBounds().pad(0.5))
       }
     }

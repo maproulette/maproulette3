@@ -4,6 +4,7 @@ import { injectIntl, FormattedMessage } from 'react-intl'
 import { TileLayer } from 'react-leaflet'
 import { BingLayer } from 'react-leaflet-bing'
 import _isEmpty from 'lodash/isEmpty'
+import _get from 'lodash/get'
 import WithErrors from '../../HOCs/WithErrors/WithErrors'
 import AppErrors from '../../../services/Error/AppErrors'
 import { layerSourceShape, normalizeLayer, defaultLayerSource }
@@ -45,7 +46,20 @@ export class SourcedTileLayer extends Component {
     return {layerRenderFailed: true}
   }
 
+  componentDidUpdate(prevProps) {
+    // If we've switched off a failed layer, reset our failure state
+    const currentLayer = _get(this.props, 'source.id')
+    if (this.state.layerRenderFailed && currentLayer &&
+        currentLayer !== _get(prevProps, 'source.id')) {
+      this.setState({layerRenderFailed: false})
+    }
+  }
+
   render() {
+    if (!this.props.source) {
+      return null
+    }
+
     if (this.state.layerRenderFailed) {
       // Try rendering the default layer as a fallback. If we *are* the
       // fallback, just render an error message
@@ -89,7 +103,7 @@ export class SourcedTileLayer extends Component {
 
 SourcedTileLayer.propTypes = {
   /** LayerSource to use */
-  source: layerSourceShape.isRequired,
+  source: layerSourceShape,
   /** Set to true to suppress display of source attribution */
   skipAttribution: PropTypes.bool,
 }

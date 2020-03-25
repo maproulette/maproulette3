@@ -197,17 +197,22 @@ are in play.
 Tailwind configuration is controlled with the `src/tailwind.config.js` file.
 New CSS classes can be found in `src/styles/`
 
-## Internationalization and Localization
+## Internationalization, Localization, and Translation
 
 Internationalization and localization is performed via
 [react-intl](https://github.com/yahoo/react-intl/wiki). Most components feature
 co-located Messages.js files that contain messages intended for display,
-along with default (U.S. English) versions of each message. Translation files
-that contain translated versions of these messages for supported locales are
-stored in the `src/lang/` directory. A fresh en-US.json file can be built from
-the latest messages using `yarn run build-intl`, which is also run
-automatically as part of the `yarn build` script used for creating production
-builds. Translation files for other locales must be updated manually.
+along with default (U.S. English) versions of each message.
+
+A fresh en-US.json file can be built from the latest messages using `yarn run
+build-intl`, which is also run automatically as part of the `yarn build` script
+used for creating production builds.
+
+Translations for other locales are managed through
+[transifex](https://www.transifex.com/osmlab/maproulette3), who kindly provides
+us with free service through their Open Source program. Translation files are
+pulled into the code repository from time to time and stored in the `src/lang/`
+directory.
 
 By default, the en-US locale will be used for users who have not set a locale in
 their MapRoulette user settings. This default locale can be changed with the

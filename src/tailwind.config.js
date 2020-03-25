@@ -61,6 +61,7 @@ module.exports = {
       'pink-light-50': 'rgba(255,178,240,0.5)',
       twitter: '#1DA1F2',
       orange: '#f7bb59',
+      'orange-jaffa': '#EA8433',
       red: '#CA484C',
       'red-light': '#FF5E63',
       purple: '#959DFF',
@@ -292,6 +293,7 @@ module.exports = {
     minHeight: {
       '0': '0',
       '5': '1.25rem',
+      '8': '2rem',
       xs: '20rem',
       full: '100%',
       screen: '100vh',
@@ -362,6 +364,7 @@ module.exports = {
       '20': '5rem',
       '24': '6rem',
       '32': '8rem',
+      '36': '9rem',
     },
 
     margin: {

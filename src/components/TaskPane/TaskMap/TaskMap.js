@@ -13,9 +13,11 @@ import _pick from 'lodash/pick'
 import _compact from 'lodash/compact'
 import _flatten from 'lodash/flatten'
 import _isEmpty from 'lodash/isEmpty'
+import _clone from 'lodash/clone'
 import { layerSourceWithId } from '../../../services/VisibleLayer/LayerSources'
 import EnhancedMap from '../../EnhancedMap/EnhancedMap'
 import MapillaryViewer from '../../MapillaryViewer/MapillaryViewer'
+import OpenStreetCamViewer from '../../OpenStreetCamViewer/OpenStreetCamViewer'
 import SourcedTileLayer
        from '../../EnhancedMap/SourcedTileLayer/SourcedTileLayer'
 import OSMDataLayer from '../../EnhancedMap/OSMDataLayer/OSMDataLayer'
@@ -31,6 +33,8 @@ import WithVisibleLayer from '../../HOCs/WithVisibleLayer/WithVisibleLayer'
 import WithKeyboardShortcuts
        from '../../HOCs/WithKeyboardShortcuts/WithKeyboardShortcuts'
 import WithMapillaryImages from '../../HOCs/WithMapillaryImages/WithMapillaryImages'
+import WithOpenStreetCamImages
+       from '../../HOCs/WithOpenStreetCamImages/WithOpenStreetCamImages'
 import { MIN_ZOOM, MAX_ZOOM, DEFAULT_ZOOM }
        from '../../../services/Challenge/ChallengeZoom/ChallengeZoom'
 import AsMappableTask from '../../../interactions/Task/AsMappableTask'
@@ -42,6 +46,8 @@ import { supportedSimplestyles }
        from '../../../interactions/TaskFeature/AsSimpleStyleableFeature'
 import BusySpinner from '../../BusySpinner/BusySpinner'
 import './TaskMap.scss'
+
+const shortcutGroup = 'layers'
 
 /**
  * TaskMap renders a map (and controls) appropriate for the given task,
@@ -56,18 +62,31 @@ export class TaskMap extends Component {
   state = {
     showTaskFeatures: true,
     showOSMData: false,
+    showOSMElements: {
+      nodes: true,
+      ways: true,
+      areas: true,
+    },
     osmData: null,
     osmDataLoading: false,
     mapillaryViewerImage: null,
+    openStreetCamViewerImage: null,
+    skipFit: false,
+    latestZoom: null,
   }
 
   /** Process keyboard shortcuts for the layers */
   handleKeyboardShortcuts = event => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 
-    const layerShortcuts = this.props.keyboardShortcutGroups.layers
+    const layerShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
     switch(event.key) {
       case layerShortcuts.layerOSMData.key:
         this.toggleOSMDataVisibility()
@@ -87,7 +106,7 @@ export class TaskMap extends Component {
    * task features on or off.
    */
   toggleTaskFeatureVisibility = () => {
-    this.setState({showTaskFeatures: !this.state.showTaskFeatures})
+    this.setState({showTaskFeatures: !this.state.showTaskFeatures, skipFit: true})
   }
 
   /**
@@ -97,11 +116,21 @@ export class TaskMap extends Component {
   toggleOSMDataVisibility = () => {
     if (!this.state.showOSMData && !this.state.osmData && !this.state.osmDataLoading) {
       this.setState({osmDataLoading: true})
-      this.props.fetchOSMData(this.props.mapBounds.bounds.toBBoxString()).then(xmlData => {
-        this.setState({osmData: xmlData, osmDataLoading: false})
+      this.props.fetchOSMData(
+        this.props.mapBounds.bounds.toBBoxString()
+      ).then(xmlData => {
+        // Indicate the map should skip fitting to bounds as the OSM data could
+        // extend beyond the current view and we don't want the map to zoom out
+        this.setState({osmData: xmlData, osmDataLoading: false, skipFit: true})
       })
     }
     this.setState({showOSMData: !this.state.showOSMData})
+  }
+
+  toggleOSMElements = element => {
+    const showOSMElements = _clone(this.state.showOSMElements)
+    showOSMElements[element] = !showOSMElements[element]
+    this.setState({showOSMElements})
   }
 
   /**
@@ -151,19 +180,62 @@ export class TaskMap extends Component {
     }
   }
 
+  /**
+   * Invoked by LayerToggle when the user wishes to toggle visibility of
+   * OpenStreetCam markers on or off.
+   */
+  toggleOpenStreetCamVisibility = async () => {
+    const isVirtual = _isFinite(this.props.virtualChallengeId)
+    const challengeId = isVirtual ? this.props.virtualChallengeId :
+                                    this.props.challenge.id
+    // If enabling layer, fetch fresh data. This allows users to toggle the
+    // layer off and on to refresh the data, e.g. if they have moved the map
+    // and wish to expand coverage of OpenStreetCam imagery
+    if (!this.props.showOpenStreetCamLayer) {
+      this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, true)
+      await this.props.fetchOpenStreetCamImagery(
+        this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+        this.props.task
+      )
+    }
+    else {
+      this.props.setShowOpenStreetCamLayer(challengeId, isVirtual, !this.props.showOpenStreetCamLayer)
+    }
+  }
+
+  /**
+   * Reloads the task data with OpenStreetCam image info requested if needed
+   */
+  loadOpenStreetCamIfNeeded = async () => {
+    // If we're supposed to show openStreetCam images but don't have them for
+    // this task, go ahead and fetch them
+    if (this.props.task && this.props.showOpenStreetCamLayer) {
+      if (this.props.openStreetCamTaskId !== this.props.taskId ||
+          (!this.props.openStreetCamImages && !this.props.openStreetCamLoading)) {
+        await this.props.fetchOpenStreetCamImagery(
+          this.latestBounds ? this.latestBounds : this.props.mapBounds.bounds,
+          this.props.task
+        )
+      }
+    }
+  }
+
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
-      _pick(this.props.keyboardShortcutGroups, 'layers'),
+      _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts)
 
     this.loadMapillaryIfNeeded()
+    this.loadOpenStreetCamIfNeeded()
   }
 
   componentDidUpdate(prevProps) {
     this.loadMapillaryIfNeeded()
+    this.loadOpenStreetCamIfNeeded()
 
     if (_get(this.props, 'task.id') !== _get(prevProps, 'task.id')) {
       this.deactivateOSMDataLayer()
+      this.setState({skipFit: false})
     }
   }
 
@@ -178,7 +250,12 @@ export class TaskMap extends Component {
 
     if (nextState.showOSMData !== this.state.showOSMData ||
         nextState.osmDataLoading !== this.state.osmDataLoading ||
-        nextState.osmData !== this.state.osmData) {
+        nextState.osmData !== this.state.osmData ||
+        !_isEqual(nextState.showOSMElements, this.state.showOSMElements)) {
+      return true
+    }
+
+    if (nextState.latestZoom !== this.state.latestZoom) {
       return true
     }
 
@@ -186,6 +263,13 @@ export class TaskMap extends Component {
         nextProps.mapillaryLoading !== this.props.mapillaryLoading ||
         nextProps.mapillaryTaskId !== this.props.mapillaryTaskId ||
         nextState.mapillaryViewerImage !== this.state.mapillaryViewerImage) {
+      return true
+    }
+
+    if (nextProps.showOpenStreetCamLayer !== this.props.showOpenStreetCamLayer ||
+        nextProps.openStreetCamLoading !== this.props.openStreetCamLoading ||
+        nextProps.openStreetCamTaskId !== this.props.openStreetCamTaskId ||
+        nextState.openStreetCamViewerImage !== this.state.openStreetCamViewerImage) {
       return true
     }
 
@@ -200,6 +284,11 @@ export class TaskMap extends Component {
 
     if(_get(nextProps, 'mapillaryImages.length') !==
        _get(this.props, 'mapillaryImages.length')) {
+      return true
+    }
+
+    if(_get(nextProps, 'openStreetCamImages.length') !==
+       _get(this.props, 'openStreetCamImages.length')) {
       return true
     }
 
@@ -233,16 +322,21 @@ export class TaskMap extends Component {
       return true
     }
 
+    if (!_isEqual(nextProps.activeKeyboardShortcuts, this.props.activeKeyboardShortcuts)) {
+      return true
+    }
+
     return false
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcutGroup('layers',
+    this.props.deactivateKeyboardShortcutGroup(shortcutGroup,
                                                this.handleKeyboardShortcuts)
   }
 
   updateTaskBounds = (bounds, zoom) => {
     this.latestBounds = bounds
+    this.setState({latestZoom: zoom})
 
     // Don't update map bounds if this task is in the process of completing.
     // We don't want to risk sending updates on a stale task as this one gets
@@ -253,7 +347,25 @@ export class TaskMap extends Component {
   }
 
   mapillaryImageMarkers = () => {
-    if (_get(this.props, 'mapillaryImages.length', 0) === 0) {
+    return this.streetLevelImageMarkers(
+      "Mapillary",
+      this.props.mapillaryImages,
+      'mapillaryViewerImage',
+      "#39AF64" // Mapillary green
+    )
+  }
+
+  openStreetCamImageMarkers = () => {
+    return this.streetLevelImageMarkers(
+      "OpenStreetCam",
+      this.props.openStreetCamImages,
+      'openStreetCamViewerImage',
+      "#C851E0" // OpenStreetCam magenta
+    )
+  }
+
+  streetLevelImageMarkers = (serviceName, images, viewerName, markerColor, imageAlt) => {
+    if (!images || images.length === 0) {
       return []
     }
 
@@ -263,17 +375,23 @@ export class TaskMap extends Component {
       viewBox: '0 0 12 12',
       type: 'circle',
       shape: { r: 6, cx: 6, cy: 6 },
-      style: { fill: "#39AF64" }, // mapillary green
+      style: { fill: markerColor },
     })
 
-    const markers = _map(this.props.mapillaryImages, imageInfo =>
-      <Marker key={imageInfo.key} position={[imageInfo.lat, imageInfo.lon]}
-              icon={icon}
-              onMouseover={({target}) => target.openPopup()}
-              onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})}>
+    const markers = _map(images, imageInfo =>
+      <Marker
+        key={imageInfo.key}
+        position={[imageInfo.lat, imageInfo.lon]}
+        icon={icon}
+        onMouseover={({target}) => target.openPopup()}
+        onClick={() => this.setState({[viewerName]: imageInfo.key})}
+      >
         <Popup>
-          <img src={imageInfo.url320} alt="From Mapillary"
-               onClick={() => this.setState({mapillaryViewerImage: imageInfo.key})} />
+          <img
+            src={imageInfo.url}
+            alt={`From ${serviceName}`}
+            onClick={() => this.setState({[viewerName]: imageInfo.key})}
+          />
         </Popup>
       </Marker>
     )
@@ -338,6 +456,9 @@ export class TaskMap extends Component {
     const mapillaryMarkers = this.props.showMapillaryLayer ?
                              this.mapillaryImageMarkers() : []
 
+    const openStreetCamMarkers = this.props.showOpenStreetCamLayer ?
+                                 this.openStreetCamImageMarkers() : []
+
     const zoom = _get(this.props.task, "parent.defaultZoom", DEFAULT_ZOOM)
     const minZoom = _get(this.props.task, "parent.minZoom", MIN_ZOOM)
     const maxZoom = _get(this.props.task, "parent.maxZoom", MAX_ZOOM)
@@ -354,10 +475,15 @@ export class TaskMap extends Component {
           toggleTaskFeatures={this.toggleTaskFeatureVisibility}
           showOSMData={this.state.showOSMData}
           toggleOSMData={this.toggleOSMDataVisibility}
+          showOSMElements={this.state.showOSMElements}
+          toggleOSMElements={this.toggleOSMElements}
           osmDataLoading={this.state.osmDataLoading}
           toggleMapillary={this.props.isMapillaryEnabled() ? this.toggleMapillaryVisibility : undefined}
           showMapillary={this.props.showMapillaryLayer}
           mapillaryCount={_get(this.props, 'mapillaryImages.length', 0)}
+          toggleOpenStreetCam={this.props.isOpenStreetCamEnabled() ? this.toggleOpenStreetCamVisibility : undefined}
+          showOpenStreetCam={this.props.showOpenStreetCamLayer}
+          openStreetCamCount={_get(this.props, 'openStreetCamImages.length', 0)}
         />
         <EnhancedMap
           center={this.props.centerPoint}
@@ -368,6 +494,7 @@ export class TaskMap extends Component {
           worldCopyJump={true}
           features={this.applyStyling(this.taskFeatures())}
           justFitFeatures={!this.state.showTaskFeatures}
+          skipFit={this.state.skipFit}
           fitFeaturesOnlyAsNecessary
           animateFeatures
           onBoundsChange={this.updateTaskBounds}
@@ -378,9 +505,14 @@ export class TaskMap extends Component {
           <SourcedTileLayer maxZoom={maxZoom} {...this.props} zIndex={1} />
           {overlayLayers}
           {this.state.showOSMData && this.state.osmData &&
-            <OSMDataLayer xmlData={this.state.osmData} />
+           <OSMDataLayer
+             xmlData={this.state.osmData}
+             zoom={_isFinite(this.state.latestZoom) ? this.state.latestZoom : zoom}
+             showOSMElements={this.state.showOSMElements}
+           />
           }
           {this.props.showMapillaryLayer && mapillaryMarkers}
+          {this.props.showOpenStreetCamLayer && openStreetCamMarkers}
         </EnhancedMap>
 
         {this.state.mapillaryViewerImage &&
@@ -388,6 +520,15 @@ export class TaskMap extends Component {
             key={Date.now()}
             initialImageKey={this.state.mapillaryViewerImage}
             onClose={() => this.setState({mapillaryViewerImage: null})}
+         />
+        }
+
+        {this.state.openStreetCamViewerImage &&
+         <OpenStreetCamViewer
+            key={Date.now()}
+            images={this.props.openStreetCamImages}
+            initialImageKey={this.state.openStreetCamViewerImage}
+            onClose={() => this.setState({openStreetCamViewerImage: null})}
          />
         }
       </div>
@@ -411,13 +552,15 @@ TaskMap.propTypes = {
 
 export default WithSearch(
   WithMapillaryImages(
-    WithTaskCenterPoint(
-      WithVisibleLayer(
-        WithIntersectingOverlays(
-          WithKeyboardShortcuts(TaskMap),
-          'task'
+    WithOpenStreetCamImages(
+      WithTaskCenterPoint(
+        WithVisibleLayer(
+          WithIntersectingOverlays(
+            WithKeyboardShortcuts(TaskMap),
+            'task'
+          )
         )
-      )
+      ),
     ),
   ),
   'task'

@@ -54,6 +54,10 @@ export const mapStateToProps = (state, ownProps) => {
     mappedProps.showMapillaryLayer =
       _get(state.currentPreferences,
            `${preferenceGroup(isVirtual)}.${challengeId}.showMapillaryLayer`)
+
+    mappedProps.showOpenStreetCamLayer =
+      _get(state.currentPreferences,
+           `${preferenceGroup(isVirtual)}.${challengeId}.showOpenStreetCamLayer`)
   }
 
   return mappedProps
@@ -83,6 +87,10 @@ export const mapDispatchToProps = dispatch => ({
   setShowMapillaryLayer: (challengeId, isVirtual, showMapillary) =>
     dispatch(setPreferences(preferenceGroup(isVirtual),
                             {[challengeId]: {showMapillaryLayer: showMapillary}})),
+
+  setShowOpenStreetCamLayer: (challengeId, isVirtual, showOpenStreetCam) =>
+    dispatch(setPreferences(preferenceGroup(isVirtual),
+                            {[challengeId]: {showOpenStreetCamLayer: showOpenStreetCam}})),
 })
 
 export const preferenceGroup = function(isVirtualChallenge) {

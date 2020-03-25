@@ -191,6 +191,7 @@ export const WithFilterCriteria = function(WrappedComponent) {
                            updateCriteria={this.updateCriteria}
                            refreshTasks={this.refreshTasks}
                            clearAllFilters={this.clearAllFilters}
+                           setInitialBounds={bounds => this.setState({initialBounds: bounds})}
                            {..._omit(this.props, ['loadingChallenge', 'clearAllFilters'])} />)
      }
    }

@@ -3,12 +3,13 @@ import { FormattedMessage } from 'react-intl'
 import classNames from 'classnames'
 import _kebabCase from 'lodash/kebabCase'
 import _isUndefined from 'lodash/isUndefined'
-import _pick from 'lodash/pick'
 import _noop from 'lodash/noop'
 import _split from 'lodash/split'
 import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 import _isEmpty from 'lodash/isEmpty'
+import _merge from 'lodash/merge'
+import _clone from 'lodash/clone'
 import { TaskStatus, messagesByStatus, keysByStatus }
        from '../../services/Task/TaskStatus/TaskStatus'
 import { needsReviewType } from '../../services/User/User'
@@ -20,21 +21,39 @@ import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
        from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import TaskNearbyList from '../TaskPane/TaskNearbyList/TaskNearbyList'
+import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import KeywordAutosuggestInput
        from '../KeywordAutosuggestInput/KeywordAutosuggestInput'
-import SvgSymbol from '../SvgSymbol/SvgSymbol'
 import External from '../External/External'
 import Modal from '../Modal/Modal'
+import AdjustFiltersOverlay from './AdjustFiltersOverlay'
 import messages from './Messages'
 
+const shortcutGroup = 'taskConfirmation'
+
 export class TaskConfirmationModal extends Component {
+  state = {
+    filters: {}
+  }
+
   commentInputRef = React.createRef()
 
   handleKeyboardShortcuts = event => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (event.key ===
-          this.props.keyboardShortcutGroups.taskCompletion.confirmSubmit.key &&
+        this.props.keyboardShortcutGroups.taskConfirmation.confirmSubmit.key &&
         event.shiftKey) {
-      this.props.onConfirm()
+      this.props.onConfirm(
+        _merge({}, _get(this.props.history, 'location.state.filters', {}),
+               this.state.filters))
+      event.preventDefault()
+    }
+    else if (event.key === this.props.keyboardShortcutGroups.taskConfirmation.cancel.key) {
+      this.props.onCancel()
       event.preventDefault()
     }
   }
@@ -42,15 +61,18 @@ export class TaskConfirmationModal extends Component {
   componentDidMount(prevProps, prevState) {
     this.commentInputRef.current.focus()
 
+    this.props.pauseKeyboardShortcuts()
     this.props.activateKeyboardShortcut(
-      'taskCompletion',
-      _pick(this.props.keyboardShortcutGroups.taskCompletion, 'confirmSubmit'),
-      this.handleKeyboardShortcuts)
+      shortcutGroup,
+      this.props.keyboardShortcutGroups.taskConfirmation,
+      this.handleKeyboardShortcuts
+    )
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcut('taskCompletion', 'confirmSubmit',
+    this.props.deactivateKeyboardShortcut(shortcutGroup, 'confirmSubmit',
                                           this.handleKeyboardShortcuts)
+    this.props.resumeKeyboardShortcuts()
   }
 
   handleAddTag = (value) => {
@@ -59,6 +81,12 @@ export class TaskConfirmationModal extends Component {
 
   handleChangeTags = (value) => {
     this.props.setTags(value)
+  }
+
+  filterChange = (key, value) => {
+    const filters = _clone(this.state.filters)
+    filters[key] = value
+    this.setState({filters})
   }
 
   render() {
@@ -86,11 +114,6 @@ export class TaskConfirmationModal extends Component {
                                        {"mr-pr-12": loadingNearby})}>
               <div className={classNames("mr-flex mr-flex-col mr-items-center",
                                          {"mr-max-w-88": !reviewConfirmation})}>
-                <SvgSymbol
-                  sym="illustration-choose"
-                  viewBox="0 0 147 200"
-                  className={applyingSuggestedFix ? "mr-h-30" : "mr-h-40"}
-                />
                 <div className="mr-w-full">
                   <h2 className="mr-text-grey-light-more mr-text-4xl mr-mt-4">
                     {this.props.inReview ?
@@ -155,21 +178,25 @@ export class TaskConfirmationModal extends Component {
                      </div>
                   }
                   <div className={classNames({"mr-mt-2": !applyingSuggestedFix})}>
-                    <textarea
-                      ref={this.commentInputRef}
-                      className={classNames("mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3", applyingSuggestedFix ? 'mr-mt-1' : 'mr-mt-6')}
-                      rows={applyingSuggestedFix ? 2 : 4}
-                      cols="1"
-                      placeholder={applyingSuggestedFix ? '' : this.props.intl.formatMessage(messages.placeholder)}
-                      value={this.props.comment}
-                      onChange={e => this.props.setComment(e.target.value)}
+                    <div className={applyingSuggestedFix ? 'mr-mt-1' : 'mr-mt-6'}>
+                      <TaskCommentInput
+                        inputRef={this.commentInputRef}
+                        inputClassName="mr-appearance-none mr-outline-none mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-font-mono mr-text-sm"
+                        previewClassName="mr-border-2 mr-rounded mr-border-grey-lighter-10 mr-p-2 mr-max-h-48 mr-overflow-y-scroll"
+                        rows={applyingSuggestedFix ? 2 : 4}
+                        placeholder={applyingSuggestedFix ? '' : this.props.intl.formatMessage(messages.placeholder)}
+                        value={this.props.comment}
+                        commentChanged={this.props.setComment}
+                      />
+                    </div>
+                    <KeywordAutosuggestInput
+                      handleChangeTags={this.handleChangeTags}
+                      handleAddTag={this.handleAddTag}
+                      formData={this.props.tags} {...this.props}
+                      tagType={"tasks"}
+                      preferredResults={preferredTags}
+                      placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)}
                     />
-                    <KeywordAutosuggestInput handleChangeTags={this.handleChangeTags}
-                                         handleAddTag={this.handleAddTag}
-                                         formData={this.props.tags} {...this.props}
-                                         tagType={"tasks"}
-                                         preferredResults={preferredTags}
-                                         placeholder={this.props.intl.formatMessage(messages.addTagsPlaceholder)} />
 
                     {this.props.submitComment &&
                     <div className="mr-my-1 mr-flex mr-justify-end">
@@ -209,7 +236,9 @@ export class TaskConfirmationModal extends Component {
 
                     <button
                       className="mr-button mr-px-8"
-                      onClick={() => this.props.onConfirm()}
+                      onClick={() => this.props.onConfirm(
+                        _merge({}, _get(this.props.history, 'location.state.filters', {}),
+                               this.state.filters))}
                     >
                       <FormattedMessage {...messages.submitLabel} />
                     </button>
@@ -249,48 +278,55 @@ export class TaskConfirmationModal extends Component {
                   }
 
                   { reviewConfirmation && _isUndefined(this.props.needsRevised) &&
-                    <div className="form mr-mt-8">
-                        <span className="mr-mr-4">
-                          <FormattedMessage {...messages.loadNextReviewLabel} />
-                        </span>
-                        <input
-                          type="radio"
-                          name="loadReviewPreference"
-                          className="mr-mr-2"
-                          checked={this.props.loadBy === TaskReviewLoadMethod.next}
-                          onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
-                          onChange={_noop}
-                        />
-                        <label className="mr-mr-4">
-                          <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
-                        </label>
-                        { this.props.fromInbox &&
-                          <React.Fragment>
-                            <input
-                              type="radio"
-                              name="loadReviewPreference"
-                              className="mr-mr-2"
-                              checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
-                              onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
-                              onChange={_noop}
-                            />
-                            <label className="mr-mr-4">
-                              <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
-                            </label>
-                          </React.Fragment>
-                        }
-                        <input
-                          type="radio"
-                          name="loadReviewPreference"
-                          className="mr-mr-2"
-                          checked={this.props.loadBy === TaskReviewLoadMethod.all}
-                          onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
-                          onChange={_noop}
-                        />
-                        <label>
-                          <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
-                        </label>
-                    </div>
+                    <React.Fragment>
+                      <div className="form mr-mt-8 mr-text-sm">
+                          <span className="mr-mr-4">
+                            <FormattedMessage {...messages.loadNextReviewLabel} />
+                          </span>
+                          <input
+                            type="radio"
+                            name="loadReviewPreference"
+                            className="mr-mr-2"
+                            checked={this.props.loadBy === TaskReviewLoadMethod.next}
+                            onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.next)}
+                            onChange={_noop}
+                          />
+                          <label className="mr-mr-4">
+                            <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.next]} />
+                          </label>
+                          { this.props.fromInbox &&
+                            <React.Fragment>
+                              <input
+                                type="radio"
+                                name="loadReviewPreference"
+                                className="mr-mr-2"
+                                checked={this.props.loadBy === TaskReviewLoadMethod.inbox}
+                                onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.inbox)}
+                                onChange={_noop}
+                              />
+                              <label className="mr-mr-4">
+                                <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.inbox]} />
+                              </label>
+                            </React.Fragment>
+                          }
+                          <input
+                            type="radio"
+                            name="loadReviewPreference"
+                            className="mr-mr-2"
+                            checked={this.props.loadBy === TaskReviewLoadMethod.all}
+                            onClick={() => this.props.chooseLoadBy(TaskReviewLoadMethod.all)}
+                            onChange={_noop}
+                          />
+                          <label>
+                            <FormattedMessage {...messagesByReviewLoadMethod[TaskReviewLoadMethod.all]} />
+                          </label>
+                      </div>
+                      <div className="mr-text-green-lighter mr-text-center mr-mt-4 hover:mr-text-white mr-cursor-pointer">
+                        <div onClick={() => this.setState({showReviewFilters: true})}>
+                          <FormattedMessage {...messages.adjustFilters} />
+                        </div>
+                      </div>
+                    </React.Fragment>
                   }
 
                   { reviewConfirmation && !_isUndefined(this.props.needsRevised) && this.props.fromInbox &&
@@ -343,6 +379,17 @@ export class TaskConfirmationModal extends Component {
               </div>
             }
           </div>
+          { this.props.inReview && this.state.showReviewFilters &&
+            <AdjustFiltersOverlay
+              {...this.props}
+              close={() => this.setState({showReviewFilters: false})}
+              filterChange={this.filterChange}
+              currentFilters={
+                _merge({}, _get(this.props.history, 'location.state.filters', {}),
+                       this.state.filters)
+              }
+            />
+          }
         </Modal>
       </External>
     )

@@ -3,19 +3,25 @@ import _find from 'lodash/find'
 import _compact from 'lodash/compact'
 import _isEmpty from 'lodash/isEmpty'
 import _map from 'lodash/map'
+import _each from 'lodash/each'
 import _isString from 'lodash/isString'
 import _uniqueId from 'lodash/uniqueId'
 
 import OSMElementHandler from './Handlers/OSMElementHandler'
 import OSMViewportHandler from './Handlers/OSMViewportHandler'
+import UserMentionHandler from './Handlers/UserMentionHandler'
 
 // All available short-code handlers
-const shortCodeHandlers = [OSMElementHandler, OSMViewportHandler]
+const shortCodeHandlers = [
+  OSMElementHandler,
+  OSMViewportHandler,
+  UserMentionHandler,
+]
 
 // Short codes are surrounded by brackets, but -- to avoid confusion with
 // Markdown links -- cannot be immediately followed by an open parenthesees
 // (hence the lookahead at the end)
-const shortCodeRegex = /(\[[^\]]+\])(?=[^(]|$)/g
+const shortCodeRegex = /(\[[^\]]+\])(?=[^(]|$)/
 
 /**
  * Recursively runs through the given JSX element tree and expands any
@@ -28,11 +34,20 @@ export const expandShortCodesInJSX = function(jsxNode) {
     {},
     _map(jsxNode.props.children, child => {
       if (_isString(child)) {
-        if (!containsShortCode(child)) {
+        // Let short-code handlers have an opportunity to normalize the content
+        // prior to tokenization
+        let content = child
+        _each(shortCodeHandlers, handler => {
+          if (handler.normalizeContent) {
+            content = handler.normalizeContent(content)
+          }
+        })
+
+        if (!containsShortCode(content)) {
           return child
         }
 
-        return _map(tokenize(child), token => (
+        return _map(tokenize(content), token => (
           <span key={_uniqueId('sc-')}>{expandedTokenContent(token)}</span>
         ))
       }

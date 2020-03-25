@@ -3,6 +3,7 @@ import _map from 'lodash/map'
 import { FormattedMessage } from 'react-intl'
 import WithNominatimSearch from '../../HOCs/WithNominatimSearch/WithNominatimSearch'
 import SvgSymbol from '../../SvgSymbol/SvgSymbol'
+import BusySpinner from '../../BusySpinner/BusySpinner'
 import Dropdown from '../../Dropdown/Dropdown'
 import messages from './Messages'
 
@@ -15,6 +16,21 @@ import messages from './Messages'
 export class LocationSearchBox extends Component {
   state = {
     showDropdown: false
+  }
+
+  /**
+   * Esc clears search, Enter signals completion
+   *
+   * @private
+   */
+  checkForSpecialKeys = (e) => {
+    if (e.key === "Escape") {
+      this.props.clearNominatimSearch()
+    }
+    else if (e.key === "Enter") {
+      this.props.searchNominatim()
+      this.setState({showDropdown: true})
+    }
   }
 
   render() {
@@ -40,16 +56,20 @@ export class LocationSearchBox extends Component {
                 placeholder="Location"
                 value={this.props.nominatimQuery}
                 onChange={(e) => this.props.updateNominatimQuery(e.target.value)}
+                onKeyDown={this.checkForSpecialKeys}
               />
-              <button
-                className="mr-button mr-button--small mr-button--blue-fill mr-ml-2"
-                onClick={() => {
-                  this.props.searchNominatim()
-                  this.setState({showDropdown: true})
-                }}
-              >
-                <FormattedMessage {...messages.searchLabel } />
-              </button>
+              {this.props.nominatumSearching ?
+               <BusySpinner inline className="mr-static" /> :
+               <button
+                 className="mr-button mr-button--small mr-button--blue-fill mr-ml-2"
+                 onClick={() => {
+                   this.props.searchNominatim()
+                   this.setState({showDropdown: true})
+                 }}
+               >
+                 <FormattedMessage {...messages.searchLabel } />
+               </button>
+              }
             </div>
           </div>
 

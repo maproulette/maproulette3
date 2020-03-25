@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
+import _merge from 'lodash/merge'
+import _cloneDeep from 'lodash/cloneDeep'
 import { FormattedMessage } from 'react-intl'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskStatus, messagesByStatus }
@@ -35,10 +37,12 @@ export class ReviewTaskControls extends Component {
   setComment = comment => this.setState({comment})
   setTags = tags => this.setState({tags})
 
-  onConfirm = () => {
+  onConfirm = (alternateFilters) => {
+    const history = _cloneDeep(this.props.history)
+    _merge(_get(history, 'location.state.filters', {}), alternateFilters)
     this.props.updateTaskReviewStatus(this.props.task, this.state.reviewStatus,
                                      this.state.comment, this.state.tags,
-                                     this.state.loadBy, this.props.history,
+                                     this.state.loadBy, history,
                                      this.props.taskBundle)
     this.setState({confirmingTask: false, comment: ""})
   }

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import _pick from 'lodash/pick'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 import BusySpinner from '../BusySpinner/BusySpinner'
 import AsManager from '../../interactions/User/AsManager'
 import WithSearch from '../HOCs/WithSearch/WithSearch'
@@ -16,6 +17,8 @@ import UserEditorSelector
        from '../UserEditorSelector/UserEditorSelector'
 import messages from './Messages'
 import './InspectTaskControls.scss'
+
+const shortcutGroup = 'taskInspect'
 
 /**
  * InspectTaskControls presents controls used during task inspect by a challenge
@@ -38,11 +41,16 @@ export class InspectTaskControls extends Component {
 
   /** Process keyboard shortcuts for the inspect controls */
   handleKeyboardShortcuts = (event) => {
+    // Ignore if shortcut group is not active
+    if (_isEmpty(this.props.activeKeyboardShortcuts[shortcutGroup])) {
+      return
+    }
+
     if (this.props.textInputActive(event)) { // ignore typing in inputs
       return
     }
 
-    const inspectShortcuts = this.props.keyboardShortcutGroups.taskInspect
+    const inspectShortcuts = this.props.keyboardShortcutGroups[shortcutGroup]
     if (event.key === inspectShortcuts.prevTask.key) {
       this.prevTask()
     }
@@ -63,13 +71,13 @@ export class InspectTaskControls extends Component {
 
   componentDidMount() {
     this.props.activateKeyboardShortcutGroup(
-      _pick(this.props.keyboardShortcutGroups, 'taskInspect'),
+      _pick(this.props.keyboardShortcutGroups, shortcutGroup),
       this.handleKeyboardShortcuts
     )
   }
 
   componentWillUnmount() {
-    this.props.deactivateKeyboardShortcutGroup('taskInspect',
+    this.props.deactivateKeyboardShortcutGroup(shortcutGroup,
                                                this.handleKeyboardShortcuts)
   }
   render() {
