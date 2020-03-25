@@ -96,6 +96,9 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
       const stateCriteria = this.state.criteria
       stateCriteria[this.props.reviewTasksType] = criteria
+      if (this.props.reviewTasksType === ReviewTasksType.toBeReviewed) {
+        stateCriteria[this.props.reviewTasksType].filters = {status: 1}
+      }
       this.setState({criteria: stateCriteria})
     }
 
