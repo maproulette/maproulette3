@@ -336,6 +336,7 @@ const BuildBundle = props => {
           showSelectionCount
           highlightPrimaryTask
           defaultPageSize={5}
+          forBundling
         />
       </div>
     </div>

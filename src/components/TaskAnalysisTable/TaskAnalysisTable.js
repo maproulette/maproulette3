@@ -184,6 +184,10 @@ export class TaskAnalysisTable extends Component {
       _filter([...this.props.selectedTasks.keys()],
                taskId => _find(data, task => task.id === taskId))
 
+    // If this is for bundling then we really do want to the full count of
+    // selected tasks since they could have used the "lasso" tool.
+    const selectedTaskCount = this.props.forBundling ?
+      this.props.selectedTasks.size : selectedDataTasks.length
 
     if (_get(this.props, 'criteria.filters')) {
       defaultFiltered = _map(this.props.criteria.filters,
@@ -203,6 +207,7 @@ export class TaskAnalysisTable extends Component {
                countShown={data.length}
                configureColumns={this.configureColumns.bind(this)}
                selectedTasks={selectedDataTasks}
+               selectedTaskCount={selectedTaskCount}
              />
            </header>
           }
