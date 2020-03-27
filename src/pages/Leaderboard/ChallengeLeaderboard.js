@@ -6,7 +6,7 @@ import Leaderboard from './Leaderboard'
 export class ChallengeLeaderboard extends Component {
   render() {
     if (!this.props.challenge) {
-      return <Leaderboard />
+      return null 
     }
 
     const challengeNameLink = (
