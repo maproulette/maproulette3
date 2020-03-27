@@ -45,7 +45,7 @@ export class TaskAnalysisTableHeader extends Component {
     render() {
         const {countShown, configureColumns} = this.props
 
-        const selectedCount = this.props.selectedTasks.length
+        const selectedCount = this.props.selectedTaskCount
         const totalTaskCount = _get(this.props, 'totalTaskCount') || countShown || 0
         const totalTasksInChallenge = _get(this.props, 'totalTasksInChallenge', 0)
         const percentShown = Math.round(totalTaskCount / totalTasksInChallenge * 100.0)
@@ -103,8 +103,8 @@ export class TaskAnalysisTableHeader extends Component {
                             title={this.props.intl.formatMessage(messages.bulkSelectionTooltip)}
                           >
                             <TriStateCheckbox
-                                checked={this.props.allTasksAreSelected()}
-                                indeterminate={this.props.someTasksAreSelected()}
+                                checked={this.props.allTasksAreSelected() || (selectedCount === totalTaskCount)}
+                                indeterminate={this.props.someTasksAreSelected() && (selectedCount !== totalTaskCount)}
                                 onClick={() => this.props.toggleAllTasksSelection()}
                                 onChange={_noop}
                             />
