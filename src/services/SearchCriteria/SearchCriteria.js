@@ -1,5 +1,6 @@
 import _get from 'lodash/get'
 import _isString from 'lodash/isString'
+import _cloneDeep from 'lodash/cloneDeep'
 
 export function buildSearchCriteria(searchParams, defaultCriteria) {
   if (searchParams) {
@@ -23,5 +24,5 @@ export function buildSearchCriteria(searchParams, defaultCriteria) {
     return {sortCriteria: {sortBy, direction}, filters, page, boundingBox,
             savedChallengesOnly, excludeOtherReviewers}
   }
-  else return defaultCriteria
+  else return _cloneDeep(defaultCriteria)
 }

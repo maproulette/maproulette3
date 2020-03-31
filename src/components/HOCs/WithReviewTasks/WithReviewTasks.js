@@ -6,6 +6,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _isUndefined from 'lodash/isUndefined'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
+import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
 import { fetchReviewNeededTasks }
        from '../../../services/Task/TaskReview/TaskReviewNeeded'
 import { fetchReviewedTasks }
@@ -96,6 +97,9 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
 
       const stateCriteria = this.state.criteria
       stateCriteria[this.props.reviewTasksType] = criteria
+      if (this.props.reviewTasksType === ReviewTasksType.toBeReviewed) {
+        stateCriteria[this.props.reviewTasksType].filters = {status: TaskStatus.fixed}
+      }
       this.setState({criteria: stateCriteria})
     }
 
