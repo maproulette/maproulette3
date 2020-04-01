@@ -228,6 +228,37 @@ export const cancelReviewClaim = function(taskId) {
   }
 }
 
+export const removeReviewRequest = function(challengeId, taskIds, criteria = null) {
+  return function(dispatch) {
+    const filters = _get(criteria, 'filters', {})
+    const searchParameters = !criteria ? {} :
+      generateSearchParametersString(filters,
+                                     criteria.boundingBox,
+                                     null,
+                                     null,
+                                     criteria.searchQuery)
+    searchParameters.cid = challengeId
+    searchParameters.ids = taskIds ? taskIds.join(',') : null
+
+    return new Endpoint(
+      api.tasks.removeReviewRequest, {
+        params: {...searchParameters},
+        json: filters.taskPropertySearch ? {taskPropertySearch: filters.taskPropertySearch} : null,
+      }
+    ).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
 /**
  *
  */
@@ -264,7 +295,7 @@ const updateTaskReviewStatus = function(dispatch, taskId, newStatus, comment, ta
     tasks: {
       [taskId]: {
         id: taskId,
-        status: newStatus
+        reviewStatus: newStatus
       }
     }
   }))

@@ -7,6 +7,7 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _omit from 'lodash/omit'
 import _isArray from 'lodash/isArray'
+import _filter from 'lodash/filter'
 import AsManager from '../../interactions/User/AsManager'
 import Dropdown from '../Dropdown/Dropdown'
 import SvgSymbol from '../SvgSymbol/SvgSymbol'
@@ -93,6 +94,18 @@ export class TaskAnalysisTableHeader extends Component {
           }))
         )
 
+        // Determine if we have tasks that can be marked as review unnecessary
+        let hasReviewRequests = this.props.allTasksAreSelected()
+        let tasks = this.props.taskData || []
+        const selectedTasks = this.props.selectedTasks || []
+        if (!hasReviewRequests) {
+          tasks = _filter(tasks, task =>
+            task.reviewStatus === TaskReviewStatusWithUnset.needed &&
+            selectedTasks.find(id => id === task.id))
+          hasReviewRequests = tasks.length > 0
+        }
+
+
         return (
             <div className="mr-flex mr-justify-between">
                 <div className="mr-flex mr-items-center">
@@ -162,7 +175,7 @@ export class TaskAnalysisTableHeader extends Component {
                                       <div>
                                         <button
                                           className={classNames("mr-text-current mr-pr-1",
-                                            (!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) ? "mr-text-grey-light mr-cursor-default" : ""
+                                            (!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()) ? "mr-text-grey-light mr-cursor-default" : "mr-text-green-lighter"
                                           )}
                                           disabled={!this.props.someTasksAreSelected() && !this.props.allTasksAreSelected()}
                                         >
@@ -192,6 +205,26 @@ export class TaskAnalysisTableHeader extends Component {
                                            </select>
                                          </ConfirmAction>
                                         }
+                                      </div>
+                                    </li>
+                                }
+                                {manager.canWriteProject(this.props.challenge.parent) &&
+                                    <li>
+                                      <div>
+                                        <ConfirmAction
+                                          action="onClick"
+                                          skipConfirmation={e => e.target.value === ""}
+                                        >
+                                          <button
+                                            className={classNames("mr-text-current mr-pr-1",
+                                              !hasReviewRequests ? "mr-text-grey-light mr-cursor-default" : "mr-text-green-lighter"
+                                            )}
+                                            disabled={!hasReviewRequests}
+                                            onClick={() => this.props.removeReviewRequests(this.props.selectedTasks)}
+                                          >
+                                            <FormattedMessage {...messages.changeReviewStatusLabel} />
+                                          </button>
+                                        </ConfirmAction>
                                       </div>
                                     </li>
                                 }

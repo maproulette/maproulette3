@@ -98,6 +98,20 @@ export class ViewChallengeTasks extends Component {
     }
   }
 
+  removeReviewRequests = (selectedIds) => {
+    if (selectedIds.length === 0) {
+      return
+    }
+    const selectedTasks = this.props.allTasksAreSelected() ? null : selectedIds
+
+    this.setState({bulkUpdating: true})
+    this.props.removeReviewRequest(this.props.challenge.id, selectedTasks, this.props.criteria).then(() => {
+      this.props.refreshChallenge()
+      this.props.refreshTasks()
+      this.setState({bulkUpdating: false})
+    })
+  }
+
   resetMapBounds = () => {
     this.setState({boundsReset: true})
     this.props.clearMapBounds(this.props.searchGroup)
@@ -214,6 +228,7 @@ export class ViewChallengeTasks extends Component {
           <TaskAnalysisTable
             taskData={_get(this.props, 'taskInfo.tasks')}
             changeStatus={this.changeStatus}
+            removeReviewRequests={this.removeReviewRequests}
             totalTaskCount={_get(this.props, 'taskInfo.totalCount')}
             totalTasksInChallenge={ calculateTasksInChallenge(this.props) }
             loading={this.props.loadingChallenge}

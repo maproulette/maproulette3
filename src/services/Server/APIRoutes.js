@@ -97,7 +97,8 @@ const apiRoutes = factory => {
         'updateStatus': factory.put('/taskBundle/:bundleId/:status'),
         'addComment': factory.post('/taskBundle/:bundleId/comment'),
         'updateReviewStatus': factory.put('/taskBundle/:bundleId/review/:status'),
-      }
+      },
+      'removeReviewRequest': factory.put('/tasks/review/remove')
     },
     'task': {
       'single': factory.get('/task/:id'),
