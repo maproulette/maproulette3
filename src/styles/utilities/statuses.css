@@ -50,6 +50,10 @@
   @apply mr-text-wild-strawberry;
 }
 
+.mr-review-unnecessary {
+  @apply mr-text-grey-light;
+}
+
 .mr-notification-type-mention {
   @apply mr-text-pink;
 }

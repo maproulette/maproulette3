@@ -17,6 +17,7 @@ import { recordChallengeSnapshot }
 import { bulkUpdateTasks, deleteChallengeTasks, bulkTaskStatusChange }
        from '../../../../services/Task/Task'
 import { TaskStatus } from '../../../../services/Task/TaskStatus/TaskStatus'
+import { removeReviewRequest } from '../../../../services/Task/TaskReview/TaskReview'
 import { addError } from '../../../../services/Error/Error'
 import AppErrors from '../../../../services/Error/AppErrors'
 import { ChallengeStatus }
@@ -212,6 +213,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
   applyBulkTaskStatusChange: (newStatus, challengeId, searchCriteria) => {
     return dispatch(bulkTaskStatusChange(newStatus, challengeId, searchCriteria))
+  },
+
+  removeReviewRequest: (challengeId, taskIds, searchCriteria) => {
+    return dispatch(removeReviewRequest(challengeId, taskIds, searchCriteria))
   }
 })
 
