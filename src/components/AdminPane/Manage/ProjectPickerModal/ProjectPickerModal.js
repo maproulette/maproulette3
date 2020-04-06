@@ -111,7 +111,8 @@ export default
       ProjectPickerModal,
       'candidateProjects',
       'pagedCandidateProjects',
-      'projectPickerModal'
+      'projectPickerModal',
+      false
     ),
     'projectPickerModal',
     'projects',

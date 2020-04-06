@@ -15,7 +15,8 @@ import { RESULTS_PER_PAGE } from '../../../services/Search/Search'
 export default function(WrappedComponent,
                         projectsProp,
                         outputProp,
-                        pageSearchGroup) {
+                        pageSearchGroup,
+                        allowVirtual = true) {
   class WithPagedProjects extends Component {
     render() {
       const searchGroups = this.props.adminChallengesSearchActive ? ["adminProjects", "adminChallenges"] : ["adminProjectList"]
@@ -29,6 +30,9 @@ export default function(WrappedComponent,
       const numberResultsToShow = (currentPage + 1) * resultsPerPage
 
       let pagedProjects = this.props[projectsProp]
+      if (!allowVirtual) {
+        pagedProjects = _filter(pagedProjects, p => !p.isVirtual)
+      }
 
       const hasMoreResults = (pagedProjects.length > numberResultsToShow) || this.props.isLoading
 
