@@ -6,6 +6,7 @@ import _isEqual from 'lodash/isEqual'
 import _clone from 'lodash/clone'
 import _get from 'lodash/get'
 import _merge from 'lodash/merge'
+import _uniqueId from 'lodash/uniqueId'
 import queryString from 'query-string'
 import { fetchLeaderboard, fetchLeaderboardForUser,
          DEFAULT_LEADERBOARD_COUNT } from '../../../services/Leaderboard/Leaderboard'
@@ -22,15 +23,17 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
       leaderboard: null,
       leaderboardLoading: false,
       showingCount: DEFAULT_LEADERBOARD_COUNT,
-      leaderboardOptions: initialOptions,
+      fetchId: -1,
     }
 
     /** merge the given userLeaderboard in with the main leaderboard */
     mergeInUserLeaderboard = userLeaderboard => {
       if (userLeaderboard && userLeaderboard.length > 0) {
         const merged = _clone(this.state.leaderboard)
-        merged.splice(userLeaderboard[0].rank - 1, userLeaderboard.length, ...userLeaderboard)
-        this.setState({leaderboard: merged})
+        if (merged) {
+          merged.splice(userLeaderboard[0].rank - 1, userLeaderboard.length, ...userLeaderboard)
+          this.setState({leaderboard: merged})
+        }
       }
     }
 
@@ -41,8 +44,7 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
                               ['forChallenges', null],
                               ['forUsers', null],
                               ['forCountries', null]])
-
-      const leaderboardOptions = _merge(this.state.leaderboardOptions, this.props.leaderboardOptions)
+      const leaderboardOptions = _merge({}, initialOptions, this.props.leaderboardOptions)
       if (leaderboardOptions) {
         if (_isBoolean(leaderboardOptions.onlyEnabled)) {
           params.set('onlyEnabled', leaderboardOptions.onlyEnabled)
@@ -75,23 +77,29 @@ const WithLeaderboard = function(WrappedComponent, initialMonthsPast=1, initialO
 
       // If we are filtering by challenges and no challenges are provided then
       // we don't need to go to the server.
-      const options = _merge(this.state.leaderboardOptions, this.props.leaderboardOptions)
+      const options = _merge({}, initialOptions, this.props.leaderboardOptions)
       if (options.filterChallenges && _isArray(this.props.challenges) &&
           this.props.challenges.length < 1) {
         return
       }
 
-      this.setState({leaderboardLoading: true, showingCount})
+      const currentFetch = _uniqueId()
+      this.setState({leaderboardLoading: true, showingCount, fetchId: currentFetch})
 
       fetchLeaderboard(...this.leaderboardParams(numberMonths, countryCode), showingCount).then(leaderboard => {
-        this.setState({leaderboard})
+        if (currentFetch >= this.state.fetchId) {
+          this.setState({leaderboard})
 
-        const userId = _get(this.props, 'user.id')
-        if (userId && !this.state.leaderboardOptions.ignoreUser) {
-          fetchLeaderboardForUser(userId, 1, ...this.leaderboardParams(numberMonths, countryCode)).then(userLeaderboard => {
-            this.mergeInUserLeaderboard(userLeaderboard)
+          const userId = _get(this.props, 'user.id')
+          if (userId && !options.ignoreUser) {
+            fetchLeaderboardForUser(userId, 1, ...this.leaderboardParams(numberMonths, countryCode)).then(userLeaderboard => {
+              this.mergeInUserLeaderboard(userLeaderboard)
+              this.setState({leaderboardLoading: false})
+            })
+          }
+          else {
             this.setState({leaderboardLoading: false})
-          })
+          }
         }
         else {
           this.setState({leaderboardLoading: false})

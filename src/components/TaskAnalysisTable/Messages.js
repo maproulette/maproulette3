@@ -124,6 +124,11 @@ export default defineMessages({
     defaultMessage: "Choose ... ",
   },
 
+  changeReviewStatusLabel: {
+    id: "Admin.manageTasks.controls.changeReviewStatus.label",
+    defaultMessage: "Remove from review queue ",
+  },
+
   showReviewColumnsLabel: {
     id: "Admin.manageTasks.controls.showReviewColumns.label",
     defaultMessage: "Show Review Columns",

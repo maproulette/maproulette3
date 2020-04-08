@@ -7,6 +7,20 @@ The format is based on
 This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v3.5.9] - 2020-04-09
+### Added
+- Require interaction before loading tasks in Review Map on Review Page
+- Default to showing tasks with Fixed status on Review Page
+- New "unnecessary" task-review status for use by challenge managers
+- Update translations
+
+### Fixed
+- Transient display of incorrect challenge leaderboard results while loading
+- Incorrect task count shown when bundling a large number of tasks with lasso
+- Erroneous inclusion of virtual project destinations when moving a challenge
+- Mixed-case or uppercase MapRoulette tags not saving on tasks (#1192)
+
+
 ## [v3.5.8] - 2020-03-25
 ### Added
 - OpenStreetCam imagery map overlay during task completion
