@@ -45,6 +45,7 @@ const apiRoutes = factory => {
       'actions': factory.get('/data/project/summary'),
       'activity': factory.get('/data/status/activity'),
       'latestActivity': factory.get('/data/status/latestActivity'),
+      'withReviewTasks': factory.get('/review/challenges'),
     },
     'challenge': {
       'single': factory.get('/challenge/:id'),

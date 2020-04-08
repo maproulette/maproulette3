@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
-import _cloneDeep from 'lodash/cloneDeep'
+import _merge from 'lodash/merge'
 import _isUndefined from 'lodash/isUndefined'
+import _cloneDeep from 'lodash/cloneDeep'
 import WithCurrentUser from '../WithCurrentUser/WithCurrentUser'
 import { ReviewTasksType } from '../../../services/Task/TaskReview/TaskReview'
 import { TaskStatus } from '../../../services/Task/TaskStatus/TaskStatus'
@@ -31,6 +32,10 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       loading: false,
       criteria: {},
       pageSize: DEFAULT_PAGE_SIZE,
+    }
+
+    buildDefaultCriteria(props) {
+      return _merge({}, DEFAULT_CRITERIA, {filters: props.defaultFilters})
     }
 
     refresh = () => {
@@ -92,20 +97,22 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
       const searchParams = this.props.history.location.state
       let pageSize = _get(searchParams, 'pageSize') || DEFAULT_PAGE_SIZE
 
-      const criteria = buildSearchCriteria(searchParams, DEFAULT_CRITERIA)
+      const criteria = buildSearchCriteria(searchParams, this.buildDefaultCriteria(this.props))
       criteria.pageSize = pageSize
 
       const stateCriteria = this.state.criteria
       stateCriteria[this.props.reviewTasksType] = criteria
       if (this.props.reviewTasksType === ReviewTasksType.toBeReviewed) {
-        stateCriteria[this.props.reviewTasksType].filters = {status: TaskStatus.fixed}
+        stateCriteria[this.props.reviewTasksType].filters =
+          _merge({status: TaskStatus.fixed},
+                 stateCriteria[this.props.reviewTasksType].filters)
       }
       this.setState({criteria: stateCriteria})
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (prevProps.reviewTasksType !== this.props.reviewTasksType) {
-        this.update(this.props, this.state.criteria[this.props.reviewTasksType] || DEFAULT_CRITERIA)
+        this.update(this.props, this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props))
       }
     }
 
@@ -128,7 +135,7 @@ export const WithReviewTasks = function(WrappedComponent, reviewStatus=0) {
           break
       }
 
-      const criteria = this.state.criteria[this.props.reviewTasksType] || DEFAULT_CRITERIA
+      const criteria = this.state.criteria[this.props.reviewTasksType] || this.buildDefaultCriteria(this.props)
       return (
         <WrappedComponent reviewData={reviewData}
                           updateReviewTasks={(criteria) => this.update(this.props, criteria)}

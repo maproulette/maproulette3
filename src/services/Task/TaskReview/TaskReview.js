@@ -15,6 +15,7 @@ import { RECEIVE_REVIEWED_TASKS,
 import RequestStatus from '../../Server/RequestStatus'
 import { taskSchema, taskBundleSchema, retrieveChallengeTask,
          receiveTasks, fetchTask } from '../Task'
+import { challengeSchema } from '../../Challenge/Challenge'
 import { generateSearchParametersString } from '../../Search/Search'
 import { addError } from '../../Error/Error'
 import AppErrors from '../../Error/AppErrors'
@@ -282,6 +283,35 @@ export const completeBundleReview = function(bundleId, taskReviewStatus, comment
       }
       else {
         dispatch(addError(AppErrors.task.updateFailure))
+        console.log(error.response || error)
+      }
+    })
+  }
+}
+
+/**
+ * Fetches a list of challenges which have review tasks
+ */
+export const fetchReviewChallenges = function(reviewTasksType,
+                                              includeTaskStatuses,
+                                              excludeOtherReviewers = true) {
+  return function(dispatch) {
+    const type = determineType(reviewTasksType)
+
+    const tStatus = includeTaskStatuses.join(',')
+
+    return new Endpoint(
+      api.challenges.withReviewTasks,
+      {schema: [challengeSchema()],
+       params:{reviewTasksType: type, excludeOtherReviewers, tStatus}}
+    ).execute().catch(error => {
+      if (isSecurityError(error)) {
+        dispatch(ensureUserLoggedIn()).then(() =>
+          dispatch(addError(AppErrors.user.unauthorized))
+        )
+      }
+      else {
+        dispatch(addError(AppErrors.challenge.fetchFailure))
         console.log(error.response || error)
       }
     })

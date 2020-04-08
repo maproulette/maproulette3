@@ -12,6 +12,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _keys from 'lodash/keys'
 import _omit from 'lodash/omit'
 import _pull from 'lodash/pull'
+import _filter from 'lodash/filter'
 import { TaskStatus, keysByStatus, messagesByStatus, isReviewableStatus }
        from '../../../services/Task/TaskStatus/TaskStatus'
 import { TaskPriority, keysByPriority, messagesByPriority }
@@ -184,6 +185,9 @@ export class TaskReviewTable extends Component {
     if (_get(this.props, 'reviewCriteria.filters')) {
       defaultFiltered = _map(this.props.reviewCriteria.filters,
                              (value, key) => {return {id: key, value}})
+
+      // We don't support searching by challengeId or projectId in the table.
+      defaultFiltered = _filter(defaultFiltered, f => (f.id !== "challengeId" && f.id !== "projectId"))
     }
 
     switch( this.props.reviewTasksType ) {

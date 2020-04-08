@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import MediaQuery from 'react-responsive'
 import classNames from 'classnames'
+import _cloneDeep from 'lodash/cloneDeep'
 import AsEndUser from '../../interactions/User/AsEndUser'
 import WithCurrentUser from '../../components/HOCs/WithCurrentUser/WithCurrentUser'
 import WithWebSocketSubscriptions
        from '../../components/HOCs/WithWebSocketSubscriptions/WithWebSocketSubscriptions'
 import ScreenTooNarrow from '../../components/ScreenTooNarrow/ScreenTooNarrow'
 import SignInButton from '../../components/SignInButton/SignInButton'
+import Header from '../../components/Header/Header'
 import { generateWidgetId, WidgetDataTarget, widgetDescriptor }
        from '../../services/Widget/Widget'
 import WithWidgetWorkspaces
@@ -18,6 +20,7 @@ import WidgetWorkspace from '../../components/WidgetWorkspace/WidgetWorkspace'
 import { ReviewTasksType } from '../../services/Task/TaskReview/TaskReview'
 import WithReviewTasks from '../../components/HOCs/WithReviewTasks/WithReviewTasks'
 import WithReviewMetrics from '../../components/HOCs/WithReviewMetrics/WithReviewMetrics'
+import TasksReviewChallenges from './TasksReview/TasksReviewChallenges'
 import messages from './Messages'
 
 
@@ -48,7 +51,8 @@ export const defaultWorkspaceSetup = function() {
  */
 export class ReviewTasksDashboard extends Component {
   state = {
-    showType: ReviewTasksType.toBeReviewed
+    showType: ReviewTasksType.toBeReviewed,
+    filterSelected: {},
   }
 
   componentDidMount() {
@@ -64,6 +68,28 @@ export class ReviewTasksDashboard extends Component {
 
   componentWillUnmount() {
     this.props.unsubscribeFromReviewMessages()
+  }
+
+  setSelectedChallenge = (challengeId, challengeName) => {
+    const filterSelected = _cloneDeep(this.state.filterSelected)
+    filterSelected[this.state.showType] = filterSelected[this.state.showType] || {}
+    filterSelected[this.state.showType].challengeId = challengeId
+    filterSelected[this.state.showType].challenge = challengeName
+    this.setState({filterSelected})
+  }
+
+  setSelectedProject = (projectId, projectName) => {
+    const filterSelected = _cloneDeep(this.state.filterSelected)
+    filterSelected[this.state.showType] = filterSelected[this.state.showType] || {}
+    filterSelected[this.state.showType].projectId = projectId
+    filterSelected[this.state.showType].project = projectName
+    this.setState({filterSelected})
+  }
+
+  changeTab = (tab) => {
+    const filterSelected = _cloneDeep(this.state.filterSelected)
+    filterSelected[this.state.showType] = null
+    this.setState({showType: tab, filterSelected})
   }
 
   render() {
@@ -86,7 +112,7 @@ export class ReviewTasksDashboard extends Component {
             className={classNames(
               this.state.showType === 'tasksToBeReviewed' ? "mr-text-white" : "mr-text-green-lighter"
             )}
-            onClick={() => this.setState({showType: ReviewTasksType.toBeReviewed})}
+            onClick={() => this.changeTab(ReviewTasksType.toBeReviewed)}
           >
             {this.props.intl.formatMessage(messages.tasksToBeReviewed)}
           </button>
@@ -96,7 +122,7 @@ export class ReviewTasksDashboard extends Component {
             className={classNames(
               this.state.showType === ReviewTasksType.reviewedByMe ? "mr-text-white" : "mr-text-green-lighter"
             )}
-            onClick={() => this.setState({showType: ReviewTasksType.reviewedByMe})}
+            onClick={() => this.changeTab(ReviewTasksType.reviewedByMe)}
           >
             {this.props.intl.formatMessage(messages.tasksReviewedByMe)}
           </button>
@@ -106,7 +132,7 @@ export class ReviewTasksDashboard extends Component {
             className={classNames(
               this.state.showType === ReviewTasksType.myReviewedTasks ? "mr-text-white" : "mr-text-green-lighter"
             )}
-            onClick={() => this.setState({showType: ReviewTasksType.myReviewedTasks})}
+            onClick={() => this.changeTab(ReviewTasksType.myReviewedTasks)}
           >
             {this.props.intl.formatMessage(messages.myReviewTasks)}
           </button>
@@ -116,7 +142,7 @@ export class ReviewTasksDashboard extends Component {
             className={classNames(
               this.state.showType === ReviewTasksType.allReviewedTasks ? "mr-text-current" : "mr-text-green-lighter"
             )}
-            onClick={() => this.setState({showType: ReviewTasksType.allReviewedTasks})}
+            onClick={() => this.changeTab(ReviewTasksType.allReviewedTasks)}
           >
             {this.props.intl.formatMessage(messages.allReviewedTasks)}
           </button>
@@ -145,13 +171,35 @@ export class ReviewTasksDashboard extends Component {
         </MediaQuery>
 
         <MediaQuery query="(min-width: 1024px)">
-          <ReviewWidgetWorkspace
-            {...this.props}
-            className="mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
-            workspaceTitle={null}
-            workspaceInfo={user.isReviewer()? reviewerTabs : notReviewerTabs}
-            reviewTasksType={showType}
-          />
+          {!this.state.filterSelected[showType] &&
+            <div className={classNames("mr-widget-workspace",
+              "mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse")}>
+              <Header
+                className="mr-px-8"
+                eyebrow={this.props.workspaceEyebrow}
+                title={''}
+                info={user.isReviewer()? reviewerTabs : notReviewerTabs}
+                actions={null}
+              />
+              <div>
+                <TasksReviewChallenges
+                  reviewTasksType={this.state.showType}
+                  selectChallenge={this.setSelectedChallenge}
+                  selectProject={this.setSelectedProject}
+                />
+              </div>
+            </div>
+          }
+          {this.state.filterSelected[showType] &&
+            <ReviewWidgetWorkspace
+              {...this.props}
+              className="mr-py-8 mr-bg-gradient-r-green-dark-blue mr-text-white mr-cards-inverse"
+              workspaceTitle={null}
+              workspaceInfo={user.isReviewer()? reviewerTabs : notReviewerTabs}
+              reviewTasksType={showType}
+              defaultFilters={this.state.filterSelected[showType]}
+            />
+          }
         </MediaQuery>
       </div>
     )
