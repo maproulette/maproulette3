@@ -34,7 +34,7 @@ import { CHALLENGE_STATUS_FINISHED }
        from '../../../services/Challenge/ChallengeStatus/ChallengeStatus'
 import { addError } from '../../../services/Error/Error'
 import AppErrors from '../../../services/Error/AppErrors'
-import AsSuggestedFix from '../../../interactions/Task/AsSuggestedFix'
+import AsCooperativeWork from '../../../interactions/Task/AsCooperativeWork'
 import AsMappableBundle from '../../../interactions/TaskBundle/AsMappableBundle'
 
 const TASK_STALE = 30000 // 30 seconds
@@ -210,15 +210,15 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         }
       }
 
-      let suggestedFixSummary = null
-      if (task.suggestedFix) {
-        suggestedFixSummary = AsSuggestedFix(task).changeSummary(tagEdits)
+      let cooperativeWorkSummary = null
+      if (AsCooperativeWork(task).isTagType()) {
+        cooperativeWorkSummary = AsCooperativeWork(task).tagChangeSummary(tagEdits)
       }
 
       return dispatch(
         taskBundle ?
-        completeTaskBundle(taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId() || taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses) :
-        completeTask(taskId, taskStatus, needsReview, tags, suggestedFixSummary, osmComment, completionResponses)
+        completeTaskBundle(taskBundle.bundleId, AsMappableBundle(taskBundle).primaryTaskId() || taskId, taskStatus, needsReview, tags, cooperativeWorkSummary, osmComment, completionResponses) :
+        completeTask(taskId, taskStatus, needsReview, tags, cooperativeWorkSummary, osmComment, completionResponses)
       ).then(() => doAfter())
     },
 

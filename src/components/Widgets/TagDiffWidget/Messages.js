@@ -6,17 +6,12 @@ import { defineMessages } from 'react-intl'
 export default defineMessages({
   label: {
     id: "Widgets.TagDiffWidget.label",
-    defaultMessage: "Suggested Fixes",
+    defaultMessage: "Cooperativees",
   },
 
   title: {
     id: "Widgets.TagDiffWidget.title",
     defaultMessage: "Proposed OSM Tag Changes",
-  },
-
-  newGeometryTitle: {
-    id: "Widgets.TagDiffWidget.newGeometryTitle",
-    defaultMessage: "Proposed OSM Tags",
   },
 
   viewAllTagsLabel: {

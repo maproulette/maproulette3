@@ -245,10 +245,10 @@ export const refreshTaskLock = function(taskId) {
  * Mark the given task as completed with the given status.
  */
 export const completeTask = function(taskId, taskStatus, needsReview,
-                                     tags, suggestedFixSummary, osmComment, completionResponses) {
+                                     tags, cooperativeWorkSummary, osmComment, completionResponses) {
   return function(dispatch) {
     return updateTaskStatus(dispatch, taskId, taskStatus, needsReview, tags,
-                            suggestedFixSummary, osmComment, completionResponses)
+                            cooperativeWorkSummary, osmComment, completionResponses)
   }
 }
 
@@ -256,11 +256,11 @@ export const completeTask = function(taskId, taskStatus, needsReview,
  * Mark all tasks in the given bundle as completed with the given status
  */
 export const completeTaskBundle = function(bundleId, primaryTaskId, taskStatus, needsReview,
-                                           tags, suggestedFixSummary, osmComment, completionResponses) {
+                                           tags, cooperativeWorkSummary, osmComment, completionResponses) {
   return function(dispatch) {
     return updateBundledTasksStatus(
       dispatch, bundleId, primaryTaskId, taskStatus, needsReview, tags,
-      suggestedFixSummary, osmComment, completionResponses
+      cooperativeWorkSummary, osmComment, completionResponses
     )
   }
 }
@@ -612,7 +612,7 @@ export const deleteChallengeTasks = function(challengeId, statuses=null) {
  * @private
  */
 const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = null,
-                                  tags = null, suggestedFixSummary = null,
+                                  tags = null, cooperativeWorkSummary = null,
                                   osmComment = null, completionResponses = null) {
   // Optimistically assume request will succeed. The store will be updated
   // with fresh task data from the server if the save encounters an error.
@@ -631,27 +631,23 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
   }
 
   let endpoint = null
-  // Suggested fixes that have been approved (fixed status) go to a different endpoint
-  if (suggestedFixSummary && newStatus === TaskStatus.fixed) {
-    endpoint = new Endpoint(
-      _isEmpty(suggestedFixSummary.creates) ? api.task.applyTagFix : api.task.applySuggestedFix,
-      {
-        params,
-        variables: { id: taskId },
-        json: {
-          comment: osmComment,
-          changes: suggestedFixSummary,
-        }
+  // Completed cooperative work goes to a different endpoint
+  if (cooperativeWorkSummary && newStatus === TaskStatus.fixed) {
+    endpoint = new Endpoint(api.task.applyTagFix, {
+      params,
+      variables: { id: taskId },
+      json: {
+        comment: osmComment,
+        changes: cooperativeWorkSummary,
       }
-    )
+    })
   }
   else {
-    endpoint = new Endpoint(
-      api.task.updateStatus,
-      {schema: taskSchema(),
+    endpoint = new Endpoint(api.task.updateStatus, {
+      schema: taskSchema(),
       variables: {id: taskId, status: newStatus}, params,
-      json: completionResponses}
-    )
+      json: completionResponses
+    })
   }
 
   return endpoint.execute().catch(error => {
@@ -674,10 +670,10 @@ const updateTaskStatus = function(dispatch, taskId, newStatus, requestReview = n
  */
 const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
                                           newStatus, requestReview = null, tags = null,
-                                          suggestedFixSummary = null, osmComment = null,
+                                          cooperativeWorkSummary = null, osmComment = null,
                                           completionResponses = null) {
-  if (suggestedFixSummary) {
-    throw new Error("Suggested-fix tasks cannot be updated as a bundle at this time")
+  if (cooperativeWorkSummary) {
+    throw new Error("Cooperative tasks cannot be updated as a bundle at this time")
   }
 
   const params = {
@@ -713,20 +709,10 @@ const updateBundledTasksStatus = function(dispatch, bundleId, primaryTaskId,
   })
 }
 
-export const fetchSuggestedTagFixChangeset = function(suggestedFixSummary) {
+export const fetchCooperativeTagFixChangeset = function(cooperativeWorkSummary) {
   const endpoint = new Endpoint(api.task.testTagFix, {
     params: { changeType: 'osmchange' },
-    json: suggestedFixSummary,
-    expectXMLResponse: true,
-  })
-
-  return endpoint.execute()
-}
-
-export const fetchSuggestedFixChangeset = function(suggestedFixSummary) {
-  const endpoint = new Endpoint(api.task.testSuggestedFix, {
-    params: { changeType: 'osmchange' },
-    json: suggestedFixSummary,
+    json: cooperativeWorkSummary,
     expectXMLResponse: true,
   })
 

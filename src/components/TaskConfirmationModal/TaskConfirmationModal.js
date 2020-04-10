@@ -20,6 +20,7 @@ import { TaskLoadMethod, messagesByLoadMethod }
 import { TaskReviewLoadMethod, messagesByReviewLoadMethod }
        from '../../services/Task/TaskReview/TaskReviewLoadMethod'
 import { TaskReviewStatus } from '../../services/Task/TaskReview/TaskReviewStatus'
+import AsCooperativeWork from '../../interactions/Task/AsCooperativeWork'
 import TaskNearbyList from '../TaskPane/TaskNearbyList/TaskNearbyList'
 import TaskCommentInput from '../TaskCommentInput/TaskCommentInput'
 import KeywordAutosuggestInput
@@ -92,7 +93,8 @@ export class TaskConfirmationModal extends Component {
   render() {
     const reviewConfirmation = this.props.inReview || !_isUndefined(this.props.needsRevised)
     const loadingNearby = this.props.loadBy === TaskLoadMethod.proximity
-    const applyingSuggestedFix = this.props.task.suggestedFix && this.props.status === TaskStatus.fixed
+    const applyingTagChanges = AsCooperativeWork(this.props.task).isTagType() &&
+                             this.props.status === TaskStatus.fixed
     const preferredTags =
       _filter(
         _split(_get(this.props.task.parent, 'preferredTags'), ','),
@@ -137,7 +139,7 @@ export class TaskConfirmationModal extends Component {
                       <FormattedMessage {...messagesByReviewStatus[this.props.status]} />
                     </div>
                   }
-                  {!this.props.inReview && !applyingSuggestedFix &&
+                  {!this.props.inReview && !applyingTagChanges &&
                     <div
                       className={classNames(
                         "mr-uppercase mr-tracking-wide",
@@ -148,7 +150,7 @@ export class TaskConfirmationModal extends Component {
                     </div>
                   }
 
-                  {applyingSuggestedFix &&
+                  {applyingTagChanges &&
                    <React.Fragment>
                      <p className="mr-my-4 mr-text-grey-light mr-text-sm">
                        <FormattedMessage
@@ -172,19 +174,19 @@ export class TaskConfirmationModal extends Component {
                      </div>
                    </React.Fragment>
                   }
-                  {applyingSuggestedFix &&
+                  {applyingTagChanges &&
                      <div className="mr-text-base mr-mt-4 mr-text-yellow">
                        <FormattedMessage {...messages.mrCommentHeader} />
                      </div>
                   }
-                  <div className={classNames({"mr-mt-2": !applyingSuggestedFix})}>
-                    <div className={applyingSuggestedFix ? 'mr-mt-1' : 'mr-mt-6'}>
+                  <div className={classNames({"mr-mt-2": !applyingTagChanges})}>
+                    <div className={applyingTagChanges ? 'mr-mt-1' : 'mr-mt-6'}>
                       <TaskCommentInput
                         inputRef={this.commentInputRef}
                         inputClassName="mr-appearance-none mr-outline-none mr-input mr-text-white mr-placeholder-medium mr-bg-grey-lighter-10 mr-border-none mr-shadow-inner mr-p-3 mr-font-mono mr-text-sm"
                         previewClassName="mr-border-2 mr-rounded mr-border-grey-lighter-10 mr-p-2 mr-max-h-48 mr-overflow-y-scroll"
-                        rows={applyingSuggestedFix ? 2 : 4}
-                        placeholder={applyingSuggestedFix ? '' : this.props.intl.formatMessage(messages.placeholder)}
+                        rows={applyingTagChanges ? 2 : 4}
+                        placeholder={applyingTagChanges ? '' : this.props.intl.formatMessage(messages.placeholder)}
                         value={this.props.comment}
                         commentChanged={this.props.setComment}
                       />

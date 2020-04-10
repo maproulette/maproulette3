@@ -49,7 +49,10 @@ export default class TaskCompletionStep1 extends Component {
           </div>
         }
 
-        <UserEditorSelector {...this.props} className="mr-mb-4" />
+        <UserEditorSelector
+          {...this.props}
+          className="mr-mb-4"
+        />
         <div className="mr-my-4 mr-grid mr-grid-columns-2 mr-grid-gap-4">
           {(this.props.allowedProgressions.has(TaskStatus.fixed) || this.props.needsRevised) &&
            <TaskEditControl {...this.props} />

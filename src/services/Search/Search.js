@@ -45,9 +45,9 @@ export const SORT_NAME = 'name'
 export const SORT_CREATED = 'created'
 export const SORT_OLDEST = 'Created'
 export const SORT_POPULARITY = 'popularity'
-export const SORT_SUGGESTED_FIX = 'has_suggested_fixes'
+export const SORT_COOPERATIVE_WORK = 'has_cooperative_work'
 export const SORT_DEFAULT = 'default'
-export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_SUGGESTED_FIX, SORT_DEFAULT]
+export const ALL_SORT_OPTIONS = [SORT_NAME, SORT_CREATED, SORT_OLDEST, SORT_POPULARITY, SORT_COOPERATIVE_WORK, SORT_DEFAULT]
 
 // Default Results Per page
 export const RESULTS_PER_PAGE = 50
@@ -57,7 +57,7 @@ export const SortOptions = {
   created: SORT_CREATED,
   created_oldest: SORT_OLDEST,
   popular: SORT_POPULARITY,
-  suggestedFix: SORT_SUGGESTED_FIX,
+  cooperativeWork: SORT_COOPERATIVE_WORK,
   default: SORT_DEFAULT,
 }
 

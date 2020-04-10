@@ -15,7 +15,7 @@ import WithCurrentUser from '../HOCs/WithCurrentUser/WithCurrentUser'
 import WithChallengePreferences
        from '../HOCs/WithChallengePreferences/WithChallengePreferences'
 import WidgetWorkspace from '../WidgetWorkspace/WidgetWorkspace'
-import WithSuggestedFix from '../HOCs/WithSuggestedFix/WithSuggestedFix'
+import WithCooperativeWork from '../HOCs/WithCooperativeWork/WithCooperativeWork'
 import WithTaskBundle from '../HOCs/WithTaskBundle/WithTaskBundle'
 import WithLockedTask from '../HOCs/WithLockedTask/WithLockedTask'
 import MapPane from '../EnhancedMap/MapPane/MapPane'
@@ -268,7 +268,14 @@ export class TaskPane extends Component {
             setCompletionResponse={this.setCompletionResponse}
             completionResponses={completionResponses}
             disableTemplate={isFinalStatus(this.props.task.status)}
-        />
+          />
+          {this.state.completingTask && this.state.completingTask === this.props.task.id &&
+           <div
+             className="mr-fixed mr-top-0 mr-bottom-0 mr-left-0 mr-right-0 mr-z-200 mr-bg-blue-firefly-75 mr-flex mr-justify-center mr-items-center"
+           >
+             <BusySpinner big inline />
+           </div>
+          }
         </MediaQuery>
         <MediaQuery query="(max-width: 1023px)">
           <MapPane completingTask={this.state.completingTask}>
@@ -328,7 +335,7 @@ export default
 WithChallengePreferences(
   WithWidgetWorkspaces(
     WithTaskBundle(
-      WithSuggestedFix(
+      WithCooperativeWork(
         WithLockedTask(
           injectIntl(TaskPane)
         )

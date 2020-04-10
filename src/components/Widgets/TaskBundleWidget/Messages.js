@@ -70,9 +70,9 @@ export default defineMessages({
                     "Task bundles cannot be created on this step.",
   },
 
-  noSuggestedFixes: {
-    id: "Widgets.TaskBundleWidget.noSuggestedFixes",
-    defaultMessage: "Quick-fix tasks cannot be bundled together",
+  noCooperativeWork: {
+    id: "Widgets.TaskBundleWidget.noCooperativeWork",
+    defaultMessage: "Cooperative tasks cannot be bundled together",
   },
 
   noVirtualChallenges: {

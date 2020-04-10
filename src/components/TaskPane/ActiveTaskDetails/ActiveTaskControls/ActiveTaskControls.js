@@ -15,6 +15,8 @@ import { allowedStatusProgressions, isCompletionStatus,
        from '../../../../services/Task/TaskStatus/TaskStatus'
 import { TaskReviewStatus } from '../../../../services/Task/TaskReview/TaskReviewStatus'
 import { TaskReviewLoadMethod } from '../../../../services/Task/TaskReview/TaskReviewLoadMethod'
+import { Editor } from '../../../../services/Editor/Editor'
+import AsCooperativeWork from '../../../../interactions/Task/AsCooperativeWork'
 import SignInButton from '../../../SignInButton/SignInButton'
 import WithSearch from '../../../HOCs/WithSearch/WithSearch'
 import WithTaskReview from '../../../HOCs/WithTaskReview/WithTaskReview'
@@ -24,7 +26,7 @@ import WithKeyboardShortcuts
 import BusySpinner from '../../../BusySpinner/BusySpinner'
 import TaskCompletionStep1 from './TaskCompletionStep1/TaskCompletionStep1'
 import TaskCompletionStep2 from './TaskCompletionStep2/TaskCompletionStep2'
-import SuggestedFixControls from './SuggestedFixControls/SuggestedFixControls'
+import CooperativeWorkControls from './CooperativeWorkControls/CooperativeWorkControls'
 import TaskNextControl from './TaskNextControl/TaskNextControl'
 import TaskConfirmationModal
        from '../../../TaskConfirmationModal/TaskConfirmationModal'
@@ -68,8 +70,21 @@ export class ActiveTaskControls extends Component {
       _get(this.props, 'user.settings.needsReview')
   }
 
+  allowedEditors = () => {
+    // Only JOSM allowed for change-file cooperative tasks
+    return AsCooperativeWork(this.props.task).isChangeFileType() ?
+      [Editor.josmLayer, Editor.josm] :
+      null
+  }
+
   /** Choose which editor to launch for fixing a task */
   pickEditor = ({ value }) => {
+    const allowed = this.allowedEditors()
+    // If the given editor isn't allowed, default to first allowed editor
+    if (allowed && allowed.indexOf(value) === -1) {
+      value = allowed[0]
+    }
+
     this.setState({taskBeingCompleted: this.props.task.id})
     this.props.editTask(
       value,
@@ -275,8 +290,8 @@ export class ActiveTaskControls extends Component {
             <FormattedMessage {...messages.readOnly} />
            </div> :
            <React.Fragment>
-             {this.props.task.suggestedFix && (!isFinal || needsRevised) &&
-               <SuggestedFixControls
+             {AsCooperativeWork(this.props.task).isTagType() && (!isFinal || needsRevised) &&
+               <CooperativeWorkControls
                  {...this.props}
                  allowedProgressions={allowedProgressions}
                  complete={this.initiateCompletion}
@@ -284,9 +299,10 @@ export class ActiveTaskControls extends Component {
                  needsRevised={needsRevised}
                />
              }
-             {!this.props.task.suggestedFix && !isEditingTask && (!isFinal || needsRevised) &&
+             {!AsCooperativeWork(this.props.task).isTagType() && !isEditingTask && (!isFinal || needsRevised) &&
              <TaskCompletionStep1
                {...this.props}
+               allowedEditors={this.allowedEditors()}
                allowedProgressions={allowedProgressions}
                pickEditor={this.pickEditor}
                complete={this.initiateCompletion}

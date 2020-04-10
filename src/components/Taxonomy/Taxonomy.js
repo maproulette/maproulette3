@@ -1,17 +1,19 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
+import { isCooperative, messagesByCooperativeType }
+       from '../../services/Challenge/CooperativeType/CooperativeType'
 import messages from './Messages'
 
 /**
  * Displays the taxonomical categories of a challenge or project, e.g. popular,
- * featured, quick-fix, saved, etc.
+ * featured, cooperative, saved, etc.
  */
 const Taxonomy = props => {
   if (!props.isSaved &&
       !props.featured &&
       !props.popular &&
       !props.newest &&
-      !props.hasSuggestedFixes) {
+      !isCooperative(props.cooperativeType)) {
     return null
   }
 
@@ -45,10 +47,10 @@ const Taxonomy = props => {
         </span>
       </li>
       }
-      {props.hasSuggestedFixes &&
+      {isCooperative(props.cooperativeType) &&
       <li>
         <span className="mr-text-rosebud">
-          <FormattedMessage {...messages.suggestedFixLabel} />
+          <FormattedMessage {...messagesByCooperativeType[props.cooperativeType]} />
         </span>
       </li>
       }
